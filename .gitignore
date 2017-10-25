@@ -1,6 +1,6 @@
 build/*
-alpha1s/build/*
-alpha1s/*.apk
+alpha1e/build/*
+alpha1e/*.apk
 ChangeSkin/build/*
 alpha1sGifLib/build/*
 alpha1sLib/build/*
@@ -9,6 +9,7 @@ slidingmenu_library/build/*
 weiboSDK/build/*
 alphaQRLib/build/*
 library/build/*
-
+alpha1e-android-app.iml
 .idea/*
 .gradle/*
+*.iml
