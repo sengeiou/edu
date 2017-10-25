@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ubt.alpha1e.ui.custom.ScrollLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@color/B6"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <ImageView
+        android:id="@+id/action_logo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/main_message_unread"
+        android:scaleType="fitXY"></ImageView>
+
+    <ImageView
+        android:id="@+id/img_unread"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_above="@+id/action_logo"
+        android:layout_marginBottom="-5dp"
+        android:layout_marginLeft="-5dp"
+        android:layout_toRightOf="@+id/action_logo"
+        android:background="@drawable/read_point" />
+
+    <LinearLayout
+        android:id="@+id/lay_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        android:layout_toLeftOf="@+id/txt_date"
+        android:layout_toRightOf="@+id/action_logo"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_message_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hello_world"
+            android:textColor="@color/T1"
+            android:textSize="16dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_below="@+id/T2" />
+
+        <TextView
+            android:id="@+id/txt_message_disc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/hello_world"
+            android:textColor="@color/T2"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@+id/img_next"
+        android:text="@string/hello_world"
+        android:textColor="@color/T2"
+        android:textSize="14dp" />
+
+    <ImageView
+        android:id="@+id/img_next"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:clickable="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/main_message_right_arrow" />
+
+</com.ubt.alpha1e.ui.custom.ScrollLayout>

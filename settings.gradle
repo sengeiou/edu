@@ -1,0 +1,7 @@
+include ':alpha1sGifLib', ':ChangeSkin', ':library'
+include ':alpha1sLib'
+include ':alphaQRLib'
+include ':choseCountryNum'
+include ':weiboSDK'
+include ':slidingmenu_library'
+include ':alpha1e'

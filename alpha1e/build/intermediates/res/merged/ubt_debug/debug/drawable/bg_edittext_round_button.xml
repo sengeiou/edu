@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 设置填充颜色 -->
+    <solid android:color="#F9F9F9" />
+
+    <!-- 设置几何图形四个角的弧度 -->
+    <corners android:radius="8px" />
+
+    <!-- 设置几何形状绘制边框  -->
+    <stroke
+        android:width="1px"
+        android:color="@color/T7" />
+
+</shape>

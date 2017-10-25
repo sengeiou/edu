@@ -1,0 +1,204 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <include layout="@layout/layout_title_back_ft" />
+
+    <!--<RelativeLayout
+        android:id="@+id/lay_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lay_title"
+        android:background="#f0f3f3">
+
+        <View
+            android:id="@+id/v_robot"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+        <ImageView
+            android:id="@+id/img_robot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/v_robot"
+            android:background="@drawable/gamepad_model_full" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/v_robot"
+            android:layout_marginLeft="170dp"
+            android:layout_marginRight="50dp"
+            android:text="@string/ui_remote_role_introduction"
+            android:textColor="#8fa2b4"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/vew_spy_1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/lay_top"
+        android:layout_marginTop="10dp"
+        android:background="#F0F3F3" />
+
+    <RelativeLayout
+        android:id="@+id/lay_item_football"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vew_spy_1">
+
+        <ImageView
+            android:id="@+id/img_football"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/gamepad_model_football" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_football"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ui_remote_role_footballer"
+                android:textColor="@color/T1"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ui_remote_role_footballer_introduction"
+                android:textColor="@color/T2" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/vew_spy_2"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/lay_item_football"
+        android:background="#F0F3F3" />
+
+    <RelativeLayout
+        android:id="@+id/lay_item_fighter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vew_spy_2">
+
+        <ImageView
+            android:id="@+id/img_fighter"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/gamepad_model_fighter" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_fighter"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ui_remote_role_fighter"
+                android:textColor="@color/T1"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ui_remote_role_fighter_introduction"
+                android:textColor="@color/T2" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/vew_spy_3"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/lay_item_fighter"
+        android:background="#F0F3F3" />
+
+    <RelativeLayout
+        android:id="@+id/lay_item_dancer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vew_spy_3">
+
+        <ImageView
+            android:id="@+id/img_dancer"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/gamepad_model_dancer" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_dancer"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ui_remote_role_dancer"
+                    android:textColor="#9f9fa3"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ui_remote_comming_soon"
+                    android:textColor="#9f9fa3" />
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ui_remote_role_dancer_introduction"
+                android:textColor="#9f9fa3" />
+
+        </LinearLayout>
+
+    </RelativeLayout>-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_my_roles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lay_title"
+        android:splitMotionEvents="false"
+        ></android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

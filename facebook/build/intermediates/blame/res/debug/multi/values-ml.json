@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\build\\intermediates\\res\\merged\\debug\\values-ml\\values-ml.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 64,
+                    "endOffset": 115
+                },
+                "from": {
+                    "file": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\src\\main\\res\\values-ml\\messenger_button_strings.xml",
+                    "position": {
+                        "startLine": 22,
+                        "startColumn": 2,
+                        "startOffset": 1122,
+                        "endColumn": 62,
+                        "endOffset": 1182
+                    }
+                }
+            }
+        ]
+    }
+]

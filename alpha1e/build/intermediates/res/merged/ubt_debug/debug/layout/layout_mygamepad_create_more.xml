@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ly_create_more"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/B6"
+    android:gravity="center"
+    android:layout_height="wrap_content">
+
+    <!--<View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#F0F3F3" />-->
+
+    <LinearLayout
+        android:id="@+id/ly_create_more_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="60dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/img_add_create"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/gamepad_add"
+            android:layout_marginRight="15dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/T1"
+            android:textSize="16sp"
+            android:text="@string/ui_remote_add_new_role"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#F0F3F3" />
+
+</LinearLayout>

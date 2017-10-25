@@ -1,0 +1,188 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <include layout="@layout/layout_title_back_ft" />
+
+    <RelativeLayout
+        android:id="@+id/lay_my_download_actions"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/lay_title"
+        android:background="@color/B6"
+        android:layout_height="50dp"
+        >
+
+        <TextView
+            android:id="@+id/txt_my_download_actions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxEms="18"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:text="@string/ui_remote_select_action_from_download"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/T1"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/img_my_download_show"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:src="@drawable/gamepad_up_arrow" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/A11" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_my_download_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lay_my_download_actions"
+        ></android.support.v7.widget.RecyclerView>
+
+    <RelativeLayout
+        android:id="@+id/lay_my_creation_actions"
+        android:layout_width="match_parent"
+        android:layout_marginTop="100dp"
+        android:background="@color/B6"
+        android:layout_height="50dp"
+        >
+
+        <View
+            android:id="@+id/view_my_creation_actions"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/A11" />
+
+        <TextView
+            android:id="@+id/txt_my_creation_actions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxEms="18"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:text="@string/ui_remote_select_action_from_creation"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/T1"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/img_my_creation_show"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:src="@drawable/gamepad_up_arrow" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/A11" />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_my_creation_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lay_my_creation_actions"
+        android:layout_above="@+id/lay_remote_role_bottom"
+        ></android.support.v7.widget.RecyclerView>
+
+
+    <LinearLayout
+        android:id="@+id/lay_remote_role_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/B5"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/A11" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            >
+
+            <TextView
+                android:id="@+id/txt_select_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text="@string/ui_remote_selected_title"
+                android:gravity="center"
+                android:textColor="@color/T1"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/txt_select_num"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/txt_select_title"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/T2"
+                android:textSize="18sp"/>
+
+
+            <TextView
+                android:id="@+id/txt_select_g"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="3dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/txt_select_num"
+                android:gravity="center"
+                android:text="/"
+                android:textColor="@color/T2"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/txt_select_sum"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="3dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/txt_select_g"
+                android:gravity="center"
+                android:text="20"
+                android:textColor="@color/T2"
+                android:textSize="18sp"/>
+
+            <Button
+                android:id="@+id/btn_finish"
+                android:layout_width="86dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="@color/A12"
+                android:gravity="center"
+                android:text="@string/ui_common_complete"
+                android:textColor="@color/A6"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

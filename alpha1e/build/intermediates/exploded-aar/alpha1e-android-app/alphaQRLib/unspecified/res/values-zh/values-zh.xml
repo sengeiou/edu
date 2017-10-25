@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="this_lib_ui_back">返回</string>
+    <string name="this_lib_ui_bind_alpha">绑定阿尔法</string>
+    <string name="this_lib_ui_bind_other_way">使用其他绑定方式</string>
+    <string name="this_lib_ui_scan_here">找到并扫描此处二维码</string>
+</resources>

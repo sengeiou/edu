@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/home_background"
+        >
+
+        <LinearLayout
+            android:id="@+id/ll_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingRight="25dp"
+            android:paddingLeft="10dp"
+            >
+
+            <ImageView
+                android:layout_width="8dp"
+                android:layout_height="18dp"
+                android:background="@drawable/sec_back_path"></ImageView>
+
+            <TextView
+                android:id="@+id/tv_base_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:background="#00000000"
+                android:gravity="center|left"
+                android:text="@string/ui_common_back"
+                android:textColor="@color/T1"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textSize="18sp"
+            />
+
+
+
+        <LinearLayout
+            android:id="@+id/ll_next"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:text="@string/ui_perfect_next"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <ViewStub
+        android:id="@+id/empty_viewstub"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_title_bar"
+        android:layout="@layout/layout_my_actions_empty" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_action_list"
+        android:background="@color/B6"
+        android:layout_below="@+id/rl_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

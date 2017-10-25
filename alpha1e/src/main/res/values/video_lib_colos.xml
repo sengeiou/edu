@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="video_lib_biz_audio_progress_bg">#ff0000</color>
+    <color name="video_lib_biz_audio_progress_first">#ffffff</color>
+    <color name="video_lib_biz_audio_progress_second">#6b6666</color>
+    <color name="video_lib_default_bg">#aa000000</color>
+    <!-- special color -->
+    <color name="video_lib_black_a10_color">#1a000000</color>
+    <color name="video_lib_white_fafaf8">#fafaf8</color>
+
+</resources>

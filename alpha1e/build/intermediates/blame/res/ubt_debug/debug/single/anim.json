@@ -1,0 +1,174 @@
+[
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\slide_bottom_out.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\slide_bottom_out.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\abc_popup_enter.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\anim\\abc_popup_enter.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\abc_slide_out_top.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\anim\\abc_slide_out_top.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\push_right_in.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\push_right_in.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\slide_in_lef.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\slide_in_lef.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\push_right_out.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\push_right_out.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\shake.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\shake.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\ctrl_main_anim_in.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\ctrl_main_anim_in.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\scan_bigger_anim.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\scan_bigger_anim.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\cycle_7.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\cycle_7.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\logo_line_anim.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\logo_line_anim.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\battery_line_anim.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\battery_line_anim.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\slide_uptodown.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\slide_uptodown.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\abc_slide_out_bottom.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\anim\\abc_slide_out_bottom.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\slide_out_left.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\slide_out_left.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\slide_in_up.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\slide_in_up.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\design_fab_out.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\anim\\design_fab_out.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\battery_line_anim_head.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\battery_line_anim_head.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\slide_top_out.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\slide_top_out.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\turn_around_anim.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\turn_around_anim.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\design_bottom_sheet_slide_in.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\anim\\design_bottom_sheet_slide_in.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\fade_in_center.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\fade_in_center.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\slide_in_bottom.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\slide_in_bottom.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\slide_out_bottom.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\slide_out_bottom.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\design_fab_in.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\anim\\design_fab_in.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\design_snackbar_in.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\anim\\design_snackbar_in.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\slide_out_up.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\slide_out_up.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\abc_slide_in_bottom.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\anim\\abc_slide_in_bottom.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\design_bottom_sheet_slide_out.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\anim\\design_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\abc_slide_in_top.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\anim\\abc_slide_in_top.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\fade_out_center.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\fade_out_center.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\abc_popup_exit.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\anim\\abc_popup_exit.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\slide_downtoup.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\slide_downtoup.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\design_snackbar_out.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\anim\\design_snackbar_out.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\slide_out_right.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\slide_out_right.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\slide_stay.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\slide_stay.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\abc_fade_out.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\anim\\abc_fade_out.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\ctrl_main_anim_out.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\ctrl_main_anim_out.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\abc_fade_in.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\anim\\abc_fade_in.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\slide_in_right.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\slide_in_right.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\anim\\scan_smaller_anim.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\anim\\scan_smaller_anim.xml"
+    }
+]

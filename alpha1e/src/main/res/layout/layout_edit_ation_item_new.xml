@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lay_frame_data_edit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:background="@drawable/bg_edit"
+    android:visibility="gone"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="120dp"
+        android:orientation="horizontal"
+        android:gravity="left|center"
+        android:paddingLeft="65dp"
+       >
+
+
+        <RelativeLayout
+            android:id="@+id/rl_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft = "6dp"
+            android:paddingRight="5dp"
+           >
+
+            <ImageView
+                android:id="@+id/iv_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/icon_preview_nor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_preview"
+                android:layout_centerHorizontal="true"
+                android:text="@string/ui_readback_preview"
+                android:textColor="@color/sec_txt_main"
+                android:textSize="16dp" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_change"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
+            >
+
+            <ImageView
+                android:id="@+id/iv_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_edit_nor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_change"
+                android:layout_centerHorizontal="true"
+                android:text="@string/ui_readback_alter"
+                android:textColor="@color/sec_txt_main"
+                android:textSize="16dp" />
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:id="@+id/rl_copy"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            >
+
+            <ImageView
+                android:id="@+id/iv_copy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_copy_nor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/iv_copy"
+                android:text="@string/ui_readback_copy"
+                android:textColor="@color/sec_txt_main"
+                android:textSize="16dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_cut"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            >
+
+            <ImageView
+                android:id="@+id/iv_cut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_cut_nor" />
+
+            <TextView
+                android:id="@+id/tv_cut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/iv_cut"
+                android:text="@string/ui_create_menu_cut"
+                android:textColor="@color/sec_txt_main"
+                android:textSize="16dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_paste"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+          >
+
+            <ImageView
+                android:id="@+id/iv_paste"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_paste_dis" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/iv_paste"
+                android:text="@string/ui_readback_paste"
+                android:textColor="@color/sec_txt_main"
+                android:textSize="16dp" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            >
+
+            <ImageView
+                android:id="@+id/iv_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_delete_nor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/iv_delete"
+                android:text="@string/ui_common_delete"
+                android:textColor="@color/sec_txt_main"
+                android:textSize="16dp" />
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

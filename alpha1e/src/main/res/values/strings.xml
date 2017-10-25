@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Alpha 1e</string>
+    <string name="app_name_for_factory">AlphaTest</string>
+    <string name="hello_world">&#183; Hello world!</string>
+    <string name="title_activity_start_test">StartTestActivity</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_private_info">PrivateInfoActivity</string>
+    <string name="title_activity_binding">BindingActivity</string>
+    <string name="title_activity_binding_by_nums">BindingByNumsActivity</string>
+    <string name="title_activity_find_pass_wd">FindPassWdActivity</string>
+    <string name="title_activity_scan_alpha">ScanAlphaActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_alarm">Alarm clock</string>
+    <string name="title_activity_scan">ScanActivity</string>
+    <string name="title_activity_main_no_robot">MainNoRobotActivity</string>
+    <string name="title_activity_actions_main">ActionsMainActivity</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_story_actions">StoryActionsActivity</string>
+    <string name="title_activity_remote_sel">RemoteSelActivity</string>
+    <string name="title_activity_remote_add">RemoteAddActivity</string>
+    <string name="title_activity_remote_role_actions_add">RemoteRoleActionsAddActivity</string>
+    <string name="title_activity_remote_introduce">RemoteIntroduceActivity</string>
+    <string name="title_activity_remote_info">RemoteInfoActivity</string>
+    <string name="title_activity_remote">RemoteActivity</string>
+    <string name="title_activity_remote_set">RemoteSetActivity</string>
+    <string name="title_activity_actions_lib_main">ActionsLibMainActivity</string>
+    <string name="title_activity_my_main">MyMainActivity</string>
+    <string name="title_activity_actions_lib_play">ActionsLibPlayActivity</string>
+    <string name="title_activity_actions_new">ActionsNewActivity</string>
+    <string name="title_activity_base_action_save">BaseActionSaveActivity</string>
+    <string name="title_activity_actions_new_type">ActionsNewTypeActivity</string>
+    <string name="title_activity_actions_new_video">ActionsNewVideoActivity</string>
+    <string name="title_activity_actions_new_video_save">ActionsNewVideoSaveActivity</string>
+    <string name="title_activity_private_info_edit">PrivateInfoEditActivity</string>
+    <string name="title_activity_about_us">AboutUsActivity</string>
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="title_activity_my_wei_xin">MyWeiXinActivity</string>
+    <string name="title_activity_robot_rename">RobotRenameActivity</string>
+    <string name="title_activity_my_test">MyTestActivity</string>
+    <string name="title_activity_feed_back">FeedBackActivity</string>
+    <string name="title_activity_message">MessageActivity</string>
+    <string name="title_activity_message_test">MessageTestActivity</string>
+    <string name="title_activity_robot_version">RobotVersionActivity</string>
+    <string name="title_activity_robor_rename">RoborRenameActivity</string>
+    <string name="title_activity_eng_test">EngTestActivity</string>
+    <string name="title_activity_actions_edit">ActionsEditActivity</string>
+    <string name="title_activity_actions_edit_save">ActionsEditSaveActivity</string>
+    <string name="title_activity_language_test">LanguageTestActivity</string>
+    <string name="title_activity_no_robot">NoRobotActivity</string>
+    <string name="facebook_app_id">937563019632261</string>
+    <string name="title_activity_web_content">WebContentActivity</string>
+    <string name="title_activity_banner_detail">BannerDetailActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--v2.7.1-->
+    <string name="title_activity_my">MyActivity</string>
+
+    <string name="to_expand_hint">Expand</string>
+    <string name="to_shrink_hint">Shrink</string>
+
+</resources>

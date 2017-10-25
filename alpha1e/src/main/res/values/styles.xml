@@ -1,0 +1,144 @@
+<resources>
+
+
+    <style name="AppBaseTheme" parent="android:Theme.Light"></style>
+
+    <style name="AppTheme" parent="AppBaseTheme"></style>
+
+    <style name="NoDisplay" parent="android:Theme.NoDisplay"></style>
+    <style name="NoTitleTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:textColor">@color/sec_txt_main</item>
+        <item name="android:textColorHint">@color/sec_txt_disc</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+    <style name="NoTitleThemeFullScreen" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:textColor">@color/sec_txt_main</item>
+        <item name="android:textColorHint">@color/sec_txt_disc</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!--<style name="button_click_theme" parent="@android:style/Widget">-->
+        <!--<item name="android:layout_width">280dp</item>-->
+        <!--<item name="android:layout_height">50dp</item>-->
+        <!--<item name="android:textColor">@color/T1</item>-->
+        <!--<item name="android:textSize">19sp</item>-->
+        <!--<item name="android:background">@drawable/bg_login_round_button</item>-->
+        <!--<item name="android:gravity">center</item>-->
+    <!--</style>-->
+
+    <style name="MyTabAppreance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="ActionsSquareTab" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- 自定义仿IOS的AlertDialog的样式 -->
+    <style name="AlertDialogStyle" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <!-- 自定义仿IOS的AlertDialog的样式 -->
+    <style name="AlertDialogStyleFullScreen" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <!--1、在values文件夹的styles.xml文件里面新建一个style -->
+    <style name="NoAnimationTheme" parent="@style/NoTitleTheme">
+
+        <item name="android:windowAnimationStyle">@style/noAnimation</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+
+
+    <style name="noAnimation">
+
+        <item name="android:activityOpenEnterAnimation">@null</item>
+
+        <item name="android:activityOpenExitAnimation">@null</item>
+
+        <item name="android:activityCloseEnterAnimation">@null</item>
+
+        <item name="android:activityCloseExitAnimation">@null</item>
+
+        <item name="android:taskOpenEnterAnimation">@null</item>
+
+        <item name="android:taskOpenExitAnimation">@null</item>
+
+        <item name="android:taskCloseEnterAnimation">@null</item>
+
+        <item name="android:taskCloseExitAnimation">@null</item>
+
+        <item name="android:taskToFrontEnterAnimation">@null</item>
+
+        <item name="android:taskToFrontExitAnimation">@null</item>
+
+        <item name="android:taskToBackEnterAnimation">@null</item>
+
+        <item name="android:taskToBackExitAnimation">@null</item>
+
+
+
+    </style>
+
+
+    <style name="playProgressStyle">
+        　　<item name="android:indeterminateDrawable">@drawable/progress_playing_ft</item>
+        　　<item name="android:minWidth">30dip</item>
+        　　<item name="android:maxWidth">30dip</item>
+        　　<item name="android:minHeight">30dip</item>
+        　　<item name="android:maxHeight">30dip</item>
+    </style>
+
+    <style name="RotateProgressStyle">
+        　　<item name="android:indeterminateDrawable">@drawable/progress_lesson_ft</item>
+    </style>
+
+    <style name="HasTitleTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:textColor">@color/sec_txt_main</item>
+        <item name="android:textColorHint">@color/sec_txt_disc</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="text_white">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TranslucentTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+    </style>
+
+    <style name="StyleProgressBarMini" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:maxHeight">50dip</item>
+        <item name="android:minHeight">5dip</item>
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
+        <item name="android:progressDrawable">@drawable/shape_progressbar_mini</item>
+    </style>
+
+</resources>

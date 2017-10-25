@@ -1,0 +1,10 @@
+签名是先使用eclipse clean 项目 再签名
+
+
+standard:alpha1s_2015_4_10_ubtrobot
+First and Last Name：深圳优必选
+Organizational Unit：深圳优必选
+Organizational：深圳优必选
+City of Locality：深圳
+State or Province：广东
+Country Code（XX）：CN

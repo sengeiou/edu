@@ -1,0 +1,1350 @@
+[
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\actions_square_item_header.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\actions_square_item_header.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_action_guide.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_action_guide.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_dialog_title_material.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_dialog_title_material.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_alert_dialog_button_bar_material.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_action_item_bak_2b.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_action_item_bak_2b.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\add_line.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\add_line.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_popup_menu_header_item_layout.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_popup_menu_header_item_layout.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_custom_instruction_sel_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_custom_instruction_sel_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_title_back_ft.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_title_back_ft.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_my_dynamic.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_my_dynamic.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_my_main.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_my_main.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_action_menu_layout.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_action_menu_layout.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_actions_edit_save.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_actions_edit_save.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\notification_media_action.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\notification_media_action.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_setting_language.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_setting_language.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\messenger_button_send_blue_small.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.8.0\\res\\layout\\messenger_button_send_blue_small.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_find_pwd.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_find_pwd.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_main_page_scan.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_main_page_scan.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_message.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_message.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_title_home.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_title_home.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_action_item_bak_8b.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_action_item_bak_8b.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_robot_info.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_robot_info.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_video_player.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_video_player.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_ctrl_more.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_ctrl_more.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_lesson_task_pad.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_lesson_task_pad.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_lesson_task_finish_dialog.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_lesson_task_finish_dialog.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_dynamic_publish.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_dynamic_publish.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_myalertdialog.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_myalertdialog.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_my_actions_empty.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_my_actions_empty.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_music_tips.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_music_tips.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_lesson_task_success_dialog.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_lesson_task_success_dialog.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\design_layout_snackbar.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\layout\\design_layout_snackbar.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\notification_template_part_time.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\notification_template_part_time.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_actions_lib_preview_web.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_actions_lib_preview_web.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_popup_menu_item_layout.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_popup_menu_item_layout.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\com_facebook_activity_layout.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.8.0\\res\\layout\\com_facebook_activity_layout.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_controller_shrink.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_controller_shrink.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_remote_fighter_pad.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_remote_fighter_pad.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_instruction_dialog_portrait.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_instruction_dialog_portrait.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_lesson_task.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_lesson_task.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_action_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_action_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_list_menu_item_layout.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_list_menu_item_layout.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\notification_template_part_chronometer.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\notification_template_part_chronometer.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_robot_version.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_robot_version.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_task_item_index.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_task_item_index.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\message_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\message_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\design_navigation_menu_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\layout\\design_navigation_menu_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_my_creation_unpublish.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_my_creation_unpublish.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_updateprogress.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_updateprogress.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\design_layout_snackbar_include.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\layout\\design_layout_snackbar_include.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_screen_simple.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_screen_simple.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_start.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_start.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\notification_template_big_media.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\notification_template_big_media.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_actions_square_detail.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_actions_square_detail.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\notification_template_lines.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\notification_template_lines.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\design_navigation_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\layout\\design_navigation_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_action_item_bak_7b.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_action_item_bak_7b.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\select_dialog_multichoice_material.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\select_dialog_multichoice_material.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_introduction.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_introduction.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\blockly_test.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\blockly_test.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_introduction_index_1.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_introduction_index_1.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_title_cancel_red.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_title_cancel_red.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_robot_item_record_with_using.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_robot_item_record_with_using.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_remote_sel.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_remote_sel.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_playground_actions_grid_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_playground_actions_grid_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\messenger_button_send_blue_round.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.8.0\\res\\layout\\messenger_button_send_blue_round.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_private_info_show.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_private_info_show.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_float_guid.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_float_guid.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_num_input.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_num_input.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_find_pwd_by_email.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_find_pwd_by_email.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activty_action_theme_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activty_action_theme_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_notice.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_notice.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_wifi_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_wifi_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_title_back.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_title_back.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_mygamepad_create_more.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_mygamepad_create_more.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_action_item_bak_1k.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_action_item_bak_1k.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\include_alertheader.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\include_alertheader.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\cube_ptr_classic_default_header.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\cube_ptr_classic_default_header.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_blank.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_blank.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_action_del.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_action_del.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\design_navigation_menu.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\layout\\design_navigation_menu.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_activity_chooser_view.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_activity_chooser_view.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\design_layout_tab_icon.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\layout\\design_layout_tab_icon.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_scan_device_histroy.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_scan_device_histroy.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_my_theme_info.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_my_theme_info.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_ctrl_more_ft.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_ctrl_more_ft.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_alertview.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_alertview.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_action_item_bak_1b.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_action_item_bak_1b.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\notification_template_big_media_narrow.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\notification_template_big_media_narrow.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_feed_back.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_feed_back.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\design_navigation_item_header.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\layout\\design_navigation_item_header.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_original_actions_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_original_actions_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_custom_instruction_sel.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_custom_instruction_sel.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\actions_square_video_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\actions_square_video_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_robot.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_robot.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\messenger_button_send_blue_large.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.8.0\\res\\layout\\messenger_button_send_blue_large.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_remote_costom_pad.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_remote_costom_pad.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_remote_guid.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_remote_guid.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\actions_square_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\actions_square_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_eng_test.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_eng_test.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_find_pwd_by_phone.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_find_pwd_by_phone.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_blockly_course.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_blockly_course.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_screen_toolbar.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_screen_toolbar.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\leak_canary_heap_dump_toast.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.squareup.leakcanary\\leakcanary-android\\1.4-beta2\\res\\layout\\leak_canary_heap_dump_toast.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_lesson_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_lesson_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_language_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_language_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_search_dropdown_item_icons_2line.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_search_dropdown_item_icons_2line.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_my_theme.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_my_theme.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_find_psw_phone_number.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_find_psw_phone_number.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_dub_guid.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_dub_guid.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_update_robot.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_update_robot.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\actionbar_trans.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\actionbar_trans.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_screen_content_include.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_screen_content_include.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_original_list.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_original_list.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_my_dynamic.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_my_dynamic.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\design_navigation_item_separator.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\layout\\design_navigation_item_separator.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_remote_football.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_remote_football.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\play_state.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\play_state.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_select_dialog_material.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_select_dialog_material.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\com_facebook_login_fragment.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.8.0\\res\\layout\\com_facebook_login_fragment.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_action_menu_item_layout.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_action_menu_item_layout.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\actions_square_item_action_detail.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\actions_square_item_action_detail.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_message_test.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_message_test.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_action_bar_view_list_nav_layout.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_action_bar_view_list_nav_layout.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_float_control.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_float_control.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_square_actions_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_square_actions_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\design_layout_tab_text.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\layout\\design_layout_tab_text.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_dub.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_dub.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_actions_lib_type.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_actions_lib_type.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_new_edit_for_pad.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_new_edit_for_pad.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\slidingmenumain.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\alpha1e-android-app\\slidingmenu_library\\unspecified\\res\\layout\\slidingmenumain.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_action_item_bak_6b.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_action_item_bak_6b.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_theme_img_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_theme_img_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_scan.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_scan.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_connected.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_connected.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_edit_ation_item_new.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_edit_ation_item_new.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_actions_publish.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_actions_publish.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_custom_instruction_type_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_custom_instruction_type_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_remote_guid_pad.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_remote_guid_pad.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_action_item_time_1b.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_action_item_time_1b.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_remote_grid_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_remote_grid_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\coogame_country.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\alpha1e-android-app\\choseCountryNum\\unspecified\\res\\layout\\coogame_country.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_theme.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_theme.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_my_role_action_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_my_role_action_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_add_action.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_add_action.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_data_loading.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_data_loading.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_introduction.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_introduction.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_load_more.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_load_more.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_alertview_alert_horizontal.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_alertview_alert_horizontal.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_actions_lib_pre_view_share.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_actions_lib_pre_view_share.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_image_detail.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_image_detail.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_actions_lib_type_select.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_actions_lib_type_select.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_custom_instruction_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_custom_instruction_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_register_complete_info.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_register_complete_info.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_actions_lib_main_3.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_actions_lib_main_3.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_action_item_bak_3b.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_action_item_bak_3b.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_my_actions.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_my_actions.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\actions_square_ishow_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\actions_square_ishow_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_mydowload_synchronized.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_mydowload_synchronized.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_web_content_share.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_web_content_share.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_action_bar_title_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_action_bar_title_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_task_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_task_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_private_info_edit.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_private_info_edit.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_robot_for_pad.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_robot_for_pad.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_lesson_task_help_dialog.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_lesson_task_help_dialog.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_lesson_task_success_dialog_pad.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_lesson_task_success_dialog_pad.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_list_menu_item_icon.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_list_menu_item_icon.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_introduction_edit.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_introduction_edit.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_my_test.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_my_test.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_action_mode_bar.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_action_mode_bar.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_aciton_select.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_aciton_select.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_robor_rename.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_robor_rename.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\include_viewpager.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\include_viewpager.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\leak_canary_ref_row.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.squareup.leakcanary\\leakcanary-android\\1.4-beta2\\res\\layout\\leak_canary_ref_row.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_robot_info_landscape.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_robot_info_landscape.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_dub.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_dub.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_action_item_bak_4b.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_action_item_bak_4b.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_edit_ation_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_edit_ation_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_custom_instruction_playtext.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_custom_instruction_playtext.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_edit_ation_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_edit_ation_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_pc_update.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_pc_update.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_scan.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_scan.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\popuwindow_scheme.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\popuwindow_scheme.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_change_action.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_change_action.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\notification_media_cancel_action.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\notification_media_cancel_action.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_mycreate_action_select.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_mycreate_action_select.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_web_content.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_web_content.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_share_dialog.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_share_dialog.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\leak_canary_display_leak.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.squareup.leakcanary\\leakcanary-android\\1.4-beta2\\res\\layout\\leak_canary_display_leak.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_actions_square_detail.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_actions_square_detail.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_private_info_head_sel.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_private_info_head_sel.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_alert_dialog_material.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_alert_dialog_material.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_my_dynamic_empty.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_my_dynamic_empty.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_preview_dub.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_preview_dub.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\popuwindow_share.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\popuwindow_share.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_banner_forward.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_banner_forward.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_alertdialog.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_alertdialog.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_action_item_bak_5b.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_action_item_bak_5b.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_dynamic_guid.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_dynamic_guid.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_remote_set.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_remote_set.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_robot_item_record_history_with_using.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_robot_item_record_history_with_using.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_add_frame.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_add_frame.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_my_actions_circle.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_my_actions_circle.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_loading.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_loading.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\uvv_on_loading_layout.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\universalvideoview-release\\res\\layout\\uvv_on_loading_layout.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_twitter_webview_login.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_twitter_webview_login.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_my_message_empty.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_my_message_empty.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\select_dialog_singlechoice_material.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\select_dialog_singlechoice_material.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\item_robot.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\item_robot.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_message.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_message.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_image.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_image.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_my_actions.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_my_actions.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\messenger_button_send_white_small.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.8.0\\res\\layout\\messenger_button_send_white_small.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_connectalertdialog.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_connectalertdialog.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_custom_instruction_sel.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_custom_instruction_sel.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_message_notify.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_message_notify.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_action_guide_for_pad.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_action_guide_for_pad.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_reset_pwd.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_reset_pwd.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_actions_simple_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_actions_simple_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_jni.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_jni.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\design_bottom_sheet_dialog.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\layout\\design_bottom_sheet_dialog.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_search_view.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_search_view.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_register_phone.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_register_phone.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_activity_chooser_view_list_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_activity_chooser_view_list_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_first_guid.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_first_guid.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_myactions_create_more.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_myactions_create_more.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_action_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_action_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_remote_football_pad.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_remote_football_pad.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_action_mode_close_item_material.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_action_mode_close_item_material.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_instruction_dialog_landscape.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_instruction_dialog_landscape.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_mygamepad_head.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_mygamepad_head.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_sloading.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_sloading.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_about_us.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_about_us.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_remote_setting_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_remote_setting_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_preview.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_preview.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_expanded_menu_layout.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_expanded_menu_layout.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_register_verify_code.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_register_verify_code.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_title_back_right_icon.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_title_back_right_icon.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\cube_ptr_simple_loading.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\cube_ptr_simple_loading.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\leak_canary_ref_top_row.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.squareup.leakcanary\\leakcanary-android\\1.4-beta2\\res\\layout\\leak_canary_ref_top_row.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\messenger_button_send_white_round.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.8.0\\res\\layout\\messenger_button_send_white_round.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_list_menu_item_checkbox.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_list_menu_item_checkbox.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_dub_alertdialog.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_dub_alertdialog.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_blockly_scan.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_blockly_scan.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_pc_update2.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_pc_update2.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_action_item_time_hide.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_action_item_time_hide.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\leak_canary_leak_row.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.squareup.leakcanary\\leakcanary-android\\1.4-beta2\\res\\layout\\leak_canary_leak_row.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_remote_costom_set.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_remote_costom_set.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_action_bar_up_container.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_action_bar_up_container.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\actions_square_image_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\actions_square_image_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_register_veri_code.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_register_veri_code.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_register.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_register.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_wifi_alertdialog.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_wifi_alertdialog.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_actions_edit.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_actions_edit.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\actions_square_item_footer.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\actions_square_item_footer.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_actions_theme_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_actions_theme_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\messenger_button_send_white_large.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.8.0\\res\\layout\\messenger_button_send_white_large.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_actions_type_select.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_actions_type_select.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_login_email.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_login_email.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_dynamic_publish_grid_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_dynamic_publish_grid_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_login_phone.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_login_phone.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_test_main.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\alpha1e-android-app\\choseCountryNum\\unspecified\\res\\layout\\activity_test_main.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_download_progress.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_download_progress.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_remote_costom.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_remote_costom.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_actions_new_edit_save.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_actions_new_edit_save.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_del_base_action.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_del_base_action.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_alertview_alert_vertical.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_alertview_alert_vertical.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_low_power.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_low_power.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_message.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_message.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_actions_ishow_detail.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_actions_ishow_detail.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\com_facebook_tooltip_bubble.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.facebook.android\\facebook-android-sdk\\4.8.0\\res\\layout\\com_facebook_tooltip_bubble.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_ishow.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_ishow.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_my_actions_download.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_my_actions_download.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_loading.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_loading.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\actions_square_ishow_item_footer.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\actions_square_ishow_item_footer.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_action_item_bak_9b.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_action_item_bak_9b.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_action_rename.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_action_rename.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\this_lib_capture.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\alpha1e-android-app\\alphaQRLib\\unspecified\\res\\layout\\this_lib_capture.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_find_pass_wd.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_find_pass_wd.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_title_cancel.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_title_cancel.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_robots_control.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_robots_control.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\uvv_on_error_layout.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\universalvideoview-release\\res\\layout\\uvv_on_error_layout.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_remote_costom_setting_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_remote_costom_setting_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\item_actions.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\item_actions.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\support_simple_spinner_dropdown_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\support_simple_spinner_dropdown_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_register_select_country.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_register_select_country.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_remote_role_actions_add.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_remote_role_actions_add.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_my_actions_sync.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_my_actions_sync.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_my.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_my.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_save_action_success.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_save_action_success.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_contact_us.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_contact_us.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\coogame_country_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\alpha1e-android-app\\choseCountryNum\\unspecified\\res\\layout\\coogame_country_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_alertview_actionsheet.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_alertview_actionsheet.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_screen_simple_overlay_action_mode.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_screen_simple_overlay_action_mode.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\item_alertbutton.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\item_alertbutton.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_bottom_bar.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_bottom_bar.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_login.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_remote_fighter.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_remote_fighter.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_register_email.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_register_email.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_blockly.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_blockly.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_new_frame.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_new_frame.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_lesson_task_guide.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_lesson_task_guide.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_custom_instruction_playaction.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_custom_instruction_playaction.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\_activity_register.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\_activity_register.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\actions_square_ishow_item_header.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\actions_square_ishow_item_header.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_my_mygamepad_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_my_mygamepad_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_private_info.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_private_info.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_alertview_alert.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_alertview_alert.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_find_pwd_email_login.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_find_pwd_email_login.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_setting.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_setting.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\design_menu_item_action_area.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\layout\\design_menu_item_action_area.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_my_actions_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_my_actions_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_db.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_db.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_custom_instruction.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_custom_instruction.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_myactions_sync_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_myactions_sync_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\design_navigation_item_subheader.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\design\\24.0.0-beta1\\res\\layout\\design_navigation_item_subheader.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_media_record.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_media_record.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\notification_template_media.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\notification_template_media.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_tips.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_tips.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_myactions_sync_footer.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_myactions_sync_footer.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\view_lesson_detail_dialog.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\view_lesson_detail_dialog.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_actions_ishow_square_detail.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_actions_ishow_square_detail.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_robot_net_connect.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_robot_net_connect.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_dub.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_dub.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_change_frame.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_change_frame.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\message_item_header.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\message_item_header.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\select_dialog_item_material.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\select_dialog_item_material.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_theme_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_theme_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_progress.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_progress.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\fragment_custom_instruction_playction.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\fragment_custom_instruction_playction.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\layout_robot_item.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\layout_robot_item.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\abc_list_menu_item_radio.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.0.0-beta1\\res\\layout\\abc_list_menu_item_radio.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_new_edit.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_new_edit.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\message_public_content.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\message_public_content.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\activity_remote_add.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\activity_remote_add.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\dialog_update_apk.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\layout\\dialog_update_apk.xml"
+    },
+    {
+        "merged": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\layout\\uvv_player_controller.xml",
+        "source": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\exploded-aar\\universalvideoview-release\\res\\layout\\uvv_player_controller.xml"
+    }
+]

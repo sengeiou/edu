@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ubt.alpha1e.ui.MyActionsSyncActivity">
+
+    <include
+        android:id="@+id/layout_title"
+        layout="@layout/layout_title_cancel_red"/>
+
+   <android.support.v7.widget.RecyclerView
+       android:id="@+id/recyclerview_sync"
+       android:layout_below="@+id/layout_title"
+       android:layout_above="@+id/layout_footer"
+       android:background="@color/B6"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
+    <include
+        android:id="@+id/layout_footer"
+        layout="@layout/layout_myactions_sync_footer"/>
+</RelativeLayout>

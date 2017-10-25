@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lay_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sec_page_robot">
+
+    <RelativeLayout
+        android:id="@+id/lay_title"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:layout_alignParentTop="true">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/sec_page_main" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:weightSum="14">
+
+            <LinearLayout
+                android:id="@+id/lay_base_back"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="5"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp">
+
+                <ImageView
+                    android:layout_width="8dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/sec_back_path"></ImageView>
+
+                <TextView
+                    android:id="@+id/tv_base_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="#00000000"
+                    android:gravity="center|left"
+                    android:text="@string/ui_common_back"
+                    android:textColor="@color/sec_txt_main"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_base_title_name"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="4"
+                android:ellipsize="middle"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/sec_txt_main"
+                android:textSize="18sp" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="5">
+
+                <Button
+                    android:id="@+id/btn_help"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/txt_base_save"
+                    android:background="@drawable/sec_help" />
+
+
+                <TextView
+                    android:id="@+id/txt_base_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:background="#00000000"
+                    android:gravity="center"
+                    android:paddingRight="10dp"
+                    android:text="@string/ui_common_save"
+                    android:textColor="@color/T5"
+                    android:textSize="18dp" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/lay_default_action"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/lay_title"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_new_actions_item">
+
+        <LinearLayout
+            android:id="@+id/lay_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/creation_action_initial_label"/>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent">
+
+                <View
+                    android:id="@+id/vew_time_long"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/sec_new_frame_lenth" />
+
+                <View
+                    android:id="@+id/vew_play_progress"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/sec_new_frame_progress"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/txt_action_frame_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ui_readback_initial_action"
+                android:textColor="@color/sec_txt_index"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/txt_action_frame_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="（1000ms）"
+                android:textColor="@color/sec_txt_index"
+                android:textSize="16dp"></TextView>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lst_actions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/lay_play"
+        android:layout_below="@+id/lay_default_action"
+        android:layout_marginTop="3dp"
+        android:divider="#00000000"
+        android:dividerHeight="3dp" />
+
+
+    <include layout="@layout/layout_edit_ation_item" />
+
+    <include layout="@layout/layout_change_frame" />
+
+    <LinearLayout
+        android:id="@+id/lay_play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:visibility="invisible" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/A11" />
+
+        <Button
+            android:id="@+id/btn_play"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/sec_page_main"
+            android:text="@string/ui_readback_play"
+            android:textColor="@color/T5"
+            android:textSize="20dp"
+            android:visibility="visible" />
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_fragment_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </RelativeLayout>
+</RelativeLayout>

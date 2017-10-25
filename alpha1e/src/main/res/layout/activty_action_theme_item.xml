@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lay_logo_info"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.ubt.alpha1e.ui.custom.ShapedImageView
+        android:id="@+id/img_theme_logo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:scaleType="centerCrop"
+        app:round_radius="10dp"
+        app:shape_mode="round_rect"
+        app:stroke_width="1dp"
+        />
+
+    <TextView
+        android:id="@+id/txt_theme_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:paddingRight="17dp"
+        android:paddingLeft="17dp"
+        android:paddingBottom="15dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/T1"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/T15" />
+
+</LinearLayout>
+
+

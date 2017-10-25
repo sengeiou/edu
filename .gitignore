@@ -1,0 +1,14 @@
+build/*
+alpha1s/build/*
+alpha1s/*.apk
+ChangeSkin/build/*
+alpha1sGifLib/build/*
+alpha1sLib/build/*
+choseCountryNum/build/*
+slidingmenu_library/build/*
+weiboSDK/build/*
+alphaQRLib/build/*
+library/build/*
+
+.idea/*
+.gradle/*

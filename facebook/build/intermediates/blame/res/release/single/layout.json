@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\build\\intermediates\\res\\merged\\release\\layout\\com_facebook_login_fragment.xml",
+        "source": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\src\\main\\res\\layout\\com_facebook_login_fragment.xml"
+    },
+    {
+        "merged": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\build\\intermediates\\res\\merged\\release\\layout\\messenger_button_send_white_small.xml",
+        "source": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\src\\main\\res\\layout\\messenger_button_send_white_small.xml"
+    },
+    {
+        "merged": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\build\\intermediates\\res\\merged\\release\\layout\\com_facebook_tooltip_bubble.xml",
+        "source": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\src\\main\\res\\layout\\com_facebook_tooltip_bubble.xml"
+    },
+    {
+        "merged": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\build\\intermediates\\res\\merged\\release\\layout\\messenger_button_send_blue_large.xml",
+        "source": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\src\\main\\res\\layout\\messenger_button_send_blue_large.xml"
+    },
+    {
+        "merged": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\build\\intermediates\\res\\merged\\release\\layout\\messenger_button_send_white_large.xml",
+        "source": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\src\\main\\res\\layout\\messenger_button_send_white_large.xml"
+    },
+    {
+        "merged": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\build\\intermediates\\res\\merged\\release\\layout\\messenger_button_send_white_round.xml",
+        "source": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\src\\main\\res\\layout\\messenger_button_send_white_round.xml"
+    },
+    {
+        "merged": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\build\\intermediates\\res\\merged\\release\\layout\\messenger_button_send_blue_round.xml",
+        "source": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\src\\main\\res\\layout\\messenger_button_send_blue_round.xml"
+    },
+    {
+        "merged": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\build\\intermediates\\res\\merged\\release\\layout\\messenger_button_send_blue_small.xml",
+        "source": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\src\\main\\res\\layout\\messenger_button_send_blue_small.xml"
+    },
+    {
+        "merged": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\build\\intermediates\\res\\merged\\release\\layout\\com_facebook_activity_layout.xml",
+        "source": "E:\\workplace\\robot\\alpha_1_new_8\\facebook\\src\\main\\res\\layout\\com_facebook_activity_layout.xml"
+    }
+]

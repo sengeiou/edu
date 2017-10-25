@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lLayout_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/alert_backgroud"
+        android:layout_gravity="center">
+
+        <com.ubt.alpha1e.ui.custom.ShapedImageView
+            android:id="@+id/iv_lesson_detail"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:scaleType="fitXY"
+            app:round_radius="10dp"
+            app:shape_mode="round_rect"
+            app:stroke_width="1dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_lesson_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="125dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:gravity="center"
+            android:textColor="@color/T1"
+            android:textSize="16sp"
+            android:visibility="visible"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_lesson_position"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitXY"
+        android:layout_marginTop="-25dp"
+        android:src="@drawable/lesson_ok"/>
+
+</LinearLayout>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="lib_bg_color">#F4F3F3</color>
+    <color name="lib_page_title">#f0f3f3</color>
+
+    <!--Input,reminder,click-->
+    <color name="A1">#E74C3C</color>
+    <color name="A2">#3498DB</color>
+    <color name="A3">#50E3C2</color>
+    <color name="A4">#B8BDC3</color>
+    <color name="A5">#E4E4E4</color>
+    <color name="A6">#FFFFFF</color>
+    <color name="A7">#2C3E50</color>
+
+    <!--Text colors-->
+
+    <color name="T1">#2c3e50</color>
+    <color name="T2">#666C72</color>
+    <color name="T3">#7F8C8D</color>
+    <color name="T4">#7C8FA8</color>
+    <color name="T5">#3498DB</color>
+    <color name="T6">#40C1BB</color>
+    <color name="T7">#9F9FA3</color>
+    <color name="T8">#71777D</color>
+    <color name="T9">#B5B5B5</color>
+    <color name="T10">#E9EDF3</color>
+    <color name="T11">#E74C3C</color>
+    <color name="T12">#CAD4E0</color>
+    <color name="DT5">#3498DB</color>
+    <color name="LT1">#2c3e50</color>
+    <color name="LT2">#2c3e50</color>
+    <color name="LT3">#2c3e50</color>
+
+    <!--background colors-->
+
+    <color name="B1">#B5C2D4</color>
+    <color name="B2">#F5503F</color>
+    <color name="B3">#DEE3E9</color>
+    <color name="B4">#E6ECF1</color>
+    <color name="B5">#F0F3F3</color>
+    <color name="TB1">#F0F3F3</color>
+    <color name="B6">#FFFFFF</color>
+    <color name="B7">#00000000</color>
+    <color name="LB1">#FFFFFF</color>
+    <color name="DB1">#FFFFFF</color>
+    <color name="GB1">#FFFFFF</color>
+    <color name="GB2">#E7EAEA</color>
+
+</resources>

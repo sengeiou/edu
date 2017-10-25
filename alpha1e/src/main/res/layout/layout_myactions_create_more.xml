@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ly_create_more"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/B6"
+    android:gravity="center"
+    android:layout_height="50dp">
+
+
+    <ImageView
+    android:id="@+id/img_add_create"
+    android:layout_width="25dp"
+    android:layout_height="25dp"
+    android:src="@drawable/myactions_add_creataction"
+    android:layout_marginRight="10dp"
+    />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/T1"
+        android:textSize="16sp"
+        android:text="@string/ui_myaction_creation_new"
+        />
+
+
+</LinearLayout>

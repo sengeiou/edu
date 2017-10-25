@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/B6"
+    tools:context="com.ubt.alpha1e.ui.MediaRecordActivity">
+
+    <include
+        android:id="@+id/layout_title"
+        layout="@layout/layout_title_back"/>
+
+    <SurfaceView
+        android:id="@+id/record_preview"
+        android:layout_below="@+id/layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    
+    <ProgressBar
+        android:id="@+id/record_progress"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:max="1000"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:progressDrawable="@drawable/progressbarhorizontal"
+        android:layout_below="@+id/record_preview"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_record_time"
+        android:layout_below="@+id/record_progress"
+        android:layout_marginTop="6dp"
+        android:layout_centerHorizontal="true"
+        android:text="10s"
+        />
+    <LinearLayout
+        android:id="@+id/layout_record_play_or_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/txt_record_time"
+        android:gravity="center"
+        android:layout_marginTop="75dp"
+        >
+      <ImageView
+          android:id="@+id/img_record_play_or_pause"
+          android:layout_width="80dp"
+          android:layout_height="80dp"
+          android:src="@drawable/publish_video_play"/>
+
+
+        <TextView
+            android:id="@+id/txt_record_play_or_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/ui_distribute_start_recording"
+            android:textColor="@color/T1"
+            android:textSize="12sp"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/layout_re_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/txt_record_time"
+        android:layout_toLeftOf="@+id/layout_record_play_or_pause"
+        android:layout_marginRight="40dp"
+        android:gravity="center"
+        android:layout_marginTop="75dp"
+        >
+        <ImageView
+            android:id="@+id/img_re_record"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/publish_recording_usable"/>
+
+        <TextView
+            android:id="@+id/txt_re_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/ui_distribute_record_again"
+            android:textColor="@color/T1"
+            android:textSize="12sp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_action_play_or_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toRightOf="@+id/layout_record_play_or_pause"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@+id/txt_record_time"
+        android:gravity="center"
+        android:layout_marginTop="75dp"
+        >
+        <ImageView
+            android:id="@+id/img_action_play_or_pause"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/publish_action_play"/>
+
+
+        <TextView
+            android:id="@+id/txt_action_play_or_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/ui_distribute_resume_action"
+            android:textColor="@color/T1"
+            android:textSize="12sp"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

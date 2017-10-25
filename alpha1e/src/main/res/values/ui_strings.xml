@@ -1,0 +1,52 @@
+<resources>
+    <array name="ui_lanuages">
+        <item>@string/ui_settings_language_english</item>
+        <item>@string/ui_setting_languages_s_chinese</item>
+        <item>@string/ui_settings_language_t_chinese</item>
+        <item>@string/ui_settings_language_japanese</item>
+        <item>@string/ui_settings_language_franch</item>
+        <item>@string/ui_settings_language_spanish</item>
+        <item>@string/ui_settings_language_germen</item>
+        <item>@string/ui_settings_language_italian</item>
+        <item>@string/ui_settings_language_korean</item>
+        <item>@string/ui_settings_language_russian</item>
+        <item>@string/ui_settings_language_hungarian</item>
+        <item>@string/ui_settings_language_turkish</item>
+    </array>
+
+    <array name="ui_lanuages_up">
+        <item>en</item>
+        <item>zh_CN</item>
+        <item>zh_TW</item>
+        <item>ja</item>
+        <item>fr</item>
+        <item>es</item>
+        <item>de</item>
+        <item>it</item>
+        <item>ko</item>
+        <item>ru</item>
+        <item>hu</item>
+        <item>tr</item>
+    </array>
+
+    <array name="ui_lanuages_title">
+        <item>English</item>
+        <item>简体中文</item>
+        <item>繁體中文</item>
+        <item>日本語</item>
+        <item>Français</item>
+        <item>El español</item>
+        <item>Deutsch</item>
+        <item>Italiano</item>
+        <item>한국어</item>
+        <item>Pусский</item>
+        <item>Magyar</item>
+        <item>Türk dili</item>
+    </array>
+
+    <array name="ui_course_language_up">
+        <item>en</item>
+        <item>zh_cn</item>
+        <item>HK</item>
+    </array>
+</resources>

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="E:\workplace\robot\alpha_1_new_8\facebook\src\main\assets"/><source path="E:\workplace\robot\alpha_1_new_8\facebook\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="E:\workplace\robot\alpha_1_new_8\facebook\src\release\assets"/></dataSet></merger>

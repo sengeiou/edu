@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="action_type_key">
+        <item>"ui_square_ishow"</item>
+        <item>"ui_square_dance"</item>
+        <item>"ui_square_story"</item>
+        <item>"ui_square_sport"</item>
+        <item>"ui_square_childrensong"</item>
+        <item>"ui_square_education"</item>
+        <item>"ui_square_unknown"</item>
+    </array>
+
+
+</resources>

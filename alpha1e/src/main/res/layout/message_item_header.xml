@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_square_info"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="visible">
+
+    <com.ubt.alpha1e.ui.custom.ShapedImageView
+        android:id="@+id/img_message_appraiser_head"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
+        android:layout_centerVertical="true"
+        android:scaleType="centerInside"
+        app:shape_mode="circle"
+        android:src="@drawable/register_login_default_head" />
+
+    <TextView
+        android:id="@+id/txt_message_appraiser_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="16dp"
+        android:layout_toRightOf="@+id/img_message_appraiser_head"
+        android:layout_toLeftOf="@+id/txt_message_reply"
+        android:textColor="@color/T1"
+        android:textSize="15sp"
+        android:ellipsize="end"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/txt_message_appraiser_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@+id/img_message_appraiser_head"
+        android:layout_below="@+id/txt_message_appraiser_name"
+        android:layout_marginTop="3dp"
+        android:textSize="11sp"
+        android:textColor="@color/T2"
+        android:text="00:01"
+        />
+
+    <TextView
+        android:id="@+id/txt_message_reply"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="2dp"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/T5"
+        android:text="@string/ui_setting_message_reply"
+        android:textSize="15sp"
+        android:visibility="gone"/>
+
+</RelativeLayout>

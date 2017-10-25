@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_activity_test_main">TestMainActivity</string>
+    <string name="lib_hello_world">Hello world!</string>
+    <string name="lib_back">返回</string>
+    <string name="lib_sel_country">选择国家</string>
+    <string name="lib_search">搜索</string>
+
+</resources>

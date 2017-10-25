@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="send_btn">#5ade78</color>
+    <color name="txt_green">#45b55a</color>
+    <color name="txt_hint">#999898</color>
+    <color name="txt_note">#989898</color>
+    <color name="txt_info">#979797</color>
+    <color name="remote_bottom">#959595</color>
+    <color name="txt_input_txt">#525151</color>
+    <color name="page_main_color">#020c18</color>
+    <color name="login_page_top">#010b17</color>
+    <color name="page_title">#040f1e</color>
+    <color name="login_page_botton">#020e1d</color>
+    <color name="page_title_remote">#0c2d49</color>
+    <color name="main_page">#020912</color>
+    <color name="welcome_txt">#7b7e80</color>
+    <color name="txt_nums">#dedede</color>
+    <color name="bottom">#051326</color>
+    <color name="main_bottom">#030d19</color>
+    <color name="battery_lev">#187fc8</color>
+    <color name="battery_low">#b61f22</color>
+    <color name="left_main">#111c29</color>
+    <color name="txt_negative">#424242</color>
+    <color name="search_bar">#0d141d</color>
+    <color name="list_color">#0f161f</color>
+    <color name="action_item_back">#2dffffff</color>
+    <color name="action_item_back_playing">#4cffffff</color>
+    <color name="line_spi">#68ffffff</color>
+    <color name="txt_sel">#999999</color>
+    <color name="main_hite">#cc1b1b1b</color>
+    <color name="txt_title_red">#f53d3a</color>
+    <color name="txt_title_green">#45b655</color>
+    <color name="remote_main">#010d18</color>
+    <color name="remote_info_control">#b2ffffff</color>
+    <color name="remote_footbool_bottom_back">#59ffffff</color>
+    <color name="remote_sel_model_back">#e01b1b1b</color>
+    <color name="remote_set_action_back">#44000000</color>
+    <color name="remote_set_action_type_item">#40ffffff</color>
+    <color name="remote_set_action_item">#14ffffff</color>
+    <color name="actions_lib_news">#0bffffff</color>
+    <color name="actions_lib_spi">#242c32</color>
+    <color name="actions_lib_video_crl">#47000000</color>
+    <color name="actions_lib_main">#030f1c</color>
+    <color name="actions_lib_line">#404a54</color>
+    <color name="actions_lib_input">#e8e8e8</color>
+    <color name="actions_new_base_actions">#182330</color>
+    <color name="actions_new_base_actions_save_preview">#154254</color>
+    <color name="actions_new_base_actions_item">#88000000</color>
+    <color name="actions_new_base_del_note">#eeeeee</color>
+    <color name="actions_new_base_spi">#29333d</color>
+    <color name="actions_new_video_record">#0e1216</color>
+    <color name="actions_new_video_ctrl">#7fffffff</color>
+    <color name="actions_new_video_pre_view">#15191d</color>
+    <color name="actions_new_video_pre_view_crtl">#1a1e22</color>
+    <color name="btn_disable">#898989</color>
+    <color name="txt_share">#464646</color>
+    <color name="btn_share_cancel">#e5e5e5</color>
+    <color name="txt_share_cancel">#de565a</color>
+    <color name="txt_more">#646464</color>
+    <color name="txt_new_edtion_info">#666c72</color>
+    <color name="txt_new_edtion_cancel">#e74c3c</color>
+    <color name="txt_new_edtion_ok">#3498db</color>
+    <color name="txt_charge">#5b5b5b</color>
+    <color name="dia_charge">#f0f3f3</color>
+    <color name="txt_charge_power">#e74c62</color>
+    <color name="txt_remote_type">#3498db</color>
+    <color name="txt_remote_set">#33ffffff</color>
+    <color name="title_about_us">#050e1f</color>
+    <color name="dia_sloading">#4c000000</color>
+    <color name="txt_info_detial">#7d8c8d</color>
+    <color name="txt_robot_info_spi">#c3c5c5</color>
+    <color name="btn_del">#ff3b30</color>
+    <color name="txt_message">#707070</color>
+    <color name="txt_battery_red">#ff5348</color>
+
+    <color name="home_txt">#6e7274</color>
+    <color name="register_txt_hint">#9f9fa3</color>
+    <color name="login_txt_by_phone">#2c3e50</color>
+    <color name="login_txt_by_email">#9f9fa3</color>
+    <color name="phone_number">#3498DB</color>
+    <color name="spy_txt_new_edtion">#c80000</color>
+    <color name="txt_action_type">#7c8fa8</color>
+    <color name="txt_language">#839091</color>
+    <color name="txt_action_type_dis">#c3cedc</color>
+    <color name="divider_white">#ffffff</color>
+    <color name="layout_tab_host">#50e3c2</color>
+    <color name="layout_text_host">#8a9fb5</color>
+
+    <!--换肤兼容-->
+
+    <color name="btn_login_content">#f0f3f3</color>
+    <color name="btn_login_around">#2c3e50</color>
+    <color name="txt_main_disc">#6e7274</color>
+    <color name="txt_main_click">#2c3e50</color>
+    <color name="btn_login_txt">#2c3e50</color>
+    <color name="btn_register_content">#f0f3f3</color>
+    <color name="btn_register_around">#2c3e50</color>
+    <color name="btn_get_content">#f0f3f3</color>
+    <color name="btn_get_around">#2c3e50</color>
+    <color name="edt_input_content">#ffffff</color>
+    <color name="edt_input_around">#000000</color>
+    <color name="txt_new_edtion">#2c3e50</color>
+    <color name="home_background">#f0f3f3</color>
+    <color name="txt_private_info">#ffffff</color>
+    <color name="bg_login_top">#e6ecf1</color>
+    <color name="btn_login_main_content">#f0f3f3</color>
+    <color name="btn_login_main_around">#2c3e50</color>
+    <color name="txt_alert">#2c3e50</color>
+    <color name="txt_type_main">#ffffff</color>
+    <color name="divider_action_type">#ebeef2</color>
+    <color name="bg_actions_item">#ffffff</color>
+    <color name="bg_more_item">#ffffff</color>
+    <color name="txt_left_disc">#2c3e50</color>
+    <color name="bg_left_main">#ffffff</color>
+    <color name="bg_left_item">#ffffff</color>
+    <color name="bg_settings">#f0f3f3</color>
+    <color name="bg_message_cancel">#2c3e50</color>
+    <color name="txt_provision">#7b9ecb</color>
+
+    <!--V2.7.1 color define-->
+    <color name="text_tab_color">#61686f</color>
+    <color name="text_tab_color_select">#0076ff</color>
+    <color name="text_user_name_color">#2C3E50</color>
+
+    <!--2017/8/16-->
+    <color name="text_confirm_color">#2c87f1</color>
+
+
+</resources>

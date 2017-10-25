@@ -1,0 +1,64 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sec_page_main">
+
+    <include layout="@layout/layout_title_back" />
+
+    <View
+        android:id="@+id/v_split"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="-1dp"
+        android:background="@color/A11"
+        android:layout_below="@+id/lay_title"/>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lay_title"
+        android:background="@android:color/white"
+        android:paddingBottom="16dp"
+        >
+
+        <com.ubt.alpha1e.ui.custom.DesContentEditText
+            android:id="@+id/edt_play_connect"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="16dp"
+            android:gravity="top|left"
+            android:maxLength="140"
+            android:hint="@string/ui_instruction_play_text_placeholder"
+            android:background="@drawable/bg_action_publish_edt"
+            android:textSize="14sp"
+            android:padding="5dp"
+            android:textColorHint="@color/T7"
+            android:textColor="@color/T1">
+            <requestFocus />
+        </com.ubt.alpha1e.ui.custom.DesContentEditText>
+
+        <TextView
+            android:id="@+id/tv_max_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/edt_play_connect"
+            android:layout_marginLeft="11dp"
+            android:layout_marginRight="22dp"
+            android:gravity="right"
+            android:padding="10dp"
+            android:text="0/140"
+            android:textColor="@color/txt_hint"
+            android:textSize="12sp" />
+
+        </RelativeLayout>
+
+</RelativeLayout>
+
+

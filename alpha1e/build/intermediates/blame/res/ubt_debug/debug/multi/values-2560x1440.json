@@ -1,0 +1,45 @@
+[
+    {
+        "outputFile": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\build\\intermediates\\res\\merged\\ubt_debug\\debug\\values-2560x1440\\values-2560x1440.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 47,
+                    "endOffset": 98
+                },
+                "from": {
+                    "file": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\values-2560x1440\\dimens.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 59,
+                        "endColumn": 47,
+                        "endOffset": 102
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 103,
+                    "endColumn": 47,
+                    "endOffset": 146
+                },
+                "from": {
+                    "file": "E:\\workplace_git\\alpha1e-android-app\\alpha1e\\src\\main\\res\\values-2560x1440\\dimens.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 108,
+                        "endColumn": 47,
+                        "endOffset": 151
+                    }
+                }
+            }
+        ]
+    }
+]

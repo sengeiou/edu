@@ -1,0 +1,156 @@
+Activity Resolver Table:
+  Schemes:
+      ubtrobot:
+        be0f2c6 com.ubt.alpha1e/.ui.Introduction.IntroductionActivity
+      tencent1104799391:
+        3e3e287 com.ubt.alpha1e/com.tencent.tauth.AuthActivity
+
+  Non-Data Actions:
+      cn.jpush.android.ui.PushActivity:
+        276c5b4 com.ubt.alpha1e/cn.jpush.android.ui.PushActivity
+      android.intent.action.MAIN:
+        a0735dd com.ubt.alpha1e/com.squareup.leakcanary.internal.DisplayLeakActivity
+        be0f2c6 com.ubt.alpha1e/.ui.Introduction.IntroductionActivity
+      com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY:
+        d697552 com.ubt.alpha1e/.ui.ActionsLibPreViewActivity
+
+Receiver Resolver Table:
+  Schemes:
+      package:
+        7122023 com.ubt.alpha1e/cn.jpush.android.service.PushReceiver
+
+  Non-Data Actions:
+      cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY:
+        7122023 com.ubt.alpha1e/cn.jpush.android.service.PushReceiver
+      cn.jpush.android.intent.MESSAGE_RECEIVED:
+        6948920 com.ubt.alpha1e/.services.MyJPushReceiver
+      android.net.conn.CONNECTIVITY_CHANGE:
+        7122023 com.ubt.alpha1e/cn.jpush.android.service.PushReceiver
+        dc652d9 com.ubt.alpha1e/com.qiniu.android.dns.NetworkReceiver
+      android.intent.action.BOOT_COMPLETED:
+        785949e com.ubt.alpha1e/.services.OSStartBroadcastReceiver
+      android.intent.action.USER_PRESENT:
+        7122023 com.ubt.alpha1e/cn.jpush.android.service.PushReceiver
+        dc652d9 com.ubt.alpha1e/com.qiniu.android.dns.NetworkReceiver
+      cn.jpush.android.intent.NOTIFICATION_OPENED:
+        6948920 com.ubt.alpha1e/.services.MyJPushReceiver
+      cn.jpush.android.intent.REGISTRATION:
+        6948920 com.ubt.alpha1e/.services.MyJPushReceiver
+      cn.jpush.android.intent.NOTIFICATION_RECEIVED:
+        6948920 com.ubt.alpha1e/.services.MyJPushReceiver
+
+Service Resolver Table:
+  Non-Data Actions:
+      cn.jpush.android.intent.PUSH_TIME:
+        75c9b7f com.ubt.alpha1e/cn.jpush.android.service.PushService
+      cn.jpush.android.intent.REPORT:
+        75c9b7f com.ubt.alpha1e/cn.jpush.android.service.PushService
+      cn.jpush.android.intent.DaemonService:
+        d09174c com.ubt.alpha1e/cn.jpush.android.service.DaemonService
+      cn.jpush.android.intent.PushService:
+        75c9b7f com.ubt.alpha1e/cn.jpush.android.service.PushService
+      cn.jpush.android.intent.REGISTER:
+        75c9b7f com.ubt.alpha1e/cn.jpush.android.service.PushService
+
+Permissions:
+  Permission [com.ubt.alpha1e.permission.JPUSH_MESSAGE] (e6f5f4e):
+    sourcePackage=com.ubt.alpha1e
+    uid=10274 gids=null type=0 prot=signature
+    perm=Permission{2c04395 com.ubt.alpha1e.permission.JPUSH_MESSAGE}
+    packageSetting=PackageSetting{a3b197c com.ubt.alpha1e/10274}
+
+Registered ContentProviders:
+  com.ubt.alpha1e/com.facebook.FacebookContentProvider:
+    Provider{ab25caa com.ubt.alpha1e/com.facebook.FacebookContentProvider}
+
+ContentProvider Authorities:
+  [com.facebook.app.FacebookContentProvider1533377826954209]:
+    Provider{ab25caa com.ubt.alpha1e/com.facebook.FacebookContentProvider}
+      applicationInfo=ApplicationInfo{ba9709b com.ubt.alpha1e}
+
+Key Set Manager:
+  [com.ubt.alpha1e]
+      Signing KeySets: 51
+
+Packages:
+  Package [com.ubt.alpha1e] (a3b197c):
+    userId=10274
+    pkg=Package{a565c38 com.ubt.alpha1e}
+    codePath=/data/app/com.ubt.alpha1e-1
+    resourcePath=/data/app/com.ubt.alpha1e-1
+    legacyNativeLibraryDir=/data/app/com.ubt.alpha1e-1/lib
+    primaryCpuAbi=armeabi-v7a
+    secondaryCpuAbi=null
+    versionCode=2617 targetSdk=20
+    versionName=2.6.1.7
+    splits=[base]
+    applicationInfo=ApplicationInfo{ba9709b com.ubt.alpha1e}
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP LARGE_HEAP ]
+    dataDir=/data/user/0/com.ubt.alpha1e
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2016-08-29 20:17:21
+    firstInstallTime=2016-08-29 20:00:22
+    lastUpdateTime=2016-08-29 20:17:22
+    signatures=PackageSignatures{6de5168 [22e8411]}
+    installPermissionsFixed=true installStatus=1
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP LARGE_HEAP ]
+    declared permissions:
+      com.ubt.alpha1e.permission.JPUSH_MESSAGE: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.RECEIVE_BOOT_COMPLETED
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.RECORD_AUDIO
+      android.permission.CAMERA
+      android.permission.INTERNET
+      android.permission.READ_PHONE_STATE
+      android.permission.ACCESS_WIFI_STATE
+      android.permission.WRITE_EXTERNAL_STORAGE
+      android.permission.BLUETOOTH
+      android.permission.BLUETOOTH_ADMIN
+      android.permission.ACCESS_FINE_LOCATION
+      android.permission.ACCESS_COARSE_LOCATION
+      com.ubt.alpha1e.permission.JPUSH_MESSAGE
+      android.permission.RECEIVE_USER_PRESENT
+      android.permission.WAKE_LOCK
+      android.permission.READ_EXTERNAL_STORAGE
+      android.permission.WRITE_SETTINGS
+      android.permission.VIBRATE
+      android.permission.MOUNT_UNMOUNT_FILESYSTEMS
+      android.permission.SYSTEM_ALERT_WINDOW
+      android.permission.CHANGE_WIFI_STATE
+      android.permission.ACCESS_LOCATION_EXTRA_COMMANDS
+      android.permission.CHANGE_NETWORK_STATE
+      android.permission.FLASHLIGHT
+      android.permission.READ_CONTACTS
+      com.android.browser.permission.READ_HISTORY_BOOKMARKS
+    install permissions:
+      android.permission.WRITE_SETTINGS: granted=true
+      android.permission.ACCESS_FINE_LOCATION: granted=true
+      android.permission.SYSTEM_ALERT_WINDOW: granted=true
+      android.permission.CHANGE_NETWORK_STATE: granted=true
+      android.permission.RECEIVE_BOOT_COMPLETED: granted=true
+      android.permission.BLUETOOTH: granted=true
+      android.permission.INTERNET: granted=true
+      com.android.browser.permission.READ_HISTORY_BOOKMARKS: granted=true
+      android.permission.BLUETOOTH_ADMIN: granted=true
+      android.permission.READ_EXTERNAL_STORAGE: granted=true
+      android.permission.ACCESS_COARSE_LOCATION: granted=true
+      android.permission.READ_PHONE_STATE: granted=true
+      android.permission.ACCESS_LOCATION_EXTRA_COMMANDS: granted=true
+      android.permission.CHANGE_WIFI_STATE: granted=true
+      android.permission.FLASHLIGHT: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.CAMERA: granted=true
+      com.ubt.alpha1e.permission.JPUSH_MESSAGE: granted=true
+      android.permission.WRITE_EXTERNAL_STORAGE: granted=true
+      android.permission.VIBRATE: granted=true
+      android.permission.ACCESS_WIFI_STATE: granted=true
+      android.permission.RECORD_AUDIO: granted=true
+      android.permission.WAKE_LOCK: granted=true
+      android.permission.READ_CONTACTS: granted=true
+    User 0:  installed=true hidden=false stopped=false notLaunched=false enabled=0
+      gids=[3002, 3003, 3001]
+      runtime permissions:
+      enabledComponents:
+        cn.jpush.android.service.PushReceiver
+        cn.jpush.android.service.AlarmReceiver
