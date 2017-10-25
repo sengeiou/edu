@@ -1,4 +1,4 @@
-include ':alpha1sGifLib', ':ChangeSkin', ':library'
+include ':alpha1sGifLib', ':ChangeSkin', ':library', ':BaseLib'
 include ':alpha1sLib'
 include ':alphaQRLib'
 include ':choseCountryNum'

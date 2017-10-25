@@ -9,6 +9,7 @@ slidingmenu_library/build/*
 weiboSDK/build/*
 alphaQRLib/build/*
 library/build/*
+BaseLib/build/*
 alpha1e-android-app.iml
 .idea/*
 .gradle/*

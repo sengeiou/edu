@@ -574,6 +574,12 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             />
 
+        <activity android:name="com.ubt.alpha1e.action.ActionsCreateActivity"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            />
+
 
 
     </application>
