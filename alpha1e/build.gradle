@@ -37,25 +37,25 @@ android {
         ubt_debug {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ubt_debug"]
             buildConfigField 'String', 'WebServiceAdderss', '"https://10.10.1.14:8443/ubx"'
-            buildConfigField 'String', 'WebCourseAdderss',  '"http://10.10.20.30:8039/course-rest"'
+            buildConfigField 'String', 'WebCourseAdderss', '"http://10.10.20.30:8039/course-rest"'
             buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"http://10.10.1.12:8030/alpha1/zip?versionId="'
         }
         ubt_test {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ubt_test"]
             buildConfigField 'String', 'WebServiceAdderss', '"https://10.10.1.14:8443/ubx"'
-            buildConfigField 'String', 'WebCourseAdderss',  '"http://10.10.20.30:8039/course-rest"'
+            buildConfigField 'String', 'WebCourseAdderss', '"http://10.10.20.30:8039/course-rest"'
             buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"http://10.10.1.12:8030/alpha1/zip?versionId="'
         }
         ubt_robot {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ubt_robot"]
             buildConfigField 'String', 'WebServiceAdderss', '"https://services.ubtrobot.com/ubx"'
-            buildConfigField 'String', 'WebCourseAdderss',  '"https://account.ubtrobot.com/course-rest"'
+            buildConfigField 'String', 'WebCourseAdderss', '"https://account.ubtrobot.com/course-rest"'
             buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"https://account.ubtrobot.com/alpha1e-rest/alpha1/zip?versionId="'
         }
         google {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "google"]
             buildConfigField 'String', 'WebServiceAdderss', '"https://services.ubtrobot.com/ubx"'
-            buildConfigField 'String', 'WebCourseAdderss',  '"https://account.ubtrobot.com/course-rest"'
+            buildConfigField 'String', 'WebCourseAdderss', '"https://account.ubtrobot.com/course-rest"'
             buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"https://account.ubtrobot.com/alpha1e-rest/alpha1/zip?versionId="'
         }
     }
@@ -73,7 +73,7 @@ android {
     }
     repositories {
         flatDir {
-            dirs'libs'
+            dirs 'libs'
         }
     }
 
@@ -98,23 +98,24 @@ dependencies {
     compile(name: 'happy-dns-0.2.7', ext: 'aar')
     compile(name: 'vitamioRecorderLibrary-release', ext: 'aar')
     compile(name: 'universalvideoview-release', ext: 'aar')
-    compile 'com.android.support:support-v4:24.+'
-    compile 'com.android.support:recyclerview-v7:24.+'
     //    compile 'com.android.support:recyclerview-v7:+'
-    compile 'com.android.support:design:24.+'
-    compile 'com.android.support:multidex:1.0.1'
-//    compile 'com.squareup.okhttp3:okhttp:3.3.1'
+    //    compile 'com.squareup.okhttp3:okhttp:3.3.1'
 //    compile 'com.github.bumptech.glide:glide:3.7.0'
 //    compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    compile 'com.facebook.android:facebook-android-sdk:4.8.0'
-//    compile 'com.zhy:okhttputils:2.6.2'
+    //    compile 'com.zhy:okhttputils:2.6.2'
     //compile 'com.android.support:appcompat-v7:22.1.1'
     compile project(':library')
-    compile 'org.greenrobot:eventbus:3.0.0'
     compile project(':BaseLib')
 //    compile 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
-    
+
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.8.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 }
