@@ -20,13 +20,13 @@ import java.util.List;
 public interface UserCenterContact {
 
     interface UserCenterView extends BaseView {
-        void loadData(List<LeftMenuModel> list);
-        void loadFragmentData(List<Fragment> fragments);
+        void loadData(List<LeftMenuModel> list,List<Fragment> fragmentList);
+
     }
 
     interface UserCenterPresenter extends BasePresenter<UserCenterView> {
         void initData();
-        void initFragmentData();
+
     }
 
 }

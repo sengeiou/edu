@@ -6,35 +6,30 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ * 邮箱 784787081@qq.com
  */
 
 public class UserInfoFragment extends MVPBaseFragment<UserInfoContract.View, UserInfoPresenter> implements UserInfoContract.View {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
+    private TextView tvContent;
+    private View mContentView;
 
     public UserInfoFragment() {
-     }
+    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TestFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static UserInfoFragment newInstance(String param1, String param2) {
         UserInfoFragment fragment = new UserInfoFragment();
@@ -57,8 +52,9 @@ public class UserInfoFragment extends MVPBaseFragment<UserInfoContract.View, Use
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_info, container, false);
+        mContentView = inflater.inflate(R.layout.fragment_user_info, container, false);
+        initUI();
+        return mContentView;
     }
 
 
@@ -73,6 +69,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserInfoContract.View, Use
         super.onDetach();
 
     }
+
     @Override
     protected UserInfoPresenter createPresenter() {
         return null;
@@ -80,7 +77,8 @@ public class UserInfoFragment extends MVPBaseFragment<UserInfoContract.View, Use
 
     @Override
     protected void initUI() {
-
+        tvContent = mContentView.findViewById(R.id.tv_content);
+        tvContent.setText(mParam1);
     }
 
     @Override

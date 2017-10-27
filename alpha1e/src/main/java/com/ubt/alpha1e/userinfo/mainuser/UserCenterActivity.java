@@ -30,7 +30,7 @@ import java.util.List;
 public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCenterView, UserCenterImpPresenter> implements UserCenterContact.UserCenterView {
     private List<LeftMenuModel> mMenuModels = new ArrayList<>();//左侧菜单栏信息
     private List<Fragment> mFragmentList = new ArrayList<>();
-      private RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     BaseQuickAdapter mBaseQuickAdapter;
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
@@ -41,10 +41,8 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_center);
         mPresenter.initData();
-        mPresenter.initFragmentData();
         initUI();
     }
-
 
 
     /**
@@ -54,28 +52,41 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
     protected void initUI() {
         mFragmentManager = this.getFragmentManager();
         mFragmentTransaction = this.mFragmentManager.beginTransaction();
-         mFragmentTransaction.add(R.id.view_pager, mFragmentList.get(0));
+        mFragmentTransaction.add(R.id.view_pager, mFragmentList.get(0));
         mFragmentTransaction.commit();
         mCurrentFragment = mFragmentList.get(0);
-         mRecyclerView = (RecyclerView) findViewById(R.id.rl_leftmenu);
+        mRecyclerView = (RecyclerView) findViewById(R.id.rl_leftmenu);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mMenuModels.get(0).setChick(true);
         mBaseQuickAdapter = new LeftAdapter(R.layout.layout_usercenter_left_item, mMenuModels);
         mBaseQuickAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Toast.makeText(UserCenterActivity.this, "position==" + position, Toast.LENGTH_LONG).show();
                 loadFragment(mFragmentList.get(position));
+                LeftMenuModel menuModel = mMenuModels.get(position);
+                for (int i = 0; i < mMenuModels.size(); i++) {
+                    if (mMenuModels.get(i).getNameString().equals(menuModel.getNameString())) {
+                        mMenuModels.get(i).setChick(true);
+                    } else {
+                        mMenuModels.get(i).setChick(false);
+                    }
+                }
+                mBaseQuickAdapter.notifyDataSetChanged();
             }
 
 
         });
         mRecyclerView.setAdapter(mBaseQuickAdapter);
-
     }
 
+    /**
+     * 重新加载Fragment
+     * @param targetFragment 加载的Fragment
+     */
     private void loadFragment(Fragment targetFragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-       // UbtLog.d(TAG,"targetFragment.isAdded()->>>"+(!targetFragment.isAdded()));
+        // UbtLog.d(TAG,"targetFragment.isAdded()->>>"+(!targetFragment.isAdded()));
         if (!targetFragment.isAdded()) {
             mCurrentFragment.onStop();
 
@@ -106,19 +117,13 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
     }
 
     @Override
-    public void loadData(List<LeftMenuModel> list) {
+    public void loadData(List<LeftMenuModel> list, List<Fragment> fragments) {
         mMenuModels.clear();
         mMenuModels.addAll(list);
-    }
-
-
-
-    @Override
-    public void loadFragmentData(List<Fragment> fragments) {
         mFragmentList.clear();
         mFragmentList.addAll(fragments);
-
     }
+
 
     public class LeftAdapter extends BaseQuickAdapter<LeftMenuModel, BaseViewHolder> {
 
@@ -129,6 +134,12 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         @Override
         protected void convert(BaseViewHolder helper, LeftMenuModel item) {
             helper.setText(R.id.tv_item_name, item.getNameString());
+            if (item.isChick()) {
+                helper.setBackgroundColor(R.id.tv_item_name, getContext().getResources().getColor(R.color.battery_lev));
+            } else {
+                helper.setBackgroundColor(R.id.tv_item_name, getContext().getResources().getColor(R.color.white));
+
+            }
         }
     }
 }
