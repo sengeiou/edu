@@ -1,10 +1,10 @@
-package com.ubt.alpha1e.usercenter.contact;
+package com.ubt.alpha1e.userinfo.mainuser;
+
 
 import android.app.Fragment;
 
-import com.ubt.alpha1e.base.BasePresenter;
-import com.ubt.alpha1e.base.BaseView;
-import com.ubt.alpha1e.usercenter.model.LeftMenuModel;
+import com.ubt.alpha1e.mvp.BasePresenter;
+import com.ubt.alpha1e.mvp.BaseView;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import java.util.List;
 
 public interface UserCenterContact {
 
-    interface UserCenterView extends BaseView{
+    interface UserCenterView extends BaseView {
         void loadData(List<LeftMenuModel> list);
         void loadFragmentData(List<Fragment> fragments);
     }

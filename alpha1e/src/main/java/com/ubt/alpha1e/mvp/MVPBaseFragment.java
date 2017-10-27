@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.base;
+package com.ubt.alpha1e.mvp;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -8,26 +8,23 @@ import android.support.annotation.Nullable;
 
 import com.ubt.alpha1e.AlphaApplication;
 
+import java.lang.reflect.ParameterizedType;
+
 /**
- * @author：liuhai
- * @date：2017/10/26 15:04
- * @modifier：ubt
- * @modify_date：2017/10/26 15:04
- * [A brief description]
- * version
+ * MVPPlugin
+ *  邮箱 784787081@qq.com
  */
 
-public abstract class BaseMvpFragment<V extends BaseView, P extends BasePresenterImpl<V>> extends Fragment implements BaseView {
-    public P mPresenter;
-
+public abstract class  MVPBaseFragment<V extends BaseView,T extends BasePresenterImpl<V>> extends Fragment implements BaseView{
+    public T mPresenter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createPresenter();
+        mPresenter= getInstance(this,1);
         mPresenter.attachView((V) this);
     }
 
-    protected abstract P createPresenter();
+    protected abstract T createPresenter();
 
     protected abstract void initUI();
 
@@ -37,7 +34,7 @@ public abstract class BaseMvpFragment<V extends BaseView, P extends BasePresente
     public void onResume() {
 
         // 如果系统语言和本地语言不一致，重启App
-        ((BaseMvpActivity) this.getActivity()).doCheckLanguage();
+        ((MVPBaseActivity) this.getActivity()).doCheckLanguage();
         super.onResume();
     }
 
@@ -56,7 +53,7 @@ public abstract class BaseMvpFragment<V extends BaseView, P extends BasePresente
 
     public String getStringRes(String str)
     {
-        return ((BaseMvpActivity)this.getActivity()).getStringResources(str);
+        return ((MVPBaseActivity)this.getActivity()).getStringResources(str);
     }
 
     /**
@@ -65,14 +62,16 @@ public abstract class BaseMvpFragment<V extends BaseView, P extends BasePresente
      * @return
      */
     public Drawable getDrawableRes(String string){
-        return ((BaseMvpActivity)this.getActivity()).getDrawableRes(string);
+        return ((MVPBaseActivity)this.getActivity()).getDrawableRes(string);
     }
+
+
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mPresenter != null)
+        if (mPresenter!=null)
             mPresenter.detachView();
     }
 
@@ -81,6 +80,20 @@ public abstract class BaseMvpFragment<V extends BaseView, P extends BasePresente
         return super.getContext();
     }
 
-
+    public  <T> T getInstance(Object o, int i) {
+            try {
+                return ((Class<T>) ((ParameterizedType) (o.getClass()
+                        .getGenericSuperclass())).getActualTypeArguments()[i])
+                        .newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (ClassCastException e) {
+                e.printStackTrace();
+            } catch (java.lang.InstantiationException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
 }
-

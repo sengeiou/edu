@@ -1,12 +1,10 @@
-package com.ubt.alpha1e.usercenter.prenster;
+package com.ubt.alpha1e.userinfo.mainuser;
+
 
 import android.app.Fragment;
 
-import com.ubt.alpha1e.base.BaseMvpFragment;
-import com.ubt.alpha1e.base.BasePresenterImpl;
-import com.ubt.alpha1e.usercenter.contact.UserCenterContact;
-import com.ubt.alpha1e.usercenter.fragment.UserInfoFragment;
-import com.ubt.alpha1e.usercenter.model.LeftMenuModel;
+import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.userinfo.manager.UserInfoFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +22,7 @@ public class UserCenterImpPresenter extends BasePresenterImpl<UserCenterContact.
 
     @Override
     public void initData() {
-        if (isAttchView()) {
+        if (isAttachView()) {
             List<LeftMenuModel> leftMenuModels = new ArrayList<>();
             for (int i = 0; i < 8; i++) {
                 LeftMenuModel menuModel = new LeftMenuModel("test" + i);

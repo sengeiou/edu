@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.usercenter.model;
+package com.ubt.alpha1e.userinfo.mainuser;
 
 /**
  * @author：liuhai

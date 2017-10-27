@@ -22,7 +22,7 @@ import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IMainUI;
 import com.ubt.alpha1e.ui.helper.LoginHelper;
 import com.ubt.alpha1e.ui.helper.MainHelper;
-import com.ubt.alpha1e.usercenter.UserCenterActivity;
+import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.umeng.analytics.MobclickAgent;
 

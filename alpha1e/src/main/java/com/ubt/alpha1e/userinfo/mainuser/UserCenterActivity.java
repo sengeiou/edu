@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.usercenter;
+package com.ubt.alpha1e.userinfo.mainuser;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -14,10 +14,7 @@ import android.widget.Toast;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.BaseMvpActivity;
-import com.ubt.alpha1e.usercenter.contact.UserCenterContact;
-import com.ubt.alpha1e.usercenter.model.LeftMenuModel;
-import com.ubt.alpha1e.usercenter.prenster.UserCenterImpPresenter;
+import com.ubt.alpha1e.mvp.MVPBaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +27,7 @@ import java.util.List;
  * 个人中心主界面
  * version
  */
-public class UserCenterActivity extends BaseMvpActivity<UserCenterContact.UserCenterView, UserCenterImpPresenter> implements UserCenterContact.UserCenterView {
+public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCenterView, UserCenterImpPresenter> implements UserCenterContact.UserCenterView {
     private List<LeftMenuModel> mMenuModels = new ArrayList<>();//左侧菜单栏信息
     private List<Fragment> mFragmentList = new ArrayList<>();
       private RecyclerView mRecyclerView;
@@ -48,11 +45,7 @@ public class UserCenterActivity extends BaseMvpActivity<UserCenterContact.UserCe
         initUI();
     }
 
-    @Override
-    protected UserCenterImpPresenter createPresenter() {
-        mPresenter = new UserCenterImpPresenter();
-        return mPresenter;
-    }
+
 
     /**
      * 初始化数据
@@ -117,6 +110,8 @@ public class UserCenterActivity extends BaseMvpActivity<UserCenterContact.UserCe
         mMenuModels.clear();
         mMenuModels.addAll(list);
     }
+
+
 
     @Override
     public void loadFragmentData(List<Fragment> fragments) {

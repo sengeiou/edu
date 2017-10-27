@@ -570,11 +570,13 @@
         <activity android:name=".action.course.CourseActionActivity">
         </activity>
         <activity
-            android:name=".usercenter.UserCenterActivity"
+            android:name=".userinfo.mainuser.UserCenterActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+
             android:screenOrientation="landscape"
             android:theme="@style/TranslucentTheme">
         </activity>
+
     </application>
 
 </manifest>
