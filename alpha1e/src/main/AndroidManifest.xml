@@ -580,6 +580,8 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             />
 
+        <activity android:name="com.ubt.alpha1e.test.TestActivity"
+            android:theme="@style/NoTitleTheme" />
 
 
     </application>
