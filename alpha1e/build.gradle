@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 24
-    buildToolsVersion "23.0.2"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "com.ubt.alpha1e"
-        minSdkVersion 15
-        targetSdkVersion 20
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
 
         multiDexEnabled true
     }
@@ -30,9 +30,14 @@ android {
 
         debug {
             minifyEnabled false
-            shrinkResources true
+//            shrinkResources false
         }
     }
+    packagingOptions {
+        exclude 'META-INF/LICENSE' // will not include LICENSE file
+
+    }
+
     productFlavors {
         ubt_debug {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ubt_debug"]
@@ -98,6 +103,7 @@ dependencies {
     compile(name: 'happy-dns-0.2.7', ext: 'aar')
     compile(name: 'vitamioRecorderLibrary-release', ext: 'aar')
     compile(name: 'universalvideoview-release', ext: 'aar')
+
     //    compile 'com.android.support:recyclerview-v7:+'
     //    compile 'com.squareup.okhttp3:okhttp:3.3.1'
 //    compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -107,14 +113,15 @@ dependencies {
     compile project(':library')
     compile project(':BaseLib')
 //    compile 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
-
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.android.support:recyclerview-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    compile rootProject.ext.supportDependencies.supportAppcompat
+    compile rootProject.ext.supportDependencies.supportdesign
+    compile rootProject.ext.supportDependencies.supportRecyleView
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.facebook.android:facebook-android-sdk:4.8.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    compile 'com.android.support:support-v4:26.+'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'

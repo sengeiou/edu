@@ -70,7 +70,7 @@ import static com.ubt.alpha1e.ui.custom.CommonCtrlView.KEY_CURRENT_PLAYING_ACTIO
  * version
  */
 
-public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresenterImpl<V>> extends AppCompatActivity implements ISkinChangedListener, LayoutInflaterFactory, IUI, BaseView {
+public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresenterImpl<V>> extends AppCompatActivity implements ISkinChangedListener, LayoutInflaterFactory, IUI,BaseView {
 
     private String mCurrentSetLanguage = "";
 
@@ -121,7 +121,6 @@ public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresente
         AppManager.getInstance().addActivity(this);
         createPresenter();
         initSkin();
-        super.onCreate(savedInstanceState);
         initWindowStatusBarColor();
 //        if (mCurrentApplanguage == null || mCurrentApplanguage.equals(""))
 //            mCurrentApplanguage = this.getResources().getConfiguration().locale
@@ -150,6 +149,11 @@ public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresente
     }
 
     protected abstract P createPresenter();
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
@@ -379,8 +383,8 @@ public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresente
 
         //此Activity销毁后，取消Eventbus监听
         EventBus.getDefault().unregister(this);
-        ((AlphaApplication) this.getApplication()).removeActivityList(this);
-        super.onDestroy();
+        AppManager.getInstance().finishActivity(this);
+         super.onDestroy();
         SkinManager.getInstance().removeChangedListener(this);
         if (null != mPresenter) {
             mPresenter.detachView();
