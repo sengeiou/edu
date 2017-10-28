@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.userinfo.manager;
+package com.ubt.alpha1e.userinfo.useredit;
 
 import android.content.Context;
 
@@ -10,7 +10,7 @@ import com.ubt.alpha1e.mvp.BaseView;
  *  邮箱 784787081@qq.com
  */
 
-public class UserInfoContract {
+public class UserEditContract {
     interface View extends BaseView {
         
     }

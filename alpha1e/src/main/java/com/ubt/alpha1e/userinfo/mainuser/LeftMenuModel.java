@@ -12,6 +12,7 @@ package com.ubt.alpha1e.userinfo.mainuser;
 public class LeftMenuModel {
     private String nameString;
     private boolean chick;   //标识
+    private int imageId;
 
     public LeftMenuModel(String nameString) {
         this.nameString = nameString;
@@ -33,4 +34,11 @@ public class LeftMenuModel {
         this.chick = chick;
     }
 
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
+    }
 }

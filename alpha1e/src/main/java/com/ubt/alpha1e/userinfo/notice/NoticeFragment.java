@@ -10,10 +10,7 @@ import com.ubt.alpha1e.mvp.MVPBaseFragment;
 
 public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticePresenter> implements NoticeContract.View {
 
-    @Override
-    protected NoticePresenter createPresenter() {
-        return null;
-    }
+
 
     @Override
     protected void initUI() {
@@ -23,6 +20,11 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     @Override
     protected void initControlListener() {
 
+    }
+
+    @Override
+    public int getContentViewId() {
+        return 0;
     }
 
     @Override

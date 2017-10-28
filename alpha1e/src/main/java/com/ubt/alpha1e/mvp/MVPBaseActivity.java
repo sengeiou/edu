@@ -60,6 +60,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 import static com.ubt.alpha1e.ui.ActionUnpublishedActivity.KEY_ACTION_SYNC_STATE;
 import static com.ubt.alpha1e.ui.custom.CommonCtrlView.KEY_CURRENT_PLAYING_ACTION_NAME;
 
@@ -108,12 +111,14 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
     private List<SkinAttr> skinAttrList;
 
     public T mPresenter;
-
+    Unbinder mUnbinder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         LayoutInflaterCompat.setFactory(layoutInflater, this);
         super.onCreate(savedInstanceState);
+        setContentView(getContentViewId());
+        mUnbinder= ButterKnife.bind(this);
         SkinManager.getInstance().addChangedListener(this);
         //((AlphaApplication) this.getApplication()).addToActivityList(this);
         // ((AlphaApplication) this.getApplication()).setBaseActivity(this);
@@ -145,6 +150,9 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
 
 
     }
+
+    public abstract int getContentViewId();
+
     public  <T> T getInstance(Object o, int i) {
         try {
             return ((Class<T>) ((ParameterizedType) (o.getClass()
@@ -395,6 +403,7 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
         EventBus.getDefault().unregister(this);
         AppManager.getInstance().finishActivity(this);
         super.onDestroy();
+        mUnbinder.unbind();//解除绑定，官方文档只对fragment做了解绑
         SkinManager.getInstance().removeChangedListener(this);
         if (null != mPresenter) {
             mPresenter.detachView();

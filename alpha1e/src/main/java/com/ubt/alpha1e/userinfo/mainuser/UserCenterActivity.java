@@ -3,13 +3,17 @@ package com.ubt.alpha1e.userinfo.mainuser;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -18,6 +22,9 @@ import com.ubt.alpha1e.mvp.MVPBaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @author：liuhai
@@ -28,10 +35,19 @@ import java.util.List;
  * version
  */
 public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCenterView, UserCenterImpPresenter> implements UserCenterContact.UserCenterView {
+    @BindView(R.id.tv_main_title)
+    TextView mTvTitle;
+    @BindView(R.id.rl_user_title)
+    RelativeLayout mRlUserTitle;
+    @BindView(R.id.rl_leftmenu)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.fl_main_content)
+    FrameLayout mViewPager;
+    @BindView(R.id.iv_main_back)
+    ImageView mIvMainBack;
     private List<LeftMenuModel> mMenuModels = new ArrayList<>();//左侧菜单栏信息
     private List<Fragment> mFragmentList = new ArrayList<>();
-    private RecyclerView mRecyclerView;
-    BaseQuickAdapter mBaseQuickAdapter;
+    private BaseQuickAdapter mBaseQuickAdapter;
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private Fragment mCurrentFragment;
@@ -39,11 +55,21 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_center);
+        //setContentView(R.layout.activity_user_center);
         mPresenter.initData();
         initUI();
     }
 
+    @Override
+    public int getContentViewId() {
+        return R.layout.activity_user_center;
+    }
+
+
+    @OnClick(R.id.iv_main_back)
+    public void onBack(View view) {
+        finish();
+    }
 
     /**
      * 初始化数据
@@ -52,19 +78,20 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
     protected void initUI() {
         mFragmentManager = this.getFragmentManager();
         mFragmentTransaction = this.mFragmentManager.beginTransaction();
-        mFragmentTransaction.add(R.id.view_pager, mFragmentList.get(0));
+        mFragmentTransaction.add(R.id.fl_main_content, mFragmentList.get(0));
         mFragmentTransaction.commit();
         mCurrentFragment = mFragmentList.get(0);
         mRecyclerView = (RecyclerView) findViewById(R.id.rl_leftmenu);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         mMenuModels.get(0).setChick(true);
         mBaseQuickAdapter = new LeftAdapter(R.layout.layout_usercenter_left_item, mMenuModels);
         mBaseQuickAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Toast.makeText(UserCenterActivity.this, "position==" + position, Toast.LENGTH_LONG).show();
-                loadFragment(mFragmentList.get(position));
                 LeftMenuModel menuModel = mMenuModels.get(position);
+                mTvTitle.setText(menuModel.getNameString());
+                loadFragment(mFragmentList.get(position));
                 for (int i = 0; i < mMenuModels.size(); i++) {
                     if (mMenuModels.get(i).getNameString().equals(menuModel.getNameString())) {
                         mMenuModels.get(i).setChick(true);
@@ -82,6 +109,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
 
     /**
      * 重新加载Fragment
+     *
      * @param targetFragment 加载的Fragment
      */
     private void loadFragment(Fragment targetFragment) {
@@ -89,10 +117,9 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         // UbtLog.d(TAG,"targetFragment.isAdded()->>>"+(!targetFragment.isAdded()));
         if (!targetFragment.isAdded()) {
             mCurrentFragment.onStop();
-
             transaction
                     .hide(mCurrentFragment)
-                    .add(R.id.view_pager, targetFragment)
+                    .add(R.id.fl_main_content, targetFragment)
                     .commit();
         } else {
             mCurrentFragment.onStop();
@@ -134,8 +161,13 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         @Override
         protected void convert(BaseViewHolder helper, LeftMenuModel item) {
             helper.setText(R.id.tv_item_name, item.getNameString());
+            Drawable drawable = getResources().getDrawable(item.getImageId());
+            /// 这一步必须要做,否则不会显示.
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            TextView tv = helper.getView(R.id.tv_item_name);
+            tv.setCompoundDrawables(drawable, null, null, null);
             if (item.isChick()) {
-                helper.setBackgroundColor(R.id.tv_item_name, getContext().getResources().getColor(R.color.battery_lev));
+                helper.setBackgroundColor(R.id.tv_item_name, getContext().getResources().getColor(R.color.txt_info));
             } else {
                 helper.setBackgroundColor(R.id.tv_item_name, getContext().getResources().getColor(R.color.white));
 
