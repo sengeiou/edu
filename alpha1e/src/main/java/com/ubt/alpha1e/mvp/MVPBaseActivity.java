@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.base;
+package com.ubt.alpha1e.mvp;
 
 import android.app.ActivityManager;
 import android.app.Dialog;
@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ThemeInfo;
@@ -48,6 +49,7 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,23 +60,23 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 import static com.ubt.alpha1e.ui.ActionUnpublishedActivity.KEY_ACTION_SYNC_STATE;
 import static com.ubt.alpha1e.ui.custom.CommonCtrlView.KEY_CURRENT_PLAYING_ACTION_NAME;
 
+
 /**
- * @author：liuhai
- * @date：2017/10/25 19:49
- * @modifier：ubt
- * @modify_date：2017/10/25 19:49
- * [A brief description]
- * version
+ * MVPPlugin
+ *  邮箱 784787081@qq.com
  */
 
-public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresenterImpl<V>> extends AppCompatActivity implements ISkinChangedListener, LayoutInflaterFactory, IUI, BaseView {
+public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenterImpl<V>> extends AppCompatActivity implements ISkinChangedListener, LayoutInflaterFactory, IUI,BaseView {
 
-    private String mCurrentSetLanguage = "";
+        private String mCurrentSetLanguage = "";
 
-    protected Dialog mCoonLoadingDia;
+        protected Dialog mCoonLoadingDia;
 
     protected abstract void initUI();
 
@@ -108,20 +110,22 @@ public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresente
     static final Class<?>[] sCreateViewSignature = new Class[]{View.class, String.class, Context.class, AttributeSet.class};
     private List<SkinAttr> skinAttrList;
 
-    protected P mPresenter;
-
+    public T mPresenter;
+    Unbinder mUnbinder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         LayoutInflaterCompat.setFactory(layoutInflater, this);
         super.onCreate(savedInstanceState);
+        setContentView(getContentViewId());
+        mUnbinder= ButterKnife.bind(this);
         SkinManager.getInstance().addChangedListener(this);
         //((AlphaApplication) this.getApplication()).addToActivityList(this);
         // ((AlphaApplication) this.getApplication()).setBaseActivity(this);
         AppManager.getInstance().addActivity(this);
-        createPresenter();
+        mPresenter= getInstance(this,1);
+        mPresenter.attachView((V) this);
         initSkin();
-        super.onCreate(savedInstanceState);
         initWindowStatusBarColor();
 //        if (mCurrentApplanguage == null || mCurrentApplanguage.equals(""))
 //            mCurrentApplanguage = this.getResources().getConfiguration().locale
@@ -143,13 +147,31 @@ public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresente
 //        SkinManager.getInstance().changeSkin(skinPath, FileTools.package_name, null);
 
         EventBus.getDefault().register(this);
-        if (null != mPresenter) {
-            mPresenter.attachView((V)this);
-        }
+
 
     }
 
-    protected abstract P createPresenter();
+    public abstract int getContentViewId();
+
+    public  <T> T getInstance(Object o, int i) {
+        try {
+            return ((Class<T>) ((ParameterizedType) (o.getClass()
+                    .getGenericSuperclass())).getActualTypeArguments()[i])
+                    .newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
@@ -362,7 +384,7 @@ public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresente
             @Override
             public void run() {
                 try {
-                    LowPowerDialog.getInstance(BaseMvpActivity.this).show();
+                    LowPowerDialog.getInstance(MVPBaseActivity.this).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -379,8 +401,9 @@ public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresente
 
         //此Activity销毁后，取消Eventbus监听
         EventBus.getDefault().unregister(this);
-        ((AlphaApplication) this.getApplication()).removeActivityList(this);
+        AppManager.getInstance().finishActivity(this);
         super.onDestroy();
+        mUnbinder.unbind();//解除绑定，官方文档只对fragment做了解绑
         SkinManager.getInstance().removeChangedListener(this);
         if (null != mPresenter) {
             mPresenter.detachView();
@@ -488,7 +511,7 @@ public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresente
             public void run() {
                 // TODO Auto-generated method stub
                 Toast.makeText(
-                        BaseMvpActivity.this, getStringResources("ui_home_conn_lost"), Toast.LENGTH_SHORT).show();
+                        MVPBaseActivity.this, getStringResources("ui_home_conn_lost"), Toast.LENGTH_SHORT).show();
             }
         });
         MyLog.writeLog("蓝牙掉线", this.getClass().getName() + "-->onLostBtCoon");
@@ -867,7 +890,7 @@ public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresente
     //新增判断是否是第一次启动App，false则显示改版指引，true则不显示。
     public boolean isLaunchered() {
         return BasicSharedPreferencesOperator
-                .getInstance(BaseMvpActivity.this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD)
+                .getInstance(MVPBaseActivity.this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD)
                 .doReadSync(
                         BasicSharedPreferencesOperator.IS_NEED_SHOW_GUIDE_VIEW)
                 .equals(BasicSharedPreferencesOperator.NO_NEED_SHOW_GUIDE_VIEW);
@@ -884,7 +907,7 @@ public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresente
 
 
     public void doWriteLauncherState() {
-        BasicSharedPreferencesOperator.getInstance(BaseMvpActivity.this,
+        BasicSharedPreferencesOperator.getInstance(MVPBaseActivity.this,
                 BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(
                 BasicSharedPreferencesOperator.IS_NEED_SHOW_GUIDE_VIEW,
                 BasicSharedPreferencesOperator.NO_NEED_SHOW_GUIDE_VIEW,
@@ -892,12 +915,12 @@ public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresente
     }
 
     public void recordSchemeShowState(String step) {
-        BasicSharedPreferencesOperator.getInstance(BaseMvpActivity.this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(BasicSharedPreferencesOperator.KEY_SCHEME_SHOW_STATE,
+        BasicSharedPreferencesOperator.getInstance(MVPBaseActivity.this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(BasicSharedPreferencesOperator.KEY_SCHEME_SHOW_STATE,
                 step, null, -1);
     }
 
     public String readSchemeShowState() {
-        return BasicSharedPreferencesOperator.getInstance(BaseMvpActivity.this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doReadSync(BasicSharedPreferencesOperator.KEY_SCHEME_SHOW_STATE);
+        return BasicSharedPreferencesOperator.getInstance(MVPBaseActivity.this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doReadSync(BasicSharedPreferencesOperator.KEY_SCHEME_SHOW_STATE);
     }
 
     //以下方法用于保存当前播放的动作名称，已解决显示过程中我的创建和下载的动作的名称为数字的问题
@@ -921,5 +944,4 @@ public abstract class BaseMvpActivity<V extends BaseView, P extends BasePresente
     public String readActionSyncState() {
         return BasicSharedPreferencesOperator.getInstance(this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doReadSync(KEY_ACTION_SYNC_STATE);
     }
-
 }

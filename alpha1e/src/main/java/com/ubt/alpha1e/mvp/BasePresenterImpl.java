@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.base;
+package com.ubt.alpha1e.mvp;
 
 /**
  * MVPPlugin
@@ -19,7 +19,7 @@ public class BasePresenterImpl<V extends BaseView> implements BasePresenter<V> {
     }
 
     @Override
-    public boolean isAttchView() {
+    public boolean isAttachView() {
         return mView != null ? true : false;
     }
 }

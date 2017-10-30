@@ -4,11 +4,34 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
-    }
+        classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'com.jakewharton:butterknife-gradle-plugin:8.8.1'
+     }
 }
 allprojects {
     repositories {
         jcenter()
+        maven { url "https://jitpack.io" }
     }
+}
+
+/*在根目录中配置公用供子模块调用*/
+ext {
+    //Android
+    compileSdkVersion = 26
+    buildToolsVersion = "26.0.1"
+    minSdkVersion = 19
+    targetSdkVersion = 21
+
+    //Version
+    supportLibrary = "26.+"
+
+    //supportLibraries dependencies
+    supportDependencies = [
+            supportAppcompat: "com.android.support:appcompat-v7:${supportLibrary}",
+            supportdesign: "com.android.support:design:${supportLibrary}",
+            supportRecyleView:"com.android.support:recyclerview-v7:${supportLibrary}"
+
+    ]
+
 }

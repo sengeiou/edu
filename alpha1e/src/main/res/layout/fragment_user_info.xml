@@ -1,0 +1,125 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/sec_play_low"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/sec_play_low"
+        >
+
+        <com.ubt.alpha1e.ui.custom.ShapedImageView
+            android:id="@+id/img_head"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/default_head"
+            android:scaleType="fitXY"
+            app:shape_mode="circle"/>
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_head"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/bg_edittext_round"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                >
+
+                <TextView
+                    style="@style/text_userinfo_left_style"
+                    android:layout_alignParentLeft="true"
+                    android:text="昵称"/>
+
+                <TextView
+                    android:id="@+id/tv_user_name"
+                    style="@style/text_userinfo_right_style"
+                    android:text="leon"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/sec_txt_num"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                >
+
+                <TextView
+                    style="@style/text_userinfo_left_style"
+                    android:layout_alignParentLeft="true"
+                    android:text="性别"/>
+
+                <TextView
+                    android:id="@+id/tv_user_sex"
+                    style="@style/text_userinfo_right_style"
+                    android:text="男"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/sec_txt_num"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                >
+
+                <TextView
+                    style="@style/text_userinfo_left_style"
+                    android:layout_alignParentLeft="true"
+                    android:text="年龄"/>
+
+                <TextView
+                    android:id="@+id/tv_user_age"
+                    style="@style/text_userinfo_right_style"
+                    android:text="10"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/sec_txt_num"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                >
+
+                <TextView
+                    style="@style/text_userinfo_left_style"
+                    android:layout_alignParentLeft="true"
+                    android:text="年级"/>
+
+                <TextView
+                    android:id="@+id/tv_user_grade"
+                    style="@style/text_userinfo_right_style"
+                    android:text="一年级"
+                    />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</ScrollView>

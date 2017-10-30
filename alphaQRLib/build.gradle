@@ -1,11 +1,10 @@
 apply plugin: 'com.android.library'
 android {
-    compileSdkVersion 22
-    buildToolsVersion "23.0.2"
-
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 22
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -23,7 +22,7 @@ android {
 
 dependencies {
 
-    compile 'com.android.support:support-v4:22.2.1'
+    compile rootProject.ext.supportDependencies.supportAppcompat
 
     compile project(':choseCountryNum')
 }
