@@ -830,6 +830,13 @@
     <string name="ui_task_known">我知道了</string>
     <string name="ui_create_guide_help">点击这里查看帮助内容</string>
     <string name="ui_task_chanllege_fail">闯关失败,再试试吧!</string>
+    
+    <string name="ui_main_right_icon">遥控器</string>
+    <string name="ui_main_right_icon2">动作</string>
+    <string name="ui_main_right_icon3">编程</string>
+    <string name="ui_main_right_icon4">社区</string>
+    <string name="ui_main_course_center">课程中心</string>
+    
 
     <!-- 不需要翻译 -->
     <string name="ui_pc_update_url">http://www.ubtrobot.com/download/index.html</string>

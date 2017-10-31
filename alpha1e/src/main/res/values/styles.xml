@@ -171,5 +171,13 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">18sp</item>
     </style>
-
+    <style name="main_right_button">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">95dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
 </resources>

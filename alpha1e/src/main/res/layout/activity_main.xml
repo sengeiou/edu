@@ -1,9 +1,89 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@drawable/main_background"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="match_parent"
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/cartoon_action"
+        android:layout_width="320dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/top_icon3"
+        android:layout_marginTop="35.43dp"
+        android:background="@drawable/main_robot"/>
+    <TextView
+        android:id="@+id/right_icon"
+        style="@style/main_right_button"
+        android:drawableTop="@drawable/main_remote"
+        android:tag="course"
+        android:text="@string/ui_main_right_icon"
+        android:layout_alignTop="@+id/top_icon3"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/right_icon2"
+        style="@style/main_right_button"
+        android:drawableTop="@drawable/main_action"
+        android:tag="action"
+        android:text="@string/ui_main_right_icon2"
+        android:layout_below="@+id/right_icon" />
+    <TextView
+        android:id="@+id/right_icon3"
+        style="@style/main_right_button"
+        android:drawableTop="@drawable/main_programming"
+        android:tag="programming"
+        android:text="@string/ui_main_right_icon3"
+        android:layout_below="@+id/right_icon2" />
+    <TextView
+        android:id="@+id/right_icon4"
+        style="@style/main_right_button"
+        android:drawableTop="@drawable/main_community"
+        android:tag="community"
+        android:text="@string/ui_main_right_icon4"
+        android:layout_below="@+id/right_icon3"
+         />
+
+    <TextView
+        android:id="@+id/top_icon"
+        android:drawableTop="@drawable/main_center"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button" />
-</LinearLayout>
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="21dp" />
+    <TextView
+        android:id="@+id/top_icon2"
+        android:drawableTop="@drawable/main_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_alignBaseline="@+id/top_icon"
+        android:layout_alignBottom="@+id/top_icon"
+        android:layout_toEndOf="@+id/top_icon" />
+    <TextView
+        android:id="@+id/top_icon3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/top_icon2"
+        android:layout_marginStart="13dp"
+        android:drawableTop="@drawable/main_playing"
+        android:layout_toEndOf="@+id/top_icon2" />
+
+    <TextView
+        android:id="@+id/bottom_icon"
+        android:drawableTop="@drawable/main_book"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/right_icon4"
+        android:layout_marginLeft="46dp"
+        android:text="@string/ui_main_course_center"
+        android:textColor="@color/white"
+        android:gravity="center_horizontal"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="82.67dp"
+        android:background="@drawable/main_alert"/>
+
+</RelativeLayout>

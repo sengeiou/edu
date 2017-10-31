@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.haha.perflib.Main;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
@@ -23,6 +24,7 @@ import com.ubt.alpha1e.ui.dialog.LoadingDialog;
 import com.ubt.alpha1e.ui.helper.IStartUI;
 import com.ubt.alpha1e.ui.helper.LoginHelper;
 import com.ubt.alpha1e.ui.helper.StartHelper;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.umeng.analytics.MobclickAgent;
 
@@ -265,7 +267,8 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
                 .equals(BasicSharedPreferencesOperator.IS_FIRST_USE_APP_VALUE_TRUE)
                 || AlphaApplicationValues.getCurrentEdit() == AlphaApplicationValues.EdtionCode.for_factory_edit) {
             //this version has show introduction go to main page
-            inte.setClass(StartActivity.this,MyMainActivity.class);
+//            inte.setClass(StartActivity.this,MyMainActivity.class);
+            inte.setClass(StartActivity.this,MainActivity.class);
         }else {
             inte.setClass(StartActivity.this,IntroductionActivity.class);
         }

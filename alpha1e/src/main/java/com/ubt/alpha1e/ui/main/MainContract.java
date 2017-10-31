@@ -20,9 +20,7 @@ public class MainContract {
 
     }
 
-    interface  Presenter extends BasePresenter<View> {
-        void launchActivity(String packageName);
-
+    interface Presenter extends BasePresenter<View> {
         void requestCartoonAction(String json);
 
         void requestCartoonText(String text);
@@ -30,5 +28,7 @@ public class MainContract {
         void requestBluetoothStatus(String status);
 
         void commandRobotAction(String json);
+
+        void dealMessage(String json);
     }
 }

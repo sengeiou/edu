@@ -727,7 +727,7 @@ public class ActionsLibMainFragment3 extends BaseFragment implements
                         break;
                     //单图
                     case 2:
-                        //动作
+                        //main_action
                     case 3:
 
                         BannerDetailActivity.launchActivity(activity, PG.convertParcelable(info));
