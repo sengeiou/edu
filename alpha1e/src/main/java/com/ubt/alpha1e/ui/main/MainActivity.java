@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.MyMainActivity;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -31,6 +34,8 @@ import pl.droidsonroids.gif.GifImageView;
 public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View {
     @BindView(R.id.cartoon_action)
     GifImageView cartoonAction;
+    @BindView(R.id.cartoon_body_touch)
+    ImageView cartoonBodyTouch;
     @BindView(R.id.right_icon)
     TextView rightIcon;
     @BindView(R.id.right_icon2)
@@ -43,13 +48,17 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     TextView topIcon;
     @BindView(R.id.top_icon2)
     TextView topIcon2;
+    @BindView(R.id.top_icon2_disconnect)
+    TextView topIcon2Disconnect;
     @BindView(R.id.top_icon3)
     TextView topIcon3;
+    @BindView(R.id.habit_alert)
+    EditText habitAlert;
     @BindView(R.id.bottom_icon)
     TextView bottomIcon;
     private String TAG = "MainActivity";
 
-    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon2,R.id.right_icon3,R.id.right_icon4,R.id.right_icon})
+    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3,R.id.right_icon,R.id.right_icon2, R.id.right_icon3, R.id.right_icon4,R.id.cartoon_body_touch})
     protected void switchActivity(View view) {
         Log.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
@@ -59,6 +68,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 startActivity(mLaunch);
                 break;
             case R.id.top_icon2:
+                cartoonBodyTouch.setVisibility(View.VISIBLE);
+                cartoonAction.setVisibility(View.INVISIBLE);
                 break;
             case R.id.top_icon3:
                 break;
@@ -71,6 +82,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.right_icon3:
                 break;
             case R.id.right_icon4:
+                break;
+            case R.id.cartoon_body_touch:
+                cartoonAction.setVisibility(View.VISIBLE);
+                cartoonBodyTouch.setVisibility(View.INVISIBLE);
+                UbtLog.d(TAG,"CARTOON BODY TOUCH ");
+                showCartoonAction("TEX");
                 break;
             default:
                 break;
