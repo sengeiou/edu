@@ -2,7 +2,8 @@
     android:orientation="vertical"
     android:background="@drawable/main_background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/mainui">
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/cartoon_action"
@@ -94,28 +95,23 @@
         android:layout_toEndOf="@+id/top_icon2" />
     <EditText
         android:id="@+id/habit_alert"
-        android:layout_width="211dp"
-        android:layout_height="110dp"
-        android:layout_marginTop="83dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/top_icon2"
+        android:layout_marginTop="60dp"
         android:background="@drawable/main_alert"
         android:textColor="@color/white"
         android:gravity="center"
         android:text="" />
-    <LinearLayout
-        android:layout_width="104dp"
-        android:layout_height="57dp"
-        android:layout_marginTop="195dp"
-        android:layout_marginLeft="19dp"
-       >
     <TextView
         android:id="@+id/bottom_icon"
         android:drawableTop="@drawable/main_book"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="120dp"
         android:text="@string/ui_main_course_center"
         android:textColor="@color/white"
         android:textSize="12sp"
         android:gravity="center_horizontal"
         />
-    </LinearLayout>
 </RelativeLayout>

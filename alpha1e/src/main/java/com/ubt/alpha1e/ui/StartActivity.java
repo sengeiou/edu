@@ -268,6 +268,7 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
                 || AlphaApplicationValues.getCurrentEdit() == AlphaApplicationValues.EdtionCode.for_factory_edit) {
             //this version has show introduction go to main page
 //            inte.setClass(StartActivity.this,MyMainActivity.class);
+           // inte.setClass(StartActivity.this,MainActivity.class);
             inte.setClass(StartActivity.this,MainActivity.class);
         }else {
             inte.setClass(StartActivity.this,IntroductionActivity.class);

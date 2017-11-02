@@ -3,10 +3,12 @@ package com.ubt.alpha1e.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
@@ -22,6 +24,7 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jpush.android.ui.FullScreenView;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -32,6 +35,7 @@ import pl.droidsonroids.gif.GifImageView;
  */
 
 public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View {
+
     @BindView(R.id.cartoon_action)
     GifImageView cartoonAction;
     @BindView(R.id.cartoon_body_touch)
@@ -56,9 +60,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     EditText habitAlert;
     @BindView(R.id.bottom_icon)
     TextView bottomIcon;
+    @BindView(R.id.mainui)
+    RelativeLayout mainui;
     private String TAG = "MainActivity";
+    int screen_width = 0;
+    int screen_height = 0;
 
-    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3,R.id.right_icon,R.id.right_icon2, R.id.right_icon3, R.id.right_icon4,R.id.cartoon_body_touch})
+    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3, R.id.right_icon4, R.id.cartoon_body_touch})
     protected void switchActivity(View view) {
         Log.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
@@ -86,7 +94,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.cartoon_body_touch:
                 cartoonAction.setVisibility(View.VISIBLE);
                 cartoonBodyTouch.setVisibility(View.INVISIBLE);
-                UbtLog.d(TAG,"CARTOON BODY TOUCH ");
+                UbtLog.d(TAG, "CARTOON BODY TOUCH ");
                 showCartoonAction("TEX");
                 break;
             default:
@@ -97,6 +105,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getScreenInch();
+        initUi();
     }
 
     @Override
@@ -155,6 +165,45 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void onMessageEvent(MessageEvent event) {
         Log.d(TAG, "RECEIVE THE MESSAGE IN MAIN THREAD" + event.message);
         mPresenter.dealMessage(event.message);
+    }
+
+    private double getScreenInch() {
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        screen_width = width;
+        screen_height = height;
+        Log.d(TAG, "width " + width + "height  " + height);
+        double wi = (double) width / (double) dm.xdpi;
+        double hi = (double) height / (double) dm.ydpi;
+        double x = Math.pow(wi, 2);
+        double y = Math.pow(hi, 2);
+        Log.d(TAG, "SCREEN  " + Math.sqrt(x + y));
+        return Math.sqrt(x + y);
+    }
+
+    private void initUi() {
+        //Course icon
+        int course_icon_width = 156;
+        int course_icon_height = 86;
+        int init_screen_width = 960;
+        int init_screen_height = 540;
+        int course_icon_margin_left = 29;
+        int course_icon_margin_bottom = 100;
+//        RelativeLayout rl = (RelativeLayout) findViewById(R.id.mainui);
+//        RelativeLayout.LayoutParams params;
+//        params = new RelativeLayout.LayoutParams(screen_width,screen_height);
+//        params.leftMargin = (course_icon_margin_left*screen_width)/init_screen_width;
+//        params.bottomMargin = (course_icon_margin_bottom*screen_height)/init_screen_height;
+//        rl.addView(bottomIcon, params);
+        bottomIcon.setX((course_icon_margin_left*screen_width)/init_screen_width);
+        bottomIcon.setY(screen_height-((course_icon_margin_bottom*screen_height)/init_screen_height)-86);
+        Log.d(TAG,"COURSE POS  X:"+ (course_icon_margin_left*screen_width)/init_screen_width+"  Y: "+(screen_height-((course_icon_margin_bottom*screen_height)/init_screen_height)));
+
+
+
+
     }
 
 
