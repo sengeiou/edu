@@ -3,67 +3,74 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/sec_play_low"
+            android:background="@color/bg_user_main"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/sec_play_low"
+        android:background="@color/bg_user_main"
         >
 
-        <RelativeLayout
-            android:id="@+id/rl_user_title"
-            android:layout_width="match_parent"
-            android:layout_height="50dp">
 
-            <ImageView
-                android:id="@+id/iv_main_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:src="@drawable/btn_back"/>
+        <ImageView
+            android:id="@+id/iv_main_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="27dp"
+            android:src="@drawable/btn_back"
+            android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/tv_main_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                />
+        <TextView
+            android:id="@+id/tv_main_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="27dp"
+            android:text="填写宝宝信息"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/gray_dft"/>
-        </RelativeLayout>
+        <ImageView
+            android:id="@+id/iv_complete_info"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="25dp"
+            />
+
 
         <com.ubt.alpha1e.ui.custom.ShapedImageView
             android:id="@+id/img_head"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_below="@+id/rl_user_title"
+            android:layout_width="77dp"
+            android:layout_height="73dp"
+            android:layout_below="@+id/tv_main_title"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/default_head"
             android:scaleType="fitXY"
             app:shape_mode="circle"/>
 
         <LinearLayout
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_width="285dp"
+            android:layout_height="195dp"
             android:layout_below="@+id/img_head"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/bg_edittext_round"
+            android:background="@drawable/bg_edit_user"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="0dp"
+                android:layout_weight="1.0"
                 >
 
                 <TextView
@@ -82,12 +89,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_alignParentBottom="true"
-                    android:background="@color/sec_txt_num"/>
+                    android:background="@color/bg_line_color"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="0dp"
+                android:layout_weight="1.0"
                 >
 
                 <TextView
@@ -102,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="22dp"
                     android:orientation="horizontal">
                     <!-- 定义两个单选框 -->
                     <RadioButton
@@ -112,7 +120,8 @@
                         android:button="@drawable/radio_select_sex"
                         android:checked="true"
                         android:text="男"
-                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textColor="@drawable/color_radiobutton"
                         />
 
                     <RadioButton
@@ -122,7 +131,8 @@
                         android:layout_marginLeft="10dp"
                         android:button="@drawable/radio_select_sex"
                         android:text="女"
-                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textColor="@drawable/color_radiobutton"
                         />
                 </RadioGroup>
 
@@ -130,12 +140,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_alignParentBottom="true"
-                    android:background="@color/sec_txt_num"/>
+                    android:background="@color/bg_line_color"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="0dp"
+                android:layout_weight="1.0"
                 >
 
                 <TextView
@@ -153,12 +164,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_alignParentBottom="true"
-                    android:background="@color/sec_txt_num"/>
+                    android:background="@color/bg_line_color"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="0dp"
+                android:layout_weight="1.0"
                 >
 
                 <TextView

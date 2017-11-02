@@ -10,7 +10,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.ant.country.CountryActivity;
-import com.ubt.alpha1e.AlphaApplicationValues.Thrid_login_type;
+ import com.ubt.alpha1e.AlphaApplicationValues.Thrid_login_type;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
@@ -102,7 +102,7 @@ public class AlphaApplication extends MultiDexApplication {
         initJPush(this);
         initSkin(this);
         initConnectClient();
-
+        initStyleDialog();
 //        LeakCanary.install(this);
         VCamera.setVideoCachePath(FileTools.media_cache);
         VCamera.setDebugMode(true);
@@ -128,6 +128,10 @@ public class AlphaApplication extends MultiDexApplication {
         JPushInterface.init(ctx);
     }
 
+    public static Context getmContext() {
+        return mContext;
+    }
+
     /**
      * 初始化主题
      */
@@ -141,6 +145,13 @@ public class AlphaApplication extends MultiDexApplication {
      */
     public void initConnectClient(){
         ConnectClientUtil.getInstance().init();
+    }
+
+    /**
+     * 初始化对话框
+     */
+    public void initStyleDialog(){
+       //  StyledDialog.init(getApplicationContext());
     }
 
     @Override

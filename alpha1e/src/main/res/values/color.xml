@@ -126,4 +126,9 @@
     <color name="text_confirm_color">#2c87f1</color>
 
 
+
+    <color name="bg_user_main">#E4F2F7</color>
+    <color name="bg_line_color">#979797</color>
+    <color name="tv_blue_color">#00A4E6</color>
+    <color name="tv_black_color">#000000</color>
 </resources>

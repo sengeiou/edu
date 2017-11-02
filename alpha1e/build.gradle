@@ -126,4 +126,6 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'com.orhanobut:dialogplus:1.11@aar'
+    compile 'com.weigan:loopView:0.1.2'
 }

@@ -3,37 +3,39 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/sec_play_low"
+            android:background="@color/bg_user_main"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/sec_play_low"
+        android:background="@color/bg_user_main"
         >
+
 
         <com.ubt.alpha1e.ui.custom.ShapedImageView
             android:id="@+id/img_head"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="77dp"
+            android:layout_height="73dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/default_head"
             android:scaleType="fitXY"
             app:shape_mode="circle"/>
 
         <LinearLayout
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_width="285dp"
+            android:layout_height="195dp"
             android:layout_below="@+id/img_head"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/bg_edittext_round"
+            android:background="@drawable/bg_edit_user"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="0dp"
+                android:layout_weight="1.0"
                 >
 
                 <TextView
@@ -44,6 +46,7 @@
                 <TextView
                     android:id="@+id/tv_user_name"
                     style="@style/text_userinfo_right_style"
+                    android:drawableRight="@null"
                     android:text="leon"
                     />
 
@@ -51,12 +54,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_alignParentBottom="true"
-                    android:background="@color/sec_txt_num"/>
+                    android:background="@color/bg_line_color"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="0dp"
+                android:layout_weight="1.0"
                 >
 
                 <TextView
@@ -64,22 +68,50 @@
                     android:layout_alignParentLeft="true"
                     android:text="性别"/>
 
-                <TextView
-                    android:id="@+id/tv_user_sex"
-                    style="@style/text_userinfo_right_style"
-                    android:text="男"
-                    />
+                <!-- 定义一组单选框 -->
+                <RadioGroup
+                    android:id="@+id/radio_group_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="22dp"
+                    android:orientation="horizontal">
+                    <!-- 定义两个单选框 -->
+                    <RadioButton
+                        android:id="@+id/male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/radio_select_sex"
+                        android:checked="true"
+                        android:text="男"
+                        android:textColor="@drawable/color_radiobutton"
+                        android:textSize="16sp"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:button="@drawable/radio_select_sex"
+                        android:text="女"
+                        android:textColor="@drawable/color_radiobutton"
+                        android:textSize="16sp"
+                        />
+                </RadioGroup>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_alignParentBottom="true"
-                    android:background="@color/sec_txt_num"/>
+                    android:background="@color/bg_line_color"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="0dp"
+                android:layout_weight="1.0"
                 >
 
                 <TextView
@@ -97,12 +129,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_alignParentBottom="true"
-                    android:background="@color/sec_txt_num"/>
+                    android:background="@color/bg_line_color"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="0dp"
+                android:layout_weight="1.0"
                 >
 
                 <TextView

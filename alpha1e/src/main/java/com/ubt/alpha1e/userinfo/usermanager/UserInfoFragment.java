@@ -1,47 +1,91 @@
 package com.ubt.alpha1e.userinfo.usermanager;
 
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.data.model.UserInfo;
+import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.data.FileTools;
+import com.ubt.alpha1e.data.ImageTools;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
+import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.custom.ShapedImageView;
-import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
+import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
+import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.userinfo.useredit.UserEditContract;
+import com.ubt.alpha1e.userinfo.useredit.UserEditPresenter;
+import com.ubt.alpha1e.utils.log.UbtLog;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * MVPPlugin
  * 邮箱 784787081@qq.com
  */
 
-public class UserInfoFragment extends MVPBaseFragment<UserInfoContract.View, UserInfoPresenter> implements UserInfoContract.View {
+public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, UserEditPresenter> implements UserEditContract.View {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private String mParam1;
+    private String mParam2;
     @BindView(R.id.img_head)
     ShapedImageView mImgHead;
     @BindView(R.id.tv_user_name)
     TextView mTvUserName;
-    @BindView(R.id.tv_user_sex)
-    TextView mTvUserSex;
+    @BindView(R.id.male)
+    RadioButton mMale;
+    @BindView(R.id.female)
+    RadioButton mFemale;
+    @BindView(R.id.radio_group_sex)
+    RadioGroup mRadioGroupSex;
     @BindView(R.id.tv_user_age)
     TextView mTvUserAge;
     @BindView(R.id.tv_user_grade)
     TextView mTvUserGrade;
 
-    private String mParam1;
-    private String mParam2;
+    Handler mHandler = new Handler();
+    private Uri mImageUri;
+    /**
+     * 拍照获取照片
+     */
+    public static final int GetUserHeadRequestCodeByShoot = 1001;
+    /**
+     * 相册获取
+     */
+    public static final int GetUserHeadRequestCodeByFile = 1002;
 
+    private UserModel mUserModel = null;
+    private String[] greadeList = new String[]{"幼儿园小班", "幼儿园中班", "幼儿园大班", "小学一年级", "小学二年级", "小学三年级", "小学四年级"
+            , "小学五年级", "小学六年级及以上"};
 
     public UserInfoFragment() {
+
     }
 
 
@@ -62,13 +106,13 @@ public class UserInfoFragment extends MVPBaseFragment<UserInfoContract.View, Use
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        UbtLog.d("UserInfoFragment", "onCreate");
     }
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 
     @Override
@@ -80,13 +124,63 @@ public class UserInfoFragment extends MVPBaseFragment<UserInfoContract.View, Use
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPresenter.getUserInfo(getContext());
+        UbtLog.d("UserInfoFragment", "onActivityCreated");
+
     }
 
+    /**
+     * 性别选中事件
+     *
+     * @param view
+     * @param ischanged
+     */
+    @OnCheckedChanged({R.id.male, R.id.female})
+    public void onRadioCheck(CompoundButton view, boolean ischanged) {
+        switch (view.getId()) {
+            case R.id.male:
+                if (ischanged) {
+                    ToastUtils.showShort("男孩子哦");
+                    mUserModel = (UserModel) SPUtils.getInstance().readObject("userinfo");
+                    if (null != mUserModel) {
+                        Log.d("userModel", mUserModel.toString());
+                    }
+                    Log.d("userModel", SPUtils.getInstance().getString("test"));
+                }
+                break;
+            case R.id.female:
+                if (ischanged) {
+                    ToastUtils.showShort("女孩子哦");
+                    UserModel userModel = new UserModel();
+                    userModel.setUserName("刘海");
+                    userModel.setAge(28);
+                    userModel.setGrade("daxue");
+                    SPUtils.getInstance().saveObject("userinfo", userModel);
+                    SPUtils.getInstance().put("test", "wodeddd");
+                }
+                break;
 
-    @OnClick({R.id.tv_user_name, R.id.tv_user_sex, R.id.tv_user_age, R.id.tv_user_grade})
-    public void toEditActivity(View view) {
-        mContext.startActivity(new Intent(mContext, UserEditActivity.class));
+            default:
+                break;
+        }
+    }
+
+    @OnClick({R.id.img_head, R.id.tv_user_age, R.id.tv_user_grade})
+    public void onClickView(View view) {
+        switch (view.getId()) {
+            case R.id.img_head:
+                mPresenter.showImageHeadDialog((Activity) mContext);
+                break;
+            case R.id.tv_user_age:
+                mPresenter.showAgeDialog((Activity) mContext, 3);
+                break;
+            case R.id.tv_user_grade:
+                List<String> list = new ArrayList<>();
+                for (String grade : greadeList) {
+                    list.add(grade);
+                }
+                mPresenter.showGradeDialog((Activity) mContext, 2, list);
+                break;
+        }
     }
 
     @Override
@@ -111,29 +205,110 @@ public class UserInfoFragment extends MVPBaseFragment<UserInfoContract.View, Use
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        UbtLog.d("UserInfoFragment", "onDestroyView");
     }
-
 
     @Override
-    public void setUserInfo(UserInfo mCurrentUserInfo) {
-        if (mCurrentUserInfo != null) {
+    public void onDestroy() {
+        super.onDestroy();
+        UbtLog.d("UserInfoFragment", "onDestroy");
+    }
 
-            Glide.with(this)
-                    .load(mCurrentUserInfo.userImage)
-                    .fitCenter()
-                    .into(mImgHead);
+    @Override
+    public void onPause() {
+        super.onPause();
+        UbtLog.d("UserInfoFragment", "onPause");
+    }
 
-            if (mCurrentUserInfo.userName != null) {
-                mTvUserName.setText(mCurrentUserInfo.userName);
+    @Override
+    public void getAgeDataList(List<String> list) {
+
+    }
+
+    /**
+     * 拍照
+     */
+    @Override
+    public void takeImageFromShoot() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File path = new File(FileTools.image_cache);
+        if (!path.exists()) {
+            path.mkdirs();
+        }
+        mImageUri = Uri.fromFile(new File(path, new Date().getTime() + ""));
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+        cameraIntent.putExtra("return-data", true);
+        startActivityForResult(cameraIntent, GetUserHeadRequestCodeByShoot);
+    }
+
+    /**
+     * 从相册获取照片
+     */
+    @Override
+    public void takeImageFromAblum() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PrivateInfoHelper.GetUserHeadRequestCodeByFile);
+    }
+
+    /**
+     * 年龄选择滚动回调
+     *
+     * @param type 0表示Age 1表示grade
+     * @param item 选择内容
+     */
+    @Override
+    public void ageSelectItem(int type, String item) {
+        ToastUtils.showShort(item);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == GetUserHeadRequestCodeByFile
+                || requestCode == GetUserHeadRequestCodeByShoot) {
+            if (resultCode == RESULT_OK) {
+                ContentResolver cr = mContext.getContentResolver();
+                if (requestCode == GetUserHeadRequestCodeByFile) {
+                    if (data == null) {
+                        return;
+                    }
+
+                    String type = cr.getType(data.getData());
+                    if (type == null) {
+                        return;
+                    }
+                    mImageUri = data.getData();
+                }
+                try {
+                    InputStream in = cr.openInputStream(mImageUri);
+                    ImageTools.compressImage(in, mImgHead.getWidth(),
+                            mImgHead.getHeight(), new IImageListener() {
+                                @Override
+                                public void onGetImage(boolean isSuccess,
+                                                       final Bitmap bitmap, long request_code) {
+                                    if (isSuccess) {
+                                        mHandler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Bitmap img = ImageTools.ImageCrop(bitmap);
+                                                mImgHead.setImageBitmap(img);
+                                            }
+                                        });
+                                    }
+                                }
+
+                            }, true);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
-
-            if (mCurrentUserInfo.userGender != null) {
-
-                mTvUserSex.setText(mCurrentUserInfo.userGender);
-            } else {
-                mTvUserSex.setText("ui_perfect_not_set");
-            }
-
         }
     }
+
+
 }
