@@ -6,26 +6,27 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/cartoon_action"
-        android:layout_width="320dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/top_icon3"
-        android:layout_marginTop="35.43dp"
+        android:layout_width="342dp"
+        android:layout_height="342dp"
+        android:layout_marginLeft="149dp"
+        android:layout_marginTop="19dp"
         android:src="@drawable/main_robot"/>
     <ImageView
         android:id="@+id/cartoon_body_touch"
-        android:layout_width="320dp"
-        android:layout_height="match_parent"
+        android:layout_width="342dp"
+        android:layout_height="342dp"
+        android:layout_marginLeft="149dp"
+        android:layout_marginTop="19dp"
         android:src="@drawable/main_robot"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="35.43dp"
-        android:layout_alignStart="@+id/cartoon_action" />
+
+       />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_alignParentRight="true"
-        android:layout_margin="10dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginLeft="26dp"
         >
     <TextView
         android:id="@+id/right_icon"
@@ -71,9 +72,8 @@
         android:drawableTop="@drawable/main_connect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
+        android:layout_marginStart="12dp"
         android:layout_alignBaseline="@+id/top_icon"
-        android:layout_alignBottom="@+id/top_icon"
         android:layout_toEndOf="@+id/top_icon" />
     <TextView
         android:id="@+id/top_icon2_disconnect"
@@ -88,24 +88,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/top_icon2"
-        android:layout_marginStart="13dp"
+        android:layout_marginStart="12dp"
         android:drawableTop="@drawable/main_playing"
+        android:layout_alignBaseline="@+id/top_icon"
         android:layout_toEndOf="@+id/top_icon2" />
     <EditText
         android:id="@+id/habit_alert"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/top_icon2"
-        android:layout_marginTop="27dp"
+        android:layout_width="211dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="83dp"
         android:background="@drawable/main_alert"
         android:textColor="@color/white"
         android:gravity="center"
         android:text="" />
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignBottom="@+id/cartoon_action"
+        android:layout_width="104dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="195dp"
+        android:layout_marginLeft="19dp"
        >
     <TextView
         android:id="@+id/bottom_icon"
@@ -114,6 +114,7 @@
         android:layout_height="wrap_content"
         android:text="@string/ui_main_course_center"
         android:textColor="@color/white"
+        android:textSize="12sp"
         android:gravity="center_horizontal"
         />
     </LinearLayout>

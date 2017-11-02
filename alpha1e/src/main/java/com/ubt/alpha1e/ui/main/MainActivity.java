@@ -102,7 +102,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public void showCartoonAction(String json) {
         try {
-            GifDrawable gifFromResource = new GifDrawable(getContext().getResources(), R.drawable.cartoon);
+            GifDrawable gifFromResource = new GifDrawable(getContext().getResources(), R.drawable.standup);
             cartoonAction.setImageDrawable(gifFromResource);
             int count = gifFromResource.getNumberOfFrames();
             gifFromResource.setLoopCount(1);
