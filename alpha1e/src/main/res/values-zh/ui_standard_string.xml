@@ -1017,4 +1017,7 @@
     <string name="user_center_original">原创</string>
     <string name="user_center_download">下载</string>
     <string name="user_center_setting">设置</string>
+
+    <string name="empty_no_noticedata">你目前没有任何消息</string>
+    <string name="empty_no_dynamiaction">你目前没有任何原创动作</string>
 </resources>

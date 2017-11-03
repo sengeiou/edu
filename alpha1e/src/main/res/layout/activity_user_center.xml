@@ -37,6 +37,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="34dp"
         android:layout_toRightOf="@+id/ll_left"
         android:orientation="vertical">
 
@@ -58,21 +60,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/tv_main_title"
-            android:layout_marginBottom="22dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="34dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
             android:visibility="visible"/>
     </RelativeLayout>
 
     <RadioGroup
         android:id="@+id/ll_left"
-        android:layout_width="100dp"
+        android:layout_width="114dp"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/iv_main_back"
         android:layout_marginTop="11dp"
-        android:orientation="vertical">
+        android:background="@drawable/img_me_sidebar"
+        android:orientation="vertical"
+        android:paddingTop="10dp">
 
         <RadioButton
             android:id="@+id/tv_user_center_info"

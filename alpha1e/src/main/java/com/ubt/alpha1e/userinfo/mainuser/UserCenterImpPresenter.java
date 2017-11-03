@@ -6,6 +6,7 @@ import android.content.Context;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.userinfo.dynamicaction.DynamicActionFragment;
 import com.ubt.alpha1e.userinfo.notice.NoticeFragment;
 import com.ubt.alpha1e.userinfo.usermanager.UserInfoFragment;
 
@@ -51,11 +52,12 @@ public class UserCenterImpPresenter extends BasePresenterImpl<UserCenterContact.
 
             List<Fragment> fragmentList = new ArrayList<>();
             for (int i = 0; i < 7; i++) {
-                Fragment fragment = UserInfoFragment.newInstance(leftMenuModels.get(i).getNameString(), "");
-                if (i != 0) {
-                    fragmentList.add(NoticeFragment.newInstance("", ""));
+                if (i == 0) {
+                    fragmentList.add(UserInfoFragment.newInstance(leftMenuModels.get(i).getNameString(), ""));
+                } else if (i == 4) {
+                    fragmentList.add(DynamicActionFragment.newInstance("", ""));
                 } else {
-                    fragmentList.add(fragment);
+                    fragmentList.add(NoticeFragment.newInstance("", ""));
                 }
             }
 

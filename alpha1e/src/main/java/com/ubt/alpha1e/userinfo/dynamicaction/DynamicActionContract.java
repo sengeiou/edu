@@ -1,8 +1,8 @@
-package com.ubt.alpha1e.userinfo.notice;
+package com.ubt.alpha1e.userinfo.dynamicaction;
 
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
-import com.ubt.alpha1e.userinfo.model.NoticeModel;
+import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
 
 import java.util.List;
 
@@ -11,12 +11,12 @@ import java.util.List;
  *  邮箱 784787081@qq.com
  */
 
-public class NoticeContract {
+public class DynamicActionContract {
     interface View extends BaseView {
-        void setNoticeData(List<NoticeModel> list);
+        void setDynamicData(List<DynamicActionModel> list);
     }
 
     interface  Presenter extends BasePresenter<View> {
-        void getNoticeData(int type);
+        void getDynamicData(int type);
     }
 }

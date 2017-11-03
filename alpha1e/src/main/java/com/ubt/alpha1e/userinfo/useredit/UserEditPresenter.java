@@ -133,7 +133,6 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
      * 获取用户信息
      */
     public void getUserModel() {
-
     }
 
 
