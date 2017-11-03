@@ -12,6 +12,7 @@ import java.io.Serializable;
  */
 
 public class UserModel implements Serializable{
+    private String userId;
     private String userName;
     private int sex;
     private String grade;
@@ -57,10 +58,20 @@ public class UserModel implements Serializable{
         this.userImage = userImage;
     }
 
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "UserModel{" +
-                "userName='" + userName + '\'' +
+                "userId='" + userId + '\'' +
+                ", userName='" + userName + '\'' +
                 ", sex=" + sex +
                 ", grade='" + grade + '\'' +
                 ", age=" + age +

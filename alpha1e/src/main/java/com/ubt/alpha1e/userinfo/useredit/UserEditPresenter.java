@@ -12,6 +12,7 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.weigan.loopview.LoopView;
 
 import java.util.ArrayList;
@@ -132,6 +133,11 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
      * 获取用户信息
      */
     public void getUserModel() {
+
+    }
+
+
+    public void upDataUserInfo(UserModel userModel){
 
     }
 

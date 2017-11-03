@@ -3,13 +3,14 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/bg_user_main"
+            android:background="@color/transparent"
+            android:overScrollMode="never"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_user_main"
+        android:background="@color/transparent"
         >
 
 
@@ -19,13 +20,12 @@
             android:layout_height="73dp"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="12dp"
             android:background="@drawable/default_head"
             android:scaleType="fitXY"
             app:shape_mode="circle"/>
 
         <LinearLayout
-            android:layout_width="285dp"
+            android:layout_width="381dp"
             android:layout_height="195dp"
             android:layout_below="@+id/img_head"
             android:layout_centerHorizontal="true"
@@ -34,8 +34,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.0"
+                android:layout_height="49dp"
                 >
 
                 <TextView
@@ -43,11 +42,23 @@
                     android:layout_alignParentLeft="true"
                     android:text="昵称"/>
 
-                <TextView
-                    android:id="@+id/tv_user_name"
-                    style="@style/text_userinfo_right_style"
-                    android:drawableRight="@null"
+                <EditText
+                    android:id="@+id/edit_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="30dp"
+                    android:background="@null"
+                    android:imeOptions="flagNoExtractUi"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
                     android:text="leon"
+                    android:textColor="@color/tv_blue_color"
+                    android:textCursorDrawable="@null"
+                    android:textSize="16sp"
                     />
 
                 <View
@@ -59,8 +70,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.0"
+                android:layout_height="49dp"
                 >
 
                 <TextView
@@ -75,15 +85,17 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="22dp"
+                    android:layout_marginRight="33dp"
                     android:orientation="horizontal">
                     <!-- 定义两个单选框 -->
                     <RadioButton
                         android:id="@+id/male"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:button="@drawable/radio_select_sex"
+                        android:button="@null"
                         android:checked="true"
+                        android:drawableLeft="@drawable/radio_select_sex"
+                        android:drawablePadding="10dp"
                         android:text="男"
                         android:textColor="@drawable/color_radiobutton"
                         android:textSize="16sp"
@@ -94,7 +106,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:button="@drawable/radio_select_sex"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/radio_select_sex"
+                        android:drawablePadding="10dp"
                         android:text="女"
                         android:textColor="@drawable/color_radiobutton"
                         android:textSize="16sp"
@@ -110,8 +124,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.0"
+                android:layout_height="49dp"
                 >
 
                 <TextView
@@ -134,8 +147,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.0"
+                android:layout_height="49dp"
                 >
 
                 <TextView

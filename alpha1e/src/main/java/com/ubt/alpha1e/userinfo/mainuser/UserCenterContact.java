@@ -2,6 +2,7 @@ package com.ubt.alpha1e.userinfo.mainuser;
 
 
 import android.app.Fragment;
+import android.content.Context;
 
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
@@ -25,7 +26,7 @@ public interface UserCenterContact {
     }
 
     interface UserCenterPresenter extends BasePresenter<UserCenterView> {
-        void initData();
+        void initData(Context contex);
 
     }
 

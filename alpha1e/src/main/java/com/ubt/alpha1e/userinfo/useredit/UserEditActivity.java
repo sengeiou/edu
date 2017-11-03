@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -46,11 +47,10 @@ import butterknife.OnClick;
 
 public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, UserEditPresenter> implements UserEditContract.View {
 
-
     @BindView(R.id.img_head)
     ShapedImageView mImgHead;
-    @BindView(R.id.tv_user_name)
-    TextView mTvUserName;
+    @BindView(R.id.edit_user_name)
+    EditText mTvUserName;
     @BindView(R.id.male)
     RadioButton mMale;
     @BindView(R.id.female)

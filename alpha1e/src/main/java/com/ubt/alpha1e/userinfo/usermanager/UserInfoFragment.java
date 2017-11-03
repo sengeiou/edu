@@ -11,14 +11,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
@@ -56,8 +57,8 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     private String mParam2;
     @BindView(R.id.img_head)
     ShapedImageView mImgHead;
-    @BindView(R.id.tv_user_name)
-    TextView mTvUserName;
+    @BindView(R.id.edit_user_name)
+    EditText mTvUserName;
     @BindView(R.id.male)
     RadioButton mMale;
     @BindView(R.id.female)
@@ -125,6 +126,11 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         UbtLog.d("UserInfoFragment", "onActivityCreated");
+        mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USERINFOMODEL);
+
+    }
+
+    private void initData(){
 
     }
 
@@ -140,22 +146,12 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
             case R.id.male:
                 if (ischanged) {
                     ToastUtils.showShort("男孩子哦");
-                    mUserModel = (UserModel) SPUtils.getInstance().readObject("userinfo");
-                    if (null != mUserModel) {
-                        Log.d("userModel", mUserModel.toString());
-                    }
-                    Log.d("userModel", SPUtils.getInstance().getString("test"));
+
                 }
                 break;
             case R.id.female:
                 if (ischanged) {
                     ToastUtils.showShort("女孩子哦");
-                    UserModel userModel = new UserModel();
-                    userModel.setUserName("刘海");
-                    userModel.setAge(28);
-                    userModel.setGrade("daxue");
-                    SPUtils.getInstance().saveObject("userinfo", userModel);
-                    SPUtils.getInstance().put("test", "wodeddd");
                 }
                 break;
 
@@ -263,6 +259,12 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         ToastUtils.showShort(item);
     }
 
+    /**
+     * 修改相片结果
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
