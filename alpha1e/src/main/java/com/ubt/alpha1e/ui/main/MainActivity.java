@@ -1,7 +1,9 @@
 package com.ubt.alpha1e.ui.main;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -65,6 +67,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
+    int init_screen_width = 960;
+    int init_screen_height = 540;
+    RelativeLayout.LayoutParams params;
 
     @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3, R.id.right_icon4, R.id.cartoon_body_touch})
     protected void switchActivity(View view) {
@@ -94,7 +99,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.cartoon_body_touch:
                 cartoonAction.setVisibility(View.VISIBLE);
                 cartoonBodyTouch.setVisibility(View.INVISIBLE);
-                UbtLog.d(TAG, "CARTOON BODY TOUCH ");
                 showCartoonAction("TEX");
                 break;
             default:
@@ -114,6 +118,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         try {
             GifDrawable gifFromResource = new GifDrawable(getContext().getResources(), R.drawable.standup);
             cartoonAction.setImageDrawable(gifFromResource);
+            Log.d(TAG,"After Animation CARTOON width*height :"+ cartoonAction.getWidth()+"  Y: "+cartoonAction.getHeight());
             int count = gifFromResource.getNumberOfFrames();
             gifFromResource.setLoopCount(1);
             Log.d(TAG, "FRAME COUNT " + count);
@@ -182,28 +187,40 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         Log.d(TAG, "SCREEN  " + Math.sqrt(x + y));
         return Math.sqrt(x + y);
     }
-
+    
     private void initUi() {
         //Course icon
-        int course_icon_width = 156;
-        int course_icon_height = 86;
-        int init_screen_width = 960;
-        int init_screen_height = 540;
-        int course_icon_margin_left = 29;
-        int course_icon_margin_bottom = 100;
-//        RelativeLayout rl = (RelativeLayout) findViewById(R.id.mainui);
-//        RelativeLayout.LayoutParams params;
-//        params = new RelativeLayout.LayoutParams(screen_width,screen_height);
-//        params.leftMargin = (course_icon_margin_left*screen_width)/init_screen_width;
-//        params.bottomMargin = (course_icon_margin_bottom*screen_height)/init_screen_height;
-//        rl.addView(bottomIcon, params);
-        bottomIcon.setX((course_icon_margin_left*screen_width)/init_screen_width);
-        bottomIcon.setY(screen_height-((course_icon_margin_bottom*screen_height)/init_screen_height)-86);
-        Log.d(TAG,"COURSE POS  X:"+ (course_icon_margin_left*screen_width)/init_screen_width+"  Y: "+(screen_height-((course_icon_margin_bottom*screen_height)/init_screen_height)));
+        int course_icon_margin_left =29;
+        int course_icon_margin_top =375 ;
+        RelativeLayout.LayoutParams rlParams = (RelativeLayout.LayoutParams) bottomIcon.getLayoutParams();
+        rlParams.leftMargin = getAdaptiveScreenX(course_icon_margin_left);
+        rlParams.topMargin=getAdaptiveScreenY(course_icon_margin_top) ;
+        bottomIcon.setLayoutParams(rlParams);
+        //cartoon animation
+        int cartoon_view_margin_left=224;
+        int cartoon_view_margin_top=28;
+        RelativeLayout.LayoutParams rlParams2 = (RelativeLayout.LayoutParams) cartoonBodyTouch.getLayoutParams();
+        rlParams2.leftMargin = getAdaptiveScreenX(cartoon_view_margin_left);
+        rlParams2.topMargin=getAdaptiveScreenY(cartoon_view_margin_top) ;
+        cartoonBodyTouch.setLayoutParams(rlParams2);
+        //cartoon action
+        int cartoon_action_margin_left=224;
+        int cartoon_action_margin_top=28;
+        RelativeLayout.LayoutParams rlParams3 = (RelativeLayout.LayoutParams) cartoonAction.getLayoutParams();
+        rlParams3.leftMargin = getAdaptiveScreenX(cartoon_action_margin_left);
+        rlParams3.topMargin=getAdaptiveScreenY(cartoon_action_margin_top);
+        cartoonAction.setLayoutParams(rlParams3);
 
 
 
+    }
 
+    private int getAdaptiveScreenX(int init_x) {
+        return init_x * screen_width / init_screen_width;
+    }
+
+    private int getAdaptiveScreenY(int init_y) {
+        return init_y * screen_height / init_screen_height;
     }
 
 
