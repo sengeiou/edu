@@ -68,7 +68,9 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
             list.add(String.valueOf(i));
         }
         loopView.setItems(list);
-        loopView.setCurrentPosition(currentPosition);
+        loopView.setInitPosition(0);
+
+         loopView.setCurrentPosition(currentPosition);
         DialogPlus.newDialog(activity)
                 .setContentHolder(viewHolder)
                 .setGravity(Gravity.BOTTOM)
@@ -126,6 +128,8 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .create().show();
         // 设置原始数据
         loopView.setItems(list);
+        loopView.setInitPosition(0);
+
         loopView.setCurrentPosition(currentPosition);
     }
 

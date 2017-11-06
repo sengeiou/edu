@@ -167,14 +167,14 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 mPresenter.showImageHeadDialog((Activity) mContext);
                 break;
             case R.id.tv_user_age:
-                mPresenter.showAgeDialog((Activity) mContext, 3);
+                mPresenter.showAgeDialog((Activity) mContext, 0);
                 break;
             case R.id.tv_user_grade:
                 List<String> list = new ArrayList<>();
                 for (String grade : greadeList) {
                     list.add(grade);
                 }
-                mPresenter.showGradeDialog((Activity) mContext, 2, list);
+                mPresenter.showGradeDialog((Activity) mContext, 1, list);
                 break;
         }
     }

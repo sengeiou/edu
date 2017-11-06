@@ -619,6 +619,7 @@
     <RelativeLayout
         android:id="@+id/rl_fragment_content"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent">
     </RelativeLayout>
 
