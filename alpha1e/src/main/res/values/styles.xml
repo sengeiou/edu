@@ -171,7 +171,7 @@
         <item name="android:textColor">@color/tv_blue_color</item>
         <item name="android:textSize">16sp</item>
     </style>
-<<<<<<< HEAD
+
     <style name="main_right_button">
         <item name="android:layout_width">80dp</item>
         <item name="android:layout_height">0dp</item>
@@ -180,7 +180,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:drawablePadding">2dp</item>
         <item name="android:gravity">center_horizontal</item>
-=======
+</style>
 
     <style name="text_userinfo_main_style">
         <item name="android:layout_width">wrap_content</item>
@@ -191,6 +191,5 @@
         <item name="android:button">@null</item>
          <item name="android:textColor">@drawable/color_main_left</item>
         <item name="android:textSize">18sp</item>
->>>>>>> e938336901a532a550d5d3c15f3cde2107ab8cba
     </style>
 </resources>

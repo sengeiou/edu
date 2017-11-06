@@ -1,5 +1,6 @@
 build/*
 alpha1e/build/*
+alpha1e/jni/local/*
 alpha1e/*.apk
 ChangeSkin/build/*
 alpha1sGifLib/build/*
