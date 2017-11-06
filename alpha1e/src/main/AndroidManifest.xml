@@ -584,6 +584,7 @@
         <activity
             android:name=".userinfo.useredit.UserEditActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
     </application>

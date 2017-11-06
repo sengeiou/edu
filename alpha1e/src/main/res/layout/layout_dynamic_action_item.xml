@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_margin="15dp"
+              android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        >
+
+        <ImageView
+            android:id="@+id/iv_action_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@color/tv_blue_color"/>
+
+        <ImageView
+            android:id="@+id/iv_play_action"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/play_playing"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_dynamic_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="机械舞"
+            android:textColor="@color/tv_black_color"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_action_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="时长:03:30"
+            android:textColor="@color/bg_line_color"
+            android:textSize="12sp"
+            />
+
+        <ImageView
+            android:id="@+id/iv_delete_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="5dp"
+            android:src="@drawable/icon_delete"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -153,11 +153,11 @@
     <style name="text_userinfo_left_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-         <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/tv_black_color</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="text_userinfo_right_style">
@@ -167,10 +167,11 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:drawablePadding">8dp</item>
         <item name="android:drawableRight">@drawable/icon_right_arrow</item>
-        <item name="android:layout_marginRight">10dp</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginRight">14dp</item>
+        <item name="android:textColor">@color/tv_blue_color</item>
+        <item name="android:textSize">16sp</item>
     </style>
+<<<<<<< HEAD
     <style name="main_right_button">
         <item name="android:layout_width">80dp</item>
         <item name="android:layout_height">0dp</item>
@@ -179,5 +180,17 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:drawablePadding">2dp</item>
         <item name="android:gravity">center_horizontal</item>
+=======
+
+    <style name="text_userinfo_main_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1.0</item>
+        <item name="android:drawablePadding">12dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:button">@null</item>
+         <item name="android:textColor">@drawable/color_main_left</item>
+        <item name="android:textSize">18sp</item>
+>>>>>>> e938336901a532a550d5d3c15f3cde2107ab8cba
     </style>
 </resources>

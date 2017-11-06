@@ -1,9 +1,11 @@
 package com.ubt.alpha1e.userinfo.useredit;
 
-import android.content.Context;
+import android.app.Activity;
 
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
+
+import java.util.List;
 
 /**
  * MVPPlugin
@@ -11,11 +13,16 @@ import com.ubt.alpha1e.mvp.BaseView;
  */
 
 public class UserEditContract {
-    interface View extends BaseView {
-        
+    public interface View extends BaseView {
+        void getAgeDataList(List<String> list);
+        void takeImageFromShoot();
+        void takeImageFromAblum();
+        void ageSelectItem(int type,String age);
     }
 
     interface  Presenter extends BasePresenter<View> {
-        
+        void showImageHeadDialog(Activity activity);
+        void showAgeDialog(Activity activity, int currentPosition);
+        void showGradeDialog(Activity activity, int currentPosition,List<String> list);
     }
 }

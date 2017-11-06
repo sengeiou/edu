@@ -1016,6 +1016,15 @@
     <string name="ui_theme_all">全部主题</string>
     <string name="ui_setting_message_reply">回复</string>
 
+    <string name="user_center_title">个人中心</string>
+    <string name="user_center_info">信息</string>
+    <string name="user_center_achievement">成就</string>
+    <string name="user_center_message">消息</string>
+    <string name="user_center_dynamic">动态</string>
+    <string name="user_center_original">原创</string>
+    <string name="user_center_download">下载</string>
+    <string name="user_center_setting">设置</string>
 
-
+    <string name="empty_no_noticedata">你目前没有任何消息</string>
+    <string name="empty_no_dynamiaction">你目前没有任何原创动作</string>
 </resources>
