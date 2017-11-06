@@ -112,7 +112,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         getScreenInch();
         initUi();
     }
-    @
 
     @Override
     public void showCartoonAction(String json) {
