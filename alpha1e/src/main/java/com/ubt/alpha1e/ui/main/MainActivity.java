@@ -1,7 +1,9 @@
 package com.ubt.alpha1e.ui.main;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -15,7 +17,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.MyMainActivity;
-import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -24,6 +26,7 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.jpush.android.ui.FullScreenView;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 

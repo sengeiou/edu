@@ -24,7 +24,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            shrinkResources true
+            shrinkResources false
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -46,24 +46,28 @@ android {
             buildConfigField 'String', 'WebServiceAdderss', '"https://10.10.1.14:8443/ubx"'
             buildConfigField 'String', 'WebCourseAdderss', '"http://10.10.20.30:8039/course-rest"'
             buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"http://10.10.1.12:8030/alpha1/zip?versionId="'
+            buildConfigField 'String', 'WebServiceAdderssFor1E', '"https://api.ubtrobot.com/ubx"'
         }
         ubt_test {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ubt_test"]
             buildConfigField 'String', 'WebServiceAdderss', '"https://10.10.1.14:8443/ubx"'
             buildConfigField 'String', 'WebCourseAdderss', '"http://10.10.20.30:8039/course-rest"'
             buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"http://10.10.1.12:8030/alpha1/zip?versionId="'
+            buildConfigField 'String', 'WebServiceAdderssFor1E', '"https://api.ubtrobot.com/ubx"'
         }
         ubt_robot {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ubt_robot"]
             buildConfigField 'String', 'WebServiceAdderss', '"https://services.ubtrobot.com/ubx"'
             buildConfigField 'String', 'WebCourseAdderss', '"https://account.ubtrobot.com/course-rest"'
             buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"https://account.ubtrobot.com/alpha1e-rest/alpha1/zip?versionId="'
+            buildConfigField 'String', 'WebServiceAdderssFor1E', '"https://api.ubtrobot.com/ubx"'
         }
         google {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "google"]
             buildConfigField 'String', 'WebServiceAdderss', '"https://services.ubtrobot.com/ubx"'
             buildConfigField 'String', 'WebCourseAdderss', '"https://account.ubtrobot.com/course-rest"'
             buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"https://account.ubtrobot.com/alpha1e-rest/alpha1/zip?versionId="'
+            buildConfigField 'String', 'WebServiceAdderssFor1E', '"https://api.ubtrobot.com/ubx"'
         }
     }
     compileOptions {
@@ -130,4 +134,9 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    compile(name:'tvsloginlib', ext:'aar')
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
+    compile 'com.android.support:design:26.+'
+    compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
 }

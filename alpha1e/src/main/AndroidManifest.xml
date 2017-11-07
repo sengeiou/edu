@@ -59,6 +59,7 @@
 
     <application
         android:name=".AlphaApplication"
+        android:exported="true"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -263,13 +264,20 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
-                <data android:scheme="tencent1104799391"/>
+                <data android:scheme="1106515940"/>
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="behind"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity
+            android:name="com.tencent.ai.tvs.ui.TVSAssistActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
+
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
@@ -366,10 +374,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name=".wxapi.WXEntryActivity"
+            android:name="com.ubt.alpha1e.wxapi.WXEntryActivity"
             android:exported="true"
-            android:label="@string/title_activity_my_wei_xin"
-            android:theme="@style/NoTitleTheme"/>
+            android:launchMode="singleTask"/>
+
         <activity
             android:name=".ui.RobotInfoActivity"
             android:label="@string/title_activity_robot_rename"
@@ -588,6 +596,28 @@
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
+
+
+        <activity
+            android:name="com.ubt.alpha1e.login.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
+            android:name="com.ubt.alpha1e.login.loginauth.LoginAuthActivity"
+            android:label="LoginAuthActivity"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTask"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustPan"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            />
+
+
     </application>
 
 </manifest>
