@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.orhanobut.dialogplus.DialogPlus;
@@ -51,6 +52,29 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .create().show();
     }
 
+    @Override
+    public void showImageCenterHeadDialog(Activity activity) {
+        ViewHolder viewHolder = new ViewHolder(R.layout.dialog_userecenter_head);
+        DialogPlus.newDialog(activity)
+                .setContentHolder(viewHolder)
+                .setGravity(Gravity.CENTER)
+                .setContentBackgroundResource(R.drawable.bg_edit_user)
+                .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        if (view.getId() == R.id.tv_take_photo) {
+                            mView.takeImageFromShoot();
+                        } else if (view.getId() == R.id.tv_take_ablum) {
+                            mView.takeImageFromAblum();
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(true)
+                .create().show();
+    }
+
 
     /**
      * 显示年龄对话框
@@ -70,7 +94,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
         loopView.setItems(list);
         loopView.setInitPosition(0);
 
-         loopView.setCurrentPosition(currentPosition);
+        loopView.setCurrentPosition(currentPosition);
         DialogPlus.newDialog(activity)
                 .setContentHolder(viewHolder)
                 .setGravity(Gravity.BOTTOM)
@@ -140,7 +164,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
     }
 
 
-    public void upDataUserInfo(UserModel userModel){
+    public void upDataUserInfo(UserModel userModel) {
 
     }
 

@@ -2,8 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:drawable="@drawable/ic_me_download"
-        android:state_checked="true"/>
+        android:state_enabled="true"/>
     <item
         android:drawable="@drawable/ic_me_download__p"
-        android:state_checked="false"/>
+        android:state_enabled="false"/>
 </selector>

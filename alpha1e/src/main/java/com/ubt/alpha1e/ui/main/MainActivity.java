@@ -15,6 +15,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.MyMainActivity;
+import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -73,14 +74,18 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         Intent mLaunch = new Intent();
         switch (view.getId()) {
             case R.id.top_icon:
-                mLaunch.setClass(this, MyMainActivity.class);
-                startActivity(mLaunch);
+
+                Intent intent = new Intent();
+                intent.setClass(this, UserCenterActivity.class);
+                startActivity(intent);
                 break;
             case R.id.top_icon2:
                 cartoonBodyTouch.setVisibility(View.VISIBLE);
                 cartoonAction.setVisibility(View.INVISIBLE);
                 break;
             case R.id.top_icon3:
+                mLaunch.setClass(this, MyMainActivity.class);
+                startActivity(mLaunch);
                 break;
             case R.id.right_icon:
                 mLaunch.setClass(this, ScanBluetoothActivity.class);

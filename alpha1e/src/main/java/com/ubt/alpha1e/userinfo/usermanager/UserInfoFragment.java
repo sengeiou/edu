@@ -11,12 +11,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
@@ -38,10 +45,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -50,9 +62,12 @@ import static android.app.Activity.RESULT_OK;
  * 邮箱 784787081@qq.com
  */
 
-public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, UserEditPresenter> implements UserEditContract.View {
+public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, UserEditPresenter> implements UserEditContract.View, AndroidAdjustResizeBugFix.OnKeyChangerListeler {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    @BindView(R.id.scrollview_user)
+    ScrollView mScrollviewUser;
+    Unbinder unbinder;
     private String mParam1;
     private String mParam2;
     @BindView(R.id.img_head)
@@ -70,8 +85,11 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     @BindView(R.id.tv_user_grade)
     TextView mTvUserGrade;
 
+
     Handler mHandler = new Handler();
     private Uri mImageUri;
+
+    AndroidAdjustResizeBugFix assistActivity;
     /**
      * 拍照获取照片
      */
@@ -108,6 +126,9 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         UbtLog.d("UserInfoFragment", "onCreate");
+        assistActivity = new AndroidAdjustResizeBugFix(getActivity());
+        assistActivity.setOnKeyChangerListeler(this);
+
     }
 
 
@@ -130,8 +151,9 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
 
     }
 
-    private void initData(){
-
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     /**
@@ -164,7 +186,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onClickView(View view) {
         switch (view.getId()) {
             case R.id.img_head:
-                mPresenter.showImageHeadDialog((Activity) mContext);
+                mPresenter.showImageCenterHeadDialog((Activity) mContext);
                 break;
             case R.id.tv_user_age:
                 mPresenter.showAgeDialog((Activity) mContext, 0);
@@ -181,6 +203,8 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
 
     @Override
     protected void initUI() {
+
+        mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName,20,mContext));
     }
 
     @Override
@@ -202,6 +226,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onDestroyView() {
         super.onDestroyView();
         UbtLog.d("UserInfoFragment", "onDestroyView");
+        unbinder.unbind();
     }
 
     @Override
@@ -261,10 +286,12 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
 
     /**
      * 修改相片结果
+     *
      * @param requestCode
      * @param resultCode
      * @param data
      */
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
@@ -312,5 +339,96 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         }
     }
 
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+
+    /**
+     * 监听键盘开启关闭
+     *
+     * @param statu true键盘开启 false 键盘关闭
+     */
+    @Override
+    public void keyBoardOpen(boolean statu) {
+
+    }
+
+    public static String stringFilter(String str) throws PatternSyntaxException {
+        // 只允许字母、数字和汉字
+        String regEx = "[^a-zA-Z0-9\u4E00-\u9FA5]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(str);
+        return m.replaceAll("").trim();
+    }
+
+
+    public class MyTextWatcher implements TextWatcher {
+        private int limit;// 字符个数限制
+        private EditText text;// 编辑框控件
+        private Context context;// 上下文对象
+
+        int cursor = 0;// 用来记录输入字符的时候光标的位置
+        int before_length;// 用来标注输入某一内容之前的编辑框中的内容的长度
+
+        public MyTextWatcher(EditText text, int limit,
+                             Context context) {
+            this.limit = limit;
+            this.text = text;
+            this.context = context;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                                      int after) {
+            before_length = s.length();
+        }
+
+        /**
+         * s 编辑框中全部的内容 、start 编辑框中光标所在的位置（从0开始计算）、count 从手机的输入法中输入的字符个数
+         */
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            cursor = start;
+//      Log.e("此时光标的位置为", cursor + "");
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            // 这里可以知道你已经输入的字数，大家可以自己根据需求来自定义文本控件实时的显示已经输入的字符个数
+            Log.e("此时你已经输入了", "" + s.length());
+
+            int after_length = s.length();// 输入内容后编辑框所有内容的总长度
+            // 如果字符添加后超过了限制的长度，那么就移除后面添加的那一部分，这个很关键
+            if (after_length > limit) {
+                // 比限制的最大数超出了多少字
+                int d_value = after_length - limit;
+                // 这时候从手机输入的字的个数
+                int d_num = after_length - before_length;
+
+                int st = cursor + (d_num - d_value);// 需要删除的超出部分的开始位置
+                int en = cursor + d_num;// 需要删除的超出部分的末尾位置
+                // 调用delete()方法将编辑框中超出部分的内容去掉
+                Editable s_new = s.delete(st, en);
+                // 给编辑框重新设置文本
+                text.setText(s_new.toString());
+                // 设置光标最后显示的位置为超出部分的开始位置，优化体验
+                text.setSelection(st);
+                // 弹出信息提示已超出字数限制
+                Toast.makeText(context, "已超出最大字数限制", Toast.LENGTH_SHORT).show();
+            }
+            String str = text.getText().toString();
+            String filter = stringFilter(str);
+            if (!str.equals(filter)) {
+                ToastUtils.showShort("不能有异常字符");
+            }
+        }
+
+    }
 
 }

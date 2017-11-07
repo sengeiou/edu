@@ -2,6 +2,8 @@ package com.ubt.alpha1e.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -11,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.squareup.haha.perflib.Main;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
@@ -47,12 +48,12 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        scale = (int)this.getResources().getDisplayMetrics().density;
+        scale = (int) this.getResources().getDisplayMetrics().density;
         setContentView(R.layout.activity_start);
         mHelper = new StartHelper(this, this);
         loginHelper = new LoginHelper(this);
         //读取主题信息，如果在主题动画加载完成之前读取完毕则继续检查逻辑，否则不检查
-         ((StartHelper) mHelper).doCkeckThemeInfo();
+        ((StartHelper) mHelper).doCkeckThemeInfo();
         ((StartHelper) mHelper).doCkeckLanguageInfo();
         ((StartHelper) mHelper).doReadUser();
         // google play不自主升级-------------------start
@@ -77,11 +78,11 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
         img_start_bg = (ImageView) findViewById(R.id.img_start_bg);
         //img_logo_line_anim = AnimationUtils.loadAnimation(this,R.anim.logo_line_anim);
 
-        img_start_bg_anim = new AlphaAnimation(0.1f,1);
-        txt_title_alpha_anim = new AlphaAnimation(0.1f,1);
+        img_start_bg_anim = new AlphaAnimation(0.1f, 1);
+        txt_title_alpha_anim = new AlphaAnimation(0.1f, 1);
 
-        img_logo_anim = new AlphaAnimation(0.1f,1);
-        txt_title_anim = new TranslateAnimation(0, 0, 50*scale, 0);
+        img_logo_anim = new AlphaAnimation(0.1f, 1);
+        txt_title_anim = new TranslateAnimation(0, 0, 50 * scale, 0);
         img_logo_anim.setDuration(1000); //设置持续时间1.5秒
         txt_title_anim.setDuration(600); //设置持续时间1秒
         img_start_bg_anim.setDuration(1500); //设置持续时间1秒
@@ -131,7 +132,7 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
             @Override
             public void onAnimationEnd(Animation arg0) {
                 txt_title.setVisibility(View.VISIBLE);
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)txt_title.getLayoutParams();
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) txt_title.getLayoutParams();
                 params.topMargin = ((int) 135 * scale);
                 txt_title.setLayoutParams(params);
                 txt_title.startAnimation(txt_title_anim);
@@ -237,7 +238,21 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
     @Override
     public void gotoNext() {
 
-        Intent inte = new Intent();
+        mHandler.sendEmptyMessage(0x111);
+
+    }
+
+    @Override
+    public void noteWaitWebProcressShutDown() {
+
+    }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0x111) {
+                Intent inte = new Intent();
 
         /*if (((StartHelper) mHelper).isNeedCompleteInfo()) {
             PrivateInfoHelper.EditType type = null;
@@ -261,29 +276,25 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
             }
         }*/
 
-        if (BasicSharedPreferencesOperator
-                .getInstance(this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD)
-                .doReadSync(BasicSharedPreferencesOperator.IS_FIRST_USE_APP_KEY)
-                .equals(BasicSharedPreferencesOperator.IS_FIRST_USE_APP_VALUE_TRUE)
-                || AlphaApplicationValues.getCurrentEdit() == AlphaApplicationValues.EdtionCode.for_factory_edit) {
-            //this version has show introduction go to main page
+                if (BasicSharedPreferencesOperator
+                        .getInstance(StartActivity.this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD)
+                        .doReadSync(BasicSharedPreferencesOperator.IS_FIRST_USE_APP_KEY)
+                        .equals(BasicSharedPreferencesOperator.IS_FIRST_USE_APP_VALUE_TRUE)
+                        || AlphaApplicationValues.getCurrentEdit() == AlphaApplicationValues.EdtionCode.for_factory_edit) {
+                    //this version has show introduction go to main page
 //            inte.setClass(StartActivity.this,MyMainActivity.class);
-           // inte.setClass(StartActivity.this,MainActivity.class);
-            inte.setClass(StartActivity.this,MainActivity.class);
-        }else {
-            inte.setClass(StartActivity.this,IntroductionActivity.class);
+                    // inte.setClass(StartActivity.this,MainActivity.class);
+                    inte.setClass(StartActivity.this, MainActivity.class);
+                } else {
+                    inte.setClass(StartActivity.this, IntroductionActivity.class);
+                }
+                MobclickAgent.onEvent(StartActivity.this.getApplicationContext(), AlphaStatics.ACTIONS_LIB);//动作库页面次数
+
+                StartActivity.this.startActivity(inte);
+                StartActivity.this.finish();
+            }
         }
-        MobclickAgent.onEvent(StartActivity.this.getApplicationContext(), AlphaStatics.ACTIONS_LIB);//动作库页面次数
-
-        StartActivity.this.startActivity(inte);
-        StartActivity.this.finish();
-
-    }
-
-    @Override
-    public void noteWaitWebProcressShutDown() {
-
-    }
+    };
 
     @Override
     public void themeCheckFinish() {
@@ -292,8 +303,7 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
             public void run() {
                 try {
                     mCoonLoadingDia.cancel();
-                    if(!((StartHelper) mHelper).isNeedUpdateApk())
-                    {
+                    if (!((StartHelper) mHelper).isNeedUpdateApk()) {
                         gotoNext();
                     }
                 } catch (Exception e) {
