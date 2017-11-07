@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/ig_robot_head"
+        android:src="@drawable/bluetooth_robot_head"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="25dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_robot_bluetooth_name"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:text="Alpha 1 eeee"
+        android:layout_toRightOf="@id/ig_robot_head"
+        android:layout_marginLeft="22dp"
+        android:gravity="center"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/btn_buletooth_connect"
+        android:layout_width="90dp"
+        android:layout_height="30dp"
+        android:background="@drawable/action_button_enable"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="25dp"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="连接"
+        android:textSize="15sp"
+        android:textColor="@color/white"/>
+    <TextView
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#cccccc"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

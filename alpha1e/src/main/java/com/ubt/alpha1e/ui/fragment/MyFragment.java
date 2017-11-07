@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.MessageRecordManager;
 import com.ubt.alpha1e.business.MessageRecordManagerListener;
@@ -271,18 +272,22 @@ public class MyFragment extends BaseFragment implements IActionsUI,MessageRecord
 
                         break;
                     case R.id.rl_receive_msg:
-                        if (mMainHelper.getCurrentUser() == null) {
-                            Intent inte = new Intent();
-                            inte.putExtra(LoginHelper.IS_LOGIN_SIGLE, true);
-                            inte.setClass(mActivity, LoginActivity.class);
-                            mActivity.startActivity(inte);
-                        } else {
-                            mMainHelper.doClickedMessage();
-
-                            Intent intent = new Intent();
-                            intent.setClass(mActivity, MessageActivity.class);
-                            startActivity(intent);
-                        }
+                        UbtLog.d(TAG," chengchangyin  enter buleteeth " );
+                        Intent i = new Intent();
+                        i.setClass(mActivity, BluetoothguidestartrobotActivity.class);
+                        mActivity.startActivity(i);
+//                        if (mMainHelper.getCurrentUser() == null) {
+//                            Intent inte = new Intent();
+//                            inte.putExtra(LoginHelper.IS_LOGIN_SIGLE, true);
+//                            inte.setClass(mActivity, LoginActivity.class);
+//                            mActivity.startActivity(inte);
+//                        } else {
+//                            mMainHelper.doClickedMessage();
+//
+//                            Intent intent = new Intent();
+//                            intent.setClass(mActivity, MessageActivity.class);
+//                            startActivity(intent);
+//                        }
                         break;
                     case R.id.rl_created_action:
                         if (mMainHelper.getCurrentUser() == null) {

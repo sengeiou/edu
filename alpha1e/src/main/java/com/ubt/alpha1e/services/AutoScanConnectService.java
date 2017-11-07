@@ -100,8 +100,9 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
      */
 	public static void startService(Context context){
 		if(instance == null){
-			Intent mIntent = new Intent(context,AutoScanConnectService.class);
-			context.startService(mIntent);
+			//add by dicy.cheng
+//			Intent mIntent = new Intent(context,AutoScanConnectService.class);
+//			context.startService(mIntent);
 		}
 	}
 
@@ -128,17 +129,18 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
-		UbtLog.d(TAG, "-onStartCommand-");
-		instance = this;
-		isAutoConnect = SettingHelper.isAutoConnect(this);
-
-		if(!EventBus.getDefault().isRegistered(this)){
-			EventBus.getDefault().register(this);
-		}
-
-		initHelper();
-		registerBluetoothListener();
-		doConnect();
+		//add by dicy.cheng
+//		UbtLog.d(TAG, "-onStartCommand-");
+//		instance = this;
+//		isAutoConnect = SettingHelper.isAutoConnect(this);
+//
+//		if(!EventBus.getDefault().isRegistered(this)){
+//			EventBus.getDefault().register(this);
+//		}
+//
+//		initHelper();
+//		registerBluetoothListener();
+//		doConnect();
 
 		return START_NOT_STICKY;
 	}
