@@ -3,7 +3,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/transparent"
+            android:background="@color/bg_user_main"
             android:overScrollMode="never"
 
     >
@@ -14,13 +14,52 @@
         android:background="@color/transparent"
         >
 
+        <ImageView
+            android:id="@+id/iv_main_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="27dp"
+            android:src="@drawable/btn_back"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_main_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="27dp"
+            android:text="填写宝宝信息"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            />
+
+        <ImageView
+            android:id="@+id/iv_complete_info"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/icon_save_user"
+            />
+
+
+
 
         <com.ubt.alpha1e.ui.custom.ShapedImageView
             android:id="@+id/img_head"
             android:layout_width="77dp"
             android:layout_height="73dp"
+            android:layout_below="@+id/tv_main_title"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/default_head"
             android:scaleType="fitXY"
             app:shape_mode="circle"/>

@@ -11,4 +11,7 @@ package com.ubt.alpha1e.base;
 
 public class Constant {
     public final static String SP_USERINFOMODEL="sp_userinfo";
+    public final static String SP_LOGIN_TOKEN = "sp_login_token";
+
+
 }

@@ -15,7 +15,6 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.business.thrid_party.MyFaceBook;
 import com.ubt.alpha1e.business.thrid_party.MyTencent;
 import com.ubt.alpha1e.business.thrid_party.MyTwitter;
-import com.ubt.alpha1e.business.thrid_party.MyWeiXin;
 import com.ubt.alpha1e.data.model.ActionOnlineInfo;
 import com.ubt.alpha1e.services.HomeKeyReceiveListener;
 import com.ubt.alpha1e.ui.fragment.IShowSquareDetailFragment;
@@ -137,12 +136,12 @@ public class SharePopupWindow {
                         removeSharePopWindow();
                         break;
                     case R.id.btn_to_qq_weixin:
-                        MyWeiXin.doShareToWeiXin(pactStringUrl(shareUrl,actionOnlineInfo.actionId+""), actionOnlineInfo, mActivity, showSquareDetailFragment, 0);
-                        removeSharePopWindow();
+//                        MyWeiXin.doShareToWeiXin(pactStringUrl(shareUrl,actionOnlineInfo.actionId+""), actionOnlineInfo, mActivity, showSquareDetailFragment, 0);
+//                        removeSharePopWindow();
                         break;
                     case R.id.btn_to_qq_weixin_pengyouquan:
-                        MyWeiXin.doShareToWeiXin(pactStringUrl(shareUrl,actionOnlineInfo.actionId+""), actionOnlineInfo, mActivity, showSquareDetailFragment, 1);
-                        removeSharePopWindow();
+//                        MyWeiXin.doShareToWeiXin(pactStringUrl(shareUrl,actionOnlineInfo.actionId+""), actionOnlineInfo, mActivity, showSquareDetailFragment, 1);
+//                        removeSharePopWindow();
                         break;
                     case R.id.btn_to_qq_zone:
                         MyTencent.doShareQQKongjian(mActivity,actionOnlineInfo, pactStringUrl(shareUrl,actionOnlineInfo.actionId+""),showSquareDetailFragment);

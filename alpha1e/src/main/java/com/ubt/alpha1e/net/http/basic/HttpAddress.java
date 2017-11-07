@@ -195,7 +195,17 @@ public class HttpAddress {
         query_user_tasks,
 
         /** 获取课时 */
-        query_user_lessons
+        query_user_lessons,
+
+
+        /*************************Alpha 1E***********************************/
+
+        /** 获取用户信息 */
+        getUserInfo,
+        updateUserInfo //更新用户新
+
+        /*************************Alpha 1E***********************************/
+
     }
 
     public static final String NO_URL = "NO_URL";
@@ -244,6 +254,12 @@ public class HttpAddress {
     //用户注册登录
     //public static final String WebUserDataPlatformAdderss = "http://10.10.1.52:8010";//研发测试环境
     public static final String WebUserDataPlatformAdderss = "http://202.170.139.168:8087/user-service-rest";//研发测试环境
+
+
+    /***********************Alpha 1E*********************************/
+    public static final String WebServiceAdderssFor1E = BuildConfig.WebServiceAdderssFor1E;
+
+
 
     // -----------------------------------------------------------------------------------------
     public static final String APP_TYPE_KEY = "appType";
@@ -406,6 +422,11 @@ public class HttpAddress {
                 return WebCourseAdderss + "/course/queryUserTasks";
             case query_user_lessons:
                 return WebCourseAdderss + "/course/queryUserLessons";
+
+            case getUserInfo:
+                return  WebServiceAdderssFor1E + "/getUserInfo";
+
+
             default:
                 break;
         }

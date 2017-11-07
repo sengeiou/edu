@@ -1,26 +1,5 @@
 package com.ubt.alpha1e.business.thrid_party;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.text.TextUtils;
-
-import com.tencent.mm.sdk.modelbase.BaseResp;
-import com.tencent.mm.sdk.modelmsg.SendAuth;
-import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
-import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.data.model.ActionInfo;
-import com.ubt.alpha1e.utils.log.MyLog;
-import com.ubt.alpha1e.utils.log.UbtLog;
-
-import java.util.Date;
-
 public class MyWeiXin {
 
 	public final static String WEIXIN_APP_ID = "wxaccd90fe93e07aa6";
@@ -30,9 +9,9 @@ public class MyWeiXin {
 	public static final String ACTION_WEIXIN_API_CALLBACK = "ACTION_WEIXIN_API_CALLBACK";
 	// ---------------------------------------------------------
 	private static long DO_LOGIN_REQUEST = -1;
-	private static IWXAPI mIWXAPI = null;
+//	private static IWXAPI mIWXAPI = null;
 
-	private static void initMyWeiXin(Context mContext) {
+/*	private static void initMyWeiXin(Context mContext) {
 		if (mIWXAPI == null) {
 			mIWXAPI = WXAPIFactory.createWXAPI(mContext, WEIXIN_APP_ID, false);
 			mIWXAPI.registerApp(WEIXIN_APP_ID);
@@ -125,5 +104,5 @@ public class MyWeiXin {
 		req.scene = flag;
 		mIWXAPI.sendReq(req);
 
-	}
+	}*/
 }
