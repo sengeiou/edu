@@ -65,4 +65,16 @@ public class UpdateUserInfoRequest extends BaseRequest  {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    @Override
+    public String toString() {
+        return "UpdateUserInfoRequest{" +
+                "nickName='" + nickName + '\'' +
+                ", sex='" + sex + '\'' +
+                ", grade='" + grade + '\'' +
+                ", age='" + age + '\'' +
+                ", headPic='" + headPic + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
 }

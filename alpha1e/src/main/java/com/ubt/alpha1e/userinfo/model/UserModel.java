@@ -20,6 +20,8 @@ public class UserModel implements Serializable{
     public String headPic;
     private String phone;
 
+
+
     public String getUserId() {
         return userId;
     }

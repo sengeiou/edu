@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
 
 import com.ant.country.CountryActivity;
- import com.ubt.alpha1e.AlphaApplicationValues.Thrid_login_type;
+import com.tencent.ai.tvs.LoginApplication;
+import com.ubt.alpha1e.AlphaApplicationValues.Thrid_login_type;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
@@ -56,7 +56,6 @@ import com.ubt.alpha1e.xingepush.XGUBTManager;
 import com.ubtechinc.base.BlueToothManager;
 import com.ubtechinc.sqlite.DBAlphaInfoManager;
 import com.umeng.analytics.MobclickAgent;
-import com.yixia.camera.VCamera;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,7 +63,7 @@ import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
-public class AlphaApplication extends MultiDexApplication {
+public class AlphaApplication extends LoginApplication {
 
     private static final String TAG = "AlphaApplication";
 
@@ -105,9 +104,9 @@ public class AlphaApplication extends MultiDexApplication {
         initConnectClient();
         initStyleDialog();
 //        LeakCanary.install(this);
-        VCamera.setVideoCachePath(FileTools.media_cache);
-        VCamera.setDebugMode(true);
-        VCamera.initialize(this);
+     //   VCamera.setVideoCachePath(FileTools.media_cache);
+      //  VCamera.setDebugMode(true);
+      //  VCamera.initialize(this);
 //        IntentFilter screenOffFilter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
 //        registerReceiver(new BroadcastReceiver() {
 //            @Override

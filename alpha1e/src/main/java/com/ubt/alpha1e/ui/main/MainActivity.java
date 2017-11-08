@@ -17,9 +17,12 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
 import com.ubt.alpha1e.login.LoginActivity;
+import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.MyMainActivity;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
+import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -78,14 +81,19 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         Intent mLaunch = new Intent();
         switch (view.getId()) {
             case R.id.top_icon:
-
                 Intent intent = new Intent();
-                if(TextUtils.isEmpty(SPUtils.getInstance().getString(Constant.SP_USER_INFO))){
+                UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+                if (null == userModel) {
                     intent.setClass(this, LoginActivity.class);
-                }else{
-                    intent.setClass(this, UserCenterActivity.class);
+                } else {
+                    if (TextUtils.isEmpty(userModel.getPhone())) {
+                        intent.setClass(this, LoginAuthActivity.class);
+                    } else if (TextUtils.isEmpty(userModel.getAge())) {
+                        intent.setClass(this, UserEditActivity.class);
+                    } else {
+                        intent.setClass(this, UserCenterActivity.class);
+                    }
                 }
-
                 startActivity(intent);
                 break;
             case R.id.top_icon2:
@@ -129,7 +137,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         try {
             GifDrawable gifFromResource = new GifDrawable(getContext().getResources(), R.drawable.standup);
             cartoonAction.setImageDrawable(gifFromResource);
-            Log.d(TAG,"After Animation CARTOON width*height :"+ cartoonAction.getWidth()+"  Y: "+cartoonAction.getHeight());
+            Log.d(TAG, "After Animation CARTOON width*height :" + cartoonAction.getWidth() + "  Y: " + cartoonAction.getHeight());
             int count = gifFromResource.getNumberOfFrames();
             gifFromResource.setLoopCount(1);
             Log.d(TAG, "FRAME COUNT " + count);
@@ -198,30 +206,29 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         Log.d(TAG, "SCREEN  " + Math.sqrt(x + y));
         return Math.sqrt(x + y);
     }
-    
+
     private void initUi() {
         //Course icon
-        int course_icon_margin_left =29;
-        int course_icon_margin_top =375 ;
+        int course_icon_margin_left = 29;
+        int course_icon_margin_top = 375;
         RelativeLayout.LayoutParams rlParams = (RelativeLayout.LayoutParams) bottomIcon.getLayoutParams();
         rlParams.leftMargin = getAdaptiveScreenX(course_icon_margin_left);
-        rlParams.topMargin=getAdaptiveScreenY(course_icon_margin_top) ;
+        rlParams.topMargin = getAdaptiveScreenY(course_icon_margin_top);
         bottomIcon.setLayoutParams(rlParams);
         //cartoon animation
-        int cartoon_view_margin_left=224;
-        int cartoon_view_margin_top=28;
+        int cartoon_view_margin_left = 224;
+        int cartoon_view_margin_top = 28;
         RelativeLayout.LayoutParams rlParams2 = (RelativeLayout.LayoutParams) cartoonBodyTouch.getLayoutParams();
         rlParams2.leftMargin = getAdaptiveScreenX(cartoon_view_margin_left);
-        rlParams2.topMargin=getAdaptiveScreenY(cartoon_view_margin_top) ;
+        rlParams2.topMargin = getAdaptiveScreenY(cartoon_view_margin_top);
         cartoonBodyTouch.setLayoutParams(rlParams2);
         //cartoon action
-        int cartoon_action_margin_left=224;
-        int cartoon_action_margin_top=28;
+        int cartoon_action_margin_left = 224;
+        int cartoon_action_margin_top = 28;
         RelativeLayout.LayoutParams rlParams3 = (RelativeLayout.LayoutParams) cartoonAction.getLayoutParams();
         rlParams3.leftMargin = getAdaptiveScreenX(cartoon_action_margin_left);
-        rlParams3.topMargin=getAdaptiveScreenY(cartoon_action_margin_top);
+        rlParams3.topMargin = getAdaptiveScreenY(cartoon_action_margin_top);
         cartoonAction.setLayoutParams(rlParams3);
-
 
 
     }

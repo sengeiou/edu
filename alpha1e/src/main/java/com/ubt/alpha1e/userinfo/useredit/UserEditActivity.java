@@ -19,6 +19,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
@@ -42,7 +43,6 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -162,12 +162,13 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                     @Override
                     public void onResponse(String response, int id) {
                         UbtLog.d("userEdit", "response:" + response);
-                        BaseResponseModel baseResponseModel = GsonImpl.get().toObject(response, BaseResponseModel.class);
+                        BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
+                                new TypeToken<BaseResponseModel<UserModel>>(){}.getType());
+//                        BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response, BaseResponseModel.class);
                         if(baseResponseModel.status){
-                            UbtLog.d("userEdit", "baseResponseModel.models.toString():" + baseResponseModel.models.toString());
-                            UserModel userModel = GsonImpl.get().toObject(baseResponseModel.models.toString(), UserModel.class);
-                            UbtLog.d("userEdit", "userModel:" + userModel);
-                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
+//                            UbtLog.d("userEdit", "baseResponseModel.models.toString():" + baseResponseModel.models.toString());
+                             UbtLog.d("userEdit", "userModel:" + baseResponseModel.models);
+                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
                         }
 
                     }
@@ -190,7 +191,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         if (!path.exists()) {
             path.mkdirs();
         }
-        mImageUri = Uri.fromFile(new File(path, new Date().getTime() + ""));
+        mImageUri = Uri.fromFile(new File(path, System.currentTimeMillis() + ""));
 
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
         cameraIntent.putExtra("return-data", true);
@@ -222,6 +223,11 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         }else if(type==1){
             grade = item;
         }
+    }
+
+    @Override
+    public void updateUserModel(UserModel userModel) {
+
     }
 
     @Override
@@ -257,7 +263,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                                             public void run() {
                                                 Bitmap img = ImageTools.ImageCrop(bitmap);
                                                 mImgHead.setImageBitmap(img);
-                                                path = ImageTools.SaveImage("head",img);
+                                                path = ImageTools.SaveImage("head",bitmap);
                                             }
                                         });
                                     }
