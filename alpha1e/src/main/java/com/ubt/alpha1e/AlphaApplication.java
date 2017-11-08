@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
 import com.ant.country.CountryActivity;
-import com.tencent.ai.tvs.LoginApplication;
-import com.ubt.alpha1e.AlphaApplicationValues.Thrid_login_type;
+ import com.ubt.alpha1e.AlphaApplicationValues.Thrid_login_type;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
@@ -52,6 +52,7 @@ import com.ubt.alpha1e.update.EngineUpdateManager;
 import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
 import com.ubt.alpha1e.utils.crash.CrashHandler;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.alpha1e.xingepush.XGUBTManager;
 import com.ubtechinc.base.BlueToothManager;
 import com.ubtechinc.sqlite.DBAlphaInfoManager;
 import com.umeng.analytics.MobclickAgent;
@@ -63,7 +64,7 @@ import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
-public class AlphaApplication extends LoginApplication {
+public class AlphaApplication extends MultiDexApplication {
 
     private static final String TAG = "AlphaApplication";
 
@@ -118,6 +119,7 @@ public class AlphaApplication extends LoginApplication {
 //                }
 //            }
 //        }, screenOffFilter);
+        XGUBTManager.getInstance(this).initXG(2100270011,"A783M4PIM7JI");
     }
 
     /**
