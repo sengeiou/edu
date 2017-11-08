@@ -10,6 +10,17 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
 
         multiDexEnabled true
+
+        ndk {
+            //根据需要 自行选择添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+                XG_ACCESS_ID  : "210027001122222222",
+                XG_ACCESS_KEY : "A783M4PIM7JI2222222",
+        ]
     }
 
     signingConfigs {
@@ -130,4 +141,14 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+
+    //信鸽稳定版 相关依赖
+    compile 'com.tencent.xinge:xinge:3.1.81-alpha'
+    //wup包
+    compile 'com.tencent.wup:wup:1.0.0.E-alpha'
+    //mid包
+    compile 'com.tencent.mid:mid:3.72.4-alpha'
+
+
 }
