@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.model.AlphaStatics;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.ui.dialog.BaseDiaUI;
@@ -23,6 +26,8 @@ import com.ubt.alpha1e.ui.helper.IStartUI;
 import com.ubt.alpha1e.ui.helper.LoginHelper;
 import com.ubt.alpha1e.ui.helper.StartHelper;
 import com.ubt.alpha1e.ui.main.MainActivity;
+import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.umeng.analytics.MobclickAgent;
 
@@ -286,7 +291,20 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
 //                    inte.setClass(StartActivity.this, IntroductionActivity.class);
 //                }
                 MobclickAgent.onEvent(StartActivity.this.getApplicationContext(), AlphaStatics.ACTIONS_LIB);//动作库页面次数
-                inte.setClass(StartActivity.this, MainActivity.class);
+                UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+                if (null == userModel) {
+                    inte.setClass(StartActivity.this, com.ubt.alpha1e.login.LoginActivity.class);
+                } else {
+                    if (TextUtils.isEmpty(userModel.getPhone())) {
+                        inte.setClass(StartActivity.this, com.ubt.alpha1e.login.LoginActivity.class);
+                    } else {
+                        if (TextUtils.isEmpty(userModel.getAge())) {
+                            inte.setClass(StartActivity.this, UserEditActivity.class);
+                        }else{
+                            inte.setClass(StartActivity.this, MainActivity.class);
+                        }
+                    }
+                }
                 StartActivity.this.startActivity(inte);
                 StartActivity.this.finish();
             }

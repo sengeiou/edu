@@ -209,6 +209,8 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 }
                 mPresenter.showGradeDialog((Activity) mContext, 1, list);
                 break;
+            default:
+                break;
         }
     }
 
@@ -307,8 +309,13 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     }
 
     @Override
-    public void updateUserModel(UserModel userModel) {
+    public void updateUserModelSuccess(UserModel userModel) {
         this.mUserModel = userModel;
+    }
+
+    @Override
+    public void updateUserModelFailed() {
+        ToastUtils.showShort("update failed");
     }
 
     /**

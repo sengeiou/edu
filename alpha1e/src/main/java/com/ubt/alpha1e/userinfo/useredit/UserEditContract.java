@@ -23,7 +23,8 @@ public class UserEditContract {
 
         void ageSelectItem(int type, String age);
 
-        void updateUserModel(UserModel userModel);
+        void updateUserModelSuccess(UserModel userModel);
+        void updateUserModelFailed();
     }
 
     interface Presenter extends BasePresenter<View> {

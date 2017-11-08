@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
@@ -15,9 +16,14 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
+import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
+import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -192,12 +198,19 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-
+                        mView.updateUserModelFailed();
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-
+                        BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
+                                new TypeToken<BaseResponseModel<UserModel>>() {
+                                }.getType());
+                        if (baseResponseModel.status) {
+                            UbtLog.d("userEdit", "userModel:" + baseResponseModel.models);
+                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
+                            mView.updateUserModelSuccess(baseResponseModel.models);
+                        }
                     }
                 });
     }
@@ -212,11 +225,19 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-
+                        mView.updateUserModelFailed();
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
+                        BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
+                                new TypeToken<BaseResponseModel<UserModel>>() {
+                                }.getType());
+                        if (baseResponseModel.status) {
+                            UbtLog.d("userEdit", "userModel:" + baseResponseModel.models);
+                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
+                            mView.updateUserModelSuccess(baseResponseModel.models);
+                        }
                     }
                 });
     }

@@ -49,27 +49,29 @@ public class OkHttpClientUtils {
 
     /**
      * 带文件请求
+     *
      * @param url
-      * @param id
+     * @param id
      * @return
      */
-    public static RequestCall getJsonByPostRequest(String url, File file,BaseRequest request, int id) {
+    public static RequestCall getJsonByPostRequest(String url, File file, BaseRequest request, int id) {
         request.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
         request.setToken(SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN));
 
-        UbtLog.d("Request", "url===" + url + "___request==" + request.toString());
+        UbtLog.d("Request", "url===" + url + "request==" + request.toString());
         return OkHttpUtils.post()
-                .addFile("headPic", "head.jpg", file)
+                .addFile("headPic", file.getName(), file)
                 .url(url)
                 .params(GsonImpl.get().getMap(request))//
                 .id(id)
-                 .build()//
+                .build()//
                 ;
 
     }
 
     /**
      * 一般post请求
+     *
      * @param url
      * @param request
      * @param id

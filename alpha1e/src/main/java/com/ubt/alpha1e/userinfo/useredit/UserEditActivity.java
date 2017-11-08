@@ -33,6 +33,7 @@ import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.custom.ShapedImageView;
 import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -168,7 +169,11 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                         if(baseResponseModel.status){
 //                            UbtLog.d("userEdit", "baseResponseModel.models.toString():" + baseResponseModel.models.toString());
                              UbtLog.d("userEdit", "userModel:" + baseResponseModel.models);
-                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
+                             SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
+                            Intent intent = new Intent();
+                            intent.setClass(UserEditActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            UserEditActivity.this.finish();
                         }
 
                     }
@@ -226,7 +231,15 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     }
 
     @Override
-    public void updateUserModel(UserModel userModel) {
+    public void updateUserModelSuccess(UserModel userModel) {
+
+    }
+
+    /**
+     * 更新信息失败
+     */
+    @Override
+    public void updateUserModelFailed() {
 
     }
 
@@ -263,7 +276,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                                             public void run() {
                                                 Bitmap img = ImageTools.ImageCrop(bitmap);
                                                 mImgHead.setImageBitmap(img);
-                                                path = ImageTools.SaveImage("head",bitmap);
+                                                path = ImageTools.SaveImage("head",img);
                                             }
                                         });
                                     }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
 import com.tencent.ai.tvs.AuthorizeListener;
 import com.tencent.ai.tvs.LoginProxy;
 import com.tencent.ai.tvs.env.ELoginEnv;
@@ -18,10 +19,16 @@ import com.tencent.ai.tvs.info.WxInfoManager;
 import com.tencent.connect.common.Constants;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.ui.BaseActivity;
+import com.ubt.alpha1e.ui.main.MainActivity;
+import com.ubt.alpha1e.userinfo.model.UserAllModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
+import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -115,24 +122,25 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
     @Override
     public void onSuccess(int i) {
-        Log.e(TAG, "login onSuccess");
-        String accessToken = "";
-        String openID = "";
-        String appID = "";
-        if (loginType == 0) {
-            accessToken = qqOpenInfoManager.accessToken;
-            openID = qqOpenInfoManager.openID;
-            appID = qqOpenInfoManager.appId;
-        } else {
-            accessToken = wxInfoManager.accessToken;
-            openID = wxInfoManager.openID;
+        if (i == 5) {
+            Log.e(TAG, "login onSuccess" + i);
+            String accessToken = "";
+            String openID = "";
+            String appID = "";
+            if (loginType == 0) {
+                accessToken = qqOpenInfoManager.accessToken;
+                openID = qqOpenInfoManager.openID;
+                appID = qqOpenInfoManager.appId;
+            } else {
+                accessToken = wxInfoManager.accessToken;
+                openID = wxInfoManager.openID;
+            }
+
+            Log.e(TAG, "accessToken:" + accessToken + "--openID:" + openID + "--appID:" + appID);
+
+            Toast.makeText(this, "onSuccess", Toast.LENGTH_LONG).show();
+            doThirdLogin(accessToken, openID);
         }
-
-        Log.e(TAG, "accessToken:" + accessToken + "--openID:" + openID + "--appID:" + appID);
-
-        Toast.makeText(this, "onSuccess", Toast.LENGTH_LONG).show();
-        doThirdLogin(accessToken, openID);
-
     }
 
     @Override
@@ -195,8 +203,8 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
                     String user = jsonObject.getString("user");
                     saveThirdLoginUserId(user);
-                    getUserPhone(user);
-
+                    //getUserPhone(user);
+                    getUserInfo();
                 } catch (JSONException ex) {
 
                 }
@@ -233,7 +241,6 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             userModel.setNickName(nickName);
             userModel.setHeadPic(userImage);
             userModel.setUserId(userId);
-            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
             SPUtils.getInstance().put(Constant.SP_USER_ID, userId);
             SPUtils.getInstance().put(Constant.SP_USER_IMAGE, userImage);
             SPUtils.getInstance().put(Constant.SP_USER_NICKNAME, nickName);
@@ -244,27 +251,50 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
     }
 
-    //解析个人信息中是否已绑定电话
-    public void getUserPhone(String user) {
 
-        try {
-            JSONObject jsonObject = new JSONObject(user);
-            String phone = jsonObject.getString("userPhone");
-            UbtLog.d(TAG, "phone:" + phone);
-            if (!TextUtils.isEmpty(phone) && !phone.equals("null")) {
-                //用户已绑定电话号码，直接通过后台去获取用户信息
-            } else {
-                //手机号码绑定流程
-                Intent intent = new Intent();
-                intent.setClass(LoginActivity.this, LoginAuthActivity.class);
-                startActivity(intent);
-                this.finish();
-
+    public void getUserInfo() {
+        BaseRequest baseRequest = new BaseRequest();
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.GET_USER_INFO, baseRequest, 0).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d(TAG, "onError:" + e.getMessage());
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d(TAG, "getUser__response==" + response);
+                BaseResponseModel<UserAllModel> baseResponseModel = GsonImpl.get().toObject(response,
+                        new TypeToken<BaseResponseModel<UserAllModel>>() {
+                        }.getType());
+                if (baseResponseModel.status) {
+                    Intent intent = new Intent();
+                    UserAllModel userAllModel = baseResponseModel.models;
+                    UbtLog.d(TAG, "userAllModel==" + userAllModel.toString());
+                    if (!TextUtils.isEmpty(userAllModel.getPhone())) {
+                        //用户已绑定电话号码，直接通过后台去获取用户信息
+                        if (!TextUtils.isEmpty(userAllModel.getAge())) {
+                            UserModel userModel = new UserModel();
+                            userModel.setNickName(userAllModel.getNickName());
+                            userModel.setHeadPic(userAllModel.getHeadPic());
+                            userModel.setPhone(userAllModel.getPhone());
+                            userModel.setAge(userAllModel.getAge());
+                            userModel.setSex(userAllModel.getSex());
+                            userModel.setGrade(userAllModel.getGrade());
+                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
+                            intent.setClass(LoginActivity.this, MainActivity.class);
+                        } else {
+                            intent.setClass(LoginActivity.this, UserEditActivity.class);
+                        }
+                    } else {
+                        //手机号码绑定流程
+                        intent.putExtra("userInfo",userAllModel);
+                        intent.setClass(LoginActivity.this, LoginAuthActivity.class);
+                    }
+                    startActivity(intent);
+                    LoginActivity.this.finish();
+                }
+            }
+        });
     }
 
 
