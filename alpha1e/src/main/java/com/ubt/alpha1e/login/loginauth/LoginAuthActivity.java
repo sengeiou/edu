@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.GetCodeRequest;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
@@ -30,7 +31,7 @@ import okhttp3.Call;
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ * 邮箱 784787081@qq.com
  */
 
 public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, LoginAuthPresenter> implements LoginAuthContract.View {
@@ -49,13 +50,12 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
     Button btnConfirm;
 
     RequestCountDown requestCountDown;
-    private static final long REQUEST_TIME = 61*1000;
+    private static final long REQUEST_TIME = 61 * 1000;
 
     private String token;
     private String userId;
     private String nickName;
     private String userImage;
-
 
 
     @Override
@@ -99,15 +99,14 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if(CheckPhoneNumberUtil.isChinaPhoneLegal(phoneNum)){
+                if (CheckPhoneNumberUtil.isChinaPhoneLegal(phoneNum)) {
                     setGetCodeTextEnable(true);
-                }else{
+                } else {
                     setGetCodeTextEnable(false);
                 }
 
             }
         });
-
 
         edtVerifyCode.addTextChangedListener(new TextWatcher() {
             @Override
@@ -117,9 +116,9 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length() >0){
+                if (charSequence.length() > 0) {
                     btnConfirm.setEnabled(true);
-                }else{
+                } else {
                     btnConfirm.setEnabled(false);
                 }
             }
@@ -130,19 +129,20 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
             }
         });
 
-
         tvGetCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 requestCountDown.start();
                 setGetCodeTextEnable(false);
                 String params = "{"
-                        + "\"token\":" + "\"" +  token + "\""
+                        + "\"token\":" + "\"" + token + "\""
                         + ",\n\"userId\":" + "\"" + userId + "\""
-                        + ",\n\"phone\":" + "\"" +  edtTel.getText().toString() + "\""
-                        +"}";
-                UbtLog.d(TAG, "params:"+ params);
-                OkHttpClientUtils.getJsonByPostRequest(HttpEntity.REQUEST_SMS_CODE, params, 0).execute(new StringCallback() {
+                        + ",\n\"phone\":" + "\"" + edtTel.getText().toString() + "\""
+                        + "}";
+                GetCodeRequest getCodeRequest = new GetCodeRequest();
+                getCodeRequest.setPhone(edtTel.getText().toString());
+                UbtLog.d(TAG, "params:" + params);
+                OkHttpClientUtils.getJsonByPostRequest(HttpEntity.REQUEST_SMS_CODE, getCodeRequest, 0).execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         UbtLog.e(TAG, "REQUEST_SMS_CODE Exception:" + e.getMessage());
@@ -161,13 +161,13 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
             @Override
             public void onClick(View view) {
                 String params = "{"
-                        + "\"token\":" + "\"" +  token + "\""
+                        + "\"token\":" + "\"" + token + "\""
                         + ",\n\"userId\":" + "\"" + userId + "\""
-                        + ",\n\"phone\":" + "\"" +  edtTel.getText().toString() + "\""
-                        + ",\n\"nickName\":" + "\"" +  nickName+ "\""
-                        + ",\n\"headPic\":" + "\"" +  userImage + "\""
-                        + ",\n\"code\":" + "\"" +  edtVerifyCode.getText().toString() + "\""
-                        +"}";
+                        + ",\n\"phone\":" + "\"" + edtTel.getText().toString() + "\""
+                        + ",\n\"nickName\":" + "\"" + nickName + "\""
+                        + ",\n\"headPic\":" + "\"" + userImage + "\""
+                        + ",\n\"code\":" + "\"" + edtVerifyCode.getText().toString() + "\""
+                        + "}";
 
                 OkHttpClientUtils.getJsonByPostRequest(HttpEntity.BIND_ACCOUNT, params, 0).execute(new StringCallback() {
                     @Override
@@ -179,8 +179,8 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                     @Override
                     public void onResponse(String response, int id) {
                         UbtLog.d(TAG, "response:" + response);
-                        BaseResponseModel baseResponseModel = GsonImpl.get().toObject(response,BaseResponseModel.class);
-                        if(baseResponseModel.status){
+                        BaseResponseModel baseResponseModel = GsonImpl.get().toObject(response, BaseResponseModel.class);
+                        if (baseResponseModel.status) {
                             Intent intent = new Intent();
                             intent.setClass(LoginAuthActivity.this, UserEditActivity.class);
                             startActivity(intent);
@@ -195,7 +195,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
 
     }
 
-    private void GoUserInfo(){
+    private void GoUserInfo() {
         Intent intent = new Intent();
         intent.setClass(LoginAuthActivity.this, UserEditActivity.class);
         startActivity(intent);
@@ -220,12 +220,12 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
         return super.onKeyDown(keyCode, event);
     }
 
-    private void setGetCodeTextEnable(boolean enable){
+    private void setGetCodeTextEnable(boolean enable) {
 
         tvGetCode.setEnabled(enable);
-        if(enable == true){
+        if (enable == true) {
             tvGetCode.setTextColor(getResources().getColor(R.color.tv_blue_color));
-        }else{
+        } else {
             tvGetCode.setTextColor(getResources().getColor(R.color.login_line_color));
         }
 
@@ -235,18 +235,19 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
 
     /**
      * 类名
-     * @author作者<br/>
-     *	实现的主要功能。
-     *	created at
-     *	修改者，修改日期，修改内容。
-    */
+     *
+     * @author作者<br/> 实现的主要功能。
+     * created at
+     * 修改者，修改日期，修改内容。
+     */
 
 
-    class RequestCountDown extends CountDownTimer{
+    class RequestCountDown extends CountDownTimer {
 
         public RequestCountDown(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
+
         @Override
         public void onFinish() {
 
@@ -258,10 +259,9 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
 
         @Override
         public void onTick(long millisUntilFinished) {
-            tvCountdown.setText("" + (millisUntilFinished/1000) + " s");
+            tvCountdown.setText("" + (millisUntilFinished / 1000) + " s");
         }
     }
-
 
 
 }
