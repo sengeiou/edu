@@ -13,9 +13,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
+import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -47,6 +51,11 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
     RequestCountDown requestCountDown;
     private static final long REQUEST_TIME = 61*1000;
 
+    private String token;
+    private String userId;
+    private String nickName;
+    private String userImage;
+
 
 
     @Override
@@ -54,6 +63,11 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
         super.onCreate(savedInstanceState);
         initControlListener();
         requestCountDown = new RequestCountDown(REQUEST_TIME, 1000);
+        token = SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN);
+        userId = SPUtils.getInstance().getString(Constant.SP_USER_ID);
+        nickName = SPUtils.getInstance().getString(Constant.SP_USER_NICKNAME);
+        userImage = SPUtils.getInstance().getString(Constant.SP_USER_IMAGE);
+        UbtLog.d(TAG, "token:" + token + "--userId:" + userId + "--nickName:" + nickName + "--userImage:" + userImage);
     }
 
     @Override
@@ -122,45 +136,59 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
             public void onClick(View view) {
                 requestCountDown.start();
                 setGetCodeTextEnable(false);
-//                http://10.10.20.71:8010/user-service-rest/v2/user/captcha?account=13574122015&accountType=0&purpose=1
-                String url = HttpEntity.REQUEST_SMS_CODE + "?account=" +edtTel.getText().toString() + "&accountType=0&purpose=1";
-                OkHttpClientUtils.getJsonByGetRequest(url, 0).execute(new StringCallback() {
+                String params = "{"
+                        + "\"token\":" + "\"" +  token + "\""
+                        + ",\n\"userId\":" + "\"" + userId + "\""
+                        + ",\n\"phone\":" + "\"" +  edtTel.getText().toString() + "\""
+                        +"}";
+                UbtLog.d(TAG, "params:"+ params);
+                OkHttpClientUtils.getJsonByPostRequest(HttpEntity.REQUEST_SMS_CODE, params, 0).execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        UbtLog.d(TAG, "onError:" + e.toString());
+                        UbtLog.e(TAG, "REQUEST_SMS_CODE Exception:" + e.getMessage());
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        UbtLog.d(TAG, "onResponse:" + response);
-//                        requestCountDown.start();
+                        UbtLog.e(TAG, "REQUEST_SMS_CODE response:" + response);
                     }
                 });
+
             }
         });
 
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String params = "{\n" +
-                        "  \"account\": \"18244971998\",\n" +
-                        "  \"accountType\": 0,\n" +
-                        "  \"captcha\": \"2345\"\n" +
-                        "}";
+                String params = "{"
+                        + "\"token\":" + "\"" +  token + "\""
+                        + ",\n\"userId\":" + "\"" + userId + "\""
+                        + ",\n\"phone\":" + "\"" +  edtTel.getText().toString() + "\""
+                        + ",\n\"nickName\":" + "\"" +  nickName+ "\""
+                        + ",\n\"headPic\":" + "\"" +  userImage + "\""
+                        + ",\n\"code\":" + "\"" +  edtVerifyCode.getText().toString() + "\""
+                        +"}";
 
-                OkHttpClientUtils.getJsonByPatchRequest(HttpEntity.BIND_ACCOUNT,params, "234566", 0).execute(new StringCallback() {
+                OkHttpClientUtils.getJsonByPostRequest(HttpEntity.BIND_ACCOUNT, params, 0).execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        UbtLog.d(TAG, "onError:" + e.getMessage());
-                        GoUserInfo();
+                        UbtLog.e(TAG, "Exception:" + e.getMessage());
+
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        UbtLog.d(TAG, "onResponse:" + response);
-                        GoUserInfo();
+                        UbtLog.d(TAG, "response:" + response);
+                        BaseResponseModel baseResponseModel = GsonImpl.get().toObject(response,BaseResponseModel.class);
+                        if(baseResponseModel.status){
+                            Intent intent = new Intent();
+                            intent.setClass(LoginAuthActivity.this, UserEditActivity.class);
+                            startActivity(intent);
+                        }
+
                     }
                 });
+
 
             }
         });

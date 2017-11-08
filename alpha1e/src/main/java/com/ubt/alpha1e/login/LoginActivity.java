@@ -90,11 +90,11 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
         rlQQLgoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                loginType = 0;
-//                proxy.requestLogin(ELoginPlatform.QQOpen, "", "", LoginActivity.this);
-                Intent intent = new Intent();
-                intent.setClass(LoginActivity.this, LoginAuthActivity.class);
-                startActivity(intent);
+                loginType = 0;
+                proxy.requestLogin(ELoginPlatform.QQOpen, "", "", LoginActivity.this);
+//                Intent intent = new Intent();
+//                intent.setClass(LoginActivity.this, LoginAuthActivity.class);
+//                startActivity(intent);
             }
         });
 
@@ -197,6 +197,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
                     saveThirdLoginToken(token)  ;
 
                     String user = jsonObject.getString("user");
+                    saveThirdLoginUserId(user);
                     getUserPhone(user);
 
                 }catch (JSONException ex){
@@ -216,6 +217,24 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             JSONObject jsonObject = new JSONObject(token);
             String spToken  = jsonObject.getString("token");
             SPUtils.getInstance().put(Constant.SP_LOGIN_TOKEN, spToken);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    public void saveThirdLoginUserId(String userInfo){
+        try {
+            SPUtils.getInstance().put(Constant.SP_USER_INFO, userInfo);
+            JSONObject jsonObject = new JSONObject(userInfo);
+            String userId = jsonObject.getString("userId");
+            String userImage = jsonObject.getString("userImage");
+            String nickName = jsonObject.getString("nickName");
+            SPUtils.getInstance().put(Constant.SP_USER_ID, userId);
+            SPUtils.getInstance().put(Constant.SP_USER_IMAGE, userImage);
+            SPUtils.getInstance().put(Constant.SP_USER_NICKNAME, nickName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
