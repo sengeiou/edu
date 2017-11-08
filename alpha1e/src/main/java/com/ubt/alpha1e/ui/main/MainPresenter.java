@@ -1,14 +1,6 @@
 package com.ubt.alpha1e.ui.main;
 
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
-
-import com.squareup.haha.perflib.Main;
-import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
-import com.ubt.alpha1e.ui.MyMainActivity;
-import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
 

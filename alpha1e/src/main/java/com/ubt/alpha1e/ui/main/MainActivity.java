@@ -1,10 +1,9 @@
 package com.ubt.alpha1e.ui.main;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -14,10 +13,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
+import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.MyMainActivity;
-import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -26,7 +28,6 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.jpush.android.ui.FullScreenView;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -79,7 +80,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.top_icon:
 
                 Intent intent = new Intent();
-                intent.setClass(this, UserCenterActivity.class);
+                if(TextUtils.isEmpty(SPUtils.getInstance().getString(Constant.SP_USER_INFO))){
+                    intent.setClass(this, LoginActivity.class);
+                }else{
+                    intent.setClass(this, UserCenterActivity.class);
+                }
+
                 startActivity(intent);
                 break;
             case R.id.top_icon2:
