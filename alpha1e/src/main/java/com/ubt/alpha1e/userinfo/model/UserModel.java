@@ -14,9 +14,9 @@ import java.io.Serializable;
 public class UserModel implements Serializable{
     private String userId;
     private String nickName;
-    private int sex;
+    private String sex;
     private String grade;
-    private int age;
+    private String age;
     public String headPic;
     private String phone;
 
@@ -36,11 +36,11 @@ public class UserModel implements Serializable{
         this.nickName = nickName;
     }
 
-    public int getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
@@ -52,11 +52,11 @@ public class UserModel implements Serializable{
         this.grade = grade;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
@@ -74,5 +74,18 @@ public class UserModel implements Serializable{
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "userId='" + userId + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", sex='" + sex + '\'' +
+                ", grade='" + grade + '\'' +
+                ", age='" + age + '\'' +
+                ", headPic='" + headPic + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 }

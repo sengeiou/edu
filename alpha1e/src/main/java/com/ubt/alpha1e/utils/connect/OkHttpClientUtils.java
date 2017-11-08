@@ -59,7 +59,7 @@ public class OkHttpClientUtils {
 
         UbtLog.d("Request", "url===" + url + "___request==" + request.toString());
         return OkHttpUtils.post()
-                .addFile("mFile", "head.jpg", file)
+                .addFile("headPic", "head.jpg", file)
                 .url(url)
                 .params(GsonImpl.get().getMap(request))//
                 .id(id)

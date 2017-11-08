@@ -20,15 +20,20 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ImageTools;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.custom.ShapedImageView;
 import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
+import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
@@ -157,6 +162,14 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                     @Override
                     public void onResponse(String response, int id) {
                         UbtLog.d("userEdit", "response:" + response);
+                        BaseResponseModel baseResponseModel = GsonImpl.get().toObject(response, BaseResponseModel.class);
+                        if(baseResponseModel.status){
+                            UbtLog.d("userEdit", "baseResponseModel.models.toString():" + baseResponseModel.models.toString());
+                            UserModel userModel = GsonImpl.get().toObject(baseResponseModel.models.toString(), UserModel.class);
+                            UbtLog.d("userEdit", "userModel:" + userModel);
+                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
+                        }
+
                     }
                 });
                 break;
@@ -244,7 +257,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                                             public void run() {
                                                 Bitmap img = ImageTools.ImageCrop(bitmap);
                                                 mImgHead.setImageBitmap(img);
-                                                path = ImageTools.SaveImage("head",bitmap);
+                                                path = ImageTools.SaveImage("head",img);
                                             }
                                         });
                                     }
