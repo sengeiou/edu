@@ -59,14 +59,21 @@ public class OkHttpClientUtils {
         request.setToken(SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN));
 
         UbtLog.d("Request", "url===" + url + "request==" + request.toString());
-        return OkHttpUtils.post()
-                .addFile("headPic", file.getName(), file)
-                .url(url)
-                .params(GsonImpl.get().getMap(request))//
-                .id(id)
-                .build()//
-                ;
-
+        if (null != file) {
+            return OkHttpUtils.post()
+                    .addFile("headPic", file.getName(), file)
+                    .url(url)
+                    .params(GsonImpl.get().getMap(request))//
+                    .id(id)
+                    .build()//
+                    ;
+        } else {
+            return OkHttpUtils.post()
+                    .url(url)
+                    .params(GsonImpl.get().getMap(request))//
+                    .id(id)
+                    .build();
+        }
     }
 
     /**

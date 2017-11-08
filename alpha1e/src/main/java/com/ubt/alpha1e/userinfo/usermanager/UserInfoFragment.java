@@ -22,6 +22,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
@@ -151,6 +152,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onResume() {
         super.onResume();
         mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+        UbtLog.d("Usercenter", "usermode===" + mUserModel.toString());
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
         mTvUserName.setText(mUserModel.getNickName());
         mTvUserAge.setText(mUserModel.getAge());
@@ -162,6 +164,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 mFemale.setChecked(true);
             }
         }
+        Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().placeholder(R.drawable.sec_action_logo).into(mImgHead);
     }
 
     /**
@@ -175,14 +178,14 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         switch (view.getId()) {
             case R.id.male:
                 if (ischanged) {
-                    if (!mUserModel.getSex().equals("1")) {
+                    if (null != mUserModel && !mUserModel.getSex().equals("1")) {
                         updateUserInfo(Constant.KEY_NICK_SEX, "1");
                     }
                 }
                 break;
             case R.id.female:
                 if (ischanged) {
-                    if (!mUserModel.getSex().equals("2")) {
+                    if (null != mUserModel && !mUserModel.getSex().equals("2")) {
                         updateUserInfo(Constant.KEY_NICK_SEX, "2");
                     }
                 }
@@ -359,7 +362,8 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                                                 Bitmap img = ImageTools.ImageCrop(bitmap);
                                                 mImgHead.setImageBitmap(img);
                                                 headPath = ImageTools.SaveImage("head", img);
-                                                mPresenter.updateUserHead(headPath);
+                                                mPresenter.updateUserInfo(Constant.KEY_NICK_HEAD, headPath);
+                                                UbtLog.d("compressImage", "使用次数");
                                             }
                                         });
                                     }
@@ -396,8 +400,9 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         Log.d("string==", "editText==" + editText);
         if (!statu && !TextUtils.isEmpty(editText)) {
             if (TVUtils.isCorrectStr(editText)) {
-                ToastUtils.showShort("上传参数");
-                updateUserInfo(Constant.KEY_NICK_NAME, editText);
+                if (!mUserModel.getNickName().equals(editText)) {
+                    updateUserInfo(Constant.KEY_NICK_NAME, editText);
+                }
             }
         }
     }

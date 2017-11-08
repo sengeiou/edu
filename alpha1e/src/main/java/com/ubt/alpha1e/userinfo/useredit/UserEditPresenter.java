@@ -14,7 +14,6 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
-import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
@@ -176,6 +175,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
      * @param value
      */
     public void updateUserInfo(int key, String value) {
+        File file = null;
         UpdateUserInfoRequest request = new UpdateUserInfoRequest();
         switch (key) {
             case Constant.KEY_NICK_NAME:
@@ -190,11 +190,14 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
             case Constant.KEY_NICK_GRADE:
                 request.setGrade(value);
                 break;
+            case Constant.KEY_NICK_HEAD:
+                file = new File(value);
+                break;
             default:
                 break;
         }
-
-        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, request, key)
+        UbtLog.d("UpdateHead--------", "request====" + request + "  headPath===" + value);
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, request, key)
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
@@ -206,8 +209,8 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                         BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<UserModel>>() {
                                 }.getType());
+                        UbtLog.d("userEdit", "baseResponseModel==" + baseResponseModel.status + "  " + baseResponseModel.models);
                         if (baseResponseModel.status) {
-                            UbtLog.d("userEdit", "userModel:" + baseResponseModel.models);
                             SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
                             mView.updateUserModelSuccess(baseResponseModel.models);
                         }
@@ -215,31 +218,5 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 });
     }
 
-    public void updateUserHead(String path) {
-        File file = new File(path);
-        if (!file.exists()) {
-            return;
-        }
-        BaseRequest baseRequest = new BaseRequest();
-        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, baseRequest, 11)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        mView.updateUserModelFailed();
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
-                                new TypeToken<BaseResponseModel<UserModel>>() {
-                                }.getType());
-                        if (baseResponseModel.status) {
-                            UbtLog.d("userEdit", "userModel:" + baseResponseModel.models);
-                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
-                            mView.updateUserModelSuccess(baseResponseModel.models);
-                        }
-                    }
-                });
-    }
 
 }
