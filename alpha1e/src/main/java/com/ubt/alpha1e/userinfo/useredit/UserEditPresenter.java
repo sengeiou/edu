@@ -12,6 +12,7 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.weigan.loopview.LoopView;
@@ -105,9 +106,8 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                             if (isAttachView()) {
                                 mView.ageSelectItem(0, list.get(loopView.getSelectedItem()));
                             }
-                            //ToastUtils.showShort("item " + loopView.getSelectedItem());
+                            dialog.dismiss();
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setCancelable(true)
@@ -142,11 +142,9 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                             if (isAttachView()) {
                                 mView.ageSelectItem(1, list.get(loopView.getSelectedItem()));
                                 Log.d("showGradeDialog", "string==" + list.get(loopView.getSelectedItem()));
-                                //ToastUtils.showShort("item " + loopView.getSelectedItem());
                             }
-                            // ToastUtils.showShort("item " + loopView.getSelectedItem());
+                            dialog.dismiss();
                         }
-                        dialog.dismiss();
                     }
                 })
                 .create().show();
@@ -161,10 +159,33 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
      * 获取用户信息
      */
     public void getUserModel() {
+
     }
 
 
     public void upDataUserInfo(UserModel userModel) {
+
+    }
+
+    public void updateUserInfo(int key, String value) {
+        switch (key) {
+            case Constant.KEY_NICK_NAME:
+
+                break;
+            case Constant.KEY_NICK_SEX:
+
+                break;
+            case Constant.KEY_NICK_AGE:
+
+                break;
+            case Constant.KEY_NICK_GRADE:
+
+                break;
+            default:
+                break;
+
+        }
+
 
     }
 

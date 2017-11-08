@@ -10,8 +10,32 @@ package com.ubt.alpha1e.base;
  */
 
 public class Constant {
-    public final static String SP_USERINFOMODEL="sp_userinfo";
+    public final static String SP_USERINFOMODEL = "sp_userinfo";
     public final static String SP_LOGIN_TOKEN = "sp_login_token";
 
 
+    /**
+     * 昵称
+     */
+    public final static int KEY_NICK_NAME = 1;
+
+    /**
+     * 性别
+     */
+    public final static int KEY_NICK_SEX = 2;
+
+    /**
+     * 年龄
+     */
+    public final static int KEY_NICK_AGE = 3;
+
+    /**
+     * 年级
+     */
+    public final static int KEY_NICK_GRADE = 4;
+
+    /**
+     * 头像
+     */
+    public final static int KEY_NICK_HEAD = 1;
 }

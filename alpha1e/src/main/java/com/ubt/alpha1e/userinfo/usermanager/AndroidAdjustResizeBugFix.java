@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
-import com.ubt.alpha1e.base.ToastUtils;
-
 import java.lang.reflect.Field;
 
 /**
@@ -56,14 +54,14 @@ public class AndroidAdjustResizeBugFix {
                 // keyboard probably just became visible
                 // 如果有高度变化，mChildOfContent.requestLayout()之后界面才会重新测量
                 // 这里就随便让原来的高度减去了1
-                ToastUtils.showShort("软件盘开启");
+               // ToastUtils.showShort("软件盘开启");
                 frameLayoutParams.height = usableHeightSansKeyboard - 1;
                 if (null != mOnKeyChangerListeler) {
                     mOnKeyChangerListeler.keyBoardOpen(true);
                 }
             } else {
                 // keyboard probably just became hidden
-                ToastUtils.showShort("软件盘关闭");
+                //ToastUtils.showShort("软件盘关闭");
                 frameLayoutParams.height = usableHeightSansKeyboard;
                 if (null != mOnKeyChangerListeler) {
                     mOnKeyChangerListeler.keyBoardOpen(false);
