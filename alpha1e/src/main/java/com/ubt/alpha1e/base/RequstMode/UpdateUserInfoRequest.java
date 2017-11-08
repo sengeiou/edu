@@ -1,32 +1,22 @@
-package com.ubt.alpha1e.userinfo.model;
-
-import java.io.Serializable;
+package com.ubt.alpha1e.base.RequstMode;
 
 /**
- * @author：liuhai
- * @date：2017/11/1 14:00
- * @modifier：ubt
- * @modify_date：2017/11/1 14:00
- * [A brief description]
- * version
+ * @author admin
+ * @className
+ * @description
+ * @date
+ * @update
  */
 
-public class UserModel implements Serializable{
-    private String userId;
+
+public class UpdateUserInfoRequest extends BaseRequest  {
+
     private String nickName;
-    private int sex;
+    private String sex;
     private String grade;
-    private int age;
+    private String age;
     public String headPic;
     private String phone;
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public String getNickName() {
         return nickName;
@@ -36,11 +26,11 @@ public class UserModel implements Serializable{
         this.nickName = nickName;
     }
 
-    public int getSex() {
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
@@ -52,11 +42,11 @@ public class UserModel implements Serializable{
         this.grade = grade;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 

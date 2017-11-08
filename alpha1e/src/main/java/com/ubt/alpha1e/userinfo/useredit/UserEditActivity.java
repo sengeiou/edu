@@ -20,14 +20,19 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ImageTools;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.custom.ShapedImageView;
 import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
+import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
 import java.io.InputStream;
@@ -38,6 +43,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 
 /**
@@ -65,6 +71,8 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     ImageView mIvMainBack;
     @BindView(R.id.tv_main_title)
     TextView mTvMainTitle;
+    @BindView(R.id.iv_complete_info)
+    ImageView ivSave;
 
     private Dialog mDialog;
 
@@ -72,8 +80,14 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     public static final int GetUserHeadRequestCodeByShoot = 1001;
     public static final int GetUserHeadRequestCodeByFile = 1002;
 
+
     private String[] greadeList = new String[]{"幼儿园小班", "幼儿园中班", "幼儿园大班", "小学一年级", "小学二年级", "小学三年级", "小学四年级"
             , "小学五年级", "小学六年级及以上"};
+
+    private String  sex = "1";
+    private String age ;
+    private String grade;
+    private String path;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
@@ -93,11 +107,13 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
             case R.id.male:
                 if (ischanged) {
                     ToastUtils.showShort("男孩子哦");
+                    sex = "1";
                 }
                 break;
             case R.id.female:
                 if (ischanged) {
                     ToastUtils.showShort("女孩子哦");
+                    sex = "2";
                 }
                 break;
 
@@ -106,7 +122,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         }
     }
 
-    @OnClick({R.id.img_head, R.id.tv_user_age, R.id.tv_user_grade})
+    @OnClick({R.id.img_head, R.id.tv_user_age, R.id.tv_user_grade,R.id.iv_complete_info})
     public void onClickView(View view) {
         switch (view.getId()) {
             case R.id.img_head:
@@ -121,6 +137,30 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                     list.add(grade);
                 }
                 mPresenter.showGradeDialog(UserEditActivity.this, 2, list);
+                break;
+            case R.id.iv_complete_info:
+                UpdateUserInfoRequest request = new UpdateUserInfoRequest();
+                request.setAge(age);
+                request.setGrade(grade);
+                request.setNickName(mTvUserName.getText().toString());
+                request.setSex(sex);
+//                if(!TextUtils.isEmpty(path)){
+//
+//                }
+                File file = new File(path);
+                OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO,file,request,11).execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        UbtLog.d("userEdit", "Exception:" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        UbtLog.d("userEdit", "response:" + response);
+                    }
+                });
+                break;
+            default:
                 break;
         }
     }
@@ -164,8 +204,14 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     @Override
     public void ageSelectItem(int type, String item) {
         ToastUtils.showShort(item);
+        if(type==0){
+            age = item;
+        }else if(type==1){
+            grade = item;
+        }
     }
 
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
@@ -198,6 +244,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                                             public void run() {
                                                 Bitmap img = ImageTools.ImageCrop(bitmap);
                                                 mImgHead.setImageBitmap(img);
+                                                path = ImageTools.SaveImage("head",bitmap);
                                             }
                                         });
                                     }

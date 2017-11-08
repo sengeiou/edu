@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.base;
+package com.ubt.alpha1e.base.RequstMode;
 
 /**
  * @author：liuhai

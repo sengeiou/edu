@@ -14,12 +14,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.AlphaApplication;
-import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.model.AlphaStatics;
 import com.ubt.alpha1e.data.model.UserInfo;
-import com.ubt.alpha1e.ui.Introduction.IntroductionActivity;
 import com.ubt.alpha1e.ui.dialog.BaseDiaUI;
 import com.ubt.alpha1e.ui.dialog.LoadingDialog;
 import com.ubt.alpha1e.ui.helper.IStartUI;
@@ -276,20 +273,20 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
             }
         }*/
 
-                if (BasicSharedPreferencesOperator
-                        .getInstance(StartActivity.this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD)
-                        .doReadSync(BasicSharedPreferencesOperator.IS_FIRST_USE_APP_KEY)
-                        .equals(BasicSharedPreferencesOperator.IS_FIRST_USE_APP_VALUE_TRUE)
-                        || AlphaApplicationValues.getCurrentEdit() == AlphaApplicationValues.EdtionCode.for_factory_edit) {
-                    //this version has show introduction go to main page
-//            inte.setClass(StartActivity.this,MyMainActivity.class);
-                    // inte.setClass(StartActivity.this,MainActivity.class);
-                    inte.setClass(StartActivity.this, MainActivity.class);
-                } else {
-                    inte.setClass(StartActivity.this, IntroductionActivity.class);
-                }
+//                if (BasicSharedPreferencesOperator
+//                        .getInstance(StartActivity.this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD)
+//                        .doReadSync(BasicSharedPreferencesOperator.IS_FIRST_USE_APP_KEY)
+//                        .equals(BasicSharedPreferencesOperator.IS_FIRST_USE_APP_VALUE_TRUE)
+//                        || AlphaApplicationValues.getCurrentEdit() == AlphaApplicationValues.EdtionCode.for_factory_edit) {
+//                    //this version has show introduction go to main page
+////            inte.setClass(StartActivity.this,MyMainActivity.class);
+//                    // inte.setClass(StartActivity.this,MainActivity.class);
+//                    inte.setClass(StartActivity.this, MainActivity.class);
+//                } else {
+//                    inte.setClass(StartActivity.this, IntroductionActivity.class);
+//                }
                 MobclickAgent.onEvent(StartActivity.this.getApplicationContext(), AlphaStatics.ACTIONS_LIB);//动作库页面次数
-
+                inte.setClass(StartActivity.this, MainActivity.class);
                 StartActivity.this.startActivity(inte);
                 StartActivity.this.finish();
             }

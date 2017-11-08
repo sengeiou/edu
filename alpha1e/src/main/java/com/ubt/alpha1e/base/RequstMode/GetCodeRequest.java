@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.base;
+package com.ubt.alpha1e.base.RequstMode;
 
 /**
  * @author：liuhai
@@ -10,20 +10,20 @@ package com.ubt.alpha1e.base;
  */
 
 public class GetCodeRequest extends BaseRequest {
-    private String Phone;
+    private String phone;
 
     public String getPhone() {
-        return Phone;
+        return phone;
     }
 
     public void setPhone(String phone) {
-        Phone = phone;
+        this.phone = phone;
     }
 
     @Override
     public String toString() {
         return "GetCodeRequest{" +
-                "Phone='" + Phone + '\'' +
+                "phone='" + phone + '\'' +
                 '}';
     }
 }

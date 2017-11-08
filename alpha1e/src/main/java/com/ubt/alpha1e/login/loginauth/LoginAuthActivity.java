@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
-import com.ubt.alpha1e.base.GetCodeRequest;
+import com.ubt.alpha1e.base.RequstMode.GetCodeRequest;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
@@ -134,15 +134,14 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
             public void onClick(View view) {
                 requestCountDown.start();
                 setGetCodeTextEnable(false);
-                String params = "{"
-                        + "\"token\":" + "\"" + token + "\""
-                        + ",\n\"userId\":" + "\"" + userId + "\""
-                        + ",\n\"phone\":" + "\"" + edtTel.getText().toString() + "\""
-                        + "}";
+//                String params = "{"
+//                        + "\"token\":" + "\"" + token + "\""
+//                        + ",\n\"userId\":" + "\"" + userId + "\""
+//                        + ",\n\"phone\":" + "\"" + edtTel.getText().toString() + "\""
+//                        + "}";
                 GetCodeRequest getCodeRequest = new GetCodeRequest();
                 getCodeRequest.setPhone(edtTel.getText().toString());
-                UbtLog.d(TAG, "params:" + params);
-                OkHttpClientUtils.getJsonByPostRequest(HttpEntity.REQUEST_SMS_CODE, getCodeRequest, 0).execute(new StringCallback() {
+                 OkHttpClientUtils.getJsonByPostRequest(HttpEntity.REQUEST_SMS_CODE, getCodeRequest, 0).execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         UbtLog.e(TAG, "REQUEST_SMS_CODE Exception:" + e.getMessage());

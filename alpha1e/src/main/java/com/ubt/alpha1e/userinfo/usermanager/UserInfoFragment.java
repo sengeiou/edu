@@ -20,7 +20,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
@@ -61,8 +60,8 @@ import static android.app.Activity.RESULT_OK;
 public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, UserEditPresenter> implements UserEditContract.View, AndroidAdjustResizeBugFix.OnKeyChangerListeler, MyTextWatcher.WatcherListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    @BindView(R.id.scrollview_user)
-    ScrollView mScrollviewUser;
+//    @BindView(R.id.scrollview_user)
+//    ScrollView mScrollviewUser;
     Unbinder unbinder;
     private String mParam1;
     private String mParam2;

@@ -1,12 +1,14 @@
 package com.ubt.alpha1e.utils.connect;
 
-import com.ubt.alpha1e.base.BaseRequest;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.request.RequestCall;
+
+import java.io.File;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -45,6 +47,34 @@ public class OkHttpClientUtils {
 
     }
 
+    /**
+     * 带文件请求
+     * @param url
+      * @param id
+     * @return
+     */
+    public static RequestCall getJsonByPostRequest(String url, File file,BaseRequest request, int id) {
+        request.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
+        request.setToken(SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN));
+
+        UbtLog.d("Request", "url===" + url + "___request==" + request.toString());
+        return OkHttpUtils.post()
+                .addFile("mFile", "head.jpg", file)
+                .url(url)
+                .params(GsonImpl.get().getMap(request))//
+                .id(id)
+                 .build()//
+                ;
+
+    }
+
+    /**
+     * 一般post请求
+     * @param url
+     * @param request
+     * @param id
+     * @return
+     */
     public static RequestCall getJsonByPostRequest(String url, BaseRequest request, int id) {
         request.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
         request.setToken(SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN));
