@@ -13,12 +13,19 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.RequstMode.BaseRequest;
+import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
-import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.weigan.loopview.LoopView;
+import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * MVPPlugin
@@ -155,38 +162,63 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
         loopView.setCurrentPosition(currentPosition);
     }
 
+
     /**
-     * 获取用户信息
+     * 每个Item更新用户信息
+     *
+     * @param key
+     * @param value
      */
-    public void getUserModel() {
-
-    }
-
-
-    public void upDataUserInfo(UserModel userModel) {
-
-    }
-
     public void updateUserInfo(int key, String value) {
+        UpdateUserInfoRequest request = new UpdateUserInfoRequest();
         switch (key) {
             case Constant.KEY_NICK_NAME:
-
+                request.setNickName(value);
                 break;
             case Constant.KEY_NICK_SEX:
-
+                request.setSex(value);
                 break;
             case Constant.KEY_NICK_AGE:
-
+                request.setAge(value);
                 break;
             case Constant.KEY_NICK_GRADE:
-
+                request.setGrade(value);
                 break;
             default:
                 break;
-
         }
 
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, request, key)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
 
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+
+                    }
+                });
+    }
+
+    public void updateUserHead(String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            return;
+        }
+        BaseRequest baseRequest = new BaseRequest();
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, baseRequest, 11)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                    }
+                });
     }
 
 }

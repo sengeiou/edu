@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
+import com.ubt.alpha1e.userinfo.model.UserModel;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class UserEditContract {
         void takeImageFromAblum();
 
         void ageSelectItem(int type, String age);
+
+        void updateUserModel(UserModel userModel);
     }
 
     interface Presenter extends BasePresenter<View> {

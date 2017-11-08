@@ -41,5 +41,5 @@ public class Constant {
     /**
      * 头像
      */
-    public final static int KEY_NICK_HEAD = 1;
+    public final static int KEY_NICK_HEAD = 5;
 }

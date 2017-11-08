@@ -21,6 +21,7 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.ui.BaseActivity;
+import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -33,12 +34,12 @@ import okhttp3.Call;
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ * 邮箱 784787081@qq.com
  */
 
 public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
-    private  static final String TAG = LoginActivity.class.getSimpleName();
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     private String appidWx = "wxfa7003941d57a391";
     private String appidQQOpen = "1106515940";
@@ -51,8 +52,6 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     RelativeLayout rlWXLogin;
 
     private int loginType = 0; //默认 0 QQ， 1 WX;
-
-
 
 
     @Override
@@ -120,11 +119,11 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
         String accessToken = "";
         String openID = "";
         String appID = "";
-        if(loginType ==0){
+        if (loginType == 0) {
             accessToken = qqOpenInfoManager.accessToken;
             openID = qqOpenInfoManager.openID;
-            appID= qqOpenInfoManager.appId;
-        }else{
+            appID = qqOpenInfoManager.appId;
+        } else {
             accessToken = wxInfoManager.accessToken;
             openID = wxInfoManager.openID;
         }
@@ -160,29 +159,27 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     }
 
 
-    private void doThirdLogin(String accessToken, String openID){
+    private void doThirdLogin(String accessToken, String openID) {
 
         String params = "";
 
-        if(loginType == 0){
-             params = "{"
-                    + "\"accessToken\":" + "\"" +  accessToken + "\""
-                    + ",\n\"appId\":" + "\"" + appidQQOpen + "\""
-                    + ",\n\"loginType\":" + "\"" +  "QQ" + "\""
-                    + ",\n\"openId\":" + "\"" + openID + "\""
-                    +"}";
-        }else{
+        if (loginType == 0) {
             params = "{"
-                    + "\"accessToken\":" + "\"" +  accessToken + "\""
-                    + ",\n\"loginType\":" + "\"" +  "WX" + "\""
+                    + "\"accessToken\":" + "\"" + accessToken + "\""
+                    + ",\n\"appId\":" + "\"" + appidQQOpen + "\""
+                    + ",\n\"loginType\":" + "\"" + "QQ" + "\""
                     + ",\n\"openId\":" + "\"" + openID + "\""
-                    +"}";
+                    + "}";
+        } else {
+            params = "{"
+                    + "\"accessToken\":" + "\"" + accessToken + "\""
+                    + ",\n\"loginType\":" + "\"" + "WX" + "\""
+                    + ",\n\"openId\":" + "\"" + openID + "\""
+                    + "}";
         }
 
-
-
         UbtLog.d(TAG, "doThirdLogin accessToken:" + accessToken + "openID:" + openID + "params:" + params);
-        OkHttpClientUtils.getJsonByPutRequest(HttpEntity.THRID_LOGIN_URL, params,0).execute(new StringCallback() {
+        OkHttpClientUtils.getJsonByPutRequest(HttpEntity.THRID_LOGIN_URL, params, 0).execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "onError:" + e.getMessage());
@@ -194,13 +191,13 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String token = jsonObject.getString("token");
-                    saveThirdLoginToken(token)  ;
+                    saveThirdLoginToken(token);
 
                     String user = jsonObject.getString("user");
                     saveThirdLoginUserId(user);
                     getUserPhone(user);
 
-                }catch (JSONException ex){
+                } catch (JSONException ex) {
 
                 }
 
@@ -211,11 +208,11 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
 
     //保存第三方登录成功，后台返回的token，用于获取用户个人信息
-    public void saveThirdLoginToken(String token){
+    public void saveThirdLoginToken(String token) {
 
         try {
             JSONObject jsonObject = new JSONObject(token);
-            String spToken  = jsonObject.getString("token");
+            String spToken = jsonObject.getString("token");
             SPUtils.getInstance().put(Constant.SP_LOGIN_TOKEN, spToken);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -225,13 +222,18 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     }
 
 
-    public void saveThirdLoginUserId(String userInfo){
+    public void saveThirdLoginUserId(String userInfo) {
         try {
-            SPUtils.getInstance().put(Constant.SP_USER_INFO, userInfo);
+
             JSONObject jsonObject = new JSONObject(userInfo);
             String userId = jsonObject.getString("userId");
             String userImage = jsonObject.getString("userImage");
             String nickName = jsonObject.getString("nickName");
+            UserModel userModel = new UserModel();
+            userModel.setNickName(nickName);
+            userModel.setHeadPic(userImage);
+            userModel.setUserId(userId);
+            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
             SPUtils.getInstance().put(Constant.SP_USER_ID, userId);
             SPUtils.getInstance().put(Constant.SP_USER_IMAGE, userImage);
             SPUtils.getInstance().put(Constant.SP_USER_NICKNAME, nickName);
@@ -243,15 +245,15 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     }
 
     //解析个人信息中是否已绑定电话
-    public void getUserPhone(String user){
+    public void getUserPhone(String user) {
 
         try {
             JSONObject jsonObject = new JSONObject(user);
             String phone = jsonObject.getString("userPhone");
             UbtLog.d(TAG, "phone:" + phone);
-            if(!TextUtils.isEmpty(phone) && !phone.equals("null")){
+            if (!TextUtils.isEmpty(phone) && !phone.equals("null")) {
                 //用户已绑定电话号码，直接通过后台去获取用户信息
-            }else{
+            } else {
                 //手机号码绑定流程
                 Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, LoginAuthActivity.class);

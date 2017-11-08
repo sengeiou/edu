@@ -15,3 +15,4 @@ alpha1e-android-app.iml
 .idea/*
 .gradle/*
 *.iml
+*.properties

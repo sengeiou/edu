@@ -29,6 +29,7 @@ import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.custom.ShapedImageView;
 import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
+import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
@@ -212,6 +213,11 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     }
 
     @Override
+    public void updateUserModel(UserModel userModel) {
+
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
@@ -244,7 +250,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                                             public void run() {
                                                 Bitmap img = ImageTools.ImageCrop(bitmap);
                                                 mImgHead.setImageBitmap(img);
-                                                path = ImageTools.SaveImage("head",bitmap);
+                                                path = ImageTools.SaveImage("head",img);
                                             }
                                         });
                                     }

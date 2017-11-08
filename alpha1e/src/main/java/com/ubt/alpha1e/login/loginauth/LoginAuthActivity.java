@@ -19,6 +19,7 @@ import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -141,7 +142,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
 //                        + "}";
                 GetCodeRequest getCodeRequest = new GetCodeRequest();
                 getCodeRequest.setPhone(edtTel.getText().toString());
-                 OkHttpClientUtils.getJsonByPostRequest(HttpEntity.REQUEST_SMS_CODE, getCodeRequest, 0).execute(new StringCallback() {
+                OkHttpClientUtils.getJsonByPostRequest(HttpEntity.REQUEST_SMS_CODE, getCodeRequest, 0).execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         UbtLog.e(TAG, "REQUEST_SMS_CODE Exception:" + e.getMessage());
@@ -180,6 +181,9 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                         UbtLog.d(TAG, "response:" + response);
                         BaseResponseModel baseResponseModel = GsonImpl.get().toObject(response, BaseResponseModel.class);
                         if (baseResponseModel.status) {
+                            UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+                            userModel.setPhone(edtTel.getText().toString());
+                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
                             Intent intent = new Intent();
                             intent.setClass(LoginAuthActivity.this, UserEditActivity.class);
                             startActivity(intent);

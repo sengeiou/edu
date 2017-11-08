@@ -25,8 +25,6 @@ import java.io.InputStream;
 
 import Decoder.BASE64Encoder;
 
-import static android.R.attr.name;
-
 public class ImageTools {
 
     public static String getImgStr(Bitmap img) {
@@ -283,7 +281,7 @@ public class ImageTools {
         if (!appDir.exists()) {
             appDir.mkdir();
         }
-        String fileName = imageName + ".jpg";
+        String fileName = imageName + System.currentTimeMillis() + ".jpg";
         File file = new File(appDir, fileName);
         try {
             FileOutputStream fos = new FileOutputStream(file);

@@ -60,7 +60,7 @@ import static android.app.Activity.RESULT_OK;
 public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, UserEditPresenter> implements UserEditContract.View, AndroidAdjustResizeBugFix.OnKeyChangerListeler, MyTextWatcher.WatcherListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-//    @BindView(R.id.scrollview_user)
+    //    @BindView(R.id.scrollview_user)
 //    ScrollView mScrollviewUser;
     Unbinder unbinder;
     private String mParam1;
@@ -93,6 +93,8 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      * 相册获取
      */
     public static final int GetUserHeadRequestCodeByFile = 1002;
+
+    public String headPath;
 
     private UserModel mUserModel = null;
     private String[] greadeList = new String[]{"幼儿园小班", "幼儿园中班", "幼儿园大班", "小学一年级", "小学二年级", "小学三年级", "小学四年级"
@@ -142,7 +144,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         UbtLog.d("UserInfoFragment", "onActivityCreated");
-        mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USERINFOMODEL);
+        mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
 
     }
 
@@ -162,13 +164,16 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         switch (view.getId()) {
             case R.id.male:
                 if (ischanged) {
-                    ToastUtils.showShort("男孩子哦");
-
+                    if (!mUserModel.getSex().equals("1")) {
+                        updateUserInfo(Constant.KEY_NICK_SEX, "1");
+                    }
                 }
                 break;
             case R.id.female:
                 if (ischanged) {
-                    ToastUtils.showShort("女孩子哦");
+                    if (!mUserModel.getSex().equals("2")) {
+                        updateUserInfo(Constant.KEY_NICK_SEX, "2");
+                    }
                 }
                 break;
 
@@ -198,8 +203,17 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
 
     @Override
     protected void initUI() {
-
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
+        mTvUserName.setText(mUserModel.getNickName());
+        mTvUserAge.setText(mUserModel.getAge());
+        mTvUserGrade.setText(mUserModel.getGrade());
+        if (!TextUtils.isEmpty(mUserModel.getSex())) {
+            if (mUserModel.getSex().equals("1")) {
+                mMale.setChecked(true);
+            } else if (mUserModel.getSex().equals("2")) {
+                mFemale.setChecked(true);
+            }
+        }
     }
 
     @Override
@@ -277,6 +291,22 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     @Override
     public void ageSelectItem(int type, String item) {
         ToastUtils.showShort(item);
+        if (type == 0) {
+            mTvUserAge.setText(item);
+            if (!mUserModel.getAge().equals(item)) {
+                updateUserInfo(Constant.KEY_NICK_AGE, item);
+            }
+        } else if (type == 1) {
+            mTvUserGrade.setText(item);
+            if (!mUserModel.getGrade().equals(item)) {
+                updateUserInfo(Constant.KEY_NICK_GRADE, item);
+            }
+        }
+    }
+
+    @Override
+    public void updateUserModel(UserModel userModel) {
+        this.mUserModel = userModel;
     }
 
     /**
@@ -319,7 +349,8 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                                             public void run() {
                                                 Bitmap img = ImageTools.ImageCrop(bitmap);
                                                 mImgHead.setImageBitmap(img);
-                                                String path = ImageTools.SaveImage("head", img);
+                                                headPath = ImageTools.SaveImage("head", img);
+                                                mPresenter.updateUserHead(headPath);
                                             }
                                         });
                                     }
@@ -357,8 +388,20 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         if (!statu && !TextUtils.isEmpty(editText)) {
             if (TVUtils.isCorrectStr(editText)) {
                 ToastUtils.showShort("上传参数");
+                updateUserInfo(Constant.KEY_NICK_NAME, editText);
             }
         }
+    }
+
+
+    /**
+     * 更新用户信息
+     *
+     * @param type
+     * @param value
+     */
+    public void updateUserInfo(int type, String value) {
+        mPresenter.updateUserInfo(type, value);
     }
 
 
