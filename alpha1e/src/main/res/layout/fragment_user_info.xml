@@ -103,8 +103,8 @@
                     <!-- 定义两个单选框 -->
                     <RadioButton
                         android:id="@+id/male"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
                         android:button="@null"
                         android:checked="true"
                         android:drawableLeft="@drawable/radio_select_sex"
@@ -116,9 +116,9 @@
 
                     <RadioButton
                         android:id="@+id/female"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
                         android:button="@null"
                         android:drawableLeft="@drawable/radio_select_sex"
                         android:drawablePadding="10dp"

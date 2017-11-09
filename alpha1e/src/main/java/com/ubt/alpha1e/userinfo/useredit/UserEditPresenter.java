@@ -33,6 +33,9 @@ import java.util.List;
 
 import okhttp3.Call;
 
+import static android.R.attr.key;
+import static android.R.attr.value;
+
 /**
  * MVPPlugin
  * 邮箱 784787081@qq.com
@@ -173,6 +176,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
      * @param value
      */
     public void updateUserInfo(int key, String value) {
+
         File file = null;
         UpdateUserInfoRequest request = new UpdateUserInfoRequest();
         switch (key) {
@@ -189,7 +193,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 request.setGrade(value);
                 break;
             case Constant.KEY_NICK_HEAD:
-                file = new File(value);
+
                 break;
             default:
                 break;
@@ -210,7 +214,42 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                         UbtLog.d("userEdit", "baseResponseModel==" + baseResponseModel.status + "  " + baseResponseModel.models);
                         if (baseResponseModel.status) {
                             SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
-                            mView.updateUserModelSuccess(baseResponseModel.models);
+                            if (isAttachView()) {
+                                mView.updateUserModelSuccess(baseResponseModel.models);
+                            }
+                        }
+                    }
+                });
+    }
+
+
+    /**
+     * 更新用户头像
+     *
+     * @param path
+     */
+    public void updateHead(String path) {
+        File file = new File(path);
+        BaseRequest baseRequest = new BaseRequest();
+        UbtLog.d("UpdateHead--------", "request====" + baseRequest + "  headPath===" + value);
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, baseRequest, key)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        mView.updateUserModelFailed();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
+                                new TypeToken<BaseResponseModel<UserModel>>() {
+                                }.getType());
+                        UbtLog.d("userEdit", "baseResponseModel==" + baseResponseModel.status + "  " + baseResponseModel.models);
+                        if (baseResponseModel.status) {
+                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
+                            if (isAttachView()) {
+                                mView.updateUserModelSuccess(baseResponseModel.models);
+                            }
                         }
                     }
                 });
