@@ -131,6 +131,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         assistActivity = new AndroidAdjustResizeBugFix(getActivity());
         assistActivity.setOnKeyChangerListeler(this);
         mPresenter.getLoopData();
+
     }
 
 
@@ -149,12 +150,6 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         UbtLog.d("UserInfoFragment", "onActivityCreated");
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
         UbtLog.d("Usercenter", "usermode===" + mUserModel.toString());
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
@@ -168,7 +163,12 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 mFemale.setChecked(true);
             }
         }
-        Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().placeholder(R.drawable.sec_action_logo).into(mImgHead);
+        Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().into(mImgHead);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     /**
@@ -372,7 +372,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                                                 Bitmap img = ImageTools.ImageCrop(bitmap);
                                                 mImgHead.setImageBitmap(img);
                                                 headPath = ImageTools.SaveImage("head", img);
-                                                mPresenter.updateUserInfo(Constant.KEY_NICK_HEAD, headPath);
+                                                mPresenter.updateHead(headPath);
                                                 UbtLog.d("compressImage", "使用次数");
                                             }
                                         });
@@ -442,6 +442,11 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void errorEditTextStr() {
+
+    }
+
+    @Override
+    public void textChange() {
 
     }
 }

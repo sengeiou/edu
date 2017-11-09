@@ -35,7 +35,7 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="@string/user_center_title"
-            android:textColor="@color/black"
+            android:textColor="@color/tv_center_title_color"
             android:textSize="20sp"
             />
 
@@ -57,7 +57,9 @@
         android:layout_below="@+id/iv_main_back"
         android:layout_marginTop="12dp"
         android:background="@drawable/img_me_sidebar"
+        android:overScrollMode="never"
         android:paddingTop="15dp"
+        android:scrollbars="none"
         android:visibility="visible"
         />
 

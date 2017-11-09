@@ -27,6 +27,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ImageTools;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
@@ -123,13 +124,20 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         mTvUserAge.setText(TextUtils.isEmpty(mUserModel.getAge())?"未填写":mUserModel.getAge());
         mTvUserGrade.setText(TextUtils.isEmpty(mUserModel.getGrade())?"未填写":mUserModel.getGrade());
 
+        checkSaveEnable();
+
         Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().placeholder(R.drawable.sec_action_logo).into(mImgHead);
         mPresenter.getLoopData();
 
     }
 
     private void checkSaveEnable(){
-//        if()
+        if(mTvUserName.getText().length()>0 && !mTvUserAge.getText().toString().equals("未填写")
+                && !mTvUserGrade.getText().toString().equals("未填写")){
+            ivSave.setEnabled(true);
+        }else{
+            ivSave.setEnabled(false);
+        }
     }
 
     /**
@@ -171,6 +179,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                 mPresenter.showGradeDialog(UserEditActivity.this, 0, gradeList);
                 break;
             case R.id.iv_complete_info:
+                LoadingDialog.show(UserEditActivity.this);
                 UpdateUserInfoRequest request = new UpdateUserInfoRequest();
                 request.setAge(age);
                 request.setGrade(grade);
@@ -184,11 +193,13 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         UbtLog.d("userEdit", "Exception:" + e.getMessage());
+                        LoadingDialog.dismiss(UserEditActivity.this);
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
                         UbtLog.d("userEdit", "response:" + response);
+                        LoadingDialog.dismiss(UserEditActivity.this);
                         BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<UserModel>>() {
                                 }.getType());
@@ -258,9 +269,11 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         if (type == 0) {
             age = item;
             mTvUserAge.setText(age);
+            checkSaveEnable();
         } else if (type == 1) {
             grade = item;
             mTvUserGrade.setText(grade);
+            checkSaveEnable();
         }
     }
 
@@ -371,5 +384,10 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     @Override
     public void errorEditTextStr() {
 
+    }
+
+    @Override
+    public void textChange() {
+        checkSaveEnable();
     }
 }

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="this_lib_ui_back">Return</string>
-    <string name="this_lib_ui_bind_alpha">Bind Alpha</string>
-    <string name="this_lib_ui_scan_here">Scan the QR code here</string>
-    <string name="this_lib_ui_bind_other_way">Using other binding mode</string>
-
-</resources>

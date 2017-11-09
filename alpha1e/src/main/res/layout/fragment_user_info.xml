@@ -1,11 +1,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/scrollview_user"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/transparent"
             android:overScrollMode="never"
-            android:id="@+id/scrollview_user"
+            android:scrollbars="none"
 
     >
 
@@ -16,20 +17,30 @@
         >
 
 
-        <com.ubt.alpha1e.ui.custom.ShapedImageView
-            android:id="@+id/img_head"
-            android:layout_width="77dp"
-            android:layout_height="73dp"
+        <FrameLayout
+            android:id="@+id/rl_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/default_head"
-            android:scaleType="fitXY"
-            app:shape_mode="circle"/>
+            android:layout_marginBottom="10dp">
+
+            <com.ubt.alpha1e.ui.custom.ShapedImageView
+                android:id="@+id/img_head"
+                android:layout_width="77dp"
+                android:layout_height="73dp"
+                android:scaleType="fitXY"
+                app:shape_mode="circle"/>
+
+            <ImageView
+                android:layout_width="77dp"
+                android:layout_height="73dp"
+                android:background="@drawable/head_background"/>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="381dp"
             android:layout_height="195dp"
-            android:layout_below="@+id/img_head"
+            android:layout_below="@+id/rl_head"
             android:layout_centerHorizontal="true"
             android:background="@drawable/bg_edit_user"
             android:orientation="vertical">
@@ -58,7 +69,6 @@
                     android:paddingLeft="15dp"
                     android:paddingRight="5dp"
                     android:paddingTop="5dp"
-                    android:text="leon"
                     android:textColor="@color/tv_blue_color"
                     android:textCursorDrawable="@null"
                     android:textSize="16sp"
@@ -93,8 +103,8 @@
                     <!-- 定义两个单选框 -->
                     <RadioButton
                         android:id="@+id/male"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
                         android:button="@null"
                         android:checked="true"
                         android:drawableLeft="@drawable/radio_select_sex"
@@ -106,9 +116,9 @@
 
                     <RadioButton
                         android:id="@+id/female"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
                         android:button="@null"
                         android:drawableLeft="@drawable/radio_select_sex"
                         android:drawablePadding="10dp"
@@ -138,7 +148,6 @@
                 <TextView
                     android:id="@+id/tv_user_age"
                     style="@style/text_userinfo_right_style"
-                    android:text="10"
                     />
 
                 <View
@@ -161,7 +170,6 @@
                 <TextView
                     android:id="@+id/tv_user_grade"
                     style="@style/text_userinfo_right_style"
-                    android:text="一年级"
                     />
 
             </RelativeLayout>

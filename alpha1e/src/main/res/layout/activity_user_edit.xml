@@ -51,22 +51,32 @@
 
 
 
-        <com.ubt.alpha1e.ui.custom.ShapedImageView
-            android:id="@+id/img_head"
-            android:layout_width="77dp"
-            android:layout_height="73dp"
-            android:layout_below="@+id/tv_main_title"
+
+        <FrameLayout
+            android:id="@+id/rl_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/default_head"
-            android:scaleType="fitXY"
-            app:shape_mode="circle"/>
+            android:layout_below="@+id/tv_main_title"
+            android:layout_marginBottom="10dp">
+
+            <com.ubt.alpha1e.ui.custom.ShapedImageView
+                android:id="@+id/img_head"
+                android:layout_width="77dp"
+                android:layout_height="73dp"
+                android:scaleType="fitXY"
+                app:shape_mode="circle"/>
+
+            <ImageView
+                android:layout_width="77dp"
+                android:layout_height="73dp"
+                android:background="@drawable/head_background"/>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="381dp"
             android:layout_height="195dp"
-            android:layout_below="@+id/img_head"
+            android:layout_below="@+id/rl_head"
             android:layout_centerHorizontal="true"
             android:background="@drawable/bg_edit_user"
             android:orientation="vertical">
