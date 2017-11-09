@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -61,6 +63,7 @@ import okhttp3.Call;
 
 public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, UserEditPresenter> implements UserEditContract.View, MyTextWatcher.WatcherListener {
 
+
     @BindView(R.id.img_head)
     ShapedImageView mImgHead;
     @BindView(R.id.edit_user_name)
@@ -100,6 +103,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     private String path;
 
     private UserModel mUserModel;
+    private static final String TAG = "UserEditActivity";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
@@ -112,10 +116,16 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     public void onResume() {
         super.onResume();
         mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+        UbtLog.d(TAG, "mUserModel:" + mUserModel.toString());
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
         mTvUserName.setText(mUserModel.getNickName());
+        mTvUserName.setSelection(mTvUserName.getText().length());
+        mTvUserAge.setText(TextUtils.isEmpty(mUserModel.getAge())?"未填写":mUserModel.getAge());
+        mTvUserGrade.setText(TextUtils.isEmpty(mUserModel.getGrade())?"未填写":mUserModel.getGrade());
 
         Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().placeholder(R.drawable.sec_action_logo).into(mImgHead);
+        mPresenter.getLoopData();
+
     }
 
     /**
@@ -162,10 +172,10 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                 request.setGrade(grade);
                 request.setNickName(mTvUserName.getText().toString());
                 request.setSex(sex);
-//                if(!TextUtils.isEmpty(path)){
-//
-//                }
-                File file = new File(path);
+                File file = null;
+                if(!TextUtils.isEmpty(path)){
+                    file = new File(path);
+                }
                 OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, request, 11).execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
@@ -178,9 +188,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                         BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<UserModel>>() {
                                 }.getType());
-//                        BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response, BaseResponseModel.class);
                         if (baseResponseModel.status) {
-//                            UbtLog.d("userEdit", "baseResponseModel.models.toString():" + baseResponseModel.models.toString());
                             UbtLog.d("userEdit", "userModel:" + baseResponseModel.models);
                             SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
                             Intent intent = new Intent();
@@ -195,6 +203,15 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
             default:
                 break;
         }
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            return true;//拦截事件传递,从而屏蔽back键。
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 
@@ -236,8 +253,10 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     public void ageSelectItem(int type, String item) {
         if (type == 0) {
             age = item;
+            mTvUserAge.setText(age);
         } else if (type == 1) {
             grade = item;
+            mTvUserGrade.setText(grade);
         }
     }
 

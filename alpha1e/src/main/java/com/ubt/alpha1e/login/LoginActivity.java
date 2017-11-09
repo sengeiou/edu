@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.tencent.ai.tvs.AuthorizeListener;
@@ -83,6 +82,15 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
         wxInfoManager = (WxInfoManager) proxy.getInfoManager(ELoginPlatform.WX);
         qqOpenInfoManager = (QQOpenInfoManager) proxy.getInfoManager(ELoginPlatform.QQOpen);
 
+        if (proxy.isTokenExist(ELoginPlatform.WX, this)) {
+            proxy.requestTokenVerify(ELoginPlatform.WX, "", "");
+        }
+
+        if (proxy.isTokenExist(ELoginPlatform.QQOpen, this)) {
+            proxy.requestTokenVerify(ELoginPlatform.QQOpen, "", "");
+        }
+
+
 
     }
 
@@ -98,9 +106,6 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             public void onClick(View view) {
                 loginType = 0;
                 proxy.requestLogin(ELoginPlatform.QQOpen, "", "", LoginActivity.this);
-//                Intent intent = new Intent();
-//                intent.setClass(LoginActivity.this, LoginAuthActivity.class);
-//                startActivity(intent);
             }
         });
 
@@ -122,8 +127,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
     @Override
     public void onSuccess(int i) {
-        if (i == 5) {
-            Log.e(TAG, "login onSuccess" + i);
+        Log.e(TAG, "login onSuccess" + i);
             String accessToken = "";
             String openID = "";
             String appID = "";
@@ -131,28 +135,29 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
                 accessToken = qqOpenInfoManager.accessToken;
                 openID = qqOpenInfoManager.openID;
                 appID = qqOpenInfoManager.appId;
+                if(i == AuthorizeListener.USERINFORECV_TYPE){
+                    doThirdLogin(accessToken, openID);  //QQ登录会回调2次onSuccess,只在type为5的时候执行登录
+                }
+
             } else {
                 accessToken = wxInfoManager.accessToken;
                 openID = wxInfoManager.openID;
+                doThirdLogin(accessToken, openID);
             }
 
             Log.e(TAG, "accessToken:" + accessToken + "--openID:" + openID + "--appID:" + appID);
 
-            Toast.makeText(this, "onSuccess", Toast.LENGTH_LONG).show();
-            doThirdLogin(accessToken, openID);
-        }
+//            doThirdLogin(accessToken, openID);
     }
 
     @Override
     public void onError(int i) {
         UbtLog.d(TAG, "login onError:" + i);
-        Toast.makeText(this, "onError", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onCancel(int i) {
         UbtLog.d(TAG, "login onCancel:" + i);
-        Toast.makeText(this, "onCancel", Toast.LENGTH_LONG).show();
     }
 
 
@@ -244,6 +249,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             SPUtils.getInstance().put(Constant.SP_USER_ID, userId);
             SPUtils.getInstance().put(Constant.SP_USER_IMAGE, userImage);
             SPUtils.getInstance().put(Constant.SP_USER_NICKNAME, nickName);
+            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -273,22 +279,15 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
                     if (!TextUtils.isEmpty(userAllModel.getPhone())) {
                         //用户已绑定电话号码，直接通过后台去获取用户信息
                         if (!TextUtils.isEmpty(userAllModel.getAge())) {
-                            UserModel userModel = new UserModel();
-                            userModel.setNickName(userAllModel.getNickName());
-                            userModel.setHeadPic(userAllModel.getHeadPic());
-                            userModel.setPhone(userAllModel.getPhone());
-                            userModel.setAge(userAllModel.getAge());
-                            userModel.setSex(userAllModel.getSex());
-                            userModel.setGrade(userAllModel.getGrade());
-                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
+                            saveUserInfo(userAllModel);
                             intent.setClass(LoginActivity.this, MainActivity.class);
                         } else {
+                            saveUserInfo(userAllModel);
                             intent.setClass(LoginActivity.this, UserEditActivity.class);
                         }
                     } else {
                         //手机号码绑定流程
-                        intent.putExtra("userInfo",userAllModel);
-                        intent.setClass(LoginActivity.this, LoginAuthActivity.class);
+                         intent.setClass(LoginActivity.this, LoginAuthActivity.class);
                     }
                     startActivity(intent);
                     LoginActivity.this.finish();
@@ -298,4 +297,20 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     }
 
 
+
+    private void saveUserInfo(UserAllModel userAllModel){
+        UserModel userModel = new UserModel();
+        userModel.setNickName(userAllModel.getNickName());
+        userModel.setHeadPic(userAllModel.getHeadPic());
+        userModel.setPhone(userAllModel.getPhone());
+        userModel.setAge(userAllModel.getAge());
+        userModel.setSex(userAllModel.getSex());
+        userModel.setGrade(userAllModel.getGrade());
+        SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
+    }
+
+
 }
+
+
+

@@ -19,7 +19,6 @@ import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.userinfo.model.UserAllModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -58,7 +57,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
     private String userId;
     private String nickName;
     private String userImage;
-    private UserAllModel mUserAllModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +69,6 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
         nickName = SPUtils.getInstance().getString(Constant.SP_USER_NICKNAME);
         userImage = SPUtils.getInstance().getString(Constant.SP_USER_IMAGE);
         UbtLog.d(TAG, "token:" + token + "--userId:" + userId + "--nickName:" + nickName + "--userImage:" + userImage);
-        mUserAllModel = (UserAllModel) getIntent().getSerializableExtra("userInfo");
     }
 
     @Override
@@ -184,10 +182,9 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                         BaseResponseModel baseResponseModel = GsonImpl.get().toObject(response, BaseResponseModel.class);
                         if (baseResponseModel.status) {
                             UbtLog.d(TAG,"model=="+baseResponseModel.models);
-                            UserModel userModel = new UserModel();
-                            userModel.setNickName(mUserAllModel.getNickName());
-                            userModel.setHeadPic(mUserAllModel.getHeadPic());
+                            UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
                             userModel.setPhone(edtTel.getText().toString());
+                            UbtLog.d(TAG, "userModel:" + userModel);
                             SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
                             Intent intent = new Intent();
                             intent.setClass(LoginAuthActivity.this, UserEditActivity.class);
@@ -203,11 +200,6 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
 
     }
 
-    private void GoUserInfo() {
-        Intent intent = new Intent();
-        intent.setClass(LoginAuthActivity.this, UserEditActivity.class);
-        startActivity(intent);
-    }
 
     @Override
     protected void initBoardCastListener() {
@@ -259,7 +251,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
         @Override
         public void onFinish() {
 
-            tvCountdown.setText("0 s");
+            tvCountdown.setText("60 s");
             setGetCodeTextEnable(true);
 
 
