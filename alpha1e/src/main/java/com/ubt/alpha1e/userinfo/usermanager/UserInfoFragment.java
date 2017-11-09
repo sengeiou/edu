@@ -444,4 +444,9 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void errorEditTextStr() {
 
     }
+
+    @Override
+    public void textChange() {
+
+    }
 }

@@ -20,6 +20,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.ui.BaseActivity;
@@ -59,6 +60,9 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
     private int loginType = 0; //默认 0 QQ， 1 WX;
 
+    public static final String PID = "";
+    public static final String DSN = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +87,12 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
         qqOpenInfoManager = (QQOpenInfoManager) proxy.getInfoManager(ELoginPlatform.QQOpen);
 
         if (proxy.isTokenExist(ELoginPlatform.WX, this)) {
-            proxy.requestTokenVerify(ELoginPlatform.WX, "", "");
+            proxy.requestTokenVerify(ELoginPlatform.WX, PID, DSN);
         }
 
         if (proxy.isTokenExist(ELoginPlatform.QQOpen, this)) {
-            proxy.requestTokenVerify(ELoginPlatform.QQOpen, "", "");
+            proxy.requestTokenVerify(ELoginPlatform.QQOpen, PID, DSN);
         }
-
 
 
     }
@@ -105,7 +108,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             @Override
             public void onClick(View view) {
                 loginType = 0;
-                proxy.requestLogin(ELoginPlatform.QQOpen, "", "", LoginActivity.this);
+                proxy.requestLogin(ELoginPlatform.QQOpen, PID, DSN, LoginActivity.this);
             }
         });
 
@@ -114,9 +117,11 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             public void onClick(View view) {
                 loginType = 1;
                 proxy.clearToken(ELoginPlatform.WX, LoginActivity.this);
-                proxy.requestLogin(ELoginPlatform.WX, "", "", LoginActivity.this);
+                proxy.requestLogin(ELoginPlatform.WX, PID, DSN, LoginActivity.this);
             }
         });
+
+
     }
 
     @Override
@@ -128,26 +133,34 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     @Override
     public void onSuccess(int i) {
         Log.e(TAG, "login onSuccess" + i);
-            String accessToken = "";
-            String openID = "";
-            String appID = "";
-            if (loginType == 0) {
-                accessToken = qqOpenInfoManager.accessToken;
-                openID = qqOpenInfoManager.openID;
-                appID = qqOpenInfoManager.appId;
-                if(i == AuthorizeListener.USERINFORECV_TYPE){
-                    doThirdLogin(accessToken, openID);  //QQ登录会回调2次onSuccess,只在type为5的时候执行登录
-                }
 
-            } else {
-                accessToken = wxInfoManager.accessToken;
-                openID = wxInfoManager.openID;
-                doThirdLogin(accessToken, openID);
+/*
+        if(i==AuthorizeListener.WX_TVSIDRECV_TYPE){  //和机器人联调的
+            UbtLog.d(TAG, "sss wx:"+ proxy.getClientId(ELoginPlatform.WX));
+            UbtLog.d(TAG, "sss qq:"+ proxy.getClientId(ELoginPlatform.QQOpen));
+        }
+*/
+
+
+        String accessToken = "";
+        String openID = "";
+        String appID = "";
+        if (loginType == 0) {
+            accessToken = qqOpenInfoManager.accessToken;
+            openID = qqOpenInfoManager.openID;
+            appID = qqOpenInfoManager.appId;
+            if (i == AuthorizeListener.USERINFORECV_TYPE) {
+                    doThirdLogin(accessToken, openID);  //QQ登录会回调2次onSuccess,只在type为5的时候执行登录
             }
 
-            Log.e(TAG, "accessToken:" + accessToken + "--openID:" + openID + "--appID:" + appID);
+        } else {
+            accessToken = wxInfoManager.accessToken;
+            openID = wxInfoManager.openID;
+                doThirdLogin(accessToken, openID);
+        }
 
-//            doThirdLogin(accessToken, openID);
+        Log.e(TAG, "accessToken:" + accessToken + "--openID:" + openID + "--appID:" + appID);
+
     }
 
     @Override
@@ -164,7 +177,6 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_LOGIN) {
-            UbtLog.d(TAG, "data:" + data.toString());
             if (resultCode == -1) {
                 proxy.handleQQOpenIntent(requestCode, resultCode, data);
             }
@@ -192,6 +204,8 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
         }
 
         UbtLog.d(TAG, "doThirdLogin accessToken:" + accessToken + "openID:" + openID + "params:" + params);
+        LoadingDialog.show(this);
+
         OkHttpClientUtils.getJsonByPutRequest(HttpEntity.THRID_LOGIN_URL, params, 0).execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -264,11 +278,13 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "onError:" + e.getMessage());
+                LoadingDialog.dismiss(LoginActivity.this);
             }
 
             @Override
             public void onResponse(String response, int id) {
                 UbtLog.d(TAG, "getUser__response==" + response);
+                LoadingDialog.dismiss(LoginActivity.this);
                 BaseResponseModel<UserAllModel> baseResponseModel = GsonImpl.get().toObject(response,
                         new TypeToken<BaseResponseModel<UserAllModel>>() {
                         }.getType());
@@ -289,6 +305,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
                         //手机号码绑定流程
                          intent.setClass(LoginActivity.this, LoginAuthActivity.class);
                     }
+
                     startActivity(intent);
                     LoginActivity.this.finish();
                 }

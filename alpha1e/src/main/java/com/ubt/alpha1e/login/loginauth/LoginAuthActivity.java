@@ -11,11 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.GetCodeRequest;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -160,6 +162,8 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                requestCountDown.cancel();
+                LoadingDialog.show(LoginAuthActivity.this);
                 String params = "{"
                         + "\"token\":" + "\"" + token + "\""
                         + ",\n\"userId\":" + "\"" + userId + "\""
@@ -173,12 +177,14 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         UbtLog.e(TAG, "Exception:" + e.getMessage());
-
+                        LoadingDialog.dismiss(LoginAuthActivity.this);
+                        Toast.makeText(LoginAuthActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
                         UbtLog.d(TAG, "response:" + response);
+                        LoadingDialog.dismiss(LoginAuthActivity.this);
                         BaseResponseModel baseResponseModel = GsonImpl.get().toObject(response, BaseResponseModel.class);
                         if (baseResponseModel.status) {
                             UbtLog.d(TAG,"model=="+baseResponseModel.models);
@@ -189,6 +195,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                             Intent intent = new Intent();
                             intent.setClass(LoginAuthActivity.this, UserEditActivity.class);
                             startActivity(intent);
+                            finish();
                         }
 
                     }

@@ -139,4 +139,5 @@
     <color name="tel_auth_rectangle_color">#EDF7FA</color>
     <color name="login_line_color">#979797</color>
     <color name="btn_get_code_color">#ffffff</color>
+    <color name="tv_user_edit_color">#1D3740</color>
 </resources>
