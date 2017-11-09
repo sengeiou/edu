@@ -8,7 +8,6 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -60,7 +59,7 @@ import static android.app.Service.START_NOT_STICKY;
  */
 
 
-public class CommonCtrlView implements IActionsUI, IMainUI {
+public class CommonCtrlView_bak implements IActionsUI, IMainUI {
 
     private static final String TAG = "ControlCenterActivity";
     public final static String KEY_CURRENT_PLAYING_ACTION_NAME = "currentPlayingActionName";
@@ -76,8 +75,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private ImageView ivPop;
     private LinearLayout lay_ctrl, lay_ctrl_more;
     private Button btn_stop, btn_reset, btn_more;  //lay_ctrl btn
-    private ImageView btn_reset_m, btn_pause_or_continue, btn_lose_power, btn_stop_m, btn_vol_log, btn_cycle,btn_lig_logo;
-    private TextView btn_exit;
+    private Button btn_cycle, btn_reset_m, btn_pause_or_continue, btn_lose_power, btn_stop_m, btn_vol_log, btn_lig_logo;
     private TextView txt_action_name, txt_action_name_m, txt_cycle_num;
     private SeekBar sek_vol_ctrl;
     private RelativeLayout rl_close_more, rl_control;
@@ -97,7 +95,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private TextView tvFloatTips;
     private boolean isShowDialog = false;
     private Context mContext;
-    private static CommonCtrlView commonCtrlView = null;
+    private static CommonCtrlView_bak commonCtrlView = null;
     private Date lastTime_doPauseOrContinuePlay = null;
 
     private String playingName = "";
@@ -124,12 +122,12 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         }
     };
 
-    public static CommonCtrlView getInstace(Context context){
+    public static CommonCtrlView_bak getInstace(Context context){
         if(commonCtrlView != null){
             commonCtrlView.onDestroy();
             commonCtrlView = null;
         }
-        commonCtrlView = new CommonCtrlView(context);
+        commonCtrlView = new CommonCtrlView_bak(context);
         return commonCtrlView;
     }
 
@@ -142,7 +140,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         }
     }
 
-    public CommonCtrlView(Context context) {
+    public CommonCtrlView_bak(Context context) {
         Log.d(TAG, "Float View  Created!");
         mContext = context;
         initHelper();
@@ -238,27 +236,25 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
      * @param view
      */
     private void initView(View view) {
-        //View_float_control LAYOUT
         ivPop = (ImageView) view.findViewById(R.id.iv_pop);
         lay_ctrl_more = (LinearLayout) view.findViewById(R.id.lay_ctrl_more);
         rl_control = (RelativeLayout) view.findViewById(R.id.rl_control);
         gifImageView = (GifImageView) view.findViewById(R.id.gif_playing_control);
 
         //init hide view
-        btn_cycle = (ImageView) view.findViewById(R.id.btn_lig_logo);
-        btn_reset_m=(ImageView) view.findViewById(R.id.btn_reset);
-        btn_lose_power = (ImageView) view.findViewById(R.id.btn_poweroff);
-        btn_pause_or_continue = (ImageView) view.findViewById(R.id.btn_playaction);
-        btn_stop_m = (ImageView) view.findViewById(R.id.btn_stopaction);
-        btn_vol_log = (ImageView) view.findViewById(R.id.btn_vol_logo);
-        btn_lig_logo = (ImageView) view.findViewById(R.id.btn_lig_logo);
+        btn_cycle = (Button) view.findViewById(R.id.btn_cycle);
+        btn_reset_m = (Button) view.findViewById(R.id.btn_do_default_m);
+        btn_lose_power = (Button) view.findViewById(R.id.btn_lost_power_m);
+        btn_pause_or_continue = (Button) view.findViewById(R.id.btn_pause_or_continue_m);
+        btn_stop_m = (Button) view.findViewById(R.id.btn_stop_m);
+        btn_vol_log = (Button) view.findViewById(R.id.btn_vol_logo);
+        btn_lig_logo = (Button) view.findViewById(R.id.btn_lig_logo);
         sek_vol_ctrl = (SeekBar) view.findViewById(R.id.skb_vol_control);
         rl_close_more = (RelativeLayout) view.findViewById(R.id.lay_ctrl_more_close);
-        btn_exit=(TextView)view.findViewById(R.id.cc_exit);
-        //view_alertdialog  layout
-        txt_action_name = (TextView) view.findViewById(R.id.action_test);
-        txt_action_name_m = (TextView) view.findViewById(R.id.action_test);
-        txt_cycle_num = (TextView) view.findViewById(R.id.action_test);
+
+        txt_action_name = (TextView) view.findViewById(R.id.txt_action_name);
+        txt_action_name_m = (TextView) view.findViewById(R.id.txt_action_name_m);
+        txt_cycle_num = (TextView) view.findViewById(R.id.txt_cycle_num);
 
         UbtLog.d(TAG, "playingName=" + playingName);
         if(playingName.equals("NO_VALUE")){
@@ -433,19 +429,12 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             }
         });
 
-        btn_exit.setOnClickListener(new View.OnClickListener(){
+        rl_close_more.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
+
                 mWindowManager.removeView(mFloatLayout);
                 lay_ctrl_more.setVisibility(View.GONE);
-            }
-        });
-//        rl_close_more.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                mWindowManager.removeView(mFloatLayout);
-//                lay_ctrl_more.setVisibility(View.GONE);
 //                rl_control.setVisibility(View.VISIBLE);
 //                wmParams.y = paddingBottomHeight;
 //                wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
@@ -454,8 +443,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 //                mWindowManager.addView(mFloatLayout, wmParams);
 
 
-//            }
-//        });
+            }
+        });
 
 
     }
@@ -573,13 +562,13 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 mHelper.doChangeVol(mHelper.mCurrentVolume);
             }
             onNoteVol(mHelper.mCurrentVolume);
-            btn_vol_log.setBackground(mBaseActivity.getDrawableRes("cc_volumeicon"));
+            btn_vol_log.setBackground(mBaseActivity.getDrawableRes("action_control_sound_icon_ft"));
         } else {
             if (sek_vol_ctrl.getProgress() != 0){
                 mHelper.mCurrentVolume = -1 * sek_vol_ctrl.getProgress();
             }
             sek_vol_ctrl.setProgress(0);
-            btn_vol_log.setBackground(mBaseActivity.getDrawableRes("cc_mute"));
+            btn_vol_log.setBackground(mBaseActivity.getDrawableRes("action_control_silence_icon_ft"));
             mHelper.ChangeMisucVol(0);
         }
     }
@@ -643,12 +632,12 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
     @Override
     public void noteLightOn() {
-        btn_lig_logo.setBackground(mBaseActivity.getDrawableRes("cc_lighton"));
+        btn_lig_logo.setBackground(mBaseActivity.getDrawableRes("action_control_light_sel_icon_ft"));
     }
 
     @Override
     public void noteLightOff() {
-        btn_lig_logo.setBackground(mBaseActivity.getDrawableRes("cc_lightoff"));
+        btn_lig_logo.setBackground(mBaseActivity.getDrawableRes("action_control_light_icon_ft"));
     }
 
     @Override

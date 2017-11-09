@@ -2,9 +2,11 @@ package com.ubt.alpha1e.ui.helper;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
@@ -211,7 +213,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
         try {
             mData.put("mac", mac);
             mData.put("cmd", cmd);
-            mData.put("param",param.toString());
+            mData.put("param", Base64.encodeToString(param,Base64.DEFAULT));
             mData.put("len", len);
             EventBus.getDefault().post(new MainActivity.MessageEvent(mData.toString()));
         }catch(JSONException e){

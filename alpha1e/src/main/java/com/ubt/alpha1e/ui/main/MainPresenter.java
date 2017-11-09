@@ -48,7 +48,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             mObject.getString("param").getBytes();
             UbtLog.d(TAG,"CMD  "+ mObject.getString("cmd")+"len "+ mObject.getString("param").getBytes()[0]);
             if(Integer.parseInt(mObject.getString("cmd"))== ConstValue.DV_READ_BATTERY){
-                mView.showCartoonAction("leg");
+              //  mView.showCartoonAction("leg");
             }
         }catch(JSONException e){
             e.printStackTrace();
