@@ -59,6 +59,9 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
     private int loginType = 0; //默认 0 QQ， 1 WX;
 
+    public static final String PID = "alpha1e_test";
+    public static final String DSN = "123456";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,18 +80,19 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
         proxy = LoginProxy.getInstance(appidWx, appidQQOpen);
         proxy.setOwnActivity(this);
         proxy.setAuthorizeListener(this);
-        proxy.setLoginEnv(ELoginEnv.FORMAL);
+        proxy.setLoginEnv(ELoginEnv.TEST);
 
         wxInfoManager = (WxInfoManager) proxy.getInfoManager(ELoginPlatform.WX);
         qqOpenInfoManager = (QQOpenInfoManager) proxy.getInfoManager(ELoginPlatform.QQOpen);
 
         if (proxy.isTokenExist(ELoginPlatform.WX, this)) {
-            proxy.requestTokenVerify(ELoginPlatform.WX, "", "");
+            proxy.requestTokenVerify(ELoginPlatform.WX, PID, DSN);
         }
 
         if (proxy.isTokenExist(ELoginPlatform.QQOpen, this)) {
-            proxy.requestTokenVerify(ELoginPlatform.QQOpen, "", "");
+            proxy.requestTokenVerify(ELoginPlatform.QQOpen, PID, DSN);
         }
+
 
 
 
@@ -105,7 +109,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             @Override
             public void onClick(View view) {
                 loginType = 0;
-                proxy.requestLogin(ELoginPlatform.QQOpen, "", "", LoginActivity.this);
+                proxy.requestLogin(ELoginPlatform.QQOpen, PID, DSN, LoginActivity.this);
             }
         });
 
@@ -114,9 +118,11 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             public void onClick(View view) {
                 loginType = 1;
                 proxy.clearToken(ELoginPlatform.WX, LoginActivity.this);
-                proxy.requestLogin(ELoginPlatform.WX, "", "", LoginActivity.this);
+                proxy.requestLogin(ELoginPlatform.WX, PID, DSN, LoginActivity.this);
             }
         });
+
+
     }
 
     @Override
@@ -128,26 +134,29 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     @Override
     public void onSuccess(int i) {
         Log.e(TAG, "login onSuccess" + i);
-            String accessToken = "";
-            String openID = "";
-            String appID = "";
-            if (loginType == 0) {
-                accessToken = qqOpenInfoManager.accessToken;
-                openID = qqOpenInfoManager.openID;
-                appID = qqOpenInfoManager.appId;
-                if(i == AuthorizeListener.USERINFORECV_TYPE){
+        if(i==2){
+            UbtLog.d(TAG, "sss wx:"+ proxy.getClientId(ELoginPlatform.WX));
+            UbtLog.d(TAG, "sss qq:"+ proxy.getClientId(ELoginPlatform.QQOpen));
+        }
+  /*      String accessToken = "";
+        String openID = "";
+        String appID = "";
+        if (loginType == 0) {
+            accessToken = qqOpenInfoManager.accessToken;
+            openID = qqOpenInfoManager.openID;
+            appID = qqOpenInfoManager.appId;
+            if (i == AuthorizeListener.USERINFORECV_TYPE) {
                     doThirdLogin(accessToken, openID);  //QQ登录会回调2次onSuccess,只在type为5的时候执行登录
-                }
-
-            } else {
-                accessToken = wxInfoManager.accessToken;
-                openID = wxInfoManager.openID;
-                doThirdLogin(accessToken, openID);
             }
 
-            Log.e(TAG, "accessToken:" + accessToken + "--openID:" + openID + "--appID:" + appID);
+        } else {
+            accessToken = wxInfoManager.accessToken;
+            openID = wxInfoManager.openID;
+                doThirdLogin(accessToken, openID);
+        }*/
 
-//            doThirdLogin(accessToken, openID);
+//        Log.e(TAG, "accessToken:" + accessToken + "--openID:" + openID + "--appID:" + appID);
+
     }
 
     @Override

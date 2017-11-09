@@ -128,6 +128,10 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
 
     }
 
+    private void checkSaveEnable(){
+//        if()
+    }
+
     /**
      * 性别选中事件
      *

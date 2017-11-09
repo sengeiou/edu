@@ -3,7 +3,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/bg_user_main"
+            android:background="@drawable/bg_user_edit"
             android:overScrollMode="never"
 
     >
@@ -11,7 +11,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparent"
         >
 
         <ImageView
@@ -34,7 +33,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="27dp"
             android:text="填写宝宝信息"
-            android:textColor="@color/black"
+            android:textColor="@color/tv_user_edit_color"
             android:textSize="16sp"
             />
 
@@ -46,7 +45,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginRight="30dp"
             android:layout_marginTop="15dp"
-            android:src="@drawable/icon_save_user"
+            android:src="@drawable/user_save_selector"
             />
 
 
