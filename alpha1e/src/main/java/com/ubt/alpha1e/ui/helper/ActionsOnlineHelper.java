@@ -13,7 +13,6 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.business.ActionsCollocationManager;
 import com.ubt.alpha1e.business.ActionsDownLoadManager;
@@ -50,8 +49,8 @@ import com.ubt.alpha1e.ui.fragment.IShowSquareDetailFragment;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.cache.ImageCache;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
-import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.utils.log.MyLog;
+import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.json.JSONArray;
@@ -609,17 +608,17 @@ public class ActionsOnlineHelper extends BaseHelper implements IJsonListener,
 		@Override
 		public void onReceive(Context arg0, Intent arg1) {
 
-			SendAuth.Resp resp = MyWeiXin.handleIntent(arg1, mBaseActivity);
-			int error_code;
-			if (resp != null)
-				error_code = resp.errCode;
-			else
-				error_code = -2;
-
-			Message msg = new Message();
-			msg.what = MSG_DO_SHARE_WEIXIN;
-			msg.obj = new Integer(error_code);
-			mHandler.sendMessage(msg);
+//			SendAuth.Resp resp = MyWeiXin.handleIntent(arg1, mBaseActivity);
+//			int error_code;
+//			if (resp != null)
+//				error_code = resp.errCode;
+//			else
+//				error_code = -2;
+//
+//			Message msg = new Message();
+//			msg.what = MSG_DO_SHARE_WEIXIN;
+//			msg.obj = new Integer(error_code);
+//			mHandler.sendMessage(msg);
 
 		}
 	};

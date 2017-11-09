@@ -22,7 +22,6 @@ import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.business.thrid_party.MyFaceBook;
 import com.ubt.alpha1e.business.thrid_party.MyTencent;
 import com.ubt.alpha1e.business.thrid_party.MyTwitter;
-import com.ubt.alpha1e.business.thrid_party.MyWeiXin;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.net.http.basic.HttpAddress;
@@ -275,12 +274,12 @@ public class ShareDialog {
                 dialog.dismiss();
                 break;
             case R.id.ll_share_to_wechat:
-                MyWeiXin.doShareToWeiXin(shareUrl, "", (BlocklyActivity)context, (BlocklyActivity)context, 0);
-                dialog.dismiss();
+//                MyWeiXin.doShareToWeiXin(shareUrl, "", (BlocklyActivity)context, (BlocklyActivity)context, 0);
+//                dialog.dismiss();
                 break;
             case R.id.ll_share_to_friends:
-                MyWeiXin.doShareToWeiXin(shareUrl, "", (BlocklyActivity)context, (BlocklyActivity)context, 1);
-                dialog.dismiss();
+//                MyWeiXin.doShareToWeiXin(shareUrl, "", (BlocklyActivity)context, (BlocklyActivity)context, 1);
+//                dialog.dismiss();
                 break;
             case R.id.ll_share_to_qq_zone:
                 MyTencent.doShareQQKongjian((BlocklyActivity)context, shareUrl, "", (BlocklyActivity)context);

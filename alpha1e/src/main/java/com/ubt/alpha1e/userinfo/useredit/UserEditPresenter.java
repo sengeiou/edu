@@ -5,18 +5,36 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.RequstMode.BaseRequest;
+import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
+import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.userinfo.model.UserAllModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
+import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
+import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.List;
+
+import okhttp3.Call;
+
+import static android.R.attr.key;
+import static android.R.attr.value;
 
 /**
  * MVPPlugin
@@ -51,6 +69,29 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .create().show();
     }
 
+    @Override
+    public void showImageCenterHeadDialog(Activity activity) {
+        ViewHolder viewHolder = new ViewHolder(R.layout.dialog_userecenter_head);
+        DialogPlus.newDialog(activity)
+                .setContentHolder(viewHolder)
+                .setGravity(Gravity.CENTER)
+                .setContentBackgroundResource(R.drawable.bg_edit_user)
+                .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        if (view.getId() == R.id.tv_take_photo) {
+                            mView.takeImageFromShoot();
+                        } else if (view.getId() == R.id.tv_take_ablum) {
+                            mView.takeImageFromAblum();
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(true)
+                .create().show();
+    }
+
 
     /**
      * 显示年龄对话框
@@ -59,15 +100,14 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
      * @param currentPosition
      */
     @Override
-    public void showAgeDialog(Activity activity, int currentPosition) {
+    public void showAgeDialog(Activity activity, final List<String> ageList, int currentPosition) {
         View contentView = LayoutInflater.from(activity).inflate(R.layout.dialog_useredit_wheel, null);
         ViewHolder viewHolder = new ViewHolder(contentView);
         final LoopView loopView = (LoopView) contentView.findViewById(R.id.loopView);
-        final ArrayList<String> list = new ArrayList<>();
-        for (int i = 5; i < 15; i++) {
-            list.add(String.valueOf(i));
-        }
-        loopView.setItems(list);
+
+        loopView.setItems(ageList);
+        loopView.setInitPosition(0);
+
         loopView.setCurrentPosition(currentPosition);
         DialogPlus.newDialog(activity)
                 .setContentHolder(viewHolder)
@@ -77,11 +117,10 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_sure) {
                             if (isAttachView()) {
-                                mView.ageSelectItem(0, list.get(loopView.getSelectedItem()));
+                                mView.ageSelectItem(0, ageList.get(loopView.getSelectedItem()));
                             }
-                            //ToastUtils.showShort("item " + loopView.getSelectedItem());
+                            dialog.dismiss();
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setCancelable(true)
@@ -116,27 +155,130 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                             if (isAttachView()) {
                                 mView.ageSelectItem(1, list.get(loopView.getSelectedItem()));
                                 Log.d("showGradeDialog", "string==" + list.get(loopView.getSelectedItem()));
-                                //ToastUtils.showShort("item " + loopView.getSelectedItem());
                             }
-                            // ToastUtils.showShort("item " + loopView.getSelectedItem());
+                            dialog.dismiss();
                         }
-                        dialog.dismiss();
                     }
                 })
                 .create().show();
         // 设置原始数据
         loopView.setItems(list);
+        loopView.setInitPosition(0);
+
         loopView.setCurrentPosition(currentPosition);
     }
 
+
     /**
-     * 获取用户信息
+     * 每个Item更新用户信息
+     *
+     * @param key
+     * @param value
      */
-    public void getUserModel() {
+    public void updateUserInfo(int key, String value) {
+
+        File file = null;
+        UpdateUserInfoRequest request = new UpdateUserInfoRequest();
+        switch (key) {
+            case Constant.KEY_NICK_NAME:
+                request.setNickName(value);
+                break;
+            case Constant.KEY_NICK_SEX:
+                request.setSex(value);
+                break;
+            case Constant.KEY_NICK_AGE:
+                request.setAge(value);
+                break;
+            case Constant.KEY_NICK_GRADE:
+                request.setGrade(value);
+                break;
+            case Constant.KEY_NICK_HEAD:
+
+                break;
+            default:
+                break;
+        }
+        UbtLog.d("UpdateHead--------", "request====" + request + "  headPath===" + value);
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, request, key)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        mView.updateUserModelFailed();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
+                                new TypeToken<BaseResponseModel<UserModel>>() {
+                                }.getType());
+                        UbtLog.d("userEdit", "baseResponseModel==" + baseResponseModel.status + "  " + baseResponseModel.models);
+                        if (baseResponseModel.status) {
+                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
+                            if (isAttachView()) {
+                                mView.updateUserModelSuccess(baseResponseModel.models);
+                            }
+                        }
+                    }
+                });
     }
 
 
-    public void upDataUserInfo(UserModel userModel){
+    /**
+     * 更新用户头像
+     *
+     * @param path
+     */
+    public void updateHead(String path) {
+        File file = new File(path);
+        BaseRequest baseRequest = new BaseRequest();
+        UbtLog.d("UpdateHead--------", "request====" + baseRequest + "  headPath===" + value);
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, baseRequest, key)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        mView.updateUserModelFailed();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
+                                new TypeToken<BaseResponseModel<UserModel>>() {
+                                }.getType());
+                        UbtLog.d("userEdit", "baseResponseModel==" + baseResponseModel.status + "  " + baseResponseModel.models);
+                        if (baseResponseModel.status) {
+                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
+                            if (isAttachView()) {
+                                mView.updateUserModelSuccess(baseResponseModel.models);
+                            }
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 获取列表数据
+     */
+    public void getLoopData() {
+        BaseRequest baseRequest = new BaseRequest();
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.GET_USER_INFO, baseRequest, 0).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d("getLoopData", "onError:" + e.getMessage());
+                mView.updateLoopData(null);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d("getLoopData", "getUser__response==" + response);
+                BaseResponseModel<UserAllModel> baseResponseModel = GsonImpl.get().toObject(response,
+                        new TypeToken<BaseResponseModel<UserAllModel>>() {
+                        }.getType());
+                if (baseResponseModel.status) {
+                    UserAllModel userAllModel = baseResponseModel.models;
+                    mView.updateLoopData(userAllModel);
+                }
+            }
+        });
 
     }
 

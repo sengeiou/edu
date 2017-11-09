@@ -13,24 +13,36 @@ import java.io.Serializable;
 
 public class UserModel implements Serializable{
     private String userId;
-    private String userName;
-    private int sex;
+    private String nickName;
+    private String sex;
     private String grade;
-    private int age;
-    public String userImage;
-    public String getUserName() {
-        return userName;
+    private String age;
+    public String headPic;
+    private String phone;
+
+
+
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public int getSex() {
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 
@@ -42,40 +54,40 @@ public class UserModel implements Serializable{
         this.grade = grade;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
-    public String getUserImage() {
-        return userImage;
+    public String getHeadPic() {
+        return headPic;
     }
 
-    public void setUserImage(String userImage) {
-        this.userImage = userImage;
+    public void setHeadPic(String headPic) {
+        this.headPic = headPic;
     }
 
-
-    public String getUserId() {
-        return userId;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     @Override
     public String toString() {
         return "UserModel{" +
                 "userId='" + userId + '\'' +
-                ", userName='" + userName + '\'' +
-                ", sex=" + sex +
+                ", nickName='" + nickName + '\'' +
+                ", sex='" + sex + '\'' +
                 ", grade='" + grade + '\'' +
-                ", age=" + age +
-                ", userImage='" + userImage + '\'' +
+                ", age='" + age + '\'' +
+                ", headPic='" + headPic + '\'' +
+                ", phone='" + phone + '\'' +
                 '}';
     }
 }

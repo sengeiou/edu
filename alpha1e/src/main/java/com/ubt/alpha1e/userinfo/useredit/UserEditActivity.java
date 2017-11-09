@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -19,25 +21,39 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ImageTools;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.custom.ShapedImageView;
 import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
+import com.ubt.alpha1e.ui.main.MainActivity;
+import com.ubt.alpha1e.userinfo.model.UserAllModel;
+import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
+import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
+import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 
 /**
@@ -45,7 +61,8 @@ import butterknife.OnClick;
  * 邮箱 784787081@qq.com
  */
 
-public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, UserEditPresenter> implements UserEditContract.View {
+public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, UserEditPresenter> implements UserEditContract.View, MyTextWatcher.WatcherListener {
+
 
     @BindView(R.id.img_head)
     ShapedImageView mImgHead;
@@ -65,6 +82,8 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     ImageView mIvMainBack;
     @BindView(R.id.tv_main_title)
     TextView mTvMainTitle;
+    @BindView(R.id.iv_complete_info)
+    ImageView ivSave;
 
     private Dialog mDialog;
 
@@ -72,13 +91,41 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     public static final int GetUserHeadRequestCodeByShoot = 1001;
     public static final int GetUserHeadRequestCodeByFile = 1002;
 
+
     private String[] greadeList = new String[]{"幼儿园小班", "幼儿园中班", "幼儿园大班", "小学一年级", "小学二年级", "小学三年级", "小学四年级"
             , "小学五年级", "小学六年级及以上"};
+
+    private List<String> ageList = new ArrayList<>();
+    private List<String> gradeList = new ArrayList<>();
+    private String sex = "1";
+    private String age;
+    private String grade;
+    private String path;
+
+    private UserModel mUserModel;
+    private static final String TAG = "UserEditActivity";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
         initUI();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+        UbtLog.d(TAG, "mUserModel:" + mUserModel.toString());
+        mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
+        mTvUserName.setText(mUserModel.getNickName());
+        mTvUserName.setSelection(mTvUserName.getText().length());
+        mTvUserAge.setText(TextUtils.isEmpty(mUserModel.getAge())?"未填写":mUserModel.getAge());
+        mTvUserGrade.setText(TextUtils.isEmpty(mUserModel.getGrade())?"未填写":mUserModel.getGrade());
+
+        Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().placeholder(R.drawable.sec_action_logo).into(mImgHead);
+        mPresenter.getLoopData();
+
     }
 
     /**
@@ -92,12 +139,12 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         switch (view.getId()) {
             case R.id.male:
                 if (ischanged) {
-                    ToastUtils.showShort("男孩子哦");
+                    sex = "1";
                 }
                 break;
             case R.id.female:
                 if (ischanged) {
-                    ToastUtils.showShort("女孩子哦");
+                    sex = "2";
                 }
                 break;
 
@@ -106,25 +153,66 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         }
     }
 
-    @OnClick({R.id.img_head, R.id.tv_user_age, R.id.tv_user_grade})
+    @OnClick({R.id.img_head, R.id.tv_user_age, R.id.tv_user_grade, R.id.iv_complete_info})
     public void onClickView(View view) {
         switch (view.getId()) {
             case R.id.img_head:
                 mPresenter.showImageHeadDialog(UserEditActivity.this);
                 break;
             case R.id.tv_user_age:
-                mPresenter.showAgeDialog(UserEditActivity.this, 3);
+                mPresenter.showAgeDialog(UserEditActivity.this, ageList, 0);
                 break;
             case R.id.tv_user_grade:
-                List<String> list = new ArrayList<>();
-                for (String grade : greadeList) {
-                    list.add(grade);
+
+                mPresenter.showGradeDialog(UserEditActivity.this, 0, gradeList);
+                break;
+            case R.id.iv_complete_info:
+                UpdateUserInfoRequest request = new UpdateUserInfoRequest();
+                request.setAge(age);
+                request.setGrade(grade);
+                request.setNickName(mTvUserName.getText().toString());
+                request.setSex(sex);
+                File file = null;
+                if(!TextUtils.isEmpty(path)){
+                    file = new File(path);
                 }
-                mPresenter.showGradeDialog(UserEditActivity.this, 2, list);
+                OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, request, 11).execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        UbtLog.d("userEdit", "Exception:" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        UbtLog.d("userEdit", "response:" + response);
+                        BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
+                                new TypeToken<BaseResponseModel<UserModel>>() {
+                                }.getType());
+                        if (baseResponseModel.status) {
+                            UbtLog.d("userEdit", "userModel:" + baseResponseModel.models);
+                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
+                            Intent intent = new Intent();
+                            intent.setClass(UserEditActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            UserEditActivity.this.finish();
+                        }
+
+                    }
+                });
+                break;
+            default:
                 break;
         }
     }
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            return true;//拦截事件传递,从而屏蔽back键。
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 
     /**
@@ -137,7 +225,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         if (!path.exists()) {
             path.mkdirs();
         }
-        mImageUri = Uri.fromFile(new File(path, new Date().getTime() + ""));
+        mImageUri = Uri.fromFile(new File(path, System.currentTimeMillis() + ""));
 
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
         cameraIntent.putExtra("return-data", true);
@@ -163,9 +251,39 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
      */
     @Override
     public void ageSelectItem(int type, String item) {
-        ToastUtils.showShort(item);
+        if (type == 0) {
+            age = item;
+            mTvUserAge.setText(age);
+        } else if (type == 1) {
+            grade = item;
+            mTvUserGrade.setText(grade);
+        }
     }
 
+    @Override
+    public void updateUserModelSuccess(UserModel userModel) {
+
+    }
+
+    /**
+     * 更新信息失败
+     */
+    @Override
+    public void updateUserModelFailed() {
+
+    }
+
+    @Override
+    public void updateLoopData(UserAllModel userAllModel) {
+        if (null != userAllModel) {
+            ageList = userAllModel.getAgeList();
+            gradeList = userAllModel.getGradeList();
+        } else {
+
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
@@ -198,6 +316,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                                             public void run() {
                                                 Bitmap img = ImageTools.ImageCrop(bitmap);
                                                 mImgHead.setImageBitmap(img);
+                                                path = ImageTools.SaveImage("head", img);
                                             }
                                         });
                                     }
@@ -237,6 +356,16 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
 
     @Override
     public void getAgeDataList(List<String> list) {
+
+    }
+
+    @Override
+    public void longEditTextSize() {
+
+    }
+
+    @Override
+    public void errorEditTextStr() {
 
     }
 }

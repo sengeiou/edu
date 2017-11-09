@@ -2,9 +2,10 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_user_main"
+    android:background="@drawable/list"
     >
 
 
@@ -17,29 +18,12 @@
         android:src="@drawable/back_icon"/>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rl_leftmenu"
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/iv_main_back"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"
-        />
-
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/list"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="34dp"
-        android:layout_toRightOf="@+id/ll_left"
+        android:layout_toRightOf="@+id/rl_leftmenu"
         android:orientation="vertical">
 
         <TextView
@@ -51,7 +35,7 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="@string/user_center_title"
-            android:textColor="@color/black"
+            android:textColor="@color/tv_center_title_color"
             android:textSize="20sp"
             />
 
@@ -65,6 +49,20 @@
             android:visibility="visible"/>
     </RelativeLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rl_leftmenu"
+        android:layout_width="110dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/iv_main_back"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/img_me_sidebar"
+        android:overScrollMode="never"
+        android:paddingTop="15dp"
+        android:scrollbars="none"
+        android:visibility="visible"
+        />
+
     <RadioGroup
         android:id="@+id/ll_left"
         android:layout_width="114dp"
@@ -74,7 +72,8 @@
         android:layout_marginTop="11dp"
         android:background="@drawable/img_me_sidebar"
         android:orientation="vertical"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:visibility="gone">
 
         <RadioButton
             android:id="@+id/tv_user_center_info"

@@ -121,11 +121,6 @@ public class ActionsNewEditActivity extends BaseActivity implements IEditActionU
     private Map<String, Object> mCopyItem = new HashMap<String, Object>();
 
 
-//    private RelativeLayout rlRoot;
-
-
-
-    //    private FastScroller fastScroller;
     private int firstVisibleItemPosition = -1;
     private int lastVisibleItemPosition = -1;
 
@@ -134,11 +129,9 @@ public class ActionsNewEditActivity extends BaseActivity implements IEditActionU
     private List<Map<String, Object>> timeDatas = new ArrayList<Map<String, Object>>();
     public static final String TIME = "time";
     public static final String SHOW = "show";
-    //    private FastScroller timeFastScroll;
     private SeekBar sbTime;
     private int current =0;
 
-//    private String init = "\"90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90\"";
 
     public String [] init = {"90", "90", "90", "90", "90","90", "90", "60","76","110", "90", "90",
             "120", "104", "70", "90"};
@@ -289,7 +282,7 @@ public class ActionsNewEditActivity extends BaseActivity implements IEditActionU
         }
 
         mHelper = new ActionsEditHelper(this, this);
-//        initActionsData();
+//        initActionsNameData();
         doReset();
 
         DisplayMetrics metrics = new DisplayMetrics();
@@ -640,7 +633,7 @@ public class ActionsNewEditActivity extends BaseActivity implements IEditActionU
     protected void onResume() {
         setCurrentActivityLable(ActionsNewEditActivity.class.getSimpleName());
         super.onResume();
-//        initActionsData();
+//        initActionsNameData();
 //        initActionLibs();
         String step = readGuideStep();
         UbtLog.d(TAG, "step:" + step);
@@ -1992,151 +1985,6 @@ public class ActionsNewEditActivity extends BaseActivity implements IEditActionU
 
 
 
-        //初级动作
-//        String actionJsonDate = "{\n" +
-//                "    \"frame\": [\n" +
-//                "      {\n" +
-//                "        \"xmlRunTime\": \"1000\",\n" +
-//                "        \"xmldata\": \"89#57#91#89#172#94#49#33#39#116#135#87#144#180#13#94\",\n" +
-//                "        \"xmlName\": \"出右腿\"\n" +
-//                "      },\n" +
-//                "      {\n" +
-//                "        \"xmlRunTime\": \"1000\",\n" +
-//                "        \"xmldata\": \"89#5#90#89#132#88#91#37#0#162#86#137#124#124#57#43\",\n" +
-//                "        \"xmlName\": \"出左腿\"\n" +
-//                "      },\n" +
-//                "      {\n" +
-//                "        \"xmlRunTime\": \"1000\",\n" +
-//                "        \"xmldata\": \"89#178#91#89#178#89#90#60#76#110#90#90#120#104#70#90\",\n" +
-//                "        \"xmlName\": \"抬右手\"\n" +
-//                "      },\n" +
-//                "      {\n" +
-//                "        \"xmlRunTime\": \"1000\",\n" +
-//                "        \"xmldata\": \"89#0#92#90#1#88#90#60#76#110#90#90#120#104#70#90\",\n" +
-//                "        \"xmlName\": \"抬左手\"\n" +
-//                "      },\n" +
-//                "      {\n" +
-//                "        \"xmlRunTime\": \"1000\",\n" +
-//                "        \"xmldata\": \"89#88#94#90#172#91#90#60#76#110#90#90#120#104#70#90\",\n" +
-//                "        \"xmlName\": \"右手\"\n" +
-//                "      },\n" +
-//                "      {\n" +
-//                "        \"xmlRunTime\": \"1000\",\n" +
-//                "        \"xmldata\": \"89#0#92#90#91#88#90#60#76#110#90#90#120#104#70#90\",\n" +
-//                "        \"xmlName\": \"左手\"\n" +
-//                "      }\n" +
-//                "    ]\n" +
-//                "  }";
-//
-//        listActionLib = new ArrayList<Map<String, Object>>();
-//
-//        try {
-//            JSONObject jsObject = new JSONObject(actionJsonDate);
-//            JSONArray jsonArray= jsObject.getJSONArray("frame");
-//            UbtLog.d(TAG, "jsonArray:" + jsonArray.toString());
-//            for(int i=0; i<jsonArray.length(); i++){
-//                Map<String, Object> map = new HashMap<String, Object>();
-//                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-//                UbtLog.d(TAG, "jsonObject:" + jsonObject.toString());
-//                map.put(ACTION_TIME, jsonObject.get("xmlRunTime"));
-//                map.put(ACTION_ANGLE, jsonObject.get("xmldata"));
-//                map.put(ACTION_NAME, basicAction[i]);
-//                listActionLib.add(i, map);
-//            }
-//
-//            Map<String, Object> tempMap = new HashMap<String, Object>();
-//            tempMap.put(ACTION_NAME, basicAction[basicAction.length-1]);
-//            listActionLib.add(tempMap);
-//
-//
-//
-//
-//            UbtLog.d(TAG, "listActionLib:" + listActionLib.toString());
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-
-
-//        String zuo = "{\n" +
-//                "    \"frame\": [\n" +
-//                "      {\n" +
-//                "        \"-xmlFrameIndex\": \"1\",\n" +
-//                "        \"-xmlAllRunTime\": \"760\",\n" +
-//                "        \"-xmlFrameStatus\": \"1\",\n" +
-//                "        \"-xmlFrameAll\": \"6\",\n" +
-//                "        \"-xmlRunTime\": \"760\",\n" +
-//                "        \"-xmldata\": \"87#42#12#81#129#178#90#60#76#110#90#90#120#104#70#90\"\n" +
-//                "      },\n" +
-//                "      {\n" +
-//                "        \"-xmlFrameIndex\": \"2\",\n" +
-//                "        \"-xmlAllRunTime\": \"600\",\n" +
-//                "        \"-xmlFrameStatus\": \"2\",\n" +
-//                "        \"-xmlFrameAll\": \"6\",\n" +
-//                "        \"-xmlRunTime\": \"300\",\n" +
-//                "        \"-xmldata\": \"0#3#86#84#133#180#90#60#76#110#90#90#137#133#59#75\"\n" +
-//                "      },\n" +
-//                "      {\n" +
-//                "        \"-xmlFrameIndex\": \"3\",\n" +
-//                "        \"-xmlAllRunTime\": \"760\",\n" +
-//                "        \"-xmlFrameStatus\": \"2\",\n" +
-//                "        \"-xmlFrameAll\": \"6\",\n" +
-//                "        \"-xmlRunTime\": \"760\",\n" +
-//                "        \"-xmldata\": \"87#42#12#81#129#178#90#60#76#110#90#90#120#104#70#90\"\n" +
-//                "      },\n" +
-//                "      {\n" +
-//                "        \"-xmlFrameIndex\": \"4\",\n" +
-//                "        \"-xmlAllRunTime\": \"600\",\n" +
-//                "        \"-xmlFrameStatus\": \"2\",\n" +
-//                "        \"-xmlFrameAll\": \"6\",\n" +
-//                "        \"-xmlRunTime\": \"300\",\n" +
-//                "        \"-xmldata\": \"0#3#86#84#133#180#90#60#76#110#90#90#137#133#59#75\"\n" +
-//                "      },\n" +
-//                "      {\n" +
-//                "        \"-xmlFrameIndex\": \"5\",\n" +
-//                "        \"-xmlAllRunTime\": \"780\",\n" +
-//                "        \"-xmlFrameStatus\": \"2\",\n" +
-//                "        \"-xmlFrameAll\": \"6\",\n" +
-//                "        \"-xmlRunTime\": \"760\",\n" +
-//                "        \"-xmldata\": \"87#42#12#81#129#178#90#60#76#110#90#90#120#104#70#90\"\n" +
-//                "      },\n" +
-//                "      {\n" +
-//                "        \"-xmlFrameIndex\": \"6\",\n" +
-//                "        \"-xmlAllRunTime\": \"600\",\n" +
-//                "        \"-xmlFrameStatus\": \"3\",\n" +
-//                "        \"-xmlFrameAll\": \"6\",\n" +
-//                "        \"-xmlRunTime\": \"300\",\n" +
-//                "        \"-xmldata\": \"0#3#86#84#133#180#90#60#76#110#90#90#137#133#59#75\"\n" +
-//                "      }\n" +
-//                "    ]\n" +
-//                "  }";
-//
-//        try {
-//
-//
-//            JSONObject zuoJsonObject = new JSONObject(zuo);
-//            JSONArray zuoJsonArray= zuoJsonObject.getJSONArray("frame");
-//            for(int i=0; i<zuoJsonArray.length(); i++){
-//                Map<String, Object> map = new HashMap<String, Object>();
-//                JSONObject jsonObject = (JSONObject) zuoJsonArray.get(i);
-//                UbtLog.d(TAG, "jsonObject:" + jsonObject.toString());
-//                map.put(ACTION_TIME, jsonObject.get("-xmlRunTime"));
-//                map.put(ACTION_ANGLE, jsonObject.get("-xmldata"));
-////                map.put(ACTION_NAME, jsonObject.get("xmlName"));
-////                listBasicActionLib.add(i, map);
-//            }
-//
-//            UbtLog.d(TAG, "listBasicActionLib:" + listBasicActionLib);
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-
-
-
-
-
-
         listHighActionLib.clear();
         for(int i=0;  i<highActionName.length; i++){
             Map<String, Object> map = new HashMap<String, Object>();
@@ -2414,7 +2262,7 @@ public class ActionsNewEditActivity extends BaseActivity implements IEditActionU
         ivActionLib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                initActionsData();
+//                initActionsNameData();
 //                initActionLibs();
                 DialogActions dialogActions = new DialogActions(ActionsNewEditActivity.this, getStringResources("ui_create_basic_action"), listBasicActionLib, 0);
                 dialogActions.show();
@@ -2424,7 +2272,7 @@ public class ActionsNewEditActivity extends BaseActivity implements IEditActionU
         ivActionLibMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                initActionsData();
+//                initActionsNameData();
 //                initActionLibs();
                 DialogActions dialogActions = new DialogActions(ActionsNewEditActivity.this, getStringResources("ui_create_advance_action"), listHighActionLib, 1);
                 dialogActions.show();

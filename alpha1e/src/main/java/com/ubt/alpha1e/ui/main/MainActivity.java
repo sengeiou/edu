@@ -4,6 +4,7 @@ package com.ubt.alpha1e.ui.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,12 +15,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
+import com.ubt.alpha1e.login.LoginActivity;
+import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.MyMainActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
+import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
+import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -84,8 +92,20 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         Intent mLaunch = new Intent();
         switch (view.getId()) {
             case R.id.top_icon:
-                mLaunch.setClass(this, MyMainActivity.class);
-                startActivity(mLaunch);
+                Intent intent = new Intent();
+                UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+                if (null == userModel) {
+                    intent.setClass(this, LoginActivity.class);
+                } else {
+                    if (TextUtils.isEmpty(userModel.getPhone())) {
+                        intent.setClass(this, LoginAuthActivity.class);
+                    } else if (TextUtils.isEmpty(userModel.getAge())) {
+                        intent.setClass(this, UserEditActivity.class);
+                    } else {
+                        intent.setClass(this, UserCenterActivity.class);
+                    }
+                }
+                startActivity(intent);
                 break;
             case R.id.top_icon2:
                 cartoonBodyTouch.setVisibility(View.VISIBLE);
@@ -144,6 +164,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             topIcon2Disconnect.setVisibility(View.VISIBLE);
         }
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -280,7 +301,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //        rlParams3.topMargin = getAdaptiveScreenY(cartoon_action_margin_top);
 //        cartoonAction.setLayoutParams(rlParams3);
         //habit alert
-
 
     }
 

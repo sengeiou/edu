@@ -53,5 +53,8 @@ encoding="utf-8"?>
         <attr name="expandString" format="reference"/>
         <attr name="collapseString" format="reference"/>
     </declare-styleable>
+    <declare-styleable name="MKLoader">
+        <attr name="mk_color" format="color"/>
 
+    </declare-styleable>
 </resources>

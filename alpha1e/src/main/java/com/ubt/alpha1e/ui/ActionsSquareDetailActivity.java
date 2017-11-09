@@ -30,7 +30,6 @@ import com.ubt.alpha1e.business.thrid_party.IWeiXinListener;
 import com.ubt.alpha1e.business.thrid_party.MyFaceBook;
 import com.ubt.alpha1e.business.thrid_party.MyTencent;
 import com.ubt.alpha1e.business.thrid_party.MyTwitter;
-import com.ubt.alpha1e.business.thrid_party.MyWeiXin;
 import com.ubt.alpha1e.data.JsonTools;
 import com.ubt.alpha1e.data.model.ActionOnlineInfo;
 import com.ubt.alpha1e.net.http.basic.GetDataFromWeb;
@@ -337,10 +336,10 @@ public class ActionsSquareDetailActivity extends BaseActivity implements View.On
                 MyTencent.doShareQQ(ActionsSquareDetailActivity.this, actionOnlineInfo, pactStringUrl(shareUrl,actionOnlineInfo.actionId+""), ActionsSquareDetailActivity.this);
                 break;
             case R.id.btn_to_qq_weixin:
-                MyWeiXin.doShareToWeiXin(pactStringUrl(shareUrl,actionOnlineInfo.actionId+""), actionOnlineInfo, ActionsSquareDetailActivity.this, ActionsSquareDetailActivity.this, 0);
+//                MyWeiXin.doShareToWeiXin(pactStringUrl(shareUrl,actionOnlineInfo.actionId+""), actionOnlineInfo, ActionsSquareDetailActivity.this, ActionsSquareDetailActivity.this, 0);
                 break;
             case R.id.btn_to_qq_weixin_pengyouquan:
-                MyWeiXin.doShareToWeiXin(pactStringUrl(shareUrl,actionOnlineInfo.actionId+""), actionOnlineInfo, ActionsSquareDetailActivity.this, ActionsSquareDetailActivity.this, 1);
+//                MyWeiXin.doShareToWeiXin(pactStringUrl(shareUrl,actionOnlineInfo.actionId+""), actionOnlineInfo, ActionsSquareDetailActivity.this, ActionsSquareDetailActivity.this, 1);
                 break;
             case R.id.btn_to_qq_zone:
                 MyTencent.doShareQQKongjian(ActionsSquareDetailActivity.this,

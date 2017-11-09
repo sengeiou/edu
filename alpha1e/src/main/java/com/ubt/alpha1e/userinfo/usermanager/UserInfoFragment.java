@@ -11,13 +11,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
@@ -28,20 +33,24 @@ import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.custom.ShapedImageView;
 import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
+import com.ubt.alpha1e.userinfo.model.UserAllModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditContract;
 import com.ubt.alpha1e.userinfo.useredit.UserEditPresenter;
+import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
+import com.ubt.alpha1e.userinfo.util.TVUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -50,9 +59,12 @@ import static android.app.Activity.RESULT_OK;
  * 邮箱 784787081@qq.com
  */
 
-public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, UserEditPresenter> implements UserEditContract.View {
+public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, UserEditPresenter> implements UserEditContract.View, AndroidAdjustResizeBugFix.OnKeyChangerListeler, MyTextWatcher.WatcherListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    //    @BindView(R.id.scrollview_user)
+//    ScrollView mScrollviewUser;
+    Unbinder unbinder;
     private String mParam1;
     private String mParam2;
     @BindView(R.id.img_head)
@@ -70,8 +82,11 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     @BindView(R.id.tv_user_grade)
     TextView mTvUserGrade;
 
+
     Handler mHandler = new Handler();
     private Uri mImageUri;
+
+    AndroidAdjustResizeBugFix assistActivity;
     /**
      * 拍照获取照片
      */
@@ -81,9 +96,14 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     public static final int GetUserHeadRequestCodeByFile = 1002;
 
+    public String headPath;
+
     private UserModel mUserModel = null;
-    private String[] greadeList = new String[]{"幼儿园小班", "幼儿园中班", "幼儿园大班", "小学一年级", "小学二年级", "小学三年级", "小学四年级"
-            , "小学五年级", "小学六年级及以上"};
+//    private String[] greadeList = new String[]{"幼儿园小班", "幼儿园中班", "幼儿园大班", "小学一年级", "小学二年级", "小学三年级", "小学四年级"
+//            , "小学五年级", "小学六年级及以上"};
+
+    private List<String> ageList = new ArrayList<>();
+    private List<String> gradeList = new ArrayList<>();
 
     public UserInfoFragment() {
 
@@ -108,6 +128,10 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         UbtLog.d("UserInfoFragment", "onCreate");
+        assistActivity = new AndroidAdjustResizeBugFix(getActivity());
+        assistActivity.setOnKeyChangerListeler(this);
+        mPresenter.getLoopData();
+
     }
 
 
@@ -126,12 +150,25 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         UbtLog.d("UserInfoFragment", "onActivityCreated");
-        mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USERINFOMODEL);
-
+        mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+        UbtLog.d("Usercenter", "usermode===" + mUserModel.toString());
+        mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
+        mTvUserName.setText(mUserModel.getNickName());
+        mTvUserAge.setText(mUserModel.getAge());
+        mTvUserGrade.setText(mUserModel.getGrade());
+        if (!TextUtils.isEmpty(mUserModel.getSex())) {
+            if (mUserModel.getSex().equals("1")) {
+                mMale.setChecked(true);
+            } else if (mUserModel.getSex().equals("2")) {
+                mFemale.setChecked(true);
+            }
+        }
+        Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().into(mImgHead);
     }
 
-    private void initData(){
-
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     /**
@@ -145,13 +182,16 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         switch (view.getId()) {
             case R.id.male:
                 if (ischanged) {
-                    ToastUtils.showShort("男孩子哦");
-
+                    if (null != mUserModel && !mUserModel.getSex().equals("1")) {
+                        updateUserInfo(Constant.KEY_NICK_SEX, "1");
+                    }
                 }
                 break;
             case R.id.female:
                 if (ischanged) {
-                    ToastUtils.showShort("女孩子哦");
+                    if (null != mUserModel && !mUserModel.getSex().equals("2")) {
+                        updateUserInfo(Constant.KEY_NICK_SEX, "2");
+                    }
                 }
                 break;
 
@@ -164,23 +204,24 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onClickView(View view) {
         switch (view.getId()) {
             case R.id.img_head:
-                mPresenter.showImageHeadDialog((Activity) mContext);
+                mPresenter.showImageCenterHeadDialog((Activity) mContext);
                 break;
             case R.id.tv_user_age:
-                mPresenter.showAgeDialog((Activity) mContext, 3);
+                mPresenter.showAgeDialog((Activity) mContext, ageList, 0);
                 break;
             case R.id.tv_user_grade:
-                List<String> list = new ArrayList<>();
-                for (String grade : greadeList) {
-                    list.add(grade);
-                }
-                mPresenter.showGradeDialog((Activity) mContext, 2, list);
+
+                mPresenter.showGradeDialog((Activity) mContext, 1, gradeList);
+                break;
+            default:
                 break;
         }
     }
 
+
     @Override
     protected void initUI() {
+
     }
 
     @Override
@@ -202,6 +243,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onDestroyView() {
         super.onDestroyView();
         UbtLog.d("UserInfoFragment", "onDestroyView");
+        unbinder.unbind();
     }
 
     @Override
@@ -231,7 +273,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         if (!path.exists()) {
             path.mkdirs();
         }
-        mImageUri = Uri.fromFile(new File(path, new Date().getTime() + ""));
+        mImageUri = Uri.fromFile(new File(path, System.currentTimeMillis() + ""));
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
         cameraIntent.putExtra("return-data", true);
         startActivityForResult(cameraIntent, GetUserHeadRequestCodeByShoot);
@@ -256,15 +298,47 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void ageSelectItem(int type, String item) {
-        ToastUtils.showShort(item);
+        if (type == 0) {
+            mTvUserAge.setText(item);
+            if (!mUserModel.getAge().equals(item)) {
+                updateUserInfo(Constant.KEY_NICK_AGE, item);
+            }
+        } else if (type == 1) {
+            mTvUserGrade.setText(item);
+            if (!mUserModel.getGrade().equals(item)) {
+                updateUserInfo(Constant.KEY_NICK_GRADE, item);
+            }
+        }
+    }
+
+    @Override
+    public void updateUserModelSuccess(UserModel userModel) {
+        this.mUserModel = userModel;
+    }
+
+    @Override
+    public void updateUserModelFailed() {
+        ToastUtils.showShort("update failed");
+    }
+
+    @Override
+    public void updateLoopData(UserAllModel userAllModel) {
+        if (null != userAllModel) {
+            ageList = userAllModel.getAgeList();
+            gradeList = userAllModel.getGradeList();
+        } else {
+
+        }
     }
 
     /**
      * 修改相片结果
+     *
      * @param requestCode
      * @param resultCode
      * @param data
      */
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
@@ -297,6 +371,9 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                                             public void run() {
                                                 Bitmap img = ImageTools.ImageCrop(bitmap);
                                                 mImgHead.setImageBitmap(img);
+                                                headPath = ImageTools.SaveImage("head", img);
+                                                mPresenter.updateHead(headPath);
+                                                UbtLog.d("compressImage", "使用次数");
                                             }
                                         });
                                     }
@@ -313,4 +390,58 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     }
 
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+
+    /**
+     * 监听键盘开启关闭
+     *
+     * @param statu true键盘开启 false 键盘关闭
+     */
+    @Override
+    public void keyBoardOpen(boolean statu) {
+        String editText = mTvUserName.getText().toString();
+        Log.d("string==", "editText==" + editText);
+        if (!statu && !TextUtils.isEmpty(editText)) {
+            if (TVUtils.isCorrectStr(editText)) {
+                if (!mUserModel.getNickName().equals(editText)) {
+                    updateUserInfo(Constant.KEY_NICK_NAME, editText);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 更新用户信息
+     *
+     * @param type
+     * @param value
+     */
+    public void updateUserInfo(int type, String value) {
+        mPresenter.updateUserInfo(type, value);
+    }
+
+
+    /**
+     * 字符超过20
+     */
+    @Override
+    public void longEditTextSize() {
+
+    }
+
+    /**
+     * 字符串包含异常字符
+     */
+    @Override
+    public void errorEditTextStr() {
+
+    }
 }
