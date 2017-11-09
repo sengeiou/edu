@@ -3,7 +3,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/bg_user_main"
+            android:background="@drawable/bg_user_edit"
             android:overScrollMode="never"
 
     >
@@ -11,7 +11,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparent"
         >
 
         <ImageView
@@ -34,7 +33,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="27dp"
             android:text="填写宝宝信息"
-            android:textColor="@color/black"
+            android:textColor="@color/tv_user_edit_color"
             android:textSize="16sp"
             />
 
@@ -46,28 +45,38 @@
             android:layout_alignParentTop="true"
             android:layout_marginRight="30dp"
             android:layout_marginTop="15dp"
-            android:src="@drawable/icon_save_user"
+            android:src="@drawable/user_save_selector"
             />
 
 
 
 
-        <com.ubt.alpha1e.ui.custom.ShapedImageView
-            android:id="@+id/img_head"
-            android:layout_width="77dp"
-            android:layout_height="73dp"
-            android:layout_below="@+id/tv_main_title"
+
+        <FrameLayout
+            android:id="@+id/rl_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/default_head"
-            android:scaleType="fitXY"
-            app:shape_mode="circle"/>
+            android:layout_below="@+id/tv_main_title"
+            android:layout_marginBottom="10dp">
+
+            <com.ubt.alpha1e.ui.custom.ShapedImageView
+                android:id="@+id/img_head"
+                android:layout_width="77dp"
+                android:layout_height="73dp"
+                android:scaleType="fitXY"
+                app:shape_mode="circle"/>
+
+            <ImageView
+                android:layout_width="77dp"
+                android:layout_height="73dp"
+                android:background="@drawable/head_background"/>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="381dp"
             android:layout_height="195dp"
-            android:layout_below="@+id/img_head"
+            android:layout_below="@+id/rl_head"
             android:layout_centerHorizontal="true"
             android:background="@drawable/bg_edit_user"
             android:orientation="vertical">

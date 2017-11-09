@@ -43,6 +43,9 @@ public class MyTextWatcher implements TextWatcher {
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         cursor = start;
 //      Log.e("此时光标的位置为", cursor + "");
+        if (null != mWatcherListener) {
+            mWatcherListener.textChange();
+        }
     }
 
     @Override
@@ -84,6 +87,10 @@ public class MyTextWatcher implements TextWatcher {
         void longEditTextSize();
 
         void errorEditTextStr();
+
+        void textChange();
+
+
     }
 
 }
