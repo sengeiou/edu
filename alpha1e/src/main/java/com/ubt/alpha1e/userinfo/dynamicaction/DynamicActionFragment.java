@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -88,6 +89,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         mRecyclerviewDynamic.setAdapter(mDynamicActionAdapter);
         emptyView = LayoutInflater.from(mContext).inflate(R.layout.layout_empty, null);
         ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(mContext.getResources().getString(R.string.empty_no_dynamiaction));
+        ((ImageView)emptyView.findViewById(R.id.iv_no_data)).setImageResource(R.drawable.ic_setting_action_deafult);
         emptyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

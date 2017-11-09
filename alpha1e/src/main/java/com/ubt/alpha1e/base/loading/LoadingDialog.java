@@ -31,7 +31,7 @@ public class LoadingDialog extends Dialog {
     /**
      * LoadingDialog
      */
-    private static LoadingDialog loadDialog;
+    private static LoadingDialog  loadDialog;
     /**
      * cancelable, the dialog dimiss or undimiss flag
      */

@@ -38,7 +38,6 @@ import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditContract;
 import com.ubt.alpha1e.userinfo.useredit.UserEditPresenter;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
-import com.ubt.alpha1e.userinfo.util.TVUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.io.File;
@@ -268,6 +267,17 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void takeImageFromShoot() {
+        getShootCamera();
+//        if (AndPermission.hasPermission(mContext, Permission.CAMERA)) {
+//            ToastUtils.showShort("有权限");
+//            getShootCamera();
+//        } else {
+//            ToastUtils.showShort("无权限");
+//
+//        }
+    }
+
+    public void getShootCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File path = new File(FileTools.image_cache);
         if (!path.exists()) {
@@ -409,11 +419,10 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         String editText = mTvUserName.getText().toString();
         Log.d("string==", "editText==" + editText);
         if (!statu && !TextUtils.isEmpty(editText)) {
-            if (TVUtils.isCorrectStr(editText)) {
-                if (!mUserModel.getNickName().equals(editText)) {
-                    updateUserInfo(Constant.KEY_NICK_NAME, editText);
-                }
+            if (!mUserModel.getNickName().equals(editText)) {
+                updateUserInfo(Constant.KEY_NICK_NAME, editText);
             }
+
         }
     }
 

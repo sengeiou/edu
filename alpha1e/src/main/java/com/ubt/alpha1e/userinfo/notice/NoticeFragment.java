@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
@@ -92,6 +93,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         mRecyclerviewNotice.setAdapter(mNoticeAdapter);
         emptyView = LayoutInflater.from(mContext).inflate(R.layout.layout_empty, null);
         ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(mContext.getResources().getString(R.string.empty_no_noticedata));
+        ((ImageView) emptyView.findViewById(R.id.iv_no_data)).setImageResource(R.drawable.ic_setting_push_deafult);
         emptyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
