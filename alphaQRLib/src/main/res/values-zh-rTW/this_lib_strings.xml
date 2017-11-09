@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="this_lib_ui_back">返回</string>
-    <string name="this_lib_ui_bind_alpha">綁定阿爾法</string>
-    <string name="this_lib_ui_scan_here">找到並掃描此處二維碼</string>
-    <string name="this_lib_ui_bind_other_way">使用其他綁定方式</string>
-
-</resources>

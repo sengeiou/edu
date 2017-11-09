@@ -294,13 +294,7 @@
             android:label="@string/title_activity_private_info"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleTheme"/>
-        <activity
-            android:name="com.google.zxing.client.android.CaptureActivity"
-            android:clearTaskOnLaunch="true"
-            android:stateNotNeeded="true"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            tools:replace="android:theme"/>
+
         <activity
             android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login"

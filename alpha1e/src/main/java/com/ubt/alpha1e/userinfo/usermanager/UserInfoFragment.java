@@ -168,7 +168,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 mFemale.setChecked(true);
             }
         }
-        Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().placeholder(R.drawable.sec_action_logo).into(mImgHead);
+        Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().into(mImgHead);
     }
 
     /**

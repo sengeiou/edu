@@ -12,10 +12,19 @@ package com.ubt.alpha1e.base;
 public class Constant {
     public final static String SP_USERINFOMODEL = "sp_userinfo";
     public final static String SP_LOGIN_TOKEN = "sp_login_token";
+    /**
+     * 用户信息保存
+     */
     public final static String SP_USER_INFO = "sp_user_info";
     public final static String SP_USER_ID = "sp_login_userId";
     public final static String SP_USER_IMAGE = "sp_user_image";
     public final static String SP_USER_NICKNAME = "sp_user_nickname";
+
+
+    /**
+     * 首次获取蓝牙权限
+     */
+    public final static String SP_START_GTE_PERMISSION ="get_first_permission";
 
 
     /**

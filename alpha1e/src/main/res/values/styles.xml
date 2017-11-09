@@ -156,8 +156,8 @@
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_marginLeft">18dp</item>
-        <item name="android:textColor">@color/tv_black_color</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/tv_center_color</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="text_userinfo_right_style">
