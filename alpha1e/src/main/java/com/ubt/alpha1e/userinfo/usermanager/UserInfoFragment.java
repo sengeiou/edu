@@ -33,6 +33,7 @@ import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.custom.ShapedImageView;
 import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
+import com.ubt.alpha1e.userinfo.model.UserAllModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditContract;
 import com.ubt.alpha1e.userinfo.useredit.UserEditPresenter;
@@ -98,8 +99,11 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public String headPath;
 
     private UserModel mUserModel = null;
-    private String[] greadeList = new String[]{"幼儿园小班", "幼儿园中班", "幼儿园大班", "小学一年级", "小学二年级", "小学三年级", "小学四年级"
-            , "小学五年级", "小学六年级及以上"};
+//    private String[] greadeList = new String[]{"幼儿园小班", "幼儿园中班", "幼儿园大班", "小学一年级", "小学二年级", "小学三年级", "小学四年级"
+//            , "小学五年级", "小学六年级及以上"};
+
+    private List<String> ageList = new ArrayList<>();
+    private List<String> gradeList = new ArrayList<>();
 
     public UserInfoFragment() {
 
@@ -126,7 +130,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         UbtLog.d("UserInfoFragment", "onCreate");
         assistActivity = new AndroidAdjustResizeBugFix(getActivity());
         assistActivity.setOnKeyChangerListeler(this);
-
+        mPresenter.getLoopData();
     }
 
 
@@ -203,14 +207,11 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 mPresenter.showImageCenterHeadDialog((Activity) mContext);
                 break;
             case R.id.tv_user_age:
-                mPresenter.showAgeDialog((Activity) mContext, 0);
+                mPresenter.showAgeDialog((Activity) mContext, ageList, 0);
                 break;
             case R.id.tv_user_grade:
-                List<String> list = new ArrayList<>();
-                for (String grade : greadeList) {
-                    list.add(grade);
-                }
-                mPresenter.showGradeDialog((Activity) mContext, 1, list);
+
+                mPresenter.showGradeDialog((Activity) mContext, 1, gradeList);
                 break;
             default:
                 break;
@@ -297,7 +298,6 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void ageSelectItem(int type, String item) {
-        ToastUtils.showShort(item);
         if (type == 0) {
             mTvUserAge.setText(item);
             if (!mUserModel.getAge().equals(item)) {
@@ -319,6 +319,16 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     @Override
     public void updateUserModelFailed() {
         ToastUtils.showShort("update failed");
+    }
+
+    @Override
+    public void updateLoopData(UserAllModel userAllModel) {
+        if (null != userAllModel) {
+            ageList = userAllModel.getAgeList();
+            gradeList = userAllModel.getGradeList();
+        } else {
+
+        }
     }
 
     /**

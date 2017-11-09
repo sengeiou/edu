@@ -14,11 +14,13 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.userinfo.model.UserAllModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -27,7 +29,6 @@ import com.weigan.loopview.LoopView;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
@@ -96,15 +97,12 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
      * @param currentPosition
      */
     @Override
-    public void showAgeDialog(Activity activity, int currentPosition) {
+    public void showAgeDialog(Activity activity, final List<String> ageList, int currentPosition) {
         View contentView = LayoutInflater.from(activity).inflate(R.layout.dialog_useredit_wheel, null);
         ViewHolder viewHolder = new ViewHolder(contentView);
         final LoopView loopView = (LoopView) contentView.findViewById(R.id.loopView);
-        final ArrayList<String> list = new ArrayList<>();
-        for (int i = 5; i < 15; i++) {
-            list.add(String.valueOf(i));
-        }
-        loopView.setItems(list);
+
+        loopView.setItems(ageList);
         loopView.setInitPosition(0);
 
         loopView.setCurrentPosition(currentPosition);
@@ -116,7 +114,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_sure) {
                             if (isAttachView()) {
-                                mView.ageSelectItem(0, list.get(loopView.getSelectedItem()));
+                                mView.ageSelectItem(0, ageList.get(loopView.getSelectedItem()));
                             }
                             dialog.dismiss();
                         }
@@ -218,5 +216,31 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 });
     }
 
+    /**
+     * 获取列表数据
+     */
+    public void getLoopData() {
+        BaseRequest baseRequest = new BaseRequest();
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.GET_USER_INFO, baseRequest, 0).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d("getLoopData", "onError:" + e.getMessage());
+                mView.updateLoopData(null);
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d("getLoopData", "getUser__response==" + response);
+                BaseResponseModel<UserAllModel> baseResponseModel = GsonImpl.get().toObject(response,
+                        new TypeToken<BaseResponseModel<UserAllModel>>() {
+                        }.getType());
+                if (baseResponseModel.status) {
+                    UserAllModel userAllModel = baseResponseModel.models;
+                    mView.updateLoopData(userAllModel);
+                }
+            }
+        });
+
+    }
 
 }
