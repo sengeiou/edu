@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.tencent.ai.tvs.AuthorizeListener;
@@ -210,6 +211,8 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "onError:" + e.getMessage());
+                LoadingDialog.dismiss(LoginActivity.this);
+                Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -279,6 +282,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "onError:" + e.getMessage());
                 LoadingDialog.dismiss(LoginActivity.this);
+                Toast.makeText(LoginActivity.this, "获取用户信息失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
