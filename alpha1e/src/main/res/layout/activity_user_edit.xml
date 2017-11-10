@@ -88,6 +88,7 @@
                 >
 
                 <TextView
+                    android:id="@+id/tv_nick_tip"
                     style="@style/text_userinfo_left_style"
                     android:layout_alignParentLeft="true"
                     android:text="昵称"/>
@@ -99,6 +100,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="30dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/tv_nick_tip"
+                    android:gravity="right|center_vertical"
                     android:background="@null"
                     android:imeOptions="flagNoExtractUi"
                     android:paddingBottom="5dp"

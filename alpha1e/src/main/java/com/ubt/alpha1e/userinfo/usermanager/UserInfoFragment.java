@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.R;
@@ -454,7 +455,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void errorEditTextStr() {
-
+        Toast.makeText(getActivity(), "用户名不能输入非法字符", Toast.LENGTH_SHORT).show();
     }
 
     @Override
