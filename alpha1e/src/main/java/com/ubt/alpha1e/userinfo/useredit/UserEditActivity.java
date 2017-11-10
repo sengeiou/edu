@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
@@ -40,6 +41,7 @@ import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.userinfo.model.UserAllModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
+import com.ubt.alpha1e.userinfo.util.TVUtils;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -179,6 +181,12 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                 mPresenter.showGradeDialog(UserEditActivity.this, mPresenter.getPosition(grade,gradeList), gradeList);
                 break;
             case R.id.iv_complete_info:
+
+                if(!TVUtils.isCorrectStr(mTvUserName.getText().toString())) {
+                    Toast.makeText(UserEditActivity.this, "用户名不能输入非法字符", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 LoadingDialog.show(UserEditActivity.this);
                 UpdateUserInfoRequest request = new UpdateUserInfoRequest();
                 request.setAge(age);
@@ -383,7 +391,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
 
     @Override
     public void errorEditTextStr() {
-
+        Toast.makeText(UserEditActivity.this, "用户名不能输入非法字符", Toast.LENGTH_SHORT).show();
     }
 
     @Override
