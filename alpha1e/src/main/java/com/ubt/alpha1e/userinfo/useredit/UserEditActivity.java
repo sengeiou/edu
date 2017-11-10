@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
@@ -28,6 +27,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ImageTools;
@@ -121,10 +121,16 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
         UbtLog.d(TAG, "mUserModel:" + mUserModel.toString());
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
-        mTvUserName.setText(mUserModel.getNickName());
-        mTvUserName.setSelection(mTvUserName.getText().length());
-        mTvUserAge.setText(TextUtils.isEmpty(mUserModel.getAge())?"未填写":mUserModel.getAge());
-        mTvUserGrade.setText(TextUtils.isEmpty(mUserModel.getGrade())?"未填写":mUserModel.getGrade());
+        if(mTvUserName.getText().toString().length()==0){
+            mTvUserName.setText(mUserModel.getNickName());
+            mTvUserName.setSelection(mTvUserName.getText().length());
+        }
+        if(TextUtils.isEmpty(age)){
+            mTvUserAge.setText(TextUtils.isEmpty(mUserModel.getAge())?"未填写":mUserModel.getAge());
+        }
+        if(TextUtils.isEmpty(grade)){
+            mTvUserGrade.setText(TextUtils.isEmpty(mUserModel.getGrade())?"未填写":mUserModel.getGrade());
+        }
 
         checkSaveEnable();
 
@@ -183,7 +189,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
             case R.id.iv_complete_info:
 
                 if(!TVUtils.isCorrectStr(mTvUserName.getText().toString())) {
-                    Toast.makeText(UserEditActivity.this, "用户名不能输入非法字符", Toast.LENGTH_SHORT).show();
+                    ToastUtils.showShort("仅限汉字、字母及数字");
                     return;
                 }
 
@@ -391,7 +397,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
 
     @Override
     public void errorEditTextStr() {
-        Toast.makeText(UserEditActivity.this, "用户名不能输入非法字符", Toast.LENGTH_SHORT).show();
+        ToastUtils.showShort("仅限汉字、字母及数字");
     }
 
     @Override
