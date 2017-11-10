@@ -18,8 +18,8 @@ android {
         }
 
         manifestPlaceholders = [
-                XG_ACCESS_ID  : "210027001122222222",
-                XG_ACCESS_KEY : "A783M4PIM7JI2222222",
+                XG_ACCESS_ID : "210027001122222222",
+                XG_ACCESS_KEY: "A783M4PIM7JI2222222",
         ]
     }
 
@@ -48,7 +48,7 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/LICENSE' // will not include LICENSE file
-     }
+    }
 
     productFlavors {
         ubt_debug {
@@ -157,4 +157,5 @@ dependencies {
     compile 'com.android.support:design:26.+'
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     compile 'com.yanzhenjie:permission:1.1.2'
+    compile 'com.github.zyyoona7:EasyPopup:1.0.2'
 }

@@ -136,6 +136,7 @@
     <color name="tv_notice_title">#AFBFC8</color>
     <color name="tv_no_data_color">#85B4C9</color>
     <color name="transparent">#00000000</color>
+    <color name="background_delete_coor">#F5F7F7</color>
     <!--2017/11/1-->
     <color name="tel_auth_rectangle_color">#EDF7FA</color>
     <color name="login_line_color">#979797</color>
