@@ -208,6 +208,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                     public void onError(Call call, Exception e, int id) {
                         UbtLog.d("userEdit", "Exception:" + e.getMessage());
                         LoadingDialog.dismiss(UserEditActivity.this);
+                        ToastUtils.showShort("用户信息保存失败");
                     }
 
                     @Override

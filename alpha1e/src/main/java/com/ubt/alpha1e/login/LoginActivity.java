@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.tencent.ai.tvs.AuthorizeListener;
@@ -23,6 +22,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
@@ -223,7 +223,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "onError:" + e.getMessage());
                 LoadingDialog.dismiss(LoginActivity.this);
-                Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                ToastUtils.showShort("登录失败");
             }
 
             @Override
@@ -293,7 +293,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "onError:" + e.getMessage());
                 LoadingDialog.dismiss(LoginActivity.this);
-                Toast.makeText(LoginActivity.this, "获取用户信息失败", Toast.LENGTH_SHORT).show();
+                ToastUtils.showShort("获取用户信息失败");
             }
 
             @Override
