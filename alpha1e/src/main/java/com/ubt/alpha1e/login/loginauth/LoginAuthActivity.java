@@ -137,11 +137,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
             public void onClick(View view) {
                 requestCountDown.start();
                 setGetCodeTextEnable(false);
-//                String params = "{"
-//                        + "\"token\":" + "\"" + token + "\""
-//                        + ",\n\"userId\":" + "\"" + userId + "\""
-//                        + ",\n\"phone\":" + "\"" + edtTel.getText().toString() + "\""
-//                        + "}";
+
                 GetCodeRequest getCodeRequest = new GetCodeRequest();
                 getCodeRequest.setPhone(edtTel.getText().toString());
                 OkHttpClientUtils.getJsonByPostRequest(HttpEntity.REQUEST_SMS_CODE, getCodeRequest, 0).execute(new StringCallback() {

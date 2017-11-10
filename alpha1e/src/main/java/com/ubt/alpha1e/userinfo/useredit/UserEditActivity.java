@@ -172,11 +172,11 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                 mPresenter.showImageHeadDialog(UserEditActivity.this);
                 break;
             case R.id.tv_user_age:
-                mPresenter.showAgeDialog(UserEditActivity.this, ageList, 0);
+                mPresenter.showAgeDialog(UserEditActivity.this, ageList, mPresenter.getPosition(age,ageList));
                 break;
             case R.id.tv_user_grade:
 
-                mPresenter.showGradeDialog(UserEditActivity.this, 0, gradeList);
+                mPresenter.showGradeDialog(UserEditActivity.this, mPresenter.getPosition(grade,gradeList), gradeList);
                 break;
             case R.id.iv_complete_info:
                 LoadingDialog.show(UserEditActivity.this);
