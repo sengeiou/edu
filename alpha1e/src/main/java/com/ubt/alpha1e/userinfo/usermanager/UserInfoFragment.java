@@ -454,7 +454,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void errorEditTextStr() {
-
+        ToastUtils.showShort("仅限汉字、字母及数字");
     }
 
     @Override

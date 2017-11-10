@@ -212,7 +212,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                         BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<UserModel>>() {
                                 }.getType());
-                        UbtLog.d("userEdit", "baseResponseModel==" + baseResponseModel.status + "  " + baseResponseModel.models);
+                        UbtLog.d("userEdit", "baseResponseModel==" + baseResponseModel.status + "  " + "info" + baseResponseModel.info + baseResponseModel.models);
                         if (baseResponseModel.status) {
                             SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
                             if (isAttachView()) {
@@ -237,7 +237,10 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        mView.updateUserModelFailed();
+                        UbtLog.d("userEditHead", "e===" + e.getMessage());
+                        if (isAttachView()) {
+                            mView.updateUserModelFailed();
+                        }
                     }
 
                     @Override
@@ -245,7 +248,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                         BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<UserModel>>() {
                                 }.getType());
-                        UbtLog.d("userEdit", "baseResponseModel==" + baseResponseModel.status + "  " + baseResponseModel.models);
+                        UbtLog.d("userEditHead", "baseResponseModel==" + baseResponseModel.status + "  " + baseResponseModel.models);
                         if (baseResponseModel.status) {
                             SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
                             if (isAttachView()) {
@@ -291,7 +294,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
         } else {
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i).equals(content)) {
-                    position=i;
+                    position = i;
                     break;
                 }
             }

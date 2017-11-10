@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -96,6 +97,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         mNoticeAdapter = new NoticeAdapter(R.layout.layout_notice_item, mNoticeModels);
         mRecyclerviewNotice.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerviewNotice.setAdapter(mNoticeAdapter);
+        mNoticeAdapter.bindToRecyclerView(mRecyclerviewNotice);
         mNoticeAdapter.setOnItemLongClickListener(this);
         emptyView = LayoutInflater.from(mContext).inflate(R.layout.layout_empty, null);
         ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(mContext.getResources().getString(R.string.empty_no_noticedata));
@@ -143,18 +145,19 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     }
 
     @Override
-    public boolean onItemLongClick(BaseQuickAdapter adapter, final View view, final int position) {
+    public boolean onItemLongClick(final BaseQuickAdapter adapter, final View view, final int position) {
+        adapter.getViewByPosition(position,R.id.rl_root).setBackgroundTintList(mContext.getResources().getColorStateList(R.color.background_delete_coor));
         final EasyPopup mCirclePop = new EasyPopup(mContext)
                 .setContentView(R.layout.dialog_item_delete)
-                .setWidth(280)
-                .setHeight(100)
+                .setWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
+                .setHeight(ViewGroup.LayoutParams.WRAP_CONTENT)
                 //是否允许点击PopupWindow之外的地方消失
                 .setFocusAndOutsideEnable(true)
                 .createPopup()
                 .setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
                     public void onDismiss() {
-
+                        mNoticeAdapter.notifyDataSetChanged();
                     }
                 });
         mCirclePop.showAtAnchorView(view, VerticalGravity.BELOW, HorizontalGravity.ALIGN_RIGHT, -80, -30);
@@ -163,7 +166,6 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
             @Override
             public void onClick(View v) {
                 mNoticeModels.remove(position);
-                mNoticeAdapter.notifyDataSetChanged();
                 mCirclePop.dismiss();
             }
         });
