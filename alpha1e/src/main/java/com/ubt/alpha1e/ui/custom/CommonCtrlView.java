@@ -578,13 +578,13 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 mHelper.doChangeVol(mHelper.mCurrentVolume);
             }
             onNoteVol(mHelper.mCurrentVolume);
-            btn_vol_log.setBackground(mBaseActivity.getDrawableRes("cc_volumeicon"));
+            btn_vol_log.setImageDrawable(mBaseActivity.getDrawableRes("cc_volumeicon"));
         } else {
             if (sek_vol_ctrl.getProgress() != 0){
                 mHelper.mCurrentVolume = -1 * sek_vol_ctrl.getProgress();
             }
             sek_vol_ctrl.setProgress(0);
-            btn_vol_log.setBackground(mBaseActivity.getDrawableRes("cc_mute"));
+            btn_vol_log.setImageDrawable(mBaseActivity.getDrawableRes("cc_mute"));
             mHelper.ChangeMisucVol(0);
         }
     }
@@ -648,12 +648,12 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
     @Override
     public void noteLightOn() {
-        btn_lig_logo.setBackground(mBaseActivity.getDrawableRes("cc_lighton"));
+        btn_lig_logo.setImageDrawable(mBaseActivity.getDrawableRes("cc_lighton"));
     }
 
     @Override
     public void noteLightOff() {
-        btn_lig_logo.setBackground(mBaseActivity.getDrawableRes("cc_lightoff"));
+        btn_lig_logo.setImageDrawable(mBaseActivity.getDrawableRes("cc_lightoff"));
     }
 
     @Override
