@@ -2858,7 +2858,7 @@ public class ActionsNewEditActivity extends BaseActivity implements IEditActionU
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

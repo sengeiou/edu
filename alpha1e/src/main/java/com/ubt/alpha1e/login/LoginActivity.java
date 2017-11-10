@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.login;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -66,6 +67,11 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     public static final String PID = "";
     public static final String DSN = "";
 
+    public static void LaunchActivity(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

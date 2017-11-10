@@ -1085,7 +1085,7 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

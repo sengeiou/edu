@@ -722,7 +722,7 @@ public class ActionsOnlineHelper extends BaseHelper implements IJsonListener,
 	}
 
 	@Override
-	public void onClaerCache() {
+	public void onClearCache() {
 		// TODO Auto-generated method stub
 
 	}

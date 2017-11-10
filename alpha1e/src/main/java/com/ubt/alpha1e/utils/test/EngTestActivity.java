@@ -136,7 +136,7 @@ public class EngTestActivity extends BaseActivity implements IEditActionUI {
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
         // TODO Auto-generated method stub
 
     }

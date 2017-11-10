@@ -17,6 +17,6 @@ public interface IFileListener {
 
 	public void onReadCacheSize(int size);
 
-	public void onClaerCache();
+	public void onClearCache();
 
 }

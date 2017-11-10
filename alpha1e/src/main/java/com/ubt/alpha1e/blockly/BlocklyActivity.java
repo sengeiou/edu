@@ -1768,7 +1768,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

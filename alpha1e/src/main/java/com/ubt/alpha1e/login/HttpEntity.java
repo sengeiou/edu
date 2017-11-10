@@ -20,6 +20,7 @@ public class HttpEntity {
     public static final String GET_USER_INFO = BASIC_UBX_SYS + "getUserInfo";
     public static final String BIND_ACCOUNT = BASIC_UBX_SYS + "bind";
     public static final String UPDATE_USERINFO = BASIC_UBX_SYS + "updateUserInfo";
+    public static final String MODIFY_MANAGE_PASSWORD = BASIC_UBX_SYS + "updateUserPwd";
 
 
 }

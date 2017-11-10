@@ -468,7 +468,7 @@ public class MyActionsLocalFragment extends BaseMyActionsFragment implements IAc
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

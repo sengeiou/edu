@@ -616,7 +616,7 @@ public class MyActionsCreateFragment extends BaseMyActionsFragment implements IA
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
         UbtLog.d(TAG, "onClaerCache");
     }
 

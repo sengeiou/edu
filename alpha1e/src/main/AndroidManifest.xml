@@ -609,6 +609,45 @@
             android:windowSoftInputMode="adjustPan"
             android:configChanges="orientation|keyboardHidden|screenSize"
             />
+
+        <activity
+            android:name=".userinfo.helpfeedback.HelpFeedbackActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".userinfo.helpfeedback.feelback.FeelbackActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".userinfo.helpfeedback.feedbackdetail.FeedbackDetailActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".userinfo.aboutus.AboutUsActivity"
+            android:label="@string/title_activity_about_us"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".userinfo.cleancache.CleanCacheActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".userinfo.contactus.ContactUsActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".userinfo.psdmanage.PsdManageActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
         <!-- APP实现的Receiver，用于接收消息和结果反馈 -->
         <receiver android:name="com.ubt.alpha1e.xingepush.XGMessageRecevicer" >
             <intent-filter>

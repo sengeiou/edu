@@ -836,7 +836,34 @@
     <string name="ui_main_right_icon3">编程</string>
     <string name="ui_main_right_icon4">社区</string>
     <string name="ui_main_course_center">课程中心</string>
-    
+
+    <string name="ui_setting_clear_cache">清除缓存数据</string>
+    <string name="ui_setting_use_memory_title">Alpha1E已用空间</string>
+    <string name="ui_setting_cache_retio_title">占用手机</string>
+    <string name="ui_setting_clear_cache_warning">是否清理全部缓存？</string>
+    <string name="ui_setting_clear_cache_success">已成功清理#的空间</string>
+    <string name="ui_setting_has_not_cache">暂无缓存</string>
+    <string name="ui_setting_scan_code_attention">扫描关注</string>
+    <string name="ui_setting_password_massage">重置密码管理</string>
+    <string name="ui_setting_help_feedback">帮助反馈</string>
+    <string name="ui_setting_idea_feedback">意见反馈</string>
+    <string name="ui_setting_feedback_detail">问题详情</string>
+    <string name="ui_setting_hot_question">热点问题</string>
+    <string name="ui_setting_search_result">搜索结果</string>
+    <string name="ui_setting_feedback_placeholder">请输入你的意见</string>
+    <string name="ui_setting_feedback_input">请输入...</string>
+    <string name="ui_setting_telephone">手机号</string>
+    <string name="ui_setting_verify_code">验证码</string>
+    <string name="ui_setting_old_password">旧密码</string>
+    <string name="ui_setting_new_password">新密码</string>
+    <string name="ui_setting_confirm_password">确认密码</string>
+    <string name="ui_setting_forget_password">忘记密码</string>
+    <string name="ui_setting_logout_tip">您确定要退出您当前的账号？</string>
+    <string name="ui_setting_logout">退出</string>
+    <string name="ui_setting_password_modify_success">修改密码成功</string>
+    <string name="ui_setting_password_modify_fail">修改密码失败</string>
+    <string name="ui_setting_common_next">下一步</string>
+
 
     <!-- 不需要翻译 -->
     <string name="ui_pc_update_url">http://www.ubtrobot.com/download/index.html</string>
