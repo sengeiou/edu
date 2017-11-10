@@ -2,9 +2,10 @@ package com.ubt.alpha1e.ui.main;
 
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.util.Base64;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -21,26 +22,21 @@ import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.ui.MyMainActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
-import com.ubt.alpha1e.utils.log.UbtLog;
-import com.ubtechinc.base.ConstValue;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
+import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ConstValue;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnTouch;
-import pl.droidsonroids.gif.GifDrawable;
-import pl.droidsonroids.gif.GifImageView;
 
 
 /**
@@ -54,7 +50,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @BindView(R.id.cartoon_body_touch_bg)
     ImageView cartoonBodyTouchBg;
     @BindView(R.id.cartoon_action)
-    GifImageView cartoonAction;
+    ImageView cartoonAction;
     @BindView(R.id.cartoon_body_touch)
     ImageView cartoonBodyTouch;
     @BindView(R.id.right_icon)
@@ -77,14 +73,27 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     EditText habitAlert;
     @BindView(R.id.bottom_icon)
     TextView bottomIcon;
+    @BindView(R.id.cartoon_head)
+    ImageView cartoonHead;
+    @BindView(R.id.cartoon_chest)
+    ImageView cartoonChest;
+    @BindView(R.id.cartoon_left_hand)
+    ImageView cartoonLeftHand;
+    @BindView(R.id.cartoon_right_hand)
+    ImageView cartoonRightHand;
+    @BindView(R.id.cartoon_left_leg)
+    ImageView cartoonLeftLeg;
+    @BindView(R.id.cartoon_right_leg)
+    ImageView cartoonRightLeg;
     @BindView(R.id.mainui)
     RelativeLayout mainui;
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
     int init_screen_width = 667;
-    int init_screen_height =375 ;
+    int init_screen_height = 375;
     RelativeLayout.LayoutParams params;
+    private AnimationDrawable frameAnimation;
 
     @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3, R.id.right_icon4, R.id.cartoon_body_touch})
     protected void switchActivity(View view) {
@@ -108,11 +117,16 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 startActivity(intent);
                 break;
             case R.id.top_icon2:
-                cartoonBodyTouch.setVisibility(View.VISIBLE);
-                cartoonAction.setVisibility(View.INVISIBLE);
+                cartoonAction.setVisibility(View.VISIBLE);
+                cartoonBodyTouch.setVisibility(View.INVISIBLE);
+                showCartoonAction("TEX");
                 break;
             case R.id.top_icon3:
-                CommonCtrlView.getInstace(getContext());
+                try {
+                    CommonCtrlView.getInstace(getContext());
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
                 break;
             case R.id.right_icon:
                 mLaunch.setClass(this, ScanBluetoothActivity.class);
@@ -126,9 +140,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.right_icon4:
                 break;
             case R.id.cartoon_body_touch:
-//                cartoonAction.setVisibility(View.VISIBLE);
-//                cartoonBodyTouch.setVisibility(View.INVISIBLE);
-//                showCartoonAction("TEX");
                 break;
             default:
                 break;
@@ -175,16 +186,23 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     public void showCartoonAction(String json) {
-        try {
-            GifDrawable gifFromResource = new GifDrawable(getContext().getResources(), R.drawable.standup);
-            cartoonAction.setImageDrawable(gifFromResource);
-            Log.d(TAG, "After Animation CARTOON width*height :" + cartoonAction.getWidth() + "  Y: " + cartoonAction.getHeight());
-            int count = gifFromResource.getNumberOfFrames();
-            gifFromResource.setLoopCount(1);
-            Log.d(TAG, "FRAME COUNT " + count);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            GifDrawable gifFromResource = new GifDrawable(getContext().getResources(), R.drawable.standup);
+//            cartoonAction.setImageDrawable(gifFromResource);
+//            Log.d(TAG, "After Animation CARTOON width*height :" + cartoonAction.getWidth() + "  Y: " + cartoonAction.getHeight());
+//            int count = gifFromResource.getNumberOfFrames();
+//            gifFromResource.setLoopCount(1);
+//            Log.d(TAG, "FRAME COUNT " + count);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_animation);
+        // Type casting the Animation drawable
+        frameAnimation = (AnimationDrawable) cartoonAction.getBackground();
+        //set true if you want to animate only once
+        frameAnimation.setOneShot(false);
+        frameAnimation.start();
+
     }
 
     @Override

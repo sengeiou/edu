@@ -9,23 +9,25 @@
         android:id="@+id/cartoon_body_touch_bg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/main_robot_background"
+        android:background="@drawable/main_robot_background"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
      />
     <!--android:background="#7fff0000"-->
-    <pl.droidsonroids.gif.GifImageView
+    <!--<pl.droidsonroids.gif.GifImageView-->
+    <ImageView
         android:id="@+id/cartoon_action"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/main_robot"/>
+        android:background="@drawable/main_robot"
+       />
 
     <!--android:background="#ADFF2F"-->
     <ImageView
         android:id="@+id/cartoon_body_touch"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:src="@drawable/main_robot"
        />
@@ -117,6 +119,7 @@
         android:textColor="@color/white"
         android:gravity="center"
         android:cursorVisible="false"
+        android:editable="false"
         android:text="" />
     <TextView
         android:id="@+id/bottom_icon"
@@ -126,6 +129,56 @@
         android:text="@string/ui_main_course_center"
         android:textColor="@color/white"
         android:textSize="12sp"
+        android:layout_marginTop="260dp"
+        android:layout_marginLeft="22dp"
         android:gravity="center_horizontal"
         />
+    <ImageView
+        android:id="@+id/cartoon_head"
+        android:layout_width="89.5dp"
+        android:layout_height="84.5dp"
+        android:layout_marginTop="66.5dp"
+        android:layout_marginLeft="286dp"
+        android:background="@color/bgColor_overlay"
+        android:visibility="invisible"/>
+    <ImageView
+        android:id="@+id/cartoon_chest"
+        android:layout_width="89.5dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="151dp"
+        android:layout_marginLeft="286dp"
+        android:background="@color/bgColor_overlay"
+        android:visibility="invisible"/>
+    <ImageView
+        android:id="@+id/cartoon_left_hand"
+        android:layout_width="41dp"
+        android:layout_height="105.5dp"
+        android:layout_marginTop="151dp"
+        android:layout_marginLeft="245dp"
+        android:background="@color/bgColor_overlay"
+        android:visibility="invisible"/>
+    <ImageView
+        android:id="@+id/cartoon_right_hand"
+        android:layout_width="41dp"
+        android:layout_height="105.5dp"
+        android:layout_marginTop="151dp"
+        android:layout_marginLeft="372dp"
+        android:background="@color/bgColor_overlay"
+        android:visibility="invisible"/>
+    <ImageView
+        android:id="@+id/cartoon_left_leg"
+        android:layout_width="42dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="226dp"
+        android:layout_marginLeft="283dp"
+        android:background="@color/bgColor_overlay"
+        android:visibility="invisible"/>
+    <ImageView
+        android:id="@+id/cartoon_right_leg"
+        android:layout_width="42dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="226dp"
+        android:layout_marginLeft="331dp"
+        android:background="@color/bgColor_overlay"
+        android:visibility="invisible"/>
 </RelativeLayout>

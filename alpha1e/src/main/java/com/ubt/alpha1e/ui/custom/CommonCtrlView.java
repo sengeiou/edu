@@ -62,7 +62,7 @@ import static android.app.Service.START_NOT_STICKY;
 
 public class CommonCtrlView implements IActionsUI, IMainUI {
 
-    private static final String TAG = "ControlCenterActivity";
+    private static final String TAG = "CommonCtrlView";
     public final static String KEY_CURRENT_PLAYING_ACTION_NAME = "currentPlayingActionName";
     //定义浮动窗口布局
     private LinearLayout mFloatLayout;
@@ -147,13 +147,18 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         mContext = context;
         initHelper();
         createFloatView();
-        //Alpha 1E from Briann
+        rl_control.setVisibility(View.INVISIBLE);
         mWindowManager.removeView(mFloatLayout);
-        rl_control.setVisibility(View.GONE);
         wmParams.y = 0;
         wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         lay_ctrl_more.setVisibility(View.VISIBLE);
         mWindowManager.addView(mFloatLayout, wmParams);
+//        //Alpha 1E from Brian
+//        rl_control.setVisibility(View.GONE);
+//        wmParams.y = 0;
+//        wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+//        lay_ctrl_more.setVisibility(View.VISIBLE);
+//        mWindowManager.addView(mFloatLayout, wmParams);
     }
 
     private void initHelper() {
