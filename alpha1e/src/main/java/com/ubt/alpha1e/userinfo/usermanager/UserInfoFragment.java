@@ -206,11 +206,12 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 mPresenter.showImageCenterHeadDialog((Activity) mContext);
                 break;
             case R.id.tv_user_age:
-                mPresenter.showAgeDialog((Activity) mContext, ageList, 0);
+                int currentPosition = mPresenter.getPosition(mTvUserAge.getText().toString(), ageList);
+                mPresenter.showAgeDialog((Activity) mContext, ageList, currentPosition);
                 break;
             case R.id.tv_user_grade:
-
-                mPresenter.showGradeDialog((Activity) mContext, 1, gradeList);
+                int currentPosition1 = mPresenter.getPosition(mTvUserGrade.getText().toString(), gradeList);
+                mPresenter.showGradeDialog((Activity) mContext, currentPosition1, gradeList);
                 break;
             default:
                 break;
