@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import com.tencent.ai.tvs.env.ELoginPlatform;
 import com.tencent.ai.tvs.info.QQOpenInfoManager;
 import com.tencent.ai.tvs.info.WxInfoManager;
 import com.tencent.connect.common.Constants;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
@@ -182,6 +184,15 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
                 proxy.handleQQOpenIntent(requestCode, resultCode, data);
             }
         }
+    }
+
+    //登录页面点击返回退出app,防止在设置清除用户信息之后调到登录页面点击返回回到主页面
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ((AlphaApplication) this.getApplication()).doExitApp(true);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 
