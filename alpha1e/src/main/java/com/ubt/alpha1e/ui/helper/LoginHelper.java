@@ -14,7 +14,6 @@ import com.google.gson.reflect.TypeToken;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.exception.WeiboException;
-import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
 import com.ubt.alpha1e.AlphaApplication;
@@ -42,8 +41,8 @@ import com.ubt.alpha1e.net.http.basic.HttpAddress.Request_type;
 import com.ubt.alpha1e.net.http.basic.IJsonListener;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.utils.GsonImpl;
-import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.utils.log.MyLog;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -247,7 +246,7 @@ public class LoginHelper extends BaseHelper implements IJsonListener,
         } else if (type == Thrid_login_type.WECHAT) {
             MyLog.writeLog("΢�ŵ�¼",
                     "com.ubt.alpha1e.ui.helper.LoginHelper.doLogin");
-            MyWeiXin.doLogin(mBaseActivity, mUI);
+//            MyWeiXin.doLogin(mBaseActivity, mUI);
         } else if (type == Thrid_login_type.SINABLOG) {
             MyLog.writeLog("΢����¼",
                     "com.ubt.alpha1e.ui.helper.LoginHelper.doLogin");
@@ -350,8 +349,8 @@ public class LoginHelper extends BaseHelper implements IJsonListener,
             mHandler.sendMessage(msg);
         } else if (do_weixin_get_login_info == request_code) {
             if (isSuccess) {
-                SendAuth.Resp weixin_return_info = (SendAuth.Resp) ((AlphaApplication) mBaseActivity
-                        .getApplicationContext()).getCurrentThridLoginInfo();
+//                SendAuth.Resp weixin_return_info = (SendAuth.Resp) ((AlphaApplication) mBaseActivity
+//                        .getApplicationContext()).getCurrentThridLoginInfo();
 
                 WeiXinLoginInfo loginInfo = new WeiXinLoginInfo().getThiz(json);
 
@@ -416,7 +415,7 @@ public class LoginHelper extends BaseHelper implements IJsonListener,
         @Override
         public void onReceive(Context arg0, Intent arg1) {
 
-            SendAuth.Resp weixin_return_info = MyWeiXin.handleIntent(arg1,
+/*            SendAuth.Resp weixin_return_info = MyWeiXin.handleIntent(arg1,
                     mBaseActivity);
             if (weixin_return_info == null) {
                 mUI.onLoginFinish(false, null, mBaseActivity.getResources()
@@ -438,7 +437,7 @@ public class LoginHelper extends BaseHelper implements IJsonListener,
                                         Request_type.get_weixin_login_info),
                                 LoginHelper.this);
                 mUI.onThridLogin();
-            }
+            }*/
         }
     };
 

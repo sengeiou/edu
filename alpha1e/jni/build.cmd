@@ -1,1 +1,1 @@
-E:\android\android-ndk\android-ndk-r11c\ndk-build NDK_OUT=./ NDK_DEBUG=0 APP_ABI="armeabi armeabi-v7a mips mips64 arm64-v8a x86 x86_64"
+G:\android-ndk-r13b-windows-x86_64\android-ndk-r13b\ndk-build NDK_OUT=./ NDK_DEBUG=0 APP_ABI="armeabi armeabi-v7a mips mips64 arm64-v8a x86 x86_64"

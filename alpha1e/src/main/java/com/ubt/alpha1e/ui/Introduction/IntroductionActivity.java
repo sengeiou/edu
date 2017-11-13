@@ -14,6 +14,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator.DataType;
 import com.ubt.alpha1e.ui.MyMainActivity;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
 public class IntroductionActivity extends FragmentActivity implements
@@ -64,7 +65,7 @@ public class IntroductionActivity extends FragmentActivity implements
 		setContentView(R.layout.activity_introduction);
 		IntroductionViewPager start_pager = new IntroductionViewPager(
 				R.id.pager, this, this);
-		start_pager.setNextActivity(MyMainActivity.class);
+		start_pager.setNextActivity(MainActivity.class);
 
 	}
 

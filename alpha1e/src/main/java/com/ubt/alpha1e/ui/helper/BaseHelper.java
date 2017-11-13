@@ -20,6 +20,7 @@ import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.dialog.AlertDialog;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -29,6 +30,9 @@ import com.ubtechinc.base.PublicInterface.BlueToothInteracter;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONString;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -203,7 +207,16 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
-
+        JSONObject mData=new JSONObject();
+        try {
+            mData.put("mac", mac);
+            mData.put("cmd", cmd);
+            mData.put("param",param.toString());
+            mData.put("len", len);
+            EventBus.getDefault().post(new MainActivity.MessageEvent(mData.toString()));
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
         if (cmd == ConstValue.DV_READ_BATTERY) {
             // ��ֹ�ظ���Ӧ-------------------start
             Date curDate = new Date(System.currentTimeMillis());

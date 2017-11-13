@@ -765,7 +765,7 @@ public class DubActivity extends BaseActivity implements IActionsUI, BaseDiaUI {
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

@@ -6,6 +6,7 @@
     <style name="AppTheme" parent="AppBaseTheme"></style>
 
     <style name="NoDisplay" parent="android:Theme.NoDisplay"></style>
+
     <style name="NoTitleTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">false</item>
@@ -13,6 +14,7 @@
         <item name="android:textColorHint">@color/sec_txt_disc</item>
         <item name="android:textAllCaps">false</item>
     </style>
+
     <style name="NoTitleThemeFullScreen" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
@@ -22,17 +24,18 @@
     </style>
 
     <!--<style name="button_click_theme" parent="@android:style/Widget">-->
-        <!--<item name="android:layout_width">280dp</item>-->
-        <!--<item name="android:layout_height">50dp</item>-->
-        <!--<item name="android:textColor">@color/T1</item>-->
-        <!--<item name="android:textSize">19sp</item>-->
-        <!--<item name="android:background">@drawable/bg_login_round_button</item>-->
-        <!--<item name="android:gravity">center</item>-->
+    <!--<item name="android:layout_width">280dp</item>-->
+    <!--<item name="android:layout_height">50dp</item>-->
+    <!--<item name="android:textColor">@color/T1</item>-->
+    <!--<item name="android:textSize">19sp</item>-->
+    <!--<item name="android:background">@drawable/bg_login_round_button</item>-->
+    <!--<item name="android:gravity">center</item>-->
     <!--</style>-->
 
     <style name="MyTabAppreance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">16sp</item>
     </style>
+
     <style name="ActionsSquareTab" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
@@ -69,7 +72,6 @@
     </style>
 
 
-
     <style name="noAnimation">
 
         <item name="android:activityOpenEnterAnimation">@null</item>
@@ -97,20 +99,25 @@
         <item name="android:taskToBackExitAnimation">@null</item>
 
 
-
     </style>
 
 
     <style name="playProgressStyle">
-        　　<item name="android:indeterminateDrawable">@drawable/progress_playing_ft</item>
-        　　<item name="android:minWidth">30dip</item>
-        　　<item name="android:maxWidth">30dip</item>
-        　　<item name="android:minHeight">30dip</item>
-        　　<item name="android:maxHeight">30dip</item>
+        　　
+        <item name="android:indeterminateDrawable">@drawable/progress_playing_ft</item>
+        　　
+        <item name="android:minWidth">30dip</item>
+        　　
+        <item name="android:maxWidth">30dip</item>
+        　　
+        <item name="android:minHeight">30dip</item>
+        　　
+        <item name="android:maxHeight">30dip</item>
     </style>
 
     <style name="RotateProgressStyle">
-        　　<item name="android:indeterminateDrawable">@drawable/progress_lesson_ft</item>
+        　　
+        <item name="android:indeterminateDrawable">@drawable/progress_lesson_ft</item>
     </style>
 
     <style name="HasTitleTheme" parent="Theme.AppCompat.NoActionBar">
@@ -137,8 +144,83 @@
         <item name="android:maxHeight">50dip</item>
         <item name="android:minHeight">5dip</item>
         <item name="android:indeterminateOnly">false</item>
-        <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
+        <item name="android:indeterminateDrawable">
+            @android:drawable/progress_indeterminate_horizontal
+        </item>
         <item name="android:progressDrawable">@drawable/shape_progressbar_mini</item>
     </style>
+
+    <style name="text_userinfo_left_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_marginLeft">18dp</item>
+        <item name="android:textColor">@color/tv_center_color</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="text_userinfo_right_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:drawableRight">@drawable/icon_right_arrow</item>
+        <item name="android:layout_marginRight">14dp</item>
+        <item name="android:textColor">@color/tv_blue_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="text_left_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:textColor">@color/tv_center_color</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="text_right_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:drawableRight">@drawable/icon_right_arrow</item>
+        <item name="android:layout_marginRight">3dp</item>
+        <item name="android:textColor">@color/tv_blue_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="main_right_button">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1.0</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:gravity">center_horizontal</item>
+</style>
+
+    <style name="text_userinfo_main_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1.0</item>
+        <item name="android:drawablePadding">12dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:button">@null</item>
+         <item name="android:textColor">@drawable/color_main_left</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="button_get_code_style">
+        <item name="android:background">@null</item>
+        <item name="android:textColor">@color/tv_user_edit_color</item>
+        <item name="android:clickable">false</item>
+
+    </style>
+
+
 
 </resources>

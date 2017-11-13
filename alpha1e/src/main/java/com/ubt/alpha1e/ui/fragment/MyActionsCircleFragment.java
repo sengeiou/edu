@@ -672,7 +672,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

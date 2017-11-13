@@ -22,8 +22,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
-import com.tencent.mm.sdk.modelbase.BaseResp;
-import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
 import com.ubt.alpha1e.AlphaApplication;
@@ -309,11 +307,11 @@ public class WebContentActivity extends BaseActivity implements IActionsLibUI,IU
                     MyTencent.doShareQQ(WebContentActivity.this, mUrl,
                             WebContentActivity.this);
                 } else if (arg0.getId() == btn_to_qq_weixin.getId()) {
-                    MyWeiXin.doShareToWeiXin(mUrl, mTitle,WebContentActivity.this,
-                            WebContentActivity.this, 0);
+//                    MyWeiXin.doShareToWeiXin(mUrl, mTitle,WebContentActivity.this,
+//                            WebContentActivity.this, 0);
                 } else if (arg0.getId() == btn_to_qq_weixin_pengyouquan.getId()) {
-                    MyWeiXin.doShareToWeiXin(mUrl,mTitle, WebContentActivity.this,
-                            WebContentActivity.this, 1);
+//                    MyWeiXin.doShareToWeiXin(mUrl,mTitle, WebContentActivity.this,
+//                            WebContentActivity.this, 1);
                 } else if (arg0.getId() == btn_to_face.getId()) {
                     MyFaceBook.doShareFaceBook(WebContentActivity.this, mUrl);
 
@@ -354,7 +352,7 @@ public class WebContentActivity extends BaseActivity implements IActionsLibUI,IU
         @Override
         public void onReceive(Context arg0, Intent arg1) {
 
-            SendAuth.Resp resp = MyWeiXin.handleIntent(arg1,WebContentActivity.this);
+     /*       SendAuth.Resp resp = MyWeiXin.handleIntent(arg1,WebContentActivity.this);
             int error_code;
             if (resp != null){
                 error_code = resp.errCode;
@@ -389,7 +387,7 @@ public class WebContentActivity extends BaseActivity implements IActionsLibUI,IU
                     }
 
                 }
-            });
+            });*/
 
         }
     };

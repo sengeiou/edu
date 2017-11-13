@@ -857,7 +857,7 @@ public class FloatControlViewService extends Service implements IActionsUI, IMai
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

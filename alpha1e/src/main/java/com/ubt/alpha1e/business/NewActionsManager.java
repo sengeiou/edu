@@ -446,7 +446,7 @@ public class NewActionsManager implements IFileListener {
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
         // TODO Auto-generated method stub
 
     }

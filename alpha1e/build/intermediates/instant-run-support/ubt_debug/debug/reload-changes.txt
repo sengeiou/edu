@@ -1,5 +1,0 @@
-CHANGED,E:\workplace_git\alpha1e-android-app\alpha1e\build\intermediates\transforms\instantRun\ubt_debug\debug\folders\4000\5\enhanced\com\android\tools\fd\runtime\AppPatchesLoaderImpl.class
-CHANGED,E:\workplace_git\alpha1e-android-app\alpha1e\build\intermediates\transforms\instantRun\ubt_debug\debug\folders\4000\5\enhanced\com\ubt\alpha1e\ui\BaseActivity$override.class
-CHANGED,E:\workplace_git\alpha1e-android-app\alpha1e\build\intermediates\transforms\instantRun\ubt_debug\debug\folders\4000\5\enhanced\com\ubt\alpha1e\ui\BaseActivity$2$override.class
-CHANGED,E:\workplace_git\alpha1e-android-app\alpha1e\build\intermediates\transforms\instantRun\ubt_debug\debug\folders\4000\5\enhanced\com\ubt\alpha1e\ui\BaseActivity$1$override.class
-CHANGED,E:\workplace_git\alpha1e-android-app\alpha1e\build\intermediates\transforms\instantRun\ubt_debug\debug\folders\4000\5\enhanced\com\ubt\alpha1e\ui\BaseActivity$3$override.class

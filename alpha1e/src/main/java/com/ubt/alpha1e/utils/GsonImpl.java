@@ -1,8 +1,11 @@
 package com.ubt.alpha1e.utils;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2016/6/12.
@@ -28,5 +31,11 @@ public class GsonImpl extends Json {
     @Override
     public <T> T toObject(byte[] bytes, Class<T> claxx) {
         return gson.fromJson(new String(bytes), claxx);
+    }
+
+    @Override
+    public Map<String,String> getMap(final Object object){
+        return new Gson().fromJson(toJson(object), new TypeToken<HashMap<String,String>>(){}.getType());
+
     }
 }

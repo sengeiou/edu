@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)  
 LOCAL_MODULE := HtsHelper
 LOCAL_SRC_FILES := HTSFileArchive.c\
-                   com_ubt_alpha1s_business_HtsHelper.cpp\
+                   com_ubt_alpha1e_business_HtsHelper.cpp\
 				   FileOperater.cpp\
 				   HtsFileReader.cpp
                    

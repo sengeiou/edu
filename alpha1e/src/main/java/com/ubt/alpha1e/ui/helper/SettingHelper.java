@@ -246,7 +246,7 @@ public class SettingHelper extends BaseHelper implements IJsonListener,
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
         mUI.onClaerCache();
     }
 

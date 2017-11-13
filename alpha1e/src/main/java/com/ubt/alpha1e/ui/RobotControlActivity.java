@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
-import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.model.AlphaStatics;
 import com.ubt.alpha1e.data.model.UserInfo;
@@ -23,6 +22,7 @@ import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IMainUI;
 import com.ubt.alpha1e.ui.helper.LoginHelper;
 import com.ubt.alpha1e.ui.helper.MainHelper;
+import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.umeng.analytics.MobclickAgent;
 
@@ -244,7 +244,7 @@ public class RobotControlActivity extends BaseActivity implements View.OnClickLi
 
     private void gotoBlocklyCourse(){
         Intent intent = new Intent();
-        intent.setClass(this, BlocklyCourseActivity.class);
+        intent.setClass(this, UserCenterActivity.class);
         startActivity(intent);
     }
 
