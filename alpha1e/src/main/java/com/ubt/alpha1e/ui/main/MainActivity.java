@@ -51,8 +51,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     ImageView cartoonBodyTouchBg;
     @BindView(R.id.cartoon_action)
     ImageView cartoonAction;
-    @BindView(R.id.cartoon_body_touch)
-    ImageView cartoonBodyTouch;
     @BindView(R.id.right_icon)
     TextView rightIcon;
     @BindView(R.id.right_icon2)
@@ -95,7 +93,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     RelativeLayout.LayoutParams params;
     private AnimationDrawable frameAnimation;
 
-    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3, R.id.right_icon4, R.id.cartoon_body_touch})
+    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3,
+            R.id.right_icon4, R.id.cartoon_head, R.id.cartoon_left_hand,
+            R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg})
+
     protected void switchActivity(View view) {
         Log.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
@@ -118,13 +119,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.top_icon2:
                 cartoonAction.setVisibility(View.VISIBLE);
-                cartoonBodyTouch.setVisibility(View.INVISIBLE);
                 showCartoonAction("TEX");
                 break;
             case R.id.top_icon3:
                 try {
                     CommonCtrlView.getInstace(getContext());
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
@@ -140,6 +140,24 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.right_icon4:
                 break;
             case R.id.cartoon_body_touch:
+                break;
+            case R.id.cartoon_head:
+                Log.d(TAG, "click head");
+                break;
+            case R.id.cartoon_chest:
+                Log.d(TAG, "click chest");
+                break;
+            case R.id.cartoon_left_hand:
+                Log.d(TAG, "click left hand");
+                break;
+            case R.id.cartoon_right_hand:
+                Log.d(TAG, "click right hand");
+                break;
+            case R.id.cartoon_left_leg:
+                Log.d(TAG, "click left leg");
+                break;
+            case R.id.cartoon_right_leg:
+                Log.d(TAG, "click right leg");
                 break;
             default:
                 break;

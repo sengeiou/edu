@@ -8,21 +8,6 @@
     <!--android:background="#7fff0000"-->
     <!--<pl.droidsonroids.gif.GifImageView-->
     <ImageView
-        android:id="@+id/cartoon_action"
-        android:layout_width="315dp"
-        android:layout_height="315dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/main_robot"
-       />
-    <!--android:background="#ADFF2F"-->
-    <ImageView
-        android:id="@+id/cartoon_body_touch"
-        android:layout_width="315dp"
-        android:layout_height="315dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/main_robot"
-       />
-    <ImageView
         android:id="@+id/cartoon_body_touch_bg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +15,21 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         />
+    <ImageView
+        android:id="@+id/cartoon_action"
+        android:layout_width="315dp"
+        android:layout_height="315dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/main_robot"
+       />
+    <!--android:background="#ADFF2F"-->
+    <!--<ImageView-->
+        <!--android:id="@+id/cartoon_body_touch"-->
+        <!--android:layout_width="315dp"-->
+        <!--android:layout_height="315dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:src="@drawable/main_robot"-->
+       <!--/>-->
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -112,7 +112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/top_icon2"
-        android:layout_marginTop="99dp"
+        android:layout_marginTop="59dp"
         android:background="@drawable/main_alert"
         android:textColor="@color/white"
         android:gravity="center"
@@ -131,11 +131,12 @@
         android:layout_marginLeft="22dp"
         android:gravity="center_horizontal"
         />
+    <!--android:background="#7fff0000">-->
     <RelativeLayout
         android:layout_width="315dp"
         android:layout_height="315dp"
         android:layout_centerInParent="true"
-        android:background="#7fff0000">
+        >
     <ImageView
         android:id="@+id/cartoon_head"
         android:layout_width="89.5dp"
@@ -143,7 +144,7 @@
         android:layout_marginTop="21.5dp"
         android:layout_marginLeft="112.5dp"
         android:background="@color/bgColor_overlay"
-        android:visibility="visible"
+        android:visibility="invisible"
         />
     <ImageView
         android:id="@+id/cartoon_chest"
@@ -152,7 +153,7 @@
         android:layout_marginTop="106dp"
         android:layout_marginLeft="112.5dp"
         android:background="@color/bgColor_overlay"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
     <ImageView
         android:id="@+id/cartoon_left_hand"
         android:layout_width="41dp"
@@ -160,7 +161,7 @@
         android:layout_marginTop="106dp"
         android:layout_marginLeft="71.5dp"
         android:background="@color/bgColor_overlay"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
     <ImageView
         android:id="@+id/cartoon_right_hand"
         android:layout_width="41dp"
@@ -168,7 +169,7 @@
         android:layout_marginTop="106dp"
         android:layout_marginLeft="202dp"
         android:background="@color/bgColor_overlay"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
     <ImageView
         android:id="@+id/cartoon_left_leg"
         android:layout_width="42dp"
@@ -176,7 +177,7 @@
         android:layout_marginTop="181dp"
         android:layout_marginLeft="112.5dp"
         android:background="@color/bgColor_overlay"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
     <ImageView
         android:id="@+id/cartoon_right_leg"
         android:layout_width="42dp"
@@ -184,6 +185,6 @@
         android:layout_marginTop="181dp"
         android:layout_marginLeft="160dp"
         android:background="@color/bgColor_overlay"
-        android:visibility="visible"/>
+        android:visibility="invisible"/>
     </RelativeLayout>
 </RelativeLayout>
