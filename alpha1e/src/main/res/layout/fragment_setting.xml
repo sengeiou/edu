@@ -31,31 +31,13 @@
                 >
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    style="@style/text_left_style"
                     android:text="@string/ui_settings_clear_cache"
-                    android:textColor="@color/T1"
-                    android:textSize="15sp" />
+                    />
 
                 <TextView
-                    android:id="@+id/txt_cache_size"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:textColor="@color/T2"
-                    android:text="0M"
-                    android:visibility="gone"/>
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="#00000000"
-                    android:src="@drawable/menu_right_arrow" />
+                    style="@style/text_right_style"
+                    android:id="@+id/txt_cache_size" />
 
                 <View
                     android:layout_width="match_parent"
@@ -73,21 +55,12 @@
                 >
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    style="@style/text_left_style"
                     android:text="@string/ui_setting_password_massage"
-                    android:textColor="@color/T1"
-                    android:textSize="15sp" />
+                    />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="#00000000"
-                    android:src="@drawable/menu_right_arrow" />
+                <TextView
+                    style="@style/text_right_style"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -104,13 +77,9 @@
                 >
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    style="@style/text_left_style"
                     android:text="@string/ui_settings_wifi"
-                    android:textColor="@color/T1"
-                    android:textSize="15sp" />
+                    />
 
                 <ImageButton
                     android:id="@+id/btn_wifi_download"
@@ -135,13 +104,9 @@
                 >
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    style="@style/text_left_style"
                     android:text="@string/ui_settings_message_remind"
-                    android:textColor="@color/T1"
-                    android:textSize="15sp" />
+                    />
 
                 <ImageButton
                     android:id="@+id/btn_message_note"
@@ -165,32 +130,14 @@
                 android:background="@color/B6">
 
                 <TextView
+                    style="@style/text_left_style"
                     android:id="@+id/tv_language"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
                     android:text="@string/ui_settings_language"
-                    android:textColor="@color/T1"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/tv_current_language"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/iv_language"
-                    android:textColor="@color/tv_blue_color"
-                    android:textSize="15sp"
                     />
 
-                <ImageView
-                    android:id="@+id/iv_language"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/menu_right_arrow" />
+                <TextView
+                    style="@style/text_right_style"
+                    android:id="@+id/tv_current_language"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -206,22 +153,15 @@
                 android:background="@color/B6">
 
                 <TextView
+                    style="@style/text_left_style"
                     android:id="@+id/tv_help_feedback"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
                     android:text="@string/ui_setting_help_feedback"
-                    android:textColor="@color/T1"
-                    android:textSize="15sp" />
+                    />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="#00000000"
-                    android:src="@drawable/menu_right_arrow" />
+                <TextView
+                    style="@style/text_right_style"/>
+
+
 
                 <View
                     android:layout_width="match_parent"
@@ -237,22 +177,13 @@
                 android:background="@color/B6">
 
                 <TextView
+                    style="@style/text_left_style"
                     android:id="@+id/tv_about"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
                     android:text="@string/ui_leftmenu_about"
-                    android:textColor="@color/T1"
-                    android:textSize="15sp" />
+                    />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="#00000000"
-                    android:src="@drawable/menu_right_arrow" />
+                <TextView
+                    style="@style/text_right_style"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -268,22 +199,13 @@
                 android:background="@color/B6">
 
                 <TextView
+                    style="@style/text_left_style"
                     android:id="@+id/tv_contact_us"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
                     android:text="@string/ui_contact_title"
-                    android:textColor="@color/T1"
-                    android:textSize="15sp" />
+                    />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="#00000000"
-                    android:src="@drawable/menu_right_arrow" />
+                <TextView
+                    style="@style/text_right_style"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -299,21 +221,13 @@
                 android:background="@color/B6">
 
                 <TextView
+                    style="@style/text_left_style"
                     android:id="@+id/tv_logout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
                     android:text="@string/ui_settings_logout"
-                    android:textColor="@color/T1"
-                    android:textSize="15sp" />
+                    />
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/menu_right_arrow" />
+                <TextView
+                    style="@style/text_right_style"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -321,7 +235,6 @@
                     android:background="@color/A11"
                     android:layout_alignParentBottom="true"/>
             </RelativeLayout>
-
 
         </LinearLayout>
 
