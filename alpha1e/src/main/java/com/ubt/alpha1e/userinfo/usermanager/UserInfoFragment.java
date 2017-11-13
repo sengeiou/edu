@@ -1,7 +1,6 @@
 package com.ubt.alpha1e.userinfo.usermanager;
 
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -204,15 +203,15 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onClickView(View view) {
         switch (view.getId()) {
             case R.id.img_head:
-                mPresenter.showImageCenterHeadDialog((Activity) mContext);
+                mPresenter.showImageCenterHeadDialog(getActivity());
                 break;
             case R.id.tv_user_age:
                 int currentPosition = mPresenter.getPosition(mTvUserAge.getText().toString(), ageList);
-                mPresenter.showAgeDialog((Activity) mContext, ageList, currentPosition);
+                mPresenter.showAgeDialog(getActivity(), ageList, currentPosition);
                 break;
             case R.id.tv_user_grade:
                 int currentPosition1 = mPresenter.getPosition(mTvUserGrade.getText().toString(), gradeList);
-                mPresenter.showGradeDialog((Activity) mContext, currentPosition1, gradeList);
+                mPresenter.showGradeDialog(getActivity(), currentPosition1, gradeList);
                 break;
             default:
                 break;
@@ -358,7 +357,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         if (requestCode == GetUserHeadRequestCodeByFile
                 || requestCode == GetUserHeadRequestCodeByShoot) {
             if (resultCode == RESULT_OK) {
-                ContentResolver cr = mContext.getContentResolver();
+                ContentResolver cr = getActivity().getContentResolver();
                 if (requestCode == GetUserHeadRequestCodeByFile) {
                     if (data == null) {
                         return;
