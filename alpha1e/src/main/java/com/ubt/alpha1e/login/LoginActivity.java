@@ -1,10 +1,12 @@
 package com.ubt.alpha1e.login;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -16,10 +18,12 @@ import com.tencent.ai.tvs.env.ELoginPlatform;
 import com.tencent.ai.tvs.info.QQOpenInfoManager;
 import com.tencent.ai.tvs.info.WxInfoManager;
 import com.tencent.connect.common.Constants;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
@@ -63,6 +67,11 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     public static final String PID = "";
     public static final String DSN = "";
 
+    public static void LaunchActivity(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +192,15 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
         }
     }
 
+    //登录页面点击返回退出app,防止在设置清除用户信息之后调到登录页面点击返回回到主页面
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ((AlphaApplication) this.getApplication()).doExitApp(true);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
     private void doThirdLogin(String accessToken, String openID) {
 
@@ -210,6 +228,8 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "onError:" + e.getMessage());
+                LoadingDialog.dismiss(LoginActivity.this);
+                ToastUtils.showShort("登录失败");
             }
 
             @Override
@@ -279,6 +299,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "onError:" + e.getMessage());
                 LoadingDialog.dismiss(LoginActivity.this);
+                ToastUtils.showShort("获取用户信息失败");
             }
 
             @Override

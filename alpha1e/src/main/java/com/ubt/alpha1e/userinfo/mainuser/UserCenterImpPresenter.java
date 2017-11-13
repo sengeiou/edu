@@ -8,6 +8,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.userinfo.dynamicaction.DynamicActionFragment;
 import com.ubt.alpha1e.userinfo.notice.NoticeFragment;
+import com.ubt.alpha1e.userinfo.setting.SettingFragment;
 import com.ubt.alpha1e.userinfo.usermanager.UserInfoFragment;
 
 import java.util.ArrayList;
@@ -56,7 +57,10 @@ public class UserCenterImpPresenter extends BasePresenterImpl<UserCenterContact.
                     fragmentList.add(UserInfoFragment.newInstance(leftMenuModels.get(i).getNameString(), ""));
                 } else if (i == 4) {
                     fragmentList.add(DynamicActionFragment.newInstance("", ""));
-                } else {
+                } else if(i == 6){
+                    Fragment fragment = SettingFragment.newInstance(leftMenuModels.get(i).getNameString(), "");
+                    fragmentList.add(fragment);
+                }else {
                     fragmentList.add(NoticeFragment.newInstance("", ""));
                 }
             }

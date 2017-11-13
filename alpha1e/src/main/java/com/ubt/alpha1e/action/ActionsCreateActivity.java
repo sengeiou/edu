@@ -3004,7 +3004,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

@@ -850,7 +850,7 @@ public class CourseHelper extends BaseHelper {
 			}
 
 			@Override
-			public void onClaerCache() {
+			public void onClearCache() {
 
 			}
 		});

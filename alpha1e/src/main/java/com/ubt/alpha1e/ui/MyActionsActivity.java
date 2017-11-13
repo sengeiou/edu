@@ -138,7 +138,7 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
     protected void initUI() {
         switch (requestPosition){
             case 0:
-                initTitle(getStringResources("ui_show_actions"));
+                initTitle(getStringResources("ui_control_demo"));
                 break;
             case 1:
                 initTitle(getStringResources("ui_myaction_download"));
@@ -1085,7 +1085,7 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

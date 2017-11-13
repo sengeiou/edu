@@ -207,11 +207,12 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 mPresenter.showImageCenterHeadDialog((Activity) mContext);
                 break;
             case R.id.tv_user_age:
-                mPresenter.showAgeDialog((Activity) mContext, ageList, 0);
+                int currentPosition = mPresenter.getPosition(mTvUserAge.getText().toString(), ageList);
+                mPresenter.showAgeDialog((Activity) mContext, ageList, currentPosition);
                 break;
             case R.id.tv_user_grade:
-
-                mPresenter.showGradeDialog((Activity) mContext, 1, gradeList);
+                int currentPosition1 = mPresenter.getPosition(mTvUserGrade.getText().toString(), gradeList);
+                mPresenter.showGradeDialog((Activity) mContext, currentPosition1, gradeList);
                 break;
             default:
                 break;
@@ -268,6 +269,17 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void takeImageFromShoot() {
+        getShootCamera();
+//        if (AndPermission.hasPermission(mContext, Permission.CAMERA)) {
+//            ToastUtils.showShort("有权限");
+//            getShootCamera();
+//        } else {
+//            ToastUtils.showShort("无权限");
+//
+//        }
+    }
+
+    public void getShootCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File path = new File(FileTools.image_cache);
         if (!path.exists()) {
@@ -442,7 +454,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void errorEditTextStr() {
-
+        ToastUtils.showShort("仅限汉字、字母及数字");
     }
 
     @Override

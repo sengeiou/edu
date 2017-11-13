@@ -450,7 +450,7 @@ public class MyActionsCollectFragment extends BaseMyActionsFragment implements I
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

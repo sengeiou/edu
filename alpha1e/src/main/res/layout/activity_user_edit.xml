@@ -18,7 +18,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-
             android:layout_alignParentTop="true"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="27dp"
@@ -31,10 +30,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="27dp"
+            android:layout_marginTop="22dp"
             android:text="填写宝宝信息"
             android:textColor="@color/tv_user_edit_color"
-            android:textSize="16sp"
+            android:textSize="18sp"
             />
 
         <ImageView
@@ -44,7 +43,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="30dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="22dp"
             android:src="@drawable/user_save_selector"
             />
 
@@ -58,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/tv_main_title"
+            android:layout_marginTop="14dp"
             android:layout_marginBottom="10dp">
 
             <com.ubt.alpha1e.ui.custom.ShapedImageView
@@ -79,6 +79,7 @@
             android:layout_below="@+id/rl_head"
             android:layout_centerHorizontal="true"
             android:background="@drawable/bg_edit_user"
+            android:layout_marginTop="13dp"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -87,6 +88,7 @@
                 >
 
                 <TextView
+                    android:id="@+id/tv_nick_tip"
                     style="@style/text_userinfo_left_style"
                     android:layout_alignParentLeft="true"
                     android:text="昵称"/>
@@ -98,13 +100,15 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="30dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/tv_nick_tip"
+                    android:gravity="right|center_vertical"
                     android:background="@null"
                     android:imeOptions="flagNoExtractUi"
                     android:paddingBottom="5dp"
                     android:paddingLeft="15dp"
                     android:paddingRight="5dp"
                     android:paddingTop="5dp"
-                    android:text="leon"
                     android:textColor="@color/tv_blue_color"
                     android:textCursorDrawable="@null"
                     android:textSize="16sp"

@@ -27,6 +27,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ImageTools;
@@ -40,6 +41,7 @@ import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.userinfo.model.UserAllModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
+import com.ubt.alpha1e.userinfo.util.TVUtils;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -119,10 +121,16 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
         UbtLog.d(TAG, "mUserModel:" + mUserModel.toString());
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
-        mTvUserName.setText(mUserModel.getNickName());
-        mTvUserName.setSelection(mTvUserName.getText().length());
-        mTvUserAge.setText(TextUtils.isEmpty(mUserModel.getAge())?"未填写":mUserModel.getAge());
-        mTvUserGrade.setText(TextUtils.isEmpty(mUserModel.getGrade())?"未填写":mUserModel.getGrade());
+        if(mTvUserName.getText().toString().length()==0){
+            mTvUserName.setText(mUserModel.getNickName());
+            mTvUserName.setSelection(mTvUserName.getText().length());
+        }
+        if(TextUtils.isEmpty(age)){
+            mTvUserAge.setText(TextUtils.isEmpty(mUserModel.getAge())?"未填写":mUserModel.getAge());
+        }
+        if(TextUtils.isEmpty(grade)){
+            mTvUserGrade.setText(TextUtils.isEmpty(mUserModel.getGrade())?"未填写":mUserModel.getGrade());
+        }
 
         checkSaveEnable();
 
@@ -172,13 +180,19 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                 mPresenter.showImageHeadDialog(UserEditActivity.this);
                 break;
             case R.id.tv_user_age:
-                mPresenter.showAgeDialog(UserEditActivity.this, ageList, 0);
+                mPresenter.showAgeDialog(UserEditActivity.this, ageList, mPresenter.getPosition(age,ageList));
                 break;
             case R.id.tv_user_grade:
 
-                mPresenter.showGradeDialog(UserEditActivity.this, 0, gradeList);
+                mPresenter.showGradeDialog(UserEditActivity.this, mPresenter.getPosition(grade,gradeList), gradeList);
                 break;
             case R.id.iv_complete_info:
+
+                if(!TVUtils.isCorrectStr(mTvUserName.getText().toString())) {
+                    ToastUtils.showShort("仅限汉字、字母及数字");
+                    return;
+                }
+
                 LoadingDialog.show(UserEditActivity.this);
                 UpdateUserInfoRequest request = new UpdateUserInfoRequest();
                 request.setAge(age);
@@ -194,6 +208,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                     public void onError(Call call, Exception e, int id) {
                         UbtLog.d("userEdit", "Exception:" + e.getMessage());
                         LoadingDialog.dismiss(UserEditActivity.this);
+                        ToastUtils.showShort("用户信息保存失败");
                     }
 
                     @Override
@@ -383,7 +398,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
 
     @Override
     public void errorEditTextStr() {
-
+        ToastUtils.showShort("仅限汉字、字母及数字");
     }
 
     @Override

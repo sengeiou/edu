@@ -6,8 +6,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
 
-import com.ubt.alpha1e.base.ToastUtils;
-
 /**
  * @author：liuhai
  * @date：2017/11/8 10:19
@@ -26,11 +24,10 @@ public class MyTextWatcher implements TextWatcher {
     int before_length;// 用来标注输入某一内容之前的编辑框中的内容的长度
     WatcherListener mWatcherListener;
 
-    public MyTextWatcher(EditText text,WatcherListener watcherListener) {
+    public MyTextWatcher(EditText text, WatcherListener watcherListener) {
         this.text = text;
         this.mWatcherListener = watcherListener;
     }
-
 
 
     @Override
@@ -80,7 +77,6 @@ public class MyTextWatcher implements TextWatcher {
         String str = text.getText().toString();
 
         if (!TVUtils.isCorrectStr(str)) {
-            ToastUtils.showShort("不能有异常字符");
             if (null != mWatcherListener) {
                 mWatcherListener.errorEditTextStr();
             }
