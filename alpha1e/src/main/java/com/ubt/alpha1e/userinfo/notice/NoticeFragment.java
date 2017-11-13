@@ -95,12 +95,12 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     @Override
     protected void initUI() {
         mNoticeAdapter = new NoticeAdapter(R.layout.layout_notice_item, mNoticeModels);
-        mRecyclerviewNotice.setLayoutManager(new LinearLayoutManager(mContext));
+        mRecyclerviewNotice.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerviewNotice.setAdapter(mNoticeAdapter);
         mNoticeAdapter.bindToRecyclerView(mRecyclerviewNotice);
         mNoticeAdapter.setOnItemLongClickListener(this);
-        emptyView = LayoutInflater.from(mContext).inflate(R.layout.layout_empty, null);
-        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(mContext.getResources().getString(R.string.empty_no_noticedata));
+        emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_empty, null);
+        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(getActivity().getResources().getString(R.string.empty_no_noticedata));
         ((ImageView) emptyView.findViewById(R.id.iv_no_data)).setImageResource(R.drawable.ic_setting_push_deafult);
         emptyView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,8 +146,8 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
 
     @Override
     public boolean onItemLongClick(final BaseQuickAdapter adapter, final View view, final int position) {
-        adapter.getViewByPosition(position,R.id.rl_root).setBackgroundTintList(mContext.getResources().getColorStateList(R.color.background_delete_coor));
-        final EasyPopup mCirclePop = new EasyPopup(mContext)
+        adapter.getViewByPosition(position,R.id.rl_root).setBackgroundTintList(getActivity().getResources().getColorStateList(R.color.background_delete_coor));
+        final EasyPopup mCirclePop = new EasyPopup(getActivity())
                 .setContentView(R.layout.dialog_item_delete)
                 .setWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
                 .setHeight(ViewGroup.LayoutParams.WRAP_CONTENT)
