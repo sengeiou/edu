@@ -22,6 +22,12 @@ public class Constant {
 
 
     /**
+     * 信鸽信息
+     */
+    public final static String SP_XG_ACCESSID ="accessid";
+    public final static String SP_XG_ACCESSKEY ="accessKey";
+
+    /**
      * 首次获取蓝牙权限
      */
     public final static String SP_START_GTE_PERMISSION ="get_first_permission";

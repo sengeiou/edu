@@ -16,7 +16,7 @@ import com.tencent.android.tpush.XGPushTextMessage;
  * API 参考网址：http://docs.developer.qq.com/xg/android_access/api.html
  */
 
-public class XGMessageRecevicer extends XGPushBaseReceiver {
+public class  XGMessageRecevicer extends XGPushBaseReceiver {
     @Override
     public void onRegisterResult(Context context, int i, XGPushRegisterResult xgPushRegisterResult) {
 
