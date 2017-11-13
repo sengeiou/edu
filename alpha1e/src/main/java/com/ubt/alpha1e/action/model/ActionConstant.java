@@ -1,37 +1,15 @@
-package com.ubt.alpha1e.action;
-
-import android.content.Context;
-
-import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.ui.BaseActivity;
-import com.ubt.alpha1e.utils.log.UbtLog;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+package com.ubt.alpha1e.action.model;
 
 /**
  * @author admin
- * @className ActionData
- * @description   创建action用到的数据
+ * @className
+ * @description
+ * @date
+ * @update
  */
 
 
-public class ActionData {
-
-    private final String TAG = "ActionData";
-
-    public static final String ACTION_TIME = "action_time";
-    public static final String ACTION_ANGLE = "action_angle";
-    public static final String ACTION_NAME = "action_name";
-    public static final String ACTION_ICON = "action_icon";
-    public static final String ACTION_LIST = "action_list";
+public class ActionConstant {
 
     public static final String WARRIOR = "{\n" +
             "    \"frame\": [\n" +
@@ -728,125 +706,6 @@ public class ActionData {
 
 
 
-    private Context context;
-    private BaseActivity baseMvpActivity;
 
-    public String [] basicAction ;
-    public String [] advanceActionName;
-    public static final int[] basicIconID = new int[] {R.drawable.xingzou, R.drawable.niuyao,
-            R.drawable.dianjiao,R.drawable.cewanyao, R.drawable.shoubi,R.drawable.wudao1,
-            R.drawable.wudao2, R.drawable.xiemu,R.drawable.zaijian};
-    public static final int [] advanceIconID = new int[] {R.drawable.chuzhao,R.drawable.xiayao,R.drawable.dunxia,
-            R.drawable.zuotaishou,R.drawable.taiyoushou, R.drawable.jixie1, R.drawable.jixie2,
-            R.drawable.baobao,R.drawable.kaixin,R.drawable.jinli};
-
-
-    private List<Map<String, Object>> listWarrior = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listStoop = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listSquat = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listLeftHand = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listRightHand = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listMechDance1 = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listMechDance2 = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listHug = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listHappy = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listSalute = new ArrayList<Map<String, Object>>();
-
-    private List<Map<String, Object>> listWalk = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listTwist = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listSteppin = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listBent = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listArm = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listDance1 = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listDance2 = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listCurtain = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> listBye = new ArrayList<Map<String, Object>>();
-
-
-
-    public ActionData(Context context){
-        this.context = context;
-        baseMvpActivity = (ActionsCreateActivity) context;
-        initActionsNameData();
-    }
-
-
-    public void initActionsNameData(){
-        UbtLog.d(TAG, "advanceActionName:" + advanceActionName + "---basicAction:" + basicAction);
-
-        if(advanceActionName == null){
-            advanceActionName = new String[]{baseMvpActivity.getStringResources("ui_advance_action_walk"), baseMvpActivity.getStringResources("ui_advance_action_twist"), baseMvpActivity.getStringResources("ui_advance_action_steppin"),baseMvpActivity.getStringResources("ui_advance_action_bent"), baseMvpActivity.getStringResources("ui_advance_action_arm"),
-                    baseMvpActivity.getStringResources("ui_advance_action_dance1"), baseMvpActivity.getStringResources("ui_advance_action_dance2"), baseMvpActivity.getStringResources("ui_advance_action_curtain"), baseMvpActivity.getStringResources("ui_advance_action_bye")};
-        }
-
-        if(basicAction == null){
-            basicAction = new String[]{baseMvpActivity.getStringResources("ui_basic_action_warrior"), baseMvpActivity.getStringResources("ui_basic_action_stoop"), baseMvpActivity.getStringResources("ui_basic_action_squat"), baseMvpActivity.getStringResources("ui_basic_action_left_hand"), baseMvpActivity.getStringResources("ui_basic_action_right_hand"),
-                    baseMvpActivity.getStringResources("ui_basic_action_mech_dance1"), baseMvpActivity.getStringResources("ui_basic_action_mech_dance2"), baseMvpActivity.getStringResources("ui_basic_action_hug"),baseMvpActivity.getStringResources("ui_basic_action_happy"),baseMvpActivity.getStringResources("ui_basic_action_salute")};
-        }
-
-    }
-
-    public void initActionList(){
-        //初级动作
-        listWarrior = actionInfo(initActionData(WARRIOR, listWarrior), basicAction[0], basicIconID[0]);
-        listStoop = actionInfo(initActionData(STOOP, listStoop), basicAction[1], basicIconID[1]);
-        listSquat = initActionData(SQUAT,listSquat);
-        listLeftHand = initActionData(LEFTHAND, listLeftHand);
-        listRightHand = initActionData(RIGHTHAND, listRightHand);
-        listMechDance1 = initActionData(MECH_DANCE1, listMechDance1);
-        listMechDance2 = initActionData(MECH_DANCE2, listMechDance2);
-        listHug = initActionData(HUG, listHug);
-        listHappy = initActionData(HAPPY, listHappy);
-        listSalute = initActionData(SALUTE, listSalute);
-
-        //高级动作
-        listWalk = initActionData(WALK, listWalk);
-        listTwist = initActionData(TWIST, listTwist);
-        listSteppin = initActionData(STEPPIN, listSteppin);
-        listBent = initActionData(BENT, listBent);
-        listArm = initActionData(ARM, listArm);
-        listDance1 = initActionData(DANCE1, listDance1);
-        listDance2 = initActionData(DANCE2, listDance2);
-        listCurtain = initActionData(CURTAIN,listCurtain);
-        listBye = initActionData(BYE, listBye);
-
-    }
-
-    public List<Map<String, Object>> actionInfo(List<Map<String, Object>> list, String actionName, int actionIconId){
-        List<Map<String, Object>> infoList = new ArrayList<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put(ACTION_LIST, list);
-        map.put(ACTION_NAME, actionName);
-        map.put(ACTION_ICON, actionIconId);
-        infoList.add(map);
-        return  infoList;
-
-    }
-
-
-    public List<Map<String, Object>>  initActionData(String json, List<Map<String, Object>> list){
-        try {
-            JSONObject zuoJsonObject = new JSONObject(json);
-            JSONArray zuoJsonArray= zuoJsonObject.getJSONArray("frame");
-            for(int i=0; i<zuoJsonArray.length(); i++){
-                Map<String, Object> map = new HashMap<String, Object>();
-                JSONObject jsonObject = (JSONObject) zuoJsonArray.get(i);
-                UbtLog.d(TAG, "jsonObject:" + jsonObject.toString());
-                map.put(ACTION_TIME, jsonObject.get("-xmlRunTime"));
-                map.put(ACTION_ANGLE, jsonObject.get("-xmldata"));
-                list.add(i, map);
-            }
-
-            UbtLog.d(TAG, "list:" + list);
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return  list;
-
-
-    }
 
 }

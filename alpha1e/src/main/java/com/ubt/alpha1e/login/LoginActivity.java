@@ -64,8 +64,8 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
     private int loginType = 0; //默认 0 QQ， 1 WX;
 
-    public static final String PID = "";
-    public static final String DSN = "";
+    public static final String PID = "alpha1e_test";
+    public static final String DSN = "123456";
 
     public static void LaunchActivity(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
@@ -143,12 +143,11 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     public void onSuccess(int i) {
         Log.e(TAG, "login onSuccess" + i);
 
-/*
+
         if(i==AuthorizeListener.WX_TVSIDRECV_TYPE){  //和机器人联调的
             UbtLog.d(TAG, "sss wx:"+ proxy.getClientId(ELoginPlatform.WX));
             UbtLog.d(TAG, "sss qq:"+ proxy.getClientId(ELoginPlatform.QQOpen));
         }
-*/
 
 
         String accessToken = "";
@@ -165,7 +164,10 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
         } else {
             accessToken = wxInfoManager.accessToken;
             openID = wxInfoManager.openID;
+            if(i==AuthorizeListener.USERINFORECV_TYPE){
                 doThirdLogin(accessToken, openID);
+            }
+
         }
 
         Log.e(TAG, "accessToken:" + accessToken + "--openID:" + openID + "--appID:" + appID);
