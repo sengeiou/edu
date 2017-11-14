@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ubt.alpha1e.Course.maincourse.MainCourseActivity;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
@@ -75,7 +76,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     int init_screen_height = 540;
     RelativeLayout.LayoutParams params;
 
-    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3, R.id.right_icon4, R.id.cartoon_body_touch})
+    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3, R.id.right_icon4, R.id.cartoon_body_touch,R.id.bottom_icon})
     protected void switchActivity(View view) {
         Log.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
@@ -119,6 +120,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 cartoonBodyTouch.setVisibility(View.INVISIBLE);
                 showCartoonAction("TEX");
                 break;
+            case R.id.bottom_icon:
+                startActivity(new Intent(this, MainCourseActivity.class));
+                break;
             default:
                 break;
         }
@@ -127,6 +131,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPresenter.getXGInfo();
         getScreenInch();
         initUi();
     }
