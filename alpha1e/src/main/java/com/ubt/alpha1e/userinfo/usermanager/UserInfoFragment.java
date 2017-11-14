@@ -297,18 +297,18 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 .request(new PermissionUtils.PermissionLocationCallback() {
                     @Override
                     public void onSuccessful() {
-                        ToastUtils.showShort("申请拍照权限成功");
+                        // ToastUtils.showShort("申请拍照权限成功");
                         getShootCamera();
                     }
 
                     @Override
                     public void onFailure() {
-                        ToastUtils.showShort("申请拍照权限失败");
+                        //  ToastUtils.showShort("申请拍照权限失败");
                     }
 
                     @Override
                     public void onRationSetting() {
-                        ToastUtils.showShort("申请拍照权限已经被拒绝过");
+                        // ToastUtils.showShort("申请拍照权限已经被拒绝过");
                     }
                 }, PermissionUtils.PermissionEnum.CAMERA);
 

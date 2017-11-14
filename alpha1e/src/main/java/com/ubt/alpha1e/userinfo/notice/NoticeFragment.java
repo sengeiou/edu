@@ -166,7 +166,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
                     });
         }
 
-        mCirclePop.showAtAnchorView(view, VerticalGravity.BELOW, HorizontalGravity.ALIGN_RIGHT, -80, -50);
+        mCirclePop.showAtAnchorView(view, VerticalGravity.BELOW, HorizontalGravity.ALIGN_RIGHT, -80, 0);
         TextView tvDelete = mCirclePop.getView(R.id.tv_delete);
         tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override
