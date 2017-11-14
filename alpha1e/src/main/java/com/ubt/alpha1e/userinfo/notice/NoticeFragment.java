@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -95,12 +94,12 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     @Override
     protected void initUI() {
         mNoticeAdapter = new NoticeAdapter(R.layout.layout_notice_item, mNoticeModels);
-        mRecyclerviewNotice.setLayoutManager(new LinearLayoutManager(mContext));
+        mRecyclerviewNotice.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerviewNotice.setAdapter(mNoticeAdapter);
         mNoticeAdapter.bindToRecyclerView(mRecyclerviewNotice);
         mNoticeAdapter.setOnItemLongClickListener(this);
-        emptyView = LayoutInflater.from(mContext).inflate(R.layout.layout_empty, null);
-        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(mContext.getResources().getString(R.string.empty_no_noticedata));
+        emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_empty, null);
+        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(getActivity().getResources().getString(R.string.empty_no_noticedata));
         ((ImageView) emptyView.findViewById(R.id.iv_no_data)).setImageResource(R.drawable.ic_setting_push_deafult);
         emptyView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,23 +143,30 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         }
     }
 
+    EasyPopup mCirclePop = null;
+
     @Override
     public boolean onItemLongClick(final BaseQuickAdapter adapter, final View view, final int position) {
-        adapter.getViewByPosition(position,R.id.rl_root).setBackgroundTintList(mContext.getResources().getColorStateList(R.color.background_delete_coor));
-        final EasyPopup mCirclePop = new EasyPopup(mContext)
-                .setContentView(R.layout.dialog_item_delete)
-                .setWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
-                .setHeight(ViewGroup.LayoutParams.WRAP_CONTENT)
-                //是否允许点击PopupWindow之外的地方消失
-                .setFocusAndOutsideEnable(true)
-                .createPopup()
-                .setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        mNoticeAdapter.notifyDataSetChanged();
-                    }
-                });
-        mCirclePop.showAtAnchorView(view, VerticalGravity.BELOW, HorizontalGravity.ALIGN_RIGHT, -80, -30);
+        adapter.getViewByPosition(position, R.id.rl_root).setBackgroundTintList(getActivity().getResources().getColorStateList(R.color.background_delete_coor));
+        if (null != mCirclePop) {
+            mCirclePop.dismiss();
+        } else {
+            mCirclePop = new EasyPopup(getActivity())
+                    .setContentView(R.layout.dialog_item_delete)
+                    .setWidth(420)
+                    .setHeight(200)
+                    //是否允许点击PopupWindow之外的地方消失
+                    .setFocusAndOutsideEnable(true)
+                    .createPopup()
+                    .setOnDismissListener(new PopupWindow.OnDismissListener() {
+                        @Override
+                        public void onDismiss() {
+                            mNoticeAdapter.notifyDataSetChanged();
+                        }
+                    });
+        }
+
+        mCirclePop.showAtAnchorView(view, VerticalGravity.BELOW, HorizontalGravity.ALIGN_RIGHT, -80, -50);
         TextView tvDelete = mCirclePop.getView(R.id.tv_delete);
         tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override

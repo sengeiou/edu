@@ -85,10 +85,10 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     protected void initUI() {
         mDynamicActionAdapter = new DynamicActionAdapter(R.layout.layout_dynamic_action_item, mDynamicActionModels);
         mDynamicActionAdapter.setOnItemChildClickListener(this);
-        mRecyclerviewDynamic.setLayoutManager(new GridLayoutManager(mContext, 2));
+        mRecyclerviewDynamic.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mRecyclerviewDynamic.setAdapter(mDynamicActionAdapter);
-        emptyView = LayoutInflater.from(mContext).inflate(R.layout.layout_empty, null);
-        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(mContext.getResources().getString(R.string.empty_no_dynamiaction));
+        emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_empty, null);
+        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(getActivity().getResources().getString(R.string.empty_no_dynamiaction));
         ((ImageView)emptyView.findViewById(R.id.iv_no_data)).setImageResource(R.drawable.ic_setting_action_deafult);
         emptyView.setOnClickListener(new View.OnClickListener() {
             @Override

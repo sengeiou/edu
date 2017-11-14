@@ -50,7 +50,6 @@ import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.update.EngineUpdateManager;
 import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
-import com.ubt.alpha1e.utils.crash.CrashHandler;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.xingepush.XGUBTManager;
 import com.ubtechinc.base.BlueToothManager;
@@ -94,8 +93,8 @@ public class AlphaApplication extends LoginApplication {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init(this);
+//        CrashHandler crashHandler = CrashHandler.getInstance();
+//        crashHandler.init(this);
 
         initActivityLife();
          initSkin(this);

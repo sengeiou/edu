@@ -74,7 +74,9 @@ public class PermissionUtils {
             return;
         }
         boolean isFirstLocation = SPUtils.getInstance().getBoolean(sp_key, false);
-        if (isFirstLocation && AndPermission.hasAlwaysDeniedPermission(mContext, Arrays.asList(permiss))) {
+        if (AndPermission.hasPermission(mContext, permiss)) {
+            mCallback.onSuccessful();
+        } else if (isFirstLocation && AndPermission.hasAlwaysDeniedPermission(mContext, Arrays.asList(permiss))) {
             mCallback.onRationSetting();
         } else {
             AndPermission.with(mContext)
@@ -92,7 +94,6 @@ public class PermissionUtils {
                     })
                     .start();
             SPUtils.getInstance().put(sp_key, true);
-
         }
 
     }
