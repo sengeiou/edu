@@ -64,7 +64,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
     private int loginType = 0; //默认 0 QQ， 1 WX;
 
-    public static final String PID = "b0851325-3056-4853-921b-dcba21b491a3";
+    public static final String PID = "b0851325-3056-4853-921b-dcba21b491a3:8c901ad100ad44d98b6276adeb861058";
     public static final String DSN = "123456";
 
     public static void LaunchActivity(Context context) {
