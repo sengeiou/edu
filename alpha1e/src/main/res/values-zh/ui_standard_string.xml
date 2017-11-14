@@ -836,10 +836,8 @@
     <string name="ui_main_right_icon3">编程</string>
     <string name="ui_main_right_icon4">社区</string>
     <string name="ui_main_course_center">课程中心</string>
-<<<<<<< HEAD
+
     <string name="control_center">关闭</string>
-    
-=======
 
     <string name="ui_setting_clear_cache">清除缓存数据</string>
     <string name="ui_setting_use_memory_title">Alpha1E已用空间</string>

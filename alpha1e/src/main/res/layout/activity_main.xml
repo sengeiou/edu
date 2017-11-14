@@ -16,12 +16,31 @@
         android:layout_centerHorizontal="true"
         />
     <ImageView
+        android:id="@+id/charging"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/charging"
+        android:layout_marginBottom="34dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        />
+    <!--<pl.droidsonroids.gif.GifImageView-->
+    <ImageView
         android:id="@+id/cartoon_action"
         android:layout_width="315dp"
         android:layout_height="315dp"
         android:layout_centerInParent="true"
-        android:src="@drawable/main_robot"
+        android:background="@drawable/main_robot"
        />
+    <TextView
+        android:id="@+id/buddleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="61dp"
+        android:layout_marginRight="142dp"
+        android:drawableTop="@drawable/bubbletext"
+        android:visibility="visible"
+        />
     <!--android:background="#ADFF2F"-->
     <!--<ImageView-->
         <!--android:id="@+id/cartoon_body_touch"-->
@@ -127,8 +146,6 @@
         android:text="@string/ui_main_course_center"
         android:textColor="@color/white"
         android:textSize="12sp"
-        android:layout_marginTop="260dp"
-        android:layout_marginLeft="22dp"
         android:gravity="center_horizontal"
         />
     <!--android:background="#7fff0000">-->
@@ -144,7 +161,7 @@
         android:layout_marginTop="21.5dp"
         android:layout_marginLeft="112.5dp"
         android:background="@color/bgColor_overlay"
-        android:visibility="invisible"
+        android:visibility="visible"
         />
     <ImageView
         android:id="@+id/cartoon_chest"

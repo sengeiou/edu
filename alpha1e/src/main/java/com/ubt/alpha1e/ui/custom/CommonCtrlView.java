@@ -221,21 +221,22 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             }
         });
 
+        mWindowManager.addView(mFloatLayout, wmParams);
         //添加mFloatLayout
-        if(!readShowState().equals("4")){
-            ColorDrawable colorDrawable = new ColorDrawable(Color.argb(150, 0, 0, 0));
-            guideLayout.setBackground(colorDrawable);
-            wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-            wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-            wmParams.y = 0;
-
-            tvFloatTips =  (TextView)guideLayout.findViewById(R.id.tv_guide_controls);
-            tvFloatTips.setText(AlphaApplication.getBaseActivity().getStringResources("ui_introduction_play_control"));
-
-            mWindowManager.addView(guideLayout, wmParams);
-        }else{
-            mWindowManager.addView(mFloatLayout, wmParams);
-        }
+//        if(!readShowState().equals("4")){
+//            ColorDrawable colorDrawable = new ColorDrawable(Color.argb(150, 0, 0, 0));
+//            guideLayout.setBackground(colorDrawable);
+//            wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+//            wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+//            wmParams.y = 0;
+//
+//            tvFloatTips =  (TextView)guideLayout.findViewById(R.id.tv_guide_controls);
+//            tvFloatTips.setText(AlphaApplication.getBaseActivity().getStringResources("ui_introduction_play_control"));
+//
+//            mWindowManager.addView(guideLayout, wmParams);
+//        }else{
+//            mWindowManager.addView(mFloatLayout, wmParams);
+//        }
     }
 
     /**
