@@ -54,7 +54,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 outRect.right = 20;
                 outRect.left = 20;
                 if (parent.getChildAdapterPosition(view) == 4) {
-                    outRect.top = 30;
+                    outRect.top = 50;
                 }
             }
         });
