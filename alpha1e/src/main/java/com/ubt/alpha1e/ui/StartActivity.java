@@ -65,7 +65,7 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
         ((StartHelper) mHelper).doRunGetResServices();
 
         //add by lihai upgadeDB
-        ((StartHelper) mHelper).UpgadeDB();
+       // ((StartHelper) mHelper).UpgadeDB();
 
         initUI();
 

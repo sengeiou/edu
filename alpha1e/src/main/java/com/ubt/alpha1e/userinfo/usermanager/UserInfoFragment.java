@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
@@ -39,6 +40,7 @@ import com.ubt.alpha1e.userinfo.useredit.UserEditPresenter;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
 import com.ubt.alpha1e.userinfo.util.TVUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.yanzhenjie.permission.Permission;
 
 import java.io.File;
 import java.io.InputStream;
@@ -268,14 +270,30 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void takeImageFromShoot() {
-        getShootCamera();
-//        if (AndPermission.hasPermission(mContext, Permission.CAMERA)) {
-//            ToastUtils.showShort("有权限");
-//            getShootCamera();
-//        } else {
-//            ToastUtils.showShort("无权限");
-//
-//        }
+        // getShootCamera();
+        if (PermissionUtils.getInstance(getActivity()).hasPermission(Permission.CAMERA)) {
+            ToastUtils.showShort("有权限");
+            getShootCamera();
+        } else {
+            PermissionUtils.getInstance(getActivity())
+                    .request(new PermissionUtils.PermissionLocationCallback() {
+                        @Override
+                        public void onSuccessful() {
+                            ToastUtils.showShort("申请拍照权限成功");
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            ToastUtils.showShort("申请拍照权限失败");
+                        }
+
+                        @Override
+                        public void onRationSetting() {
+                            ToastUtils.showShort("申请拍照权限已经被拒绝过");
+                        }
+                    }, PermissionUtils.PermissionEnum.CAMERA);
+
+        }
     }
 
     public void getShootCamera() {

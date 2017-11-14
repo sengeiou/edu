@@ -48,10 +48,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.Set;
 
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.TagAliasCallback;
 import twitter4j.auth.AccessToken;
 
 public class LoginHelper extends BaseHelper implements IJsonListener,
@@ -208,13 +205,7 @@ public class LoginHelper extends BaseHelper implements IJsonListener,
                 }
             }
             if (MSG_SET_ALIAS == msg.what) {
-                // ���� JPush �ӿ������ñ�����
-                try {
-                    JPushInterface.setAliasAndTags(thiz,
-                            (String) msg.obj, null, mAliasCallback);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
             }
         }
     };
@@ -546,28 +537,7 @@ public class LoginHelper extends BaseHelper implements IJsonListener,
         mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, alias));
     }
 
-    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
-        @Override
-        public void gotResult(int code, String alias, Set<String> tags) {
-            String logs;
-            switch (code) {
-                // �ɹ�
-                case 0:
-                    logs = "Set tag and alias success";
-                    // ���������� SharePreference ��дһ���ɹ����õ�״̬���ɹ�����һ�κ��Ժ󲻱��ٴ������ˡ�
-                    break;
-                // ʧ��
-                case 6002:
-                    // �ӳ� 60 �������� Handler ���ñ���
-                    mHandler.sendMessageDelayed(
-                            mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
-                    break;
-                default:
-                    logs = "Failed with errorCode = " + code;
-            }
 
-        }
-    };
 
     /**
      * FACEBOOK
