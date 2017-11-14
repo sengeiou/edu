@@ -36,7 +36,7 @@
         android:layout_marginTop="11.45dp"
         android:paddingLeft="60dp"
         android:paddingRight="60dp"
-        android:text="根据《中华人民共和国网络安全法》要求，自6月1日起使用信息发布，即时通讯等互联网服务需要进行身份信息认证。为了保证您的使用体验，建议您尽快完成手机号码绑定验证，感谢您的理解和理解。"
+        android:text="根据《中华人民共和国网络安全法》要求，自6月1日起使用信息发布，即时通讯等互联网服务需要进行身份信息认证。为了保证您的使用体验，建议您尽快完成手机号码绑定验证，感谢您的理解和支持。"
         android:gravity="center"
         android:textColor="#FF4814"
         android:textSize="12sp"
@@ -135,7 +135,8 @@
                         android:hint="请输入手机号码"
                         android:paddingLeft="25dp"
                         android:textColor="@color/tv_user_edit_color"
-                        android:inputType="phone"
+                        android:inputType="phone|number"
+                        android:digits="1234567890"
                         android:textSize="15sp"
                         android:gravity="center"
                         />

@@ -45,6 +45,8 @@
             android:layout_marginLeft="40dp"
             android:layout_toRightOf="@+id/view_center"
             android:text="岁"
+            android:gravity="center_vertical"
+            android:paddingTop="3dp"
             android:textColor="@color/tv_black_color"
             android:textSize="18sp"/>
     </RelativeLayout>
