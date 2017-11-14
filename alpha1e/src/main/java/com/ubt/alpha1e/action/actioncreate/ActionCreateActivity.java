@@ -11,4 +11,23 @@ import com.ubt.alpha1e.mvp.MVPBaseActivity;
 
 public class ActionCreateActivity extends MVPBaseActivity<ActionCreateContract.View, ActionCreatePresenter> implements ActionCreateContract.View {
 
+    @Override
+    protected void initUI() {
+
+    }
+
+    @Override
+    protected void initControlListener() {
+
+    }
+
+    @Override
+    protected void initBoardCastListener() {
+
+    }
+
+    @Override
+    public int getContentViewId() {
+        return 0;
+    }
 }

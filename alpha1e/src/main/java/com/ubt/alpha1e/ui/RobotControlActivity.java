@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.action.ActionsCreateActivity;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.model.AlphaStatics;
@@ -212,7 +213,8 @@ public class RobotControlActivity extends BaseActivity implements View.OnClickLi
                 if(checkLoginState()){
                     intent.putExtra(ActionsEditHelper.StartTypeStr,
                             ActionsEditHelper.StartType.new_type);
-                    intent.setClass(this, ActionsNewEditActivity.class);
+//                    intent.setClass(this, ActionsNewEditActivity.class);
+                    intent.setClass(this, ActionsCreateActivity.class);
                     startActivity(intent);
                 }else{
                     intent.putExtra(LoginHelper.IS_LOGIN_SIGLE, true);

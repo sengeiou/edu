@@ -298,7 +298,7 @@
                         android:id="@+id/iv_music_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/bg_music"
+                        android:src="@drawable/img_music_purple"
                         />
 
                     <RelativeLayout
@@ -320,7 +320,7 @@
                             android:layout_height="wrap_content"
                             style="@null"
                             android:progressDrawable="@android:color/transparent"
-                            android:thumb="@drawable/icon_add_mark"
+                            android:thumb="@drawable/ic_addmusic_mark"
                             android:visibility="invisible"
                             android:thumbOffset="0dp"
                             android:layout_marginLeft="-15dp"
@@ -389,7 +389,7 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
+  <!--      <RelativeLayout
             android:id="@+id/rl_music"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -418,7 +418,7 @@
                 android:layout_below="@+id/iv_play_voice"
                 android:text="0:03"/>
 
-        </RelativeLayout>
+        </RelativeLayout>-->
 
 
 

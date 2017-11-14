@@ -288,6 +288,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             setContentView(R.layout.activity_new_edit_for_pad);
         }else{
             setContentView(R.layout.activity_new_edit);
+            setContentView(R.layout.activity_create_action);
         }
 
         mHelper = new ActionsEditHelper(this, this);
