@@ -132,9 +132,13 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
             mTvUserGrade.setText(TextUtils.isEmpty(mUserModel.getGrade())?"未填写":mUserModel.getGrade());
         }
 
+        if(TextUtils.isEmpty(path)){
+            Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().placeholder(R.drawable.sec_action_logo).into(mImgHead);
+        }
+
         checkSaveEnable();
 
-        Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().placeholder(R.drawable.sec_action_logo).into(mImgHead);
+
         mPresenter.getLoopData();
 
     }
@@ -239,7 +243,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;//拦截事件传递,从而屏蔽back键。
+//            return true;//拦截事件传递,从而屏蔽back键。
         }
         return super.onKeyDown(keyCode, event);
     }
