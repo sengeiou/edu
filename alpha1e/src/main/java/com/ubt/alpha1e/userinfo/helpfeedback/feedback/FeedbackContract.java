@@ -1,6 +1,4 @@
-package com.ubt.alpha1e.userinfo.helpfeedback.feelback;
-
-import android.content.Context;
+package com.ubt.alpha1e.userinfo.helpfeedback.feedback;
 
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
@@ -10,7 +8,7 @@ import com.ubt.alpha1e.mvp.BaseView;
  *  邮箱 784787081@qq.com
  */
 
-public class FeelbackContract {
+public class FeedbackContract {
     interface View extends BaseView {
         void onFeedbackFinish(boolean isSuccess, String errorMsg);
     }

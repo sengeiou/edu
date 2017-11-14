@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.userinfo.psdmanage.psdverifycode;
 
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -14,9 +15,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.login.loginauth.CheckPhoneNumberUtil;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.custom.ClearableEditText;
+import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.userinfo.psdmanage.PsdManageActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -50,12 +53,15 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
     @BindView(R.id.tv_confirm)
     TextView tvConfirm;
 
+    protected Dialog mCoonLoadingDia;
+
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
                 case GO_TO_NEXT:
+                    ((PsdManageActivity)getActivity()).switchFragment(PsdManageActivity.FRAGMENT_SETTING_PASSWORD);
                     break;
             }
         }
@@ -71,6 +77,7 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
         setViewEnable(tvGetVerifyCode,false);
         setViewEnable(tvConfirm,false);
         requestCountDown = new RequestCountDown(REQUEST_TIME, 1000);
+        mCoonLoadingDia = SLoadingDialog.getInstance(getContext());
 
         edtPhone.addTextChangedListener(new TextWatcher() {
             String telephone = "";
@@ -158,31 +165,62 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
                 requestCountDown.cancel();
                 requestCountDown.start();
                 setViewEnable(tvGetVerifyCode,false);
-                //mPresenter.doGetVerifyCode(edtPhone.getText().toString());
+
+                mCoonLoadingDia.cancel();
+                mCoonLoadingDia.show();
+                mPresenter.doGetVerifyCode(edtPhone.getText().toString());
                 break;
             case R.id.tv_confirm:
-                //mPresenter.doVerifyCode(edtVerifyCode.getText().toString());
-                ((PsdManageActivity)getActivity()).switchFragment(PsdManageActivity.FRAGMENT_SETTING_PASSWORD);
+
+                mCoonLoadingDia.cancel();
+                mCoonLoadingDia.show();
+                mPresenter.doVerifyCode(edtPhone.getText().toString(), edtVerifyCode.getText().toString());
                 break;
 
         }
     }
 
     @Override
-    public void onGetVerifyCode(boolean isSuccess, String errorMsg) {
+    public void onGetVerifyCode(final boolean isSuccess, String msg) {
         UbtLog.d(TAG, "onGetVerifyCode = " + isSuccess);
-        if (isSuccess) {
 
-        }
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                if(mCoonLoadingDia != null){
+                    mCoonLoadingDia.cancel();
+                }
+
+                if (isSuccess) {
+                    ToastUtils.showShort(getStringRes("ui_setting_verify_code_send_success"));
+                }else {
+                    ToastUtils.showShort(getStringRes("ui_setting_verify_code_send_fail"));
+                    requestCountDown.cancel();
+                    tvGetVerifyCode.setText(getStringRes("ui_register_get_vertify_code"));
+                    setViewEnable(tvGetVerifyCode,true);
+                }
+            }
+        });
     }
 
     @Override
-    public void onVerifyCode(boolean isSuccess, String errorMsg) {
-        if (isSuccess) {
-            mHandler.sendEmptyMessage(GO_TO_NEXT);
-        }else {
+    public void onVerifyCode(final boolean isSuccess, String errorMsg) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if(mCoonLoadingDia != null){
+                    mCoonLoadingDia.cancel();
+                }
 
-        }
+                if (isSuccess) {
+                    mHandler.sendEmptyMessage(GO_TO_NEXT);
+                }else {
+                    ToastUtils.showShort(getStringRes("ui_setting_password_verify_fail"));
+                }
+            }
+        });
+
     }
 
     class RequestCountDown extends CountDownTimer {
@@ -216,6 +254,9 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
     @Override
     public void onDestroy() {
         requestCountDown.cancel();
+        if(mCoonLoadingDia != null){
+            mCoonLoadingDia.cancel();
+        }
         super.onDestroy();
     }
 }

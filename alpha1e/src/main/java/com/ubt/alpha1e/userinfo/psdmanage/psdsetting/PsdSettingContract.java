@@ -12,10 +12,10 @@ import com.ubt.alpha1e.mvp.BaseView;
 
 public class PsdSettingContract {
     interface View extends BaseView {
-        
+        void onSetUserPassword(boolean isSuccess, String errorMsg);
     }
 
     interface  Presenter extends BasePresenter<View> {
-        
+        void doSetUserPassword(String password);
     }
 }

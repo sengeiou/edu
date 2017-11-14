@@ -21,6 +21,9 @@ public class HttpEntity {
     public static final String BIND_ACCOUNT = BASIC_UBX_SYS + "bind";
     public static final String UPDATE_USERINFO = BASIC_UBX_SYS + "updateUserInfo";
     public static final String MODIFY_MANAGE_PASSWORD = BASIC_UBX_SYS + "updateUserPwd";
-
+    public static final String SET_USER_PASSWORD = BASIC_UBX_SYS + "addUserPwd";
+    public static final String VERIDATA_CODE = BASIC_UBX_SYS + "validateCode";
+    public static final String ADD_FEEDBACK = BASIC_UBX_SYS + "addFeedback";
+    public static final String CHECK_APP_UPDATE = BASIC_UBX_SYS + "updateApp";
 
 }

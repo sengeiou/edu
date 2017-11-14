@@ -534,7 +534,7 @@
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
-            android:name=".userinfo.helpfeedback.feelback.FeelbackActivity"
+            android:name=".userinfo.helpfeedback.feedback.FeedbackActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
@@ -561,6 +561,11 @@
 
         <activity
             android:name=".userinfo.psdmanage.PsdManageActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".course.CourseActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 

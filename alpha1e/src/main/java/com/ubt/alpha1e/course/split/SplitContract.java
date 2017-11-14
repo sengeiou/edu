@@ -1,4 +1,6 @@
-package com.ubt.alpha1e.userinfo.psdmanage.psdmodify;
+package com.ubt.alpha1e.course.split;
+
+import android.content.Context;
 
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
@@ -8,12 +10,12 @@ import com.ubt.alpha1e.mvp.BaseView;
  *  邮箱 784787081@qq.com
  */
 
-public class PsdModifyContract {
+public class SplitContract {
     interface View extends BaseView {
-        void onModifyPassword(boolean isSuccess, String msg);
+        
     }
 
     interface  Presenter extends BasePresenter<View> {
-        void doModifyPassword(String oldPassword,String newPassword);
+        
     }
 }

@@ -43,12 +43,13 @@ public class PsdVerifyCodePresenter extends BasePresenterImpl<PsdVerifyCodeContr
     }
 
     @Override
-    public void doVerifyCode(String verifyCode) {
+    public void doVerifyCode(String telephone,String verifyCode) {
 
         VerifyCodeRequest verifyCodeRequest = new VerifyCodeRequest();
-        verifyCodeRequest.setVerifyCode(verifyCode);
+        verifyCodeRequest.setPhone(telephone);
+        verifyCodeRequest.setCode(verifyCode);
 
-        String url = HttpEntity.REQUEST_SMS_CODE;
+        String url = HttpEntity.VERIDATA_CODE;
         doRequestFromWeb(url,verifyCodeRequest, DO_VERIFY_CODE);
     }
 

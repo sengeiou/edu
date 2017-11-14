@@ -8,14 +8,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.IUpdateListener;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
-import com.ubt.alpha1e.ui.dialog.UpdateDialog;
 import com.ubt.alpha1e.update.ApkUpdateManager;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -27,6 +28,8 @@ import butterknife.OnClick;
  */
 
 public class AboutUsActivity extends MVPBaseActivity<AboutUsContract.View, AboutUsPresenter> implements AboutUsContract.View {
+
+    private static final String TAG = AboutUsActivity.class.getSimpleName();
 
     @BindView(R.id.tv_version)
     TextView tvVersion;
@@ -58,6 +61,7 @@ public class AboutUsActivity extends MVPBaseActivity<AboutUsContract.View, About
             version = "";
         }
 
+        UbtLog.d(TAG,"version = " + version);
         tvVersion.setText(getStringResources("ui_about_version") + version);
         tvBaseTitleName.setText(getStringResources("ui_leftmenu_about"));
     }
@@ -85,16 +89,15 @@ public class AboutUsActivity extends MVPBaseActivity<AboutUsContract.View, About
                 break;
             case R.id.rl_app_update: {
                 if (ApkUpdateManager.isUpdating()) {
-                    Toast.makeText(getContext(), getStringResources("ui_about_update_doing"), Toast.LENGTH_LONG).show();
+                    ToastUtils.showShort(getStringResources("ui_about_update_doing"));
                     return;
                 }
 
                 if (mPresenter.isOnlyWifiDownload(getContext())
                         && (!mPresenter.isWifiCoon(getContext()))) {
-                    Toast.makeText(getContext(),
-                            getStringResources("ui_about_update_wifi_need"), Toast.LENGTH_SHORT).show();
+                    ToastUtils.showShort(getStringResources("ui_about_update_wifi_need"));
                 } else {
-                    mPresenter.doUpdateApk();
+                    mPresenter.doUpdateApk(version);
                     if (mCoonLoadingDia != null) {
                         mCoonLoadingDia.cancel();
                     }
@@ -129,13 +132,13 @@ public class AboutUsActivity extends MVPBaseActivity<AboutUsContract.View, About
                 if (mCoonLoadingDia != null) {
                     mCoonLoadingDia.cancel();
                 }
-                Toast.makeText(AboutUsActivity.this, info, Toast.LENGTH_SHORT).show();
+                ToastUtils.showShort(info);
             }
         });
     }
 
     @Override
-    public void noteApkUpdate(final String versionPath, final String versionNameSizeInfo) {
+    public void noteApkUpdate(final String versionPath) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -143,18 +146,20 @@ public class AboutUsActivity extends MVPBaseActivity<AboutUsContract.View, About
                     mCoonLoadingDia.cancel();
                 }
 
-                UpdateDialog.getInstance(AboutUsActivity.this,
-                        versionNameSizeInfo.split("#"), new IUpdateListener() {
+                new ConfirmDialog(getContext()).builder().setMsg(getStringResources("ui_setting_app_update_tips"))
+                        .setCancelable(true)
+                        .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
                             @Override
-                            public void doUpdate() {
+                            public void onClick(View view) {
                                 ApkUpdateManager.getInstance(AboutUsActivity.this, versionPath).Update();
                             }
+                        }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                            @Override
-                            public void doIgnore() {
+                    }
+                }).show();
 
-                            }
-                        }).show();
             }
         });
     }
