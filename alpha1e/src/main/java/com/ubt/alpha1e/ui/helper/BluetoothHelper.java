@@ -14,7 +14,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 
+import com.tencent.ai.tvs.env.ELoginPlatform;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.business.FileSendManager;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.FileTools;
@@ -58,6 +60,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.ubt.alpha1e.base.Constant.SP_CLIENT_ID;
 
 public class BluetoothHelper extends BaseHelper implements IJsonListener,
         IEngineUpdateManagerListener,IBluetoothUpdateManagerListener,FileSendManager.IFileSendManager {
@@ -857,17 +861,32 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
             String  productAndDsn = new String(param);
             UbtLog.d(TAG,"productAndDsn = " + productAndDsn);
             String [] ss = productAndDsn.split(",");
-            if(productAndDsn != null && productAndDsn.length() == 2){
+            if(productAndDsn != null && ss.length == 2){
                 UbtLog.d(TAG,"product =   "+ss[0]);
                 UbtLog.d(TAG,"dsn =  "+ss[1]);
             }
             UbtLog.d(TAG,"再发送clientId 给机器人  ");
 
-            String params = "";
+            String params = SPUtils.getInstance().getString(SP_CLIENT_ID, "");
+            if(params.length()< 200){
+                return;
+            }
             UbtLog.d(TAG,"params =========== " + params);
-            doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes(params));
+            UbtLog.d(TAG,"params size= " + BluetoothParamUtil.stringToBytes(params).length);
+            UbtLog.d(TAG," params.substring(0,200)： "+params.substring(0,200));
+            doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes(params.substring(0,200)));
         }else if(cmd == ConstValue.DV_CLIENT_ID){
-            UbtLog.d(TAG,"cmd = " + cmd + "    发送clientId成功 ");
+            UbtLog.d(TAG,"cmd = " + cmd + "    发送clientId 1 段成功 ");
+            String params = SPUtils.getInstance().getString(SP_CLIENT_ID, "");
+            if(params.length()< 200){
+                return;
+            }
+            UbtLog.d(TAG,"cmd = " + cmd + "    发送clientId 2 命令 ");
+            UbtLog.d(TAG," params.substring(200)： "+params.substring(200));
+            doSendComm(ConstValue.DV_CLIENT_ID2, BluetoothParamUtil.stringToBytes(params.substring(200)));
+//            finishBluetoothConnect();
+        }else if(cmd == ConstValue.DV_CLIENT_ID2){
+            UbtLog.d(TAG,"cmd = " + cmd + "    发送clientId 2 段成功 ");
             finishBluetoothConnect();
         }
     }

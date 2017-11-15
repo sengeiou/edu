@@ -2,8 +2,6 @@ package com.ubt.alpha1e.bluetoothandnet.bluetoothconnect;
 
 
 import android.animation.ObjectAnimator;
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -242,9 +240,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
             timer.cancel();
             timer = null ;
         }
-//        if(mHandler.hasMessages(CONNECT_BLUETOOTH_TIME)){
-//            mHandler.removeMessages(CONNECT_BLUETOOTH_TIME);
-//        }
+
         try {
             this.mHelper.DistoryHelper();
         } catch (Exception e) {
@@ -348,10 +344,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
             tv_devices_num.setText("发现 "+lst_robots_result_datas.size()+" 台机器人");
 
             mdevicesAdapter.notifyDataSetChanged();
-//            setListViewHeightBasedOnChildren(lst_robots_result);
         }else{
-//            tvDeviceNum.setText("");
-//            tvDeviceNum.setVisibility(View.INVISIBLE);
             tv_devices_num.setText("正在搜索机器人......");
         }
 
@@ -603,6 +596,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
             if(isFirst){
                 rl_content_device_list.setVisibility(View.INVISIBLE);
                 rl_content_bluetooth_connect_sucess.setVisibility(View.VISIBLE);
+                rl_content_bluetooth_connect_fail.setVisibility(View.INVISIBLE);
             }else {
                  BluetoothconnectActivity.this.finish();
 
@@ -610,6 +604,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
         }else {
             rl_content_device_list.setVisibility(View.INVISIBLE);
             rl_content_bluetooth_connect_fail.setVisibility(View.VISIBLE);
+            rl_content_bluetooth_connect_fail.setVisibility(View.INVISIBLE);
         }
     }
 

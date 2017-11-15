@@ -17,6 +17,7 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -112,8 +113,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //                startActivity(mLaunch);
                 break;
             case R.id.right_icon:
-                mLaunch.setClass(this, ScanBluetoothActivity.class);
-                startActivity(mLaunch);
+//                mLaunch.setClass(this, ScanBluetoothActivity.class);
+//                startActivity(mLaunch);
+                Intent ii = new Intent();
+                ii.setClass(this, BluetoothguidestartrobotActivity.class);
+                this.startActivity(ii);
+                this.overridePendingTransition(R.anim.activity_open_up_down,0);
                 break;
             case R.id.right_icon2:
                 break;

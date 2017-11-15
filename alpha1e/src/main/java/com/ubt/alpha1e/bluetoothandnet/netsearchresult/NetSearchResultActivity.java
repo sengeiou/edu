@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.adapter.WifiInfoAdapter;
+import com.ubt.alpha1e.adapter.WifiInfoAdapter_list;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
@@ -46,11 +47,14 @@ public class NetSearchResultActivity extends MVPBaseActivity<NetSearchResultCont
 
     String TAG = "NetSearchResultActivity";
 
-    @BindView(R.id.btn_goto_connect)
-    Button btn_goto_connect;
+    @BindView(R.id.ib_return)
+    ImageButton ib_return;
 
     @BindView(R.id.ib_close)
     ImageButton ib_close;
+
+    @BindView(R.id.btn_goto_connect)
+    Button btn_goto_connect;
 
     @BindView(R.id.rl_content_bluetooth_no_net)
     RelativeLayout rl_content_bluetooth_no_net;
@@ -63,7 +67,7 @@ public class NetSearchResultActivity extends MVPBaseActivity<NetSearchResultCont
 
 
     public WifiHelper mWifiHelper = null;
-    public WifiInfoAdapter mAdapter;
+    public WifiInfoAdapter_list mAdapter;
     // 扫描出的网络连接列表
     private List<ScanResult> mWifiListItem = new ArrayList<>();
     private String mCurrentSelectWifiName = null;
@@ -86,11 +90,6 @@ public class NetSearchResultActivity extends MVPBaseActivity<NetSearchResultCont
                     mScanResult = (ScanResult)msg.obj;
                     UbtLog.d(TAG,"mScanResult = " + mScanResult.SSID);
 
-//                    //将选择WIFI名称传输回上一页面
-//                    NetworkEvent mWifiEvent = new NetworkEvent(NetworkEvent.Event.CHANGE_SELECT_WIFI);
-//                    mWifiEvent.setSelectWifiName(mScanResult.SSID);
-//                    EventBus.getDefault().post(mWifiEvent);
-
                     Intent i = new Intent();
                     i.putExtra("wifiName",mScanResult.SSID);
 //                    i.putExtra("wifiName",event.getSelectWifiName());
@@ -112,11 +111,6 @@ public class NetSearchResultActivity extends MVPBaseActivity<NetSearchResultCont
                         }else {
                             UbtLog.d(TAG,"mWifiListItem isempty    null" );
                         }
-//                        mRecyclerview.setVisibility(View.GONE);
-//                        rlNoWifi.setVisibility(View.VISIBLE);
-//                        if(listener != null ){
-//                            listener.havaDate(false);
-//                        }
                     }else {
                         UbtLog.d(TAG,"mWifiListItem hava data " );
                         if(rl_content_wifi_list != null && rl_content_bluetooth_no_net != null){
@@ -125,7 +119,6 @@ public class NetSearchResultActivity extends MVPBaseActivity<NetSearchResultCont
                         }else {
                             UbtLog.d(TAG,"mWifiListItem hava data     null" );
                         }
-//                        rlNoWifi.setVisibility(View.GONE);
                     }
                     break;
                 default:
@@ -155,7 +148,7 @@ public class NetSearchResultActivity extends MVPBaseActivity<NetSearchResultCont
             mCurrentSelectWifiName = wifi ;
         }
         UbtLog.d(TAG, "mCurrentSelectWifiName=="+mCurrentSelectWifiName);
-        mAdapter = new WifiInfoAdapter(getApplicationContext(),mWifiListItem,mHandler,mCurrentSelectWifiName);
+        mAdapter = new WifiInfoAdapter_list(getApplicationContext(),mWifiListItem,mHandler,mCurrentSelectWifiName);
         mRecyclerview.setAdapter(mAdapter);
 
     }
@@ -188,6 +181,8 @@ public class NetSearchResultActivity extends MVPBaseActivity<NetSearchResultCont
             case R.id.ib_close:
                 NetSearchResultActivity.this.finish();
                 break;
+            case R.id.ib_return:
+                NetSearchResultActivity.this.finish();
             default:
         }
     }

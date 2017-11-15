@@ -278,7 +278,7 @@
                 android:id="@+id/image1"
                 android:layout_width="43dp"
                 android:layout_height="55dp"
-                android:background="@drawable/bluetooth_connect_fail"
+                android:background="@drawable/buletooth_con_fail"
                 android:layout_centerHorizontal="true"/>
             <TextView
                 android:layout_below="@id/image1"

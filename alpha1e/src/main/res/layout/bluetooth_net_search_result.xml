@@ -44,7 +44,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="18dp"
             android:layout_centerVertical="true"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
     </RelativeLayout>
 
     <TextView
@@ -62,12 +62,12 @@
         android:layout_below="@id/line"
         android:visibility="visible">
         <RelativeLayout
-            android:layout_width="360dp"
+            android:layout_width="380dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@drawable/alert_backgroud"
+            android:background="@null"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true">
             <TextView
                 android:id="@+id/txt_msg"
@@ -75,12 +75,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:textStyle="bold"
-                android:text="可用网络列表"
+                android:text="  可用网络列表"
                 android:gravity="center_vertical"
-                android:paddingLeft="34dp"
+                android:paddingLeft="20dp"
                 android:textColor="#666666"
                 android:textSize="16sp"
-                android:background="@drawable/bg_bluetooth_devices"/>
+                android:background="@null"/>
             <TextView
                 android:id="@+id/line2"
                 android:layout_below="@id/txt_msg"
@@ -89,7 +89,6 @@
                 android:background="#cccccc" />
             <android.support.v7.widget.RecyclerView
                 android:layout_below="@id/line2"
-                android:background="#ffffff"
                 android:id="@+id/recyclerview_wifi"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
@@ -115,9 +114,9 @@
                 android:id="@+id/image2"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
-                android:background="@drawable/bluetooth_connect_sucess"
+                android:background="@drawable/bluetooth_wifi_abnomal"
                 android:layout_centerHorizontal="true"
-                android:visibility="invisible"/>
+                android:visibility="visible"/>
             <TextView
                 android:layout_below="@id/image2"
                 android:layout_width="wrap_content"

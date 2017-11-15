@@ -68,7 +68,7 @@
             android:id="@+id/ig_bluetooth"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/bluetooth_connect_fail"
+            android:background="@drawable/buletooth_connect_fail"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"/>
         <EditText

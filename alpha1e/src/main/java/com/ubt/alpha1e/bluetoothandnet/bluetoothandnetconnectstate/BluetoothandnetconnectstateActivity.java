@@ -167,7 +167,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 case MSG_DO_BLUETOOTH_DISCONNECT:
                     UbtLog.d(TAG,"MSG_DO_BLUETOOTH_DISCONNECT ..... " );
                     ((AlphaApplication) getApplicationContext()).doLostConnect();
-                    ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_connect_fail));
+                    ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.buletooth_con_fail));
                     ed_bluetooth_name.setText("");
                     ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
                     ed_wifi_name.setText("");
@@ -439,7 +439,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 mHelper.readNetworkStatus();
         }else {
             rl_content_device_list.setVisibility(View.GONE);
-            ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_connect_fail));
+            ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.buletooth_con_fail));
             ed_bluetooth_name.setText("");
 
             ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
@@ -482,7 +482,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
                 }else {
                     UbtLog.d(TAG,"请先连接蓝牙");
-                    ToastUtils.showShort("请先连接蓝牙");
+                    ToastUtils.showShort("请先连接机器人");
                 }
                 break;
 
@@ -559,7 +559,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
             }
         }else {
             rl_content_device_list.setVisibility(View.GONE);
-            ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_connect_fail));
+            ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.buletooth_con_fail));
             ed_bluetooth_name.setText("");
 
             ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));

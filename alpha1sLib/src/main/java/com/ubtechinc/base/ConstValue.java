@@ -335,4 +335,9 @@ public class ConstValue {
 	 */
 	public static final byte DV_CLIENT_ID = (byte) 0x81;
 
+	/**
+	 * 1E机器人发送CLIENT ID 分两段
+	 */
+	public static final byte DV_CLIENT_ID2 = (byte) 0x82;
+
 }
