@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.userinfo.model.NoticeModel;
 import com.zyyoona7.lib.EasyPopup;
@@ -99,7 +100,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         mNoticeAdapter.bindToRecyclerView(mRecyclerviewNotice);
         mNoticeAdapter.setOnItemLongClickListener(this);
         emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_empty, null);
-        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(getActivity().getResources().getString(R.string.empty_no_noticedata));
+        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(ResourceManager.getInstance(getActivity()).getStringResources("empty_no_noticedata"));
         ((ImageView) emptyView.findViewById(R.id.iv_no_data)).setImageResource(R.drawable.ic_setting_push_deafult);
         emptyView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,7 +167,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
                     });
         }
 
-        mCirclePop.showAtAnchorView(view, VerticalGravity.BELOW, HorizontalGravity.ALIGN_RIGHT, -80, 0);
+        mCirclePop.showAtAnchorView(view, VerticalGravity.CENTER, HorizontalGravity.ALIGN_RIGHT, -80, 0);
         TextView tvDelete = mCirclePop.getView(R.id.tv_delete);
         tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override

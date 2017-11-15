@@ -860,4 +860,22 @@
     <string name="ui_advance_action_curtain">Curtain call</string>
     <string name="ui_advance_action_bye">Goodbye</string>
 
+
+    <string name="user_center_title">个人中心</string>
+    <string name="user_center_info">信息</string>
+    <string name="user_center_achievement">成就</string>
+    <string name="user_center_message">消息</string>
+    <string name="user_center_dynamic">动态</string>
+    <string name="user_center_original">原创</string>
+    <string name="user_center_download">下载</string>
+    <string name="user_center_setting">设置</string>
+
+    <string name="empty_no_noticedata">你目前没有任何消息</string>
+    <string name="empty_no_dynamiaction">你目前没有任何原创动作</string>
+
+    <string name="dialog_permission_location_setting">您尚未开启\"ALpha 1E\"位置权限,请到设置中开启</string>
+    <string name="dialog_permission_camera_setting">您尚未开启\"ALpha 1E\"相机权限,请到设置中开启</string>
+    <string name="dialog_permission_storage_setting">您尚未开启\"ALpha 1E\"存储权限,请到设置中开启</string>
+    <string name="dialog_go_setting">去设置</string>
+
 </resources>

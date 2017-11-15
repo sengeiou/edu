@@ -156,6 +156,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         mRecyclerView = (RecyclerView) findViewById(R.id.rl_leftmenu);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCurrentPosition = 0;
+        mTvTitle.setText(mMenuModels.get(0).getNameString());
         mMenuModels.get(0).setChick(true);
         mBaseQuickAdapter = new LeftAdapter(R.layout.layout_usercenter_left_item, mMenuModels);
         mBaseQuickAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
