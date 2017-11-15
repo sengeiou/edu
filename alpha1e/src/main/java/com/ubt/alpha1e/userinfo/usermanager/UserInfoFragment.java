@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ import com.ubt.alpha1e.userinfo.useredit.UserEditContract;
 import com.ubt.alpha1e.userinfo.useredit.UserEditPresenter;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
 import com.ubt.alpha1e.userinfo.util.TVUtils;
+import com.ubt.alpha1e.utils.NameLengthFilter;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.io.File;
@@ -166,6 +168,8 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     private void initData() {
         mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
         UbtLog.d("Usercenter", "usermode===" + mUserModel.toString());
+        InputFilter[] filters = { new NameLengthFilter(20) };
+        mTvUserName.setFilters(filters);
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
         mTvUserName.setText(mUserModel.getNickName());
         mTvUserAge.setText(mUserModel.getAge());

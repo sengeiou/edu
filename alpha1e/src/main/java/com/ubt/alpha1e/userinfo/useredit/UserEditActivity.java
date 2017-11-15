@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -43,6 +43,7 @@ import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
 import com.ubt.alpha1e.userinfo.util.TVUtils;
 import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.NameLengthFilter;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
@@ -109,8 +110,8 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     private static final String TAG = "UserEditActivity";
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         initUI();
     }
 
@@ -120,6 +121,9 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         super.onResume();
         mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
         UbtLog.d(TAG, "mUserModel:" + mUserModel.toString());
+
+        InputFilter[] filters = { new NameLengthFilter(20) };
+        mTvUserName.setFilters(filters);
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
         if(mTvUserName.getText().toString().length()==0){
             mTvUserName.setText(mUserModel.getNickName());
@@ -192,10 +196,13 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                 break;
             case R.id.iv_complete_info:
 
-                if(!TVUtils.isCorrectStr(mTvUserName.getText().toString())) {
-                    ToastUtils.showShort("仅限汉字、字母及数字");
-                    return;
+                if(!mTvUserName.getText().toString().equals(mUserModel.getNickName())){
+                    if(!TVUtils.isCorrectStr(mTvUserName.getText().toString())) {
+                        ToastUtils.showShort("仅限汉字、字母及数字");
+                        return;
+                    }
                 }
+
 
                 LoadingDialog.show(UserEditActivity.this);
                 UpdateUserInfoRequest request = new UpdateUserInfoRequest();
@@ -402,7 +409,10 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
 
     @Override
     public void errorEditTextStr() {
-        ToastUtils.showShort("仅限汉字、字母及数字");
+        if(!mTvUserName.getText().toString().equals(mUserModel.getNickName())){
+            ToastUtils.showShort("仅限汉字、字母及数字");
+        }
+
     }
 
     @Override
