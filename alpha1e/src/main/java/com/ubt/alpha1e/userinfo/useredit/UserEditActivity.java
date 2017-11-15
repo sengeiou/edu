@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -25,16 +24,15 @@ import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.FileUtils;
+import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
-import com.ubt.alpha1e.data.FileTools;
-import com.ubt.alpha1e.data.ImageTools;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.custom.ShapedImageView;
 import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
 import com.ubt.alpha1e.ui.main.MainActivity;
@@ -46,11 +44,10 @@ import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.NameLengthFilter;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
-import com.weigan.loopview.LoopView;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -203,7 +200,6 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                     }
                 }
 
-
                 LoadingDialog.show(UserEditActivity.this);
                 UpdateUserInfoRequest request = new UpdateUserInfoRequest();
                 request.setAge(age);
@@ -261,18 +257,42 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
      */
     @Override
     public void takeImageFromShoot() {
+         // getShootCamera();
+        //首先判断是否开启相机权限，如果开启直接调用，未开启申请
+        PermissionUtils.getInstance(this)
+                .request(new PermissionUtils.PermissionLocationCallback() {
+                    @Override
+                    public void onSuccessful() {
+                       //  ToastUtils.showShort("申请拍照权限成功");
+                        getShootCamera();
+                    }
+
+                    @Override
+                    public void onFailure() {
+                         //ToastUtils.showShort("申请拍照权限失败");
+                    }
+
+                    @Override
+                    public void onRationSetting() {
+                        // ToastUtils.showShort("申请拍照权限已经被拒绝过");
+                    }
+                }, PermissionUtils.PermissionEnum.CAMERA);
+
+    }
+
+    public void getShootCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File path = new File(FileTools.image_cache);
+        String catchPath = FileUtils.getCacheDirectory(this, "");
+        // File path = new File(FileTools.image_cache);
+        File path = new File(catchPath + "/images");
         if (!path.exists()) {
             path.mkdirs();
         }
         mImageUri = Uri.fromFile(new File(path, System.currentTimeMillis() + ""));
-
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
         cameraIntent.putExtra("return-data", true);
         startActivityForResult(cameraIntent, GetUserHeadRequestCodeByShoot);
     }
-
     /**
      * 从相册获取照片
      */
@@ -347,27 +367,10 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                     mImageUri = data.getData();
                 }
                 try {
-                    InputStream in = cr.openInputStream(mImageUri);
-                    ImageTools.compressImage(in, mImgHead.getWidth(),
-                            mImgHead.getHeight(), new IImageListener() {
-                                @Override
-                                public void onGetImage(boolean isSuccess,
-                                                       final Bitmap bitmap, long request_code) {
-                                    if (isSuccess) {
-                                        mHandler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Bitmap img = ImageTools.ImageCrop(bitmap);
-                                                mImgHead.setImageBitmap(img);
-                                                path = ImageTools.SaveImage("head", img);
-                                            }
-                                        });
-                                    }
-                                }
-
-                            }, true);
-
-                } catch (Exception e) {
+                    Bitmap bitmap = FileUtils.getBitmapFormUri(this, mImageUri);
+                    mImgHead.setImageBitmap(bitmap);
+                    path = FileUtils.SaveImage(this, "head", bitmap);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 
@@ -377,8 +380,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
 
     @Override
     protected void initUI() {
-        View outerView = LayoutInflater.from(this).inflate(R.layout.dialog_useredit_wheel, null);
-        LoopView loopView = (LoopView) outerView.findViewById(R.id.loopView);
+
 
     }
 

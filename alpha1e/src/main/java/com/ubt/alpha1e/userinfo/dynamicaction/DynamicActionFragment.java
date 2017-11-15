@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
@@ -88,8 +89,8 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         mRecyclerviewDynamic.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mRecyclerviewDynamic.setAdapter(mDynamicActionAdapter);
         emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_empty, null);
-        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(getActivity().getResources().getString(R.string.empty_no_dynamiaction));
-        ((ImageView)emptyView.findViewById(R.id.iv_no_data)).setImageResource(R.drawable.ic_setting_action_deafult);
+        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(ResourceManager.getInstance(getActivity()).getStringResources("empty_no_dynamiaction"));
+        ((ImageView) emptyView.findViewById(R.id.iv_no_data)).setImageResource(R.drawable.ic_setting_action_deafult);
         emptyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

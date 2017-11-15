@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.utils.log.UbtLog;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 import com.yanzhenjie.permission.PermissionListener;
@@ -73,6 +74,7 @@ public class PermissionUtils {
             default:
                 break;
         }
+        UbtLog.d("psermission", "sp_key==" + sp_key);
         if (TextUtils.isEmpty(sp_key) || null == permiss) {
             return;
         }
@@ -121,7 +123,7 @@ public class PermissionUtils {
             default:
                 break;
         }
-//        UbtLog.d("psermission", "message==" + message);
+        UbtLog.d("psermission", "message==" + message);
         
         new ConfirmDialog(mContext).builder()
                 .setMsg(message)

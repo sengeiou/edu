@@ -57,9 +57,9 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
-                        if (view.getId() == R.id.rl_take_photo) {
+                        if (view.getId() == R.id.rl_take_photo||view.getId()==R.id.tv_take_photo) {
                             mView.takeImageFromShoot();
-                        } else if (view.getId() == R.id.rl_take_ablum) {
+                        } else if (view.getId() == R.id.rl_take_ablum||view.getId()==R.id.tv_take_ablum) {
                             mView.takeImageFromAblum();
                         }
                         dialog.dismiss();
