@@ -10,6 +10,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
@@ -28,15 +30,20 @@ import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
+import com.zyyoona7.lib.EasyPopup;
+import com.zyyoona7.lib.HorizontalGravity;
+import com.zyyoona7.lib.VerticalGravity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.OnClick;
-import butterknife.OnTouch;
+import pl.droidsonroids.gif.GifDrawable;
 
 
 /**
@@ -46,13 +53,12 @@ import butterknife.OnTouch;
 
 public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View {
 
-
     @BindView(R.id.cartoon_body_touch_bg)
     ImageView cartoonBodyTouchBg;
+    @BindView(R.id.charging)
+    ImageView charging;
     @BindView(R.id.cartoon_action)
     ImageView cartoonAction;
-    @BindView(R.id.cartoon_body_touch)
-    ImageView cartoonBodyTouch;
     @BindView(R.id.right_icon)
     TextView rightIcon;
     @BindView(R.id.right_icon2)
@@ -94,8 +100,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     int init_screen_height = 375;
     RelativeLayout.LayoutParams params;
     private AnimationDrawable frameAnimation;
+    private EasyPopup mCirclePop;
+    private int powerThreshold[] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100};
+    int index=0;
+    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3,
+            R.id.right_icon4,R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
+            R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg})
 
-    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3, R.id.right_icon4, R.id.cartoon_body_touch})
     protected void switchActivity(View view) {
         Log.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
@@ -118,13 +129,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.top_icon2:
                 cartoonAction.setVisibility(View.VISIBLE);
-                cartoonBodyTouch.setVisibility(View.INVISIBLE);
                 showCartoonAction("TEX");
                 break;
             case R.id.top_icon3:
                 try {
                     CommonCtrlView.getInstace(getContext());
-                }catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
@@ -133,25 +143,56 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 startActivity(mLaunch);
                 break;
             case R.id.right_icon2:
-                cartoonBodyTouchBg.setBackground(getDrawableRes("ten"));
+                mCirclePop = new EasyPopup(this)
+                        .setContentView(R.layout.main_ui_buddletext)
+                        //是否允许点击PopupWindow之外的地方消失
+                        .setFocusAndOutsideEnable(true)
+                        .createPopup();
+                mCirclePop.showAtAnchorView(cartoonHead, VerticalGravity.ALIGN_TOP,  HorizontalGravity.RIGHT, 20 , 0);
+
                 break;
             case R.id.right_icon3:
+                mCirclePop = new EasyPopup(this)
+                        .setContentView(R.layout.main_ui_buddletext)
+                        //是否允许点击PopupWindow之外的地方消失
+                        .setFocusAndOutsideEnable(true)
+                        .createPopup();
+                    mCirclePop.showAtAnchorView(cartoonHead,VerticalGravity.ALIGN_TOP,  HorizontalGravity.RIGHT, 20 , 0);
+                    TextView mBuddleText=mCirclePop.getView(R.id.tv_delete);
+                    if (index== 0) {
+                    mBuddleText.setText("从机场到下榻宾馆沿途，欢迎的人群几乎就没有间断。他们簇拥在街道两侧，纷纷向习近平总书记、国家主席挥舞中老两国国旗，表达着老挝人民对中国的深厚感情和对习近平总书记、国家主席来访的由衷喜悦");
+                } else if (index == 1) {
+                    mBuddleText.setText("从机场到下榻宾馆沿途，欢迎的人群几乎就没有间断。他们簇拥在街道两侧，纷纷向习近平总书记");
+                } else if (index== 2) {
+                    mBuddleText.setText("从机场到下榻宾馆沿途，欢迎的人群几乎就没有间断");
+                    index = 0;
+                }
+                index++;
                 break;
             case R.id.right_icon4:
                 break;
-            case R.id.cartoon_body_touch:
+            case R.id.cartoon_head:
+                Log.d(TAG, "click head");
+                break;
+            case R.id.cartoon_chest:
+                Log.d(TAG, "click chest");
+                break;
+            case R.id.cartoon_left_hand:
+                Log.d(TAG, "click left hand");
+                break;
+            case R.id.cartoon_right_hand:
+                Log.d(TAG, "click right hand");
+                break;
+            case R.id.cartoon_left_leg:
+                Log.d(TAG, "click left leg");
+                break;
+            case R.id.cartoon_right_leg:
+                Log.d(TAG, "click right leg");
                 break;
             default:
                 break;
         }
     }
-
-    @OnTouch(R.id.cartoon_body_touch)
-    public boolean cartoonBodyTouch(View view) {
-        Log.d(TAG, "cartoon body touch  " + view.getX() + "Y  " + view.getY());
-        return true;
-    }
-
 
     @Override
     protected void onResume() {
@@ -168,12 +209,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getScreenInch();
-        initUi();
-        if (isBulueToothConnected()) {
-            topIcon2Disconnect.setVisibility(View.INVISIBLE);
-        } else {
-            topIcon2Disconnect.setVisibility(View.VISIBLE);
-        }
+        initUI();
+
     }
 
 
@@ -186,21 +223,22 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     public void showCartoonAction(String json) {
-//        try {
-//            GifDrawable gifFromResource = new GifDrawable(getContext().getResources(), R.drawable.standup);
-//            cartoonAction.setImageDrawable(gifFromResource);
-//            Log.d(TAG, "After Animation CARTOON width*height :" + cartoonAction.getWidth() + "  Y: " + cartoonAction.getHeight());
-//            int count = gifFromResource.getNumberOfFrames();
-//            gifFromResource.setLoopCount(1);
-//            Log.d(TAG, "FRAME COUNT " + count);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_animation);
+
+//           try {
+//               GifDrawable gifFromResource = new GifDrawable(getContext().getResources(), R.drawable.rightleg);
+//               cartoonAction.setImageDrawable(gifFromResource);
+//               Log.d(TAG, "After Animation CARTOON width*height :" + cartoonAction.getWidth() + "  Y: " + cartoonAction.getHeight());
+//               int count = gifFromResource.getNumberOfFrames();
+//               gifFromResource.setLoopCount(1);
+//               Log.d(TAG, "FRAME COUNT " + count);
+//           } catch (IOException e) {
+//               e.printStackTrace();
+//           }
+        cartoonAction.setBackgroundResource(R.drawable.swigrighthand);
         // Type casting the Animation drawable
         frameAnimation = (AnimationDrawable) cartoonAction.getBackground();
         //set true if you want to animate only once
-        frameAnimation.setOneShot(false);
+        frameAnimation.setOneShot(true);
         frameAnimation.start();
 
     }
@@ -216,7 +254,21 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     protected void initUI() {
-
+        //course center icon
+        int course_icon_margin_left = 22;
+        int course_icon_margin_top = 260;
+        RelativeLayout.LayoutParams rlParams = (RelativeLayout.LayoutParams) bottomIcon.getLayoutParams();
+        rlParams.leftMargin = getAdaptiveScreenX(course_icon_margin_left);
+        rlParams.topMargin = getAdaptiveScreenY(course_icon_margin_top);
+        bottomIcon.setLayoutParams(rlParams);
+        bottomIcon.setVisibility(View.VISIBLE);
+        //Bluetooth connection icon
+        if (isBulueToothConnected()) {
+            topIcon2Disconnect.setVisibility(View.INVISIBLE);
+        } else {
+            topIcon2Disconnect.setVisibility(View.VISIBLE);
+        }
+        
     }
 
     @Override
@@ -243,7 +295,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
         Log.d(TAG, "RECEIVE THE MESSAGE IN MAIN THREAD" + event.message);
         mPresenter.dealMessage(event.message);
@@ -259,16 +311,20 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             } else if (mCmd == 0x74) {
                 Log.d(TAG, "ROBOT POWER OFF EVENT");
             } else if (mCmd == ConstValue.DV_READ_BATTERY) {
+
                 byte[] mParams = Base64.decode(mMessage.getString("param"), Base64.DEFAULT);
                 for (int i = 0; i < mParams.length; i++) {
                     Log.d(TAG, "index " + i + "value :" + mParams[i]);
-                    if (i == 2) {
-                        if (mParams[i] == 0x01) {
-                            Log.d(TAG, " IS CHARGE ");
-                        }
-                    }
+
                     if (i == 3) {
-                        Log.d(TAG, "POWER VALUE " + mParams[i]);
+                        if (i == 2) {
+                            if (mParams[i] == 0x01) {
+                                Log.d(TAG, " IS CHARGE ");
+                                charging.setBackground(getDrawableRes("charging_flag"));
+                            }
+
+                        }
+                        powerStatusUpdate(mParams[mParams.length - 1]);
                     }
                 }
             } else {
@@ -280,9 +336,49 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     }
 
+    private int powerStatusUpdate(byte mParam) {
+        Log.d(TAG, "POWER VALUE " + mParam);
+        int power_index = 0;
+        if (mParam < powerThreshold[powerThreshold.length / 2]) {
+            for (int j = 0; j < powerThreshold.length / 2; j++) {
+                if (mParam < powerThreshold[j + 1] && mParam > powerThreshold[j]) {
+                    power_index = j - 1;
+                }
+                if (mParam == powerThreshold[j]) {
+                    power_index = j;
+                }
+            }
+        } else {
+            for (int j = powerThreshold.length / 2; j < powerThreshold.length; j++) {
+                if (powerThreshold[j - 1] < mParam && mParam < powerThreshold[j]) {
+                    power_index = j - 1;
+                }
+                if (mParam == powerThreshold[j]) {
+                    power_index = j;
+                }
+            }
+        }
+        Log.d(TAG, "Current power is " + power_index);
+        cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[power_index]));
+        return power_index;
+    }
+
+    private void buddleTextShow(String text){
+
+    }
+
     private double getScreenInch() {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int dpiClassification = dm.densityDpi;
+        Log.d(TAG, "SCREEN DENSITY DPI\n" +
+                "0.75 - ldpi - 120 dpi\n" +
+                "1.0 - mdpi - 160 dpi\n" +
+                "1.5 - hdpi - 240 dpi\n" +
+                "2.0 - xhdpi - 320 dpi\n" +
+                "3.0 - xxhdpi - 480 dpi\n" +
+                "4.0 - xxxhdpi - 640 dpi\n" +
+                "current screen :" + dpiClassification);
         int width = dm.widthPixels;
         int height = dm.heightPixels;
         screen_width = width;
@@ -298,12 +394,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     private void initUi() {
         //Course icon
-        int course_icon_margin_left = 22;
-        int course_icon_margin_top = 260;
-        RelativeLayout.LayoutParams rlParams = (RelativeLayout.LayoutParams) bottomIcon.getLayoutParams();
-        rlParams.leftMargin = getAdaptiveScreenX(course_icon_margin_left);
-        rlParams.topMargin = getAdaptiveScreenY(course_icon_margin_top);
-        bottomIcon.setLayoutParams(rlParams);
+//        int course_icon_margin_left = 22;
+//        int course_icon_margin_top = 260;
+//        RelativeLayout.LayoutParams rlParams = (RelativeLayout.LayoutParams) bottomIcon.getLayoutParams();
+//        rlParams.leftMargin = getAdaptiveScreenX(course_icon_margin_left);
+//        rlParams.topMargin = getAdaptiveScreenY(course_icon_margin_top);
+//        bottomIcon.setLayoutParams(rlParams);
         //cartoon animation
 //        int cartoon_view_margin_left = 170;
 //        int cartoon_view_margin_top = 0;

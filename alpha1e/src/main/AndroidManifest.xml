@@ -2,17 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ubt.alpha1e"
-<<<<<<< HEAD
-    android:versionCode="3138"
-    android:versionName="3.1.3.8">
-=======
     android:versionCode="1"
     android:versionName="V1.0.0.1">
-    <meta-data android:name="design_width" android:value="1920">
-    </meta-data>
-    <meta-data android:name="design_height" android:value="1080">
-    </meta-data>
->>>>>>> e69cb6148ab09a2f1bc4234dfc5a9318d521a051
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21"/>
@@ -66,6 +57,7 @@
         android:name=".AlphaApplication"
         android:exported="true"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"

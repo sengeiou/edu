@@ -837,9 +837,14 @@
     <string name="ui_main_right_icon4">社区</string>
     <string name="ui_main_course_center">课程中心</string>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <string name="control_center">关闭</string>
     
 =======
+=======
+
+    <string name="control_center">关闭</string>
+>>>>>>> feature/Liang_MainUi
 
     <string name="ui_setting_clear_cache">清除缓存数据</string>
     <string name="ui_setting_use_memory_title">Alpha1E已用空间</string>
@@ -880,7 +885,11 @@
     <string name="ui_common_no">否</string>
     <string name="ui_common_yes">是</string>
 
+<<<<<<< HEAD
 >>>>>>> e69cb6148ab09a2f1bc4234dfc5a9318d521a051
+=======
+>>>>>>> fc4e795a65c821ede9681c0b3ab4a0119eb1f37b
+>>>>>>> feature/Liang_MainUi
 
     <!-- 不需要翻译 -->
     <string name="ui_pc_update_url">http://www.ubtrobot.com/download/index.html</string>

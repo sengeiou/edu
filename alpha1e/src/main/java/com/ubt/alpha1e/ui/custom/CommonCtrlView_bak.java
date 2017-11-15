@@ -903,9 +903,10 @@ public class CommonCtrlView_bak implements IActionsUI, IMainUI {
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
+
 
     @Override
     public void onNoteDataChaged(Bitmap img, long id) {
