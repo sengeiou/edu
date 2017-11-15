@@ -18,8 +18,7 @@ import com.ubt.alpha1e.adapter.FeedbackRecyclerAdapter;
 import com.ubt.alpha1e.data.model.FeedbackInfo;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
-import com.ubt.alpha1e.userinfo.helpfeedback.HelpFeedbackActivity;
-import com.ubt.alpha1e.userinfo.helpfeedback.feelback.FeelbackActivity;
+import com.ubt.alpha1e.userinfo.helpfeedback.feedback.FeedbackActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
@@ -122,7 +121,7 @@ public class HotQuestionFragment extends MVPBaseFragment<HotQuestionContract.Vie
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_feedback:
-                FeelbackActivity.LaunchActivity(getContext());
+                FeedbackActivity.LaunchActivity(getContext());
                 break;
         }
     }

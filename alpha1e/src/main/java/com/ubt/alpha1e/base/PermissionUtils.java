@@ -3,12 +3,15 @@ package com.ubt.alpha1e.base;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.view.View;
 
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 import com.yanzhenjie.permission.PermissionListener;
 import com.yanzhenjie.permission.Rationale;
 import com.yanzhenjie.permission.RationaleListener;
+import com.yanzhenjie.permission.SettingService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -74,8 +77,11 @@ public class PermissionUtils {
             return;
         }
         boolean isFirstLocation = SPUtils.getInstance().getBoolean(sp_key, false);
-        if (isFirstLocation && AndPermission.hasAlwaysDeniedPermission(mContext, Arrays.asList(permiss))) {
+        if (AndPermission.hasPermission(mContext, permiss)) {
+            mCallback.onSuccessful();
+        } else if (isFirstLocation && AndPermission.hasAlwaysDeniedPermission(mContext, Arrays.asList(permiss))) {
             mCallback.onRationSetting();
+            showRationSettingDialog(permission);
         } else {
             AndPermission.with(mContext)
                     .requestCode(10000)
@@ -92,10 +98,48 @@ public class PermissionUtils {
                     })
                     .start();
             SPUtils.getInstance().put(sp_key, true);
-
         }
 
     }
+
+    /**
+     * 用户勾选过不再提醒则显示该设置对话框跳转到应用详情页
+     */
+    private void showRationSettingDialog(PermissionEnum permission) {
+        final SettingService settingService = AndPermission.defineSettingDialog(mContext);
+        String message = "";
+        switch (permission) {
+            case LOACTION:
+                message = ResourceManager.getInstance(mContext).getStringResources("dialog_permission_location_setting");
+                break;
+            case CAMERA:
+                message = ResourceManager.getInstance(mContext).getStringResources("dialog_permission_camera_setting");
+                break;
+            case STORAGE:
+                message = ResourceManager.getInstance(mContext).getStringResources("dialog_permission_storage_setting");
+                break;
+            default:
+                break;
+        }
+//        UbtLog.d("psermission", "message==" + message);
+        
+        new ConfirmDialog(mContext).builder()
+                .setMsg(message)
+                .setCancelable(true)
+                .setPositiveButton(ResourceManager.getInstance(mContext).getStringResources("dialog_go_setting"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        settingService.execute();
+                    }
+                }).setNegativeButton(ResourceManager.getInstance(mContext).getStringResources("ui_common_cancel"), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }).show();
+
+    }
+
 
     /**
      * 回调监听。
