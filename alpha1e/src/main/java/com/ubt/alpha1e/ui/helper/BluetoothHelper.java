@@ -106,6 +106,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
 
 
     private static final int MSG_DO_NOTE_DISCONNECT = 1020;
+    private static final int MSG_DO_FINISHE_CONNECT = 1021;
 
     // -------------------------------
     private String mCurrentLocalSoftVersion = null;
@@ -242,9 +243,16 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                 String mac = (String) msg.obj;
                 doSendComm(mac, ConstValue.DV_HANDSHAKE, null);
             }else if (msg.what == MSG_DO_COON_BT_SUCCESS) {
+//                doDealConnectSuccessResult();
+//                mUI.onCoonected(true);
+                UbtLog.d(TAG,"    发送 获取 product 和 dsn  命令");
+//                byte[] param_read = new byte[1];
+                doSendComm(ConstValue.DV_PRODUCT_AND_DSN, null);
+
+            }else if(msg.what == MSG_DO_FINISHE_CONNECT){
+                UbtLog.d(TAG,"    蓝牙连接过程完成");
                 doDealConnectSuccessResult();
                 mUI.onCoonected(true);
-
             }else if(msg.what == MSG_DO_CONNECT_NETWORK_UPGRADE){
 
                 doDealConnectSuccessResult();
@@ -614,6 +622,14 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
 
     }
 
+    private void finishBluetoothConnect() {
+        // connect bluetooth success to update UI
+        Message msg = new Message();
+        msg.what = MSG_DO_FINISHE_CONNECT;
+        mHandler.sendMessage(msg);
+
+    }
+
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
@@ -836,6 +852,23 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
             event.setNetworkInfo(networkInfo);
             EventBus.getDefault().post(event);
 
+        }else if(cmd == ConstValue.DV_PRODUCT_AND_DSN){
+            UbtLog.d(TAG,"cmd = " + cmd + "    获取到 product 和 dsn  ");
+            String  productAndDsn = new String(param);
+            UbtLog.d(TAG,"productAndDsn = " + productAndDsn);
+            String [] ss = productAndDsn.split(",");
+            if(productAndDsn != null && productAndDsn.length() == 2){
+                UbtLog.d(TAG,"product =   "+ss[0]);
+                UbtLog.d(TAG,"dsn =  "+ss[1]);
+            }
+            UbtLog.d(TAG,"再发送clientId 给机器人  ");
+
+            String params = "";
+            UbtLog.d(TAG,"params =========== " + params);
+            doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes(params));
+        }else if(cmd == ConstValue.DV_CLIENT_ID){
+            UbtLog.d(TAG,"cmd = " + cmd + "    发送clientId成功 ");
+            finishBluetoothConnect();
         }
     }
 

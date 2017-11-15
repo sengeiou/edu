@@ -16,6 +16,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -97,12 +98,18 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 startActivity(intent);
                 break;
             case R.id.top_icon2:
-                cartoonBodyTouch.setVisibility(View.VISIBLE);
-                cartoonAction.setVisibility(View.INVISIBLE);
+//                cartoonBodyTouch.setVisibility(View.VISIBLE);
+//                cartoonAction.setVisibility(View.INVISIBLE);
+
+
+                Intent i = new Intent();
+                i.setClass(this, BluetoothandnetconnectstateActivity.class);
+                this.startActivity(i);
+                this.overridePendingTransition(R.anim.activity_open_up_down,0);
                 break;
             case R.id.top_icon3:
-                mLaunch.setClass(this, MyMainActivity.class);
-                startActivity(mLaunch);
+//                mLaunch.setClass(this, MyMainActivity.class);
+//                startActivity(mLaunch);
                 break;
             case R.id.right_icon:
                 mLaunch.setClass(this, ScanBluetoothActivity.class);

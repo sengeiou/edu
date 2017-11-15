@@ -211,7 +211,9 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                     return;
                 }
                 isConnecting = true;
+
                 mHelper.doCancelCoon();
+                ((AlphaApplication) getApplicationContext()).cleanBluetoothConnectData();
 
                 tv_devices_num.setText("蓝牙连接中");
                 mCurrentRobotInfo = lst_robots_result_datas.get(position);
@@ -353,7 +355,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
             Map<String, Object> modle = mCurrentRobotInfo ;
             isConnecting = true;
             mHelper.doCancelCoon();
-
+            ((AlphaApplication) getApplicationContext()).cleanBluetoothConnectData();
             tv_devices_num.setText("蓝牙连接中");
             modle.put(ScanHelper.map_val_robot_connect_state,true);
             lst_robots_result_datas.clear();
@@ -445,12 +447,12 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         }
     }
 
-//    @Override
-//    public void finish() {
-//        super.finish();
-//        //关闭窗体动画显示
-//        this.overridePendingTransition(0,R.anim.activity_close_down_up);
-//    }
+    @Override
+    public void finish() {
+        super.finish();
+        //关闭窗体动画显示
+        this.overridePendingTransition(0,R.anim.activity_close_down_up);
+    }
 
     @Override
     public void onClick(View v) {

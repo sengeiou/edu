@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
@@ -364,7 +365,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
             Map<String, Object> modle = mCurrentRobotInfo ;
             isConnecting = true;
             mHelper.doCancelCoon();
-
+            ((AlphaApplication) getApplicationContext()).cleanBluetoothConnectData();
             tv_devices_num.setText("蓝牙连接中");
             modle.put(ScanHelper.map_val_robot_connect_state,true);
             lst_robots_result_datas.clear();
@@ -435,7 +436,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
                 }
                 isConnecting = true;
                 mHelper.doCancelCoon();
-
+                ((AlphaApplication) getApplicationContext()).cleanBluetoothConnectData();
                 tv_devices_num.setText("蓝牙连接中");
                 mCurrentRobotInfo = lst_robots_result_datas.get(position);
                 mBlueConnectNum = 1;

@@ -109,8 +109,8 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     private static final String TAG = "UserEditActivity";
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         initUI();
     }
 

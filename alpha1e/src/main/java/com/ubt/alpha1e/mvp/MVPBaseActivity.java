@@ -74,8 +74,9 @@ import static com.ubt.alpha1e.ui.custom.CommonCtrlView.KEY_CURRENT_PLAYING_ACTIO
 
 public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenterImpl<V>> extends AppCompatActivity implements ISkinChangedListener, LayoutInflaterFactory, IUI,BaseView {
 
-        private String mCurrentSetLanguage = "";
+    private String mCurrentSetLanguage = "";
 
+    protected Dialog mCoonLoadingDia;
 
     protected abstract void initUI();
 
