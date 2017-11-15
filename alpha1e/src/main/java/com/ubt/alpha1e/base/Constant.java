@@ -20,6 +20,14 @@ public class Constant {
     public final static String SP_USER_IMAGE = "sp_user_image";
     public final static String SP_USER_NICKNAME = "sp_user_nickname";
 
+    /**
+     * 首次申请权限
+     */
+    public final static String SP_FIRST_PERMISSION = "first_permission";
+
+    public final static String SP_PERMISSION_LOCATION = "sp_location_permission";
+    public final static String SP_PERMISSION_STORAGE = "sp_storage_permission";
+    public final static String SP_PERMISSION_CAMERA = "sp_camera_permission";
 
     /**
      * 信鸽信息
@@ -30,7 +38,7 @@ public class Constant {
     /**
      * 首次获取蓝牙权限
      */
-    public final static String SP_START_GTE_PERMISSION ="get_first_permission";
+    public final static String SP_START_GTE_PERMISSION = "get_first_permission";
 
 
     /**

@@ -42,7 +42,7 @@ public class MyTextWatcher implements TextWatcher {
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         cursor = start;
-//      Log.e("此时光标的位置为", cursor + "");
+         Log.e("onTextChanged", "start=="+start);
         if (null != mWatcherListener) {
             mWatcherListener.textChange();
         }

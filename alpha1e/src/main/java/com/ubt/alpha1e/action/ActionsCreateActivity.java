@@ -3051,7 +3051,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
     private void readEngOneByOne (){
         if(ids.size() >0){
             UbtLog.d(TAG, "readEngOneByOne:" + i);
-            if(i==ids.size()-1){
+            if(i==ids.size()){
                 i=0;
                 addFrame();
             }else{

@@ -24,6 +24,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.NetUtil;
+import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
@@ -135,6 +137,15 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
 
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        UbtLog.d("Usercenter", "onHiddenChanged===" + mUserModel.toString());
+        if (hidden) {
+            initData();
+        }
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
@@ -149,6 +160,10 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         UbtLog.d("UserInfoFragment", "onActivityCreated");
+        initData();
+    }
+
+    private void initData() {
         mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
         UbtLog.d("Usercenter", "usermode===" + mUserModel.toString());
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
@@ -206,12 +221,20 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 mPresenter.showImageCenterHeadDialog(getActivity());
                 break;
             case R.id.tv_user_age:
-                int currentPosition = mPresenter.getPosition(mTvUserAge.getText().toString(), ageList);
-                mPresenter.showAgeDialog(getActivity(), ageList, currentPosition);
+                if (NetUtil.isNetWorkConnected(getActivity()) && ageList.size() > 0) {
+                    int currentPosition = mPresenter.getPosition(mTvUserAge.getText().toString(), ageList);
+                    mPresenter.showAgeDialog(getActivity(), ageList, currentPosition);
+                } else {
+                    ToastUtils.showShort("Network  unavailable");
+                }
                 break;
             case R.id.tv_user_grade:
-                int currentPosition1 = mPresenter.getPosition(mTvUserGrade.getText().toString(), gradeList);
-                mPresenter.showGradeDialog(getActivity(), currentPosition1, gradeList);
+                if (NetUtil.isNetWorkConnected(getActivity()) && gradeList.size() > 0) {
+                    int currentPosition1 = mPresenter.getPosition(mTvUserGrade.getText().toString(), gradeList);
+                    mPresenter.showGradeDialog(getActivity(), currentPosition1, gradeList);
+                } else {
+                    ToastUtils.showShort("Network  unavailable");
+                }
                 break;
             default:
                 break;
@@ -268,14 +291,27 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void takeImageFromShoot() {
-        getShootCamera();
-//        if (AndPermission.hasPermission(mContext, Permission.CAMERA)) {
-//            ToastUtils.showShort("有权限");
-//            getShootCamera();
-//        } else {
-//            ToastUtils.showShort("无权限");
-//
-//        }
+        // getShootCamera();
+        //首先判断是否开启相机权限，如果开启直接调用，未开启申请
+        PermissionUtils.getInstance(getActivity())
+                .request(new PermissionUtils.PermissionLocationCallback() {
+                    @Override
+                    public void onSuccessful() {
+                        // ToastUtils.showShort("申请拍照权限成功");
+                        getShootCamera();
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        //  ToastUtils.showShort("申请拍照权限失败");
+                    }
+
+                    @Override
+                    public void onRationSetting() {
+                        // ToastUtils.showShort("申请拍照权限已经被拒绝过");
+                    }
+                }, PermissionUtils.PermissionEnum.CAMERA);
+
     }
 
     public void getShootCamera() {
@@ -335,8 +371,12 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     @Override
     public void updateLoopData(UserAllModel userAllModel) {
         if (null != userAllModel) {
-            ageList = userAllModel.getAgeList();
-            gradeList = userAllModel.getGradeList();
+            if (null != userAllModel.getAgeList() && userAllModel.getAgeList().size() > 0) {
+                ageList = userAllModel.getAgeList();
+            }
+            if (null != userAllModel.getGradeList() && userAllModel.getGradeList().size() > 0) {
+                gradeList = userAllModel.getGradeList();
+            }
         } else {
 
         }
