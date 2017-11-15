@@ -87,8 +87,7 @@
             android:layout_toRightOf="@+id/btn_vol_logo"
             android:layout_toLeftOf="@+id/btn_lig_logo"
             android:progressDrawable="@drawable/sec_bg_vol"
-            android:thumb="@drawable/cc_volumecontrol"
-            android:thumbOffset="0dp" />
+            android:thumb="@drawable/cc_volumecontrol" />
         <ImageView
             android:id="@+id/btn_lig_logo"
             android:layout_width="wrap_content"
