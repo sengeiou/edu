@@ -268,6 +268,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         } else {
             topIcon2Disconnect.setVisibility(View.VISIBLE);
         }
+
+
         
     }
 
@@ -370,6 +372,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private double getScreenInch() {
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int scale = (int) this.getResources().getDisplayMetrics().density;
+
         int dpiClassification = dm.densityDpi;
         Log.d(TAG, "SCREEN DENSITY DPI\n" +
                 "0.75 - ldpi - 120 dpi\n" +
