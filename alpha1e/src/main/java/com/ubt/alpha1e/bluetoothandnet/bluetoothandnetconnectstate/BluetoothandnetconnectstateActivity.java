@@ -134,7 +134,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
             switch (msg.what) {
                 case UPDATE_WIFI_STATUS:
                     NetworkInfo networkInfo = (NetworkInfo) msg.obj;
-                    UbtLog.d(TAG,"networkInfo = " + networkInfo);
+                    UbtLog.d(TAG,"networkInfo == " + networkInfo);
 //                    if(networkInfo != null && networkInfo.status){
                     ed_wifi_name.setText(networkInfo.name);
 
