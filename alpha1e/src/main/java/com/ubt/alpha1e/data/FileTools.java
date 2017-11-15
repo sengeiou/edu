@@ -7,7 +7,9 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.StatFs;
 import android.text.TextUtils;
+import android.text.format.Formatter;
 import android.util.Log;
 
 import com.ubt.alpha1e.AlphaApplication;
@@ -63,8 +65,8 @@ public class FileTools {
     public static final String theme_cache = file_path + "/themes";
     public static final String theme_log_name = "theme_logs";
     public static final String theme_festival_log_name = "theme_festival_log_name";
-    public static final String theme_pkg_file = theme_cache + "/language_v2.6.1.ubt";
-    public static final String theme_pkg_festival_file = theme_cache + "/festival_language_v2.6.1.ubt";
+    public static final String theme_pkg_file = theme_cache + "/language_v1.0.1.ubt";
+    public static final String theme_pkg_festival_file = theme_cache + "/festival_language_v1.0.1.ubt";
     public static final String update_cache = file_path + "/update";
     public static final String actions_download_cache = file_path + "/actions";
     public static final String actions_new_cache = file_path + "/creates";
@@ -323,7 +325,7 @@ public class FileTools {
                             }
                         });
                 if (cacheListFileNames == null) {
-                    listener.onClaerCache();
+                    listener.onClearCache();
                     return;
                 }
                 for (int i = 0; i < cacheListFileNames.length; i++) {
@@ -337,7 +339,7 @@ public class FileTools {
                         }
                     }
                 }
-                listener.onClaerCache();
+                listener.onClearCache();
             }
         });
     }
@@ -792,4 +794,28 @@ public class FileTools {
         }
     }
 
+    /**
+     * 获取手机内部存储空间
+     *
+     * @param context
+     * @return 以M,G为单位的容量
+     */
+    public static String getInternalMemorySSize(Context context) {
+        return Formatter.formatFileSize(context, getInternalMemoryLSize(context));
+    }
+
+    /**
+     * 获取手机内部存储空间
+     *
+     * @param context
+     * @return 以M,G为单位的容量
+     */
+    public static long getInternalMemoryLSize(Context context) {
+        File file = Environment.getDataDirectory();
+        StatFs statFs = new StatFs(file.getPath());
+        long blockSizeLong = statFs.getBlockSizeLong();
+        long blockCountLong = statFs.getBlockCountLong();
+        long size = blockCountLong * blockSizeLong;
+        return size;
+    }
 }

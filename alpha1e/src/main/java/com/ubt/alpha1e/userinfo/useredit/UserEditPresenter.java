@@ -1,12 +1,12 @@
 package com.ubt.alpha1e.userinfo.useredit;
 
 import android.app.Activity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -142,8 +142,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
         View contentView = LayoutInflater.from(activity).inflate(R.layout.dialog_useredit_wheel, null);
         ViewHolder viewHolder = new ViewHolder(contentView);
         final LoopView loopView = (LoopView) contentView.findViewById(R.id.loopView);
-        TextView textView = contentView.findViewById(R.id.tv_wheel_name);
-        textView.setVisibility(View.GONE);
+       
         DialogPlus.newDialog(activity)
                 .setContentHolder(viewHolder)
                 .setGravity(Gravity.BOTTOM)
@@ -211,7 +210,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                         BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<UserModel>>() {
                                 }.getType());
-                        UbtLog.d("userEdit", "baseResponseModel==" + baseResponseModel.status + "  " + baseResponseModel.models);
+                        UbtLog.d("userEdit", "baseResponseModel==" + baseResponseModel.status + "  " + "info" + baseResponseModel.info + baseResponseModel.models);
                         if (baseResponseModel.status) {
                             SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
                             if (isAttachView()) {
@@ -236,7 +235,10 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        mView.updateUserModelFailed();
+                        UbtLog.d("userEditHead", "e===" + e.getMessage());
+                        if (isAttachView()) {
+                            mView.updateUserModelFailed();
+                        }
                     }
 
                     @Override
@@ -244,7 +246,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                         BaseResponseModel<UserModel> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<UserModel>>() {
                                 }.getType());
-                        UbtLog.d("userEdit", "baseResponseModel==" + baseResponseModel.status + "  " + baseResponseModel.models);
+                        UbtLog.d("userEditHead", "baseResponseModel==" + baseResponseModel.status + "  " + baseResponseModel.models);
                         if (baseResponseModel.status) {
                             SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
                             if (isAttachView()) {
@@ -280,6 +282,22 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
             }
         });
 
+    }
+
+
+    public int getPosition(String content, List<String> list) {
+        int position = 0;
+        if (TextUtils.isEmpty(content)) {
+            position = 0;
+        } else {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).equals(content)) {
+                    position = i;
+                    break;
+                }
+            }
+        }
+        return position;
     }
 
 }

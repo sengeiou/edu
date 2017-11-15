@@ -2,8 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ubt.alpha1e"
+<<<<<<< HEAD
     android:versionCode="3138"
     android:versionName="3.1.3.8">
+=======
+    android:versionCode="1"
+    android:versionName="V1.0.0.1">
+    <meta-data android:name="design_width" android:value="1920">
+    </meta-data>
+    <meta-data android:name="design_height" android:value="1080">
+    </meta-data>
+>>>>>>> e69cb6148ab09a2f1bc4234dfc5a9318d521a051
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21"/>
@@ -93,96 +102,12 @@
         <service android:name=".services.RecordSoftService"/>
         <service android:name=".services.AutoScanConnectService"/>
 
-        <!-- Required  一PushService -->
-        <service
-            android:name="cn.jpush.android.service.PushService"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTER"/>
-                <action android:name="cn.jpush.android.intent.REPORT"/>
-                <action android:name="cn.jpush.android.intent.PushService"/>
-                <action android:name="cn.jpush.android.intent.PUSH_TIME"/>
-            </intent-filter>
-        </service>
-        <service
-            android:name="cn.jpush.android.service.DaemonService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.DaemonService"/>
 
-                <category android:name="com.ubt.alpha1e"/>
-            </intent-filter>
-        </service>
 
-        <receiver
-            android:name="cn.jpush.android.service.PushReceiver"
-            android:enabled="true">
-            <intent-filter android:priority="1000">
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>
 
-                <category android:name="com.ubt.alpha1e"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.USER_PRESENT"/>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-            </intent-filter>
-            <!-- Optional -->
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED"/>
-                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
 
-                <data android:scheme="package"/>
-            </intent-filter>
-        </receiver>
 
-        <!-- Required SDK核心功能 -->
-        <activity
-            android:name="cn.jpush.android.ui.PushActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="cn.jpush.android.ui.PushActivity"/>
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="com.ubt.alpha1e"/>
-            </intent-filter>
-        </activity>
-        <!-- Required SDK核心功能 -->
-        <service
-            android:name="cn.jpush.android.service.DownloadService"
-            android:enabled="true"
-            android:exported="false"/>
-        <!-- Required SDK核心功能 -->
-        <receiver android:name="cn.jpush.android.service.AlarmReceiver"/>
-        <receiver
-            android:name=".services.MyJPushReceiver"
-            android:enabled="true">
-
-            <!-- android:enabled="true" 接受INSTALL ALONE SDK的广播信息 -->
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTRATION"/>
-                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED"/>
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED"/>
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED"/>
-                <!-- NOTE: replace the package name "cn.jpush.android" to your app package name -->
-                <category android:name="com.ubt.alpha1e"/>
-            </intent-filter>
-        </receiver>
-
-        <!-- Required. For publish channel feature -->
-        <!-- JPUSH_CHANNEL 是为了方便开发者统计APK分发渠道。 -->
-        <!-- 例如: -->
-        <!-- 发到 Google Play 的APK可以设置为 google-play; -->
-        <!-- 发到其他市场的 APK 可以设置为 xxx-market。 -->
-        <meta-data
-            android:name="JPUSH_CHANNEL"
-            android:value="developer-default"/>
-        <!-- Required. AppKey copied from Portal -->
-        <meta-data
-            android:name="JPUSH_APPKEY"
-            android:value="6dc6a3e99e238acf9cd91a9c"/>
 
         <!-- Facebook -->
         <meta-data
@@ -605,6 +530,50 @@
             android:windowSoftInputMode="adjustPan"
             android:configChanges="orientation|keyboardHidden|screenSize"
             />
+
+        <activity
+            android:name=".userinfo.helpfeedback.HelpFeedbackActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".userinfo.helpfeedback.feedback.FeedbackActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".userinfo.helpfeedback.feedbackdetail.FeedbackDetailActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".userinfo.aboutus.AboutUsActivity"
+            android:label="@string/title_activity_about_us"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".userinfo.cleancache.CleanCacheActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".userinfo.contactus.ContactUsActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".userinfo.psdmanage.PsdManageActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".course.CourseActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
         <!-- APP实现的Receiver，用于接收消息和结果反馈 -->
         <receiver android:name="com.ubt.alpha1e.xingepush.XGMessageRecevicer" >
             <intent-filter>

@@ -919,7 +919,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

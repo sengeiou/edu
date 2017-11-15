@@ -57,17 +57,17 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
         mHelper = new StartHelper(this, this);
         loginHelper = new LoginHelper(this);
         //读取主题信息，如果在主题动画加载完成之前读取完毕则继续检查逻辑，否则不检查
-        ((StartHelper) mHelper).doCkeckThemeInfo();
-        ((StartHelper) mHelper).doCkeckLanguageInfo();
+//        ((StartHelper) mHelper).doCkeckThemeInfo();
+//        ((StartHelper) mHelper).doCkeckLanguageInfo();
         ((StartHelper) mHelper).doReadUser();
         // google play不自主升级-------------------start
-        ((StartHelper) mHelper).doUpdateApk();
+//        ((StartHelper) mHelper).doUpdateApk();
         // google play不自主升级-------------------end
         ((StartHelper) mHelper).doGetLocation();
         ((StartHelper) mHelper).doRunGetResServices();
 
         //add by lihai upgadeDB
-        ((StartHelper) mHelper).UpgadeDB();
+       // ((StartHelper) mHelper).UpgadeDB();
 
         UbtLog.d(TAG,"BUILD_TYPE = " + BuildConfig.BUILD_TYPE + "   DEBUG = " +BuildConfig.DEBUG );
         if(!"release".equals(BuildConfig.BUILD_TYPE)){

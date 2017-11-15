@@ -42,4 +42,6 @@ public class Constant {
     public static final String SHARE_IMAGE_PATH = "SHARE_IMAGE_PATH";
     public static final String SHARE_BLOCKLY_CHAllANGE = "SHARE_BLOCKLY_CHAllANGE";
 
+    public static final String FEEDBACK_INFO_KEY = "FEEDBACK_INFO_KEY";
+
 }

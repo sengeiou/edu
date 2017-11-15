@@ -47,23 +47,27 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="49dp"
+                android:layout_height="48dp"
                 android:focusableInTouchMode="true"
                 >
 
                 <TextView
+                    android:id="@+id/tv_nick_tip"
                     style="@style/text_userinfo_left_style"
                     android:layout_alignParentLeft="true"
                     android:text="昵称"/>
 
                 <EditText
                     android:id="@+id/edit_user_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginRight="30dp"
+                    android:layout_toRightOf="@+id/tv_nick_tip"
                     android:background="@null"
+                    android:gravity="right|center_vertical"
                     android:imeOptions="flagNoExtractUi"
                     android:paddingBottom="5dp"
                     android:paddingLeft="15dp"
@@ -83,7 +87,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="49dp"
+                android:layout_height="48dp"
                 >
 
                 <TextView
@@ -137,7 +141,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="49dp"
+                android:layout_height="48dp"
                 >
 
                 <TextView
@@ -159,13 +163,13 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="49dp"
+                android:layout_height="48dp"
                 >
 
                 <TextView
                     style="@style/text_userinfo_left_style"
                     android:layout_alignParentLeft="true"
-                    android:text="年级"/>
+                    android:text="教育"/>
 
                 <TextView
                     android:id="@+id/tv_user_grade"

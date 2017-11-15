@@ -50,7 +50,6 @@ import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.update.EngineUpdateManager;
 import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
-import com.ubt.alpha1e.utils.crash.CrashHandler;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.xingepush.XGUBTManager;
 import com.ubtechinc.base.BlueToothManager;
@@ -61,7 +60,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import cn.jpush.android.api.JPushInterface;
 
 public class AlphaApplication extends LoginApplication {
 
@@ -95,12 +93,11 @@ public class AlphaApplication extends LoginApplication {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init(this);
+//        CrashHandler crashHandler = CrashHandler.getInstance();
+//        crashHandler.init(this);
 
         initActivityLife();
-        initJPush(this);
-        initSkin(this);
+         initSkin(this);
         initConnectClient();
         initStyleDialog();
 //        LeakCanary.install(this);
@@ -121,13 +118,7 @@ public class AlphaApplication extends LoginApplication {
         XGUBTManager.getInstance(this).initXG(2100270011,"A783M4PIM7JI");
     }
 
-    /**
-     * 初始化推送库
-     */
-    public void initJPush(Context ctx) {
-        JPushInterface.setDebugMode(true);
-        JPushInterface.init(ctx);
-    }
+
 
     public static Context getmContext() {
         return mContext;
@@ -164,7 +155,7 @@ public class AlphaApplication extends LoginApplication {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        JPushInterface.onKillProcess(getApplicationContext());
+
     }
 
     @Override

@@ -1,10 +1,12 @@
 package com.ubt.alpha1e.login;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -16,10 +18,12 @@ import com.tencent.ai.tvs.env.ELoginPlatform;
 import com.tencent.ai.tvs.info.QQOpenInfoManager;
 import com.tencent.ai.tvs.info.WxInfoManager;
 import com.tencent.connect.common.Constants;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
@@ -60,9 +64,14 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
     private int loginType = 0; //默认 0 QQ， 1 WX;
 
-    public static final String PID = "";
-    public static final String DSN = "";
+    public static final String PID = "b0851325-3056-4853-921b-dcba21b491a3";
+    public static final String DSN = "123456";
 
+    public static void LaunchActivity(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,12 +143,11 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     public void onSuccess(int i) {
         Log.e(TAG, "login onSuccess" + i);
 
-/*
+
         if(i==AuthorizeListener.WX_TVSIDRECV_TYPE){  //和机器人联调的
             UbtLog.d(TAG, "sss wx:"+ proxy.getClientId(ELoginPlatform.WX));
             UbtLog.d(TAG, "sss qq:"+ proxy.getClientId(ELoginPlatform.QQOpen));
         }
-*/
 
 
         String accessToken = "";
@@ -156,7 +164,10 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
         } else {
             accessToken = wxInfoManager.accessToken;
             openID = wxInfoManager.openID;
+            if(i==AuthorizeListener.USERINFORECV_TYPE){
                 doThirdLogin(accessToken, openID);
+            }
+
         }
 
         Log.e(TAG, "accessToken:" + accessToken + "--openID:" + openID + "--appID:" + appID);
@@ -181,6 +192,15 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
                 proxy.handleQQOpenIntent(requestCode, resultCode, data);
             }
         }
+    }
+
+    //登录页面点击返回退出app,防止在设置清除用户信息之后调到登录页面点击返回回到主页面
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ((AlphaApplication) this.getApplication()).doExitApp(true);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 
@@ -210,6 +230,8 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "onError:" + e.getMessage());
+                LoadingDialog.dismiss(LoginActivity.this);
+                ToastUtils.showShort("登录失败");
             }
 
             @Override
@@ -279,6 +301,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "onError:" + e.getMessage());
                 LoadingDialog.dismiss(LoginActivity.this);
+                ToastUtils.showShort("获取用户信息失败");
             }
 
             @Override

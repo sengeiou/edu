@@ -7,19 +7,12 @@
 
     >
 
-  <!--  <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/login"
-        android:scaleType="fitXY"/>-->
-
-
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:scaleType="fitXY"/>
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +29,8 @@
             android:text="ALPHA 1E"
             android:textColor="#fff"
             android:gravity="center"
-            android:textSize="30sp"
+            android:textSize="27sp"
+
             />
 
         <TextView
@@ -45,14 +39,14 @@
             android:gravity="center"
             android:text="@string/ui_launch_dream"
             android:textColor="#fff"
-            android:textSize="18sp"
+            android:textSize="16sp"
             />
 
 
 
         <RelativeLayout
             android:id="@+id/rl_wx_login"
-            android:layout_width="160dp"
+            android:layout_width="154dp"
             android:layout_height="45.33dp"
             android:layout_gravity="center"
             android:background="@drawable/bg_btn_login"
@@ -66,7 +60,6 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/wx_icon"
                 android:scaleType="fitCenter"
-                android:paddingTop="4dp"
                 android:paddingLeft="8dp"
                 />
 
@@ -78,16 +71,16 @@
                 android:paddingLeft="10dp"
                 android:text="微信登录"
                 android:gravity="center"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="#289CDF"/>
 
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_qq_login"
-            android:layout_width="160dp"
+            android:layout_width="154dp"
             android:layout_height="45.33dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:layout_gravity="center"
             android:background="@drawable/bg_btn_login"
             android:gravity="center"
@@ -100,7 +93,6 @@
                 android:src="@drawable/qq_icon"
                 android:scaleType="fitCenter"
                 android:visibility="visible"
-                android:paddingTop="4dp"
                 />
 
             <TextView
@@ -111,7 +103,7 @@
                 android:paddingLeft="10dp"
                 android:gravity="center"
                 android:text="QQ登录"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textColor="#289CDF"/>
 
         </RelativeLayout>

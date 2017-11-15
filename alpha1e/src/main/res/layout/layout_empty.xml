@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/no_more_data"/>
+            />
 
 
         <TextView
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:textColor="@color/tv_black_color"
+            android:textColor="@color/tv_no_data_color"
             android:textSize="18sp"
             />
     </LinearLayout>

@@ -11,12 +11,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.GetCodeRequest;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
@@ -137,17 +137,14 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
             public void onClick(View view) {
                 requestCountDown.start();
                 setGetCodeTextEnable(false);
-//                String params = "{"
-//                        + "\"token\":" + "\"" + token + "\""
-//                        + ",\n\"userId\":" + "\"" + userId + "\""
-//                        + ",\n\"phone\":" + "\"" + edtTel.getText().toString() + "\""
-//                        + "}";
+
                 GetCodeRequest getCodeRequest = new GetCodeRequest();
                 getCodeRequest.setPhone(edtTel.getText().toString());
                 OkHttpClientUtils.getJsonByPostRequest(HttpEntity.REQUEST_SMS_CODE, getCodeRequest, 0).execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         UbtLog.e(TAG, "REQUEST_SMS_CODE Exception:" + e.getMessage());
+                        ToastUtils.showShort("获取验证码失败");
                     }
 
                     @Override
@@ -178,7 +175,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                     public void onError(Call call, Exception e, int id) {
                         UbtLog.e(TAG, "Exception:" + e.getMessage());
                         LoadingDialog.dismiss(LoginAuthActivity.this);
-                        Toast.makeText(LoginAuthActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
+                        ToastUtils.showShort("验证码错误");
                     }
 
                     @Override
@@ -222,7 +219,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;//拦截事件传递,从而屏蔽back键。
+//            return true;//拦截事件传递,从而屏蔽back键。
         }
         return super.onKeyDown(keyCode, event);
     }
