@@ -460,6 +460,11 @@ public class RobotInfoActivity extends BaseActivity implements BaseDiaUI {
 		mHandler.sendEmptyMessage(MSG_DO_BLUETOOTH_DISCONNECT);
 	}
 
+	@Override
+	protected void onPostResume() {
+		super.onPostResume();
+	}
+
 	/**
 	 * 初始化数据
 	 */

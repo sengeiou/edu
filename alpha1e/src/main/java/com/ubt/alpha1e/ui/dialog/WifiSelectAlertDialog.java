@@ -137,7 +137,7 @@ public class WifiSelectAlertDialog {
 
         // 调整dialog背景大小
         llBg.setLayoutParams(new FrameLayout.LayoutParams((int) (mDisplay
-                .getWidth() * 0.7), (int)(mDisplay.getHeight() * 0.5)));
+                .getWidth() * 0.7), (int)(mDisplay.getHeight() * 0.7)));
 
 
 ////        WindowManager m = getWindowManager();

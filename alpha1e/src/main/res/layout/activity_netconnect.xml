@@ -68,7 +68,7 @@
             android:id="@+id/ig_wifi"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/buletooth_wi_fi"
+            android:background="@drawable/bluetooth_wifi_nomal"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"/>
         <EditText
@@ -81,9 +81,11 @@
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:textColor="#666666"
-            android:focusable="false"
             android:singleLine="true"
             android:maxLines="1"
+            android:maxLength="100"
+            android:windowSoftInputMode="adjustPan"
+            android:imeOptions="flagNoExtractUi"
             android:background="@null"
             android:textSize="16sp"/>
 
@@ -131,7 +133,7 @@
             android:background="#00000000"
             android:singleLine="true"
             android:maxLines="1"
-            android:maxLength="25"
+            android:maxLength="100"
             android:windowSoftInputMode="adjustPan"
             android:imeOptions="flagNoExtractUi"
             android:textSize="16sp"/>
@@ -187,8 +189,9 @@
         android:id="@+id/rl_content_net_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/line"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:layout_below="@+id/rl_tile"
+        android:layout_alignParentStart="true">
         <RelativeLayout
             android:id="@+id/rl_net_list"
             android:layout_width="360dp"

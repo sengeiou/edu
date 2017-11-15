@@ -324,6 +324,15 @@ public class ConstValue {
 	public static final byte DV_FALL_DOWN = (byte) 0x71;
 
 
+	/**
+	 * 1E机器人获取产品productID和DSN
+	 */
+	public static final byte DV_PRODUCT_AND_DSN = (byte) 0x72;
 
+
+	/**
+	 * 1E机器人发送CLIENT ID
+	 */
+	public static final byte DV_CLIENT_ID = (byte) 0x73;
 
 }

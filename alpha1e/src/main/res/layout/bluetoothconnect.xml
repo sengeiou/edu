@@ -42,7 +42,8 @@
             android:background="@drawable/blutooth_retrun"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="18dp"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <TextView
@@ -51,6 +52,71 @@
         android:layout_height="1dp"
         android:layout_below="@id/rl_tile"
         android:background="#cccccc" />
+
+
+    //搜索中
+    <RelativeLayout
+        android:id="@+id/rl_content_device_researching"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/line"
+        android:visibility="visible">
+        <RelativeLayout
+            android:id="@+id/rl_devices_researching"
+            android:layout_width="140dp"
+            android:layout_height="180dp"
+            android:layout_centerInParent="true">
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/ig_researching"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:background="@drawable/bluetooth_searching"/>
+            <TextView
+                android:id="@+id/tv_advice_researching"
+                android:layout_below="@id/ig_researching"
+                android:layout_width="140dp"
+                android:layout_height="45dp"
+                android:text="正在搜索机器人..."
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="#1D3740"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    //未搜索到
+    <RelativeLayout
+        android:id="@+id/rl_content_no_device"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/line"
+        android:visibility="invisible">
+        <RelativeLayout
+            android:id="@+id/rl_devices_no_device"
+            android:layout_width="180dp"
+            android:layout_height="190dp"
+            android:layout_centerInParent="true">
+            <ImageView
+                android:id="@+id/ig_no_device"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/blutooth_search_no_device"/>
+            <TextView
+                android:id="@+id/tv_advice_no_device"
+                android:layout_below="@id/ig_no_device"
+                android:layout_width="180dp"
+                android:layout_height="70dp"
+                android:text="没有找到机器人\n请确认机器人开机后重试！"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="#1D3740"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
 
     //搜索
     <RelativeLayout
@@ -89,34 +155,41 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/line"
-        android:visibility="visible">
+        android:visibility="invisible">
         <RelativeLayout
             android:id="@+id/rl_devices_list"
             android:layout_width="360dp"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true">
-            <pl.droidsonroids.gif.GifImageView
-                android:id="@+id/ig_bg"
+            <ImageView
+                android:id="@+id/ig_phone"
                 android:layout_width="73dp"
-                android:layout_marginLeft="100dp"
-                android:background="@drawable/gif_search_device"
+                android:layout_marginLeft="30dp"
+                android:background="@drawable/bluetooth_bg_phone"
+                android:layout_height="73dp"/>
+
+            <ImageView
+                android:id="@+id/ig_robtot"
+                android:layout_width="110dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/bluetooth_bg_robot"
                 android:layout_height="73dp"/>
             <TextView
                 android:id="@+id/tv_advice"
-                android:layout_alignParentRight="true"
-                android:layout_width="135dp"
+                android:layout_toRightOf="@id/ig_robtot"
+                android:layout_width="120dp"
                 android:layout_height="45dp"
                 android:textStyle="bold"
                 android:text="手机靠近我就可\n以自动连接上哦!"
                 android:gravity="center"
                 android:textColor="#666666"
-                android:textSize="14sp"
-                android:layout_marginRight="25dp"
-                android:layout_marginTop="18dp"
+                android:textSize="11sp"
+                android:layout_marginLeft="-20dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/bg_bluetooth_advices"/>
             <TextView
                 android:id="@+id/tv_devices_num"
-                android:layout_below="@id/ig_bg"
+                android:layout_below="@id/ig_phone"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:textStyle="bold"
@@ -150,7 +223,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/line"
-        android:visibility="gone">
+        android:visibility="invisible">
         <RelativeLayout
             android:id="@+id/rl_connect_sucess"
             android:layout_width="240dp"

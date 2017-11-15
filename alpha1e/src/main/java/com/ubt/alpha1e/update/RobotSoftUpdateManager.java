@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.data.model.UpgradeProgressInfo;
@@ -120,7 +121,8 @@ public class RobotSoftUpdateManager {
                         if(mContext instanceof RobotConnectedActivity ||
                                 mContext instanceof ScanBluetoothActivity ||
                                 mContext instanceof AutoScanConnectService ||
-                                mContext instanceof BluetoothconnectActivity){
+                                mContext instanceof BluetoothconnectActivity||
+                                mContext instanceof BluetoothandnetconnectstateActivity){
                             // 跳转主页
                             mHandler.sendEmptyMessage(ScanHelper.MSG_DO_COON_BT_SUCCESS);
                         }else {

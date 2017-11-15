@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.MessageRecordManager;
@@ -31,7 +32,6 @@ import com.ubt.alpha1e.data.model.NewActionInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.LoginActivity;
-import com.ubt.alpha1e.ui.MessageActivity;
 import com.ubt.alpha1e.ui.MyActionsActivity;
 import com.ubt.alpha1e.ui.MyDynamicActivity;
 import com.ubt.alpha1e.ui.MyMainActivity;
@@ -273,9 +273,16 @@ public class MyFragment extends BaseFragment implements IActionsUI,MessageRecord
                         break;
                     case R.id.rl_receive_msg:
                         UbtLog.d(TAG," chengchangyin  enter buleteeth " );
+
                         Intent i = new Intent();
-                        i.setClass(mActivity, BluetoothguidestartrobotActivity.class);
+                        i.setClass(mActivity, BluetoothandnetconnectstateActivity.class);
                         mActivity.startActivity(i);
+                        mActivity.overridePendingTransition(R.anim.activity_open_up_down,R.anim.activity_close_down_up);
+
+
+//                        Intent i = new Intent();
+//                        i.setClass(mActivity, BluetoothguidestartrobotActivity.class);
+//                        mActivity.startActivity(i);
 //                        if (mMainHelper.getCurrentUser() == null) {
 //                            Intent inte = new Intent();
 //                            inte.putExtra(LoginHelper.IS_LOGIN_SIGLE, true);
@@ -290,22 +297,25 @@ public class MyFragment extends BaseFragment implements IActionsUI,MessageRecord
 //                        }
                         break;
                     case R.id.rl_created_action:
-                        if (mMainHelper.getCurrentUser() == null) {
-                            Intent inte = new Intent();
-                            inte.putExtra(LoginHelper.IS_LOGIN_SIGLE, true);
-                            inte.setClass(mActivity, LoginActivity.class);
-                            mActivity.startActivity(inte);
-                        } else {
-                            if(isBulueToothConnected()){
-                                if(BaseHelper.hasSdcard){
-                                    MyActionsActivity.launchActivity(mActivity, 3);
-                                }else{
-                                    showToast("ui_remote_synchoronize_no_sd");
-                                }
-                            }else{
-                                MyActionsActivity.launchActivity(mActivity, 3);
-                            }
-                        }
+//                        if (mMainHelper.getCurrentUser() == null) {
+//                            Intent inte = new Intent();
+//                            inte.putExtra(LoginHelper.IS_LOGIN_SIGLE, true);
+//                            inte.setClass(mActivity, LoginActivity.class);
+//                            mActivity.startActivity(inte);
+//                        } else {
+//                            if(isBulueToothConnected()){
+//                                if(BaseHelper.hasSdcard){
+//                                    MyActionsActivity.launchActivity(mActivity, 3);
+//                                }else{
+//                                    showToast("ui_remote_synchoronize_no_sd");
+//                                }
+//                            }else{
+//                                MyActionsActivity.launchActivity(mActivity, 3);
+//                            }
+//                        }
+                        Intent it = new Intent();
+                        it.setClass(mActivity, BluetoothguidestartrobotActivity.class);
+                        mActivity.startActivity(it);
                         break;
                     case R.id.rl_download_action:
                         if (mMainHelper.getCurrentUser() == null) {

@@ -4,6 +4,7 @@ package com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ import android.widget.ImageButton;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 
@@ -28,6 +30,8 @@ import butterknife.BindView;
  */
 
 public class BluetoothguidestartrobotActivity extends MVPBaseActivity<BluetoothguidestartrobotContract.View, BluetoothguidestartrobotPresenter> implements BluetoothguidestartrobotContract.View,View.OnClickListener {
+
+    String TAG =  "BluetoothguidestartrobotActivity";
 
     @BindView(R.id.bluetooth_guide_start_robot)
     ImageButton btn_finish;
@@ -85,8 +89,13 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
             case R.id.button_next:
                 if(select.isChecked()){
                     Intent intent = new Intent();
+                    intent.putExtra("isFirst","yes");
                     intent.setClass(BluetoothguidestartrobotActivity.this,BluetoothconnectActivity.class);
                     this.startActivity(intent);
+                    this.overridePendingTransition(R.anim.activity_open_up_down,R.anim.activity_close_down_up);
+//                    this.overridePendingTransition(R.anim.activity_open_up_down,0);
+                    BluetoothguidestartrobotActivity.this.finish();
+
                 }else {
                     ToastUtils.showShort("请确认站立，并选择");
                 }

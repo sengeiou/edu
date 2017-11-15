@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.ui.helper;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
@@ -19,6 +20,7 @@ import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.JsonTools;
 import com.ubt.alpha1e.data.TimeTools;
+import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
 import com.ubt.alpha1e.net.http.basic.GetDataFromWeb;
@@ -36,6 +38,7 @@ import com.ubt.alpha1e.update.IBluetoothUpdateManagerListener;
 import com.ubt.alpha1e.update.IEngineUpdateManagerListener;
 import com.ubt.alpha1e.update.RobotSoftUpdateManager;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
+import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.AlphaInfo;
@@ -100,6 +103,9 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
     private static final int MSG_DO_CHECK_UPDATE_SOFT = 1013;
     public static final int MSG_DO_UPDATE_SOFT = 1014;
     public static final int MSG_DO_CONNECT_NETWORK_UPGRADE = 1015;
+
+
+    private static final int MSG_DO_NOTE_DISCONNECT = 1020;
 
     // -------------------------------
     private String mCurrentLocalSoftVersion = null;
@@ -321,6 +327,16 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
             }else if(msg.what == MSG_DO_UPDATE_SOFT){
 
                 mUI.noteUpdateBin();
+            }else if (msg.what == MSG_DO_NOTE_DISCONNECT) {
+//                if (mUI != null){
+//                    mUI.noteDiscoonected();
+//                }
+                UbtLog.d(TAG,"--MSG_DO_NOTE_DISCONNECT-1- " );
+                if(EventBus.getDefault().hasSubscriberForEvent(RobotEvent.class)) {
+                    RobotEvent disconnectEvent = new RobotEvent(RobotEvent.Event.DISCONNECT);
+                    EventBus.getDefault().post(disconnectEvent);
+                    UbtLog.d(TAG,"--MSG_DO_NOTE_DISCONNECT-2- " );
+                }
             }
 
         }
@@ -336,6 +352,14 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
             }
         }
         return result;
+    }
+
+    /**
+     * 读取 1E 联网状态
+     */
+    public void readNetworkStatus(){
+        UbtLog.d(TAG,"--readNetworkStatus-- " );
+        doSendComm(ConstValue.DV_READ_NETWORK_STATUS, null);
     }
 
 
@@ -363,6 +387,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!mBtAdapter.isEnabled()) {
             mBtAdapter.enable();
+//            ((Activity)mContext).startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),1333);
         }
         mDevicesList = new ArrayList<BluetoothDevice>();
 
@@ -391,6 +416,16 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
 
     public void getBindHistoryDerivce() {
         mUI.onGetHistoryBindDevices(mBtAdapter.getBondedDevices());
+    }
+
+    public void cancelScan(){
+        if (mBtAdapter.isDiscovering()) {
+            UbtLog.d(TAG,"取消蓝牙搜索");
+            if(mCountDownTimer != null){
+                mCountDownTimer.cancel();
+            }
+            mBtAdapter.cancelDiscovery();
+        }
     }
 
     public void doScan() {
@@ -582,10 +617,12 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
-        if (mCurrentTryDevices == null
-                || mac != mCurrentTryDevices.getAddress()) {
+        UbtLog.d(TAG,"cmd==1===="+cmd);
+        if ((mCurrentTryDevices == null
+                || mac != mCurrentTryDevices.getAddress()) && cmd != ConstValue.DV_READ_NETWORK_STATUS) {
             return;
         }
+        UbtLog.d(TAG,"cmd==2===="+cmd);
         if(cmd == ConstValue.DV_HANDSHAKE_B_SEVEN){
             hasHandshakeBseven = true;
             lastTime_DV_HANDSHAKE_B_SEVEN = new Date(System.currentTimeMillis());
@@ -788,6 +825,17 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                 MyLog.writeLog(TAG, "设置开启边充边玩成功");
             }
 
+        }else if(cmd == ConstValue.DV_READ_NETWORK_STATUS){
+
+            String networkInfoJson = BluetoothParamUtil.bytesToString(param);
+            UbtLog.d(TAG,"cmd = " + cmd + "    networkInfoJson = " + networkInfoJson);
+
+            NetworkInfo networkInfo = GsonImpl.get().toObject(networkInfoJson,NetworkInfo.class);
+
+            RobotEvent event = new RobotEvent(RobotEvent.Event.NETWORK_STATUS);
+            event.setNetworkInfo(networkInfo);
+            EventBus.getDefault().post(event);
+
         }
     }
 
@@ -970,7 +1018,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
 
     @Override
     public void onDeviceDisConnected(String mac) {
-
+        UbtLog.e(TAG, "onDeviceDisConnected..... ");
         if (((AlphaApplication) mContext.getApplicationContext())
                 .getCurrentBluetooth() != null
                 && ((AlphaApplication) mContext.getApplicationContext())
@@ -978,6 +1026,11 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
             ((AlphaApplication) mContext.getApplicationContext())
                     .setCurrentBluetooth(null);
         }
+
+        Message msg = new Message();
+        msg.what = MSG_DO_NOTE_DISCONNECT;
+        mHandler.sendMessage(msg);
+        UnRegisterHelper();
     }
 
     @Override

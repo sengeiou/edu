@@ -115,6 +115,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initUI();
+        mHelper = new NetworkHelper(NetconnectActivity.this);
     }
 
     @Override
@@ -127,7 +128,17 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
 
         rl_net_list.setVisibility(View.INVISIBLE);
 
-        initData();
+        Intent i = getIntent();
+        String name = i.getStringExtra("wifiName");
+        UbtLog.d(TAG,"name ==="+wifiName);
+        if(name == null){
+            ib_return.setVisibility(View.INVISIBLE);
+            initData();
+        }else {
+            wifiName = name ;
+            ed_wifi_name.setText(wifiName);
+            ed_wifi_pwd.requestFocus();
+        }
         ed_wifi_name.addTextChangedListener(mTextWatcher);
         ed_wifi_pwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -242,7 +253,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         mConnectAlertDialog = new NetConnectAlertDialog(NetconnectActivity.this)
                 .builder()
                 .setMsg(getStringResources("ui_network_connecting"))
-                .setCancelable(false);
+                .setCancelable(true);
         mConnectAlertDialog.show();
 
         ((NetworkHelper)mHelper).doConnectNetwork(ed_wifi_name.getText().toString(), ed_wifi_pwd.getText().toString());
@@ -294,26 +305,38 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
             super.handleMessage(msg);
             switch (msg.what) {
                 case NETWORK_CONNECT_SUCCESS:
-//                    if(mConnectAlertDialog != null){
-//                        mConnectAlertDialog.setImageResoure(R.drawable.network_connect_success);
-//                        mConnectAlertDialog.setMsg(getStringResources("ui_network_connect_success"));
-//                        mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY,1500);
-//                    }
+                    if(mConnectAlertDialog != null){
+                        mConnectAlertDialog.setImageResoure(R.drawable.network_connect_success);
+                        mConnectAlertDialog.setMsg(getStringResources("ui_network_connect_success"));
+                        mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY,1500);
+                    }
 
                     break;
                 case NETWORK_CONNECT_FAIL:
-//                    if(mConnectAlertDialog != null){
-//                        mConnectAlertDialog.setImageResoure(R.drawable.network_connect_fail);
-//                        mConnectAlertDialog.setMsg(getStringResources("ui_network_connect_failer"));
-//                        mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_FAIL_DIALOG_DISPLAY,1500);
-//                    }
+                    UbtLog.d(TAG,"网络连接失败！  1 " );
+                    if(mConnectAlertDialog != null){
+                        UbtLog.d(TAG,"网络连接失败！  2" );
+                        mConnectAlertDialog.setImageResoure(R.drawable.network_connect_fail);
+                        mConnectAlertDialog.setMsg(getStringResources("ui_network_connect_failer"));
+                        mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_FAIL_DIALOG_DISPLAY,1500);
+                    }
                     break;
                 case NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY:
-//                    displayDialog();
+                    displayDialog();
+                    UbtLog.d(TAG,"网络连接成功 wifiName: " +wifiName  );
+
+                    Intent intent = new Intent();
+                    //把返回数据存入Intent
+                    intent.putExtra("wifiName", ed_wifi_name.getText().toString());
+                    intent.putExtra("isConnectSucces","yes");
+                    //设置返回数据
+                    NetconnectActivity.this.setResult(RESULT_OK, intent);
+                    //关闭Activity
+                    NetconnectActivity.this.finish();
 //                    toBack();
                     break;
                 case NETWORK_CONNECT_FAIL_DIALOG_DISPLAY:
-//                    displayDialog();
+                    displayDialog();
                     break;
                 case UPDATE_WIFI_NAME:
                     String remoteConnectName = (String) msg.obj;
@@ -336,6 +359,18 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
             }
         }
     };
+
+    /**
+     * 消失对话框
+     */
+    private void displayDialog(){
+
+        if(mConnectAlertDialog != null && mConnectAlertDialog.isShowing()){
+            mConnectAlertDialog.display();
+            mConnectAlertDialog = null;
+        }
+    }
+
 
     /**
      * 获取当前手机连接WIFI名称
@@ -374,6 +409,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
     }
 
 
+    String wifiName = "";
     /**
      * 监听Eventbus消息方法
      * @param event
@@ -381,6 +417,9 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
     @Subscribe
     public void onEventNetwork(NetworkEvent event) {
         if(event.getEvent() == NetworkEvent.Event.CHANGE_SELECT_WIFI){
+
+            wifiName = event.getSelectWifiName();
+            UbtLog.d(TAG,"选择的wifi ："+wifiName);
             ed_wifi_name.setText(event.getSelectWifiName());
             ed_wifi_pwd.requestFocus();
         }else if(event.getEvent() == NetworkEvent.Event.DO_CONNECT_WIFI){
@@ -434,9 +473,19 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         UbtLog.d(TAG,"curhigh="+view.getHeight());
         UbtLog.d(TAG,"curwidth="+view.getWidth());
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", view.getHeight(), 0);
-        animator.setDuration(1000);
+        animator.setDuration(200);
         animator.start();
 
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mHelper != null){
+            //读取更新当前机器人网络状态
+            ((NetworkHelper)mHelper).readNetworkStatus();
+        }
     }
 
     public class NetDeviceListAdapter extends BaseQuickAdapter<BluetoothDeviceModel, BaseViewHolder> {

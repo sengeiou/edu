@@ -76,7 +76,6 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
 
         private String mCurrentSetLanguage = "";
 
-        protected Dialog mCoonLoadingDia;
 
     protected abstract void initUI();
 
@@ -424,17 +423,17 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
 
         UbtLog.d(TAG, "--wmma--onResume!");
 
-        if (((AlphaApplication) this.getApplicationContext())
-                .getCurrentBluetooth() != null) {
-            UbtLog.d(TAG, "--wmma--bluetooth ssss");
-            if (stopFloatService() /*&& isServiceRun(getApplicationContext(), "com.ubt.alpha1e.ui.custom.FloatControlViewService")*/) {
-                CommonCtrlView.closeCommonCtrlView();
-            } else {
-                CommonCtrlView.getInstace(this);
-            }
-        } else {
-            CommonCtrlView.closeCommonCtrlView();
-        }
+//        if (((AlphaApplication) this.getApplicationContext())
+//                .getCurrentBluetooth() != null) {
+//            UbtLog.d(TAG, "--wmma--bluetooth ssss");
+//            if (stopFloatService() /*&& isServiceRun(getApplicationContext(), "com.ubt.alpha1e.ui.custom.FloatControlViewService")*/) {
+//                CommonCtrlView.closeCommonCtrlView();
+//            } else {
+//                CommonCtrlView.getInstace(this);
+//            }
+//        } else {
+//            CommonCtrlView.closeCommonCtrlView();
+//        }
 
     }
 

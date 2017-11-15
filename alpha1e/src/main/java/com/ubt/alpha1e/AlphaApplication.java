@@ -269,6 +269,20 @@ public class AlphaApplication extends MultiDexApplication {
         return mActivityList;
     }
 
+    public void doLostConnect() {
+
+        UbtLog.d(TAG,"doLostConnect ..... " );
+        ActionPlayer.StopCycleThread(true);
+        // 蓝牙断线
+        if (mBlueManager != null){
+            mBlueManager.releaseAllConnected();
+        }
+
+        cleanBluetoothConnectData();
+
+        MyActionsHelper.mCacheActionsNames.clear();
+    }
+
     public void doLostConn(Activity mCurrentAct) {
         CommonCtrlView.closeCommonCtrlView();
         MyActionsHelper.doStopMp3ForMyDownload();

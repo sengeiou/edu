@@ -605,6 +605,13 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             android:theme="@style/NoTitleThemeFullScreen"/>
+        //蓝牙联网---搜索结果
+        <activity
+            android:name="com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+            android:theme="@style/NoTitleThemeFullScreen"/>
 
 
     </application>

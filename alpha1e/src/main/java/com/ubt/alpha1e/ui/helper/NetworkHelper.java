@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.ui.helper;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.ubt.alpha1e.data.model.NetworkInfo;
@@ -18,8 +19,8 @@ public class NetworkHelper extends BaseHelper {
 
     private static final String TAG = "NetworkHelper";
 
-    public NetworkHelper(BaseActivity baseActivity) {
-        super(baseActivity);
+    public NetworkHelper(Context context) {
+        super(context);
     }
 
     @Override
