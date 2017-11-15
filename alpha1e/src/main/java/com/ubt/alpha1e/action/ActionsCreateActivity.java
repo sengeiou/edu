@@ -287,7 +287,8 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         if(AlphaApplication.isPad()){
             setContentView(R.layout.activity_new_edit_for_pad);
         }else{
-            setContentView(R.layout.activity_new_edit);
+//            setContentView(R.layout.activity_new_edit);
+            setContentView(R.layout.activity_create_action);
         }
 
         mHelper = new ActionsEditHelper(this, this);
@@ -3568,12 +3569,6 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         double accuracy_num = num / total * 100;
         return df.format(accuracy_num);
     }
-
-
-
-
-
-
 
 
 

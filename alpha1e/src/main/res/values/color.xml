@@ -142,4 +142,5 @@
     <color name="login_line_color">#979797</color>
     <color name="btn_get_code_color">#ffffff</color>
     <color name="tv_user_edit_color">#1D3740</color>
+    <color name="action_filter_color">#0B4E75</color>
 </resources>

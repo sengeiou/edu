@@ -24,7 +24,7 @@
             android:id="@+id/iv_robot"
             android:layout_width="102px"
             android:layout_height="183px"
-            android:src="@drawable/alpha_body"
+            android:src="@drawable/img_body"
             android:scaleType="fitCenter"/>
 
         <ImageView
