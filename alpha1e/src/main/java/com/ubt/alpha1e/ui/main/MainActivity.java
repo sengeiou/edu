@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.Course.maincourse.MainCourseActivity;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
@@ -76,7 +77,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     int init_screen_height = 540;
     RelativeLayout.LayoutParams params;
 
-    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3, R.id.right_icon4, R.id.cartoon_body_touch,R.id.bottom_icon})
+    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3, R.id.right_icon4, R.id.cartoon_body_touch, R.id.bottom_icon})
     protected void switchActivity(View view) {
         Log.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
@@ -110,6 +111,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 startActivity(mLaunch);
                 break;
             case R.id.right_icon2:
+                startActivity(new Intent(this, ActionTestActivity.class));
                 break;
             case R.id.right_icon3:
                 break;
