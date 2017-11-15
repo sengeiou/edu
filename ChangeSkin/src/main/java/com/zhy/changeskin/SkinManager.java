@@ -217,7 +217,9 @@ public class SkinManager {
 
 
     public boolean needChangeSkin() {
-        return usePlugin ;
+        //return usePlugin ;
+        //暂时不考虑切肤2017.11.6
+        return false;
     }
 
     public void setChangeSkin(boolean usePlugin)

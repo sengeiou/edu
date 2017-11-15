@@ -7,9 +7,9 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
 
 import com.ant.country.CountryActivity;
+import com.tencent.ai.tvs.LoginApplication;
 import com.ubt.alpha1e.AlphaApplicationValues.Thrid_login_type;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
@@ -50,20 +50,18 @@ import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.update.EngineUpdateManager;
 import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
-import com.ubt.alpha1e.utils.crash.CrashHandler;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.alpha1e.xingepush.XGUBTManager;
 import com.ubtechinc.base.BlueToothManager;
 import com.ubtechinc.sqlite.DBAlphaInfoManager;
 import com.umeng.analytics.MobclickAgent;
-import com.yixia.camera.VCamera;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import cn.jpush.android.api.JPushInterface;
 
-public class AlphaApplication extends MultiDexApplication {
+public class AlphaApplication extends LoginApplication {
 
     private static final String TAG = "AlphaApplication";
 
@@ -95,18 +93,17 @@ public class AlphaApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        CrashHandler crashHandler = CrashHandler.getInstance();
-        crashHandler.init(this);
+//        CrashHandler crashHandler = CrashHandler.getInstance();
+//        crashHandler.init(this);
 
         initActivityLife();
-        initJPush(this);
-        initSkin(this);
+         initSkin(this);
         initConnectClient();
-
+        initStyleDialog();
 //        LeakCanary.install(this);
-        VCamera.setVideoCachePath(FileTools.media_cache);
-        VCamera.setDebugMode(true);
-        VCamera.initialize(this);
+     //   VCamera.setVideoCachePath(FileTools.media_cache);
+      //  VCamera.setDebugMode(true);
+      //  VCamera.initialize(this);
 //        IntentFilter screenOffFilter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
 //        registerReceiver(new BroadcastReceiver() {
 //            @Override
@@ -118,14 +115,13 @@ public class AlphaApplication extends MultiDexApplication {
 //                }
 //            }
 //        }, screenOffFilter);
+        XGUBTManager.getInstance(this).initXG(2100270011,"A783M4PIM7JI");
     }
 
-    /**
-     * 初始化推送库
-     */
-    public void initJPush(Context ctx) {
-        JPushInterface.setDebugMode(true);
-        JPushInterface.init(ctx);
+
+
+    public static Context getmContext() {
+        return mContext;
     }
 
     /**
@@ -143,6 +139,13 @@ public class AlphaApplication extends MultiDexApplication {
         ConnectClientUtil.getInstance().init();
     }
 
+    /**
+     * 初始化对话框
+     */
+    public void initStyleDialog(){
+       //  StyledDialog.init(getApplicationContext());
+    }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -152,7 +155,7 @@ public class AlphaApplication extends MultiDexApplication {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        JPushInterface.onKillProcess(getApplicationContext());
+
     }
 
     @Override

@@ -1,0 +1,114 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@drawable/main_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/mainui">
+
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/cartoon_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#7fff0000"
+        android:src="@drawable/main_robot"/>
+    <ImageView
+        android:id="@+id/cartoon_body_touch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#ADFF2F"
+        android:src="@drawable/main_robot"
+       />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="27dp"
+        android:layout_marginLeft="26dp"
+        >
+    <TextView
+        android:id="@+id/right_icon"
+        style="@style/main_right_button"
+        android:drawableTop="@drawable/main_remote"
+        android:tag="course"
+        android:text="@string/ui_main_right_icon"
+        android:layout_alignTop="@+id/top_icon3"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/right_icon2"
+        style="@style/main_right_button"
+        android:drawableTop="@drawable/main_action"
+        android:tag="action"
+        android:text="@string/ui_main_right_icon2"
+        android:layout_below="@+id/right_icon" />
+    <TextView
+        android:id="@+id/right_icon3"
+        style="@style/main_right_button"
+        android:drawableTop="@drawable/main_programming"
+        android:tag="programming"
+        android:text="@string/ui_main_right_icon3"
+        android:layout_below="@+id/right_icon2" />
+    <TextView
+        android:id="@+id/right_icon4"
+        style="@style/main_right_button"
+        android:drawableTop="@drawable/main_community"
+        android:tag="community"
+        android:text="@string/ui_main_right_icon4"
+        android:layout_below="@+id/right_icon3"
+         />
+</LinearLayout>
+    <TextView
+        android:id="@+id/top_icon"
+        android:drawableTop="@drawable/main_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="21dp" />
+    <TextView
+        android:id="@+id/top_icon2"
+        android:drawableTop="@drawable/main_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_alignBaseline="@+id/top_icon"
+        android:layout_toEndOf="@+id/top_icon" />
+    <TextView
+        android:id="@+id/top_icon2_disconnect"
+        android:drawableTop="@drawable/main_disconnected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_alignEnd="@+id/top_icon2"
+        android:visibility="invisible"/>
+    <TextView
+        android:id="@+id/top_icon3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/top_icon2"
+        android:layout_marginStart="12dp"
+        android:drawableTop="@drawable/main_playing"
+        android:layout_alignBaseline="@+id/top_icon"
+        android:layout_toEndOf="@+id/top_icon2" />
+    <EditText
+        android:id="@+id/habit_alert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/top_icon2"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/main_alert"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:text="" />
+    <TextView
+        android:id="@+id/bottom_icon"
+        android:drawableTop="@drawable/main_book"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ui_main_course_center"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:gravity="center_horizontal"
+        />
+</RelativeLayout>

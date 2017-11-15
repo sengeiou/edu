@@ -741,7 +741,7 @@ public class MyFragment extends BaseFragment implements IActionsUI,MessageRecord
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

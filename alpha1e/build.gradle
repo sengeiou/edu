@@ -10,6 +10,17 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
 
         multiDexEnabled true
+
+        ndk {
+            //根据需要 自行选择添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+                XG_ACCESS_ID : "210027001122222222",
+                XG_ACCESS_KEY: "A783M4PIM7JI2222222",
+        ]
     }
 
     signingConfigs {
@@ -24,20 +35,19 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            shrinkResources true
+            shrinkResources false
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
 
         debug {
-            minifyEnabled false
+            minifyEnabled true
 //            shrinkResources false
         }
     }
     packagingOptions {
         exclude 'META-INF/LICENSE' // will not include LICENSE file
-
     }
 
     productFlavors {
@@ -46,24 +56,28 @@ android {
             buildConfigField 'String', 'WebServiceAdderss', '"https://10.10.1.14:8443/ubx"'
             buildConfigField 'String', 'WebCourseAdderss', '"http://10.10.20.30:8039/course-rest"'
             buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"http://10.10.1.12:8030/alpha1/zip?versionId="'
+            buildConfigField 'String', 'WebServiceAdderssFor1E', '"https://api.ubtrobot.com/ubx"'
         }
         ubt_test {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ubt_test"]
             buildConfigField 'String', 'WebServiceAdderss', '"https://10.10.1.14:8443/ubx"'
             buildConfigField 'String', 'WebCourseAdderss', '"http://10.10.20.30:8039/course-rest"'
             buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"http://10.10.1.12:8030/alpha1/zip?versionId="'
+            buildConfigField 'String', 'WebServiceAdderssFor1E', '"https://api.ubtrobot.com/ubx"'
         }
         ubt_robot {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ubt_robot"]
             buildConfigField 'String', 'WebServiceAdderss', '"https://services.ubtrobot.com/ubx"'
             buildConfigField 'String', 'WebCourseAdderss', '"https://account.ubtrobot.com/course-rest"'
             buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"https://account.ubtrobot.com/alpha1e-rest/alpha1/zip?versionId="'
+            buildConfigField 'String', 'WebServiceAdderssFor1E', '"https://api.ubtrobot.com/ubx"'
         }
         google {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "google"]
             buildConfigField 'String', 'WebServiceAdderss', '"https://services.ubtrobot.com/ubx"'
             buildConfigField 'String', 'WebCourseAdderss', '"https://account.ubtrobot.com/course-rest"'
             buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"https://account.ubtrobot.com/alpha1e-rest/alpha1/zip?versionId="'
+            buildConfigField 'String', 'WebServiceAdderssFor1E', '"https://api.ubtrobot.com/ubx"'
         }
     }
     compileOptions {
@@ -94,7 +108,6 @@ android {
 
 dependencies {
     compile project(':alpha1sLib')
-    compile project(':alphaQRLib')
     compile project(':weiboSDK')
     compile project(':choseCountryNum')
     compile project(':alpha1sGifLib')
@@ -120,9 +133,29 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.8.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    compile 'com.orhanobut:dialogplus:1.11@aar'
+    compile 'com.weigan:loopView:0.1.2'
+    compile 'com.android.support:support-v4:26.+'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //信鸽稳定版 相关依赖
+    compile 'com.tencent.xinge:xinge:3.1.81-alpha'
+    //wup包
+    //    compile 'com.tencent.wup:wup:1.0.0.E-alpha'
+    //            {
+    //                exclude ''
+    //            }
+    //mid包
+    compile 'com.tencent.mid:mid:3.72.4-alpha'
+    compile(name: 'tvsloginlib', ext: 'aar')
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
+    compile 'com.android.support:design:26.+'
+    compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
+    compile 'com.yanzhenjie:permission:1.1.2'
+    compile 'com.github.zyyoona7:EasyPopup:1.0.2'
 }

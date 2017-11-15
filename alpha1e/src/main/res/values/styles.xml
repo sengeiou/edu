@@ -154,10 +154,10 @@
     <style name="text_userinfo_left_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-         <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_marginLeft">18dp</item>
+        <item name="android:textColor">@color/tv_center_color</item>
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -168,12 +168,53 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:drawablePadding">8dp</item>
         <item name="android:drawableRight">@drawable/icon_right_arrow</item>
-        <item name="android:layout_marginRight">10dp</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_marginRight">14dp</item>
+        <item name="android:textColor">@color/tv_blue_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="text_left_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:textColor">@color/tv_center_color</item>
         <item name="android:textSize">18sp</item>
     </style>
 
-  <!-- CustomCheckBox theme -->
+    <style name="text_right_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:drawableRight">@drawable/icon_right_arrow</item>
+        <item name="android:layout_marginRight">3dp</item>
+        <item name="android:textColor">@color/tv_blue_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="main_right_button">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1.0</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:gravity">center_horizontal</item>
+</style>
+
+    <style name="text_userinfo_main_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1.0</item>
+        <item name="android:drawablePadding">12dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:button">@null</item>
+         <item name="android:textColor">@drawable/color_main_left</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
      <style name="CustomCheckBoxTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
          <item name="android:button">@drawable/checkbox_style</item>
      </style>
@@ -183,4 +224,10 @@
         <item name="@android:windowExitAnimation">@anim/dialog_exit</item>
     </style>
 
+    <style name="button_get_code_style">
+        <item name="android:background">@null</item>
+        <item name="android:textColor">@color/tv_user_edit_color</item>
+        <item name="android:clickable">false</item>
+
+    </style>
 </resources>

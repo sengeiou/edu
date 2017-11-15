@@ -2,6 +2,9 @@ package com.ubt.alpha1e.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -12,17 +15,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.AlphaApplication;
-import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.model.AlphaStatics;
 import com.ubt.alpha1e.data.model.UserInfo;
-import com.ubt.alpha1e.ui.Introduction.IntroductionActivity;
 import com.ubt.alpha1e.ui.dialog.BaseDiaUI;
 import com.ubt.alpha1e.ui.dialog.LoadingDialog;
 import com.ubt.alpha1e.ui.helper.IStartUI;
 import com.ubt.alpha1e.ui.helper.LoginHelper;
 import com.ubt.alpha1e.ui.helper.StartHelper;
+import com.ubt.alpha1e.ui.main.MainActivity;
+import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.umeng.analytics.MobclickAgent;
 
@@ -45,22 +50,22 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        scale = (int)this.getResources().getDisplayMetrics().density;
+        scale = (int) this.getResources().getDisplayMetrics().density;
         setContentView(R.layout.activity_start);
         mHelper = new StartHelper(this, this);
         loginHelper = new LoginHelper(this);
         //读取主题信息，如果在主题动画加载完成之前读取完毕则继续检查逻辑，否则不检查
-         ((StartHelper) mHelper).doCkeckThemeInfo();
-        ((StartHelper) mHelper).doCkeckLanguageInfo();
+//        ((StartHelper) mHelper).doCkeckThemeInfo();
+//        ((StartHelper) mHelper).doCkeckLanguageInfo();
         ((StartHelper) mHelper).doReadUser();
         // google play不自主升级-------------------start
-        ((StartHelper) mHelper).doUpdateApk();
+//        ((StartHelper) mHelper).doUpdateApk();
         // google play不自主升级-------------------end
         ((StartHelper) mHelper).doGetLocation();
         ((StartHelper) mHelper).doRunGetResServices();
 
         //add by lihai upgadeDB
-        ((StartHelper) mHelper).UpgadeDB();
+       // ((StartHelper) mHelper).UpgadeDB();
 
         initUI();
 
@@ -75,11 +80,11 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
         img_start_bg = (ImageView) findViewById(R.id.img_start_bg);
         //img_logo_line_anim = AnimationUtils.loadAnimation(this,R.anim.logo_line_anim);
 
-        img_start_bg_anim = new AlphaAnimation(0.1f,1);
-        txt_title_alpha_anim = new AlphaAnimation(0.1f,1);
+        img_start_bg_anim = new AlphaAnimation(0.1f, 1);
+        txt_title_alpha_anim = new AlphaAnimation(0.1f, 1);
 
-        img_logo_anim = new AlphaAnimation(0.1f,1);
-        txt_title_anim = new TranslateAnimation(0, 0, 50*scale, 0);
+        img_logo_anim = new AlphaAnimation(0.1f, 1);
+        txt_title_anim = new TranslateAnimation(0, 0, 50 * scale, 0);
         img_logo_anim.setDuration(1000); //设置持续时间1.5秒
         txt_title_anim.setDuration(600); //设置持续时间1秒
         img_start_bg_anim.setDuration(1500); //设置持续时间1秒
@@ -129,7 +134,7 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
             @Override
             public void onAnimationEnd(Animation arg0) {
                 txt_title.setVisibility(View.VISIBLE);
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)txt_title.getLayoutParams();
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) txt_title.getLayoutParams();
                 params.topMargin = ((int) 135 * scale);
                 txt_title.setLayoutParams(params);
                 txt_title.startAnimation(txt_title_anim);
@@ -235,7 +240,21 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
     @Override
     public void gotoNext() {
 
-        Intent inte = new Intent();
+        mHandler.sendEmptyMessage(0x111);
+
+    }
+
+    @Override
+    public void noteWaitWebProcressShutDown() {
+
+    }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0x111) {
+                Intent inte = new Intent();
 
         /*if (((StartHelper) mHelper).isNeedCompleteInfo()) {
             PrivateInfoHelper.EditType type = null;
@@ -259,27 +278,38 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
             }
         }*/
 
-        if (BasicSharedPreferencesOperator
-                .getInstance(this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD)
-                .doReadSync(BasicSharedPreferencesOperator.IS_FIRST_USE_APP_KEY)
-                .equals(BasicSharedPreferencesOperator.IS_FIRST_USE_APP_VALUE_TRUE)
-                || AlphaApplicationValues.getCurrentEdit() == AlphaApplicationValues.EdtionCode.for_factory_edit) {
-            //this version has show introduction go to main page
-            inte.setClass(StartActivity.this,MyMainActivity.class);
-        }else {
-            inte.setClass(StartActivity.this,IntroductionActivity.class);
+//                if (BasicSharedPreferencesOperator
+//                        .getInstance(StartActivity.this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD)
+//                        .doReadSync(BasicSharedPreferencesOperator.IS_FIRST_USE_APP_KEY)
+//                        .equals(BasicSharedPreferencesOperator.IS_FIRST_USE_APP_VALUE_TRUE)
+//                        || AlphaApplicationValues.getCurrentEdit() == AlphaApplicationValues.EdtionCode.for_factory_edit) {
+//                    //this version has show introduction go to main page
+////            inte.setClass(StartActivity.this,MyMainActivity.class);
+//                    // inte.setClass(StartActivity.this,MainActivity.class);
+//                    inte.setClass(StartActivity.this, MainActivity.class);
+//                } else {
+//                    inte.setClass(StartActivity.this, IntroductionActivity.class);
+//                }
+                MobclickAgent.onEvent(StartActivity.this.getApplicationContext(), AlphaStatics.ACTIONS_LIB);//动作库页面次数
+                UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+                if (null == userModel) {
+                    inte.setClass(StartActivity.this, com.ubt.alpha1e.login.LoginActivity.class);
+                } else {
+                    if (TextUtils.isEmpty(userModel.getPhone())) {
+                        inte.setClass(StartActivity.this, com.ubt.alpha1e.login.LoginActivity.class);
+                    } else {
+                        if (TextUtils.isEmpty(userModel.getAge())) {
+                            inte.setClass(StartActivity.this, UserEditActivity.class);
+                        }else{
+                            inte.setClass(StartActivity.this, MainActivity.class);
+                        }
+                    }
+                }
+                StartActivity.this.startActivity(inte);
+                StartActivity.this.finish();
+            }
         }
-        MobclickAgent.onEvent(StartActivity.this.getApplicationContext(), AlphaStatics.ACTIONS_LIB);//动作库页面次数
-
-        StartActivity.this.startActivity(inte);
-        StartActivity.this.finish();
-
-    }
-
-    @Override
-    public void noteWaitWebProcressShutDown() {
-
-    }
+    };
 
     @Override
     public void themeCheckFinish() {
@@ -288,8 +318,7 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
             public void run() {
                 try {
                     mCoonLoadingDia.cancel();
-                    if(!((StartHelper) mHelper).isNeedUpdateApk())
-                    {
+                    if (!((StartHelper) mHelper).isNeedUpdateApk()) {
                         gotoNext();
                     }
                 } catch (Exception e) {

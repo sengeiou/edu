@@ -33,6 +33,7 @@ import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.IMainUI;
 import com.ubt.alpha1e.ui.helper.LoginHelper;
 import com.ubt.alpha1e.ui.helper.MainHelper;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.LoginUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.changeskin.SkinManager;
@@ -102,7 +103,8 @@ public class MyMainActivity extends BaseActivity implements
     public static void launchActivity(Activity activity,int requestCode)
     {
         Intent intent = new Intent();
-        intent.setClass(activity,MyMainActivity.class);
+       // intent.setClass(activity,MyMainActivity.class);
+        intent.setClass(activity,MainActivity.class);
         activity.startActivityForResult(intent, requestCode);
     }
 

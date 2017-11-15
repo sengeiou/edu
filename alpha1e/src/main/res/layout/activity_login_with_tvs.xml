@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_login"
+
+    >
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/tv_robot_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ALPHA 1E"
+            android:textColor="#fff"
+            android:gravity="center"
+            android:textSize="27sp"
+
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/ui_launch_dream"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            />
+
+
+
+        <RelativeLayout
+            android:id="@+id/rl_wx_login"
+            android:layout_width="154dp"
+            android:layout_height="45.33dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_btn_login"
+            android:layout_marginTop="36dp"
+            android:gravity="center"
+            >
+
+            <ImageView
+                android:id="@+id/iv_wx_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/wx_icon"
+                android:scaleType="fitCenter"
+                android:paddingLeft="8dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_wx_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/iv_wx_login"
+                android:paddingLeft="10dp"
+                android:text="微信登录"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="#289CDF"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_qq_login"
+            android:layout_width="154dp"
+            android:layout_height="45.33dp"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_btn_login"
+            android:gravity="center"
+            >
+
+            <ImageView
+                android:id="@+id/iv_qq_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/qq_icon"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                />
+
+            <TextView
+                android:id="@+id/tv_qq_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/iv_qq_login"
+                android:paddingLeft="10dp"
+                android:gravity="center"
+                android:text="QQ登录"
+                android:textSize="16sp"
+                android:textColor="#289CDF"/>
+
+        </RelativeLayout>
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>

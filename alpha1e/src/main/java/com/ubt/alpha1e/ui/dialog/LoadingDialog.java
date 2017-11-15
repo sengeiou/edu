@@ -100,6 +100,22 @@ public class LoadingDialog extends BaseDialog {
 
     }
 
+    public static LoadingDialog getInstance(Context _context) {
+
+        try {
+            if (mDia != null && mDia.isShowing())
+                mDia.cancel();
+        } catch (Exception e) {
+            MyLog.writeLog("对话框功能", "对话框取消失败-->" + e.getMessage());
+            e.printStackTrace();
+        }
+        mDia = new LoadingDialog(_context);
+        mDia.mContext = _context;
+        mDia.mCancelable = false;
+        mDia.initDia();
+        return mDia;
+    }
+
     private void initDia() {
 
         View root = View.inflate(mContext, R.layout.dialog_loading, null);

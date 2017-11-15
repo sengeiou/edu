@@ -831,6 +831,52 @@
     <string name="ui_create_guide_help">点击这里查看帮助内容</string>
     <string name="ui_task_chanllege_fail">闯关失败,再试试吧!</string>
 
+    <string name="ui_main_right_icon">遥控器</string>
+    <string name="ui_main_right_icon2">动作</string>
+    <string name="ui_main_right_icon3">编程</string>
+    <string name="ui_main_right_icon4">社区</string>
+    <string name="ui_main_course_center">课程中心</string>
+
+    <string name="ui_setting_clear_cache">清除缓存数据</string>
+    <string name="ui_setting_use_memory_title">Alpha1E已用空间</string>
+    <string name="ui_setting_cache_retio_title">占用手机</string>
+    <string name="ui_setting_clear_cache_warning">是否清理全部缓存？</string>
+    <string name="ui_setting_clear_cache_success">已成功清理#的空间</string>
+    <string name="ui_setting_has_not_cache">暂无缓存</string>
+    <string name="ui_setting_scan_code_attention">扫描关注</string>
+    <string name="ui_setting_password_massage">重置密码管理</string>
+    <string name="ui_setting_help_feedback">帮助反馈</string>
+    <string name="ui_setting_idea_feedback">意见反馈</string>
+    <string name="ui_setting_feedback_detail">问题详情</string>
+    <string name="ui_setting_hot_question">热点问题</string>
+    <string name="ui_setting_search_result">搜索结果</string>
+    <string name="ui_setting_feedback_placeholder">请输入你的意见</string>
+    <string name="ui_setting_feedback_input">请输入...</string>
+    <string name="ui_setting_telephone">手机号</string>
+    <string name="ui_setting_verify_code">验证码</string>
+    <string name="ui_setting_old_password">旧密码</string>
+    <string name="ui_setting_new_password">新密码</string>
+    <string name="ui_setting_confirm_password">确认密码</string>
+    <string name="ui_setting_forget_password">忘记密码</string>
+    <string name="ui_setting_logout_tip">您确定要退出您当前的账号？</string>
+    <string name="ui_setting_logout">退出</string>
+    <string name="ui_setting_password_modify_success">修改密码成功</string>
+    <string name="ui_setting_password_modify_fail">修改密码失败</string>
+    <string name="ui_setting_common_next">下一步</string>
+    <string name="ui_setting_password_verify_fail">验证码检验失败</string>
+    <string name="ui_setting_verify_code_send_success">验证码检验发送成功</string>
+    <string name="ui_setting_verify_code_send_fail">验证码检验发送失败</string>
+    <string name="ui_telephone_request">请输入电话号码</string>
+    <string name="ui_old_password_request">请输入6位旧密码</string>
+    <string name="ui_new_password_request">请输入6位新密码</string>
+    <string name="ui_setting_principle_tip_1">主人，我是Alpha，很高兴见到你，欢迎来到奇幻的编程世界；</string>
+    <string name="ui_setting_principle_tip_2">通过编程，主人可以强化我的技能，我能唱歌、跳舞还有很多很多的技能；</string>
+    <string name="ui_setting_principle_tip_3">现在让我为大家表演一段音乐或舞蹈吧。</string>
+    <string name="ui_setting_app_update_tips">是否需要更新版本？</string>
+    <string name="ui_common_no">否</string>
+    <string name="ui_common_yes">是</string>
+
+
     <!-- 不需要翻译 -->
     <string name="ui_pc_update_url">http://www.ubtrobot.com/download/index.html</string>
     <string name="ui_setting_cust_phone_value">400-6666-700</string>
@@ -884,131 +930,22 @@
     <string name="ui_robot_instruction_play_text_empty">播放指令文本不能为空</string>
     <string name="ui_robot_instruction_play_action_empty">播放指令动作不能为空</string>
 
-    <!--=============================end=========================================-->
-
-
-    <!--======================================================================-->
-    <!--以下字段从V3.1.1版本后废弃，为了兼容之前版本，保留一段时间-->
-    <!--======================================================================-->
-    <!--string for V2.7.1-->
-    <string name="ui_myaction_load_data_fail">出错了！</string>
-    <string name="ui_myaction_cry_again_later">请稍后再试...</string>
-    <string name="ui_action_logo_empty">动作图片不能为空</string>
-    <string name="ui_guide_page_title">机器人梦想，触手可及</string>
-    <string name="ui_guide_square">动作广场搬到这里啦~</string>
-    <string name="ui_guide_robot">在这里可以和Alpha一起玩耍哦~</string>
-    <string name="ui_guide_my">我的账号相关管理在这里啦~</string>
-    <string name="ui_guide_connect">点我来连接机器人吧~</string>
-    <string name="ui_guide_control">点击我可以控制机器人当前的状态哦~</string>
-    <string name="ui_robot_connect_dis">目前还没连接机器人哦点击扫描去连接吧</string>
-    <string name="ui_recevie_msg">收到的消息</string>
-    <string name="ui_created_action">创建的动作</string>
-    <string name="ui_downloaded_action">下载的动作</string>
-    <string name="ui_collected_action">收藏的动作</string>
-    <string name="ui_person_info">个人信息</string>
-    <string name="ui_show_actions">动作演示</string>
-    <string name="ui_show_action_description">更多Alpha的精彩表演</string>
-    <string name="ui_gamepad_description">更多机器人的角色选择</string>
-    <string name="ui_create_action_description">无限创意等你挑战</string>
-    <string name="ui_readback_save_description_dance_placeholder">举起你的双手，和Alpha一起hi翻全场~</string>
-    <string name="ui_readback_save_description_story_placeholder">排排坐，快来听alpha讲故事啦~~</string>
-    <string name="ui_readback_save_description_sport_placeholder">左三圈，右三圈，快跟Alpha一起来运动~</string>
-    <string name="ui_readback_save_description_science_placeholder">Alpha小课堂开始上课啦~</string>
-    <string name="ui_readback_save_description_childsong_placeholder">啦啦啦，啦啦啦，alpha唱儿歌给你听~</string>
-    <string name="ui_robot_info_bluetooth_remaining_title">升级蓝牙成功，等待机器人重新连接...</string>
-    <string name="ui_robot_info_bin_remaining_title">升级固件成功，等待机器人重新连接...</string>
-    <string name="ui_common_bluetooth_upgrade_warning">蓝牙升级，为避免损坏机器人，请务必确保机器人处于充电状态。</string>
-    <string name="ui_robot_control_title">机器人控制</string>
-
-    <!--String add for V2.8-->
-    <string name="ui_dub_for_action">为动作配音</string>
-    <string name="ui_start_dub">开始配音</string>
-    <string name="ui_re_start_dub">重新配音</string>
-    <string name="ui_stop_dub">停止配音</string>
-    <string name="ui_finish_dub">配音完成</string>
-    <string name="ui_dub_quit_warning">确定放弃这段配音么?</string>
-    <string name="ui_preview_dub">声音预览</string>
-    <string name="ui_volume">音量</string>
-    <string name="ui_guide_dub">配音功能在这里</string>
-    <string name="ui_download_success">下载成功</string>
     <string name="ui_download_success_dub">Alpha 可以为下载和创建的的动作配音啦！</string>
-    <string name="ui_try_it_at_once">马上去试试</string>
-    <string name="ui_pc_update_start">开始PC端软件激活固件，一起玩耍吧</string>
-    <string name="ui_pc_update_open">打开</string>
-    <string name="ui_pc_update_download">选择Alpha1 PC端编程软件下载并安装</string>
-    <string name="ui_pc_update_goto_connect">现在用数据线连接Alpha和你的机器人吧</string>
-    <string name="ui_pc_update_check_charging_full">将机器人平放，并接入适配器以保证电源充足</string>
-    <string name="ui_pc_update_last_tip">最后，不要忘记重启机器人完成固件激活哦</string>
-    <string name="ui_pc_update_call_phone">如有问题请拨打售后服务电话 400-6666-700</string>
 
-    <!--string for V2.9-->
-    <string name="ui_dynamic_action">动作</string>
-    <string name="ui_dynamic_text">文字</string>
-    <string name="ui_dynamic_photo">图片</string>
-    <string name="ui_dynamic_video">视频</string>
-    <string name="ui_dynamic_send">发动态</string>
-    <string name="ui_dynamic_quit_warning">确定要退出吗？退出后编辑的内容将不保存。</string>
-    <string name="ui_my_send_dynamic">发布的动态</string>
-    <string name="ui_favorite_action">喜欢的动作</string>
-    <string name="ui_no_send_dynamic">小主人，您还没有发布过动态哦</string>
-    <string name="ui_goto_ishow_send_dynamic">去爱秀发布动态</string>
-    <string name="ui_delete_dynamic">确定要删除这条动态吗?</string>
-    <string name="ui_common_detial">详情</string>
-    <string name="ui_robot_action_delete_warning">确定删除动作？同时删除机器人存储卡的动作与音频。</string>
-    <string name="ui_guide_page_view_ishow">爱秀改版</string>
-    <string name="ui_guide_page_view_ishow_detail">和小伙伴一起玩转新年</string>
-    <string name="ui_guide_page_view_action">动作配音</string>
-    <string name="ui_guide_page_view_action_detail">alpha的情感由你来表达</string>
-    <string name="ui_guide_page_view_newyear">新的一年</string>
-    <string name="ui_guide_page_view_newyear_detail">alpha与你一起快乐成长</string>
-    <string name="ui_guide_xiu">爱秀改版,更多惊喜在这里!</string>
-    <string name="ui_guide_send_dynamic">点击这里可以发布动态哦~</string>
-    <string name="ui_guide_remote_left">方向键长按执行</string>
-    <string name="ui_guide_remote_right">技能键单击执行</string>
-    <string name="ui_distribute_publish_ishow_encourage">发布到爱秀可以获得大众的围观和评论哦~</string>
-    <string name="ui_distribute_release_to_ishow">发布到爱秀</string>
-    <string name="ui_send_dynamic_loading">动态发布中,请稍后...</string>
+    <string name="user_center_title">个人中心</string>
+    <string name="user_center_info">信息</string>
+    <string name="user_center_achievement">成就</string>
+    <string name="user_center_message">消息</string>
+    <string name="user_center_dynamic">动态</string>
+    <string name="user_center_original">原创</string>
+    <string name="user_center_download">下载</string>
+    <string name="user_center_setting">设置</string>
 
-    <!-- string for V3.0 -->
-    <string name="ui_square_official">官方动作</string>
-    <string name="ui_square_original">精品原创</string>
-    <string name="ui_action_main_recently">最新上线</string>
-    <string name="ui_action_main_popular_recommendation">热门推荐</string>
-    <string name="ui_action_main_original_list">原创榜单</string>
-    <string name="ui_square_popular">热门</string>
-    <string name="ui_square_recommend">推荐</string>
-    <string name="ui_ishow_pulibc_action_emtry">小主人，你没有未发布的动作哦</string>
-    <string name="ui_setting_contact_us">联系我们</string>
-    <string name="ui_setting_cust_phone">客服电话</string>
-    <string name="ui_setting_cust_email">客服邮箱</string>
-    <string name="ui_setting_cust_public_concern">关注优必选微信公众号</string>
-    <string name="ui_setting_cust_long_press_copy">长按可复制</string>
-    <string name="ui_setting_cust_call_phone">拨打电话：</string>
-    <string name="ui_setting_cust_send_email">发邮件：</string>
-    <string name="ui_home_notice_title">通知</string>
-    <string name="ui_setting_cust_praise_me">喜欢了我</string>
-    <string name="ui_setting_cust_share_picture">（分享图片）</string>
-    <string name="ui_setting_cust_share_video">（分享视频）</string>
-    <string name="ui_guide_page_action_square">动作广场</string>
-    <string name="ui_guide_page_theme_select">主题随心所选</string>
-    <string name="ui_guide_page_original_area">原创社区</string>
-    <string name="ui_guide_page_wait_for_you">等待你来挑战</string>
-    <string name="ui_guide_page_role_duel">角色对决</string>
-    <string name="ui_guide_page_battle_start">“战斗”一触即发</string>
-    <string name="ui_guide_page_create_action">创建动作</string>
-    <string name="ui_guide_page_play_unlimited_imagination">发挥无限想象</string>
-    <string name="ui_guide_page_instant_experience">马上体验</string>
-    <string name="ui_setting_cust_copy_success">复制成功</string>
-    <string name="ui_setting_cust_your_suggestion">您的建议</string>
-    <string name="ui_setting_cust_email_prompt">我们很希望能得到您的建议!</string>
-    <string name="ui_setting_cust_email_select">选择邮件应用</string>
-    <string name="ui_webview_loading">正在为您加载...</string>
-    <string name="ui_original_list_prompt_one">按照30天内发布的作品的热度值排名</string>
-    <string name="ui_original_list_prompt_two">热度值与下载、喜欢与评论相关哦~</string>
-    <string name="ui_action_main_theme_recommendation">主题推荐</string>
-    <string name="ui_theme_all">全部主题</string>
-    <string name="ui_setting_message_reply">回复</string>
+    <string name="empty_no_noticedata">你目前没有任何消息</string>
+    <string name="empty_no_dynamiaction">你目前没有任何原创动作</string>
 
-
-
+    <string name="dialog_permission_location_setting">您尚未开启\"ALpha 1E\"位置权限,请到设置中开启</string>
+    <string name="dialog_permission_camera_setting">您尚未开启\"ALpha 1E\"相机权限,请到设置中开启</string>
+    <string name="dialog_permission_storage_setting">您尚未开启\"ALpha 1E\"存储权限,请到设置中开启</string>
+    <string name="dialog_go_setting">去设置</string>
 </resources>

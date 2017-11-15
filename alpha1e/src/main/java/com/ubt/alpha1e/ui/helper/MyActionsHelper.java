@@ -826,7 +826,6 @@ public class MyActionsHelper extends BaseHelper implements
             mHandler.sendMessage(msg);
         }else{
             mActionsNames.addAll(mCacheActionsNames);
-
             Message msg = new Message();
             msg.what = MSG_DO_READ_ACTIONS;
             mHandler.sendMessage(msg);

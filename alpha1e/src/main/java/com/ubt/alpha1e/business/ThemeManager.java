@@ -349,7 +349,7 @@ public class ThemeManager implements FileDownloadListener, IJsonListener, IFileL
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

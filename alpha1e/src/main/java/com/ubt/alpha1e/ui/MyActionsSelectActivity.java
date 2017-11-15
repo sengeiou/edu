@@ -519,7 +519,7 @@ public class MyActionsSelectActivity extends BaseActivity implements IActionsUI{
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

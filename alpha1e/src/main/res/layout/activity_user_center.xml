@@ -2,67 +2,129 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/list"
     >
 
-    <RelativeLayout
-        android:id="@+id/rl_user_title"
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
 
-        <ImageView
-            android:id="@+id/iv_main_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:src="@drawable/btn_back"/>
+    <ImageView
+        android:id="@+id/iv_main_back"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/back_icon"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="34dp"
+        android:layout_toRightOf="@+id/rl_leftmenu"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_main_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/black"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/user_center_title"
+            android:textColor="@color/tv_center_title_color"
             android:textSize="20sp"
             />
 
-        <View
+        <FrameLayout
+            android:id="@+id/fl_main_content"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/gray_dft"/>
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tv_main_title"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="15dp"
+            android:visibility="visible"/>
     </RelativeLayout>
-
-
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rl_leftmenu"
-        android:layout_width="100dp"
+        android:layout_width="110dp"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/rl_user_title"
+        android:layout_below="@+id/iv_main_back"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/img_me_sidebar"
+        android:overScrollMode="never"
+        android:paddingTop="15dp"
+        android:scrollbars="none"
+        android:visibility="visible"
         />
 
-    <View
-        android:id="@+id/line_center"
-        android:layout_width="1dp"
+    <RadioGroup
+        android:id="@+id/ll_left"
+        android:layout_width="114dp"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rl_user_title"
-        android:layout_toRightOf="@+id/rl_leftmenu"
-        android:background="@color/A8"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/iv_main_back"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/img_me_sidebar"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:visibility="gone">
 
-        />
+        <RadioButton
+            android:id="@+id/tv_user_center_info"
+            style="@style/text_userinfo_main_style"
+            android:checked="true"
+            android:drawableLeft="@drawable/radio_selector_main_left_info"
+            android:text="@string/user_center_info"
+            />
 
-    <FrameLayout
-        android:id="@+id/fl_main_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/rl_user_title"
-        android:layout_toRightOf="@+id/line_center"
-        android:visibility="visible"/>
+        <RadioButton
+            android:id="@+id/tv_user_center_achievement"
+            style="@style/text_userinfo_main_style"
+            android:drawableLeft="@drawable/radio_selector_main_left_achievement"
 
+            android:text="@string/user_center_achievement"
+            />
+
+        <RadioButton
+            android:id="@+id/tv_user_center_message"
+            style="@style/text_userinfo_main_style"
+            android:drawableLeft="@drawable/radio_selector_main_left_message"
+            android:text="@string/user_center_message"
+            />
+
+        <RadioButton
+            android:id="@+id/tv_user_center_dynamic"
+            style="@style/text_userinfo_main_style"
+            android:drawableLeft="@drawable/radio_selector_main_left_dynaic"
+            android:text="@string/user_center_dynamic"
+            />
+
+        <RadioButton
+            android:id="@+id/tv_user_center_original"
+            style="@style/text_userinfo_main_style"
+            android:drawableLeft="@drawable/radio_selector_main_left_create"
+            android:text="@string/user_center_original"
+            />
+
+        <RadioButton
+            android:id="@+id/tv_user_center_download"
+            style="@style/text_userinfo_main_style"
+            android:drawableLeft="@drawable/radio_selector_main_left_download"
+            android:text="@string/user_center_download"
+            />
+
+        <RadioButton
+            android:id="@+id/tv_user_center_setting"
+            style="@style/text_userinfo_main_style"
+            android:drawableLeft="@drawable/radio_selector_main_left_setting"
+            android:text="@string/user_center_setting"
+            />
+
+    </RadioGroup>
 </RelativeLayout>

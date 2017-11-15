@@ -769,7 +769,7 @@ public class MediaRecordActivity extends BaseActivity implements MediaRecorderBa
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

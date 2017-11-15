@@ -717,7 +717,7 @@ public class MyActionsDownloadFragment extends BaseMyActionsFragment implements 
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

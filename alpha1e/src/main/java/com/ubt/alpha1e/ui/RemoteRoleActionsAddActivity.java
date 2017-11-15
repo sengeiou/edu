@@ -856,7 +856,7 @@ public class RemoteRoleActionsAddActivity extends BaseActivity implements IRemot
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

@@ -1,6 +1,11 @@
 package com.ubt.alpha1e.utils;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2016/6/12.
@@ -47,4 +52,8 @@ public abstract  class Json {
     public abstract <T> T toObject(String json, Type claxx);
 
     public abstract <T> T toObject(byte[] bytes, Class<T> claxx);
+
+    public abstract Map<String,String> getMap(final Object object);
+
+
 }
