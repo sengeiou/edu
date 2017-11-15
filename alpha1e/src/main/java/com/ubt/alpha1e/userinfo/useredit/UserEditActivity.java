@@ -25,16 +25,15 @@ import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.FileUtils;
 import com.ubt.alpha1e.base.RequstMode.UpdateUserInfoRequest;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.FileTools;
-import com.ubt.alpha1e.data.ImageTools;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.custom.ShapedImageView;
 import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
 import com.ubt.alpha1e.ui.main.MainActivity;
@@ -49,7 +48,7 @@ import com.weigan.loopview.LoopView;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.io.File;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,33 +120,32 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
         UbtLog.d(TAG, "mUserModel:" + mUserModel.toString());
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
-        if(mTvUserName.getText().toString().length()==0){
+        if (mTvUserName.getText().toString().length() == 0) {
             mTvUserName.setText(mUserModel.getNickName());
             mTvUserName.setSelection(mTvUserName.getText().length());
         }
-        if(TextUtils.isEmpty(age)){
-            mTvUserAge.setText(TextUtils.isEmpty(mUserModel.getAge())?"未填写":mUserModel.getAge());
+        if (TextUtils.isEmpty(age)) {
+            mTvUserAge.setText(TextUtils.isEmpty(mUserModel.getAge()) ? "未填写" : mUserModel.getAge());
         }
-        if(TextUtils.isEmpty(grade)){
-            mTvUserGrade.setText(TextUtils.isEmpty(mUserModel.getGrade())?"未填写":mUserModel.getGrade());
+        if (TextUtils.isEmpty(grade)) {
+            mTvUserGrade.setText(TextUtils.isEmpty(mUserModel.getGrade()) ? "未填写" : mUserModel.getGrade());
         }
 
-        if(TextUtils.isEmpty(path)){
+        if (TextUtils.isEmpty(path)) {
             Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().placeholder(R.drawable.sec_action_logo).into(mImgHead);
         }
 
         checkSaveEnable();
 
-
         mPresenter.getLoopData();
 
     }
 
-    private void checkSaveEnable(){
-        if(mTvUserName.getText().length()>0 && !mTvUserAge.getText().toString().equals("未填写")
-                && !mTvUserGrade.getText().toString().equals("未填写")){
+    private void checkSaveEnable() {
+        if (mTvUserName.getText().length() > 0 && !mTvUserAge.getText().toString().equals("未填写")
+                && !mTvUserGrade.getText().toString().equals("未填写")) {
             ivSave.setEnabled(true);
-        }else{
+        } else {
             ivSave.setEnabled(false);
         }
     }
@@ -184,15 +182,15 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                 mPresenter.showImageHeadDialog(UserEditActivity.this);
                 break;
             case R.id.tv_user_age:
-                mPresenter.showAgeDialog(UserEditActivity.this, ageList, mPresenter.getPosition(age,ageList));
+                mPresenter.showAgeDialog(UserEditActivity.this, ageList, mPresenter.getPosition(age, ageList));
                 break;
             case R.id.tv_user_grade:
 
-                mPresenter.showGradeDialog(UserEditActivity.this, mPresenter.getPosition(grade,gradeList), gradeList);
+                mPresenter.showGradeDialog(UserEditActivity.this, mPresenter.getPosition(grade, gradeList), gradeList);
                 break;
             case R.id.iv_complete_info:
 
-                if(!TVUtils.isCorrectStr(mTvUserName.getText().toString())) {
+                if (!TVUtils.isCorrectStr(mTvUserName.getText().toString())) {
                     ToastUtils.showShort("仅限汉字、字母及数字");
                     return;
                 }
@@ -204,7 +202,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                 request.setNickName(mTvUserName.getText().toString());
                 request.setSex(sex);
                 File file = null;
-                if(!TextUtils.isEmpty(path)){
+                if (!TextUtils.isEmpty(path)) {
                     file = new File(path);
                 }
                 OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, request, 11).execute(new StringCallback() {
@@ -340,30 +338,13 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                     mImageUri = data.getData();
                 }
                 try {
-                    InputStream in = cr.openInputStream(mImageUri);
-                    ImageTools.compressImage(in, mImgHead.getWidth(),
-                            mImgHead.getHeight(), new IImageListener() {
-                                @Override
-                                public void onGetImage(boolean isSuccess,
-                                                       final Bitmap bitmap, long request_code) {
-                                    if (isSuccess) {
-                                        mHandler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Bitmap img = ImageTools.ImageCrop(bitmap);
-                                                mImgHead.setImageBitmap(img);
-                                                path = ImageTools.SaveImage("head", img);
-                                            }
-                                        });
-                                    }
-                                }
-
-                            }, true);
-
-                } catch (Exception e) {
+                    Bitmap bitmap = FileUtils.getBitmapFormUri(this, mImageUri);
+                    mImgHead.setImageBitmap(bitmap);
+                    path = FileUtils.SaveImage(this, "head", bitmap);
+                    mPresenter.updateHead(path);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         }
     }
