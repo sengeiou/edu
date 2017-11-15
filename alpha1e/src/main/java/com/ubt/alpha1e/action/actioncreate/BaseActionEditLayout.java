@@ -15,24 +15,24 @@ import android.widget.LinearLayout;
  * version
  */
 
-public abstract class ActionEditLayout extends LinearLayout{
+public abstract class BaseActionEditLayout extends LinearLayout{
 
 
 
 
-    public ActionEditLayout(Context context) {
+    public BaseActionEditLayout(Context context) {
         super(context);
         init(context);
     }
 
 
 
-    public ActionEditLayout(Context context, @Nullable AttributeSet attrs) {
+    public BaseActionEditLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public ActionEditLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public BaseActionEditLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }

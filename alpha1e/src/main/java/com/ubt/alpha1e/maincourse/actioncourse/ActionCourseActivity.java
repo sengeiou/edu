@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.Course.actioncourse;
+package com.ubt.alpha1e.maincourse.actioncourse;
 
 
 import android.graphics.Rect;
@@ -8,8 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.ubt.alpha1e.Course.adapter.ActionCoursedapter;
-import com.ubt.alpha1e.Course.model.ActionCourseModel;
+import com.ubt.alpha1e.maincourse.adapter.ActionCoursedapter;
+import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;

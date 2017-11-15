@@ -549,11 +549,11 @@
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
-            android:name=".Course.maincourse.MainCourseActivity"
+            android:name=".maincourse.maincourse.MainCourseActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
-            android:name=".Course.actioncourse.ActionCourseActivity"
+            android:name=".maincourse.actioncourse.ActionCourseActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <!-- APP实现的Receiver，用于接收消息和结果反馈 -->

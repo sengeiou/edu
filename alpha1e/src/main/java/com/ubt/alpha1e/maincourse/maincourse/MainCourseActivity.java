@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.Course.maincourse;
+package com.ubt.alpha1e.maincourse.maincourse;
 
 
 import android.content.Intent;
@@ -11,9 +11,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.ubt.alpha1e.Course.actioncourse.ActionCourseActivity;
-import com.ubt.alpha1e.Course.adapter.MainCoursedapter;
-import com.ubt.alpha1e.Course.model.CourseModel;
+import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
+import com.ubt.alpha1e.maincourse.adapter.MainCoursedapter;
+import com.ubt.alpha1e.maincourse.model.CourseModel;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;

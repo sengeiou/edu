@@ -15,16 +15,16 @@ import com.ubt.alpha1e.R;
  * version
  */
 
-public class ActionEditImpleLayout extends ActionEditLayout {
-    public ActionEditImpleLayout(Context context) {
+public class ActionEditsSander extends BaseActionEditLayout {
+    public ActionEditsSander(Context context) {
         super(context);
     }
 
-    public ActionEditImpleLayout(Context context, @Nullable AttributeSet attrs) {
+    public ActionEditsSander(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ActionEditImpleLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ActionEditsSander(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
