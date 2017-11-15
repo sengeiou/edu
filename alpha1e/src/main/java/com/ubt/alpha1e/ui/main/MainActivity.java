@@ -53,15 +53,12 @@ import pl.droidsonroids.gif.GifDrawable;
 
 public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View {
 
-
     @BindView(R.id.cartoon_body_touch_bg)
     ImageView cartoonBodyTouchBg;
     @BindView(R.id.charging)
     ImageView charging;
     @BindView(R.id.cartoon_action)
     ImageView cartoonAction;
-    @BindView(R.id.buddleText)
-    TextView buddleText;
     @BindView(R.id.right_icon)
     TextView rightIcon;
     @BindView(R.id.right_icon2)
@@ -105,9 +102,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private AnimationDrawable frameAnimation;
     private EasyPopup mCirclePop;
     private int powerThreshold[] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100};
-
+    int index=0;
     @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3,
-            R.id.right_icon4, R.id.cartoon_head, R.id.cartoon_left_hand,
+            R.id.right_icon4,R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
             R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg})
 
     protected void switchActivity(View view) {
@@ -149,14 +146,28 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 mCirclePop = new EasyPopup(this)
                         .setContentView(R.layout.main_ui_buddletext)
                         //是否允许点击PopupWindow之外的地方消失
-                        .setWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
-                        .setHeight(ViewGroup.LayoutParams.WRAP_CONTENT)
                         .setFocusAndOutsideEnable(true)
                         .createPopup();
-                mCirclePop.showAtAnchorView(cartoonBodyTouchBg, VerticalGravity.CENTER, HorizontalGravity.LEFT, 100 , 100);
-                buddleText=mCirclePop.getView(R.id.tv_delete);
+                mCirclePop.showAtAnchorView(cartoonHead, VerticalGravity.ALIGN_TOP,  HorizontalGravity.RIGHT, 20 , 0);
+
                 break;
             case R.id.right_icon3:
+                mCirclePop = new EasyPopup(this)
+                        .setContentView(R.layout.main_ui_buddletext)
+                        //是否允许点击PopupWindow之外的地方消失
+                        .setFocusAndOutsideEnable(true)
+                        .createPopup();
+                    mCirclePop.showAtAnchorView(cartoonHead,VerticalGravity.ALIGN_TOP,  HorizontalGravity.RIGHT, 20 , 0);
+                    TextView mBuddleText=mCirclePop.getView(R.id.tv_delete);
+                    if (index== 0) {
+                    mBuddleText.setText("从机场到下榻宾馆沿途，欢迎的人群几乎就没有间断。他们簇拥在街道两侧，纷纷向习近平总书记、国家主席挥舞中老两国国旗，表达着老挝人民对中国的深厚感情和对习近平总书记、国家主席来访的由衷喜悦");
+                } else if (index == 1) {
+                    mBuddleText.setText("从机场到下榻宾馆沿途，欢迎的人群几乎就没有间断。他们簇拥在街道两侧，纷纷向习近平总书记");
+                } else if (index== 2) {
+                    mBuddleText.setText("从机场到下榻宾馆沿途，欢迎的人群几乎就没有间断");
+                    index = 0;
+                }
+                index++;
                 break;
             case R.id.right_icon4:
                 break;
@@ -257,8 +268,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         } else {
             topIcon2Disconnect.setVisibility(View.VISIBLE);
         }
-
-
+        
     }
 
     @Override
@@ -355,8 +365,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     private void buddleTextShow(String text){
 
-        buddleText.setVisibility(View.VISIBLE);
-        buddleText.setText(text);
     }
 
     private double getScreenInch() {

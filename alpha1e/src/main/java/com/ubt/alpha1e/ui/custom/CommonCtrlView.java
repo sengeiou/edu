@@ -251,7 +251,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         gifImageView = (GifImageView) view.findViewById(R.id.gif_playing_control);
 
         //init hide view
-        btn_cycle = (ImageView) view.findViewById(R.id.btn_lig_logo);
+        btn_cycle = (ImageView) view.findViewById(R.id.btn_actionlist);
         btn_reset_m=(ImageView) view.findViewById(R.id.btn_reset);
         btn_lose_power = (ImageView) view.findViewById(R.id.btn_poweroff);
         btn_pause_or_continue = (ImageView) view.findViewById(R.id.btn_playaction);
@@ -314,14 +314,14 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 if(AlphaApplication.isCycleActionFragment()){
                     return;
                 }
-                mWindowManager.removeView(mFloatLayout);
-                lay_ctrl_more.setVisibility(View.GONE);
-                rl_control.setVisibility(View.VISIBLE);
-                wmParams.y = paddingBottomHeight;
-                wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-                wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
-                mWindowManager.addView(mFloatLayout, wmParams);
+//                mWindowManager.removeView(mFloatLayout);
+//                lay_ctrl_more.setVisibility(View.GONE);
+//                rl_control.setVisibility(View.VISIBLE);
+//                wmParams.y = paddingBottomHeight;
+//                wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+//                wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+//                wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
+//                mWindowManager.addView(mFloatLayout, wmParams);
                 MyActionsActivity.launchActivity(mBaseActivity, 4);
 //                ((MyActionsActivity)AlphaApplication.getBaseActivity()).startCycleActionFragment();
             }
@@ -341,8 +341,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                         MyActionsHelper.Command_type.Do_default, "", AlphaApplication.getActionType());
                 txt_action_name_m.setText("");
                 mBaseActivity.saveCurrentPlayingActionName("");
-                btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
-                gifImageView.setVisibility(View.INVISIBLE);
+               // btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
+               // gifImageView.setVisibility(View.INVISIBLE);
 
             }
         });
