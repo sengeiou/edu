@@ -304,14 +304,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/rcv_time"
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="26dp"
-                            android:onClick="true"
+                            android:layout_height="20dp"
+                            android:background="@drawable/bg_action_frame_list"
+
                             >
-                        </android.support.v7.widget.RecyclerView>
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rcv_time"
+                                android:layout_width="match_parent"
+                                android:layout_height="20dp"
+                                android:onClick="true"
+                                >
+                            </android.support.v7.widget.RecyclerView>
+
+
+                        </RelativeLayout>
+
 
                         <SeekBar
                             android:id="@+id/sb_voice"
@@ -359,15 +368,16 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="46dp"
                         android:orientation="horizontal"
-                        android:background="@color/action_filter_color"
+                        android:background="@drawable/bg_action_frame_list"
                         >
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/rcv_actions"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
 
                             >
 

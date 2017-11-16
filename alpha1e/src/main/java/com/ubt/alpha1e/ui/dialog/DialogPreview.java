@@ -13,7 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.ui.ActionsNewEditActivity;
+import com.ubt.alpha1e.action.ActionsCreateActivity;
+import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.utils.TimeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -44,7 +45,7 @@ public class DialogPreview extends Dialog {
 
     private TextView tvCancel, tvConfirm;
     private List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-    private ActionsNewEditActivity activity;
+    private BaseActivity activity;
 
 
     private Timer timer = new Timer();
@@ -82,7 +83,7 @@ public class DialogPreview extends Dialog {
     };
 
 
-    public DialogPreview(Context context, List<Map<String, Object>> list, ActionsNewEditActivity activity) {
+    public DialogPreview(Context context, List<Map<String, Object>> list, BaseActivity activity) {
         super(context);
         this.context = context;
         dialogPreview = this;
@@ -120,10 +121,10 @@ public class DialogPreview extends Dialog {
         ivPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!activity.canPlay()){
+                if(!((ActionsCreateActivity)activity).canPlay()){
                     return;
                 }
-                activity.doPlayAutoRead();
+                ((ActionsCreateActivity)activity).doPlayAutoRead();
                 ivPlay.setImageResource(R.drawable.icon_pause_nor);
                 int time = list.size()*200;
                 playFinish = false;
@@ -153,7 +154,7 @@ public class DialogPreview extends Dialog {
             public void onClick(View v) {
                 index = 0;
                 timer.cancel();
-                activity.cancelAutoData();
+                ((ActionsCreateActivity)activity).cancelAutoData();
                 list.clear();
                 dismiss();
             }
