@@ -184,6 +184,8 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
         String first = i.getStringExtra("isFirst");
         if(first != null&& first.equals("yes")){
             isFirst = true ;
+        }else {
+            ib_return.setVisibility(View.VISIBLE);
         }
         AutoScanConnectService.doEntryManalConnect(true);
         mHelper = new BluetoothHelper(BluetoothconnectActivity.this, BluetoothconnectActivity.this);

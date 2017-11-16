@@ -398,7 +398,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
         registerBoardCastReceiver();
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!mBtAdapter.isEnabled()) {
-            mBtAdapter.enable();
+//            mBtAdapter.enable();
 //            ((Activity)mContext).startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),1333);
         }
         mDevicesList = new ArrayList<BluetoothDevice>();

@@ -2,6 +2,7 @@ package com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate;
 
 
 import android.animation.ObjectAnimator;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity;
@@ -40,6 +42,7 @@ import com.ubt.alpha1e.ui.helper.IMainUI;
 import com.ubt.alpha1e.ui.helper.IScanUI;
 import com.ubt.alpha1e.ui.helper.ScanHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.yanzhenjie.permission.Permission;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -454,6 +457,16 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         this.overridePendingTransition(0,R.anim.activity_close_down_up);
     }
 
+
+    void startBluetoothConnect(){
+        UbtLog.d(TAG,"获取蓝牙列表");
+        Intent intent = new Intent();
+        intent.putExtra("isFirst","no");
+        intent.setClass(BluetoothandnetconnectstateActivity.this,BluetoothconnectActivity.class);
+        this.startActivity(intent);
+        this.overridePendingTransition(R.anim.activity_open_up_down,R.anim.activity_close_down_up);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -464,12 +477,35 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 BluetoothandnetconnectstateActivity.this.finish();
                 break;
             case R.id.ig_get_bluetooth_list:
-                UbtLog.d(TAG,"获取蓝牙列表");
-                Intent intent = new Intent();
-                intent.putExtra("isFirst","no");
-                intent.setClass(BluetoothandnetconnectstateActivity.this,BluetoothconnectActivity.class);
-                this.startActivity(intent);
-                this.overridePendingTransition(R.anim.activity_open_up_down,R.anim.activity_close_down_up);
+
+
+                BluetoothAdapter mBtAdapter;
+                mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+                if (!mBtAdapter.isEnabled()) {
+                    UbtLog.d(TAG, "bluetoothEnable false ");
+                    boolean bluetoothEnable = mBtAdapter.enable();
+                    if(bluetoothEnable){
+                        UbtLog.d(TAG, "bluetooth Enable true 判断是否授权");
+                        if(PermissionUtils.getInstance(this).hasPermission(Permission.LOCATION)){
+                            UbtLog.d(TAG, "bluetoothEnable true 有授权");//ok
+                            startBluetoothConnect();
+                        }else {
+                            UbtLog.d(TAG, "bluetoothEnable true 没有授权");//ok
+                            PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION);
+                        }
+                    }else {
+                        UbtLog.d(TAG, "bluetoothEnable false 提醒去打开蓝牙");//ok
+                    }
+                }else {
+                    UbtLog.d(TAG, "bluetooth enable  判断是否授权");
+                    if(PermissionUtils.getInstance(this).hasPermission(Permission.LOCATION)){
+                        UbtLog.d(TAG, "bluetoothEnable true 有授权");//ok
+                        startBluetoothConnect();
+                    }else {
+                        UbtLog.d(TAG, "bluetoothEnable true 没有授权"); //ok
+                        PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION);
+                    }
+                }
 
                 break;
             case R.id.ig_get_wifi_list:
