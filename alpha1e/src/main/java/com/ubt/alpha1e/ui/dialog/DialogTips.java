@@ -10,7 +10,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.ui.ActionsNewEditActivity;
+import com.ubt.alpha1e.action.ActionsCreateActivity;
+import com.ubt.alpha1e.ui.BaseActivity;
 
 /**
  * @author wmma
@@ -31,9 +32,9 @@ public class DialogTips extends Dialog {
 
     private String content = "";
     private int type = 0;
-    private ActionsNewEditActivity activity;
+    private BaseActivity activity;
 
-    public DialogTips(Context context, String content, int type, ActionsNewEditActivity activity) {
+    public DialogTips(Context context, String content, int type, BaseActivity activity) {
         super(context);
         this.context = context;
         dialogTips = this;
@@ -65,9 +66,9 @@ public class DialogTips extends Dialog {
             public void onClick(View v) {
                 dismiss();
                 if(type == 1) {
-                    activity.lostLeftLeg();
+                    ((ActionsCreateActivity)activity).lostLeftLeg();
                 }else if(type == 2){
-                    activity.lostRightLeg();
+                    ((ActionsCreateActivity)activity).lostRightLeg();
                 }
             }
         });

@@ -370,8 +370,10 @@ public class FrameRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             width = width/4;
         }
 
-        int height = 50;
-        if(density == 2.0){
+        ViewGroup.LayoutParams param = view.getLayoutParams();
+        int height = param.height;
+        UbtLog.d(TAG, "height:" + height + "--width:" + param.width);
+ /*       if(density == 2.0){
             height = 100;
         }else if(density == 1.0){
             height = 50;
@@ -384,7 +386,7 @@ public class FrameRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         }else if(density == 4.0){
             height = 200;
         }
-
+*/
 
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
