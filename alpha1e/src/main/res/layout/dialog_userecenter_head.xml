@@ -4,8 +4,8 @@
                 android:layout_height="wrap_content">
 
     <LinearLayout
-        android:layout_width="380dp"
-        android:layout_height="100dp"
+        android:layout_width="300dp"
+        android:layout_height="120dp"
         android:layout_centerInParent="true"
         android:background="@drawable/bg_edit_user"
         android:orientation="horizontal"
@@ -15,27 +15,24 @@
         <TextView
             android:id="@+id/tv_take_photo"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/line_center"
             android:layout_weight="1"
             android:background="@color/white"
             android:drawablePadding="15dp"
-            android:drawableRight="@drawable/bottom_shoot"
-            android:gravity="center|right"
-            android:paddingBottom="20dp"
-            android:paddingLeft="40dp"
-            android:paddingRight="20dp"
-            android:paddingTop="20dp"
+            android:drawableTop="@drawable/bottom_shoot"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
             android:text="拍照"
-            android:textColor="@color/black"
-            android:textSize="20sp"/>
+            android:textColor="@color/login_line_color"
+            android:textSize="18sp"/>
 
         <View
             android:id="@+id/line_center"
             android:layout_width="1dp"
-            android:layout_height="23dp"
+            android:layout_height="30dp"
             android:layout_gravity="center_vertical"
             android:background="@color/bg_line_color"/>
 
@@ -44,17 +41,16 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
             android:layout_weight="1"
             android:background="@color/white"
-            android:drawableLeft="@drawable/bottom_ablum"
             android:drawablePadding="15dp"
-            android:gravity="center|left"
-            android:paddingBottom="20dp"
+            android:drawableTop="@drawable/bottom_ablum"
+            android:gravity="center"
+            android:paddingBottom="15dp"
             android:paddingLeft="20dp"
-            android:paddingTop="20dp"
+            android:paddingTop="15dp"
             android:text="相册"
-            android:textColor="@color/black"
-            android:textSize="20sp"/>
+            android:textColor="@color/login_line_color"
+            android:textSize="18sp"/>
     </LinearLayout>
 </RelativeLayout>

@@ -16,7 +16,7 @@ public class AboutUsContract {
 
         void noteApkUpsateFail(String info);
 
-        void noteApkUpdate(String versionPath, String versionNameSizeInfo);
+        void noteApkUpdate(String versionPath);
     }
 
     interface  Presenter extends BasePresenter<View> {
@@ -24,6 +24,6 @@ public class AboutUsContract {
 
         boolean isWifiCoon(Context context);
 
-        void doUpdateApk();
+        void doUpdateApk(String version);
     }
 }

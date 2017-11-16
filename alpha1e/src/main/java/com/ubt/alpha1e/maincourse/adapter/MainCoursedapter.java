@@ -31,6 +31,5 @@ public class MainCoursedapter extends BaseQuickAdapter<CourseModel, BaseViewHold
         ((ImageView) helper.getView(R.id.iv_cources)).setImageResource(item.getDrawableId());
         helper.setText(R.id.tv_cources_name, item.getMainCourcesName());
         ImageView  ivScore = helper.getView(R.id.iv_complete);
-        ivScore.setImageResource(item.getLockType()==1?R.drawable.img_lesson_completed:R.drawable.img_lesson_incomplete);
-    }
+     }
 }

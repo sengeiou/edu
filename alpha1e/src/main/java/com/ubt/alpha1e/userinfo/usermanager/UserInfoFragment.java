@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,14 +25,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.FileUtils;
 import com.ubt.alpha1e.base.NetUtil;
 import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
-import com.ubt.alpha1e.data.FileTools;
-import com.ubt.alpha1e.data.ImageTools;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
-import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.custom.ShapedImageView;
 import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
 import com.ubt.alpha1e.userinfo.model.UserAllModel;
@@ -40,10 +39,11 @@ import com.ubt.alpha1e.userinfo.useredit.UserEditContract;
 import com.ubt.alpha1e.userinfo.useredit.UserEditPresenter;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
 import com.ubt.alpha1e.userinfo.util.TVUtils;
+import com.ubt.alpha1e.utils.NameLengthFilter;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.io.File;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,6 +166,8 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     private void initData() {
         mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
         UbtLog.d("Usercenter", "usermode===" + mUserModel.toString());
+        InputFilter[] filters = { new NameLengthFilter(20) };
+        mTvUserName.setFilters(filters);
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
         mTvUserName.setText(mUserModel.getNickName());
         mTvUserAge.setText(mUserModel.getAge());
@@ -316,7 +318,9 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
 
     public void getShootCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File path = new File(FileTools.image_cache);
+        String catchPath = FileUtils.getCacheDirectory(getActivity(), "");
+        // File path = new File(FileTools.image_cache);
+        File path = new File(catchPath + "/images");
         if (!path.exists()) {
             path.mkdirs();
         }
@@ -409,30 +413,13 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                     }
                     mImageUri = data.getData();
                 }
+
                 try {
-                    InputStream in = cr.openInputStream(mImageUri);
-                    ImageTools.compressImage(in, mImgHead.getWidth(),
-                            mImgHead.getHeight(), new IImageListener() {
-                                @Override
-                                public void onGetImage(boolean isSuccess,
-                                                       final Bitmap bitmap, long request_code) {
-                                    if (isSuccess) {
-                                        mHandler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Bitmap img = ImageTools.ImageCrop(bitmap);
-                                                mImgHead.setImageBitmap(img);
-                                                headPath = ImageTools.SaveImage("head", img);
-                                                mPresenter.updateHead(headPath);
-                                                UbtLog.d("compressImage", "使用次数");
-                                            }
-                                        });
-                                    }
-                                }
-
-                            }, true);
-
-                } catch (Exception e) {
+                    Bitmap bitmap = FileUtils.getBitmapFormUri(getActivity(), mImageUri);
+                    mImgHead.setImageBitmap(bitmap);
+                    headPath = FileUtils.SaveImage(getActivity(), "head", bitmap);
+                    mPresenter.updateHead(headPath);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 
