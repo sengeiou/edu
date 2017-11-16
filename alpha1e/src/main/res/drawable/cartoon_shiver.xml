@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
+<item android:drawable="@drawable/shiver1"  android:duration="50"/>
+    <item android:drawable="@drawable/shiver2"  android:duration="50"/>
+    <item android:drawable="@drawable/shiver3"  android:duration="50"/>
+    <item android:drawable="@drawable/shiver4"  android:duration="50"/>
+    <item android:drawable="@drawable/shiver5"  android:duration="50"/>
+    <item android:drawable="@drawable/shiver6"  android:duration="50"/>
+    <item android:drawable="@drawable/shiver7"  android:duration="50"/>
+    <item android:drawable="@drawable/shiver8"  android:duration="50"/>
+    <item android:drawable="@drawable/shiver9"  android:duration="50"/>
+<item android:drawable="@drawable/shiver10"  android:duration="50"/>
+<item android:drawable="@drawable/shiver11"  android:duration="50"/>
+<item android:drawable="@drawable/shiver12"  android:duration="50"/>
+<item android:drawable="@drawable/shiver13"  android:duration="50"/>
+<item android:drawable="@drawable/shiver14"  android:duration="50"/>
+<item android:drawable="@drawable/shiver15"  android:duration="50"/>
+<item android:drawable="@drawable/shiver16"  android:duration="50"/>
+<item android:drawable="@drawable/shiver17"  android:duration="50"/>
+<item android:drawable="@drawable/shiver18"  android:duration="50"/>
+<item android:drawable="@drawable/shiver19"  android:duration="50"/>
+
+<item android:drawable="@drawable/shiver20"  android:duration="50"/>
+<item android:drawable="@drawable/shiver21"  android:duration="50"/>
+
+
+</animation-list>

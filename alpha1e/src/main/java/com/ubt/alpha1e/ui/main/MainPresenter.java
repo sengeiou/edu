@@ -13,7 +13,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     @Override
     public void requestCartoonAction(String json) {
-            mView.showCartoonAction("text");
+          //  mView.showCartoonAction(1);
     }
 
     @Override

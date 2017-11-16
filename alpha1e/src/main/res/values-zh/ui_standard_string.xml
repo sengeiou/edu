@@ -866,7 +866,6 @@
     <string name="ui_setting_password_modify_fail">修改密码失败</string>
     <string name="ui_setting_common_next">下一步</string>
 
->>>>>>> fc4e795a65c821ede9681c0b3ab4a0119eb1f37b
 
     <!-- 不需要翻译 -->
     <string name="ui_pc_update_url">http://www.ubtrobot.com/download/index.html</string>

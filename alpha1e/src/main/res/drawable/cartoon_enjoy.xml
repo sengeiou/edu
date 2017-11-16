@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
+<item android:drawable="@drawable/enjoy1"  android:duration="50"/>
+    <item android:drawable="@drawable/enjoy2"  android:duration="50"/>
+    <item android:drawable="@drawable/enjoy3"  android:duration="50"/>
+    <item android:drawable="@drawable/enjoy4"  android:duration="50"/>
+    <item android:drawable="@drawable/enjoy5"  android:duration="50"/>
+    <item android:drawable="@drawable/enjoy6"  android:duration="50"/>
+    <item android:drawable="@drawable/enjoy7"  android:duration="50"/>
+    <item android:drawable="@drawable/enjoy8"  android:duration="50"/>
+    <item android:drawable="@drawable/enjoy9"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy10"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy11"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy12"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy13"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy14"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy15"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy16"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy17"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy18"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy19"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy20"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy21"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy22"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy23"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy24"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy25"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy26"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy27"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy28"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy29"  android:duration="50"/>
+
+<item android:drawable="@drawable/enjoy30"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy31"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy32"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy33"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy34"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy35"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy36"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy37"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy38"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy39"  android:duration="50"/>
+
+<item android:drawable="@drawable/enjoy40"  android:duration="50"/>
+<item android:drawable="@drawable/enjoy41"  android:duration="50"/>
+
+</animation-list>

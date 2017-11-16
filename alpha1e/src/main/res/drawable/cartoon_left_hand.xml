@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
+<item android:drawable="@drawable/swing_lefthand1"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand2"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand3"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand4"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand5"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand6"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand7"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand8"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand9"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand10"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand11"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand12"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand13"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand14"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand15"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand16"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand17"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand18"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand19"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand20"  android:duration="50"/>
+<item android:drawable="@drawable/swing_lefthand21"  android:duration="50"/>
+
+</animation-list>
