@@ -12,14 +12,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.MyMainActivity;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
@@ -107,11 +106,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 startActivity(mLaunch);
                 break;
             case R.id.right_icon:
-                mLaunch.setClass(this, ScanBluetoothActivity.class);
-                startActivity(mLaunch);
+//                mLaunch.setClass(this, ScanBluetoothActivity.class);
+//                startActivity(mLaunch);
+                startActivity(new Intent(this, ActionTestActivity.class));
+
                 break;
             case R.id.right_icon2:
-                startActivity(new Intent(this, ActionTestActivity.class));
                 break;
             case R.id.right_icon3:
                 break;
