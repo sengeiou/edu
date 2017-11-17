@@ -64,7 +64,50 @@ public class HotQuestionFragment extends MVPBaseFragment<HotQuestionContract.Vie
     @Override
     protected void initUI() {
         mFeedbackInfoDatas = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+
+        FeedbackInfo f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "机器人无法连接手机";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "机器人无法连接电脑";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "机器人可以添加新的舞蹈吗?";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "机器人怎样添加动作?";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "机器人启动后不能正常复位?";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "机器人启动后不能正常复位?";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "移动端控制不了机器人?";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        for (int i = 0; i < 2; i++) {
             FeedbackInfo f1 = new FeedbackInfo();
             f1.feedbackId = 1;
             f1.feedbackName = ((MVPBaseActivity)getActivity()).getStringResources("ui_setting_hot_question") + "标题_" + i;
