@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sina.weibo.sdk.openapi.legacy.AccountAPI.CAPITAL.R;
 
 /**
  * @author：liuhai
