@@ -119,6 +119,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             @Override
             public void onClick(View view) {
                 loginType = 0;
+                proxy.clearToken(ELoginPlatform.QQOpen, LoginActivity.this);
                 proxy.requestLogin(ELoginPlatform.QQOpen, PID, DSN, LoginActivity.this);
             }
         });
