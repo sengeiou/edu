@@ -42,25 +42,31 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI {
         mActionEdit.setUp(mHelper);
     }
 
+    @Override
+    protected void onResume() {
+        setCurrentActivityLable("ActionTestActivity");
+        super.onResume();
+
+    }
 
     @Override
     public void onPlaying() {
-
+        mActionEdit.onPlaying();
     }
 
     @Override
     public void onPausePlay() {
-
+        mActionEdit.onPausePlay();
     }
 
     @Override
     public void onFinishPlay() {
-
+        mActionEdit.onFinishPlay();
     }
 
     @Override
     public void onFrameDo(int index) {
-
+        mActionEdit.onFrameDo(index);
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.ubt.alpha1e.action.actioncreate;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -12,6 +15,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,6 +27,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baoyz.pg.PG;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.AlphaApplication;
@@ -31,17 +36,23 @@ import com.ubt.alpha1e.action.model.ActionConstant;
 import com.ubt.alpha1e.action.model.ActionDataModel;
 import com.ubt.alpha1e.action.model.PrepareDataModel;
 import com.ubt.alpha1e.action.model.PrepareMusicModel;
+import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.business.NewActionPlayer;
+import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.FrameActionInfo;
 import com.ubt.alpha1e.data.model.NewActionInfo;
+import com.ubt.alpha1e.ui.ActionsEditSaveActivity;
 import com.ubt.alpha1e.ui.FrameRecycleViewAdapter;
 import com.ubt.alpha1e.ui.TimesHideRecycleViewAdapter;
 import com.ubt.alpha1e.ui.TimesRecycleViewAdapter;
+import com.ubt.alpha1e.ui.WebContentActivity;
 import com.ubt.alpha1e.ui.custom.ActionGuideView;
 import com.ubt.alpha1e.ui.dialog.DialogTips;
+import com.ubt.alpha1e.ui.dialog.IMessageListeter;
+import com.ubt.alpha1e.ui.dialog.MyAlertDialog;
 import com.ubt.alpha1e.ui.fragment.SaveSuccessFragment;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
@@ -51,6 +62,7 @@ import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ByteHexHelper;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -331,10 +343,13 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         ivAddFrame.setImageResource(R.drawable.icon_add_nor);
         ivAddFrame.setOnClickListener(this);
         ivBack = (ImageView) findViewById(R.id.iv_back);
+        ivBack.setOnClickListener(this);
         ivReset = (ImageView) findViewById(R.id.iv_reset);
         ivReset.setOnClickListener(this);
         ivAutoRead = (ImageView) findViewById(R.id.iv_auto_read);
+        ivAutoRead.setOnClickListener(this);
         ivSave = (ImageView) findViewById(R.id.iv_save_action);
+        ivSave.setOnClickListener(this);
         ivHelp = (ImageView) findViewById(R.id.iv_help);
         ivHelp.setOnClickListener(this);
 
@@ -381,6 +396,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         });
         ivZoomPlus = (ImageView) findViewById(R.id.iv_zoom_plus);
         ivZoomMinus = (ImageView) findViewById(R.id.iv_zoom_minus);
+        ivZoomPlus.setOnClickListener(this);
+        ivZoomMinus.setOnClickListener(this);
         tvZoomPlus = (TextView) findViewById(R.id.tv_zoom_plus);
         tvZoomMinus = (TextView) findViewById(R.id.tv_zoom_minus);
         sbVoice = (SeekBar) findViewById(R.id.sb_voice);
@@ -541,6 +558,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         tvDeleteMusic = (TextView) findViewById(R.id.tv_del_music);
         iv_del_music = (ImageView) findViewById(R.id.iv_del_music);
         iv_del_music.setOnClickListener(this);
+        initMediaPlayer();
     }
 
 
@@ -556,17 +574,231 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     }
 
+    private void initMediaPlayer() {
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                UbtLog.d(TAG, "播放完毕:" + isFinishFramePlay);
+
+                playFinish = true;
+                mHandler.removeMessages(0);
+                mediaPlayer.seekTo(0);
+                sbVoice.setProgress(0);
+                tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
+                ivPlay.setImageResource(R.drawable.icon_play_music);
+                ivAddFrame.setEnabled(true);
+                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                recyclerViewTimesHide.setVisibility(View.GONE);
+//                if(isFinishFramePlay){
+                setEnable(true);
+//                }
+                if (list_frames != null && list_frames.size() > 0) {
+                    if (isFinishFramePlay) {
+                        layoutManager.scrollToPosition(0);
+//                        recyclerViewFrames.smoothScrollToPosition(0);
+                    }
+
+                }
+                if (recyclerViewTimes != null) {
+                    recyclerViewTimes.smoothScrollToPosition(0);
+                }
+            }
+        });
+    }
+
+
+    public void play(String mp3) {
+        String path = null;
+        if (mp3.equals("")) {
+            path = mDir + File.separator + "a.mp3";
+//            final File file = new File(path);
+        } else {
+            path = mDir + File.separator + mp3;
+        }
+
+        File file = new File(path);
+        UbtLog.d(TAG, "path:" + path);
+        if (file.exists()) {
+
+            try {
+                mediaPlayer.reset();
+                mediaPlayer.setDataSource(path);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            ToastUtils.showShort("file is not exit");
+        }
+
+    }
+
+
+    /**
+     * 播放预览动作
+     */
+    private void play() {
+        try {
+            if (mDir.equals("") || mDir.equals(null)) {
+                return;
+            }
+            playFinish = false;
+            mediaPlayer.start();
+
+            //后台线程发送消息进行更新进度条
+            final int milliseconds = 100;
+            new Thread() {
+                @Override
+                public void run() {
+                    while (true && !playFinish && !((Activity) mContext).isDestroyed()) {
+                        try {
+                            sleep(milliseconds);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
+                        mHandler.sendEmptyMessage(0);
+                    }
+                }
+            }.start();
+
+//            mediaPlayer.start();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN
+                && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+
+            ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,
+                    null);
+
+            return doBack();
+
+        }
+        return false;
+    }
+
+    private boolean doBack() {
+
+        if (musicTimes == 0) {
+            if (list_frames.size() < 1) {
+                ((Activity) mContext).finish();
+                return false;
+            }
+        } else {
+            if (list_frames.size() < 2) {
+                ((Activity) mContext).finish();
+                return false;
+            }
+        }
+
+        if (isSaveSuccess) {
+            ((Activity) mContext).finish();
+            return true;
+        }
+        MyAlertDialog.getInstance(
+                mContext,
+                ResourceManager.getInstance(mContext).getStringResources("ui_readback_quit_tip"),
+                ResourceManager.getInstance(mContext).getStringResources("ui_common_cancel"),
+                ResourceManager.getInstance(mContext).getStringResources("ui_common_save"), new IMessageListeter() {
+
+                    @Override
+                    public void onViewAction(boolean isOk) {
+                        if (isOk) {
+                            saveNewAction();
+                        } else {
+                            doReset();
+                            if (mediaPlayer != null) {
+                                mediaPlayer.stop();
+                                playFinish = true;
+                            }
+                            ((Activity) mContext).finish();
+                        }
+                    }
+                }).show();
+        return true;
+    }
+
+    private void saveNewAction() {
+
+        if (musicTimes == 0) {
+            if (list_frames.size() < 1) {
+                MyAlertDialog.getInstance(
+                        mContext,
+                        ResourceManager.getInstance(mContext).getStringResources("ui_readback_not_null"),
+                        ResourceManager.getInstance(mContext).getStringResources("ui_common_cancel"),
+                        ResourceManager.getInstance(mContext).getStringResources("ui_common_confirm"), null).show();
+                return;
+            }
+        } else {
+            if (list_frames.size() < 2) {
+                MyAlertDialog.getInstance(
+                        mContext,
+                        ResourceManager.getInstance(mContext).getStringResources("ui_readback_not_null"),
+                        ResourceManager.getInstance(mContext).getStringResources("ui_common_cancel"),
+                        ResourceManager.getInstance(mContext).getStringResources("ui_common_confirm"), null).show();
+                return;
+            }
+        }
+
+        Intent inte = new Intent();
+        inte.setClass(mContext, ActionsEditSaveActivity.class);
+        inte.putExtra(ActionsEditHelper.NewActionInfo, PG.convertParcelable(getEditingActions()));
+        inte.putExtra(SCHEME_ID, mSchemeId);
+        inte.putExtra(SCHEME_NAME, mSchemeName);
+        inte.putExtra(Constant.SCREEN_ORIENTATION, 0);
+        if (mDir != "") {
+            inte.putExtra(ActionsEditSaveActivity.MUSIC_DIR, mDir);
+        }
+        mContext.startActivity(inte);
+    }
+
+    public void pause() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }
+    }
+
+    public void stopMusic() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            UbtLog.d(TAG, "mediaPlayer stop");
+            playFinish = true;
+            mHandler.removeMessages(0);
+            mediaPlayer.stop();
+            ivPlay.setImageResource(R.drawable.icon_play_music);
+        }
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.iv_back:
+                doBack();
+                break;
+            case R.id.iv_save_action:
+                saveNewAction();
+                break;
             case R.id.iv_cancel_update:
                 break;
             case R.id.iv_play_music:
+                startPlayAction();
                 break;
             case R.id.iv_del_music:
+                deleteMusci();
                 break;
             case R.id.iv_music_icon:
+                if (mDir != "" && playFinish) {
+                    rl_delete_music.setVisibility(View.VISIBLE);
+                }
                 break;
 
             case R.id.iv_reset:
@@ -576,11 +808,37 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 ivAddFrame.setImageResource(R.drawable.icon_add_nor);
                 break;
             case R.id.iv_reset_index:
+                sbVoice.setProgress(0);
+                recyclerViewFrames.smoothScrollToPosition(0);
+                recyclerViewTimes.smoothScrollToPosition(0);
+                break;
+            case R.id.iv_auto_read:
+                if (ids.size() <= 0) {
+                    showLostDialog(0, ResourceManager.getInstance(mContext).getStringResources("ui_create_click_to_cutoff"));
+                } else {
+                    DialogMusic dialogMusic = new DialogMusic(mContext, this, 1);
+                    dialogMusic.show();
+                }
                 break;
             case R.id.sb_voice:
                 break;
             case R.id.iv_help:
-                ToastUtils.showShort("删除");
+                String language = ResourceManager.getInstance(mContext).getStandardLocale(ResourceManager.getInstance(mContext).getAppCurrentLanguage());
+
+//                String url = HttpAddress
+//                        .getRequestUrl(HttpAddress.Request_type.action_help)
+//                        + HttpAddress.getParamsForGet(
+//                        new String[] { language },
+//                        HttpAddress.Request_type.action_help);
+//                UbtLog.d(TAG, "url:" +url);
+                String url = "https://services.ubtrobot.com/actionHelp/actionHelp.html?lang=" + language;  //暂时这样
+                UbtLog.d(TAG, "url:" + url);
+                Intent intent = new Intent();
+                intent.putExtra(WebContentActivity.SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                intent.putExtra(WebContentActivity.WEB_TITLE, "");
+                intent.putExtra(WebContentActivity.WEB_URL, url);
+                intent.setClass(mContext, WebContentActivity.class);
+                mContext.startActivity(intent);
                 break;
 
             case R.id.iv_add_frame:
@@ -620,9 +878,322 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 showPrepareActionDialog(2);
                 break;
             case R.id.iv_action_bgm:
-                showPrepareMusicDialog();
+                PermissionUtils.getInstance(mContext).request(new PermissionUtils.PermissionLocationCallback() {
+                    @Override
+                    public void onSuccessful() {
+                        showPrepareMusicDialog();
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+
+                    @Override
+                    public void onRationSetting() {
+
+                    }
+                }, PermissionUtils.PermissionEnum.STORAGE);
+                break;
+            case R.id.iv_zoom_plus:
+                ivZoomPlus();
+                break;
+            case R.id.iv_zoom_minus:
+                ivZoomMins();
                 break;
             default:
+        }
+    }
+
+    /**
+     * 删除音乐
+     */
+    private void deleteMusci() {
+        if (mDir != "") {
+            stopMusic();
+            mDir = "";
+            musicTimes = 0;
+            sbVoice.setVisibility(View.INVISIBLE);
+            timeDatas.clear();
+            timeAdapter.notifyDataSetChanged();
+            ToastUtils.showShort(ResourceManager.getInstance(mContext).getStringResources("ui_create_delete_music_tips"));
+            rl_delete_music.setVisibility(View.GONE);
+            tvMusicTime.setVisibility(View.INVISIBLE);
+            if (list_frames.size() > 0) {
+                list_frames.remove(list_frames.size() - 1);
+                adapter.setMusicTime(0);
+                adapter.notifyDataSetChanged();
+            }
+
+            if (isFinishFramePlay) {
+                setEnable(true);
+            }
+
+        }
+    }
+
+    public void startPlayAction() {
+
+        recyclerViewTimesHide.setVisibility(View.GONE);
+        rl_delete_music.setVisibility(View.GONE);
+
+        //取消修改状态
+        goneEditFrameLayout();
+        change = false;
+        if (list_frames.size() > 0) {
+            ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+            adapter.setDefSelect(-1);
+        }
+
+        if (mDir.equals("") && list_frames.size() <= 0) {
+            return;
+        }
+
+        if (list_frames.size() > 0) {
+            if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
+                UbtLog.d(TAG, "边充边玩未打开");
+                ToastUtils.showShort(ResourceManager.getInstance(mContext).getStringResources("ui_settings_play_during_charging_tips"));
+                return;
+            }
+        }
+
+        if (mediaPlayer != null && mediaPlayer.isPlaying() && !mDir.equals("")) {
+            ivPlay.setImageResource(R.drawable.icon_play_music);
+            pause();
+            doPlayCurrentFrames();
+            UbtLog.d(TAG, "setEnable true");
+            setEnable(true);
+            ivAddFrame.setEnabled(true);
+            ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+            playFinish = true;
+        } else {
+            UbtLog.d(TAG, "doPlayCurrentFrames");
+            if (recyclerViewTimes != null) {
+                recyclerViewTimes.smoothScrollToPosition(0);
+            }
+            if (list_frames.size() > 0) {
+                UbtLog.d(TAG, "getNewPlayerState:" + ((ActionsEditHelper) mHelper).getNewPlayerState());
+                if (scroll == 0 && ((ActionsEditHelper) mHelper).getNewPlayerState() != NewActionPlayer.PlayerState.PLAYING) {
+                    UbtLog.d(TAG, "recyclerViewFrames smoothScrollToPosition");
+                    recyclerViewFrames.smoothScrollToPosition(0);
+                }
+
+            }
+            ivPlay.setImageResource(R.drawable.icon_pause_nor);
+            doPlayCurrentFrames();
+            play();
+
+        }
+    }
+
+    private void doPlayCurrentFrames() {
+
+        UbtLog.d(TAG, "state:" + ((ActionsEditHelper) mHelper).getNewPlayerState());
+        resetState();
+        if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
+            ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_pause_or_continue,
+                    getEditingActions());
+
+
+        } else if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PAUSING) {
+            ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_pause_or_continue,
+                    getEditingActions());
+        } else {
+
+//            if(musicTimes !=0){
+//                if(list_frames.size()>1){
+//                    setEnable(false);
+//                }
+//
+//            }else{
+//                if(list_frames.size()>0){
+//                    setEnable(false);
+//                }
+//            }
+
+            setEnable(false);
+
+            if (musicTimes != 0) {
+                if (list_frames.size() < 2) {
+                    return;
+                }
+            } else {
+                if (list_frames.size() == 0) {
+                    return;
+                }
+            }
+
+            isFinishFramePlay = false;
+
+            if (mDir != "" && mediaPlayer != null) {
+                if (mediaPlayer.getCurrentPosition() == 0) {
+                    UbtLog.d(TAG, "只在音频播完状态下才可以从头开始播:" + mediaPlayer.getCurrentPosition());
+                    ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_play,
+                            getEditingActions());
+
+                }
+            } else {
+                ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_play,
+                        getEditingActions());
+            }
+
+
+        }
+
+
+    }
+
+    private NewActionInfo getEditingActions() {
+
+        List<FrameActionInfo> frames = new ArrayList<FrameActionInfo>();
+        frames.add(FrameActionInfo.getDefaultFrame());
+        if (musicTimes == 0) {
+            for (int i = 0; i < list_frames.size(); i++) {
+                frames.add(((FrameActionInfo) list_frames.get(i).get(
+                        ActionsEditHelper.MAP_FRAME)));
+            }
+        } else {
+            for (int i = 0; i < list_frames.size() - 1; i++) {
+                frames.add(((FrameActionInfo) list_frames.get(i).get(
+                        ActionsEditHelper.MAP_FRAME)));
+            }
+        }
+
+        mCurrentNewAction.frameActions = frames;
+        UbtLog.d(TAG, "mCurrentNewAction:" + mCurrentNewAction.frameActions.toString());
+        return mCurrentNewAction;
+    }
+
+    private NewActionInfo getEditingPreviewActions() {
+        List<FrameActionInfo> frames = new ArrayList<FrameActionInfo>();
+        frames.add(FrameActionInfo.getDefaultFrame());
+        for (int i = 0; i < list_autoFrames.size(); i++) {
+            frames.add(((FrameActionInfo) list_autoFrames.get(i).get(
+                    ActionsEditHelper.MAP_FRAME)));
+        }
+        mCurrentNewAction.frameActions = frames;
+        UbtLog.d(TAG, "mCurrentNewAction:" + mCurrentNewAction.frameActions.toString());
+        return mCurrentNewAction;
+    }
+
+
+    private void releaseFrameDatas() {
+
+        int frame_size = -1;
+        try {
+            frame_size = mCurrentNewAction.frameActions.size();
+        } catch (Exception e) {
+            frame_size = -1;
+        }
+        if (frame_size == -1) {
+            return;
+        }
+        for (int i = 0; i < frame_size; i++) {
+
+            FrameActionInfo info = mCurrentNewAction.frameActions.get(i);
+
+            Map map = new HashMap<String, Object>();
+            map.put(ActionsEditHelper.MAP_FRAME, info);
+            /*map.put(ActionsEditHelper.MAP_FRAME_NAME, this.getResources()
+                    .getString(R.string.ui_readback_index)
+                    + (lst_actions_adapter_data.size() + 1));*/
+            map.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1));
+            map.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time + "ms");
+
+            list_frames.add(map);
+        }
+
+    }
+
+
+    /**
+     * 点击放大事件
+     */
+    public void ivZoomPlus() {
+        UbtLog.d(TAG, "currentPlus:" + currentPlus);
+
+        if (list_frames.size() <= 0) {
+            return;
+        }
+
+        if (currentMinus != 1) {
+            adapter.scaleItem(1);
+
+            currentPlus = 1;
+            currentMinus = 1;
+            if (timeDatas.size() > 0) {
+                timeAdapter.scaleItem(1);
+            }
+
+            tvZoomPlus.setText("");
+            tvZoomMinus.setText("");
+
+        } else if (currentPlus == 1) {
+            adapter.scaleItem(2);
+            if (timeDatas.size() > 0) {
+                timeAdapter.scaleItem(2);
+            }
+            tvZoomPlus.setText("2");
+            currentPlus = 2;
+        } else if (currentPlus == 2) {
+            adapter.scaleItem(3);
+            if (timeDatas.size() > 0) {
+                timeAdapter.scaleItem(3);
+            }
+            tvZoomPlus.setText("3");
+            currentPlus = 3;
+        } else if (currentPlus == 3) {
+            adapter.scaleItem(4);
+            if (timeDatas.size() > 0) {
+                timeAdapter.scaleItem(4);
+            }
+            tvZoomPlus.setText("4");
+            currentPlus = 4;
+        }
+
+
+    }
+
+    /**
+     * 点击缩小事件
+     */
+    public void ivZoomMins() {
+        UbtLog.d(TAG, "currentMinus:" + currentMinus);
+
+        if (list_frames.size() <= 0) {
+            return;
+        }
+
+        if (currentPlus != 1) {
+            adapter.scaleItem(1);
+            if (timeDatas.size() > 0) {
+                timeAdapter.scaleItem(1);
+            }
+            currentMinus = 1;
+            currentPlus = 1;
+            tvZoomPlus.setText("");
+            tvZoomMinus.setText("");
+        } else if (currentMinus == 1) {
+            adapter.scaleItem(-1);
+            if (timeDatas.size() > 0) {
+                timeAdapter.scaleItem(-1);
+            }
+            tvZoomMinus.setText("2");
+            currentMinus = -1;
+        } else if (currentMinus == -1) {
+            adapter.scaleItem(-2);
+            if (timeDatas.size() > 0) {
+                timeAdapter.scaleItem(-2);
+            }
+            tvZoomMinus.setText("3");
+            currentMinus = -2;
+        } else if (currentMinus == -2) {
+            adapter.scaleItem(-3);
+            if (timeDatas.size() > 0) {
+                timeAdapter.scaleItem(-3);
+            }
+            tvZoomMinus.setText("4");
+            currentMinus = -4;
         }
     }
 
@@ -737,7 +1308,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 sbVoice.setProgress(mediaPlayer.getCurrentPosition());
             } else if (msg.what == 1) {
                 if (playFinish) {
-                    ivPlay.setImageResource(R.drawable.button_play);
+                    ivPlay.setImageResource(R.drawable.icon_play_music);
                 }
             }
         }
@@ -805,9 +1376,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     }
 
 
-
-
     String mCurrentSourcePath;
+
     private void setPlayFile(String fileName, int type) {
 
         mCurrentSourcePath = FileTools.tmp_file_cache + "/" + fileName;
@@ -1178,7 +1748,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                         if (type == 1) {
                             lostLeftLeg();
                         } else if (type == 2) {
-                            lostLeftLeg();
+                            lostRightLeg();
                         }
                     }
                 })
@@ -1543,22 +2113,78 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         return df.format(accuracy_num);
     }
 
+
     public void onPlaying() {
+        UbtLog.d(TAG, "onPlaying");
 
     }
 
 
     public void onPausePlay() {
+        UbtLog.d(TAG, "onPausePlay");
+        mHandler.post(new Runnable() {
 
+            @Override
+            public void run() {
+                ivPlay.setImageResource(R.drawable.icon_play_music);
+                setEnable(true);
+                ivAddFrame.setEnabled(true);
+                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+
+
+            }
+        });
     }
 
 
     public void onFinishPlay() {
+        UbtLog.d(TAG, "onFinishPlay");
+        if (doPlayPreview) {
+            doPlayPreview = false;
+        }
+        isFinishFramePlay = true;
+        mHandler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                if (playFinish) {
+                    ivPlay.setImageResource(R.drawable.icon_play_music);
+                    setEnable(true);
+                }
+                ivAddFrame.setEnabled(true);
+                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                adapter.setPlayIndex(-1);
+
+            }
+        });
+
 
     }
 
 
-    public void onFrameDo(int index) {
+    public void onFrameDo(final int index) {
+        UbtLog.d(TAG, "onFrameDo:" + index + "--doPlayPreview:" + doPlayPreview);
+        if (doPlayPreview) {
+            return;
+        }
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (index == 0) {
+
+                } else {
+                    if (musicTimes == 0) {
+                        layoutManager.scrollToPositionWithOffset(index - 1, 0);
+                    }
+
+//                    layoutManager.setStackFromEnd(true);
+//                    recyclerViewFrames.smoothScrollToPosition(index-1);
+                    adapter.setPlayIndex(index - 1);
+
+                }
+            }
+        });
+
 
     }
 

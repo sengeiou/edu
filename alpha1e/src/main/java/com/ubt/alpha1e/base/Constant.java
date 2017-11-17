@@ -35,6 +35,9 @@ public class Constant {
     public final static String SP_PERMISSION_LOCATION = "sp_location_permission";
     public final static String SP_PERMISSION_STORAGE = "sp_storage_permission";
     public final static String SP_PERMISSION_CAMERA = "sp_camera_permission";
+    public final static String SP_PERMISSION_MICROPHONE = "sp_microphone_permission";
+
+
 
     /**
      * 信鸽信息

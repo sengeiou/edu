@@ -25,6 +25,8 @@ import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.model.ActionConstant;
 import com.ubt.alpha1e.action.model.PrepareMusicModel;
+import com.ubt.alpha1e.base.PermissionUtils;
+import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.ui.dialog.DialogDub;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -71,6 +73,7 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_aciton_select, null);
         ViewHolder viewHolder = new ViewHolder(contentView);
         TextView tvTitle = contentView.findViewById(R.id.title_actions);
+        tvTitle.setText(ResourceManager.getInstance(mContext).getStringResources("ui_create_music"));
         ImageView imageView = contentView.findViewById(R.id.iv_delete);
         imageView.setVisibility(View.VISIBLE);
         tvCancle = contentView.findViewById(R.id.tv_cancel);
@@ -114,11 +117,28 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         //第一个位置弹出录音框
         if (position == 0) {
-            if (null != mDialogPlus && mDialogPlus.isShowing()) {
-                mDialogPlus.dismiss();
-            }
-            DialogDub dialogDub = new DialogDub(mContext);
-            dialogDub.show();
+            PermissionUtils.getInstance(mContext).request(new PermissionUtils.PermissionLocationCallback() {
+                @Override
+                public void onSuccessful() {
+                    if (null != mDialogPlus && mDialogPlus.isShowing()) {
+                        mDialogPlus.dismiss();
+                    }
+                    DialogDub dialogDub = new DialogDub(mContext);
+                    dialogDub.show();
+                }
+
+                @Override
+                public void onFailure() {
+
+                }
+
+                @Override
+                public void onRationSetting() {
+
+                }
+            }, PermissionUtils.PermissionEnum.MICROPHONE);
+
+
         } else {
             selectDataModel = (PrepareMusicModel) adapter.getData().get(position);
             previewMusic(selectDataModel);
