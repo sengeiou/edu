@@ -133,7 +133,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter.getXGInfo();
+        //mPresenter.getXGInfo();
         getScreenInch();
         initUi();
     }

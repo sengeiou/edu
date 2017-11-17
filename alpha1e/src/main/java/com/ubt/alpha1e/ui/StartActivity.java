@@ -305,6 +305,7 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
                         }
                     }
                 }
+                inte.setClass(StartActivity.this, MainActivity.class);
                 StartActivity.this.startActivity(inte);
                 StartActivity.this.finish();
             }

@@ -1,7 +1,7 @@
 package com.ubt.alpha1e.action.actioncreate;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Message;
@@ -45,16 +45,17 @@ import com.ubt.alpha1e.ui.dialog.DialogTips;
 import com.ubt.alpha1e.ui.fragment.SaveSuccessFragment;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
-import com.ubt.alpha1e.ui.helper.IEditActionUI;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.TimeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ByteHexHelper;
 
+import java.io.File;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,7 @@ import static java.lang.System.currentTimeMillis;
  * version
  */
 
-public abstract class BaseActionEditLayout extends LinearLayout implements View.OnClickListener, PrepareActionUtil.OnDialogListener, IEditActionUI, DialogTips.OnLostClickListener {
+public abstract class BaseActionEditLayout extends LinearLayout implements View.OnClickListener, PrepareActionUtil.OnDialogListener, DialogTips.OnLostClickListener, DialogMusic.OnMusicDialogListener {
     private static final String TAG = "BaseActionEditLayout";
 
     private ImageView ivRobot;
@@ -247,14 +248,15 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         initUI();
     }
 
-    public void setUp(ActionTestActivity actionTestActivity) {
-        mHelper = new ActionsEditHelper(actionTestActivity, this);
+    public void setUp(BaseHelper baseHelper) {
+        this.mHelper = baseHelper;
     }
 
     /**
      * 初始化UI
      */
     protected void initUI() {
+        mCurrentNewAction = new NewActionInfo();
         ivPlay = (ImageView) findViewById(R.id.iv_play_music);
         tvMusicTime = (TextView) findViewById(R.id.tv_play_time);
         ivPlay.setOnClickListener(this);
@@ -272,6 +274,78 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         ivLegRight.setOnClickListener(this);
         initRobot();
 
+        recyclerViewFrames = (RecyclerView) findViewById(R.id.rcv_actions);
+        layoutManager = new LinearLayoutManager(mContext);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerViewFrames.setLayoutManager(layoutManager);
+        list_frames = new ArrayList<Map<String, Object>>();
+        adapter = new FrameRecycleViewAdapter(mContext, list_frames, density);
+        recyclerViewFrames.setAdapter(adapter);
+//        fastScroller = (FastScroller) findViewById(R.id.fastscroll);
+//        fastScroller.setRecyclerView(recyclerViewFrames);
+
+        recyclerViewFrames.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                UbtLog.d(TAG, "firstVisibleItemPosition:" + firstVisibleItemPosition +
+                        "-lastVisibleItemPosition:" + lastVisibleItemPosition);
+            }
+
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (touch == 1) {
+                    return;
+                }
+
+                if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
+                    if (touch == 2) {
+                        UbtLog.d(TAG, "onScrolled recyclerViewFrames  dx:" + dx);
+                        recyclerViewTimes.scrollBy(dx, dy);
+                        recyclerViewTimesHide.scrollBy(dx, dy);
+                    }
+
+                }
+
+            }
+        });
+
+        recyclerViewFrames.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (musicTimes != 0 && list_frames.size() == 1) {
+                    return true;
+                }
+                touch = 2;
+                return false;
+            }
+        });
+
+        ivAddFrame = (ImageView) findViewById(R.id.iv_add_frame);
+        ivAddFrame.setEnabled(true);
+        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+        ivAddFrame.setOnClickListener(this);
+        ivBack = (ImageView) findViewById(R.id.iv_back);
+        ivReset = (ImageView) findViewById(R.id.iv_reset);
+        ivReset.setOnClickListener(this);
+        ivAutoRead = (ImageView) findViewById(R.id.iv_auto_read);
+        ivSave = (ImageView) findViewById(R.id.iv_save_action);
+        ivHelp = (ImageView) findViewById(R.id.iv_help);
+        ivHelp.setOnClickListener(this);
+
+        ivActionLib = (ImageView) findViewById(R.id.iv_action_lib);
+        ivActionLib.setOnClickListener(this);
+        ivActionLibMore = (ImageView) findViewById(R.id.iv_action_lib_more);
+        ivActionLibMore.setOnClickListener(this);
+        ivActionBgm = (ImageView) findViewById(R.id.iv_action_bgm);
+        ivActionBgm.setOnClickListener(this);
+        initEditFrameLayout();
+//        rlRoot = (RelativeLayout) findViewById(R.id.rl_action_edit);
         recyclerViewTimes = (RecyclerView) findViewById(R.id.rcv_time);
         layoutManagerTime = new LinearLayoutManager(mContext);
         layoutManagerTime.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -281,14 +355,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         layoutManagerTimeHide = new LinearLayoutManager(mContext);
         layoutManagerTimeHide.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerViewTimesHide.setLayoutManager(layoutManagerTimeHide);
-
-        recyclerViewFrames = (RecyclerView) findViewById(R.id.rcv_actions);
-        layoutManager = new LinearLayoutManager(mContext);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerViewFrames.setLayoutManager(layoutManager);
-        list_frames = new ArrayList<Map<String, Object>>();
-        adapter = new FrameRecycleViewAdapter(mContext, list_frames, density);
-        recyclerViewFrames.setAdapter(adapter);
 
         recyclerViewTimesHide.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -313,12 +379,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 recyclerViewFrames.scrollBy(dx, dy);
             }
         });
-
         ivZoomPlus = (ImageView) findViewById(R.id.iv_zoom_plus);
         ivZoomMinus = (ImageView) findViewById(R.id.iv_zoom_minus);
         tvZoomPlus = (TextView) findViewById(R.id.tv_zoom_plus);
         tvZoomMinus = (TextView) findViewById(R.id.tv_zoom_minus);
-
         sbVoice = (SeekBar) findViewById(R.id.sb_voice);
 
         sbVoice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -469,197 +533,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             }
         });
 
-        ivAddFrame = (ImageView) findViewById(R.id.iv_add_frame);
-        ivAddFrame.setEnabled(true);
-        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
-        ivAddFrame.setOnClickListener(this);
-        ivBack = (ImageView) findViewById(R.id.iv_back);
-        ivReset = (ImageView) findViewById(R.id.iv_reset);
-        ivReset.setOnClickListener(this);
-        ivAutoRead = (ImageView) findViewById(R.id.iv_auto_read);
-        ivSave = (ImageView) findViewById(R.id.iv_save_action);
-        ivHelp = (ImageView) findViewById(R.id.iv_help);
-        ivHelp.setOnClickListener(this);
-
-        ivActionLib = (ImageView) findViewById(R.id.iv_action_lib);
-        ivActionLib.setOnClickListener(this);
-        ivActionLibMore = (ImageView) findViewById(R.id.iv_action_lib_more);
-        ivActionLibMore.setOnClickListener(this);
-        ivActionBgm = (ImageView) findViewById(R.id.iv_action_bgm);
-        ivActionBgm.setOnClickListener(this);
-        initEditFrameLayout();
-//        rlRoot = (RelativeLayout) findViewById(R.id.rl_action_edit);
-        recyclerViewTimes = (RecyclerView) findViewById(R.id.rcv_time);
-        layoutManagerTime = new LinearLayoutManager(mContext);
-        layoutManagerTime.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerViewTimes.setLayoutManager(layoutManagerTime);
-        recyclerViewTimesHide = (RecyclerView) findViewById(R.id.rcv_time_hide);
-        layoutManagerTimeHide = new LinearLayoutManager(mContext);
-        layoutManagerTimeHide.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerViewTimesHide.setLayoutManager(layoutManagerTimeHide);
-        recyclerViewTimesHide.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                UbtLog.d(TAG, "onScrolled recyclerViewTimesHide");
-                recyclerViewTimes.scrollBy(dx, dy);
-                recyclerViewFrames.scrollBy(dx, dy);
-            }
-        });
-        ivZoomPlus = (ImageView) findViewById(R.id.iv_zoom_plus);
-        ivZoomMinus = (ImageView) findViewById(R.id.iv_zoom_minus);
-        tvZoomPlus = (TextView) findViewById(R.id.tv_zoom_plus);
-        tvZoomMinus = (TextView) findViewById(R.id.tv_zoom_minus);
-        sbVoice = (SeekBar) findViewById(R.id.sb_voice);
-        sbVoice.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                UbtLog.d(TAG, "progress:" + getnum(progress, musicTimes));
-//
-//
-//                if(timeDatas.size() <=0) {
-//                    return;
-//                }
-//                float a = Float.valueOf(getnum(progress, musicTimes));
-//                UbtLog.d(TAG, "progress a:" + a + Math.round(a));
-//
-//
-//                timePosition = (musicTimes/100)*Math.round(a)/100;
-//                if(timePosition <= 0){
-//                    timePosition = 0;
-//                }else{
-//                    timePosition = timePosition -1;
-//                }
-//
-//                UbtLog.d(TAG, "timePosition:" + timePosition);
-//
-////                recyclerViewTimes.smoothScrollToPosition(timePosition);
-//                UbtLog.d(TAG, "1progress:" + Math.round(a) + "rate:" + Math.round(a)/10 + "timePosition:" + timePosition);
-//                int rate = Math.round(a)/10;
-//
-//                if (rate == 10) {
-//                    UbtLog.d(TAG, "timePosition:" + timePosition);
-//                    layoutManagerTime.scrollToPositionWithOffset(timePosition, 0);
-//                    layoutManagerTimeHide.scrollToPositionWithOffset(timePosition, 0);
-//                    layoutManagerTimeHide.setStackFromEnd(true);
-//
-//                } else {
-//                    if( rate == 0){
-//                        layoutManagerTime.scrollToPositionWithOffset(timePosition - rate, 0);
-//                        layoutManagerTimeHide.scrollToPositionWithOffset(timePosition - rate, 0);
-//                        layoutManagerTimeHide.setStackFromEnd(true);
-//                    }else if(rate == 1){
-//                        layoutManagerTime.scrollToPositionWithOffset(timePosition - rate, 0);
-//                        layoutManagerTimeHide.scrollToPositionWithOffset(timePosition - rate, 0);
-//                        layoutManagerTimeHide.setStackFromEnd(true);
-//                    }
-//                    else if(rate ==2){
-//                        layoutManagerTime.scrollToPositionWithOffset(timePosition - rate-1, 0);
-//                        layoutManagerTimeHide.scrollToPositionWithOffset(timePosition - rate-1, 0);
-//                        layoutManagerTimeHide.setStackFromEnd(true);
-//                    }else if(rate == 3){
-//                        layoutManagerTime.scrollToPositionWithOffset(timePosition - rate-2, 0);
-//                        layoutManagerTimeHide.scrollToPositionWithOffset(timePosition - rate-2, 0);
-//                        layoutManagerTimeHide.setStackFromEnd(true);
-//                    }else if(rate == 4){
-//                        layoutManagerTime.scrollToPositionWithOffset(timePosition - rate-3, 0);
-//                        layoutManagerTimeHide.scrollToPositionWithOffset(timePosition - rate-3, 0);
-//                        layoutManagerTimeHide.setStackFromEnd(true);
-//                    }else if(rate == 5){
-//                        layoutManagerTime.scrollToPositionWithOffset(timePosition - rate-4, 0);
-//                        layoutManagerTimeHide.scrollToPositionWithOffset(timePosition - rate-4, 0);
-//                        layoutManagerTimeHide.setStackFromEnd(true);
-//                    }else if(rate == 6){
-//                        layoutManagerTime.scrollToPositionWithOffset(timePosition - rate-5, 0);
-//                        layoutManagerTimeHide.scrollToPositionWithOffset(timePosition - rate-5, 0);
-//                        layoutManagerTimeHide.setStackFromEnd(true);
-//                    }else if(rate == 7){
-//                        layoutManagerTime.scrollToPositionWithOffset(timePosition - rate-6, 0);
-//                        layoutManagerTimeHide.scrollToPositionWithOffset(timePosition - rate-6, 0);
-//                        layoutManagerTimeHide.setStackFromEnd(true);
-//                    }else if(rate == 8){
-//                        layoutManagerTime.scrollToPositionWithOffset(timePosition - rate-7, 0);
-//                        layoutManagerTimeHide.scrollToPositionWithOffset(timePosition - rate-7, 0);
-//                        layoutManagerTimeHide.setStackFromEnd(true);
-//                    }else if(rate == 9){
-//                        layoutManagerTime.scrollToPositionWithOffset(timePosition - rate-8, 0);
-//                        layoutManagerTimeHide.scrollToPositionWithOffset(timePosition - rate-8, 0);
-//                        layoutManagerTimeHide.setStackFromEnd(true);
-//                    }
-//                    else
-//                    {
-//                        layoutManagerTime.scrollToPositionWithOffset(timePosition - rate-1, 0);
-//                        layoutManagerTimeHide.scrollToPositionWithOffset(timePosition - rate-1, 0);
-//                        layoutManagerTimeHide.setStackFromEnd(true);
-//                    }
-//
-//
-//
-//                }
-//
-//
-//
-////                layoutManagerTime.setStackFromEnd(true);
-//                UbtLog.d(TAG, "recyclerViewFrames smoothScrollToPosition 1:" + scroll);
-//                recyclerViewFrames.scrollBy( (musicTimes)*Math.round(a)/100-scroll,0);
-////                recyclerViewTimes.scrollBy((musicTimes)*Math.round(a)/100-scroll+10, 0);
-////                recyclerViewTimesHide.scrollBy((musicTimes)*Math.round(a)/100-scroll,0);
-//                scroll = (musicTimes)*Math.round(a)/100;
-////                recyclerViewFrames.smoothScrollToPosition(timePosition);
-//
-////                recyclerViewTimesHide.smoothScrollToPosition(timePosition);
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                UbtLog.d(TAG, "22 onStartTrackingTouch:" + currentTimeMillis());
-                if (timeDatas.size() <= 0) {
-                    return;
-                }
-                clickTime = currentTimeMillis();
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                UbtLog.d(TAG, "22 onStopTrackingTouch:" + currentTimeMillis());
-
-                long dur = currentTimeMillis() - clickTime;
-                if (currentTimeMillis() - clickTime < 100) {
-                    Map<String, Object> map = new HashMap<String, Object>();
-                    map.put(TIME, "100");
-                    if (timeDatas.get(timePosition).get(SHOW).equals("1")) {
-
-                        map.put(SHOW, "1");
-                    } else {
-                        map.put(SHOW, "1");
-                    }
-                    UbtLog.d(TAG, "timePosition:" + timePosition + "--dur:" + dur);
-                    timeDatas.set(timePosition, map);
-                    timeAdapter.notifyDataSetChanged();
-                    timeHideAdapter.notifyDataSetChanged();
-                } else {
-
-                }
-            }
-        });
-
-        sbVoice.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                UbtLog.d(TAG, "sssss" + event.getX());
-//                recyclerViewTimes.scrollBy((int)event.getX(), 0);
-                return false;
-            }
-        });
-
-        sbVoice.setOnClickListener(this);
         ivResetIndex = (ImageView) findViewById(R.id.iv_reset_index);
         ivResetIndex.setOnClickListener(this);
         ivDeleteMusic = (ImageView) findViewById(R.id.iv_music_icon);
@@ -826,7 +699,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 list_frames.add(addMap);
                 currentIndex++;
             } else {
-                //  handleFrameAndTime(addMap);
+                handleFrameAndTime(addMap);
             }
 
         }
@@ -925,12 +798,279 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
      */
     @Override
     public void onMusicConfirm(PrepareMusicModel prepareMusicModel) {
+        String name = prepareMusicModel.getMusicName();
+        int songType = prepareMusicModel.getMusicType();
+        UbtLog.d(TAG, "name:" + name + "songType:" + songType);
+        setPlayFile(name + ".mp3", songType);
+    }
+
+
+
+
+    String mCurrentSourcePath;
+    private void setPlayFile(String fileName, int type) {
+
+        mCurrentSourcePath = FileTools.tmp_file_cache + "/" + fileName;
+        boolean isFileCreateSuccess = false;
+        if (type == 0) {
+            isFileCreateSuccess = FileTools.writeAssetsToSd("music/" + fileName, mContext, mCurrentSourcePath);
+        } else if (type == 1) {
+            isFileCreateSuccess = FileTools.copyFile(FileTools.record + File.separator + fileName, mCurrentSourcePath, true);
+        }
+
+        UbtLog.d(TAG, "isFileCreateSuccess:" + isFileCreateSuccess);
+        if (isFileCreateSuccess) {
+
+            UbtLog.d(TAG, "mDir:" + mDir);
+
+            if (mDir.equals("")) {
+                try {
+//                    mDir = mCurrentSourcePath;
+//                    sbVoice.setVisibility(View.VISIBLE);
+                    setMusic();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                DialogMusic dialogMusic = new DialogMusic(mContext, this, 0);
+                dialogMusic.show();
+            }
+
+
+        }
+
+    }
+
+    @Override
+    public void setMusic() {
+        try {
+
+            UbtLog.d(TAG, "setMusic");
+            //先清除之前的标记
+            mDir = "";
+            sbVoice.setVisibility(View.INVISIBLE);
+            timeDatas.clear();
+            if (timeAdapter != null) {
+                timeAdapter.notifyDataSetChanged();
+            }
+            tvMusicTime.setText("00:00");
+
+            if (list_frames.size() > 0) {
+                if (musicTimes != 0) {
+                    list_frames.remove(list_frames.size() - 1);
+                    adapter.setMusicTime(0);
+                    adapter.notifyDataSetChanged();
+                }
+
+            }
+            musicTimes = 0;
+
+            mDir = mCurrentSourcePath;
+            sbVoice.setVisibility(View.VISIBLE);
+
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(mDir);
+            mediaPlayer.prepareAsync();//数据缓冲
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                public void onPrepared(MediaPlayer mp) {
+//                    mp.start();
+                    mp.seekTo(0);
+                    sbVoice.setProgress(0);
+                    musicTimes = handleMusicTime(mediaPlayer.getDuration());
+                    UbtLog.d(TAG, "play musicTimes:" + musicTimes);
+                    long time = musicTimes;
+                    tvMusicTime.setVisibility(View.VISIBLE);
+                    tvMusicTime.setText(TimeUtils.getTimeFromMillisecond(time));
+                    initTimeFrame();
+                    sbVoice.setMax(mediaPlayer.getDuration());
+                }
+            });
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void startAutoRead() {
+        setButtonEnable(false);
+
+        autoRead = true;
+        ivAddFrame.setImageResource(R.drawable.icon_stop_nor);
+        mHandler.sendEmptyMessage(MSG_AUTO_READ);
+    }
+
+    private void initTimeFrame() {
+
+//        timeDatas = new ArrayList<Map<String, Object>>();
+        Map<String, Object> timeMap = new HashMap<String, Object>();
+        for (int i = 0; i < musicTimes / 100; i++) {
+            timeMap.put(TIME, "100");
+            timeMap.put(SHOW, "0");
+            timeDatas.add(timeMap);
+        }
+        UbtLog.d(TAG, "size:" + timeDatas.size());
+
+        timeHideAdapter = new TimesHideRecycleViewAdapter(mContext, timeDatas);
+        recyclerViewTimesHide.setAdapter(timeHideAdapter);
+        timeHideAdapter.setOnItemListener(new TimesHideRecycleViewAdapter.OnItemListener() {
+            @Override
+            public void onItemClick(View view, int pos, Map<String, Object> data) {
+                UbtLog.d(TAG, "onItemClick pos:" + pos);
+                data.put(SHOW, "0");
+                data.put(TIME, "100");
+                timeDatas.set(pos, data);
+                timeHideAdapter.notifyDataSetChanged();
+                timeAdapter.notifyDataSetChanged();
+            }
+        });
+
+        timeAdapter = new TimesRecycleViewAdapter(mContext, timeDatas);
+        recyclerViewTimes.setAdapter(timeAdapter);
+        timeAdapter.setOnItemListener(new TimesRecycleViewAdapter.OnItemListener() {
+            @Override
+            public void onItemClick(View view, int pos, Map<String, Object> data) {
+                UbtLog.d(TAG, "timeAdapter onItemClick:" + pos);
+
+            }
+        });
+        recyclerViewTimes.smoothScrollToPosition(0);
+        recyclerViewTimes.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                firstVisibleItemPosition = layoutManagerTime.findFirstVisibleItemPosition();
+                lastVisibleItemPosition = layoutManagerTime.findLastVisibleItemPosition();
+
+                UbtLog.d(TAG, "firstVisibleItemPosition:" + firstVisibleItemPosition +
+                        "-lastVisibleItemPosition:" + lastVisibleItemPosition);
+//                sbVoice.setProgress((firstVisibleItemPosition*100/5000)*100);
+            }
+
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (touch == 2) {
+                    return;
+
+                }
+                UbtLog.d(TAG, "ivZhen scrollBy dx:" + dx + "-dy:" + dy);
+                //                recyclerViewFrames.scrollBy(dx, dy);
+            }
+        });
+
+        recyclerViewTimes.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                touch = 1;
+                return false;
+            }
+        });
+
+        //根据添加的音乐自动补全动作
+        if (list_frames.size() == 0) {
+            FrameActionInfo info = new FrameActionInfo();
+            info.eng_angles = "";
+
+            info.eng_time = musicTimes;
+            info.totle_time = musicTimes;
+
+            Map map = new HashMap<String, Object>();
+            map.put(ActionsEditHelper.MAP_FRAME, info);
+            String item_name = ResourceManager.getInstance(mContext).getStringResources("ui_readback_index");
+            item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+            //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+            map.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+            map.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+            list_frames.add(list_frames.size(), map);
+            adapter.setMusicTime(musicTimes);
+            adapter.notifyDataSetChanged();
+
+
+        } else {
+
+            //根据当前已添加的动作帧时间计算补全帧时长
+            handleAddFrame();
+
+        }
+
+    }
+
+    private void handleAddFrame() {
+
+        int time = 0;
+
+        for (int i = 0; i < list_frames.size(); i++) {
+            time += (int) list_frames.get(i).get(ActionsEditHelper.MAP_FRAME_TIME);
+        }
+
+        UbtLog.d(TAG, "handleAddFrame time:" + time);
+
+        int backupTime = musicTimes - time;
+        UbtLog.d(TAG, "handleAddFrame backupTime:" + backupTime);
+        if (backupTime <= 0) {
+            return;
+        }
+
+        FrameActionInfo info = new FrameActionInfo();
+        info.eng_angles = "";
+
+        info.eng_time = backupTime;
+        info.totle_time = backupTime;
+
+        Map map = new HashMap<String, Object>();
+        map.put(ActionsEditHelper.MAP_FRAME, info);
+        String item_name = ResourceManager.getInstance(mContext).getStringResources("ui_readback_index");
+        item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+        //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+        map.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+        map.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+        list_frames.add(list_frames.size(), map);
+
+        adapter.setMusicTime(backupTime);
+        adapter.notifyDataSetChanged();
+
+
+    }
+
+    private int handleMusicTime(int time) {
+        int handleTime = 0;
+        int yushu = time % 100;
+        handleTime = time + (100 - yushu);
+        UbtLog.d(TAG, "handleTime:" + handleTime);
+        return handleTime;
 
     }
 
     @Override
     public void playAction(PrepareDataModel prepareDataModel) {
-        ToastUtils.showShort("播放动作" + prepareDataModel.getPrepareName());
+        UbtLog.d(TAG, "previewAction:" + prepareDataModel.toString());
+        for (int i = 0; i < prepareDataModel.getList().size(); i++) {
+            String time = prepareDataModel.getList().get(i).getXmlRunTime();
+            String angles = prepareDataModel.getList().get(i).getXmldata();
+
+            FrameActionInfo info = new FrameActionInfo();
+            info.eng_angles = angles;
+            info.eng_time = Integer.valueOf(time);
+            info.totle_time = Integer.valueOf(time);
+
+            Map addMap = new HashMap<String, Object>();
+            addMap.put(ActionsEditHelper.MAP_FRAME, info);
+            String item_name = ResourceManager.getInstance(mContext).getStringResources("ui_readback_index");
+            item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+            //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+            addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+            addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+            UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+            previewList.add(addMap);
+        }
+        doPlayPreviewFrames();
+        previewList.clear();
     }
 
 
@@ -1133,7 +1273,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     private void readEngOneByOne() {
         if (ids.size() > 0) {
-            UbtLog.d(TAG, "readEngOneByOne:" + i);
+            UbtLog.d(TAG, "readEngOneByOne:" + i + "  ids.size==" + ids.size());
             if (i == ids.size()) {
                 i = 0;
                 addFrame();
@@ -1325,6 +1465,64 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     }
 
+    private List<Map<String, Object>> previewList = new ArrayList<Map<String, Object>>();
+
+
+    private Date lastTime_play = null;
+
+    private void doPlayPreviewFrames() {
+
+        if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
+            Toast.makeText(mContext, ResourceManager.getInstance(mContext).getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 防止过快点击-----------start
+        Date curDate = new Date(System.currentTimeMillis());
+        float time_difference = 500;
+        if (lastTime_play != null) {
+            time_difference = curDate.getTime()
+                    - lastTime_play.getTime();
+        }
+        lastTime_play = curDate;
+        if (time_difference < 500) {
+            return;
+        }
+
+        resetState();
+        ivAddFrame.setEnabled(true);
+        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+
+        doPlayPreview = true;
+        if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
+            UbtLog.d(TAG, "doPlayPreviewFrames Do_Stop");
+            ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,
+                    getPreviewActions());
+
+
+        } else {
+            UbtLog.d(TAG, "doPlayPreviewFrames Do_play doPlayPreview:" + doPlayPreview);
+            ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_play,
+                    getPreviewActions());
+            doPlayPreview = true;
+
+
+        }
+    }
+
+
+    private NewActionInfo getPreviewActions() {
+        List<FrameActionInfo> frames = new ArrayList<FrameActionInfo>();
+        frames.add(FrameActionInfo.getDefaultFrame());
+        for (int i = 0; i < previewList.size(); i++) {
+            frames.add(((FrameActionInfo) previewList.get(i).get(
+                    ActionsEditHelper.MAP_FRAME)));
+        }
+        mCurrentNewAction.frameActions = frames;
+        UbtLog.d(TAG, "mCurrentNewAction:" + mCurrentNewAction.frameActions.toString());
+        return mCurrentNewAction;
+    }
+
 
     public String getnum(int num1, int num2) {
         NumberFormat numberFormat = NumberFormat.getInstance();
@@ -1345,62 +1543,26 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         return df.format(accuracy_num);
     }
 
-    @Override
     public void onPlaying() {
 
     }
 
-    @Override
+
     public void onPausePlay() {
 
     }
 
-    @Override
+
     public void onFinishPlay() {
 
     }
 
-    @Override
+
     public void onFrameDo(int index) {
 
     }
 
-    @Override
-    public void notePlayChargingError() {
 
-    }
-
-    @Override
-    public void onReadImageFinish(Bitmap img, long request_code) {
-
-    }
-
-    @Override
-    public void onReadFileStrFinish(String erroe_str, String result, boolean result_state, long request_code) {
-
-    }
-
-    @Override
-    public void onWriteFileStrFinish(String erroe_str, boolean result, long request_code) {
-
-    }
-
-    @Override
-    public void onWriteDataFinish(long requestCode, FileTools.State state) {
-
-    }
-
-    @Override
-    public void onReadCacheSize(int size) {
-
-    }
-
-    @Override
-    public void onClearCache() {
-
-    }
-
-    @Override
     public void onReadEng(byte[] eng_angle) {
 
         UbtLog.d(TAG, "onReadEng:" + needAdd);
@@ -1415,8 +1577,4 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         }
     }
 
-    @Override
-    public void onChangeActionFinish() {
-
-    }
 }
