@@ -313,9 +313,7 @@ public class MyFragment extends BaseFragment implements IActionsUI,MessageRecord
 //                                MyActionsActivity.launchActivity(mActivity, 3);
 //                            }
 //                        }
-                        Intent it = new Intent();
-                        it.setClass(mActivity, BluetoothguidestartrobotActivity.class);
-                        mActivity.startActivity(it);
+
                         break;
                     case R.id.rl_download_action:
                         if (mMainHelper.getCurrentUser() == null) {

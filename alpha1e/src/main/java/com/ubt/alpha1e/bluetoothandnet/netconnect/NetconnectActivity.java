@@ -24,14 +24,18 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothDeviceModel;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.event.NetworkEvent;
+import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.RobotNetConnectActivity;
 import com.ubt.alpha1e.ui.custom.VisiblePswEditText;
@@ -96,20 +100,12 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
     @BindView(R.id.net_device_list)
     RecyclerView net_device_list;
 
-    private BaseQuickAdapter mdevicesAdapter;
-    private List<BluetoothDeviceModel> mBluetoothDeviceModels = new ArrayList<>();
-
-
     //定义类常量
     private static final int NETWORK_CONNECT_SUCCESS = 1; //连接成功
     private static final int NETWORK_CONNECT_FAIL = 2;    //连接失败
     private static final int NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY = 3;    //连接对话框消失
     private static final int NETWORK_CONNECT_FAIL_DIALOG_DISPLAY = 4;    //连接对话框消失
     private static final int UPDATE_WIFI_NAME = 5;    //更新网络连接名称
-
-    //定义联网弹出框
-    private NetConnectAlertDialog mConnectAlertDialog = null;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,13 +247,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
      * 开始联网
      */
     private void startNetwork(){
-
-        mConnectAlertDialog = new NetConnectAlertDialog(NetconnectActivity.this)
-                .builder()
-                .setMsg(getStringResources("dialog_network_connecting"))
-                .setCancelable(true);
-        mConnectAlertDialog.show();
-
+        LoadingDialog.show(this,"联网中...");
         ((NetworkHelper)mHelper).doConnectNetwork(ed_wifi_name.getText().toString(), ed_wifi_pwd.getText().toString());
     }
 
@@ -305,21 +295,12 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
             super.handleMessage(msg);
             switch (msg.what) {
                 case NETWORK_CONNECT_SUCCESS:
-                    if(mConnectAlertDialog != null){
-                        mConnectAlertDialog.setImageResoure(R.drawable.network_connect_success);
-                        mConnectAlertDialog.setMsg(getStringResources("ui_network_connect_success"));
-                        mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY,1500);
-                    }
+                    mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY,200);
 
                     break;
                 case NETWORK_CONNECT_FAIL:
                     UbtLog.d(TAG,"网络连接失败！  1 " );
-                    if(mConnectAlertDialog != null){
-                        UbtLog.d(TAG,"网络连接失败！  2" );
-                        mConnectAlertDialog.setImageResoure(R.drawable.network_connect_fail);
-                        mConnectAlertDialog.setMsg(getStringResources("dialog_network_connect_failer"));
-                        mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_FAIL_DIALOG_DISPLAY,1500);
-                    }
+                    mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_FAIL_DIALOG_DISPLAY,200);
                     break;
                 case NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY:
                     displayDialog();
@@ -336,6 +317,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                     break;
                 case NETWORK_CONNECT_FAIL_DIALOG_DISPLAY:
                     displayDialog();
+                    ToastUtils.showCustomShort(R.layout.bluetooth_wifi_connect_fail);
                     break;
                 case UPDATE_WIFI_NAME:
                     String remoteConnectName = (String) msg.obj;
@@ -363,11 +345,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
      * 消失对话框
      */
     private void displayDialog(){
-
-        if(mConnectAlertDialog != null && mConnectAlertDialog.isShowing()){
-            mConnectAlertDialog.display();
-            mConnectAlertDialog = null;
-        }
+        LoadingDialog.dismiss(NetconnectActivity.this);
     }
 
     /**

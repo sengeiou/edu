@@ -148,4 +148,11 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
         this.overridePendingTransition(R.anim.activity_open_up_down,0);
         BluetoothguidestartrobotActivity.this.finish();
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        //关闭窗体动画显示
+        this.overridePendingTransition(0,R.anim.activity_close_down_up);
+    }
 }

@@ -66,7 +66,7 @@ import butterknife.BindView;
  * @modified:
  */
 
-public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<BluetoothandnetconnectstateContract.View, BluetoothandnetconnectstatePresenter> implements BluetoothandnetconnectstateContract.View , View.OnClickListener,IScanUI , IMainUI {
+public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<BluetoothandnetconnectstateContract.View, BluetoothandnetconnectstatePresenter> implements BluetoothandnetconnectstateContract.View , View.OnClickListener,IScanUI {
 
     String TAG = "BluetoothandnetconnectstateActivity";
 
@@ -296,18 +296,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         return super.onCreateView(parent, name, context, attrs);
     }
 
-//    /**
-//     * 监听Eventbus消息方法
-//     * @param event
-//     */
-    @Subscribe
-    public void onEventNetwork(NetworkEvent event) {
-        if(event.getEvent() == NetworkEvent.Event.CHANGE_SELECT_WIFI){
-//            ed_wifi_name.setText(event.getSelectWifiName());
-            UbtLog.d(TAG,"选择的wifi ："+event.getSelectWifiName());
 
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -349,8 +338,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         intent.putExtra("isFirst","no");
         intent.setClass(BluetoothandnetconnectstateActivity.this,BluetoothconnectActivity.class);
         this.startActivity(intent);
-//        this.finish();
-//        this.overridePendingTransition(R.anim.activity_open_up_down,R.anim.activity_close_down_up);
+
     }
 
     @Override
@@ -535,41 +523,6 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
     @Override
     public void onGotoPCUpdate() {
-
-    }
-
-    @Override
-    public void noteCharging() {
-
-    }
-
-    @Override
-    public void updateBattery(int power) {
-
-    }
-
-    @Override
-    public void noteDiscoonected() {
-
-    }
-
-    @Override
-    public void noteLightOn() {
-
-    }
-
-    @Override
-    public void noteLightOff() {
-
-    }
-
-    @Override
-    public void onNoteVol(int mCurrentVol) {
-
-    }
-
-    @Override
-    public void onNoteVolState(boolean mCurrentVolState) {
 
     }
 

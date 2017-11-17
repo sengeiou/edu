@@ -92,7 +92,6 @@ public class NetSearchResultActivity extends MVPBaseActivity<NetSearchResultCont
 
                     Intent i = new Intent();
                     i.putExtra("wifiName",mScanResult.SSID);
-//                    i.putExtra("wifiName",event.getSelectWifiName());
                     i.setClass(NetSearchResultActivity.this,NetconnectActivity.class);
                     NetSearchResultActivity.this.startActivity(i);
                     NetSearchResultActivity.this.finish();

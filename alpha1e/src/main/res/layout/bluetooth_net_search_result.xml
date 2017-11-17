@@ -34,7 +34,7 @@
             android:layout_centerInParent="true"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:text="连接机器人"
+            android:text="给机器人联网"
             android:textSize="18sp"/>
         <ImageButton
             android:id="@+id/ib_return"

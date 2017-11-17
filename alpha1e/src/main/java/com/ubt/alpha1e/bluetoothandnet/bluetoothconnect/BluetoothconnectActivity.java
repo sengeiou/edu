@@ -361,7 +361,6 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
      */
     public float getDistance(short rssi) {
         //return (float) Math.pow(10, (Math.abs(rssi) - 45) / (10 * 3.25));
-
         float A_Value = 49;
         float n_Value = 3.5f;
         int iRssi = Math.abs(rssi);
@@ -664,7 +663,6 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     @Override
     public void finish() {
         super.finish();
-
         if(isFirst){
             //关闭窗体动画显示
             this.overridePendingTransition(0,R.anim.activity_close_down_up);

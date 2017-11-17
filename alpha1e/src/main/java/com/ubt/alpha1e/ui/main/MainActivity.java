@@ -102,11 +102,19 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //                cartoonBodyTouch.setVisibility(View.VISIBLE);
 //                cartoonAction.setVisibility(View.INVISIBLE);
 
-
-                Intent i = new Intent();
-                i.setClass(this, BluetoothandnetconnectstateActivity.class);
-                this.startActivity(i);
+                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect",true);
+                Intent bluetoothConnectIntent = new Intent();
+                if(isfirst){
+                    Log.d(TAG, "第一次蓝牙连接" );
+                    SPUtils.getInstance().put("firstBluetoothConnect",false);
+                    bluetoothConnectIntent.setClass(this, BluetoothguidestartrobotActivity.class);
+                }else {
+                    Log.d(TAG, "非第一次蓝牙连接 ");
+                    bluetoothConnectIntent.setClass(this, BluetoothandnetconnectstateActivity.class);
+                }
+                startActivity(bluetoothConnectIntent);
                 this.overridePendingTransition(R.anim.activity_open_up_down,0);
+
                 break;
             case R.id.top_icon3:
 //                mLaunch.setClass(this, MyMainActivity.class);
@@ -115,10 +123,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.right_icon:
 //                mLaunch.setClass(this, ScanBluetoothActivity.class);
 //                startActivity(mLaunch);
-                Intent ii = new Intent();
-                ii.setClass(this, BluetoothguidestartrobotActivity.class);
-                this.startActivity(ii);
-                this.overridePendingTransition(R.anim.activity_open_up_down,0);
+//                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect",true);
                 break;
             case R.id.right_icon2:
                 break;
