@@ -111,8 +111,7 @@ import okhttp3.Call;
 public class BlocklyActivity extends BaseActivity implements IEditActionUI, IActionsUI, DirectionSensorEventListener.ActionListener, BaseDiaUI, IRemoteUI,IUiListener,IWeiXinListener {
 
     private static final String TAG = "BlocklyActivity";
-    //public static String URL = "http://10.10.1.14:8080/jimublock/blockly/project/course.html?_ijt=n155lfrvrlh5e82kt197dop6u3";
-
+    public static String URL = "https://ubt.codemao.cn/";
     public static int REQUEST_CODE = 1000;
     public static int LOGIN_REQUEST_CODE = 1111;
     public static final int READ_ACTION_TIME_OUT_CODE = 2222;
@@ -204,6 +203,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     if(isBulueToothConnected()){
 //                    ((RemoteHelper)mHelper).sendWalkFiles(unSyncFileNames);
                     }
+                    dismissLoading();
                     break;
                 case STOP_WALK_CONTINUE_CODE :
                     stopPlay();
@@ -668,8 +668,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             e.printStackTrace();
         }
 
-        mWebView.loadUrl("file:///"+getBlocklyPath(this));
-        //mWebView.loadUrl(URL);
+//        mWebView.loadUrl("file:///"+getBlocklyPath(this));
+        mWebView.loadUrl(URL);
 
         rlBlank.setOnClickListener(new View.OnClickListener() {
             @Override

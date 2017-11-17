@@ -127,11 +127,9 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
     private Map<String, Object> mCopyItem = new HashMap<String, Object>();
 
 
-//    private RelativeLayout rlRoot;
 
 
 
-    //    private FastScroller fastScroller;
     private int firstVisibleItemPosition = -1;
     private int lastVisibleItemPosition = -1;
 
@@ -140,11 +138,9 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
     private List<Map<String, Object>> timeDatas = new ArrayList<Map<String, Object>>();
     public static final String TIME = "time";
     public static final String SHOW = "show";
-    //    private FastScroller timeFastScroll;
     private SeekBar sbTime;
     private int current =0;
 
-//    private String init = "\"90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90\"";
 
     public String [] init = {"90", "90", "90", "90", "90","90", "90", "60","76","110", "90", "90",
             "120", "104", "70", "90"};
@@ -366,7 +362,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 mediaPlayer.seekTo(0);
                 sbVoice.setProgress(0);
                 tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long)handleMusicTime(mediaPlayer.getDuration())));
-                ivPlay.setImageResource(R.drawable.button_play);
+                ivPlay.setImageResource(R.drawable.ic_play_enable);
                 ivAddFrame.setEnabled(true);
                 ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 recyclerViewTimesHide.setVisibility(View.GONE);
@@ -462,7 +458,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             playFinish = true;
             mHandler.removeMessages(0);
             mediaPlayer.stop();
-            ivPlay.setImageResource(R.drawable.button_play);
+            ivPlay.setImageResource(R.drawable.ic_play_enable);
         }
     }
 
@@ -524,7 +520,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
                 }
                 UbtLog.d(TAG,"ivZhen scrollBy dx:" + dx + "-dy:" + dy);
-                ivZhen.scrollTo(500, 500);
+//                ivZhen.scrollTo(500, 500);
 //                recyclerViewFrames.scrollBy(dx, dy);
             }
         });
@@ -703,7 +699,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
 
                 if(mediaPlayer!= null && mediaPlayer.isPlaying() && !mDir.equals("")){
-                    ivPlay.setImageResource(R.drawable.button_play);
+                    ivPlay.setImageResource(R.drawable.ic_play_enable);
                     pause();
                     doPlayCurrentFrames();
                     UbtLog.d(TAG, "setEnable true");
@@ -724,7 +720,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                         }
 
                     }
-                    ivPlay.setImageResource(R.drawable.icon_pause_nor);
+                    ivPlay.setImageResource(R.drawable.ic_pause);
                     doPlayCurrentFrames();
                     play();
 
@@ -2243,8 +2239,8 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 }
 
                 if(lostRightLeg == false){
-//                    DialogTips dialog = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_holde_robot"), 1, ActionsCreateActivity.this);
-//                    dialog.show();
+                    DialogTips dialog = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_holde_robot"), 1, ActionsCreateActivity.this);
+                    dialog.show();
                 }else{
                     lostLeftLeg();
                 }
@@ -2261,8 +2257,8 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                     return;
                 }
                 if(lostLeftLeg == false){
-//                    DialogTips dialog = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_holde_robot"), 2, ActionsCreateActivity.this);
-//                    dialog.show();
+                    DialogTips dialog = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_holde_robot"), 2, ActionsCreateActivity.this);
+                    dialog.show();
                 }else{
                     lostRightLeg();
                 }
@@ -2300,8 +2296,8 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 }
                 else{
                     if(ids.size() <=0){
-//                        DialogTips dialogTips = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_click_to_cutoff"), 0, ActionsCreateActivity.this);
-//                        dialogTips.show();
+                        DialogTips dialogTips = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_click_to_cutoff"), 0, ActionsCreateActivity.this);
+                        dialogTips.show();
                         goneEditFrameLayout();
                         adapter.setDefSelect(-1);
                         return;
@@ -2479,7 +2475,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             public void onClick(View v) {
                 copy = true;
                 ivPaste.setEnabled(true);
-                ivPaste.setImageResource(R.drawable.icon_paste_nor);
+                ivPaste.setImageResource(R.drawable.ic_paste);
                 mCopyItem = mCurrentEditItem;
             }
         });
@@ -2489,7 +2485,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             public void onClick(View v) {
                 cut = true;
                 ivPaste.setEnabled(true);
-                ivPaste.setImageResource(R.drawable.icon_paste_nor);
+                ivPaste.setImageResource(R.drawable.ic_paste);
                 mCutItem = mCurrentEditItem;
             }
         });
@@ -2522,7 +2518,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 adapter.notifyDataSetChanged();
                 adapter.setDefSelect(-1);
                 goneEditFrameLayout();
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 ivCancelChange.setVisibility(View.INVISIBLE);
             }
         });
@@ -2635,10 +2631,10 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         copy = false;
 //        cut = false;
         ivPaste.setEnabled(false);
-        ivPaste.setImageResource(R.drawable.icon_paste_dis);
+        ivPaste.setImageResource(R.drawable.ic_paste_disable);
         adapter.setDefSelect(-1);
         ivAddFrame.setEnabled(true);
-        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
 
 
     }
@@ -2889,10 +2885,10 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
             @Override
             public void run() {
-                ivPlay.setImageResource(R.drawable.button_play);
+                ivPlay.setImageResource(R.drawable.ic_play_enable);
                 setEnable(true);
                 ivAddFrame.setEnabled(true);
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
 
 
             }
@@ -2911,11 +2907,11 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             @Override
             public void run() {
                 if(playFinish){
-                    ivPlay.setImageResource(R.drawable.button_play);
+                    ivPlay.setImageResource(R.drawable.ic_play_enable);
                     setEnable(true);
                 }
                 ivAddFrame.setEnabled(true);
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 adapter.setPlayIndex(-1);
 
             }
@@ -3040,7 +3036,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             UbtLog.d(TAG,"laizhelile");
             change = false;
             adapter.setDefSelect(-1);
-            ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+            ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
             ivCancelChange.setVisibility(View.INVISIBLE);
         }
     }
@@ -3066,7 +3062,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                         .get(ActionsEditHelper.MAP_FRAME)).totle_time = adapter.getTime();
             }
 
-            ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+            ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
             ivCancelChange.setVisibility(View.INVISIBLE);
             adapter.setDefSelect(-1);
             adapter.setTime();
@@ -3225,7 +3221,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
     private void updateAddViewEnable() {
         ivAddFrame.setEnabled(true);
-        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
     }
 
 
@@ -3261,7 +3257,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 sbVoice.setProgress(mediaPlayer.getCurrentPosition());
             }else if(msg.what == 1){
                 if(playFinish){
-                    ivPlay.setImageResource(R.drawable.button_play);
+                    ivPlay.setImageResource(R.drawable.ic_play_enable);
                 }
             }
         }
@@ -3282,7 +3278,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         }
 
         if(mediaPlayer!= null && mediaPlayer.isPlaying() && !mDir.equals("")){
-            ivPlay.setImageResource(R.drawable.button_play);
+            ivPlay.setImageResource(R.drawable.ic_play_enable);
             pause();
             doPlayCurrentFrames();
             playFinish = true;
@@ -3513,7 +3509,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         ivLegLeft.setSelected(false);
         ivLegRight.setSelected(false);
         ivAddFrame.setEnabled(false);
-        ivAddFrame.setImageResource(R.drawable.icon_add_dis);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
         ids.clear();
     }
 
@@ -4201,7 +4197,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         setButtonEnable(false);
 
         autoRead = true;
-        ivAddFrame.setImageResource(R.drawable.icon_stop_nor);
+        ivAddFrame.setImageResource(R.drawable.ic_stop);
         mHandler.sendEmptyMessage(MSG_AUTO_READ);
     }
 
@@ -4242,7 +4238,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
         resetState();
         ivAddFrame.setEnabled(true);
-        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
 
     }
 
@@ -4756,7 +4752,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
         resetState();
         ivAddFrame.setEnabled(true);
-        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
 
         doPlayPreview = true;
         if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
@@ -4773,6 +4769,12 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
 
         }
+    }
+
+
+    public void changeCurrentItemTime(int time){
+        ((FrameActionInfo) mCurrentEditItem
+                .get(ActionsEditHelper.MAP_FRAME)).totle_time = time;
     }
 
 
