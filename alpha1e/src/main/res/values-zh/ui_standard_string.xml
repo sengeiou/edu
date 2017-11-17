@@ -716,8 +716,11 @@
     <string name="ui_network_no_password_tips">无密码提示</string>
     <string name="ui_network_un_pass_tip">您未输入Wi-Fi密码，确定继续连接么？</string>
     <string name="ui_network_connecting">正在为Alpha联网</string>
+    <string name="dialog_network_connecting">联网中...</string>
     <string name="ui_network_connect_failer">Alpha联网失败</string>
     <string name="ui_network_connect_success">Alpha联网成功</string>
+    <string name="dialog_network_connect_failer">联网失败</string>
+    <string name="dialog_network_connect_success">联网成功</string>
     <string name="ui_network_connect_all_robot">为已连接机器人同步配网</string>
     <string name="ui_network_select">选择Wi-Fi</string>
     <string name="ui_network_change">更换Wi-Fi</string>

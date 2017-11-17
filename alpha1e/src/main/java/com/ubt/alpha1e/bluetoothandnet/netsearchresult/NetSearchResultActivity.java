@@ -140,6 +140,7 @@ public class NetSearchResultActivity extends MVPBaseActivity<NetSearchResultCont
     protected void initUI() {
         btn_goto_connect.setOnClickListener(this);
         ib_close.setOnClickListener(this);
+        ib_return.setOnClickListener(this);
         rl_content_bluetooth_no_net.setVisibility(View.INVISIBLE);
         mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         mRecyclerview.setLayoutManager(mLayoutManager);

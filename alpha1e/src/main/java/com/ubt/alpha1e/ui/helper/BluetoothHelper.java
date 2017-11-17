@@ -116,7 +116,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
     private String mCurrentLocalSoftVersion = null;
     private String mCurrentLocalHardVersion = null;
     private Timer mReadHardVersionTimer;
-    private Timer mHandShakeTimer;
+    private static Timer mHandShakeTimer;
     private Timer StopScanBLETimer = null;
     private Date lastTime_DV_HANDSHAKE = null;
     private Date lastTime_DV_HANDSHAKE_B_SEVEN = null;

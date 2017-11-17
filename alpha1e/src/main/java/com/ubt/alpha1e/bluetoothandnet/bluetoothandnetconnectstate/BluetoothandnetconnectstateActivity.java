@@ -29,6 +29,7 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.PermissionUtils;
+import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity;
@@ -37,6 +38,7 @@ import com.ubt.alpha1e.event.NetworkEvent;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
 import com.ubt.alpha1e.ui.helper.IMainUI;
 import com.ubt.alpha1e.ui.helper.IScanUI;
@@ -119,15 +121,11 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     public static final int MSG_DO_UPGRADE_PROGRESS_DISPLAY = 7; //关闭更新进度框
     public static final int MSG_DO_BLUETOOTH_DISCONNECT = 8; //蓝牙断开
 
-    private BaseQuickAdapter mdevicesAdapter;
     private List<Map<String, Object>> lst_robots_result_datas;
 
     private BluetoothHelper mHelper;
     private DecimalFormat df = new DecimalFormat("0.##");
     private Map<String, Object> mCurrentRobotInfo = null;
-
-    private boolean isConnecting = false;
-
 
     //定义Handler处理对象
     public Handler mHandler = new Handler() {
@@ -151,12 +149,9 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
                     break;
                 case MSG_DO_REQUEST_FAIL:
-//                    dismissDialog();
-//                    Toast.makeText(RobotInfoActivity.this,getStringResources("ui_common_network_request_failed"),Toast.LENGTH_SHORT).show();
+
                     break;
                 case MSG_DO_NO_NEW_VERSION:
-//                    dismissDialog();
-//                    Toast.makeText(RobotInfoActivity.this,getStringResources("ui_upgrade_already_latest"),Toast.LENGTH_SHORT).show();
                     break;
                 case MSG_DO_HAS_NEW_VERSION:
 //                    dismissDialog();
@@ -201,36 +196,6 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         rl_devices_list.setOnClickListener(this);
         no_buletooth_devices.setOnClickListener(this);
 
-        buletooth_device_list = (RecyclerView) findViewById(R.id.buletooth_device_list);
-        buletooth_device_list.setLayoutManager(new LinearLayoutManager(this));
-
-        mdevicesAdapter = new BluetoothandnetconnectstateActivity.BluetoothDeviceListAdapter(R.layout.bluetooth_device_list_layout, lst_robots_result_datas);
-        mdevicesAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                Map<String, Object> modle = (Map<String, Object>)adapter.getItem(position);
-                if((boolean)modle.get(ScanHelper.map_val_robot_connect_state)){
-                    UbtLog.d(TAG,"蓝牙正在连接点击按钮无效");
-                    return;
-                }
-                isConnecting = true;
-
-                mHelper.doCancelCoon();
-                ((AlphaApplication) getApplicationContext()).cleanBluetoothConnectData();
-
-                tv_devices_num.setText("蓝牙连接中");
-                mCurrentRobotInfo = lst_robots_result_datas.get(position);
-                mHelper.doReCoonect(mCurrentRobotInfo);
-
-                modle.put(ScanHelper.map_val_robot_connect_state,true);
-                lst_robots_result_datas.clear();
-                lst_robots_result_datas.add(modle);
-                buletooth_device_list.setAdapter(mdevicesAdapter);
-
-            }
-        });
-
-        buletooth_device_list.setAdapter(mdevicesAdapter);
         rl_devices_list.setVisibility(View.INVISIBLE);
 
 
@@ -304,86 +269,6 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         msg.what = UPDATE_WIFI_STATUS;
         msg.obj = event.getNetworkInfo();
         mHandler.sendMessage(msg);
-    }
-
-    private void dealScanResult(BluetoothDevice bluetoothDevice,short rssi){
-
-        if(bluetoothDevice != null){
-            UbtLog.d(TAG,"搜索到蓝牙地址 ："+bluetoothDevice.getAddress());
-        }
-
-        if(!(bluetoothDevice.getName().toLowerCase().contains("alpha"))){
-            return;
-        }
-
-        Map<String,Object> receiveRobot = null;
-        boolean isNew = true;
-        for(Map robot : lst_robots_result_datas){
-            if(robot.get(ScanHelper.map_val_robot_mac).equals(bluetoothDevice.getAddress()) ){
-                UbtLog.d(TAG,"mac : " + bluetoothDevice.getAddress() + "    isNew = " + isNew + "   rssi = " + rssi + " df = " + df.format(getDistance(rssi)));
-                robot.put(ScanHelper.map_val_robot_name, /*-rssi + "_" +*/ AlphaApplicationValues.dealBluetoothName(bluetoothDevice.getName()) );
-                robot.put(ScanHelper.map_val_robot_mac, bluetoothDevice.getAddress());
-                robot.put(ScanHelper.map_val_robot_connect_state, false);
-                isNew = false;
-                receiveRobot = robot;
-                break;
-            }
-        }
-
-        if(isNew){
-            UbtLog.d(TAG,"mac : " + bluetoothDevice.getAddress() + "    isNew = " + isNew + "   rssi = " + rssi + " df = " + df.format(getDistance(rssi)));
-            Map robot = new HashMap<>();
-            robot.put(ScanHelper.map_val_robot_name,/*-rssi + " _ " +*/ AlphaApplicationValues.dealBluetoothName(bluetoothDevice.getName()) );
-            robot.put(ScanHelper.map_val_robot_mac, bluetoothDevice.getAddress());
-            robot.put(ScanHelper.map_val_robot_connect_state, false);
-            if(!isConnecting){
-                lst_robots_result_datas.add(robot);
-            }
-            receiveRobot = robot;
-        }
-
-        if(lst_robots_result_datas.size() > 0  && !isConnecting){
-//            tvDeviceNum.setVisibility(View.VISIBLE);
-            tv_devices_num.setText("发现 "+lst_robots_result_datas.size()+" 台机器人");
-
-            mdevicesAdapter.notifyDataSetChanged();
-//            setListViewHeightBasedOnChildren(lst_robots_result);
-        }else{
-            tv_devices_num.setText("正在搜索机器人......");
-        }
-
-        if(getDistance(rssi) < 0.8 && !isConnecting){
-
-            mCurrentRobotInfo = receiveRobot;
-            Map<String, Object> modle = mCurrentRobotInfo ;
-            isConnecting = true;
-            mHelper.doCancelCoon();
-            ((AlphaApplication) getApplicationContext()).cleanBluetoothConnectData();
-            tv_devices_num.setText("蓝牙连接中");
-            modle.put(ScanHelper.map_val_robot_connect_state,true);
-            lst_robots_result_datas.clear();
-            lst_robots_result_datas.add(modle);
-            buletooth_device_list.setAdapter(mdevicesAdapter);
-
-            mHelper.doReCoonect(mCurrentRobotInfo);
-
-        }
-    }
-
-    /**
-     * 更加rssi信号转换成距离
-     * d=10^((ABS(RSSI)-A)/(10*n))、A 代表在距离一米时的信号强度(45 ~ 49), n 代表环境对信号的衰减系数(3.25 ~ 4.5)
-     * @param rssi
-     * @return
-     */
-    public float getDistance(short rssi) {
-        //return (float) Math.pow(10, (Math.abs(rssi) - 45) / (10 * 3.25));
-
-        float A_Value = 49;
-        float n_Value = 3.5f;
-        int iRssi = Math.abs(rssi);
-        float power = (iRssi-A_Value)/(10*n_Value);
-        return (float) Math.pow(10,power);
     }
 
     @Override
@@ -464,7 +349,8 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         intent.putExtra("isFirst","no");
         intent.setClass(BluetoothandnetconnectstateActivity.this,BluetoothconnectActivity.class);
         this.startActivity(intent);
-        this.overridePendingTransition(R.anim.activity_open_up_down,R.anim.activity_close_down_up);
+//        this.finish();
+//        this.overridePendingTransition(R.anim.activity_open_up_down,R.anim.activity_close_down_up);
     }
 
     @Override
@@ -477,7 +363,6 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 BluetoothandnetconnectstateActivity.this.finish();
                 break;
             case R.id.ig_get_bluetooth_list:
-
 
                 BluetoothAdapter mBtAdapter;
                 mBtAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -495,6 +380,16 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                         }
                     }else {
                         UbtLog.d(TAG, "bluetoothEnable false 提醒去打开蓝牙");//ok
+                        new ConfirmDialog(this).builder()
+                                .setTitle("提示")
+                                .setMsg("请在手机的“设置->蓝牙”中打开蓝牙")
+                                .setCancelable(true)
+                                .setPositiveButton("确定", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        UbtLog.d(TAG, "bluetoothEnable false onClick 1 ");
+                                    }
+                                }).show();
                     }
                 }else {
                     UbtLog.d(TAG, "bluetooth enable  判断是否授权");
@@ -678,27 +573,4 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
     }
 
-    public class BluetoothDeviceListAdapter extends BaseQuickAdapter<Map<String, Object>, BaseViewHolder> {
-
-        public BluetoothDeviceListAdapter(@LayoutRes int layoutResId, @Nullable List<Map<String, Object>> data) {
-            super(layoutResId, data);
-        }
-
-        @Override
-        protected void convert(BaseViewHolder helper, Map<String, Object> item) {
-            helper.addOnClickListener(R.id.btn_buletooth_connect);
-            helper.setText(R.id.tv_robot_bluetooth_name, (String)item.get(ScanHelper.map_val_robot_name));
-            if ((boolean)item.get(ScanHelper.map_val_robot_connect_state)) {
-                if(item.get("isConnect") == null){
-                    helper.setText(R.id.btn_buletooth_connect, "连接中");
-                }else {
-                    helper.setText(R.id.btn_buletooth_connect, "已连接");
-                }
-                helper.setBackgroundRes(R.id.btn_buletooth_connect,R.drawable.action_button_disable);
-            } else {
-                helper.setText(R.id.btn_buletooth_connect, "连接");
-
-            }
-        }
-    }
 }

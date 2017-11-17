@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot;
 
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,10 +13,14 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.utils.log.UbtLog;
+import com.yanzhenjie.permission.Permission;
 
 import butterknife.BindView;
 
@@ -88,13 +93,43 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
                 break;
             case R.id.button_next:
                 if(select.isChecked()){
-                    Intent intent = new Intent();
-                    intent.putExtra("isFirst","yes");
-                    intent.setClass(BluetoothguidestartrobotActivity.this,BluetoothconnectActivity.class);
-                    this.startActivity(intent);
-                    this.overridePendingTransition(R.anim.activity_open_up_down,R.anim.activity_close_down_up);
-//                    this.overridePendingTransition(R.anim.activity_open_up_down,0);
-                    BluetoothguidestartrobotActivity.this.finish();
+                    BluetoothAdapter mBtAdapter;
+                    mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (!mBtAdapter.isEnabled()) {
+                        UbtLog.d(TAG, "bluetoothEnable false ");
+                        boolean bluetoothEnable = mBtAdapter.enable();
+                        if(bluetoothEnable){
+                            UbtLog.d(TAG, "bluetooth Enable true 判断是否授权");
+                            if(PermissionUtils.getInstance(this).hasPermission(Permission.LOCATION)){
+                                UbtLog.d(TAG, "bluetoothEnable true 有授权");//ok
+                                startBluetoothConnect();
+                            }else {
+                                UbtLog.d(TAG, "bluetoothEnable true 没有授权");//ok
+                                PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION);
+                            }
+                        }else {
+                            UbtLog.d(TAG, "bluetoothEnable false 提醒去打开蓝牙");//ok
+                            new ConfirmDialog(this).builder()
+                                    .setTitle("提示")
+                                    .setMsg("请在手机的“设置->蓝牙”中打开蓝牙")
+                                    .setCancelable(true)
+                                    .setPositiveButton("确定", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            UbtLog.d(TAG, "bluetoothEnable false onClick 1 ");
+                                        }
+                                    }).show();
+                        }
+                    }else {
+                        UbtLog.d(TAG, "bluetooth enable  判断是否授权");
+                        if(PermissionUtils.getInstance(this).hasPermission(Permission.LOCATION)){
+                            UbtLog.d(TAG, "bluetoothEnable true 有授权");//ok
+                            startBluetoothConnect();
+                        }else {
+                            UbtLog.d(TAG, "bluetoothEnable true 没有授权"); //ok
+                            PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION);
+                        }
+                    }
 
                 }else {
                     ToastUtils.showShort("请确认站立，并选择");
@@ -103,5 +138,14 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
             default:
 
         }
+    }
+
+    void startBluetoothConnect(){
+        Intent intent = new Intent();
+        intent.putExtra("isFirst","yes");
+        intent.setClass(BluetoothguidestartrobotActivity.this,BluetoothconnectActivity.class);
+        this.startActivity(intent);
+        this.overridePendingTransition(R.anim.activity_open_up_down,0);
+        BluetoothguidestartrobotActivity.this.finish();
     }
 }

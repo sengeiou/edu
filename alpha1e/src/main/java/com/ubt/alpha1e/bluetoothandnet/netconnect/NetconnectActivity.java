@@ -118,6 +118,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         mHelper = new NetworkHelper(NetconnectActivity.this);
     }
 
+    boolean isFirst = false ;
     @Override
     protected void initUI() {
         ib_close.setOnClickListener(this);
@@ -132,9 +133,11 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         String name = i.getStringExtra("wifiName");
         UbtLog.d(TAG,"name ==="+wifiName);
         if(name == null){
+            isFirst = true ;
             ib_return.setVisibility(View.INVISIBLE);
             initData();
         }else {
+            isFirst = false ;
             wifiName = name ;
             ed_wifi_name.setText(wifiName);
             ed_wifi_pwd.requestFocus();
@@ -175,7 +178,6 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                 break;
             case R.id.ig_get_wifi_name:
                 UbtLog.d(TAG,"ig_get_wifi_name click");
-//                translateAnimRun(rl_net_list);
                 gotoSelectWifi();
                 break;
             case R.id.ig_see_wifi_pwd:
@@ -252,13 +254,11 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
 
         mConnectAlertDialog = new NetConnectAlertDialog(NetconnectActivity.this)
                 .builder()
-                .setMsg(getStringResources("ui_network_connecting"))
+                .setMsg(getStringResources("dialog_network_connecting"))
                 .setCancelable(true);
         mConnectAlertDialog.show();
 
         ((NetworkHelper)mHelper).doConnectNetwork(ed_wifi_name.getText().toString(), ed_wifi_pwd.getText().toString());
-        //((NetworkHelper)mHelper).doConnectNetwork("UBT", "Ubtubtubt!@");
-        //((NetworkHelper)mHelper).doConnectNetwork("UBT-users", "Ubtubtubt");
     }
 
     /**
@@ -317,7 +317,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                     if(mConnectAlertDialog != null){
                         UbtLog.d(TAG,"网络连接失败！  2" );
                         mConnectAlertDialog.setImageResoure(R.drawable.network_connect_fail);
-                        mConnectAlertDialog.setMsg(getStringResources("ui_network_connect_failer"));
+                        mConnectAlertDialog.setMsg(getStringResources("dialog_network_connect_failer"));
                         mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_FAIL_DIALOG_DISPLAY,1500);
                     }
                     break;
@@ -333,7 +333,6 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                     NetconnectActivity.this.setResult(RESULT_OK, intent);
                     //关闭Activity
                     NetconnectActivity.this.finish();
-//                    toBack();
                     break;
                 case NETWORK_CONNECT_FAIL_DIALOG_DISPLAY:
                     displayDialog();
@@ -371,7 +370,6 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         }
     }
 
-
     /**
      * 获取当前手机连接WIFI名称
      * @return
@@ -404,10 +402,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         msg.what = UPDATE_WIFI_NAME;
         msg.obj = "";
         mHandler.sendMessage(msg);
-
-
     }
-
 
     String wifiName = "";
     /**
@@ -462,49 +457,26 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                 }).show();
     }
 
-
-    public void translateAnimRun(View view)
-    {
-        rl_net_list.setVisibility(View.VISIBLE);
-        float curTranslationY = view.getTranslationY();
-        float curTranslationX = view.getTranslationX();
-        UbtLog.d(TAG,"curTranslationY="+curTranslationY);
-        UbtLog.d(TAG,"curTranslationX="+curTranslationX);
-        UbtLog.d(TAG,"curhigh="+view.getHeight());
-        UbtLog.d(TAG,"curwidth="+view.getWidth());
-        ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", view.getHeight(), 0);
-        animator.setDuration(200);
-        animator.start();
-
-    }
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if(mHelper != null){
             //读取更新当前机器人网络状态
-            ((NetworkHelper)mHelper).readNetworkStatus();
+//            ((NetworkHelper)mHelper).readNetworkStatus();
         }
+        mHandler.removeMessages(NETWORK_CONNECT_SUCCESS);
+        mHandler.removeMessages(NETWORK_CONNECT_FAIL);
+        mHandler.removeMessages(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY);
+        mHandler.removeMessages(UPDATE_WIFI_NAME);
     }
 
-    public class NetDeviceListAdapter extends BaseQuickAdapter<BluetoothDeviceModel, BaseViewHolder> {
+    @Override
+    public void finish() {
+        super.finish();
 
-        public NetDeviceListAdapter(@LayoutRes int layoutResId, @Nullable List<BluetoothDeviceModel> data) {
-            super(layoutResId, data);
-        }
-
-        @Override
-        protected void convert(BaseViewHolder helper, BluetoothDeviceModel item) {
-            helper.addOnClickListener(R.id.btn_buletooth_connect);
-            helper.setText(R.id.tv_robot_bluetooth_name, item.getDeviceName());
-            if (item.isConnecting()) {
-                helper.setText(R.id.btn_buletooth_connect, "连接中");
-                helper.setBackgroundRes(R.id.btn_buletooth_connect,R.drawable.action_button_disable);
-            } else {
-                helper.setText(R.id.btn_buletooth_connect, "连接");
-
-            }
+        if(isFirst){
+            //关闭窗体动画显示
+            this.overridePendingTransition(0,R.anim.activity_close_down_up);
         }
     }
 }

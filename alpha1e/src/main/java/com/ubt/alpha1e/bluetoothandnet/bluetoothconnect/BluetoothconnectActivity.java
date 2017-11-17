@@ -1,13 +1,10 @@
 package com.ubt.alpha1e.bluetoothandnet.bluetoothconnect;
 
 
-import android.animation.ObjectAnimator;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -62,7 +58,6 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
 
     String TAG = "BluetoothconnectActivity";
 
-
     @BindView(R.id.ib_close)
     ImageButton ib_close;
 
@@ -80,12 +75,6 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
 
     @BindView(R.id.rl_devices_list)
     RelativeLayout rl_devices_list;
-
-//    @BindView(R.id.ig_bg)
-//    GifImageView gif_scan_logo;
-    @BindView(R.id.ig_phone)
-    ImageView ig_phone;
-
 
     @BindView(R.id.btn_goto_connect)
     Button btn_goto_connect;
@@ -119,66 +108,31 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     //搜索中
     @BindView(R.id.rl_content_device_researching)
     RelativeLayout rl_content_device_researching;
+    //连接中
+    @BindView(R.id.rl_content_bluetooth_connecting)
+    RelativeLayout rl_content_bluetooth_connecting;
 
     @BindView(R.id.rl_devices_no_device)
     RelativeLayout rl_devices_no_device;
 
 
     private BaseQuickAdapter mdevicesAdapter;
-    private List<BluetoothDeviceModel> mBluetoothDeviceModels = new ArrayList<>();
-    private Handler handler = new Handler();
-
 
     private BluetoothHelper mHelper;
     private List<Map<String, Object>> lst_robots_result_datas;
     private DecimalFormat df = new DecimalFormat("0.##");
     private Map<String, Object> mCurrentRobotInfo = null;
-    private int mBlueConnectNum = 0;
-
-    private static final int START_CONNECT_BLUETOOTH = 100;
-    private static final int CONNECT_BLUETOOTH_TIME = 101;
-    private static final int CONNECT_BLUETOOTH_FINISH = 102;
-    private int mConnectTime = 0;
 
     private boolean isConnecting = false;
+    boolean isFirst = false ; //是否是首次打开
 
     public Timer timer = new Timer();
 
-    //定义Handler处理对象
-    public Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 0:
-                    break;
-                default:
-                    break;
-
-            }
-        }
-    };
-
-
-    boolean isFirst = false ; //是否是首次打开
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lst_robots_result_datas = new ArrayList<>();
         initUI();
-//        BluetoothAdapter mBtAdapter;
-//        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
-//        if (!mBtAdapter.isEnabled()) {
-//            boolean s = mBtAdapter.enable();
-//            if(s){
-//                UbtLog.d(TAG, "s true");
-//            }else {
-//                UbtLog.d(TAG, "s false");
-//            }
-////            ((Activity)mContext).startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),1333);
-//        }else {
-//            UbtLog.d(TAG, "bluetooth enable");
-//        }
 
         Intent i =getIntent();
         String first = i.getStringExtra("isFirst");
@@ -207,6 +161,11 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     }
 
     @Override
+    public int getContentViewId() {
+        return R.layout.bluetoothconnect;
+    }
+
+    @Override
     protected void onResume() {
         initControlListener();
         super.onResume();
@@ -229,7 +188,6 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     @Override
     public void onDestroy() {
         UbtLog.d(TAG,"---onDestroy----");
-        handler.removeCallbacks(runnable);
         EventBus.getDefault().unregister(this);
         if(mHelper != null){
             mHelper.cancelScan();
@@ -264,12 +222,21 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
                 if(mHelper != null){
                     mHelper.cancelScan();
                 }
+                if(isConnecting){
+                    return;
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(rl_content_device_researching!= null && rl_content_no_device != null){
-                            rl_content_device_researching.setVisibility(View.INVISIBLE);
+                        try {
+                            rl_content_bluetooth_connect_sucess.setVisibility(View.INVISIBLE);
+                            rl_content_bluetooth_connect_fail.setVisibility(View.INVISIBLE);
+                            rl_content_device_list.setVisibility(View.INVISIBLE);
                             rl_content_no_device.setVisibility(View.VISIBLE);
+                            rl_content_device_researching.setVisibility(View.INVISIBLE);
+                            rl_content_bluetooth_connecting.setVisibility(View.INVISIBLE);
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -283,16 +250,19 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
 
         if( event != null && event.getEvent() == RobotEvent.Event.SCAN_ROBOT){
             UbtLog.d(TAG,"收到蓝牙设备");
-//            if(rlConnecting.getVisibility() != View.VISIBLE){
-                dealScanResult(event.getBluetoothDevice(),event.getRssi());
-//            }
+            if(isConnecting){
+                return;
+            }
+            dealScanResult(event.getBluetoothDevice(),event.getRssi());
         }
     }
 
     boolean isSearchDevice = true ;
 
-    private void dealScanResult(BluetoothDevice bluetoothDevice,short rssi){
-
+    synchronized  void dealScanResult(BluetoothDevice bluetoothDevice,short rssi){
+        if(isConnecting){
+            return;
+        }
         if(bluetoothDevice != null){
            UbtLog.d(TAG,"搜索到蓝牙地址 ："+bluetoothDevice.getAddress());
         }
@@ -327,7 +297,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
             receiveRobot = robot;
         }
 
-        if(lst_robots_result_datas.size() > 0 && !isConnecting){
+        if( !isConnecting && lst_robots_result_datas.size()> 0){
             if(isSearchDevice){
                 if(task != null){
                     task.cancel();
@@ -338,10 +308,19 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
                     timer = null ;
                 }
                 isSearchDevice = false ;
-                rl_content_device_researching.setVisibility(View.INVISIBLE);
-                rl_content_device_list.setVisibility(View.VISIBLE);
-                rl_devices_list.setVisibility(View.INVISIBLE);
-                handler.postDelayed(runnable,200);
+                try {
+                    rl_content_bluetooth_connect_sucess.setVisibility(View.INVISIBLE);
+                    rl_content_bluetooth_connect_fail.setVisibility(View.INVISIBLE);
+                    rl_content_device_list.setVisibility(View.VISIBLE);
+                    rl_content_no_device.setVisibility(View.INVISIBLE);
+                    rl_content_device_researching.setVisibility(View.INVISIBLE);
+                    rl_content_bluetooth_connecting.setVisibility(View.INVISIBLE);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return;
+                }
+
+
             }
             tv_devices_num.setText("发现 "+lst_robots_result_datas.size()+" 台机器人");
 
@@ -350,42 +329,28 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
             tv_devices_num.setText("正在搜索机器人......");
         }
 
-        if(getDistance(rssi) < 0.8 && !isConnecting){
+        if(!isConnecting && getDistance(rssi) < 0.8 ){
             tv_devices_num.setText("进行自动连接蓝牙......");
 
             mCurrentRobotInfo = receiveRobot;
-//            tvConnecting.setText(getStringRes("ui_scan_connecting").replaceAll("#",(String) mCurrentRobotInfo.get(ScanHelper.map_val_robot_name)));
-            mBlueConnectNum = 1;
-
-            Map<String, Object> modle = mCurrentRobotInfo ;
             isConnecting = true;
             mHelper.doCancelCoon();
             ((AlphaApplication) getApplicationContext()).cleanBluetoothConnectData();
-            tv_devices_num.setText("蓝牙连接中");
-            modle.put(ScanHelper.map_val_robot_connect_state,true);
             lst_robots_result_datas.clear();
-            lst_robots_result_datas.add(modle);
-            buletooth_device_list.setAdapter(mdevicesAdapter);
 
             mHelper.doReCoonect(mCurrentRobotInfo);
-//            mHandler.sendEmptyMessage(START_CONNECT_BLUETOOTH);
-
-        }
-    }
-
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            if(rl_devices_list !=null && ig_phone != null ){
-                translateAnimRun(rl_devices_list);
-                imageviewTranslateAnimRun(ig_phone);
+            try {
+                rl_content_bluetooth_connect_sucess.setVisibility(View.INVISIBLE);
+                rl_content_bluetooth_connect_fail.setVisibility(View.INVISIBLE);
+                rl_content_device_list.setVisibility(View.INVISIBLE);
+                rl_content_no_device.setVisibility(View.INVISIBLE);
+                rl_content_device_researching.setVisibility(View.INVISIBLE);
+                rl_content_bluetooth_connecting.setVisibility(View.VISIBLE);
+            }catch (Exception e){
+                e.printStackTrace();
+                return;
             }
         }
-    };
-
-    public String getStringRes(String str)
-    {
-        return this.getStringResources(str);
     }
 
     /**
@@ -415,8 +380,6 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
         rl_content_no_device.setOnClickListener(this);
         rl_devices_no_device.setOnClickListener(this);
 
-
-
         buletooth_device_list = (RecyclerView) findViewById(R.id.buletooth_device_list);
         buletooth_device_list.setLayoutManager(new LinearLayoutManager(this));
 
@@ -429,53 +392,30 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
                     UbtLog.d(TAG,"蓝牙正在连接点击按钮无效");
                     return;
                 }
+                if(isConnecting){
+                    return;
+                }
                 isConnecting = true;
                 mHelper.doCancelCoon();
                 ((AlphaApplication) getApplicationContext()).cleanBluetoothConnectData();
-                tv_devices_num.setText("蓝牙连接中");
                 mCurrentRobotInfo = lst_robots_result_datas.get(position);
-                mBlueConnectNum = 1;
                 mHelper.doReCoonect(mCurrentRobotInfo);
-
-                modle.put(ScanHelper.map_val_robot_connect_state,true);
                 lst_robots_result_datas.clear();
-                lst_robots_result_datas.add(modle);
-                buletooth_device_list.setAdapter(mdevicesAdapter);
+                try {
+                    rl_content_bluetooth_connect_sucess.setVisibility(View.INVISIBLE);
+                    rl_content_bluetooth_connect_fail.setVisibility(View.INVISIBLE);
+                    rl_content_device_list.setVisibility(View.INVISIBLE);
+                    rl_content_no_device.setVisibility(View.INVISIBLE);
+                    rl_content_device_researching.setVisibility(View.INVISIBLE);
+                    rl_content_bluetooth_connecting.setVisibility(View.VISIBLE);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return;
+                }
             }
         });
         buletooth_device_list.setAdapter(mdevicesAdapter);
-        rl_devices_list.setVisibility(View.INVISIBLE);
     }
-
-    public void translateAnimRun(View view)
-    {
-        if(rl_devices_list == null){
-            return;
-        }
-        rl_devices_list.setVisibility(View.VISIBLE);
-        float curTranslationY = view.getTranslationY();
-        float curTranslationX = view.getTranslationX();
-        UbtLog.d(TAG,"curTranslationY="+curTranslationY);
-        UbtLog.d(TAG,"curTranslationX="+curTranslationX);
-        UbtLog.d(TAG,"curhigh="+view.getHeight());
-        UbtLog.d(TAG,"curwidth="+view.getWidth());
-        ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", view.getHeight(), 0);
-        animator.setDuration(500);
-        animator.start();
-
-    }
-
-    //图片平移
-    public void imageviewTranslateAnimRun(View view)
-    {
-        ObjectAnimator valueAnimator;
-        valueAnimator = ObjectAnimator.ofFloat(view, "translationX",0.0f,100.0f);
-        valueAnimator.setDuration(1000);
-        valueAnimator.setRepeatCount(8800);
-        valueAnimator.start();
-    }
-
-
 
     @Override
     protected void initControlListener() {
@@ -486,11 +426,6 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     @Override
     protected void initBoardCastListener() {
 
-    }
-
-    @Override
-    public int getContentViewId() {
-        return R.layout.bluetoothconnect;
     }
 
     @Override
@@ -533,11 +468,19 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
         lst_robots_result_datas.clear();
         tv_devices_num.setText("正在搜索机器人......");
         buletooth_device_list.setAdapter(mdevicesAdapter);
-        rl_content_device_list.setVisibility(View.INVISIBLE);
-        rl_devices_list.setVisibility(View.INVISIBLE);
-        rl_content_bluetooth_connect_fail.setVisibility(View.INVISIBLE);
-        rl_content_device_researching.setVisibility(View.VISIBLE);
-        rl_content_no_device.setVisibility(View.INVISIBLE);
+
+        try {
+            rl_content_bluetooth_connect_sucess.setVisibility(View.INVISIBLE);
+            rl_content_bluetooth_connect_fail.setVisibility(View.INVISIBLE);
+            rl_content_device_list.setVisibility(View.INVISIBLE);
+            rl_content_no_device.setVisibility(View.INVISIBLE);
+            rl_content_device_researching.setVisibility(View.VISIBLE);
+            rl_content_bluetooth_connecting.setVisibility(View.INVISIBLE);
+        }catch (Exception e){
+            e.printStackTrace();
+            return;
+        }
+
         if(mHelper != null ){
             mHelper.doNearFieldScan();
         }
@@ -596,17 +539,30 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
         UbtLog.d(TAG,"网络连接状态 onCoonected =  " + state);
         if (state) {
             if(isFirst){
-                rl_content_device_list.setVisibility(View.INVISIBLE);
-                rl_content_bluetooth_connect_sucess.setVisibility(View.VISIBLE);
-                rl_content_bluetooth_connect_fail.setVisibility(View.INVISIBLE);
+                try {
+                    rl_content_bluetooth_connect_sucess.setVisibility(View.VISIBLE);
+                    rl_content_bluetooth_connect_fail.setVisibility(View.INVISIBLE);
+                    rl_content_device_list.setVisibility(View.INVISIBLE);
+                    rl_content_no_device.setVisibility(View.INVISIBLE);
+                    rl_content_device_researching.setVisibility(View.INVISIBLE);
+                    rl_content_bluetooth_connecting.setVisibility(View.INVISIBLE);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }else {
                  BluetoothconnectActivity.this.finish();
-
             }
         }else {
-            rl_content_device_list.setVisibility(View.INVISIBLE);
-            rl_content_bluetooth_connect_fail.setVisibility(View.VISIBLE);
-            rl_content_bluetooth_connect_fail.setVisibility(View.INVISIBLE);
+            try {
+                rl_content_bluetooth_connect_sucess.setVisibility(View.INVISIBLE);
+                rl_content_bluetooth_connect_fail.setVisibility(View.VISIBLE);
+                rl_content_device_list.setVisibility(View.INVISIBLE);
+                rl_content_no_device.setVisibility(View.INVISIBLE);
+                rl_content_device_researching.setVisibility(View.INVISIBLE);
+                rl_content_bluetooth_connecting.setVisibility(View.INVISIBLE);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -705,11 +661,13 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
         }
     }
 
-//    @Override
-//    public void finish() {
-//        super.finish();
-//
-//        //关闭窗体动画显示
-//        this.overridePendingTransition(0,R.anim.activity_close_down_up);
-//    }
+    @Override
+    public void finish() {
+        super.finish();
+
+        if(isFirst){
+            //关闭窗体动画显示
+            this.overridePendingTransition(0,R.anim.activity_close_down_up);
+        }
+    }
 }
