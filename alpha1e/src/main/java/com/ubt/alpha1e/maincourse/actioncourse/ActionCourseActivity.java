@@ -8,9 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.maincourse.adapter.ActionCoursedapter;
 import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
-import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 
 /**
@@ -41,6 +42,11 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         mPresenter.getActionCourseData();
     }
 
+    @OnClick(R.id.iv_main_back)
+    public void onClick(View view) {
+        finish();
+    }
+
     @Override
     protected void initUI() {
         mActionCourseModels = new ArrayList<>();
@@ -51,8 +57,8 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-                outRect.right = 20;
-                outRect.left = 20;
+                outRect.right = 30;
+                outRect.left = 30;
                 if (parent.getChildAdapterPosition(view) == 4) {
                     outRect.top = 50;
                 }

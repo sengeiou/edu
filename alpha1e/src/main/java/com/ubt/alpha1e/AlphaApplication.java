@@ -59,6 +59,8 @@ import com.ubtechinc.base.BlueToothManager;
 import com.ubtechinc.sqlite.DBAlphaInfoManager;
 import com.umeng.analytics.MobclickAgent;
 
+import org.litepal.LitePal;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -103,6 +105,7 @@ public class AlphaApplication extends LoginApplication {
          initSkin(this);
         initConnectClient();
         initXG();
+        LitePal.initialize(this);
 //        LeakCanary.install(this);
         //   VCamera.setVideoCachePath(FileTools.media_cache);
         //  VCamera.setDebugMode(true);
