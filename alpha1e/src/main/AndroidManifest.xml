@@ -593,6 +593,11 @@
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
+            android:name=".userinfo.photoshow.PhotoShowActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
             android:name=".userinfo.psdmanage.PsdManageActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>

@@ -405,13 +405,12 @@ public class AlphaApplication extends LoginApplication {
     public void clearCacheData(){
         //清除在线缓存
         BaseHelper.hasGetScheme = false;
-        ActionsOnlineCacheOperater.getInstance(this,FileTools.db_log_cache, FileTools.db_log_name).cleanOnlineCache();
+        //ActionsOnlineCacheOperater.getInstance(this,FileTools.db_log_cache, FileTools.db_log_name).cleanOnlineCache();
         MyActionsHelper.mCacheActionsNames.clear();
         ActionsLibMainFragment3.clearCacheDatas();
 
         //app 改版指引相关
-        BasicSharedPreferencesOperator.getInstance(this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(BasicSharedPreferencesOperator.KEY_GUIDE_STEP,
-                "0", null, -1);
+        BasicSharedPreferencesOperator.getInstance(this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(BasicSharedPreferencesOperator.KEY_GUIDE_STEP, "0", null, -1);
     }
 
     /**
