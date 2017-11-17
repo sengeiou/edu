@@ -187,7 +187,7 @@ public class ActionsEditHelper extends BaseHelper implements
     public void doLostOnePower(int id) {
         byte[] params = new byte[1];
         params[0] = ByteHexHelper.intToHexByte(id);
-        doSendComm(ConstValue.CTRL_ONE_ENGINE, params);
+         doSendComm(ConstValue.CTRL_ONE_ENGINE, params);
     }
 
     public void doLostLeftHandAndRead(){

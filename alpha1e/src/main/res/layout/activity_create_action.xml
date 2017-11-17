@@ -228,7 +228,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_toRightOf="@+id/tv_zoom_minus"
-                android:src="@drawable/btn_close"
+                android:src="@drawable/ic_cancel"
                 android:visibility="invisible"
                 />
 
@@ -260,7 +260,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_play_time"
+                      android:id="@+id/tv_play_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/iv_play_music"

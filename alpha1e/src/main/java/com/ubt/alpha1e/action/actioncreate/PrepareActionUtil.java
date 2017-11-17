@@ -22,6 +22,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.model.ActionConstant;
 import com.ubt.alpha1e.action.model.PrepareDataModel;
 import com.ubt.alpha1e.action.model.PrepareMusicModel;
+import com.ubt.alpha1e.base.ResourceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,14 +58,18 @@ public class PrepareActionUtil implements BaseQuickAdapter.OnItemClickListener, 
     public void showActionDialog(int type, OnDialogListener mDialogListener) {
         this.mDialogListener = mDialogListener;
         this.mType = type;
+        String title="";
         if (type == 1) {
+            title = ResourceManager.getInstance(mContext).getStringResources("ui_create_basic_action");
             list = ActionConstant.getBasicActionList(mContext);
         } else if (type == 2) {
+            title = ResourceManager.getInstance(mContext).getStringResources("ui_create_advance_action");
             list = ActionConstant.getHighActionList(mContext);
         }
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_aciton_select, null);
         ViewHolder viewHolder = new ViewHolder(contentView);
         TextView tvTitle = contentView.findViewById(R.id.title_actions);
+        tvTitle.setText(title);
         tvCancle = contentView.findViewById(R.id.tv_cancel);
         tvConfirm = contentView.findViewById(R.id.tv_confirm);
         RecyclerView recyclerView = contentView.findViewById(R.id.rv_actions);
