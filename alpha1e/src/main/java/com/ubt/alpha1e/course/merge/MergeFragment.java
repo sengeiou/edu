@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.course.split;
+package com.ubt.alpha1e.course.merge;
 
 
 import android.animation.AnimatorSet;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.course.CourseActivity;
+import com.ubt.alpha1e.course.split.SplitFragment;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -29,9 +30,9 @@ import butterknife.Unbinder;
  * 邮箱 784787081@qq.com
  */
 
-public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPresenter> implements SplitContract.View {
+public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePresenter> implements MergeContract.View {
 
-    private static final String TAG = SplitFragment.class.getSimpleName();
+    private static final String TAG = MergeFragment.class.getSimpleName();
 
     @BindView(R.id.tv_next)
     TextView tvNext;
@@ -63,9 +64,9 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
 
     private boolean hasInitRobot = false;
 
+
     @Override
     protected void initUI() {
-
         scale = (int) this.getResources().getDisplayMetrics().density;
         containerWidth = this.getResources().getDisplayMetrics().widthPixels;
         containerHeight = this.getResources().getDisplayMetrics().heightPixels;
@@ -102,35 +103,32 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
         if (scale == 3.0) {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ivRobot.getLayoutParams();
 
-
-            UbtLog.d(TAG, "ivHandLeftBg start :" + ivHandLeftBg.getWidth() + "/" + ivHandLeftBg.getHeight());
-
             UbtLog.d(TAG, "width : " + params.width + " height : " + params.height + " width = " + ivRobot.getWidth() + "  height = " + ivRobot.getHeight() + "  topMargin = " + params.topMargin);
             params.width = ivRobot.getWidth() / 2 * 3;
             params.height = ivRobot.getHeight() / 2 * 3;
             ivRobot.setLayoutParams(params);
             UbtLog.d(TAG, "ivRobot:" + ivRobot.getWidth() + "/" + ivRobot.getHeight());
 
+            UbtLog.d(TAG, "ivHandLeftBg start :" + ivHandLeftBg.getWidth() + "/" + ivHandLeftBg.getHeight());
             params = (RelativeLayout.LayoutParams) ivHandLeft.getLayoutParams();
             params.width = ivHandLeft.getWidth() / 2 * 3;
             params.height = ivHandLeft.getHeight() / 2 * 3;
             params.topMargin = 370;
             ivHandLeft.setLayoutParams(params);
-            UbtLog.d(TAG, "ivHandLeft:" + ivHandLeft.getWidth() + "/" + ivHandLeft.getHeight() + "  params = " + params.topMargin);
+
+            UbtLog.d(TAG, "ivHandLeft:" + ivHandLeft.getWidth() + "/" + ivHandLeft.getHeight());
 
             params = (RelativeLayout.LayoutParams) ivHandRight.getLayoutParams();
             params.width = ivHandRight.getWidth() / 2 * 3;
             params.height = ivHandRight.getHeight() / 2 * 3;
             params.topMargin = 370;
             ivHandRight.setLayoutParams(params);
-            UbtLog.d(TAG, "ivHandRight:" + ivHandRight.getWidth() + "/" + ivHandRight.getHeight());
 
             params = (RelativeLayout.LayoutParams) ivLegLeft.getLayoutParams();
             params.width = ivLegLeft.getWidth() / 2 * 3;
             params.height = ivLegLeft.getHeight() / 2 * 3;
             params.topMargin = 51 * (-1);
             ivLegLeft.setLayoutParams(params);
-            UbtLog.d(TAG, "ivLegLeft:" + ivLegLeft.getWidth() + "/" + ivLegLeft.getHeight() + "    topMargin = " + params.topMargin);
 
             params = (RelativeLayout.LayoutParams) ivLegRight.getLayoutParams();
             params.width = ivLegLeft.getWidth() / 2 * 3;
@@ -165,8 +163,47 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
 
             UbtLog.d(TAG, "ivHandLeftBg end :" + ivHandLeftBg.getWidth() + "/" + ivHandLeftBg.getHeight());
 
-
+            //initImagePosition(ivHandLeft);
+            //initImagePosition(ivHandRight);
+            //initImagePosition(ivLegLeft);
+            //initImagePosition(ivLegRight);
         }
+    }
+
+    private void initImagePosition(ImageView view){
+        int targetX = 0 ;
+        int targetY = 0;
+        if(view.getId() == R.id.iv_hand_left){
+            targetX = containerWidth/2 - ivRobot.getWidth()/2 - ivHandLeftBg.getWidth() - ivHandLeftBg.getWidth() - SizeUtils.dip2px(getContext(),30);
+            targetY = containerHeight/2 - ivHandLeftBg.getHeight()/2;
+            UbtLog.d(TAG,"targetX = " + targetX + " targetY = " + targetY + " width = " + ivHandLeftBg.getWidth() + " height = " + ivHandLeftBg.getHeight()+ "   view = " + view);
+        }else if(view.getId() == R.id.iv_leg_left ){
+            targetX = containerWidth/2 - ivRobot.getWidth()/2 - ivHandLeftBg.getWidth()*2 - ivLegLeft.getWidth()- SizeUtils.dip2px(getContext(),30)*2;
+            targetY = containerHeight/2 - view.getHeight()/2;
+        }else if(view.getId() == R.id.iv_hand_right){
+            targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRightBg.getWidth() + SizeUtils.dip2px(getContext(),30);
+            targetY = containerHeight/2 - view.getHeight()/2;
+        }else if(view.getId() == R.id.iv_leg_right){
+            targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRightBg.getWidth()*2 + SizeUtils.dip2px(getContext(),30)*2;
+            targetY = containerHeight/2 - view.getHeight()/2;
+        }
+
+        /*// 属性动画移动
+        ObjectAnimator y = ObjectAnimator.ofFloat(view, "y", view.getY(), targetX);
+        ObjectAnimator x = ObjectAnimator.ofFloat(view, "x", view.getX(), targetY);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(x, y);
+        animatorSet.setDuration(0);
+        animatorSet.start();*/
+
+
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
+        //params.setMargins(targetX,targetY, targetX + view.getWidth(), targetY + view.getHeight());
+
+        //params.topMargin = targetY;
+        //params.leftMargin = targetX;
+        view.setLayoutParams(params);
     }
 
     @Override
@@ -176,7 +213,7 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
 
     @Override
     public int getContentViewId() {
-        return R.layout.fragment_robot_split;
+        return R.layout.fragment_robot_merge;
     }
 
     @Override
@@ -193,13 +230,6 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
@@ -212,7 +242,7 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
                 ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_SPLIT);
                 break;
             case R.id.tv_next:
-                ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_MERGE);
+                ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_FEATURE);
                 break;
         }
     }
@@ -267,20 +297,18 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
                 case MotionEvent.ACTION_UP: {
 
                     if(view.getId() == R.id.iv_hand_left){
-                        targetX = containerWidth/2 - ivRobot.getWidth()/2 - ivHandLeftBg.getWidth() - ivHandLeft.getWidth() - SizeUtils.dip2px(getContext(),30);
-                        targetY = containerHeight/2 - view.getHeight()/2;
+                        targetX = ivHandLeftBg.getX();
+                        targetY = ivHandLeftBg.getY();
                     }else if(view.getId() == R.id.iv_leg_left ){
-                        targetX = containerWidth/2 - ivRobot.getWidth()/2 - ivHandLeftBg.getWidth()*2 - ivLegLeft.getWidth()- SizeUtils.dip2px(getContext(),30)*2;
-                        targetY = containerHeight/2 - view.getHeight()/2;
+                        targetX = ivLegLeftBg.getX();
+                        targetY = ivLegLeftBg.getY();
                     }else if(view.getId() == R.id.iv_hand_right){
-                        targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRightBg.getWidth() + SizeUtils.dip2px(getContext(),30);
-                        targetY = containerHeight/2 - view.getHeight()/2;
+                        targetX = ivHandRightBg.getX();
+                        targetY = ivHandRightBg.getY();
                     }else if(view.getId() == R.id.iv_leg_right){
-                        targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRightBg.getWidth()*2 + SizeUtils.dip2px(getContext(),30)*2;
-                        targetY = containerHeight/2 - view.getHeight()/2;
+                        targetX = ivLegRightBg.getX();
+                        targetY = ivLegRightBg.getY();
                     }
-
-                    UbtLog.d(TAG,"targetX = " + targetX + " targetY = " + targetY + " width = " + ivHandLeftBg.getWidth() + " height = " + ivHandLeftBg.getHeight()+ "   view = " + view);
 
                     // 属性动画移动
                     ObjectAnimator y = ObjectAnimator.ofFloat(view, "y", view.getY(), targetY);
