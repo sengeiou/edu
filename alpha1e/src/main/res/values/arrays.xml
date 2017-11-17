@@ -10,6 +10,29 @@
         <item>"ui_square_education"</item>
         <item>"ui_square_unknown"</item>
     </array>
+    <array name="mainUi_buddle_text">
+        <item>  你能陪我玩吗，或者我让你玩</item>
+        <item>  没有什么是一支舞解决不了的问题</item>
+        <item>  对我温柔点，别摔到宝宝</item>
+        <item>  电力满满，机器人生才有趣</item>
+        <item>  挑战编程课，可以获取“编程之星”哦</item>
+        <item>  早睡早起，锻炼身体</item>
+        <item>  图形化编程什么的，可难不住alpha我</item>
+        <item>  常常解锁编程课，会有意想不到的惊喜</item>
+        <item>  大家都叫我机器人界的舞王，但我其实也擅长编程喔</item>
+        <item>  多吃绿色的蔬菜，才能像alpha一样健康又强壮</item>
+        <item>  编辑出酷炫的动作，别忘了分享到社区秀一下</item>
+        <item>  我不会告诉别人，我的身上有16个舵机呢</item>
+        <item>  看到我胸前两个小小的麦克风吗，其实那才是alpha的耳朵</item>
+        <item>  传感器让alpha能感知更多的事情，是我感受世界的工具</item>
+        <item>  我的眼睛会说话，你明白不同的颜色代表什么吗</item>
+        <item>  学会了编程，我们每个人都是小小程序员</item>
+    </array>
+    <array name="mainUi_buddle_lowpower">
+        <item>我电量太低了，正烦着呢</item>
+        <item>我没电了，不开心</item>
+        <item>没有电，机器人生很空虚</item>
+    </array>
 
 
 </resources>

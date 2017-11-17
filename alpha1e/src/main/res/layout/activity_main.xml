@@ -19,11 +19,21 @@
         android:id="@+id/charging"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/charging"
-        android:layout_marginBottom="10dp"
+        android:background="@drawable/charging_normal"
+        android:layout_marginBottom="15dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         />
+    <ImageView
+        android:id="@+id/charging_dot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/charging_normal_dot"
+        android:layout_marginBottom="13dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        />
+
     <!--<pl.droidsonroids.gif.GifImageView-->
     <ImageView
         android:id="@+id/cartoon_action"
@@ -34,6 +44,7 @@
         android:layout_marginBottom="-50dp"
         android:background="@drawable/main_robot"
        />
+
     <!--android:background="#ADFF2F"-->
     <!--<ImageView-->
         <!--android:id="@+id/cartoon_body_touch"-->
@@ -141,8 +152,25 @@
         android:textSize="12sp"
         android:gravity="center_horizontal"
         />
+
     <!--android:background="#7fff0000">-->
+
+    <TextView
+        android:id="@+id/buddle_text"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="388dp"
+        android:layout_marginTop="116dp"
+        android:text="你好，我是Alpha"
+        android:gravity="center"
+        android:textSize="13sp"
+        android:textColor="@color/tv_center_color"
+        android:background="@drawable/bubbletext"
+        android:visibility="invisible"
+        />
+
     <RelativeLayout
+        android:id="@+id/touch_control"
         android:layout_width="315dp"
         android:layout_height="315dp"
         android:layout_above="@+id/charging"

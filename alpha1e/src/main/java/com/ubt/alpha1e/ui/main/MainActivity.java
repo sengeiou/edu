@@ -5,13 +5,13 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -20,7 +20,8 @@ import android.widget.TextView;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.loopHandler.HandlerCallback;
+import com.ubt.alpha1e.base.loopHandler.LooperThread;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
@@ -32,19 +33,18 @@ import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
 import com.zyyoona7.lib.EasyPopup;
-import com.zyyoona7.lib.HorizontalGravity;
-import com.zyyoona7.lib.VerticalGravity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import pl.droidsonroids.gif.GifDrawable;
 
 
 /**
@@ -52,7 +52,7 @@ import pl.droidsonroids.gif.GifDrawable;
  * 邮箱 784787081@qq.com
  */
 
-public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View {
+public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View,HandlerCallback {
 
     @BindView(R.id.cartoon_body_touch_bg)
     ImageView cartoonBodyTouchBg;
@@ -94,6 +94,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     ImageView cartoonRightLeg;
     @BindView(R.id.mainui)
     RelativeLayout mainui;
+    @BindView(R.id.buddle_text)
+    TextView buddleText;
+    @BindView(R.id.charging_dot)
+    ImageView chargingDot;
+    @BindView(R.id.touch_control)
+    RelativeLayout touchControl;
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
@@ -103,23 +109,52 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private AnimationDrawable frameAnimation;
     private EasyPopup mCirclePop;
     private int powerThreshold[] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100};
-    int index=0;
-    private int cartoon_action_swing_right_leg=0;
-    private int cartoon_action_swing_left_leg=1;
-    private int cartoon_action_swing_right_hand=2;
-    private int cartoon_action_swing_left_hand=3;
-    private int cartoon_action_hand_stand=4;
-    private int cartoon_aciton_squat=5;
-    private int cartoon_action_enjoy=6;
-    private int cartoon_action_fall=7;
-    private int cartoon_action_greeting=8;
-    private int cartoon_action_shiver=9;
-    private int cartoon_action_sleep=10;
-    private int cartoon_action_hand_stand_reverse=11;
-    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3,
-            R.id.right_icon4,R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
-            R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg})
+    int index = 0;
+    private int cartoon_action_swing_right_leg = 0;
+    private int cartoon_action_swing_left_leg = 1;
+    private int cartoon_action_swing_right_hand = 2;
+    private int cartoon_action_swing_left_hand = 3;
+    private int cartoon_action_hand_stand = 4;
+    private int cartoon_action_hand_stand_reverse = 5;
+    private int cartoon_aciton_squat = 6;
+    private int cartoon_action_enjoy = 7;
+    private int cartoon_action_fall = 8;
+    private int cartoon_action_greeting = 9;
+    private int cartoon_action_shiver = 10;
+    private int cartoon_action_sleep = 11;
+    private int cartoon_action_smile = 12;
+    private int buddleTextTimeout = 5000;//5s
+    private Timer mTimer;
+    private TimerTask mTimeOutTask;
+    private LooperThread looperThread;
 
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getScreenInch();
+        initUI();
+        looperThread = new LooperThread(this);
+        looperThread.start();
+        callAsynchronousTask();
+        chargeAsynchronousTask();
+//        Thread chargingUi=new Thread(new Runnable(){
+//            @Override
+//            public void run() {
+//                chargeAsynchronousTask();
+//            }
+//        });
+//        chargingUi.start();
+
+        //startBuddleTime();
+
+    }
+
+
+    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3,
+            R.id.right_icon4, R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
+            R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg})
     protected void switchActivity(View view) {
         Log.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
@@ -142,8 +177,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.top_icon2:
                 cartoonAction.setVisibility(View.VISIBLE);
-                if(index>=11){
-                    index=0;
+                if (index >= 12) {
+                    index = 0;
                 }
                 showCartoonAction(index++);
                 break;
@@ -159,51 +194,34 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 startActivity(mLaunch);
                 break;
             case R.id.right_icon2:
-                mCirclePop = new EasyPopup(this)
-                        .setContentView(R.layout.main_ui_buddletext)
-                        //是否允许点击PopupWindow之外的地方消失
-                        .setFocusAndOutsideEnable(true)
-                        .createPopup();
-                mCirclePop.showAtAnchorView(cartoonHead, VerticalGravity.ALIGN_TOP,  HorizontalGravity.RIGHT, 20 , 0);
-
                 break;
             case R.id.right_icon3:
-                mCirclePop = new EasyPopup(this)
-                        .setContentView(R.layout.main_ui_buddletext)
-                        //是否允许点击PopupWindow之外的地方消失
-                        .setFocusAndOutsideEnable(true)
-                        .createPopup();
-                    mCirclePop.showAtAnchorView(cartoonHead,VerticalGravity.ALIGN_TOP,  HorizontalGravity.RIGHT, 20 , 0);
-                    TextView mBuddleText=mCirclePop.getView(R.id.tv_delete);
-                    if (index== 0) {
-                    mBuddleText.setText("从机场到下榻宾馆沿途，欢迎的人群几乎就没有间断。他们簇拥在街道两侧，纷纷向习近平总书记、国家主席挥舞中老两国国旗，表达着老挝人民对中国的深厚感情和对习近平总书记、国家主席来访的由衷喜悦");
-                } else if (index == 1) {
-                    mBuddleText.setText("从机场到下榻宾馆沿途，欢迎的人群几乎就没有间断。他们簇拥在街道两侧，纷纷向习近平总书记");
-                } else if (index== 2) {
-                    mBuddleText.setText("从机场到下榻宾馆沿途，欢迎的人群几乎就没有间断");
-                    index = 0;
-                }
-                index++;
                 break;
             case R.id.right_icon4:
                 break;
             case R.id.cartoon_head:
                 Log.d(TAG, "click head");
+                showCartoonAction(cartoon_action_enjoy);
                 break;
             case R.id.cartoon_chest:
                 Log.d(TAG, "click chest");
+                showCartoonAction(cartoon_action_smile);
                 break;
             case R.id.cartoon_left_hand:
                 Log.d(TAG, "click left hand");
+                showCartoonAction(cartoon_action_swing_left_hand);
                 break;
             case R.id.cartoon_right_hand:
                 Log.d(TAG, "click right hand");
+                showCartoonAction(cartoon_action_swing_right_hand);
                 break;
             case R.id.cartoon_left_leg:
                 Log.d(TAG, "click left leg");
+                showCartoonAction(cartoon_action_swing_left_leg);
                 break;
             case R.id.cartoon_right_leg:
                 Log.d(TAG, "click right leg");
+                showCartoonAction(cartoon_action_swing_right_leg);
                 break;
             default:
                 break;
@@ -222,15 +240,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getScreenInch();
-        initUI();
-
-    }
-
-
-    @Override
     public boolean onTouchEvent(MotionEvent event) {
         Log.d(TAG, "X ,Y  " + (event.getX() + "," + event.getY()));
         return super.onTouchEvent(event);
@@ -239,7 +248,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private Handler m_Handler = new Handler();
 
     @Override
-    public void showCartoonAction(int value ) {
+    public void showCartoonAction(int value) {
 
 //           try {
 //               GifDrawable gifFromResource = new GifDrawable(getContext().getResources(), R.drawable.rightleg);
@@ -251,71 +260,159 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //           } catch (IOException e) {
 //               e.printStackTrace();
 //           }
-        String actionName="";
-        mCirclePop = new EasyPopup(this)
-                .setContentView(R.layout.main_ui_buddletext)
-                //是否允许点击PopupWindow之外的地方消失
-                .setFocusAndOutsideEnable(true)
-                .createPopup();
-        mCirclePop.dismiss();
-        mCirclePop.showAtAnchorView(cartoonHead,VerticalGravity.ALIGN_TOP,  HorizontalGravity.RIGHT, 20 , 0);
-        TextView mBuddleText=mCirclePop.getView(R.id.tv_delete);
-        if(m_animationTask == null) { m_animationTask = new AnimationTask(); }
-        if(value==cartoon_action_swing_left_hand){
-            cartoonAction.setBackgroundResource(R.drawable.cartoon_left_hand);
-            actionName="swing_left_hand";
-        }else if(value==cartoon_action_swing_right_hand) {
-            cartoonAction.setBackgroundResource(R.drawable.swigrighthand);
-            actionName="swing_right_hand";
-        }else if(value==cartoon_action_swing_left_leg){
-             cartoonAction.setBackgroundResource(R.drawable.cartoon_swing_leftleg);
-             actionName="swing_left_leg";
-        }else if(value==cartoon_action_swing_right_leg){
-            cartoonAction.setBackgroundResource(R.drawable.cartoon_right_leg);
-            actionName="swing_right_leg";
-        }else if(value==cartoon_action_hand_stand){
-             cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand);
-            actionName="hand_stand";
-        }else if(value==cartoon_action_hand_stand_reverse){
-            cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand_reverse);
-            actionName="hand_stand_reverse";
-        }else if(value==cartoon_aciton_squat){
-            cartoonAction.setBackgroundResource(R.drawable.cartoon_squat);
-            actionName="squat";
-        }else if(value==cartoon_action_enjoy){
-            cartoonAction.setBackgroundResource(R.drawable.cartoon_enjoy);
-            actionName="enjoy";
-        }else if(value==cartoon_action_fall){
-            cartoonAction.setBackgroundResource(R.drawable.cartoon_fall);
-            actionName="fall";
-        }else if(value==cartoon_action_greeting){
-            cartoonAction.setBackgroundResource(R.drawable.cartoon_greeting);
-            actionName="greeting";
-        }else if(value==cartoon_action_shiver){
-            cartoonAction.setBackgroundResource(R.drawable.cartoon_shiver);
-            actionName="shiver";
-        }else if(value==cartoon_action_sleep){
-            cartoonAction.setBackgroundResource(R.drawable.cartoon_sleep);
-            actionName="sleep";
+        String actionName = "";
+        if (m_animationTask == null) {
+            m_animationTask = new AnimationTask();
         }
-        mBuddleText.setText(actionName);
+        if (value == cartoon_action_swing_left_hand) {
+            cartoonAction.setBackgroundResource(R.drawable.cartoon_left_hand);
+            actionName = "swing_left_hand";
+        } else if (value == cartoon_action_swing_right_hand) {
+            cartoonAction.setBackgroundResource(R.drawable.swigrighthand);
+            actionName = "swing_right_hand";
+        } else if (value == cartoon_action_swing_left_leg) {
+            cartoonAction.setBackgroundResource(R.drawable.cartoon_swing_leftleg);
+            actionName = "swing_left_leg";
+        } else if (value == cartoon_action_swing_right_leg) {
+            cartoonAction.setBackgroundResource(R.drawable.cartoon_right_leg);
+            actionName = "swing_right_leg";
+        } else if (value == cartoon_action_hand_stand) {
+            cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand);
+            actionName = "hand_stand";
+        } else if (value == cartoon_action_hand_stand_reverse) {
+            cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand_reverse);
+            actionName = "hand_stand_reverse";
+        } else if (value == cartoon_aciton_squat) {
+            cartoonAction.setBackgroundResource(R.drawable.cartoon_squat);
+            actionName = "squat";
+        } else if (value == cartoon_action_enjoy) {
+            cartoonAction.setBackgroundResource(R.drawable.cartoon_enjoy);
+            actionName = "enjoy";
+        } else if (value == cartoon_action_fall) {
+            cartoonAction.setBackgroundResource(R.drawable.cartoon_fall);
+            actionName = "fall";
+        } else if (value == cartoon_action_greeting) {
+            cartoonAction.setBackgroundResource(R.drawable.cartoon_greeting);
+            actionName = "greeting";
+        } else if (value == cartoon_action_shiver) {
+            cartoonAction.setBackgroundResource(R.drawable.cartoon_shiver);
+            actionName = "shiver";
+        } else if (value == cartoon_action_sleep) {
+            cartoonAction.setBackgroundResource(R.drawable.cartoon_sleep);
+            actionName = "sleep";
+        } else if (value == cartoon_action_smile) {
+            cartoonAction.setBackgroundResource(R.drawable.cartoon_smile);
+            actionName = "smile enjoy";
+        }
+        showBuddleText(actionName);
         // Type casting the Animation drawable
         frameAnimation = (AnimationDrawable) cartoonAction.getBackground();
-        int time=frameAnimation.getNumberOfFrames()*frameAnimation.getDuration(0);
-        Log.d(TAG,"Animation time is "+time);
+        int time = frameAnimation.getNumberOfFrames() * frameAnimation.getDuration(0);
+        Log.d(TAG, "Animation time is " + time);
         //set true if you want to animate only once
-        frameAnimation.setOneShot(false);
+        frameAnimation.setOneShot(true);
         boolean result = m_Handler.postDelayed(m_animationTask, time);
         frameAnimation.start();
 
     }
+
     private AnimationTask m_animationTask;
+
+    @Override
+    public void handleMessage(Bundle bundle) {
+        runOnUiThread(new Runnable() {
+            @Override public void run() {
+            }
+        });
+    }
+
     private class AnimationTask implements Runnable {
         @Override
         public void run() {
-            Log.d(TAG,"stop the animation");
-            frameAnimation.stop();
+            Log.d(TAG, "stop the animation");
+            if (frameAnimation.isRunning()) {
+                frameAnimation.stop();
+            }
         }
+    }
+
+    public void callAsynchronousTask() {
+        Timer timer = new Timer();
+        TimerTask doAsynchronousTask = new TimerTask() {
+            @Override
+            public void run() {
+                looperThread.post(new Runnable() {
+                    public void run() {
+                        try {
+                            boolean isUiThread = Looper.getMainLooper().getThread() == Thread.currentThread();
+                            Random random = new Random();
+                            Log.i(TAG, "Timer out IS :   " + buddleTextTimeout+"main thread "+isUiThread);
+                            String[] arrayText = getResources().getStringArray(R.array.mainUi_buddle_text);
+                            int select = random.nextInt(arrayText.length);
+                            final String text = arrayText[select];
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    showBuddleText(text);
+                                }
+                            });
+
+                        } catch (Exception e) {
+                            // TODO Auto-generated catch block
+                        }
+                    }
+                });
+
+            }
+        };
+        timer.schedule(doAsynchronousTask, 0, 5000); //execute in every 50000 ms
+    }
+
+    public void chargeAsynchronousTask() {
+        Timer timer = new Timer();
+        TimerTask doAsynchronousTask = new TimerTask() {
+            @Override
+            public void run() {
+                looperThread.post(new Runnable() {
+                    public void run() {
+                        try {
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    chargingDot.setBackground(getDrawableRes("charging_dot"));
+                                }
+                            });
+                            Thread.sleep(500);
+                            runOnUiThread(new Runnable() {
+                                @Override public void run() {
+                                    chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+                                }
+                            });
+
+                        } catch (Exception e) {
+                            // TODO Auto-generated catch block
+                        }
+                    }
+                });
+            }
+        };
+        timer.schedule(doAsynchronousTask, 0, 1000); //execute in every 50000 ms
+    }
+
+    private void showBuddleText(String text) {
+//        if(mCirclePop!=null){
+//            mCirclePop.dismiss();
+//        }else {
+//            mCirclePop = new EasyPopup(this)
+//                    .setContentView(R.layout.main_ui_buddletext)
+//                    .setFocusAndOutsideEnable(true)
+//                    .createPopup();
+//
+//        }
+//        mCirclePop.showAtAnchorView(cartoonHead,VerticalGravity.ALIGN_TOP,  HorizontalGravity.RIGHT, 20 , 0);
+//        TextView mBuddleText=mCirclePop.getView(R.id.tv_delete);
+//        mBuddleText.setText(text);
+
+        buddleText.setText(text);
+        buddleText.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -337,6 +434,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         rlParams.topMargin = getAdaptiveScreenY(course_icon_margin_top);
         bottomIcon.setLayoutParams(rlParams);
         bottomIcon.setVisibility(View.VISIBLE);
+        //Buddle Text
+        int buddle_text_margin_left = 388;
+        int buddle_text_margin_top = 116;//height*0.31
+        RelativeLayout.LayoutParams buddleParams = (RelativeLayout.LayoutParams) buddleText.getLayoutParams();
+        buddleParams.leftMargin = getAdaptiveScreenX(buddle_text_margin_left);
+        buddleParams.topMargin = getAdaptiveScreenY(buddle_text_margin_top);
+        buddleText.setLayoutParams(buddleParams);
         //Bluetooth connection icon
         if (isBulueToothConnected()) {
             topIcon2Disconnect.setVisibility(View.INVISIBLE);
@@ -345,7 +449,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
 
 
-        
     }
 
     @Override
@@ -372,7 +475,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(MessageEvent event) {
         Log.d(TAG, "RECEIVE THE MESSAGE IN MAIN THREAD" + event.message);
         mPresenter.dealMessage(event.message);
@@ -397,7 +500,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         if (i == 2) {
                             if (mParams[i] == 0x01) {
                                 Log.d(TAG, " IS CHARGE ");
-                                charging.setBackground(getDrawableRes("charging_flag"));
+                                charging.setBackground(getDrawableRes("charging"));
+
                             }
 
                         }
@@ -440,7 +544,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         return power_index;
     }
 
-    private void buddleTextShow(String text){
+    private void buddleTextShow(String text) {
 
     }
 
