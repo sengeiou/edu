@@ -159,6 +159,12 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         mTvTitle.setText(mMenuModels.get(0).getNameString());
         mMenuModels.get(0).setChick(true);
         mBaseQuickAdapter = new LeftAdapter(R.layout.layout_usercenter_left_item, mMenuModels);
+        mBaseQuickAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+
+            }
+        });
         mBaseQuickAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -233,6 +239,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
 
         @Override
         protected void convert(BaseViewHolder helper, LeftMenuModel item) {
+            helper.addOnClickListener(R.id.tv_item_name);
             helper.setText(R.id.tv_item_name, item.getNameString());
             Drawable drawable = getResources().getDrawable(item.getImageId());
             /// 这一步必须要做,否则不会显示.

@@ -61,6 +61,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:debuggable="true"
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.amap.api.v2.apikey"
@@ -538,6 +539,41 @@
         <activity
             android:name=".userinfo.helpfeedback.feedbackdetail.FeedbackDetailActivity"
             android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        //dicy.cheng
+        //蓝牙联网---开机引导
+        <activity
+            android:name="com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        //蓝牙联网---蓝牙连接
+        <activity
+            android:name="com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        //蓝牙联网---网络连接
+        <activity
+            android:name="com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        //蓝牙联网---连接状态
+        <activity
+            android:name="com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        //蓝牙联网---搜索结果
+        <activity
+            android:name="com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity

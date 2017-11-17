@@ -152,6 +152,18 @@ public class RobotConnectedActivity extends BaseActivity implements
     }
 
     @Override
+    public void onPause() {
+        try {
+            this.mHelper.UnRegisterHelper();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        super.onPause();
+    }
+
+    @Override
     protected void initBoardCastListener() {
     }
 
