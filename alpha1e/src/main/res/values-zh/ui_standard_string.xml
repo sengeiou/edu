@@ -830,7 +830,7 @@
     <string name="ui_task_known">我知道了</string>
     <string name="ui_create_guide_help">点击这里查看帮助内容</string>
     <string name="ui_task_chanllege_fail">闯关失败,再试试吧!</string>
-    
+
     <string name="ui_main_right_icon">遥控器</string>
     <string name="ui_main_right_icon2">动作</string>
     <string name="ui_main_right_icon3">编程</string>
@@ -863,6 +863,18 @@
     <string name="ui_setting_password_modify_success">修改密码成功</string>
     <string name="ui_setting_password_modify_fail">修改密码失败</string>
     <string name="ui_setting_common_next">下一步</string>
+    <string name="ui_setting_password_verify_fail">验证码检验失败</string>
+    <string name="ui_setting_verify_code_send_success">验证码检验发送成功</string>
+    <string name="ui_setting_verify_code_send_fail">验证码检验发送失败</string>
+    <string name="ui_telephone_request">请输入电话号码</string>
+    <string name="ui_old_password_request">请输入6位旧密码</string>
+    <string name="ui_new_password_request">请输入6位新密码</string>
+    <string name="ui_setting_principle_tip_1">主人，我是Alpha，很高兴见到你，欢迎来到奇幻的编程世界；</string>
+    <string name="ui_setting_principle_tip_2">通过编程，主人可以强化我的技能，我能唱歌、跳舞还有很多很多的技能；</string>
+    <string name="ui_setting_principle_tip_3">现在让我为大家表演一段音乐或舞蹈吧。</string>
+    <string name="ui_setting_app_update_tips">是否需要更新版本？</string>
+    <string name="ui_common_no">否</string>
+    <string name="ui_common_yes">是</string>
 
 
     <!-- 不需要翻译 -->
@@ -931,4 +943,9 @@
 
     <string name="empty_no_noticedata">你目前没有任何消息</string>
     <string name="empty_no_dynamiaction">你目前没有任何原创动作</string>
+
+    <string name="dialog_permission_location_setting">您尚未开启\"ALpha 1E\"位置权限,请到设置中开启</string>
+    <string name="dialog_permission_camera_setting">您尚未开启\"ALpha 1E\"相机权限,请到设置中开启</string>
+    <string name="dialog_permission_storage_setting">您尚未开启\"ALpha 1E\"存储权限,请到设置中开启</string>
+    <string name="dialog_go_setting">去设置</string>
 </resources>

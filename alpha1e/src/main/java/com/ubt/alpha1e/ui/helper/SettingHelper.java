@@ -16,7 +16,6 @@ import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
 
-import cn.jpush.android.api.JPushInterface;
 
 public class SettingHelper extends BaseHelper implements IJsonListener,
         ISharedPreferensListenet, IFileListener {
@@ -266,13 +265,7 @@ public class SettingHelper extends BaseHelper implements IJsonListener,
             ((AlphaApplication) mBaseActivity.getApplicationContext())
                     .doRestartApp();*/
         } else if (request_code == do_set_message_note) {
-            if (JPushInterface.isPushStopped(mBaseActivity
-                    .getApplicationContext())) {
-                JPushInterface
-                        .resumePush(mBaseActivity.getApplicationContext());
-            } else {
-                JPushInterface.stopPush(mBaseActivity.getApplicationContext());
-            }
+
         }
 
     }

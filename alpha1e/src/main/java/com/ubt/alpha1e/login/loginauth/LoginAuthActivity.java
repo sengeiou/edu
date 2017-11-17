@@ -219,7 +219,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            return true;//拦截事件传递,从而屏蔽back键。
+//            return true;//拦截事件传递,从而屏蔽back键。
         }
         return super.onKeyDown(keyCode, event);
     }

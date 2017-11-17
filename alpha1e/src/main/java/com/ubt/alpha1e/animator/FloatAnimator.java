@@ -60,7 +60,7 @@ public class FloatAnimator {
         }
     }
 
-    static class Builder{
+    public static class Builder{
         private List<View> animatorViews = new ArrayList<>();
 
         public Builder  view(View view) {
