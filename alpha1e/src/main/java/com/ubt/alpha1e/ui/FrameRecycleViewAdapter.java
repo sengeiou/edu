@@ -13,6 +13,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.action.ActionsCreateActivity;
 import com.ubt.alpha1e.data.model.FrameActionInfo;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -242,7 +243,7 @@ public class FrameRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 changeTime = progress*10;
                 viewHolder.tvTime.setText(changeTime + "");
                 changeViewLen(viewHolder.timeView, 1, "" + progress*10);
-                ((ActionsNewEditActivity)context).changeCurrentItemTime(changeTime);
+                ((ActionsCreateActivity)context).changeCurrentItemTime(changeTime);
             }
 
             @Override

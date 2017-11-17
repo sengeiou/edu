@@ -5,27 +5,18 @@
           android:versionCode="1"
           android:versionName="V1.0.0.1">
 
+    <meta-data
+        android:name="design_width"
+        android:value="1920">
+    </meta-data>
+    <meta-data
+        android:name="design_height"
+        android:value="1080">
+    </meta-data>
+
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21"/>
-
-    <meta-data
-        android:name="design_width"
-        android:value="1920">
-    </meta-data>
-    <meta-data
-        android:name="design_height"
-        android:value="1080">
-    </meta-data>
-
-    <meta-data
-        android:name="design_width"
-        android:value="1920">
-    </meta-data>
-    <meta-data
-        android:name="design_height"
-        android:value="1080">
-    </meta-data>
 
     <permission
         android:name="com.ubt.alpha1e.permission.JPUSH_MESSAGE"

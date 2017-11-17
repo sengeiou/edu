@@ -194,7 +194,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(MessageEvent event) {
-        Log.d(TAG, "RECEIVE THE MESSAGE IN MAIN THREAD" + event.message);
+//        Log.d(TAG, "RECEIVE THE MESSAGE IN MAIN THREAD" + event.message);
         mPresenter.dealMessage(event.message);
     }
 
