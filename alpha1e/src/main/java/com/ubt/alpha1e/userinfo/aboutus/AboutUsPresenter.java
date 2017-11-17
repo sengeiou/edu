@@ -109,12 +109,16 @@ public class AboutUsPresenter extends BasePresenterImpl<AboutUsContract.View> im
                             JSONObject result  = JsonTools.getJsonModel(response);
                             UbtLog.d(TAG,"result = " + result);
                             try {
-                                String versionPath = result.getString("path");
-                                UbtLog.d(TAG,"versionPath = " + versionPath);
-                                if(!TextUtils.isEmpty(versionPath)){
-                                    mView.noteApkUpdate(versionPath);
-                                }else {
+                                if(result == null){
                                     mView.noteNewestVersion();
+                                }else {
+                                    String versionPath = result.getString("path");
+                                    UbtLog.d(TAG,"versionPath = " + versionPath);
+                                    if(!TextUtils.isEmpty(versionPath)){
+                                        mView.noteApkUpdate(versionPath);
+                                    }else {
+                                        mView.noteNewestVersion();
+                                    }
                                 }
 
                             } catch (JSONException e) {
