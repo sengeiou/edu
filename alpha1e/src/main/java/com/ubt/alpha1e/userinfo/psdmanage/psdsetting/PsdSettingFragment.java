@@ -1,7 +1,10 @@
 package com.ubt.alpha1e.userinfo.psdmanage.psdsetting;
 
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -12,9 +15,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.login.loginauth.CheckPhoneNumberUtil;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.custom.ClearableEditText;
+import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,12 +45,23 @@ public class PsdSettingFragment extends MVPBaseFragment<PsdSettingContract.View,
     @BindView(R.id.edt_password_2)
     ClearableEditText edtPassword2;
 
+    protected Dialog mCoonLoadingDia;
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
+
     public PsdSettingFragment() {
 
     }
 
     @Override
     protected void initUI() {
+        mCoonLoadingDia = SLoadingDialog.getInstance(getContext());
+
         setViewEnable(tvConfirm,false);
 
         edtPassword1.addTextChangedListener(new TextWatcher() {
@@ -142,6 +159,11 @@ public class PsdSettingFragment extends MVPBaseFragment<PsdSettingContract.View,
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_confirm:
+                if(doCheck()){
+                    mCoonLoadingDia.cancel();
+                    mCoonLoadingDia.show();
+                    mPresenter.doSetUserPassword(edtPassword2.getText().toString());
+                }
                 break;
         }
     }
@@ -153,5 +175,21 @@ public class PsdSettingFragment extends MVPBaseFragment<PsdSettingContract.View,
         } else {
             mView.setAlpha(0.3f);
         }
+    }
+
+    @Override
+    public void onSetUserPassword(final boolean isSuccess,final String msg) {
+        UbtLog.d(TAG,"onSetUserPassword = " + isSuccess);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if(mCoonLoadingDia != null){
+                    mCoonLoadingDia.cancel();
+                }
+                if(!TextUtils.isEmpty(msg)){
+                    ToastUtils.showShort(msg);
+                }
+            }
+        });
     }
 }

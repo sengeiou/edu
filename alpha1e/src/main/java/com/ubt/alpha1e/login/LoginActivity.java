@@ -42,6 +42,8 @@ import org.json.JSONObject;
 
 import okhttp3.Call;
 
+import static com.ubt.alpha1e.base.Constant.SP_CLIENT_ID;
+
 
 /**
  * MVPPlugin
@@ -64,8 +66,8 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
     private int loginType = 0; //默认 0 QQ， 1 WX;
 
-    public static final String PID = "";
-    public static final String DSN = "";
+    public static final String PID = "b0851325-3056-4853-921b-dcba21b491a3:8c901ad100ad44d98b6276adeb861058";
+    public static final String DSN = "123456";
 
     public static void LaunchActivity(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
@@ -143,12 +145,12 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     public void onSuccess(int i) {
         Log.e(TAG, "login onSuccess" + i);
 
-/*
+
         if(i==AuthorizeListener.WX_TVSIDRECV_TYPE){  //和机器人联调的
             UbtLog.d(TAG, "sss wx:"+ proxy.getClientId(ELoginPlatform.WX));
             UbtLog.d(TAG, "sss qq:"+ proxy.getClientId(ELoginPlatform.QQOpen));
+            SPUtils.getInstance().put(SP_CLIENT_ID, proxy.getClientId(ELoginPlatform.WX));
         }
-*/
 
 
         String accessToken = "";
@@ -165,7 +167,10 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
         } else {
             accessToken = wxInfoManager.accessToken;
             openID = wxInfoManager.openID;
+            if(i==AuthorizeListener.USERINFORECV_TYPE){
                 doThirdLogin(accessToken, openID);
+            }
+
         }
 
         Log.e(TAG, "accessToken:" + accessToken + "--openID:" + openID + "--appID:" + appID);

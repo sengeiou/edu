@@ -92,7 +92,7 @@ public class MyMainActivity extends BaseActivity implements
                     }
                     break;
                 case START_AUTO_SCAN_CONNECT_SERVICE:
-                    startAutoScanConnectService();
+//                    startAutoScanConnectService();
                     break;
                 default:
                     break;
@@ -441,9 +441,12 @@ public class MyMainActivity extends BaseActivity implements
 
             @Override
             public void onClick(View view) {
+                UbtLog.d(TAG, "-imgBtnRobotState is onclick");
                 if(isBulueToothConnected()){
+                    UbtLog.d(TAG, "-isBulueToothConnected yes");
                   RobotInfoActivity.launchActivity(MyMainActivity.this, getRequestedOrientation());
                 }else{
+                    UbtLog.d(TAG, "-isBulueToothConnected no");
                     Intent mIntent = new Intent();
                     mIntent.setClass(MyMainActivity.this, RobotConnectedActivity.class);
                     startActivity(mIntent);

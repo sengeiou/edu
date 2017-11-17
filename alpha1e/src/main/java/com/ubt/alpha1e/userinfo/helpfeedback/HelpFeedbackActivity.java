@@ -53,7 +53,6 @@ public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.V
     @BindView(R.id.iv_title_right)
     ImageView ivTitleRight;
 
-
     @BindView(R.id.edt_base_title)
     EditText edtBaseTitle;
     @BindView(R.id.tv_base_right)
@@ -192,6 +191,7 @@ public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.V
             tvBaseTitleName.setVisibility(View.INVISIBLE);
             rlBaseSearch.setVisibility(View.VISIBLE);
             tvBaseRight.setVisibility(View.VISIBLE);
+            tvBaseRight.setText(getStringResources("ui_common_cancel"));
 
             Fragment f = mFragmentCache.containsKey(FRAGMENT_SEARCH_QUESTION) ? mFragmentCache.get(FRAGMENT_SEARCH_QUESTION)
                     : new FeedbackSearchFragment();

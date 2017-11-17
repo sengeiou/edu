@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import cn.jpush.android.api.JPushInterface;
 
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
@@ -28,15 +27,13 @@ public class IntroductionActivity extends FragmentActivity implements
 	public void onResume() {
 		super.onResume();
 		MobclickAgent.onResume(this);
-		JPushInterface.onResume(this);
 
 	}
 
 	public void onPause() {
 		super.onPause();
 		MobclickAgent.onPause(this);
-		JPushInterface.onPause(this);
-	}
+ 	}
 
 	private static int[] mBackgroundRes = new int[] {
 			R.drawable.introduction_1, R.drawable.introduction_2,

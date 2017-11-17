@@ -12,6 +12,13 @@ package com.ubt.alpha1e.base;
 public class Constant {
     public final static String SP_USERINFOMODEL = "sp_userinfo";
     public final static String SP_LOGIN_TOKEN = "sp_login_token";
+
+    /**
+     * 保存从腾讯tvs后台获取的clientId
+     */
+    public final static String SP_CLIENT_ID = "sp_client_id";
+
+
     /**
      * 用户信息保存
      */
@@ -20,11 +27,19 @@ public class Constant {
     public final static String SP_USER_IMAGE = "sp_user_image";
     public final static String SP_USER_NICKNAME = "sp_user_nickname";
 
+    /**
+     * 首次申请权限
+     */
+    public final static String SP_FIRST_PERMISSION = "first_permission";
+
+    public final static String SP_PERMISSION_LOCATION = "sp_location_permission";
+    public final static String SP_PERMISSION_STORAGE = "sp_storage_permission";
+    public final static String SP_PERMISSION_CAMERA = "sp_camera_permission";
 
     /**
      * 首次获取蓝牙权限
      */
-    public final static String SP_START_GTE_PERMISSION ="get_first_permission";
+    public final static String SP_START_GTE_PERMISSION = "get_first_permission";
 
 
     /**

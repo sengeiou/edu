@@ -7,7 +7,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -58,9 +57,9 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
-                        if (view.getId() == R.id.tv_take_photo) {
+                        if (view.getId() == R.id.rl_take_photo||view.getId()==R.id.tv_take_photo) {
                             mView.takeImageFromShoot();
-                        } else if (view.getId() == R.id.tv_take_ablum) {
+                        } else if (view.getId() == R.id.rl_take_ablum||view.getId()==R.id.tv_take_ablum) {
                             mView.takeImageFromAblum();
                         }
                         dialog.dismiss();
@@ -143,8 +142,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
         View contentView = LayoutInflater.from(activity).inflate(R.layout.dialog_useredit_wheel, null);
         ViewHolder viewHolder = new ViewHolder(contentView);
         final LoopView loopView = (LoopView) contentView.findViewById(R.id.loopView);
-        TextView textView = contentView.findViewById(R.id.tv_wheel_name);
-        textView.setVisibility(View.GONE);
+       
         DialogPlus.newDialog(activity)
                 .setContentHolder(viewHolder)
                 .setGravity(Gravity.BOTTOM)

@@ -28,22 +28,21 @@ public class PsdModifyPresenter extends BasePresenterImpl<PsdModifyContract.View
 
     @Override
     public void doModifyPassword(String oldPassword, String newPassword) {
-        if(TextUtils.isEmpty(oldPassword) || TextUtils.isEmpty(newPassword) ){
-            mView.onModifyPassword(false,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_setting_password_modify_fail"));
-        }else {
-            //mView.onModifyPassword(true,"");
-            doModifyFromWeb(oldPassword,newPassword);
-        }
+
+        ModifyMessagePsdRequest modifyMessagePsdRequest = new ModifyMessagePsdRequest();
+        modifyMessagePsdRequest.setOldPassword(oldPassword);
+        modifyMessagePsdRequest.setNewPassword(newPassword);
+        String url = HttpEntity.MODIFY_MANAGE_PASSWORD;
+
+        doRequestFromWeb(url,modifyMessagePsdRequest,0);
     }
 
     /**
      * 获取列表数据
      */
-    public void doModifyFromWeb(String oldPassword, String newPassword) {
-        ModifyMessagePsdRequest modifyMessagePsdRequest = new ModifyMessagePsdRequest();
-        modifyMessagePsdRequest.setOldPassword(oldPassword);
-        modifyMessagePsdRequest.setNewPassword(newPassword);
-        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.MODIFY_MANAGE_PASSWORD, modifyMessagePsdRequest, 0).execute(new StringCallback() {
+    public void doRequestFromWeb(String url, BaseRequest baseRequest, int requestId) {
+
+        OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "doModifyFromWeb onError:" + e.getMessage());
@@ -58,7 +57,7 @@ public class PsdModifyPresenter extends BasePresenterImpl<PsdModifyContract.View
                         new TypeToken<BaseResponseModel<BaseModel>>() {
                         }.getType());
                 if (baseResponseModel.status) {
-                    mView.onModifyPassword(true,"");
+                    mView.onModifyPassword(true,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_setting_password_modify_success"));
                 }else {
                     mView.onModifyPassword(false,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_setting_password_modify_fail"));
                 }
