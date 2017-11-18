@@ -212,7 +212,7 @@ public class RobotControlActivity extends BaseActivity implements View.OnClickLi
                 if(checkLoginState()){
 //                    intent.putExtra(ActionsEditHelper.StartTypeStr,
 //                            ActionsEditHelper.StartType.new_type);
-////                    intent.setClass(this, ActionsNewEditActivity.class);
+//                    intent.setClass(this, ActionsNewEditActivity.class);
 //                    intent.setClass(this, ActionsCreateActivity.class);
 //                    startActivity(intent);
                     startActivity(new Intent(this, ActionTestActivity.class));

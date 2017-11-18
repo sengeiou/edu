@@ -45,7 +45,6 @@ import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.FrameActionInfo;
 import com.ubt.alpha1e.data.model.NewActionInfo;
 import com.ubt.alpha1e.ui.ActionsEditSaveActivity;
-import com.ubt.alpha1e.ui.FrameRecycleViewAdapter;
 import com.ubt.alpha1e.ui.TimesHideRecycleViewAdapter;
 import com.ubt.alpha1e.ui.TimesRecycleViewAdapter;
 import com.ubt.alpha1e.ui.WebContentActivity;
@@ -83,7 +82,7 @@ import static java.lang.System.currentTimeMillis;
  * version
  */
 
-public abstract class BaseActionEditLayout extends LinearLayout implements View.OnClickListener, PrepareActionUtil.OnDialogListener, DialogTips.OnLostClickListener, DialogMusic.OnMusicDialogListener {
+public abstract class BaseActionEditLayout extends LinearLayout implements View.OnClickListener, PrepareActionUtil.OnDialogListener, DialogTips.OnLostClickListener, DialogMusic.OnMusicDialogListener, DialogPreview.OnActionPreviewListener, FrameRecycleViewAdapter.OnchangeCurrentItemTimeListener {
     private static final String TAG = "BaseActionEditLayout";
 
     private ImageView ivRobot;
@@ -127,10 +126,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private int selectPos = -1;
     private Map<String, Object> mCopyItem = new HashMap<String, Object>();
 
-//    private RelativeLayout rlRoot;
 
 
-    //    private FastScroller fastScroller;
     private int firstVisibleItemPosition = -1;
     private int lastVisibleItemPosition = -1;
 
@@ -139,7 +136,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private List<Map<String, Object>> timeDatas = new ArrayList<Map<String, Object>>();
     public static final String TIME = "time";
     public static final String SHOW = "show";
-    //    private FastScroller timeFastScroll;
     private SeekBar sbTime;
     private int current = 0;
 
@@ -291,10 +287,32 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerViewFrames.setLayoutManager(layoutManager);
         list_frames = new ArrayList<Map<String, Object>>();
-        adapter = new FrameRecycleViewAdapter(mContext, list_frames, density);
+        adapter = new FrameRecycleViewAdapter(mContext, list_frames, density, this);
         recyclerViewFrames.setAdapter(adapter);
-//        fastScroller = (FastScroller) findViewById(R.id.fastscroll);
-//        fastScroller.setRecyclerView(recyclerViewFrames);
+        adapter.setOnItemListener(new FrameRecycleViewAdapter.OnItemListener() {
+            @Override
+            public void onItemClick(View view,int pos, Map<String, Object> data) {
+                UbtLog.d(TAG, "getNewPlayerState:"  + ((ActionsEditHelper) mHelper).getNewPlayerState());
+
+                if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
+                    return;
+                }
+
+                if(musicTimes !=0){
+                    if(pos == list_frames.size()-1){
+                        return;
+                    }
+                }
+
+                adapter.setDefSelect(pos);
+
+                selectPos = pos;
+                mCurrentEditItem = data;
+                showEditFrameLayout();
+                updateAddViewEnable();
+            }
+        });
+
 
         recyclerViewFrames.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -340,7 +358,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
         ivAddFrame = (ImageView) findViewById(R.id.iv_add_frame);
         ivAddFrame.setEnabled(true);
-        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
         ivAddFrame.setOnClickListener(this);
         ivBack = (ImageView) findViewById(R.id.iv_back);
         ivBack.setOnClickListener(this);
@@ -564,13 +582,20 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     private void initEditFrameLayout() {
         rlEditFrame = (RelativeLayout) findViewById(R.id.lay_frame_data_edit);
+        rlEditFrame.setOnClickListener(this);
         ivPreview = (ImageView) findViewById(R.id.iv_preview);
+        ivPreview.setOnClickListener(this);
         ivChange = (ImageView) findViewById(R.id.iv_change);
+        ivChange.setOnClickListener(this);
         ivCopy = (ImageView) findViewById(R.id.iv_copy);
+        ivCopy.setOnClickListener(this);
         ivCut = (ImageView) findViewById(R.id.iv_cut);
+        ivCut.setOnClickListener(this);
         tvCut = (TextView) findViewById(R.id.tv_cut);
         ivPaste = (ImageView) findViewById(R.id.iv_paste);
+        ivPaste.setOnClickListener(this);
         ivDelete = (ImageView) findViewById(R.id.iv_delete);
+        ivDelete.setOnClickListener(this);
 
     }
 
@@ -588,7 +613,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
                 ivPlay.setImageResource(R.drawable.icon_play_music);
                 ivAddFrame.setEnabled(true);
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 recyclerViewTimesHide.setVisibility(View.GONE);
 //                if(isFinishFramePlay){
                 setEnable(true);
@@ -788,12 +813,13 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 saveNewAction();
                 break;
             case R.id.iv_cancel_update:
+                doCancelChange();
                 break;
             case R.id.iv_play_music:
                 startPlayAction();
                 break;
             case R.id.iv_del_music:
-                deleteMusci();
+                deleteMusic();
                 break;
             case R.id.iv_music_icon:
                 if (mDir != "" && playFinish) {
@@ -805,7 +831,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 doReset();
                 resetState();
                 ivAddFrame.setEnabled(true);
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 break;
             case R.id.iv_reset_index:
                 sbVoice.setProgress(0);
@@ -824,13 +850,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 break;
             case R.id.iv_help:
                 String language = ResourceManager.getInstance(mContext).getStandardLocale(ResourceManager.getInstance(mContext).getAppCurrentLanguage());
-
-//                String url = HttpAddress
-//                        .getRequestUrl(HttpAddress.Request_type.action_help)
-//                        + HttpAddress.getParamsForGet(
-//                        new String[] { language },
-//                        HttpAddress.Request_type.action_help);
-//                UbtLog.d(TAG, "url:" +url);
                 String url = "https://services.ubtrobot.com/actionHelp/actionHelp.html?lang=" + language;  //暂时这样
                 UbtLog.d(TAG, "url:" + url);
                 Intent intent = new Intent();
@@ -901,14 +920,137 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             case R.id.iv_zoom_minus:
                 ivZoomMins();
                 break;
+            case R.id.lay_frame_data_edit:
+                rlEditFrame.setVisibility(View.GONE);
+                adapter.setDefSelect(-1);
+                break;
+            case R.id.iv_preview:
+                doPreviewItem();
+                break;
+            case R.id.iv_change:
+                doChangeItem();
+                break;
+            case R.id.iv_copy:
+                doCopyItem();
+                break;
+            case R.id.iv_cut:
+                doCutItem();
+                break;
+            case R.id.iv_paste:
+                doPasteItem();
+                break;
+            case R.id.iv_delete:
+                doDeleteItem();
+                break;
+
             default:
         }
     }
 
     /**
+     * 预览动作帧
+     */
+    private void doPreviewItem() {
+        ((ActionsEditHelper) mHelper)
+                .doCtrlAllEng(((FrameActionInfo) mCurrentEditItem
+                        .get(ActionsEditHelper.MAP_FRAME)).getData());
+        resetState();
+        ivAddFrame.setEnabled(true);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
+    }
+
+    /**
+     * 修改动作帧
+     */
+    private void doChangeItem() {
+        if(ids.size() <=0){
+            goneEditFrameLayout();
+            showLostDialog(0, ResourceManager.getInstance(mContext).getStringResources("ui_create_click_to_cutoff"));
+            return;
+        }
+        change = true;
+        ivCancelChange.setVisibility(View.VISIBLE);
+        ivAddFrame.setImageResource(R.drawable.ic_confirm);
+    }
+
+    /**
+     * 去修改动作帧
+     */
+    private void doCancelChange() {
+        ivCancelChange.setVisibility(View.INVISIBLE);
+        goneEditFrameLayout();
+        change =false;
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
+        adapter.setDefSelect(-1);
+    }
+
+    /**
+     * 复制动作帧
+     */
+    private void doCopyItem() {
+        copy = true;
+        ivPaste.setEnabled(true);
+        ivPaste.setImageResource(R.drawable.ic_paste);
+        mCopyItem = mCurrentEditItem;
+    }
+
+    /**
+     * 剪切动作帧
+     */
+    private void doCutItem() {
+        cut = true;
+        ivPaste.setEnabled(true);
+        ivPaste.setImageResource(R.drawable.ic_paste);
+        mCutItem = mCurrentEditItem;
+    }
+
+    /**
+     * 粘贴动作帧
+     */
+    private void doPasteItem() {
+        int index = selectPos;
+        UbtLog.d(TAG, "index:" + index);
+        if(copy){
+            list_frames.add(index+1, copyItem(mCopyItem));
+        }else if(cut){
+            UbtLog.d(TAG, "index:" + index);
+            list_frames.add(index+1, copyItem(mCutItem));
+            list_frames.remove(mCutItem);
+            mCutItem.clear();
+        }
+        goneEditFrameLayout();
+        adapter.notifyDataSetChanged();
+    }
+
+    public Map<String, Object> copyItem(Map<String, Object> item) {
+        Map<String, Object> c_item = new HashMap<String, Object>();
+        c_item.put(ActionsEditHelper.MAP_FRAME, ((FrameActionInfo) item
+                .get(ActionsEditHelper.MAP_FRAME)).doCopy());
+        c_item.put(ActionsEditHelper.MAP_FRAME_NAME,
+                item.get(ActionsEditHelper.MAP_FRAME_NAME));
+        c_item.put(ActionsEditHelper.MAP_FRAME_TIME,
+                item.get(ActionsEditHelper.MAP_FRAME_TIME));
+
+        return c_item;
+    }
+
+    /**
+     * 删除动作帧
+     */
+    private void doDeleteItem() {
+        list_frames.remove(mCurrentEditItem);
+        adapter.notifyDataSetChanged();
+        adapter.setDefSelect(-1);
+        goneEditFrameLayout();
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
+        ivCancelChange.setVisibility(View.INVISIBLE);
+    }
+
+
+    /**
      * 删除音乐
      */
-    private void deleteMusci() {
+    private void deleteMusic() {
         if (mDir != "") {
             stopMusic();
             mDir = "";
@@ -941,7 +1083,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         goneEditFrameLayout();
         change = false;
         if (list_frames.size() > 0) {
-            ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+            ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
             adapter.setDefSelect(-1);
         }
 
@@ -964,7 +1106,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             UbtLog.d(TAG, "setEnable true");
             setEnable(true);
             ivAddFrame.setEnabled(true);
-            ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+            ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
             playFinish = true;
         } else {
             UbtLog.d(TAG, "doPlayCurrentFrames");
@@ -999,20 +1141,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_pause_or_continue,
                     getEditingActions());
         } else {
-
-//            if(musicTimes !=0){
-//                if(list_frames.size()>1){
-//                    setEnable(false);
-//                }
-//
-//            }else{
-//                if(list_frames.size()>0){
-//                    setEnable(false);
-//                }
-//            }
-
             setEnable(false);
-
             if (musicTimes != 0) {
                 if (list_frames.size() < 2) {
                     return;
@@ -1022,25 +1151,18 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     return;
                 }
             }
-
             isFinishFramePlay = false;
-
             if (mDir != "" && mediaPlayer != null) {
                 if (mediaPlayer.getCurrentPosition() == 0) {
                     UbtLog.d(TAG, "只在音频播完状态下才可以从头开始播:" + mediaPlayer.getCurrentPosition());
                     ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_play,
                             getEditingActions());
-
                 }
             } else {
                 ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_play,
                         getEditingActions());
             }
-
-
         }
-
-
     }
 
     private NewActionInfo getEditingActions() {
@@ -1225,6 +1347,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         DisplayMetrics dm = new DisplayMetrics();
         dm = getResources().getDisplayMetrics();
         float density = dm.density;
+        UbtLog.d(TAG, "density:" + density);
         if (AlphaApplication.isPad()) {
             UbtLog.d(TAG, "Pad Robot 1");
         } else {
@@ -1322,10 +1445,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             autoRead = false;
             needAdd = false;
             autoAng = "";
-            ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+            ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
             setButtonEnable(true);
-//            DialogPreview dialogPreview = new DialogPreview(ActionsNewEditActivity.this, list_autoFrames, ActionsNewEditActivity.this);
-//            dialogPreview.show();
+            DialogPreview dialogPreview = new DialogPreview(mContext, list_autoFrames, this);
+            dialogPreview.show();
             UbtLog.d(TAG, "list_autoFrames:" + list_autoFrames.toString());
         } else if (cut) {
             adapter.notifyDataSetChanged();
@@ -1351,15 +1474,21 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         }
     }
 
+
+    private void showEditFrameLayout() {
+        rlEditFrame.setVisibility(View.VISIBLE);
+
+    }
+
     private void goneEditFrameLayout() {
         rlEditFrame.setVisibility(View.GONE);
         copy = false;
 //        cut = false;
         ivPaste.setEnabled(false);
-        ivPaste.setImageResource(R.drawable.icon_paste_dis);
+        ivPaste.setImageResource(R.drawable.ic_paste_disable);
         adapter.setDefSelect(-1);
         ivAddFrame.setEnabled(true);
-        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
 
 
     }
@@ -1468,7 +1597,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         setButtonEnable(false);
 
         autoRead = true;
-        ivAddFrame.setImageResource(R.drawable.icon_stop_nor);
+        ivAddFrame.setImageResource(R.drawable.ic_stop);
         mHandler.sendEmptyMessage(MSG_AUTO_READ);
     }
 
@@ -1719,7 +1848,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     private void updateAddViewEnable() {
         ivAddFrame.setEnabled(true);
-        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
     }
 
 
@@ -1800,7 +1929,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         ivLegLeft.setSelected(false);
         ivLegRight.setSelected(false);
         ivAddFrame.setEnabled(false);
-        ivAddFrame.setImageResource(R.drawable.icon_add_dis);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
         ids.clear();
     }
 
@@ -1855,12 +1984,13 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             UbtLog.d(TAG, "laizhelile");
             change = false;
             adapter.setDefSelect(-1);
-            ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+            ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
             ivCancelChange.setVisibility(View.INVISIBLE);
         }
     }
 
 
+    @Override
     public void changeCurrentItemTime(int time) {
         ((FrameActionInfo) mCurrentEditItem
                 .get(ActionsEditHelper.MAP_FRAME)).totle_time = time;
@@ -1885,7 +2015,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                         .get(ActionsEditHelper.MAP_FRAME)).totle_time = adapter.getTime();
             }
 
-            ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+            ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
             ivCancelChange.setVisibility(View.INVISIBLE);
             adapter.setDefSelect(-1);
             adapter.setTime();
@@ -2061,7 +2191,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
         resetState();
         ivAddFrame.setEnabled(true);
-        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
 
         doPlayPreview = true;
         if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
@@ -2129,7 +2259,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 ivPlay.setImageResource(R.drawable.icon_play_music);
                 setEnable(true);
                 ivAddFrame.setEnabled(true);
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
 
 
             }
@@ -2152,7 +2282,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     setEnable(true);
                 }
                 ivAddFrame.setEnabled(true);
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 adapter.setPlayIndex(-1);
 
             }
@@ -2202,5 +2332,52 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
         }
     }
+
+
+
+    @Override
+    public  void doPlayAutoRead(){
+
+        //检测是否在充电状态和边充边玩状态是否打开
+         UbtLog.d(TAG, "mHelper.getChargingState():" + mHelper.getChargingState() + "SettingHelper" + SettingHelper.isPlayCharging(mContext));
+        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)){
+            UbtLog.d(TAG, "边充边玩未打开");
+            Toast.makeText(mContext, AlphaApplication.getBaseActivity().getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
+            ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,
+                    getEditingPreviewActions());
+
+
+        } else {
+            doPlayPreview = true;
+            ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_play,
+                    getEditingPreviewActions());
+
+        }
+
+        resetState();
+        ivAddFrame.setEnabled(true);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
+
+    }
+
+
+
+
+    @Override
+    public void cancelAutoData(){
+        int count = list_autoFrames.size();
+        currentIndex = currentIndex - count;
+        UbtLog.d(TAG, "count:" + count);
+        for(int i=0; i<count; i++){
+            list_frames.remove(list_frames.size()-1);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+
 
 }

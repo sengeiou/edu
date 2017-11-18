@@ -16,7 +16,7 @@
         android:layout_marginBottom="120dp"
         android:orientation="horizontal"
         android:gravity="left|center"
-        android:paddingLeft="65dp"
+        android:paddingLeft="90dp"
        >
 
 

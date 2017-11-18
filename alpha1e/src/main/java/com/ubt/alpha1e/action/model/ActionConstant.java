@@ -894,7 +894,7 @@ public class ActionConstant {
      */
     public static ViewGroup.LayoutParams getIvRobotParams(float density, ImageView imageView) {
         ViewGroup.LayoutParams params = imageView.getLayoutParams();
-        int n = 1;
+        int n = 2;
         if (density == 3.0) {
             n = 3;
         } else if (density == 4.0) {
