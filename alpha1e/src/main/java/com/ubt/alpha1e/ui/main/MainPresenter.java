@@ -27,23 +27,12 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     }
 
     @Override
-    public void commandRobotAction(String json) {
-
+    public void commandRobotAction(byte cmd, byte[] params) {
+        MainUiBtHelper.getInstance(mView.getContext()).sendCommand(cmd,params);
     }
 
     @Override
     public void dealMessage(String json) {
-        try {
-            JSONObject mObject = new JSONObject(json);
-            mObject.getString("cmd");
-            mObject.getInt("len");
-            mObject.getString("param").getBytes();
-            UbtLog.d(TAG,"CMD  "+ mObject.getString("cmd")+"len "+ mObject.getString("param").getBytes()[0]);
-            if(Integer.parseInt(mObject.getString("cmd"))== ConstValue.DV_READ_BATTERY){
-              //  mView.showCartoonAction("leg");
-            }
-        }catch(JSONException e){
-            e.printStackTrace();
-        }
+
     }
 }

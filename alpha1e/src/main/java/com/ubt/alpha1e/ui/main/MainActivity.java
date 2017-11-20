@@ -22,15 +22,18 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.loopHandler.HandlerCallback;
 import com.ubt.alpha1e.base.loopHandler.LooperThread;
+import com.ubt.alpha1e.blockly.LedColorEnum;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
+import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ByteHexHelper;
 import com.ubtechinc.base.ConstValue;
 import com.zyyoona7.lib.EasyPopup;
 
@@ -124,23 +127,31 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int cartoon_action_sleep = 11;
     private int cartoon_action_smile = 12;
     private int buddleTextTimeout = 5000;//5s
-    private int chargeShrinkTimeout=1000;
-    private Timer mTimer;
-    private TimerTask mTimeOutTask;
+    private int charging_shrink_interval=1000;
+    private int chargeShrinkTimeout=2000;
+    private Timer mBuddleTextTimer;
+    private TimerTask mBuddleTextTimeOutTask;
     private LooperThread looperThread;
+    Timer mChargetimer;
+    TimerTask mChargingTimeoutTask;
+    private byte mChargeValue=0;
+    long mCurrentTouchTime=0;
+    private long noOperationTimeout=1*60*1000;
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mCurrentTouchTime=System.currentTimeMillis();
         getScreenInch();
         initUI();
+        mHelper=MainUiBtHelper.getInstance(getContext());
         looperThread = new LooperThread(this);
         looperThread.start();
+        buddleTextAsynchronousTask();
 
-        callAsynchronousTask();
-        chargeAsynchronousTask();
+
     }
 
     @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3,
@@ -171,7 +182,21 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 if (index >= 12) {
                     index = 0;
                 }
+                LedColorEnum colorEnum = LedColorEnum.WHITE;
                 showCartoonAction(index++);
+                byte [] mParams={0,0,0,0,0};
+                mParams[0]=0x04;
+                mParams[1] = ByteHexHelper.intToHexByte(colorEnum.getR());
+                mParams[2] = ByteHexHelper.intToHexByte(colorEnum.getG());
+                mParams[3] = ByteHexHelper.intToHexByte(colorEnum.getB());
+                mParams[4] = ByteHexHelper.intToHexByte(Integer.valueOf(0xff));//time
+                mPresenter.commandRobotAction((byte)0x61,mParams);
+                byte[] papram = new byte[1];
+                papram[0]=0x01;
+                mPresenter.commandRobotAction(ConstValue.ENTER_COURSE_MODE,mParams);
+                //TURN OFF LIGHT
+                papram[0]=0x01;
+                mPresenter.commandRobotAction(ConstValue.DV_LIGHT, papram);
                 break;
             case R.id.top_icon3:
                 try {
@@ -233,6 +258,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         Log.d(TAG, "X ,Y  " + (event.getX() + "," + event.getY()));
+        mCurrentTouchTime=System.currentTimeMillis();
+        if(System.currentTimeMillis()-mCurrentTouchTime<noOperationTimeout) {
+            buddleText.setVisibility(View.INVISIBLE);
+        }
         return super.onTouchEvent(event);
     }
 
@@ -284,7 +313,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             cartoonAction.setBackgroundResource(R.drawable.cartoon_smile);
             actionName = "smile enjoy";
         }
-        showBuddleText(actionName);
+        //showBuddleText(actionName);
         // Type casting the Animation drawable
         frameAnimation = (AnimationDrawable) cartoonAction.getBackground();
         int time = frameAnimation.getNumberOfFrames() * frameAnimation.getDuration(0);
@@ -317,40 +346,56 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
     }
 
-    public void callAsynchronousTask() {
-        Timer timer = new Timer();
-        TimerTask doAsynchronousTask = new TimerTask() {
+    public void buddleTextAsynchronousTask() {
+        mBuddleTextTimer= new Timer();
+        mBuddleTextTimeOutTask= new TimerTask() {
             @Override
             public void run() {
                 looperThread.post(new Runnable() {
                     public void run() {
-                        try {
-                            boolean isUiThread = Looper.getMainLooper().getThread() == Thread.currentThread();
-                            Random random = new Random();
-                            Log.i(TAG, "Timer out IS :   " + buddleTextTimeout+"main thread "+isUiThread);
-                            String[] arrayText = getResources().getStringArray(R.array.mainUi_buddle_text);
-                            int select = random.nextInt(arrayText.length);
-                            final String text = arrayText[select];
-                            runOnUiThread(new Runnable() {
-                                @Override public void run() {
-                                    showBuddleText(text);
-                                }
-                            });
-
-                        } catch (Exception e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
+                       if(System.currentTimeMillis()-mCurrentTouchTime>noOperationTimeout) {
+                           try {
+                               boolean isUiThread = Looper.getMainLooper().getThread() == Thread.currentThread();
+                               Random random = new Random();
+                               Log.i(TAG, "Timer out IS :   " + buddleTextTimeout + "main thread " + isUiThread);
+                               String[] arrayText = getResources().getStringArray(R.array.mainUi_buddle_text);
+                               int select = random.nextInt(arrayText.length);
+                               final String text = arrayText[select];
+                               runOnUiThread(new Runnable() {
+                                   @Override
+                                   public void run() {
+                                       showBuddleText(text);
+                                   }
+                               });
+                           } catch (Exception e) {
+                               // TODO Auto-generated catch block
+                               e.printStackTrace();
+                           }
+                       }else {
+                           runOnUiThread(new Runnable() {
+                               @Override
+                               public void run() {
+                                   buddleText.setVisibility(View.INVISIBLE);
+                               }
+                           });
+                       }
                     }
                 });
             }
         };
-        timer.schedule(doAsynchronousTask, 0, buddleTextTimeout); //execute in every 50000 ms
+       mBuddleTextTimer.schedule(mBuddleTextTimeOutTask, 0, buddleTextTimeout); //execute in every 50000 ms
     }
-
+   private void stopBuddleTextAsynchronousTask(){
+       if (mBuddleTextTimeOutTask != null){
+           mBuddleTextTimeOutTask.cancel();
+           mBuddleTextTimeOutTask = null;
+           mBuddleTextTimer.purge();
+           mBuddleTextTimer=null;
+       }
+   }
     public void chargeAsynchronousTask() {
-        Timer timer = new Timer();
-        TimerTask doAsynchronousTask = new TimerTask() {
+       mChargetimer= new Timer();
+        mChargingTimeoutTask= new TimerTask() {
             @Override
             public void run() {
                 looperThread.post(new Runnable() {
@@ -358,12 +403,14 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         try {
                             runOnUiThread(new Runnable() {
                                 @Override public void run() {
+                                    charging.setBackground(getDrawableRes("charging"));
                                     chargingDot.setBackground(getDrawableRes("charging_dot"));
                                 }
                             });
-                            Thread.sleep(500);
+                            Thread.sleep(charging_shrink_interval);
                             runOnUiThread(new Runnable() {
                                 @Override public void run() {
+                                    charging.setBackground(getDrawableRes("charging"));
                                     chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
                                 }
                             });
@@ -376,7 +423,16 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 });
             }
         };
-        timer.schedule(doAsynchronousTask, 0, chargeShrinkTimeout); //execute in every 50000 ms
+       mChargetimer.schedule(mChargingTimeoutTask, 0, chargeShrinkTimeout); //execute in every 50000 ms
+    }
+    private void stopchargeAsynchronousTask(){
+        if (mChargingTimeoutTask != null){
+            mChargingTimeoutTask.cancel();
+            mChargingTimeoutTask= null;
+            mChargetimer.purge();
+            mChargetimer=null;
+        }
+
     }
 
     private void showBuddleText(String text) {
@@ -458,22 +514,32 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             } else if (mCmd == 0x74) {
                 Log.d(TAG, "ROBOT POWER OFF EVENT");
             } else if (mCmd == ConstValue.DV_READ_BATTERY) {
-
-                byte[] mParams = Base64.decode(mMessage.getString("param"), Base64.DEFAULT);
+               final byte[] mParams = Base64.decode(mMessage.getString("param"), Base64.DEFAULT);
                 for (int i = 0; i < mParams.length; i++) {
                     Log.d(TAG, "index " + i + "value :" + mParams[i]);
-
-                    if (i == 3) {
-                        if (i == 2) {
-                            if (mParams[i] == 0x01) {
+                            if (mParams[2] == 0x01&&mParams[2]!=mChargeValue) {
                                 Log.d(TAG, " IS CHARGE ");
-                                charging.setBackground(getDrawableRes("charging"));
-
+                                chargeAsynchronousTask();
+                                mChargeValue=mParams[2];
+                            } else if(mParams[2]==0x0&&mParams[2]!=mChargeValue) {
+                                stopchargeAsynchronousTask();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        charging.setBackground(getDrawableRes("charging_normal"));
+                                        chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+                                    }
+                                });
+                                mChargeValue=mParams[2];
                             }
+                        runOnUiThread(new Runnable(){
+                            @Override
+                            public void run() {
+                                powerStatusUpdate(mParams[mParams.length - 1]);
+                            }
+                        });
 
-                        }
-                        powerStatusUpdate(mParams[mParams.length - 1]);
-                    }
+
                 }
             } else {
                 Log.d(TAG, "ROBOT OTHER SITUATION" + mCmd);

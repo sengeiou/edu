@@ -27,7 +27,7 @@ public class MainContract {
 
         void requestBluetoothStatus(String status);
 
-        void commandRobotAction(String json);
+        void commandRobotAction(byte cmd,byte[]params);
 
         void dealMessage(String json);
     }
