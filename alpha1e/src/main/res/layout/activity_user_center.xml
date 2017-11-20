@@ -34,7 +34,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="@string/user_center_title"
             android:textColor="@color/tv_center_title_color"
             android:textSize="20sp"
             />
@@ -63,68 +62,5 @@
         android:visibility="visible"
         />
 
-    <RadioGroup
-        android:id="@+id/ll_left"
-        android:layout_width="114dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/iv_main_back"
-        android:layout_marginTop="11dp"
-        android:background="@drawable/img_me_sidebar"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:visibility="gone">
 
-        <RadioButton
-            android:id="@+id/tv_user_center_info"
-            style="@style/text_userinfo_main_style"
-            android:checked="true"
-            android:drawableLeft="@drawable/radio_selector_main_left_info"
-            android:text="@string/user_center_info"
-            />
-
-        <RadioButton
-            android:id="@+id/tv_user_center_achievement"
-            style="@style/text_userinfo_main_style"
-            android:drawableLeft="@drawable/radio_selector_main_left_achievement"
-
-            android:text="@string/user_center_achievement"
-            />
-
-        <RadioButton
-            android:id="@+id/tv_user_center_message"
-            style="@style/text_userinfo_main_style"
-            android:drawableLeft="@drawable/radio_selector_main_left_message"
-            android:text="@string/user_center_message"
-            />
-
-        <RadioButton
-            android:id="@+id/tv_user_center_dynamic"
-            style="@style/text_userinfo_main_style"
-            android:drawableLeft="@drawable/radio_selector_main_left_dynaic"
-            android:text="@string/user_center_dynamic"
-            />
-
-        <RadioButton
-            android:id="@+id/tv_user_center_original"
-            style="@style/text_userinfo_main_style"
-            android:drawableLeft="@drawable/radio_selector_main_left_create"
-            android:text="@string/user_center_original"
-            />
-
-        <RadioButton
-            android:id="@+id/tv_user_center_download"
-            style="@style/text_userinfo_main_style"
-            android:drawableLeft="@drawable/radio_selector_main_left_download"
-            android:text="@string/user_center_download"
-            />
-
-        <RadioButton
-            android:id="@+id/tv_user_center_setting"
-            style="@style/text_userinfo_main_style"
-            android:drawableLeft="@drawable/radio_selector_main_left_setting"
-            android:text="@string/user_center_setting"
-            />
-
-    </RadioGroup>
 </RelativeLayout>

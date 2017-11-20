@@ -73,9 +73,9 @@ import static com.ubt.alpha1e.ui.custom.CommonCtrlView.KEY_CURRENT_PLAYING_ACTIO
 
 public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenterImpl<V>> extends AppCompatActivity implements ISkinChangedListener, LayoutInflaterFactory, IUI,BaseView {
 
-        private String mCurrentSetLanguage = "";
+    private String mCurrentSetLanguage = "";
 
-        protected Dialog mCoonLoadingDia;
+    protected Dialog mCoonLoadingDia;
 
     protected abstract void initUI();
 
@@ -423,18 +423,19 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
 
         UbtLog.d(TAG, "--wmma--onResume!");
 
-        if (((AlphaApplication) this.getApplicationContext())
-                .getCurrentBluetooth() != null) {
-            UbtLog.d(TAG, "--wmma--bluetooth ssss");
+
+//        if (((AlphaApplication) this.getApplicationContext())
+//                .getCurrentBluetooth() != null) {
+//            UbtLog.d(TAG, "--wmma--bluetooth ssss");
 //            if (stopFloatService() /*&& isServiceRun(getApplicationContext(), "com.ubt.alpha1e.ui.custom.FloatControlViewService")*/) {
-//                ControlCenterActivity.closeCommonCtrlView();
+//                CommonCtrlView.closeCommonCtrlView();
 //            } else {
-//                ControlCenterActivity.getInstace(this);
+//                CommonCtrlView.getInstace(this);
 //            }
 //        } else {
-//            ControlCenterActivity.closeCommonCtrlView();
-//       }
-        }
+//            CommonCtrlView.closeCommonCtrlView();
+//        }
+
     }
 
     @Override

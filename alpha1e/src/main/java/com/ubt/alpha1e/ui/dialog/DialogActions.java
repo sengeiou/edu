@@ -14,9 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.action.ActionsCreateActivity;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.ui.ActionsAdapter;
 import com.ubt.alpha1e.ui.ActionsNewEditActivity;
+import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.io.File;
@@ -48,7 +50,7 @@ public class DialogActions extends Dialog {
     private TextView tvCancel;
     private TextView tvConfirm;
 
-    private ActionsNewEditActivity context;
+    private BaseActivity context;
     private ActionsAdapter adapter;
     private DialogActions dialog;
 
@@ -62,7 +64,7 @@ public class DialogActions extends Dialog {
     private  Date lastTime_play = null;
 
 
-    public DialogActions(ActionsNewEditActivity context, String title, List<Map<String, Object>> data, int type) {
+    public DialogActions(BaseActivity context, String title, List<Map<String, Object>> data, int type) {
         super(context);
         this.context = context;
         this.title = title;
@@ -132,7 +134,7 @@ public class DialogActions extends Dialog {
                     return;
                 }
                 dismiss();
-                context.addLibAction(selectData, type);
+                ((ActionsCreateActivity)context).addLibAction(selectData, type);
 
 
             }
@@ -167,8 +169,8 @@ public class DialogActions extends Dialog {
                     selectData = data;
                     tvConfirm.setTextColor(context.getResources().getColor(R.color.text_confirm_color));;
                     tvConfirm.setEnabled(true);
-                    context.doReset();
-                    context.previewAction(data, type);
+                    ((ActionsCreateActivity)context).doReset();
+                    ((ActionsCreateActivity)context).previewAction(data, type);
 
                 }
 
@@ -215,7 +217,7 @@ public class DialogActions extends Dialog {
             return;
         }
 
-        context.stopMusic();
+        ((ActionsCreateActivity)context).stopMusic();
 
         try {
             if(player != null){

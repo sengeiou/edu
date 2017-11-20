@@ -716,8 +716,11 @@
     <string name="ui_network_no_password_tips">无密码提示</string>
     <string name="ui_network_un_pass_tip">您未输入Wi-Fi密码，确定继续连接么？</string>
     <string name="ui_network_connecting">正在为Alpha联网</string>
+    <string name="dialog_network_connecting">联网中...</string>
     <string name="ui_network_connect_failer">Alpha联网失败</string>
     <string name="ui_network_connect_success">Alpha联网成功</string>
+    <string name="dialog_network_connect_failer">联网失败</string>
+    <string name="dialog_network_connect_success">联网成功</string>
     <string name="ui_network_connect_all_robot">为已连接机器人同步配网</string>
     <string name="ui_network_select">选择Wi-Fi</string>
     <string name="ui_network_change">更换Wi-Fi</string>
@@ -877,6 +880,7 @@
     <string name="ui_setting_app_update_tips">是否需要更新版本？</string>
     <string name="ui_common_no">否</string>
     <string name="ui_common_yes">是</string>
+
     <!-- 不需要翻译 -->
     <string name="ui_pc_update_url">http://www.ubtrobot.com/download/index.html</string>
     <string name="ui_setting_cust_phone_value">400-6666-700</string>
@@ -947,5 +951,13 @@
     <string name="dialog_permission_location_setting">您尚未开启\"ALpha 1E\"位置权限,请到设置中开启</string>
     <string name="dialog_permission_camera_setting">您尚未开启\"ALpha 1E\"相机权限,请到设置中开启</string>
     <string name="dialog_permission_storage_setting">您尚未开启\"ALpha 1E\"存储权限,请到设置中开启</string>
+    <string name="dialog_permission_microphone_setting">您尚未开启\"ALpha 1E\"录音权限,请到设置中开启</string>
     <string name="dialog_go_setting">去设置</string>
+
+
+    <string name="ui_common_save_success">保存成功</string>
+    <string name="ui_common_save_fail">保存失败</string>
+    <string name="ui_common_save_to_dcim">长按保存到相册</string>
+
+    <string name="ui_principle_head_tips">小朋友，请摸摸我的头！</string>
 </resources>

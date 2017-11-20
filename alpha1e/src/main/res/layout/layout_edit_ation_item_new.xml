@@ -16,7 +16,7 @@
         android:layout_marginBottom="120dp"
         android:orientation="horizontal"
         android:gravity="left|center"
-        android:paddingLeft="65dp"
+        android:paddingLeft="90dp"
        >
 
 
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/icon_preview_nor" />
+                android:src="@drawable/ic_preview" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon_edit_nor" />
+                android:src="@drawable/ic_revise" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon_copy_nor" />
+                android:src="@drawable/ic_copy" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon_cut_nor" />
+                android:src="@drawable/ic_cut" />
 
             <TextView
                 android:id="@+id/tv_cut"
@@ -143,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon_paste_dis" />
+                android:src="@drawable/ic_paste_disable" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -170,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon_delete_nor" />
+                android:src="@drawable/ic_delete" />
 
             <TextView
                 android:layout_width="wrap_content"

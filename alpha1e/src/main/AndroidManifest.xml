@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+     xmlns:tools="http://schemas.android.com/tools"
     package="com.ubt.alpha1e"
     android:versionCode="1"
     android:versionName="V1.0.0.1">
+
+    <meta-data android:name="design_width" android:value="1920">
+
+    </meta-data>
+    <meta-data
+        android:name="design_height"
+        android:value="1080">
+    </meta-data>
+
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21"/>
@@ -55,9 +64,10 @@
 
     <application
         android:name=".AlphaApplication"
-        android:exported="true"
         android:allowBackup="true"
+
         android:hardwareAccelerated="false"
+        android:exported="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -94,13 +104,6 @@
         <service android:name=".services.RecordSoftService"/>
         <service android:name=".services.AutoScanConnectService"/>
 
-
-
-
-
-
-
-
         <!-- Facebook -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -122,10 +125,11 @@
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider1533377826954208"
             android:exported="true"/>
+
         <activity
             android:name=".ui.main.MainActivity"
-            android:label="@string/app_name"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen">
         </activity>
@@ -180,7 +184,6 @@
                 <data android:scheme="1106515940"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -190,7 +193,6 @@
             android:name="com.tencent.ai.tvs.ui.TVSAssistActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
-
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
@@ -207,7 +209,6 @@
             android:label="@string/title_activity_private_info"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleTheme"/>
-
         <activity
             android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login"
@@ -281,10 +282,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.wxapi.WXEntryActivity"
+            android:name=".wxapi.WXEntryActivity"
             android:exported="true"
             android:launchMode="singleTask"/>
-
         <activity
             android:name=".ui.RobotInfoActivity"
             android:label="@string/title_activity_robot_rename"
@@ -499,65 +499,104 @@
         <activity
             android:name=".userinfo.useredit.UserEditActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
-            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen"/>
-
-
-        <activity
-            android:name="com.ubt.alpha1e.login.LoginActivity"
-            android:label="@string/title_activity_login"
-            android:screenOrientation="landscape"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTask"
             android:theme="@style/NoTitleThemeFullScreen"
             android:windowSoftInputMode="adjustPan"/>
-
         <activity
-            android:name="com.ubt.alpha1e.login.loginauth.LoginAuthActivity"
-            android:label="LoginAuthActivity"
-            android:screenOrientation="landscape"
-            android:launchMode="singleTask"
-            android:theme="@style/NoTitleThemeFullScreen"
-            android:windowSoftInputMode="adjustPan"
+            android:name=".login.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            />
-
+            android:label="@string/title_activity_login"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".login.loginauth.LoginAuthActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="LoginAuthActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".userinfo.helpfeedback.HelpFeedbackActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
-            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen"/>
-
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".userinfo.helpfeedback.feedback.FeedbackActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
-
         <activity
             android:name=".userinfo.helpfeedback.feedbackdetail.FeedbackDetailActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
+
+        //dicy.cheng
+        //蓝牙联网---开机引导
+        <activity
+            android:name="com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        //蓝牙联网---蓝牙连接
+        <activity
+            android:name="com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        //蓝牙联网---网络连接
+        <activity
+            android:name="com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        //蓝牙联网---连接状态
+        <activity
+            android:name="com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        //蓝牙联网---搜索结果
+        <activity
+            android:name="com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+
 
         <activity
             android:name=".userinfo.aboutus.AboutUsActivity"
             android:label="@string/title_activity_about_us"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
-
         <activity
             android:name=".userinfo.cleancache.CleanCacheActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
-
         <activity
             android:name=".userinfo.contactus.ContactUsActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".userinfo.photoshow.PhotoShowActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".userinfo.psdmanage.PsdManageActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.main.MainCourseActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.actioncourse.ActionCourseActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
@@ -567,15 +606,21 @@
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <!-- APP实现的Receiver，用于接收消息和结果反馈 -->
-        <receiver android:name="com.ubt.alpha1e.xingepush.XGMessageRecevicer" >
+        <receiver android:name=".xingepush.XGMessageRecevicer">
             <intent-filter>
+
                 <!-- 接收消息透传 -->
-                <action android:name="com.tencent.android.tpush.action.PUSH_MESSAGE" />
+                <action android:name="com.tencent.android.tpush.action.PUSH_MESSAGE"/>
                 <!-- 监听注册、反注册、设置/删除标签、通知被点击等处理结果 -->
-                <action android:name="com.tencent.android.tpush.action.FEEDBACK" />
+                <action android:name="com.tencent.android.tpush.action.FEEDBACK"/>
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".action.actioncreate.ActionTestActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen">
+        </activity>
     </application>
 
 </manifest>

@@ -219,6 +219,7 @@ public class BlueToothClientHandler extends Thread implements
 				Log.d(TAG,"send : "+ByteHexHelper.bytesToHexString(data));
 			}
 
+
 			if(mUpgrage){
 				return;
 			}

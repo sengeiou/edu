@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.userinfo.photoshow.PhotoShowActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,7 +70,7 @@ public class ContactUsActivity extends MVPBaseActivity<ContactUsContract.View, C
         initUI();
     }
 
-    @OnClick({R.id.ll_base_back, R.id.tv_base_title_name,R.id.rl_cust_phone, R.id.rl_cust_email, R.id.rl_cust_website})
+    @OnClick({R.id.ll_base_back, R.id.tv_base_title_name,R.id.rl_cust_phone, R.id.rl_cust_email, R.id.rl_cust_website,R.id.iv_ubt_wechat})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_back:
@@ -80,6 +81,9 @@ public class ContactUsActivity extends MVPBaseActivity<ContactUsContract.View, C
             case R.id.rl_cust_email:
                 break;
             case R.id.rl_cust_website:
+                break;
+            case R.id.iv_ubt_wechat:
+                PhotoShowActivity.LaunchActivity(getContext());
                 break;
         }
     }
