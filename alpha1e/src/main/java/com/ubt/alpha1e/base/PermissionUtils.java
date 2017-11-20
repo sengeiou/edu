@@ -33,7 +33,7 @@ public class PermissionUtils {
     private static volatile PermissionUtils instance;
 
     public enum PermissionEnum {
-        LOACTION, CAMERA, STORAGE
+        LOACTION, CAMERA, STORAGE, MICROPHONE
     }
 
     private PermissionUtils(Context context) {
@@ -70,6 +70,10 @@ public class PermissionUtils {
             case STORAGE:
                 sp_key = Constant.SP_PERMISSION_STORAGE;
                 permiss = Permission.STORAGE;
+                break;
+            case MICROPHONE:
+                sp_key = Constant.SP_PERMISSION_MICROPHONE;
+                permiss = Permission.MICROPHONE;
                 break;
             default:
                 break;
@@ -120,11 +124,14 @@ public class PermissionUtils {
             case STORAGE:
                 message = ResourceManager.getInstance(mContext).getStringResources("dialog_permission_storage_setting");
                 break;
+            case MICROPHONE:
+                message = ResourceManager.getInstance(mContext).getStringResources("dialog_permission_microphone_setting");
+                break;
             default:
                 break;
         }
         UbtLog.d("psermission", "message==" + message);
-        
+
         new ConfirmDialog(mContext).builder()
                 .setMsg(message)
                 .setCancelable(true)

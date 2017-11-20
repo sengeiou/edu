@@ -1,7 +1,6 @@
 package com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate;
 
 
-import android.animation.ObjectAnimator;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -10,10 +9,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
@@ -23,24 +19,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.ubt.alpha1e.AlphaApplication;
-import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.PermissionUtils;
-import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity;
 import com.ubt.alpha1e.data.model.NetworkInfo;
-import com.ubt.alpha1e.event.NetworkEvent;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
-import com.ubt.alpha1e.ui.helper.IMainUI;
 import com.ubt.alpha1e.ui.helper.IScanUI;
 import com.ubt.alpha1e.ui.helper.ScanHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -50,7 +40,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;

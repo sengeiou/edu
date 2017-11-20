@@ -35,6 +35,15 @@ public class Constant {
     public final static String SP_PERMISSION_LOCATION = "sp_location_permission";
     public final static String SP_PERMISSION_STORAGE = "sp_storage_permission";
     public final static String SP_PERMISSION_CAMERA = "sp_camera_permission";
+    public final static String SP_PERMISSION_MICROPHONE = "sp_microphone_permission";
+
+
+
+    /**
+     * 信鸽信息
+     */
+    public final static String SP_XG_ACCESSID ="accessid";
+    public final static String SP_XG_ACCESSKEY ="accessKey";
 
     /**
      * 首次获取蓝牙权限

@@ -1,18 +1,13 @@
 package com.ubt.alpha1e.bluetoothandnet.netconnect;
 
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
@@ -24,32 +19,18 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
-import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothDeviceModel;
-import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
-import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.event.NetworkEvent;
-import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.ui.RobotNetConnectActivity;
-import com.ubt.alpha1e.ui.custom.VisiblePswEditText;
 import com.ubt.alpha1e.ui.dialog.AlertDialog;
-import com.ubt.alpha1e.ui.dialog.NetConnectAlertDialog;
 import com.ubt.alpha1e.ui.dialog.WifiSelectAlertDialog;
 import com.ubt.alpha1e.ui.helper.NetworkHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
 
 import butterknife.BindView;
 

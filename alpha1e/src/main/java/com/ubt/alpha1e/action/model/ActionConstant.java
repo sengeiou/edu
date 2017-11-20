@@ -1,5 +1,23 @@
 package com.ubt.alpha1e.action.model;
 
+import android.content.Context;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.data.FileTools;
+import com.ubt.alpha1e.utils.log.UbtLog;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author admin
  * @className
@@ -11,6 +29,7 @@ package com.ubt.alpha1e.action.model;
 
 public class ActionConstant {
 
+    //出招
     public static final String WARRIOR = "{\n" +
             "    \"frame\": [\n" +
             "      {\n" +
@@ -53,7 +72,7 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
-    public static final  String SQUAT = "{\n" +
+    public static final String SQUAT = "{\n" +
             "    \"frame\": [\n" +
             "      {\n" +
             "        \"-xmlRunTime\": \"540\",\n" +
@@ -82,7 +101,7 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
-    public static final  String LEFTHAND = " {\n" +
+    public static final String LEFTHAND = " {\n" +
             "    \"frame\": [\n" +
             "      {\n" +
             "        \"-xmlRunTime\": \"440\",\n" +
@@ -103,7 +122,7 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
-    public static final  String RIGHTHAND = "{\n" +
+    public static final String RIGHTHAND = "{\n" +
             "    \"frame\": [\n" +
             "      {\n" +
             "        \"-xmlRunTime\": \"440\",\n" +
@@ -124,7 +143,7 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
-    public static final  String MECH_DANCE1 = "{\n" +
+    public static final String MECH_DANCE1 = "{\n" +
             "    \"frame\": [\n" +
             "      {\n" +
             "        \"-xmlRunTime\": \"420\",\n" +
@@ -145,7 +164,7 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
-    public static final  String MECH_DANCE2 = "{\n" +
+    public static final String MECH_DANCE2 = "{\n" +
             "    \"frame\": [\n" +
             "      {\n" +
             "        \"-xmlRunTime\": \"420\",\n" +
@@ -166,7 +185,7 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
-    public static final String HUG= "{\n" +
+    public static final String HUG = "{\n" +
             "    \"frame\": [\n" +
             "      {\n" +
             "        \"-xmlRunTime\": \"1000\",\n" +
@@ -203,7 +222,7 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
-    public static final   String HAPPY = "{\n" +
+    public static final String HAPPY = "{\n" +
             "    \"frame\": [\n" +
             "      {\n" +
             "        \"-xmlRunTime\": \"300\",\n" +
@@ -256,7 +275,7 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
-    public static final   String SALUTE = "{\n" +
+    public static final String SALUTE = "{\n" +
             "    \"frame\": [\n" +
             "      {\n" +
             "        \"-xmlRunTime\": \"1000\",\n" +
@@ -285,7 +304,7 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
-    public static final  String WALK = "{\n" +
+    public static final String WALK = "{\n" +
             "    \"frame\": [\n" +
             "      {\n" +
             "        \"-xmlRunTime\": \"460\",\n" +
@@ -306,7 +325,7 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
-    public static final  String TWIST = "{\n" +
+    public static final String TWIST = "{\n" +
             "    \"frame\": [\n" +
             "      {\n" +
             "        \"-xmlRunTime\": \"420\",\n" +
@@ -343,7 +362,7 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
-    public static final  String STEPPIN = " {\n" +
+    public static final String STEPPIN = " {\n" +
             "    \"frame\": [\n" +
             "      {\n" +
             "        \"-xmlRunTime\": \"440\",\n" +
@@ -604,7 +623,6 @@ public class ActionConstant {
             "  }";
 
 
-
     public static final String CURTAIN = " {\n" +
             "    \"frame\": [\n" +
             "      {\n" +
@@ -704,8 +722,190 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
+    /**
+     * 基础动作图片ID
+     */
+    private static int[] basicIconID = new int[]{
+            R.drawable.chuzhao, R.drawable.xiayao, R.drawable.dunxia,
+            R.drawable.zuotaishou, R.drawable.taiyoushou, R.drawable.jixie1, R.drawable.jixie2,
+            R.drawable.baobao, R.drawable.kaixin, R.drawable.jinli};
+
+    /**
+     * 高级动作图片ID
+     */
+    private static int[] advanceIconID = new int[]{R.drawable.xingzou, R.drawable.niuyao,
+            R.drawable.dianjiao, R.drawable.cewanyao, R.drawable.shoubi, R.drawable.wudao1,
+            R.drawable.wudao2, R.drawable.xiemu, R.drawable.zaijian};
+
+    private static String[] baseActionJson = new String[]{WARRIOR, STOOP, SQUAT, LEFTHAND, RIGHTHAND, MECH_DANCE1
+            , MECH_DANCE2, HUG, HAPPY, SALUTE};
+
+    private static String[] highActionJson = new String[]{WALK, TWIST, STEPPIN, BENT, ARM, DANCE1, DANCE2, CURTAIN, BYE};
 
 
+    private static String[] songs = {"", "flexin", "jingle bells", "london bridge is falling down",
+            "twinkle twinkle little star", "yankee doodle dandy", "kind of light", "so good",
+            "Sun Indie Pop", "The little robot", "zombie"};
 
+    /**
+     * 解析动作json
+     *
+     * @param json
+     */
+    private static List<ActionDataModel> praseActionData(String json) {
+        List<ActionDataModel> list = new ArrayList<>();
+        try {
+            JSONObject zuoJsonObject = new JSONObject(json);
+            JSONArray zuoJsonArray = zuoJsonObject.getJSONArray("frame");
+            for (int i = 0; i < zuoJsonArray.length(); i++) {
+                JSONObject jsonObject = (JSONObject) zuoJsonArray.get(i);
+                UbtLog.d("initActionData", "jsonObject:" + jsonObject.toString());
+                ActionDataModel actionDataModel = new ActionDataModel();
+                actionDataModel.setXmlRunTime(jsonObject.optString("-xmlRunTime"));
+                actionDataModel.setXmldata(jsonObject.optString("-xmldata"));
+                list.add(actionDataModel);
+            }
+            UbtLog.d("initActionData", "list:" + list);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+
+    /**
+     * 获取基本动作名称列表
+     *
+     * @param context
+     * @return
+     */
+    private static String[] getBasicName(Context context) {
+        String[] basicAction = new String[]{ResourceManager.getInstance(context).getStringResources("ui_basic_action_warrior"),
+                ResourceManager.getInstance(context).getStringResources("ui_basic_action_stoop"),
+                ResourceManager.getInstance(context).getStringResources("ui_basic_action_squat"),
+                ResourceManager.getInstance(context).getStringResources("ui_basic_action_left_hand"),
+                ResourceManager.getInstance(context).getStringResources("ui_basic_action_right_hand"),
+                ResourceManager.getInstance(context).getStringResources("ui_basic_action_mech_dance1"),
+                ResourceManager.getInstance(context).getStringResources("ui_basic_action_mech_dance2"),
+                ResourceManager.getInstance(context).getStringResources("ui_basic_action_hug"),
+                ResourceManager.getInstance(context).getStringResources("ui_basic_action_happy"),
+                ResourceManager.getInstance(context).getStringResources("ui_basic_action_salute")};
+        return basicAction;
+    }
+
+    /**
+     * 获取高难度动作名称列表
+     *
+     * @param context
+     * @return
+     */
+    private static String[] getHighActionName(Context context) {
+        String[] highActionName = new String[]{ResourceManager.getInstance(context).getStringResources("ui_advance_action_walk"),
+                ResourceManager.getInstance(context).getStringResources("ui_advance_action_twist"),
+                ResourceManager.getInstance(context).getStringResources("ui_advance_action_steppin"),
+                ResourceManager.getInstance(context).getStringResources("ui_advance_action_bent"),
+                ResourceManager.getInstance(context).getStringResources("ui_advance_action_arm"),
+                ResourceManager.getInstance(context).getStringResources("ui_advance_action_dance1"),
+                ResourceManager.getInstance(context).getStringResources("ui_advance_action_dance2"),
+                ResourceManager.getInstance(context).getStringResources("ui_advance_action_curtain"),
+                ResourceManager.getInstance(context).getStringResources("ui_advance_action_bye")};
+        return highActionName;
+    }
+
+
+    /**
+     * 获取基础动作列表
+     *
+     * @param context
+     * @return
+     */
+    public static List<PrepareDataModel> getBasicActionList(Context context) {
+        List<PrepareDataModel> list = new ArrayList<>();
+        String[] baseActionNames = getBasicName(context);
+        for (int i = 0; i < baseActionNames.length; i++) {
+            PrepareDataModel prepareDataModel = new PrepareDataModel();
+            prepareDataModel.setPrepareName(baseActionNames[i]);
+            prepareDataModel.setDrawableId(basicIconID[i]);
+            prepareDataModel.setList(praseActionData(baseActionJson[i]));
+            list.add(prepareDataModel);
+        }
+        return list;
+    }
+
+
+    /**
+     * 获取高级动作列表
+     *
+     * @param context
+     * @return
+     */
+    public static List<PrepareDataModel> getHighActionList(Context context) {
+        List<PrepareDataModel> list = new ArrayList<>();
+        String[] highActionNames = getHighActionName(context);
+        for (int i = 0; i < highActionNames.length; i++) {
+            PrepareDataModel prepareDataModel = new PrepareDataModel();
+            prepareDataModel.setPrepareName(highActionNames[i]);
+            prepareDataModel.setDrawableId(advanceIconID[i]);
+            prepareDataModel.setList(praseActionData(highActionJson[i]));
+            list.add(prepareDataModel);
+        }
+        return list;
+    }
+
+
+    /**
+     * 获取音乐列表
+     *
+     * @param mContext
+     * @return
+     */
+    public static List<PrepareMusicModel> getMusicList(Context mContext) {
+        List<PrepareMusicModel> listSongs = new ArrayList<>();
+        for (int i = 0; i < songs.length; i++) {
+            PrepareMusicModel prepareMusicModel = new PrepareMusicModel();
+            prepareMusicModel.setMusicName(songs[i]);
+            prepareMusicModel.setMusicType(0);
+            listSongs.add(prepareMusicModel);
+        }
+
+        UbtLog.d("getMusicList", "record:" + FileTools.readFiles(FileTools.record).toString());
+        List<String> listRecord = FileTools.readFiles(FileTools.record);
+        for (int i = 0; i < listRecord.size(); i++) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            String name = listRecord.get(i);
+            name = name.substring(0, name.length() - 4);
+            UbtLog.d("getMusicList", "record name:" + name);
+
+            PrepareMusicModel prepareMusicModel = new PrepareMusicModel();
+            prepareMusicModel.setMusicName(name);
+            prepareMusicModel.setMusicType(1);
+            listSongs.add(prepareMusicModel);
+        }
+        return listSongs;
+    }
+
+
+    /**
+     * 根据密度获取Params
+     *
+     * @param density
+     * @param imageView
+     * @return
+     */
+    public static ViewGroup.LayoutParams getIvRobotParams(float density, ImageView imageView) {
+        ViewGroup.LayoutParams params = imageView.getLayoutParams();
+        int n = 2;
+        if (density == 3.0) {
+            n = 3;
+        } else if (density == 4.0) {
+            n = 4;
+        } else if (density == 5.0) {
+            n = 5;
+        }
+        UbtLog.d("getIvRobotParams", "width:" + params.width + "--height:" + params.height);
+        params.width = params.width / 2 * n;
+        params.height = params.height / 2 * n;
+        return params;
+    }
 
 }

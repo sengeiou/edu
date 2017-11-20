@@ -93,6 +93,9 @@ public class ActionsEditSaveActivity extends BaseActivity implements
     private String musicDir = "";
     public static String MUSIC_DIR = "music_dir";
 
+    private ImageView ivBack;
+    private ImageView ivSave;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,14 +169,32 @@ public class ActionsEditSaveActivity extends BaseActivity implements
 
     @Override
     protected void initUI() {
-        initTitle(getStringResources("ui_readback_save_title"));
+      /*  initTitle(getStringResources("ui_readback_save_title"));
         initTitleSave(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
 
                 saveNewAction();
             }
-        }, getStringResources("ui_common_confirm"));
+        }, getStringResources("ui_common_confirm"));*/
+
+        ivBack = (ImageView)findViewById(R.id.iv_back) ;
+        ivSave = (ImageView)findViewById(R.id.iv_save);
+
+        ivBack.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        ivSave.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveNewAction();
+            }
+        });
+
 
         mGridView = (GridView)findViewById(R.id.grid_actions_type);
         txt_actions_type_des = (TextView)findViewById(R.id.txt_action_type_des);

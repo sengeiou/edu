@@ -298,7 +298,7 @@ public class ActionsLibMainFragment3 extends BaseFragment implements
 
         UbtLog.d(TAG,"mUbtBanner = " + mUbtBanner + "   mHelper = " + mHelper);
         if(mHelper != null){
-            showDialog();
+//            showDialog();
             mHelper.doReadDownLoadHistory();
         }
     }
@@ -825,7 +825,7 @@ public class ActionsLibMainFragment3 extends BaseFragment implements
     public void showDialog() {
         if(mLoadingDialog!=null&&!mLoadingDialog.isShowing())
         {
-            mLoadingDialog.show();
+         //   mLoadingDialog.show();
         }
     }
 

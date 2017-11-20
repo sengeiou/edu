@@ -681,6 +681,16 @@ public class BlocklyJsInterface {
 
     }
 
+
+    @JavascriptInterface
+    public void stopAllAction() {
+        //TODO 停止所有动作
+    }
+
+
+
+
+
     /***
      * 判断字符串是否都是数字
      */

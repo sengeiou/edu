@@ -11,6 +11,18 @@ package com.ubt.alpha1e.login;
 
 public class HttpEntity {
 
+
+    /**
+     * 信鸽获取
+     */
+    public static final String XG_URL = "https://test79.ubtrobot.com/xinge-push-rest/";
+    /**
+     * 获取XG AppaccessId AppaccessKey
+     */
+    public static final String getXGAppId = XG_URL+"push/appInfo";
+
+    public static final String bindXGServer = XG_URL+"push/userToken";
+
     //http://10.10.32.52:8080/ubx/sys/register
     public static final String BASIC_THIRD_LOGIN_URL = "http://10.10.20.71:8010/user-service-rest/v2/";
     public static final String THRID_LOGIN_URL = BASIC_THIRD_LOGIN_URL + "user/login/third";

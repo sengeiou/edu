@@ -8,26 +8,17 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.adapter.WifiInfoAdapter;
 import com.ubt.alpha1e.adapter.WifiInfoAdapter_list;
-import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
-import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
-import com.ubt.alpha1e.event.NetworkEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.ui.dialog.WifiSelectAlertDialog;
 import com.ubt.alpha1e.ui.helper.WifiHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;

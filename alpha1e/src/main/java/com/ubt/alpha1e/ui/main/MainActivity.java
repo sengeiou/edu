@@ -13,13 +13,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.MyMainActivity;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
@@ -77,7 +78,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     int init_screen_height = 540;
     RelativeLayout.LayoutParams params;
 
-    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3, R.id.right_icon4, R.id.cartoon_body_touch})
+    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3, R.id.right_icon4, R.id.cartoon_body_touch, R.id.bottom_icon})
     protected void switchActivity(View view) {
         Log.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
@@ -102,28 +103,30 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //                cartoonBodyTouch.setVisibility(View.VISIBLE);
 //                cartoonAction.setVisibility(View.INVISIBLE);
 
-                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect",true);
+                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
                 Intent bluetoothConnectIntent = new Intent();
-                if(isfirst){
-                    Log.d(TAG, "第一次蓝牙连接" );
-                    SPUtils.getInstance().put("firstBluetoothConnect",false);
+                if (isfirst) {
+                    Log.d(TAG, "第一次蓝牙连接");
+                    SPUtils.getInstance().put("firstBluetoothConnect", false);
                     bluetoothConnectIntent.setClass(this, BluetoothguidestartrobotActivity.class);
-                }else {
+                } else {
                     Log.d(TAG, "非第一次蓝牙连接 ");
                     bluetoothConnectIntent.setClass(this, BluetoothandnetconnectstateActivity.class);
                 }
                 startActivity(bluetoothConnectIntent);
-                this.overridePendingTransition(R.anim.activity_open_up_down,0);
+                this.overridePendingTransition(R.anim.activity_open_up_down, 0);
 
                 break;
             case R.id.top_icon3:
-//                mLaunch.setClass(this, MyMainActivity.class);
-//                startActivity(mLaunch);
+                mLaunch.setClass(this, MyMainActivity.class);
+                startActivity(mLaunch);
                 break;
             case R.id.right_icon:
 //                mLaunch.setClass(this, ScanBluetoothActivity.class);
 //                startActivity(mLaunch);
-//                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect",true);
+                startActivity(new Intent(this, ActionTestActivity.class));
+
+                //                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect",true);
                 break;
             case R.id.right_icon2:
                 break;
@@ -136,6 +139,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 cartoonBodyTouch.setVisibility(View.INVISIBLE);
                 showCartoonAction("TEX");
                 break;
+            case R.id.bottom_icon:
+                startActivity(new Intent(this, MainCourseActivity.class));
+                break;
             default:
                 break;
         }
@@ -144,6 +150,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //mPresenter.getXGInfo();
         getScreenInch();
         initUi();
     }
@@ -204,7 +211,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(MessageEvent event) {
-        Log.d(TAG, "RECEIVE THE MESSAGE IN MAIN THREAD" + event.message);
+//        Log.d(TAG, "RECEIVE THE MESSAGE IN MAIN THREAD" + event.message);
         mPresenter.dealMessage(event.message);
     }
 
