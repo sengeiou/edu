@@ -102,7 +102,7 @@ public class AlphaApplication extends LoginApplication {
 //        crashHandler.init(this);
 
         initActivityLife();
-         initSkin(this);
+        initSkin(this);
         initConnectClient();
         initXG();
         LitePal.initialize(this);
@@ -123,7 +123,6 @@ public class AlphaApplication extends LoginApplication {
 //        }, screenOffFilter);
 
     }
-
 
 
     public static Context getmContext() {
@@ -281,6 +280,20 @@ public class AlphaApplication extends LoginApplication {
         return mActivityList;
     }
 
+    public void doLostConnect() {
+
+        UbtLog.d(TAG, "doLostConnect ..... ");
+        ActionPlayer.StopCycleThread(true);
+        // 蓝牙断线
+        if (mBlueManager != null) {
+            mBlueManager.releaseAllConnected();
+        }
+
+        cleanBluetoothConnectData();
+
+        MyActionsHelper.mCacheActionsNames.clear();
+    }
+
     public void doLostConn(Activity mCurrentAct) {
         CommonCtrlView.closeCommonCtrlView();
         MyActionsHelper.doStopMp3ForMyDownload();
@@ -399,12 +412,12 @@ public class AlphaApplication extends LoginApplication {
         //清除在线缓存
         BaseHelper.hasGetScheme = false;
         ActionsOnlineCacheOperater.getInstance(this, FileTools.db_log_cache, FileTools.db_log_name).cleanOnlineCache();
+        //ActionsOnlineCacheOperater.getInstance(this,FileTools.db_log_cache, FileTools.db_log_name).cleanOnlineCache();
         MyActionsHelper.mCacheActionsNames.clear();
         ActionsLibMainFragment3.clearCacheDatas();
 
         //app 改版指引相关
-        BasicSharedPreferencesOperator.getInstance(this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(BasicSharedPreferencesOperator.KEY_GUIDE_STEP,
-                "0", null, -1);
+        BasicSharedPreferencesOperator.getInstance(this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(BasicSharedPreferencesOperator.KEY_GUIDE_STEP, "0", null, -1);
     }
 
     /**
