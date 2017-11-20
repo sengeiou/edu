@@ -269,6 +269,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     public void showCartoonAction(int value) {
+        mCurrentTouchTime=System.currentTimeMillis();
+        if(System.currentTimeMillis()-mCurrentTouchTime<noOperationTimeout) {
+            buddleText.setVisibility(View.INVISIBLE);
+        }
         String actionName = "";
         if (m_animationTask == null) {
             m_animationTask = new AnimationTask();
