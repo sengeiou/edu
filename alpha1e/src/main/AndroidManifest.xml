@@ -621,6 +621,12 @@
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen">
         </activity>
+
+        <activity
+            android:name=".maincourse.courseone.CourseOneActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen">
+        </activity>
     </application>
 
 </manifest>

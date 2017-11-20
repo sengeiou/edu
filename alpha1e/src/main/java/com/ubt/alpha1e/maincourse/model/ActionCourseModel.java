@@ -1,7 +1,5 @@
 package com.ubt.alpha1e.maincourse.model;
 
-import org.litepal.crud.DataSupport;
-
 import java.util.List;
 
 /**
@@ -10,12 +8,14 @@ import java.util.List;
  * @modifier：ubt
  * @modify_date：2017/11/13 20:15
  * [A brief description]
- * version
+ * 关卡类
  */
 
-public class ActionCourseModel extends DataSupport {
+public class ActionCourseModel {
+
     private String userId;
     private String ActionCourcesName;
+    private String title;
     private int ActionLockType;
     private int drawableId;
     private int ActionCourcesScore;
@@ -24,10 +24,7 @@ public class ActionCourseModel extends DataSupport {
      */
     private int currentCourseIndex;
 
-    /**
-     * 课时列表
-     */
-    private List<ActionCourseContent> mContents;
+    private List<String> mList;
 
 
     public String getUserId() {
@@ -78,12 +75,20 @@ public class ActionCourseModel extends DataSupport {
         this.currentCourseIndex = currentCourseIndex;
     }
 
-    public List<ActionCourseContent> getContents() {
-        return mContents;
+    public List<String> getList() {
+        return mList;
     }
 
-    public void setContents(List<ActionCourseContent> contents) {
-        mContents = contents;
+    public void setList(List<String> list) {
+        mList = list;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override
@@ -91,11 +96,12 @@ public class ActionCourseModel extends DataSupport {
         return "ActionCourseModel{" +
                 "userId='" + userId + '\'' +
                 ", ActionCourcesName='" + ActionCourcesName + '\'' +
+                ", title='" + title + '\'' +
                 ", ActionLockType=" + ActionLockType +
                 ", drawableId=" + drawableId +
                 ", ActionCourcesScore=" + ActionCourcesScore +
                 ", currentCourseIndex=" + currentCourseIndex +
-                ", mContents=" + mContents +
+                ", mList=" + mList +
                 '}';
     }
 }

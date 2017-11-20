@@ -6,7 +6,7 @@ package com.ubt.alpha1e.maincourse.model;
  * @modifier：ubt
  * @modify_date：2017/11/13 18:17
  * [A brief description]
- * version
+ * 首页课程
  */
 
 public class CourseModel {

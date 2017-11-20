@@ -32,9 +32,8 @@
     	</list>
     -->
     <list>
-        <mapping class="com.ubt.alpha1e.maincourse.model.ActionCourseContent"/>
-        <mapping class="com.ubt.alpha1e.maincourse.model.ActionCourseModel"/>
- 
+        <mapping class="com.ubt.alpha1e.maincourse.model.LocalActionRecord"/>
+
     </list>
 
     <!--
