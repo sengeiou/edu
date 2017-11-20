@@ -147,4 +147,5 @@
     <color name="action_save_text_rect_color">#F9F9F9</color>
     <color name="action_save_text_border_color">#E4E4E4</color>
     <color name="action_save_text_color">#9F9FA3</color>
+    <color name="action_dialog_filter_color">#E7E8E9</color>
 </resources>

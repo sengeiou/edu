@@ -139,7 +139,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private SeekBar sbTime;
     private int current = 0;
 
-//    private String init = "\"90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90\"";
 
     public String[] init = {"90", "90", "90", "90", "90", "90", "90", "60", "76", "110", "90", "90",
             "120", "104", "70", "90"};
