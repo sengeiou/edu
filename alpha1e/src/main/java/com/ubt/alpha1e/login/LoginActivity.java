@@ -132,8 +132,6 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
                 proxy.requestLogin(ELoginPlatform.WX, PID, DSN, LoginActivity.this);
             }
         });
-
-
     }
 
     @Override
@@ -149,8 +147,12 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
         if(i==AuthorizeListener.WX_TVSIDRECV_TYPE){  //和机器人联调的
             UbtLog.d(TAG, "sss wx:"+ proxy.getClientId(ELoginPlatform.WX));
-            UbtLog.d(TAG, "sss qq:"+ proxy.getClientId(ELoginPlatform.QQOpen));
             SPUtils.getInstance().put(SP_CLIENT_ID, proxy.getClientId(ELoginPlatform.WX));
+        }
+
+        if(i== AuthorizeListener.QQOPEN_TVSIDRECV_TYPE){
+            UbtLog.d(TAG, "sss qq:"+ proxy.getClientId(ELoginPlatform.QQOpen));
+            SPUtils.getInstance().put(SP_CLIENT_ID, proxy.getClientId(ELoginPlatform.QQOpen));
         }
 
 

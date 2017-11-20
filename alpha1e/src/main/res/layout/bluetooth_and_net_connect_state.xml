@@ -56,7 +56,7 @@
 
     //蓝牙
     <RelativeLayout
-        android:layout_marginTop="58dp"
+        android:layout_marginTop="68dp"
         android:id="@+id/rl_wifi_name"
         android:layout_width="360dp"
         android:layout_height="56dp"
