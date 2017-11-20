@@ -132,8 +132,6 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
                 proxy.requestLogin(ELoginPlatform.WX, PID, DSN, LoginActivity.this);
             }
         });
-
-
     }
 
     @Override

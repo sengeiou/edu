@@ -247,11 +247,11 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                 String mac = (String) msg.obj;
                 doSendComm(mac, ConstValue.DV_HANDSHAKE, null);
             }else if (msg.what == MSG_DO_COON_BT_SUCCESS) {
-//                doDealConnectSuccessResult();
-//                mUI.onCoonected(true);
+                doDealConnectSuccessResult();
+                mUI.onCoonected(true);
                 UbtLog.d(TAG,"    发送 获取 product 和 dsn  命令");
 //                byte[] param_read = new byte[1];
-                doSendComm(ConstValue.DV_PRODUCT_AND_DSN, null);
+//                doSendComm(ConstValue.DV_PRODUCT_AND_DSN, null);
 
             }else if(msg.what == MSG_DO_FINISHE_CONNECT){
                 UbtLog.d(TAG,"    蓝牙连接过程完成");
