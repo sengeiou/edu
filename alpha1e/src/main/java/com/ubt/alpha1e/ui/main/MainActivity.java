@@ -138,6 +138,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         initUI();
         looperThread = new LooperThread(this);
         looperThread.start();
+
         callAsynchronousTask();
         chargeAsynchronousTask();
     }
