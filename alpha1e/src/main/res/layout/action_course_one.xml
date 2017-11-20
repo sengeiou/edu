@@ -5,98 +5,98 @@
     android:layout_height="match_parent"
     android:background="@drawable/img_bg_action"
     android:gravity="center"
-  >
+    >
 
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:gravity="center_vertical"
         android:paddingTop="8dp">
 
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/back_icon"
             android:layout_centerVertical="true"
+            android:src="@drawable/back_icon"
             />
 
         <ImageView
             android:id="@+id/iv_help"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@drawable/actions_edit_help_selector"
             android:layout_alignParentRight="true"
+            android:src="@drawable/actions_edit_help_selector"
             />
 
         <ImageView
             android:id="@+id/iv_save_action"
             android:layout_width="45dp"
             android:layout_height="45dp"
+            android:layout_toLeftOf="@+id/iv_help"
             android:scaleType="fitXY"
             android:src="@drawable/actions_edit_save_selector"
-            android:layout_toLeftOf="@+id/iv_help"
             />
 
         <ImageView
             android:id="@+id/iv_auto_read"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@drawable/actions_edit_auto_selector"
-            android:scaleType="fitXY"
             android:layout_toLeftOf="@id/iv_save_action"
+            android:scaleType="fitXY"
+            android:src="@drawable/actions_edit_auto_selector"
             />
 
         <ImageView
             android:id="@+id/iv_reset"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@drawable/actions_edit_reset_selector"
-            android:scaleType="fitXY"
             android:layout_toLeftOf="@+id/iv_auto_read"
+            android:scaleType="fitXY"
+            android:src="@drawable/actions_edit_reset_selector"
 
             />
 
 
     </RelativeLayout>
-    
+
 
     <RelativeLayout
         android:id="@+id/rl_mid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rl_title"
         android:layout_above="@+id/rl_action_line"
-        android:paddingRight="16dp"
-        android:paddingLeft="16dp"
+        android:layout_below="@+id/rl_title"
         android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         >
 
         <LinearLayout
             android:id="@+id/ll_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             >
 
             <ImageView
                 android:id="@+id/iv_action_lib"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_basic_action"
                 android:scaleType="fitXY"
+                android:src="@drawable/icon_basic_action"
                 />
 
             <ImageView
                 android:id="@+id/iv_action_lib_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_advanced_action"
                 android:scaleType="fitXY"
+                android:src="@drawable/icon_advanced_action"
                 />
 
 
@@ -104,14 +104,12 @@
                 android:id="@+id/iv_action_bgm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_bg_action"
                 android:scaleType="fitXY"
+                android:src="@drawable/icon_bg_action"
                 />
 
 
         </LinearLayout>
-
-
 
 
         <RelativeLayout
@@ -121,14 +119,57 @@
             >
 
 
-
             <include
                 layout="@layout/layout_robot"
                 />
 
+            <RelativeLayout
+                android:id="@+id/rl_course_content"
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/ll_robot"
+                android:background="@drawable/bg_edit_user">
+
+                <ImageView
+                    android:id="@+id/iv_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_tipscard_last_grey"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_course_index"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_toLeftOf="@+id/iv_right"
+                    android:layout_toRightOf="@+id/iv_left"
+                    android:text="认识时间轴"
+                    android:textColor="@color/action_frame_color"
+                    android:textSize="16sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_tipscard_next_grey"
+                    />
+            </RelativeLayout>
+
 
         </RelativeLayout>
-
 
 
     </RelativeLayout>
@@ -149,8 +190,8 @@
             android:id="@+id/iv_del_music"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_delete_nor"
             android:layout_centerHorizontal="true"
+            android:src="@drawable/icon_delete_nor"
             />
 
         <TextView
@@ -158,10 +199,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_del_music"
-            android:text="@string/ui_create_delete_music"
             android:gravity="center"
+            android:text="@string/ui_create_delete_music"
             />
-
 
 
     </RelativeLayout>
@@ -172,12 +212,11 @@
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/img_bg_bottom"
-        android:visibility="visible"
         android:layout_marginTop="-60dp"
+        android:background="@drawable/img_bg_bottom"
         android:paddingRight="10dp"
+        android:visibility="visible"
         >
-
 
 
         <RelativeLayout
@@ -219,8 +258,8 @@
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/iv_zoom_minus"
-                android:paddingTop="10dp"
                 android:paddingRight="10dp"
+                android:paddingTop="10dp"
                 />
 
             <ImageView
@@ -238,9 +277,9 @@
             android:id="@+id/ll_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_below="@+id/rl_zoom"
             android:layout_marginTop="10dp"
+            android:orientation="horizontal"
             >
 
             <RelativeLayout
@@ -254,13 +293,13 @@
                     android:id="@+id/iv_play_music"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/icon_play_music"
                     android:layout_centerHorizontal="true"
                     android:paddingTop="10dp"
+                    android:src="@drawable/icon_play_music"
                     />
 
                 <TextView
-                      android:id="@+id/tv_play_time"
+                    android:id="@+id/tv_play_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/iv_play_music"
@@ -269,21 +308,18 @@
                     />
 
 
-
             </RelativeLayout>
-
 
 
             <RelativeLayout
                 android:id="@+id/ll_frame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/rl_play_music"
                 android:layout_toLeftOf="@+id/iv_add_frame"
-                android:orientation="vertical"
+                android:layout_toRightOf="@+id/rl_play_music"
                 android:gravity="center_vertical"
+                android:orientation="vertical"
                 >
-
 
 
                 <LinearLayout
@@ -310,6 +346,7 @@
                             android:background="@drawable/bg_action_frame_list"
 
                             >
+
                             <android.support.v7.widget.RecyclerView
                                 android:id="@+id/rcv_time"
                                 android:layout_width="match_parent"
@@ -324,15 +361,15 @@
 
                         <SeekBar
                             android:id="@+id/sb_voice"
+                            style="@null"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            style="@null"
-                            android:progressDrawable="@android:color/transparent"
-                            android:thumb="@drawable/ic_addmusic_mark"
-                            android:visibility="invisible"
-                            android:thumbOffset="0dp"
                             android:layout_marginLeft="-15dp"
                             android:layout_marginRight="-15dp"
+                            android:progressDrawable="@android:color/transparent"
+                            android:thumb="@drawable/ic_addmusic_mark"
+                            android:thumbOffset="0dp"
+                            android:visibility="invisible"
                             />
 
                         <android.support.v7.widget.RecyclerView
@@ -344,7 +381,6 @@
                         </android.support.v7.widget.RecyclerView>
 
 
-
                     </RelativeLayout>
 
 
@@ -354,8 +390,8 @@
                     android:id="@+id/ll_add_frame"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="26dp"
+                    android:orientation="horizontal"
                     android:visibility="visible"
                     >
 
@@ -369,8 +405,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="46dp"
-                        android:orientation="horizontal"
                         android:background="@drawable/bg_action_frame_list"
+                        android:orientation="horizontal"
                         >
 
                         <android.support.v7.widget.RecyclerView
@@ -386,74 +422,70 @@
                     </LinearLayout>
 
 
-
-
-
                 </LinearLayout>
 
-
-
-
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignBottom="@+id/ll_add_frame"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="40dp"
+                    android:src="@drawable/ic_addmusic_mark"/>
             </RelativeLayout>
 
             <ImageView
                 android:id="@+id/iv_add_frame"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/actions_edit_add_selector"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:src="@drawable/actions_edit_add_selector"
                 />
-
 
 
         </RelativeLayout>
 
-  <!--      <RelativeLayout
-            android:id="@+id/rl_music"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="40dp"
-            android:visibility="gone"
-            >
+        <!--      <RelativeLayout
+                  android:id="@+id/rl_music"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:paddingTop="40dp"
+                  android:visibility="gone"
+                  >
 
-            <TextView
-                android:id="@+id/tv_music"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Music"/>
+                  <TextView
+                      android:id="@+id/tv_music"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:gravity="center"
+                      android:text="Music"/>
 
-            <ImageView
-                android:id="@+id/iv_play_voice"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_below="@+id/tv_music"
-                android:src="@drawable/play_playing"/>
+                  <ImageView
+                      android:id="@+id/iv_play_voice"
+                      android:layout_width="40dp"
+                      android:layout_height="40dp"
+                      android:layout_below="@+id/tv_music"
+                      android:src="@drawable/play_playing"/>
 
-            <TextView
-                android:id="@+id/tv_music_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/iv_play_voice"
-                android:text="0:03"/>
+                  <TextView
+                      android:id="@+id/tv_music_time"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@+id/iv_play_voice"
+                      android:text="0:03"/>
 
-        </RelativeLayout>-->
-
-
+              </RelativeLayout>-->
 
 
     </RelativeLayout>
-
 
 
     <RelativeLayout
         android:id="@+id/rl_fragment_content"
         android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
     </RelativeLayout>
-
 
 
 </RelativeLayout>

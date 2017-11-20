@@ -7,10 +7,13 @@ import android.os.Bundle;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.courselayout.CourseOneLayout;
-import com.ubt.alpha1e.ui.BaseActivity;
+import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
+import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IEditActionUI;
+
+import java.util.List;
 
 
 /**
@@ -18,16 +21,46 @@ import com.ubt.alpha1e.ui.helper.IEditActionUI;
  * 邮箱 784787081@qq.com
  */
 
-public class CourseOneActivity extends BaseActivity implements IEditActionUI {
+public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI {
 
+    BaseHelper mHelper;
     CourseOneLayout mActionEdit;
 
-    private BaseHelper mHelper;
+    /**
+     * 当前课时
+     */
+    private int currentCourse;
+
+    /**
+     * 当前第几个
+     */
+    private int currentIndex;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mHelper = new ActionsEditHelper(CourseOneActivity.this, this);
+        mHelper.RegisterHelper();
+        initUI();
+    }
 
     @Override
     protected void initUI() {
-
+        mActionEdit = (CourseOneLayout) findViewById(R.id.action_edit);
+        mActionEdit.setUp(mHelper);
+        mPresenter.getCourseOneData(this);
     }
+
+    /**
+     * 获取到课时列表后设置数据
+     *
+     * @param list
+     */
+    @Override
+    public void getCourseOneData(List<ActionCourseOneContent> list) {
+        mActionEdit.setData(list, 1);
+    }
+
 
     @Override
     protected void initControlListener() {
@@ -40,20 +73,8 @@ public class CourseOneActivity extends BaseActivity implements IEditActionUI {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_action_course_one);
-        mHelper = new ActionsEditHelper(this, this);
-        mHelper.RegisterHelper();
-        mActionEdit = (CourseOneLayout) findViewById(R.id.action_edit);
-        mActionEdit.setUp(mHelper);
-    }
-
-    @Override
-    protected void onResume() {
-        setCurrentActivityLable("ActionTestActivity");
-        super.onResume();
-
+    public int getContentViewId() {
+        return R.layout.activity_action_course_one;
     }
 
     @Override
@@ -120,4 +141,6 @@ public class CourseOneActivity extends BaseActivity implements IEditActionUI {
     public void onChangeActionFinish() {
 
     }
+
+
 }

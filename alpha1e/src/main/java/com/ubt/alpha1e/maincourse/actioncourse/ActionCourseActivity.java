@@ -131,7 +131,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 .setContentHolder(viewHolder)
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(width)
-                .setContentBackgroundResource(R.drawable.bg_edit_user)
+                .setContentBackgroundResource(R.drawable.alert_backgroud)
                 .setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {

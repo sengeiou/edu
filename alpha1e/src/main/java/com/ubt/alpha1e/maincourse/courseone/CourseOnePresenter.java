@@ -2,13 +2,117 @@ package com.ubt.alpha1e.maincourse.courseone;
 
 import android.content.Context;
 
+import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
+import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ * 邮箱 784787081@qq.com
  */
 
-public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View> implements CourseOneContract.Presenter{
-    
+public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View> implements CourseOneContract.Presenter {
+
+
+    /**
+     * 获取课时列表
+     *
+     * @param context
+     */
+    @Override
+    public void getCourseOneData(Context context) {
+        List<ActionCourseOneContent> list = new ArrayList<>();
+        /**
+         * 第一课时
+         */
+        ActionCourseOneContent actionCourseOneContent1 = new ActionCourseOneContent();
+
+        actionCourseOneContent1.setIndex(0);
+        actionCourseOneContent1.setCourseName(ResourceManager.getInstance(context).getStringResources("action_course_card1_1"));
+        List<CourseOne1Content> one1ContentList = new ArrayList<>();
+        CourseOne1Content one1Content1 = new CourseOne1Content();
+        one1Content1.setIndex(0);
+        one1Content1.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_1"));
+        one1Content1.setId(R.id.ll_add_frame);
+        one1Content1.setDirection(0);
+        one1ContentList.add(one1Content1);
+
+        CourseOne1Content one1Content2 = new CourseOne1Content();
+        one1Content2.setIndex(1);
+        one1Content2.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_2"));
+        one1Content2.setId(R.id.ll_add_frame);
+        one1Content2.setDirection(0);
+        one1ContentList.add(one1Content2);
+
+        CourseOne1Content one1Content3 = new CourseOne1Content();
+        one1Content3.setIndex(0);
+        one1Content3.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_3"));
+        one1Content3.setId(R.id.ll_add_frame);
+        one1Content3.setDirection(0);
+        one1ContentList.add(one1Content3);
+
+        CourseOne1Content one1Content4 = new CourseOne1Content();
+        one1Content4.setIndex(0);
+        one1Content4.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_4"));
+        one1Content4.setId(R.id.ll_add_frame);
+        one1Content4.setDirection(0);
+        one1ContentList.add(one1Content4);
+
+        CourseOne1Content one1Content5 = new CourseOne1Content();
+        one1Content5.setIndex(0);
+        one1Content5.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_5"));
+        one1Content5.setId(R.id.ll_add_frame);
+        one1Content5.setDirection(0);
+        one1ContentList.add(one1Content5);
+
+        CourseOne1Content one1Content6 = new CourseOne1Content();
+        one1Content6.setIndex(0);
+        one1Content6.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_6"));
+        one1Content6.setId(R.id.ll_add_frame);
+        one1Content6.setDirection(0);
+        one1ContentList.add(one1Content6);
+        actionCourseOneContent1.setList(one1ContentList);
+        list.add(actionCourseOneContent1);
+
+        /**
+         * 第二课时
+         */
+        ActionCourseOneContent actionCourseOneContent2 = new ActionCourseOneContent();
+        actionCourseOneContent2.setIndex(1);
+        actionCourseOneContent2.setCourseName(ResourceManager.getInstance(context).getStringResources("action_course_card1_2"));
+        List<CourseOne1Content> one1ContentList1 = new ArrayList<>();
+        CourseOne1Content one1Content7 = new CourseOne1Content();
+        one1Content7.setIndex(0);
+        one1Content7.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_2_1"));
+        one1Content7.setId(R.id.ll_add_frame);
+        one1Content7.setDirection(0);
+        one1ContentList1.add(one1Content7);
+        actionCourseOneContent2.setList(one1ContentList1);
+        list.add(actionCourseOneContent2);
+
+        /**
+         * 第三课时
+         */
+        ActionCourseOneContent actionCourseOneContent3 = new ActionCourseOneContent();
+        actionCourseOneContent2.setIndex(1);
+        actionCourseOneContent2.setCourseName(ResourceManager.getInstance(context).getStringResources("action_course_card1_3"));
+        List<CourseOne1Content> one1ContentList2 = new ArrayList<>();
+        CourseOne1Content one1Content8 = new CourseOne1Content();
+        one1Content8.setIndex(0);
+        one1Content8.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_3_1"));
+        one1Content8.setId(R.id.ll_add_frame);
+        one1Content8.setDirection(0);
+        one1ContentList2.add(one1Content8);
+        actionCourseOneContent3.setList(one1ContentList2);
+        list.add(actionCourseOneContent3);
+
+        if (isAttachView()) {
+            mView.getCourseOneData(list);
+        }
+    }
 }

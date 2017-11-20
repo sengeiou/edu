@@ -73,13 +73,13 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
 //        /**
 //         * 第一关课时内容
 //         */
-//        ActionCourseContent content11 = new ActionCourseContent();
+//        ActionCourseOneContent content11 = new ActionCourseOneContent();
 //        content11.setIndex(1);
 //        content11.setContent("认识时间轴");
-//         ActionCourseContent content12 = new ActionCourseContent();
+//         ActionCourseOneContent content12 = new ActionCourseOneContent();
 //        content12.setIndex(2);
 //        content12.setContent("熟悉动作模板");
-//         ActionCourseContent content13 = new ActionCourseContent();
+//         ActionCourseOneContent content13 = new ActionCourseOneContent();
 //        content13.setIndex(3);
 //        content13.setContent("了解音频");
 //
@@ -96,13 +96,13 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
 //        /**
 //         * 第一关课时内容
 //         */
-//         ActionCourseContent content21 = new ActionCourseContent();
+//         ActionCourseOneContent content21 = new ActionCourseOneContent();
 //        content21.setIndex(1);
 //        content21.setContent("了解动作模板");
-//         ActionCourseContent content22 = new ActionCourseContent();
+//         ActionCourseOneContent content22 = new ActionCourseOneContent();
 //        content22.setIndex(2);
 //        content22.setContent("模板讲解");
-//         ActionCourseContent content23 = new ActionCourseContent();
+//         ActionCourseOneContent content23 = new ActionCourseOneContent();
 //        content23.setIndex(3);
 //        content23.setContent("添加指定动作");
 //

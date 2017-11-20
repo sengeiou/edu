@@ -124,11 +124,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.right_icon:
 //                mLaunch.setClass(this, ScanBluetoothActivity.class);
 //                startActivity(mLaunch);
-                startActivity(new Intent(this, ActionTestActivity.class));
+
 
                 //                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect",true);
                 break;
             case R.id.right_icon2:
+                startActivity(new Intent(this, ActionTestActivity.class));
+                this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 break;
             case R.id.right_icon3:
                 break;
