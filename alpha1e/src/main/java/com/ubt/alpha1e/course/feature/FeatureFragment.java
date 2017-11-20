@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,7 +16,6 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.animator.BezierView;
 import com.ubt.alpha1e.course.CourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
-import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import butterknife.BindView;
@@ -74,7 +75,13 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
     BezierView bzvPrincipleVoice;
     @BindView(R.id.bzv_principle_voice_obstacle_avoidance)
     BezierView bzvPrincipleVoiceObstacleAvoidance;
+    @BindView(R.id.rl_principle_steering_engine_intro)
+    RelativeLayout rlPrincipleSteeringEngineIntro;
+    @BindView(R.id.tv_msg_show)
+    TextView tvMsgShow;
 
+    private Animation biggerAnimation = null;
+    private Animation smallerAnimation = null;
 
     private int containerWidth;
     private int containerHeight;
@@ -90,7 +97,12 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
         containerWidth = this.getResources().getDisplayMetrics().widthPixels;
         containerHeight = this.getResources().getDisplayMetrics().heightPixels;
 
-        UbtLog.d(TAG, "scale == " + scale
+        biggerAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.scan_bigger_anim_right_bottom);
+        biggerAnimation.setDuration(500);
+        smallerAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.scan_smaller_anim_right_bottom);
+        smallerAnimation.setDuration(500);
+
+        UbtLog.d(TAG, "scale = " + scale
                 + "  width = " + this.getResources().getDisplayMetrics().widthPixels
                 + "  height = " + this.getResources().getDisplayMetrics().heightPixels
                 + "  densityDpi = " + this.getResources().getDisplayMetrics().densityDpi);
@@ -111,6 +123,7 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
             }
         });
 
+
     }
 
     @Override
@@ -121,9 +134,9 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
     @Override
     public int getContentViewId() {
         scale = (int) this.getResources().getDisplayMetrics().density;
-        if(scale == 3){
+        if (scale == 3) {
             return R.layout.fragment_robot_feature_3;
-        }else {
+        } else {
             return R.layout.fragment_robot_feature;
         }
     }
@@ -175,13 +188,6 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
 
             initViewLayout(ivPrincipleVoiceObstacleAvoidance, scale, 0);
 
-            /*initViewLine(ivRobot, ivPrincipleSteeringEngine);
-            initViewLine(ivRobot, ivPrincipleInfraredSensor);
-            initViewLine(ivRobot, ivPrincipleSoundbox);
-            initViewLine(ivRobot, ivPrincipleHead);
-            initViewLine(ivRobot, ivPrincipleEye);
-            initViewLine(ivRobot, ivPrincipleVoice);
-            initViewLine(ivRobot, ivPrincipleVoiceObstacleAvoidance);*/
         }
 
         initViewLine(ivRobot, ivPrincipleSteeringEngine);
@@ -197,106 +203,100 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
 
         params = (RelativeLayout.LayoutParams) view.getLayoutParams();
         UbtLog.d(TAG, "width start :: " + params.width + " height : " + params.height + " width = " + ivRobot.getWidth()
-                + "  height = " + ivRobot.getHeight() + "  topMargin = " + params.topMargin + " " +  params.leftMargin + " >> " + view.getTop() + "   " + view.getLeft() );
+                + "  height = " + ivRobot.getHeight() + "  topMargin = " + params.topMargin + " " + params.leftMargin + " >> " + view.getTop() + "   " + view.getLeft());
 
-        params.width  = view.getWidth() / 2 * scale;
+        params.width = view.getWidth() / 2 * scale;
         params.height = view.getHeight() / 2 * scale;
         if (margetTop != 0) {
             params.topMargin = margetTop / 2 * scale;
         }
         view.setLayoutParams(params);
-
-        UbtLog.d(TAG, "width center:> " + params.width + " height : " + params.height + " width = " + ivRobot.getWidth()
-                + "  height = " + ivRobot.getHeight() + "  topMargin = " + params.topMargin + " " +  params.leftMargin + " >> " + view.getTop() + "   " + view.getLeft() );
-
-        int newLeft = view.getLeft() - (params.width  - view.getWidth()) / 2;
-        int newTop  = view.getTop() -  (params.height - view.getHeight())/ 2;
+        int newLeft = view.getLeft() - (params.width - view.getWidth()) / 2;
+        int newTop = view.getTop() - (params.height - view.getHeight()) / 2;
 
         view.layout(newLeft, newTop, newLeft + params.width, newTop + params.height);
 
-        UbtLog.d(TAG, "width end:: " + params.width + " height : " + params.height + " width = " + ivRobot.getWidth()
-                + "  height = " + ivRobot.getHeight() + "  topMargin = " + params.topMargin + " " +  params.leftMargin + " >> " + view.getTop() + "   " + view.getLeft() );
     }
 
     private void initViewLine(View startView, View targetView) {
         UbtLog.d(TAG, "targetView = " + targetView);
         int[] startPos = getlocation(startView);
         int[] targetPos = getlocation(targetView);
-        int startX,startY,targetX,targetY;
+        int startX, startY, targetX, targetY;
         if (targetView.getId() == R.id.iv_principle_steering_engine) {
             startX = startPos[0] + startView.getWidth() / 4;
             startY = startPos[1] + startView.getHeight() - 14 / 2 * scale;
             targetX = targetPos[0] + targetView.getWidth() / 2;
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
-            bzvPrincipleSteeringEngine.addPoint(startX , startY);
-            bzvPrincipleSteeringEngine.addPoint(targetX + (startX - targetX)/2 , targetY - (targetY - startY) / 2 - 30);
+            bzvPrincipleSteeringEngine.addPoint(startX, startY);
+            bzvPrincipleSteeringEngine.addPoint(targetX + (startX - targetX) / 2, targetY - (targetY - startY) / 2 - 30);
             bzvPrincipleSteeringEngine.addPoint(targetX, targetY);
 
-        }else if(targetView.getId() == R.id.iv_principle_infrared_sensor){
+        } else if (targetView.getId() == R.id.iv_principle_infrared_sensor) {
 
             startX = startPos[0] + startView.getWidth() / 2;
-            startY = startPos[1] + startView.getHeight() / 2 + 26 / 2 * scale ;
+            startY = startPos[1] + startView.getHeight() / 2 + 26 / 2 * scale;
             targetX = targetPos[0] + targetView.getWidth() / 2;
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
-            bzvPrincipleInfraredSensor.addPoint(startX , startY);
-            bzvPrincipleInfraredSensor.addPoint(targetX + (startX - targetX)/2 , startY+50);
+            bzvPrincipleInfraredSensor.addPoint(startX, startY);
+            bzvPrincipleInfraredSensor.addPoint(targetX + (startX - targetX) / 2, startY + 50);
             bzvPrincipleInfraredSensor.addPoint(targetX, targetY);
 
-        }else if(targetView.getId() == R.id.iv_principle_soundbox){
+        } else if (targetView.getId() == R.id.iv_principle_soundbox) {
 
             startX = startPos[0] + startView.getWidth() / 2 - 46 / 2 * scale;
-            startY = startPos[1] + 58 / 2 * scale ;
+            startY = startPos[1] + 58 / 2 * scale;
             targetX = targetPos[0] + targetView.getWidth() / 2;
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
-            bzvPrincipleSoundbox.addPoint(startX , startY);
-            bzvPrincipleSoundbox.addPoint(targetX + (startX - targetX)/2, targetY + 100);
+            bzvPrincipleSoundbox.addPoint(startX, startY);
+            bzvPrincipleSoundbox.addPoint(targetX + (startX - targetX) / 2, targetY + 100);
             bzvPrincipleSoundbox.addPoint(targetX, targetY);
 
-        }else if(targetView.getId() == R.id.iv_principle_head){
+        } else if (targetView.getId() == R.id.iv_principle_head) {
 
             startX = startPos[0] + startView.getWidth() / 2;
-            startY = startPos[1] ;
+            startY = startPos[1];
             targetX = targetPos[0] + targetView.getWidth() / 2;
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
-            bzvPrincipleHead.addPoint(startX , startY);
+            bzvPrincipleHead.addPoint(startX, startY);
             bzvPrincipleHead.addPoint(targetX, targetY);
 
-        }else if(targetView.getId() == R.id.iv_principle_eye){
+        } else if (targetView.getId() == R.id.iv_principle_eye) {
 
             startX = startPos[0] + startView.getWidth() / 2 + 24 / 2 * scale;
-            startY = startPos[1] + 58 / 2 * scale ;
+            startY = startPos[1] + 58 / 2 * scale;
             targetX = targetPos[0] + targetView.getWidth() / 2;
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
-            bzvPrincipleEye.addPoint(startX , startY);
-            bzvPrincipleEye.addPoint(targetX - (targetX - startX)/2, targetY + 100);
+            bzvPrincipleEye.addPoint(startX, startY);
+            bzvPrincipleEye.addPoint(targetX - (targetX - startX) / 2, targetY + 100);
             bzvPrincipleEye.addPoint(targetX, targetY);
 
-        }else if(targetView.getId() == R.id.iv_principle_voice){
+        } else if (targetView.getId() == R.id.iv_principle_voice) {
 
             startX = startPos[0] + startView.getWidth() / 2 + 46 / 2 * scale;
             startY = startPos[1] + 118 / 2 * scale;
             targetX = targetPos[0] + targetView.getWidth() / 2;
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
-            bzvPrincipleVoice.addPoint(startX , startY);
-            bzvPrincipleVoice.addPoint(targetX - (targetX - startX)/2 , startY+50);
+            bzvPrincipleVoice.addPoint(startX, startY);
+            bzvPrincipleVoice.addPoint(targetX - (targetX - startX) / 2, startY + 50);
             bzvPrincipleVoice.addPoint(targetX, targetY);
 
-        }else if(targetView.getId() == R.id.iv_principle_voice_obstacle_avoidance){
+        } else if (targetView.getId() == R.id.iv_principle_voice_obstacle_avoidance) {
 
             startX = startPos[0] + startView.getWidth() / 2;
-            startY = startPos[1] + 200 / 2 * scale ;
+            startY = startPos[1] + 200 / 2 * scale;
             targetX = targetPos[0] + targetView.getWidth() / 2;
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
-            bzvPrincipleVoiceObstacleAvoidance.addPoint(startX , startY);
-            bzvPrincipleVoiceObstacleAvoidance.addPoint(targetX - (targetX - startX)/2 , targetY - (targetY - startY) / 2 - 30);
-            bzvPrincipleVoiceObstacleAvoidance.addPoint(targetX , targetY);
+            bzvPrincipleVoiceObstacleAvoidance.addPoint(startX, startY);
+            bzvPrincipleVoiceObstacleAvoidance.addPoint(targetX - (targetX - startX) / 2, targetY - (targetY - startY) / 2 - 30);
+            bzvPrincipleVoiceObstacleAvoidance.addPoint(targetX, targetY);
         }
 
     }
@@ -308,13 +308,24 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
         x = location[0];
         y = location[1];
 
-        UbtLog.d(TAG, "Screenx--->>" + x + "  " + "Screeny--->" + y + "     = " + view.getLeft() + "    " + view.getTop() );
+        UbtLog.d(TAG, "Screenx--->>" + x + "  " + "Screeny--->" + y + "     = " + view.getLeft() + "    " + view.getTop());
         return location;
     }
 
 
-    @OnClick({R.id.iv_back, R.id.tv_next, R.id.iv_principle_steering_engine, R.id.iv_principle_infrared_sensor, R.id.iv_principle_soundbox, R.id.iv_principle_head, R.id.iv_principle_eye, R.id.iv_principle_voice, R.id.iv_principle_voice_obstacle_avoidance})
+    @OnClick({R.id.iv_back,
+            R.id.tv_next,
+            R.id.tv_msg_show,
+            R.id.iv_principle_steering_engine,
+            R.id.iv_principle_infrared_sensor,
+            R.id.iv_principle_soundbox,
+            R.id.iv_principle_head,
+            R.id.iv_principle_eye,
+            R.id.iv_principle_voice,
+            R.id.iv_principle_voice_obstacle_avoidance,
+            R.id.rl_principle_steering_engine_intro})
     public void onViewClicked(View view) {
+        UbtLog.d(TAG, "view = " + view);
         switch (view.getId()) {
             case R.id.iv_back:
                 //((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_MERGE);
@@ -323,30 +334,70 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
             case R.id.tv_next:
                 //((CourseActivity) getContext()).finish();
 
-                bzvPrincipleSteeringEngine.start();
+                /*bzvPrincipleSteeringEngine.start();
                 bzvPrincipleInfraredSensor.start();
                 bzvPrincipleSoundbox.start();
                 bzvPrincipleHead.start();
                 bzvPrincipleEye.start();
                 bzvPrincipleVoice.start();
-                bzvPrincipleVoiceObstacleAvoidance.start();
+                bzvPrincipleVoiceObstacleAvoidance.start();*/
+
+                if(tvMsgShow.getVisibility() == View.VISIBLE){
+                    showView(tvMsgShow, false, smallerAnimation);
+                }else {
+                    showView(tvMsgShow, true, biggerAnimation);
+                }
+
+                break;
+            case R.id.tv_msg_show:
                 break;
             case R.id.iv_principle_steering_engine:
-                //getPo(ivPrincipleSteeringEngine);
+                UbtLog.d(TAG, "rlPrincipleSteeringEngineIntro = " + rlPrincipleSteeringEngineIntro);
+                showView(rlPrincipleSteeringEngineIntro, true, biggerAnimation);
+
+                //bzvPrincipleSteeringEngine.start();
                 break;
             case R.id.iv_principle_infrared_sensor:
-                //getPo(ivPrincipleInfraredSensor);
+                bzvPrincipleInfraredSensor.start();
                 break;
             case R.id.iv_principle_soundbox:
+                bzvPrincipleSoundbox.start();
                 break;
             case R.id.iv_principle_head:
+                bzvPrincipleHead.start();
                 break;
             case R.id.iv_principle_eye:
+                bzvPrincipleEye.start();
                 break;
             case R.id.iv_principle_voice:
+                bzvPrincipleVoice.start();
                 break;
             case R.id.iv_principle_voice_obstacle_avoidance:
+                bzvPrincipleVoiceObstacleAvoidance.start();
+                break;
+            case R.id.rl_principle_steering_engine_intro:
+                showView(rlPrincipleSteeringEngineIntro, false, smallerAnimation);
                 break;
         }
     }
+
+    private void showView(View view, boolean isShow, Animation anim) {
+        if (view.getVisibility() == View.VISIBLE && isShow) {
+            return;
+        }
+
+        if (view.getVisibility() != View.VISIBLE && !isShow) {
+            return;
+        }
+
+        if (isShow) {
+            view.setVisibility(View.VISIBLE);
+        } else {
+            view.setVisibility(View.GONE);
+        }
+        if (anim != null) {
+            view.startAnimation(anim);
+        }
+    }
+
 }

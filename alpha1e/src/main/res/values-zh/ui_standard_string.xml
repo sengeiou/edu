@@ -957,4 +957,6 @@
     <string name="ui_common_save_success">保存成功</string>
     <string name="ui_common_save_fail">保存失败</string>
     <string name="ui_common_save_to_dcim">长按保存到相册</string>
+
+    <string name="ui_principle_head_tips">小朋友，请摸摸我的头！</string>
 </resources>
