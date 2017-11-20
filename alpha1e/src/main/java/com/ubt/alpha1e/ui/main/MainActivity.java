@@ -124,6 +124,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int cartoon_action_sleep = 11;
     private int cartoon_action_smile = 12;
     private int buddleTextTimeout = 5000;//5s
+    private int chargeShrinkTimeout=1000;
     private Timer mTimer;
     private TimerTask mTimeOutTask;
     private LooperThread looperThread;
@@ -139,18 +140,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         looperThread.start();
         callAsynchronousTask();
         chargeAsynchronousTask();
-//        Thread chargingUi=new Thread(new Runnable(){
-//            @Override
-//            public void run() {
-//                chargeAsynchronousTask();
-//            }
-//        });
-//        chargingUi.start();
-
-        //startBuddleTime();
-
     }
-
 
     @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3,
             R.id.right_icon4, R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
@@ -249,17 +239,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     public void showCartoonAction(int value) {
-
-//           try {
-//               GifDrawable gifFromResource = new GifDrawable(getContext().getResources(), R.drawable.rightleg);
-//               cartoonAction.setImageDrawable(gifFromResource);
-//               Log.d(TAG, "After Animation CARTOON width*height :" + cartoonAction.getWidth() + "  Y: " + cartoonAction.getHeight());
-//               int count = gifFromResource.getNumberOfFrames();
-//               gifFromResource.setLoopCount(1);
-//               Log.d(TAG, "FRAME COUNT " + count);
-//           } catch (IOException e) {
-//               e.printStackTrace();
-//           }
         String actionName = "";
         if (m_animationTask == null) {
             m_animationTask = new AnimationTask();
@@ -322,6 +301,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void handleMessage(Bundle bundle) {
         runOnUiThread(new Runnable() {
             @Override public void run() {
+
             }
         });
     }
@@ -358,13 +338,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
                         } catch (Exception e) {
                             // TODO Auto-generated catch block
+                            e.printStackTrace();
                         }
                     }
                 });
-
             }
         };
-        timer.schedule(doAsynchronousTask, 0, 5000); //execute in every 50000 ms
+        timer.schedule(doAsynchronousTask, 0, buddleTextTimeout); //execute in every 50000 ms
     }
 
     public void chargeAsynchronousTask() {
@@ -389,28 +369,16 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
                         } catch (Exception e) {
                             // TODO Auto-generated catch block
+                            e.printStackTrace();
                         }
                     }
                 });
             }
         };
-        timer.schedule(doAsynchronousTask, 0, 1000); //execute in every 50000 ms
+        timer.schedule(doAsynchronousTask, 0, chargeShrinkTimeout); //execute in every 50000 ms
     }
 
     private void showBuddleText(String text) {
-//        if(mCirclePop!=null){
-//            mCirclePop.dismiss();
-//        }else {
-//            mCirclePop = new EasyPopup(this)
-//                    .setContentView(R.layout.main_ui_buddletext)
-//                    .setFocusAndOutsideEnable(true)
-//                    .createPopup();
-//
-//        }
-//        mCirclePop.showAtAnchorView(cartoonHead,VerticalGravity.ALIGN_TOP,  HorizontalGravity.RIGHT, 20 , 0);
-//        TextView mBuddleText=mCirclePop.getView(R.id.tv_delete);
-//        mBuddleText.setText(text);
-
         buddleText.setText(text);
         buddleText.setVisibility(View.VISIBLE);
     }
@@ -421,7 +389,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     public void showCartoonText(String text) {
-
     }
 
     @Override
@@ -447,7 +414,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         } else {
             topIcon2Disconnect.setVisibility(View.VISIBLE);
         }
-
 
     }
 
