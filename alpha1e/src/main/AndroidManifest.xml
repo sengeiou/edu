@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.ubt.alpha1e"
-          android:versionCode="1"
-          android:versionName="V1.0.0.1">
+     xmlns:tools="http://schemas.android.com/tools"
+    package="com.ubt.alpha1e"
+    android:versionCode="1"
+    android:versionName="V1.0.0.2">
+    <meta-data android:name="design_width" android:value="1920">
 
-    <meta-data
-        android:name="design_width"
-        android:value="1920">
     </meta-data>
     <meta-data
         android:name="design_height"
