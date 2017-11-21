@@ -159,7 +159,7 @@ dependencies {
     compile 'com.tencent.mid:mid:3.72.4-alpha'
     compile(name: 'tvsloginlib', ext: 'aar')
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
-     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
+    compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     compile 'com.yanzhenjie:permission:1.1.2'
     compile 'com.github.zyyoona7:EasyPopup:1.0.2'
     compile 'org.litepal.android:core:1.6.0'

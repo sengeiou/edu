@@ -19,9 +19,9 @@ public class HttpEntity {
     /**
      * 获取XG AppaccessId AppaccessKey
      */
-    public static final String getXGAppId = XG_URL+"push/appInfo";
+    public static final String getXGAppId = XG_URL + "push/appInfo";
 
-    public static final String bindXGServer = XG_URL+"push/userToken";
+    public static final String bindXGServer = XG_URL + "push/userToken";
 
     //http://10.10.32.52:8080/ubx/sys/register
     public static final String BASIC_THIRD_LOGIN_URL = "http://10.10.20.71:8010/user-service-rest/v2/";
@@ -37,5 +37,14 @@ public class HttpEntity {
     public static final String VERIDATA_CODE = BASIC_UBX_SYS + "validateCode";
     public static final String ADD_FEEDBACK = BASIC_UBX_SYS + "addFeedback";
     public static final String CHECK_APP_UPDATE = BASIC_UBX_SYS + "updateApp";
+
+    public static final String COURSE_GET_PROGRESS = BASIC_UBX_SYS + "getCourseProgress";
+
+
+    public static final String COURSE_SAVE_PROGRESS = BASIC_UBX_SYS + "saveCourseProgress";
+
+    public static final String COURSE_SAVE_STATU = BASIC_UBX_SYS + "saveCourseStatus";
+
+    public static final String COURSE_GET_STATU = BASIC_UBX_SYS + "getCourseStatus";
 
 }

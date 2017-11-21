@@ -7,9 +7,12 @@ import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.zyyoona7.lib.HorizontalGravity;
+import com.zyyoona7.lib.VerticalGravity;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * MVPPlugin
@@ -38,43 +41,67 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         CourseOne1Content one1Content1 = new CourseOne1Content();
         one1Content1.setIndex(0);
         one1Content1.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_1"));
-        one1Content1.setId(R.id.ll_add_frame);
+        one1Content1.setId(R.id.ll_frame);
         one1Content1.setDirection(0);
+        one1Content1.setX(0);
+        one1Content1.setY(-50);
+        one1Content1.setVertGravity(VerticalGravity.CENTER);
+        one1Content1.setHorizGravity(HorizontalGravity.RIGHT);
         one1ContentList.add(one1Content1);
 
         CourseOne1Content one1Content2 = new CourseOne1Content();
         one1Content2.setIndex(1);
         one1Content2.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_2"));
-        one1Content2.setId(R.id.ll_add_frame);
-        one1Content2.setDirection(0);
+        one1Content2.setId(R.id.iv_zoom_plus);
+        one1Content2.setDirection(1);
+        one1Content2.setX(0);
+        one1Content2.setY(0);
+        one1Content2.setVertGravity(VerticalGravity.CENTER);
+        one1Content2.setHorizGravity(HorizontalGravity.LEFT);
         one1ContentList.add(one1Content2);
 
         CourseOne1Content one1Content3 = new CourseOne1Content();
-        one1Content3.setIndex(0);
+        one1Content3.setIndex(2);
         one1Content3.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_3"));
-        one1Content3.setId(R.id.ll_add_frame);
+        one1Content3.setId(R.id.rl_musicz_zpne);
+        one1Content3.setX(0);
+        one1Content3.setY(-40);
+        one1Content3.setVertGravity(VerticalGravity.CENTER);
+        one1Content3.setHorizGravity(HorizontalGravity.RIGHT);
         one1Content3.setDirection(0);
         one1ContentList.add(one1Content3);
 
         CourseOne1Content one1Content4 = new CourseOne1Content();
-        one1Content4.setIndex(0);
+        one1Content4.setIndex(3);
         one1Content4.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_4"));
-        one1Content4.setId(R.id.ll_add_frame);
+        one1Content4.setId(R.id.iv_reset_index);
         one1Content4.setDirection(0);
+        one1Content4.setX(70);
+        one1Content4.setY(20);
+        one1Content4.setVertGravity(VerticalGravity.ALIGN_BOTTOM);
+        one1Content4.setHorizGravity(HorizontalGravity.RIGHT);
         one1ContentList.add(one1Content4);
 
         CourseOne1Content one1Content5 = new CourseOne1Content();
-        one1Content5.setIndex(0);
+        one1Content5.setIndex(4);
         one1Content5.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_5"));
-        one1Content5.setId(R.id.ll_add_frame);
-        one1Content5.setDirection(0);
+        one1Content5.setId(R.id.iv_add_frame);
+        one1Content5.setDirection(1);
+        one1Content5.setX(0);
+        one1Content5.setY(0);
+        one1Content5.setVertGravity(VerticalGravity.CENTER);
+        one1Content5.setHorizGravity(HorizontalGravity.LEFT);
         one1ContentList.add(one1Content5);
 
         CourseOne1Content one1Content6 = new CourseOne1Content();
-        one1Content6.setIndex(0);
+        one1Content6.setIndex(5);
         one1Content6.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_6"));
-        one1Content6.setId(R.id.ll_add_frame);
+        one1Content6.setId(R.id.iv_play_music);
         one1Content6.setDirection(0);
+        one1Content6.setX(0);
+        one1Content6.setY(0);
+        one1Content6.setVertGravity(VerticalGravity.CENTER);
+        one1Content6.setHorizGravity(HorizontalGravity.RIGHT);
         one1ContentList.add(one1Content6);
         actionCourseOneContent1.setList(one1ContentList);
         list.add(actionCourseOneContent1);

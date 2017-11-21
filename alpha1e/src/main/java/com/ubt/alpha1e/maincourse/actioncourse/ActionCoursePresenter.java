@@ -67,68 +67,15 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         }
     }
 
-//    private List<ActionCourseModel> initActionCourseData() {
-//        List<ActionCourseModel> list = new ArrayList<>();
-//
-//        /**
-//         * 第一关课时内容
-//         */
-//        ActionCourseOneContent content11 = new ActionCourseOneContent();
-//        content11.setIndex(1);
-//        content11.setContent("认识时间轴");
-//         ActionCourseOneContent content12 = new ActionCourseOneContent();
-//        content12.setIndex(2);
-//        content12.setContent("熟悉动作模板");
-//         ActionCourseOneContent content13 = new ActionCourseOneContent();
-//        content13.setIndex(3);
-//        content13.setContent("了解音频");
-//
-//        ActionCourseModel courseModel1 = new ActionCourseModel();
-//        courseModel1.setActionCourcesName("第一关");
-//        courseModel1.setActionLockType(0);
-//        courseModel1.setDrawableId(R.drawable.ic_action_level1);
-//        courseModel1.getContents().add(content11);
-//        courseModel1.getContents().add(content12);
-//        courseModel1.getContents().add(content13);
-//
-//        list.add(courseModel1);
-//
-//        /**
-//         * 第一关课时内容
-//         */
-//         ActionCourseOneContent content21 = new ActionCourseOneContent();
-//        content21.setIndex(1);
-//        content21.setContent("了解动作模板");
-//         ActionCourseOneContent content22 = new ActionCourseOneContent();
-//        content22.setIndex(2);
-//        content22.setContent("模板讲解");
-//         ActionCourseOneContent content23 = new ActionCourseOneContent();
-//        content23.setIndex(3);
-//        content23.setContent("添加指定动作");
-//
-//        ActionCourseModel courseModel2 = new ActionCourseModel();
-//        courseModel2.setActionCourcesName("第二关");
-//        courseModel2.setDrawableId(R.drawable.ic_action_level2);
-//        courseModel2.setActionLockType(1);
-//        courseModel2.getContents().add(content21);
-//        courseModel2.getContents().add(content22);
-//        courseModel2.getContents().add(content23);
-//         list.add(courseModel2);
-//        ActionCourseModel courseModel3 = new ActionCourseModel();
-//        courseModel3.setActionCourcesName("第三关");
-//        courseModel3.setDrawableId(R.drawable.ic_action_level3);
-//        courseModel3.setActionLockType(1);
-//        list.add(courseModel3);
-//        ActionCourseModel courseModel4 = new ActionCourseModel();
-//        courseModel4.setActionCourcesName("第四关");
-//        courseModel4.setDrawableId(R.drawable.ic_action_level4);
-//        courseModel4.setActionLockType(1);
-//        list.add(courseModel4);
-//        ActionCourseModel courseModel5 = new ActionCourseModel();
-//        courseModel5.setActionCourcesName("第五关");
-//        courseModel5.setDrawableId(R.drawable.ic_action_level5);
-//        courseModel5.setActionLockType(1);
-//        list.add(courseModel4);
-//        return list;
-//    }
+
+    public void getCourseScore(){
+
+    }
+
+
+    public void getLastProgress(){
+
+    }
+
+
 }

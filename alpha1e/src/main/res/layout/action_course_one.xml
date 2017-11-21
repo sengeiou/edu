@@ -131,7 +131,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/ll_robot"
-                android:background="@drawable/bg_edit_user">
+                android:background="@drawable/bg_edit_user"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/iv_left"
@@ -342,6 +343,7 @@
                         android:layout_height="wrap_content">
 
                         <RelativeLayout
+                            android:id="@+id/rl_musicz_zpne"
                             android:layout_width="match_parent"
                             android:layout_height="20dp"
                             android:background="@drawable/bg_action_frame_list"
@@ -425,13 +427,7 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignBottom="@+id/ll_add_frame"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginLeft="40dp"
-                    android:src="@drawable/ic_addmusic_mark"/>
+
             </RelativeLayout>
 
             <ImageView
@@ -487,6 +483,7 @@
         android:layout_height="match_parent"
         android:visibility="gone">
     </RelativeLayout>
+
 
 
 </RelativeLayout>

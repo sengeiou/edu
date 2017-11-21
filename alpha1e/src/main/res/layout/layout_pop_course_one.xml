@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+    >
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bubble_guide_left"
+        android:gravity="center"
+        android:text="这是时间轴，它就像一个奇妙的盒子，上面装着音乐，下面装着动作，添加的动作会按先后顺序显示在轴上。"
+        android:textColor="@color/tv_center_color"
+        android:textSize="14sp"
+        />
+
+</RelativeLayout>

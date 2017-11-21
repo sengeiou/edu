@@ -24,6 +24,13 @@ public class CourseOne1Content {
      */
     private int direction;
 
+
+    private int  vertGravity;
+
+    private int horizGravity;
+
+    private int x;
+    private int y;
     public int getIndex() {
         return index;
     }
@@ -56,6 +63,40 @@ public class CourseOne1Content {
         this.direction = direction;
     }
 
+    public int getVertGravity() {
+        return vertGravity;
+    }
+
+    public void setVertGravity(int vertGravity) {
+        this.vertGravity = vertGravity;
+    }
+
+    public int getHorizGravity() {
+        return horizGravity;
+    }
+
+    public void setHorizGravity(int horizGravity) {
+        this.horizGravity = horizGravity;
+    }
+
+
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
     @Override
     public String toString() {
         return "CourseOne1Content{" +
@@ -63,6 +104,10 @@ public class CourseOne1Content {
                 ", content='" + content + '\'' +
                 ", id=" + id +
                 ", direction=" + direction +
+                ", vertGravity=" + vertGravity +
+                ", horizGravity=" + horizGravity +
+                ", x=" + x +
+                ", y=" + y +
                 '}';
     }
 }

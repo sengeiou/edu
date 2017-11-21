@@ -3,8 +3,14 @@ package com.ubt.alpha1e.maincourse.courseone;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.courselayout.CourseOneLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
@@ -25,6 +31,8 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
 
     BaseHelper mHelper;
     CourseOneLayout mActionEdit;
+    RelativeLayout mRlInstruction;
+
 
     /**
      * 当前课时
@@ -44,11 +52,29 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
         initUI();
     }
 
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1111) {
+                mRlInstruction.setVisibility(View.GONE);
+                mPresenter.getCourseOneData(CourseOneActivity.this);
+            }
+        }
+    };
+
+
     @Override
     protected void initUI() {
         mActionEdit = (CourseOneLayout) findViewById(R.id.action_edit);
+        mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
         mActionEdit.setUp(mHelper);
-        mPresenter.getCourseOneData(this);
+        boolean flag = SPUtils.getInstance().getBoolean(Constant.SP_ACTION_COURSE_CARD_ONE);
+        if (!flag) {
+            mRlInstruction.setVisibility(View.VISIBLE);
+            SPUtils.getInstance().put(Constant.SP_ACTION_COURSE_CARD_ONE, false);
+            mHandler.sendEmptyMessageDelayed(1111, 3000);
+        }
     }
 
     /**
