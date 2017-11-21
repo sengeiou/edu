@@ -579,6 +579,10 @@
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen">
         </activity>
+
+        <activity android:name=".action.actioncreate.SaveSuccessActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
     </application>
 
 </manifest>

@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.action.actioncreate.SaveSuccessActivity;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ImageTools;
@@ -695,8 +696,10 @@ public class ActionsEditSaveActivity extends BaseActivity implements
         {
             UbtLog.d("wilson","onChangeActionFinish");
             Intent intent = new Intent();
-            intent.putExtra(ActionsEditHelper.SaveActionResult,state);
-            setResult(ActionsEditHelper.SaveActionReq, intent);
+            intent.setClass(this, SaveSuccessActivity.class);
+            startActivity(intent);
+//            intent.putExtra(ActionsEditHelper.SaveActionResult,state);
+//            setResult(ActionsEditHelper.SaveActionReq, intent);
             finish();
         }else
         {
