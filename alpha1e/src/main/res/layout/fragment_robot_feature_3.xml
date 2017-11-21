@@ -132,6 +132,33 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
 
+        <RelativeLayout
+            android:id="@+id/rl_principle_steering_engine_intro"
+            android:layout_width="610px"
+            android:layout_height="396px"
+            android:layout_toRightOf="@+id/iv_principle_steering_engine"
+            android:layout_above="@+id/iv_principle_steering_engine"
+            android:layout_marginLeft="-386px"
+            android:layout_marginBottom="-140px"
+            android:visibility="gone"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/icon_principle_steering_engine_intro"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="18dp"
+                android:gravity="center_vertical"
+                android:text="@string/ui_setting_principle_tip_2"
+                android:textColor="@color/white"
+                android:textSize="12sp"/>
+
+        </RelativeLayout>
+
         <ImageView
             android:id="@+id/iv_principle_steering_engine"
             android:layout_width="132px"
@@ -206,6 +233,27 @@
             android:layout_toRightOf="@+id/v_empty"
             android:layout_below="@+id/v_empty"
             android:src="@drawable/icon_principle_voice_obstacle_avoidance"
+            />
+
+        <TextView
+            android:id="@+id/tv_msg_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="215px"
+            android:minHeight="59px"
+            android:gravity="center_vertical"
+            android:text="@string/ui_principle_head_tips"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:textColor="#104A70"
+            android:textSize="16sp"
+            android:background="@drawable/icon_message_show"
+            android:layout_above="@+id/v_top"
+            android:layout_marginBottom="-30dp"
+            android:layout_toRightOf="@+id/iv_robot"
+            android:visibility="visible"
             />
 
     </RelativeLayout>

@@ -4,6 +4,8 @@ package com.ubt.alpha1e.course.split;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +34,11 @@ import butterknife.Unbinder;
 public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPresenter> implements SplitContract.View {
 
     private static final String TAG = SplitFragment.class.getSimpleName();
+
+    private static final int HIDE_VIEW = 1;
+    private static final int GO_TO_NEXT = 2;
+
+    private final int ANIMATOR_TIME = 500;
 
     @BindView(R.id.tv_next)
     TextView tvNext;
@@ -62,6 +69,36 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
     private int scale = 0;
 
     private boolean hasInitRobot = false;
+    private RelativeLayout.LayoutParams params = null;
+
+    private boolean hasLostHandLeft = false;
+    private boolean hasLostHandRight = false;
+    private boolean hasLostLegLeft = false;
+    private boolean hasLostLegRight = false;
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case HIDE_VIEW:
+                    int viewId = msg.arg1;
+                    if(viewId == R.id.iv_hand_left){
+                        ivHandLeftBg.setVisibility(View.INVISIBLE);
+                    }else if(viewId == R.id.iv_hand_right){
+                        ivHandRightBg.setVisibility(View.INVISIBLE);
+                    }else if(viewId == R.id.iv_leg_left ){
+                        ivLegLeftBg.setVisibility(View.INVISIBLE);
+                    }else if(viewId == R.id.iv_leg_right){
+                        ivLegRightBg.setVisibility(View.INVISIBLE);
+                    }
+                    break;
+                case GO_TO_NEXT:
+                    ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_MERGE);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void initUI() {
@@ -95,78 +132,59 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
                 });
             }
         });
+
+        initData();
     }
 
     private void initRobot() {
 
         if (scale == 3.0) {
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ivRobot.getLayoutParams();
 
+            initViewLayout(ivRobot, scale);
 
-            UbtLog.d(TAG, "ivHandLeftBg start :" + ivHandLeftBg.getWidth() + "/" + ivHandLeftBg.getHeight());
+            initViewLayout(ivHandLeft, scale);
 
-            UbtLog.d(TAG, "width : " + params.width + " height : " + params.height + " width = " + ivRobot.getWidth() + "  height = " + ivRobot.getHeight() + "  topMargin = " + params.topMargin);
-            params.width = ivRobot.getWidth() / 2 * 3;
-            params.height = ivRobot.getHeight() / 2 * 3;
-            ivRobot.setLayoutParams(params);
-            UbtLog.d(TAG, "ivRobot:" + ivRobot.getWidth() + "/" + ivRobot.getHeight());
+            initViewLayout(ivHandRight, scale);
 
-            params = (RelativeLayout.LayoutParams) ivHandLeft.getLayoutParams();
-            params.width = ivHandLeft.getWidth() / 2 * 3;
-            params.height = ivHandLeft.getHeight() / 2 * 3;
-            params.topMargin = 370;
-            ivHandLeft.setLayoutParams(params);
-            UbtLog.d(TAG, "ivHandLeft:" + ivHandLeft.getWidth() + "/" + ivHandLeft.getHeight() + "  params = " + params.topMargin);
+            initViewLayout(ivLegLeft, scale);
 
-            params = (RelativeLayout.LayoutParams) ivHandRight.getLayoutParams();
-            params.width = ivHandRight.getWidth() / 2 * 3;
-            params.height = ivHandRight.getHeight() / 2 * 3;
-            params.topMargin = 370;
-            ivHandRight.setLayoutParams(params);
-            UbtLog.d(TAG, "ivHandRight:" + ivHandRight.getWidth() + "/" + ivHandRight.getHeight());
+            initViewLayout(ivLegRight, scale);
 
-            params = (RelativeLayout.LayoutParams) ivLegLeft.getLayoutParams();
-            params.width = ivLegLeft.getWidth() / 2 * 3;
-            params.height = ivLegLeft.getHeight() / 2 * 3;
-            params.topMargin = 51 * (-1);
-            ivLegLeft.setLayoutParams(params);
-            UbtLog.d(TAG, "ivLegLeft:" + ivLegLeft.getWidth() + "/" + ivLegLeft.getHeight() + "    topMargin = " + params.topMargin);
+            initViewLayout(ivHandLeftBg, scale);
 
-            params = (RelativeLayout.LayoutParams) ivLegRight.getLayoutParams();
-            params.width = ivLegLeft.getWidth() / 2 * 3;
-            params.height = ivLegLeft.getHeight() / 2 * 3;
-            params.topMargin = 51 * (-1);
-            ivLegRight.setLayoutParams(params);
+            initViewLayout(ivHandRightBg, scale);
 
-            //bg
-            params = (RelativeLayout.LayoutParams) ivHandLeftBg.getLayoutParams();
-            params.width = ivHandLeftBg.getWidth() / 2 * 3;
-            params.height = ivHandLeftBg.getHeight() / 2 * 3;
-            params.topMargin = 370;
-            ivHandLeftBg.setLayoutParams(params);
+            initViewLayout(ivLegLeftBg, scale);
 
-            params = (RelativeLayout.LayoutParams) ivHandRightBg.getLayoutParams();
-            params.width = ivHandRightBg.getWidth() / 2 * 3;
-            params.height = ivHandRightBg.getHeight() / 2 * 3;
-            params.topMargin = 370;
-            ivHandRightBg.setLayoutParams(params);
-
-            params = (RelativeLayout.LayoutParams) ivLegLeftBg.getLayoutParams();
-            params.width = ivLegLeftBg.getWidth() / 2 * 3;
-            params.height = ivLegLeftBg.getHeight() / 2 * 3;
-            params.topMargin = 51 * (-1);
-            ivLegLeftBg.setLayoutParams(params);
-
-            params = (RelativeLayout.LayoutParams) ivLegRightBg.getLayoutParams();
-            params.width = ivLegRightBg.getWidth() / 2 * 3;
-            params.height = ivLegRightBg.getHeight() / 2 * 3;
-            params.topMargin = 51 * (-1);
-            ivLegRightBg.setLayoutParams(params);
-
-            UbtLog.d(TAG, "ivHandLeftBg end :" + ivHandLeftBg.getWidth() + "/" + ivHandLeftBg.getHeight());
-
+            initViewLayout(ivLegRightBg, scale);
 
         }
+    }
+
+    private void initViewLayout(View view, int scale ) {
+
+        params = (RelativeLayout.LayoutParams) view.getLayoutParams();
+        UbtLog.d(TAG, "width start : " + params.width + " height : " + params.height + " width = " + ivRobot.getWidth()
+                + "  height = " + ivRobot.getHeight() + "  topMargin = " + params.topMargin + " " +  params.leftMargin + " >> " + view.getTop() + "   " + view.getLeft() + "    = " + view.getX()+"/" + view.getY());
+
+        params.width  = view.getWidth() / 2 * scale;
+        params.height = view.getHeight() / 2 * scale;
+        params.topMargin = params.topMargin / 2 * scale;
+        view.setLayoutParams(params);
+
+        /*int newLeft = view.getLeft() - (params.width  - view.getWidth()) / 2;
+        int newTop  = view.getTop() -  (params.height - view.getHeight())/ 2;
+        view.layout(newLeft, newTop, newLeft + params.width, newTop + params.height);
+
+        UbtLog.d(TAG, "width end:: " + params.width + " height : " + params.height + " width = " + ivRobot.getWidth()
+                + "  height = " + ivRobot.getHeight() + "  topMargin = " + params.topMargin + " " +  params.leftMargin + " >> " + view.getTop() + "   " + view.getLeft() + "    = " + view.getX()+"/" + view.getY());*/
+    }
+
+    private void initData(){
+        hasLostHandLeft = false;
+        hasLostHandRight = false;
+        hasLostLegLeft = false;
+        hasLostLegRight = false;
     }
 
     @Override
@@ -196,7 +214,6 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
     public void onResume() {
         super.onResume();
 
-
     }
 
     @Override
@@ -209,12 +226,63 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
-                ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_SPLIT);
+                ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_PRINCIPLE);
                 break;
             case R.id.tv_next:
-                ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_MERGE);
+                doAplitAll();
+                mHandler.sendEmptyMessageDelayed(GO_TO_NEXT,600);
                 break;
         }
+    }
+
+    private void doAplitAll(){
+
+        float targetX,targetY;
+        if(!hasLostHandLeft){
+            targetX = containerWidth/2 - ivRobot.getWidth()/2 - ivHandLeftBg.getWidth() - ivHandLeft.getWidth() - SizeUtils.dip2px(getContext(),30);
+            targetY = containerHeight/2 - ivHandLeft.getHeight()/2;
+            ivHandLeftBg.setBackgroundResource(R.drawable.icon_principle_leftarm_white);
+            ivHandLeftBg.setVisibility(View.VISIBLE);
+            hasLostHandLeft = true;
+            doAnimator(ivHandLeft, targetX, targetY);
+        }
+        if(!hasLostHandRight){
+            targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRight.getWidth() + SizeUtils.dip2px(getContext(),30);
+            targetY = containerHeight/2 - ivHandRight.getHeight()/2;
+            ivHandRightBg.setBackgroundResource(R.drawable.icon_principle_rightarm_white);
+            ivHandRightBg.setVisibility(View.VISIBLE);
+            hasLostHandRight = true;
+            doAnimator(ivHandRight, targetX, targetY);
+        }
+
+        if(!hasLostLegLeft){
+            targetX = containerWidth/2 - ivRobot.getWidth()/2 - ivHandLeftBg.getWidth()*2 - ivLegLeft.getWidth()- SizeUtils.dip2px(getContext(),30)*2;
+            targetY = containerHeight/2 - ivLegLeft.getHeight()/2;
+            ivLegLeftBg.setBackgroundResource(R.drawable.icon_principle_leftleg_white);
+            ivLegLeftBg.setVisibility(View.VISIBLE);
+            hasLostLegLeft = true;
+            doAnimator(ivLegLeft, targetX, targetY);
+        }
+
+        if(!hasLostLegRight){
+            targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRightBg.getWidth()*2 + SizeUtils.dip2px(getContext(),30)*2;
+            targetY = containerHeight/2 - ivLegRight.getHeight()/2;
+            ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_white);
+            ivLegRightBg.setVisibility(View.VISIBLE);
+            hasLostLegRight = true;
+            doAnimator(ivLegRight, targetX, targetY);
+        }
+    }
+
+    private void doAnimator(View view,float targetX, float targetY){
+        // 属性动画移动
+        ObjectAnimator y = ObjectAnimator.ofFloat(view, "y", view.getY(), targetY);
+        ObjectAnimator x = ObjectAnimator.ofFloat(view, "x", view.getX(), targetX);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(x, y);
+        animatorSet.setDuration(ANIMATOR_TIME);
+        animatorSet.start();
     }
 
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
@@ -223,13 +291,37 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
 
         private float targetX,targetY;
 
+        private float startX,startY;
+
         @Override
         public boolean onTouch(View view, MotionEvent event) {
             //UbtLog.d(TAG, "event.getActionMasked() = " + event.getActionMasked());
+            if(!onTouchable(view)){
+                return false;
+            }
+
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
                     lastX = event.getRawX();
                     lastY = event.getRawY();
+
+                    startX = view.getX();
+                    startY = view.getY();
+
+                    if(view.getId() == R.id.iv_hand_left){
+                        ivHandLeftBg.setBackgroundResource(R.drawable.icon_principle_leftarm_yellow);
+                        ivHandLeftBg.setVisibility(View.VISIBLE);
+                    }else if(view.getId() == R.id.iv_hand_right){
+                        ivHandRightBg.setBackgroundResource(R.drawable.icon_principle_rightarm_yellow);
+                        ivHandRightBg.setVisibility(View.VISIBLE);
+                    }else if(view.getId() == R.id.iv_leg_left){
+                        ivLegLeftBg.setBackgroundResource(R.drawable.icon_principle_leftleg_yellow);
+                        ivLegLeftBg.setVisibility(View.VISIBLE);
+                    }else if(view.getId() == R.id.iv_leg_right){
+                        ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_yellow);
+                        ivLegRightBg.setVisibility(View.VISIBLE);
+                    }
+                    UbtLog.d(TAG,"targetX = " + targetX + " targetY = " + targetY + " width = " + ivHandLeftBg.getWidth() + " height = " + ivHandLeftBg.getHeight()+ "   view = " + view.getX()+"/"+view.getY());
                     return true;
                 case MotionEvent.ACTION_MOVE: {
                     //  不要直接用getX和getY,这两个获取的数据已经是经过处理的,容易出现图片抖动的情况
@@ -245,6 +337,7 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
                     } else if (nextY > containerHeight - view.getHeight()) {
                         nextY = containerHeight - view.getHeight();
                     }
+
                     if (nextX < 0) {
                         nextX = 0;
                     } else if (nextX > containerWidth - view.getWidth()) {
@@ -262,22 +355,67 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
 
                     lastX = event.getRawX();
                     lastY = event.getRawY();
+
+                    //当移动位置绝对值超出背景图时，变白色
+                    if(Math.abs(nextX - startX) > view.getWidth() || Math.abs(nextY - startY) > view.getHeight()  ){
+                        if(view.getId() == R.id.iv_hand_left){
+                            ivHandLeftBg.setBackgroundResource(R.drawable.icon_principle_leftarm_white);
+                        }else if(view.getId() == R.id.iv_hand_right){
+                            ivHandRightBg.setBackgroundResource(R.drawable.icon_principle_rightarm_white);
+                        }else if(view.getId() == R.id.iv_leg_left ){
+                            ivLegLeftBg.setBackgroundResource(R.drawable.icon_principle_leftleg_white);
+                        }else if(view.getId() == R.id.iv_leg_right){
+                            ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_white);
+                        }
+                    }else {
+                        if(view.getId() == R.id.iv_hand_left){
+                            ivHandLeftBg.setBackgroundResource(R.drawable.icon_principle_leftarm_yellow);
+                        }else if(view.getId() == R.id.iv_hand_right){
+                            ivHandRightBg.setBackgroundResource(R.drawable.icon_principle_rightarm_yellow);
+                        }else if(view.getId() == R.id.iv_leg_left ){
+                            ivLegLeftBg.setBackgroundResource(R.drawable.icon_principle_leftleg_yellow);
+                        }else if(view.getId() == R.id.iv_leg_right){
+                            ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_yellow);
+                        }
+                    }
+
+                    //UbtLog.d(TAG,"ivHandLeftBg = " + ivHandLeftBg.getX() + "/" + ivHandLeftBg.getY() + "    ivHandLeft = " + ivHandLeft.getX()+"/"+ivHandLeft.getY() + "    last = " + lastX+"/" +lastY);
+
                 }
                 return false;
                 case MotionEvent.ACTION_UP: {
 
-                    if(view.getId() == R.id.iv_hand_left){
-                        targetX = containerWidth/2 - ivRobot.getWidth()/2 - ivHandLeftBg.getWidth() - ivHandLeft.getWidth() - SizeUtils.dip2px(getContext(),30);
-                        targetY = containerHeight/2 - view.getHeight()/2;
-                    }else if(view.getId() == R.id.iv_leg_left ){
-                        targetX = containerWidth/2 - ivRobot.getWidth()/2 - ivHandLeftBg.getWidth()*2 - ivLegLeft.getWidth()- SizeUtils.dip2px(getContext(),30)*2;
-                        targetY = containerHeight/2 - view.getHeight()/2;
-                    }else if(view.getId() == R.id.iv_hand_right){
-                        targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRightBg.getWidth() + SizeUtils.dip2px(getContext(),30);
-                        targetY = containerHeight/2 - view.getHeight()/2;
-                    }else if(view.getId() == R.id.iv_leg_right){
-                        targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRightBg.getWidth()*2 + SizeUtils.dip2px(getContext(),30)*2;
-                        targetY = containerHeight/2 - view.getHeight()/2;
+                    //当移动位置绝对值移出原来位置时，执行掉点，否则不掉电
+                    if(Math.abs(view.getX() - startX) > view.getWidth() || Math.abs(view.getY() - startY) > view.getHeight()  ){
+                        if(view.getId() == R.id.iv_hand_left){
+                            targetX = containerWidth/2 - ivRobot.getWidth()/2 - ivHandLeftBg.getWidth() - ivHandLeft.getWidth() - SizeUtils.dip2px(getContext(),30);
+                            targetY = containerHeight/2 - view.getHeight()/2;
+                            ivHandLeftBg.setBackgroundResource(R.drawable.icon_principle_leftarm_white);
+                            hasLostHandLeft = true;
+                        }else if(view.getId() == R.id.iv_hand_right){
+                            targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRightBg.getWidth() + SizeUtils.dip2px(getContext(),30);
+                            targetY = containerHeight/2 - view.getHeight()/2;
+                            ivHandRightBg.setBackgroundResource(R.drawable.icon_principle_rightarm_white);
+                            hasLostHandRight = true;
+                        }else if(view.getId() == R.id.iv_leg_left ){
+                            targetX = containerWidth/2 - ivRobot.getWidth()/2 - ivHandLeftBg.getWidth()*2 - ivLegLeft.getWidth()- SizeUtils.dip2px(getContext(),30)*2;
+                            targetY = containerHeight/2 - view.getHeight()/2;
+                            ivLegLeftBg.setBackgroundResource(R.drawable.icon_principle_leftleg_white);
+                            hasLostLegLeft = true;
+                        }else if(view.getId() == R.id.iv_leg_right){
+                            targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRightBg.getWidth()*2 + SizeUtils.dip2px(getContext(),30)*2;
+                            targetY = containerHeight/2 - view.getHeight()/2;
+                            ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_white);
+                            hasLostLegRight = true;
+                        }
+                    }else {
+                        targetX = startX;
+                        targetY = startY;
+
+                        Message hideViewMsg = new Message();
+                        hideViewMsg.what = HIDE_VIEW;
+                        hideViewMsg.arg1 = view.getId();
+                        mHandler.sendMessageDelayed(hideViewMsg,ANIMATOR_TIME);
                     }
 
                     UbtLog.d(TAG,"targetX = " + targetX + " targetY = " + targetY + " width = " + ivHandLeftBg.getWidth() + " height = " + ivHandLeftBg.getHeight()+ "   view = " + view);
@@ -288,7 +426,7 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
 
                     AnimatorSet animatorSet = new AnimatorSet();
                     animatorSet.playTogether(x, y);
-                    animatorSet.setDuration(500);
+                    animatorSet.setDuration(ANIMATOR_TIME);
                     animatorSet.start();
 
                     lastX = event.getRawX();
@@ -297,6 +435,20 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
                 return false;
             }
             return false;
+        }
+
+        private boolean onTouchable(View view){
+            boolean touchable = true;
+            if(view.getId() == R.id.iv_hand_left && hasLostHandLeft){
+                touchable = false;
+            }else if(view.getId() == R.id.iv_hand_right && hasLostHandRight){
+                touchable = false;
+            }else if(view.getId() == R.id.iv_leg_left && hasLostLegLeft){
+                touchable = false;
+            }else if(view.getId() == R.id.iv_leg_right && hasLostLegRight){
+                touchable = false;
+            }
+            return touchable;
         }
     };
 }
