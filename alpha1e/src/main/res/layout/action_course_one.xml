@@ -151,6 +151,7 @@
                     android:layout_centerInParent="true"
                     android:layout_toLeftOf="@+id/iv_right"
                     android:layout_toRightOf="@+id/iv_left"
+                    android:gravity="center"
                     android:text="认识时间轴"
                     android:textColor="@color/action_frame_color"
                     android:textSize="16sp"
