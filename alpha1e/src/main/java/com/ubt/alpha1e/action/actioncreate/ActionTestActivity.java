@@ -134,6 +134,9 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
 
         if (requestCode == ActionsEditHelper.SaveActionReq) {
 
+            if(data == null){
+                return;
+            }
             isSaveSuccess =(Boolean) data.getExtras().get(ActionsEditHelper.SaveActionResult);
             if(isSaveSuccess){
                 ToastUtils.showShort("ui_save_action_success");

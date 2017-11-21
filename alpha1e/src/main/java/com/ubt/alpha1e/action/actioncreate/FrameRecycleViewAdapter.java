@@ -202,20 +202,23 @@ public class FrameRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 viewHolder.rlEditLayout.setVisibility(View.GONE);
             }
 
-            if(position == playIndex){
-                UbtLog.d(TAG, "playing view VISIBLE");
-                viewHolder.rlNormal.setVisibility(View.VISIBLE);
-                UbtLog.d(TAG, "is 333");
-                viewHolder.itemView.setBackgroundResource(R.drawable.buttonstyle_ba_on);
+            if(playIndex != -1){
+                if(position == playIndex){
+                    UbtLog.d(TAG, "playing view VISIBLE");
+                    viewHolder.rlNormal.setVisibility(View.VISIBLE);
+                    UbtLog.d(TAG, "is 333");
+                    viewHolder.itemView.setBackgroundResource(R.drawable.buttonstyle_ba_on);
 
-            }else{
-                viewHolder.playingView.setVisibility(View.GONE);
-                viewHolder.rlNormal.setVisibility(View.VISIBLE);
+                }else{
+                    viewHolder.playingView.setVisibility(View.GONE);
+                    viewHolder.rlNormal.setVisibility(View.VISIBLE);
 
-                UbtLog.d(TAG, "is 444");
-                viewHolder.itemView.setBackgroundResource(R.drawable.buttonstyle_ba);
+                    UbtLog.d(TAG, "is 444");
+                    viewHolder.itemView.setBackgroundResource(R.drawable.buttonstyle_ba);
 
+                }
             }
+
 
         }
 
