@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lLayout_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/alert_backgroud"
+        android:minHeight="150dp"
+        android:minWidth="300dp">
+
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:drawableTop="@drawable/lowpowerindicator20"
+            android:gravity="center"
+            android:text="@string/lowpower_indicator"
+            android:textAppearance="@style/ActionsSquareTab"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+
+</LinearLayout>

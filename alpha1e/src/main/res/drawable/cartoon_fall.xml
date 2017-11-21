@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
-<item android:drawable="@drawable/fall1"  android:duration="50"/>
-    <item android:drawable="@drawable/fall2"  android:duration="50"/>
-    <item android:drawable="@drawable/fall3"  android:duration="50"/>
-    <item android:drawable="@drawable/fall4"  android:duration="50"/>
-    <item android:drawable="@drawable/fall5"  android:duration="50"/>
-    <item android:drawable="@drawable/fall6"  android:duration="50"/>
-    <item android:drawable="@drawable/fall7"  android:duration="50"/>
-    <item android:drawable="@drawable/fall8"  android:duration="50"/>
-    <item android:drawable="@drawable/fall9"  android:duration="50"/>
-<item android:drawable="@drawable/fall10"  android:duration="50"/>
-<item android:drawable="@drawable/fall11"  android:duration="50"/>
-<item android:drawable="@drawable/fall12"  android:duration="50"/>
-<item android:drawable="@drawable/fall13"  android:duration="50"/>
-<item android:drawable="@drawable/fall14"  android:duration="50"/>
-<item android:drawable="@drawable/fall15"  android:duration="50"/>
-<item android:drawable="@drawable/fall16"  android:duration="50"/>
-<item android:drawable="@drawable/fall17"  android:duration="50"/>
-<item android:drawable="@drawable/fall18"  android:duration="50"/>
-<item android:drawable="@drawable/fall19"  android:duration="50"/>
-<item android:drawable="@drawable/fall20"  android:duration="50"/>
-<item android:drawable="@drawable/fall21"  android:duration="50"/>
-<item android:drawable="@drawable/fall22"  android:duration="50"/>
-<item android:drawable="@drawable/fall23"  android:duration="50"/>
-<item android:drawable="@drawable/fall24"  android:duration="50"/>
-<item android:drawable="@drawable/fall25"  android:duration="50"/>
-<item android:drawable="@drawable/fall26"  android:duration="50"/>
-<item android:drawable="@drawable/fall27"  android:duration="50"/>
-<item android:drawable="@drawable/fall28"  android:duration="50"/>
-<item android:drawable="@drawable/fall29"  android:duration="50"/>
-<item android:drawable="@drawable/fall30"  android:duration="50"/>
-<item android:drawable="@drawable/fall31"  android:duration="50"/>
-<item android:drawable="@drawable/fall32"  android:duration="50"/>
-<item android:drawable="@drawable/fall33"  android:duration="50"/>
-<item android:drawable="@drawable/fall34"  android:duration="50"/>
-<item android:drawable="@drawable/fall35"  android:duration="50"/>
-<item android:drawable="@drawable/fall36"  android:duration="50"/>
-<item android:drawable="@drawable/fall37"  android:duration="50"/>
-<item android:drawable="@drawable/fall38"  android:duration="50"/>
-<item android:drawable="@drawable/fall39"  android:duration="50"/>
-<item android:drawable="@drawable/fall40"  android:duration="50"/>
-<item android:drawable="@drawable/fall41"  android:duration="50"/>
+<item android:drawable="@drawable/fall1"  android:duration="40"/>
+    <item android:drawable="@drawable/fall2"  android:duration="40"/>
+    <item android:drawable="@drawable/fall3"  android:duration="40"/>
+    <item android:drawable="@drawable/fall4"  android:duration="40"/>
+    <item android:drawable="@drawable/fall5"  android:duration="40"/>
+    <item android:drawable="@drawable/fall6"  android:duration="40"/>
+    <item android:drawable="@drawable/fall7"  android:duration="40"/>
+    <item android:drawable="@drawable/fall8"  android:duration="40"/>
+    <item android:drawable="@drawable/fall9"  android:duration="40"/>
+<item android:drawable="@drawable/fall10"  android:duration="40"/>
+<item android:drawable="@drawable/fall11"  android:duration="40"/>
+<item android:drawable="@drawable/fall12"  android:duration="40"/>
+<item android:drawable="@drawable/fall13"  android:duration="40"/>
+<item android:drawable="@drawable/fall14"  android:duration="40"/>
+<item android:drawable="@drawable/fall15"  android:duration="40"/>
+<item android:drawable="@drawable/fall16"  android:duration="40"/>
+<item android:drawable="@drawable/fall17"  android:duration="40"/>
+<item android:drawable="@drawable/fall18"  android:duration="40"/>
+<item android:drawable="@drawable/fall19"  android:duration="40"/>
+<item android:drawable="@drawable/fall20"  android:duration="40"/>
+<item android:drawable="@drawable/fall21"  android:duration="40"/>
+<item android:drawable="@drawable/fall22"  android:duration="40"/>
+<item android:drawable="@drawable/fall23"  android:duration="40"/>
+<item android:drawable="@drawable/fall24"  android:duration="40"/>
+<item android:drawable="@drawable/fall25"  android:duration="40"/>
+<item android:drawable="@drawable/fall26"  android:duration="40"/>
+<item android:drawable="@drawable/fall27"  android:duration="40"/>
+<item android:drawable="@drawable/fall28"  android:duration="40"/>
+<item android:drawable="@drawable/fall29"  android:duration="40"/>
+<item android:drawable="@drawable/fall30"  android:duration="40"/>
+<item android:drawable="@drawable/fall31"  android:duration="40"/>
+<item android:drawable="@drawable/fall32"  android:duration="40"/>
+<item android:drawable="@drawable/fall33"  android:duration="40"/>
+<item android:drawable="@drawable/fall34"  android:duration="40"/>
+<item android:drawable="@drawable/fall35"  android:duration="40"/>
+<item android:drawable="@drawable/fall36"  android:duration="40"/>
+<item android:drawable="@drawable/fall37"  android:duration="40"/>
+<item android:drawable="@drawable/fall38"  android:duration="40"/>
+<item android:drawable="@drawable/fall39"  android:duration="40"/>
+<item android:drawable="@drawable/fall40"  android:duration="40"/>
+<item android:drawable="@drawable/fall41"  android:duration="40"/>
 
 </animation-list>

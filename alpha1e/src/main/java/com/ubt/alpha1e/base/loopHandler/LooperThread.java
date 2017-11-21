@@ -53,4 +53,7 @@ public final class LooperThread extends Thread {
     public static void send(Message message) {
         handler.sendMessage(message);
     }
+    public static void sendDelayMessage(Message message,long delay){
+        handler.sendMessageDelayed(message,delay);
+    }
 }

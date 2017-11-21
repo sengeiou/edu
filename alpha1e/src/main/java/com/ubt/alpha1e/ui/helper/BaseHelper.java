@@ -22,6 +22,7 @@ import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.dialog.AlertDialog;
+import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
 import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -220,7 +221,6 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
             e.printStackTrace();
         }
         if (cmd == ConstValue.DV_READ_BATTERY) {
-            // ��ֹ�ظ���Ӧ-------------------start
             Date curDate = new Date(System.currentTimeMillis());
             float time_difference = 500;
             if (lastTime_doReadState != null) {
@@ -249,6 +249,16 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                     AlphaApplication.getBaseActivity().onNoteLowPower();
                 } else if (power > 10) {
                     isNeedNoteLowPower = true;
+                }
+                if(param[2]==0){
+                    if(power<20){
+                        UbtLog.d(TAG,"LESS 20 SHOW DIALOG");
+                        new LowBatteryDialog(mContext).builder().show();
+                    }
+                    if(power<5){
+                        UbtLog.d(TAG,"LESS 5 SHOW DIALOG");
+                        new LowBatteryDialog(mContext).builder().show();
+                    }
                 }
             } catch (Exception e) {
                 UbtLog.e(TAG, "Exception:" + e.getMessage());

@@ -6,6 +6,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -28,6 +29,7 @@ import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
+import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.UserModel;
@@ -51,8 +53,8 @@ import butterknife.OnClick;
 
 
 /**
- * MVPPlugin
- * 邮箱 784787081@qq.com
+ * Liliang
+ * Main UI function
  */
 
 public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View,HandlerCallback {
@@ -126,6 +128,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int cartoon_action_shiver = 10;
     private int cartoon_action_sleep = 11;
     private int cartoon_action_smile = 12;
+    private int cartoon_aciton_squat_reverse = 13;
     private int buddleTextTimeout = 5000;//5s
     private int charging_shrink_interval=1000;
     private int chargeShrinkTimeout=2000;
@@ -137,20 +140,31 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private byte mChargeValue=0;
     long mCurrentTouchTime=0;
     private long noOperationTimeout=1*60*1000;
+    private boolean lowBatteryIndicator=false;
+    private int LOWPOWER_THRESHOLD=20;
+    private String STATUS_MACHINE="status_machine";
+    private final byte APP_LAUNCH_STATUS=0x01;
+    private final byte APP_CONNECTED_STATUS=0x02;
+    private final byte APP_NOT_OPERATION=0x03;
+    private final byte LOW_POWER_LESS_TWENTY_STATUS=0x04;
+    private final byte LOW_POWER_LESS_FILVE_STATUS=0x05;
+    private final byte ROBOT_CHARGING=0x06;
+    private final byte ROBOT_CHARGING_ENOUGH=0x07;
+    private final byte ROBOT_SLEEP_EVENT=0x08;
+
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        looperThread = new LooperThread(this);
+        looperThread.start();
         mCurrentTouchTime=System.currentTimeMillis();
         getScreenInch();
         initUI();
         mHelper=MainUiBtHelper.getInstance(getContext());
-        looperThread = new LooperThread(this);
-        looperThread.start();
-        buddleTextAsynchronousTask();
-
+        looperThread.sendDelayMessage(createMessage(APP_LAUNCH_STATUS,""),2000);
 
     }
 
@@ -197,6 +211,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 //TURN OFF LIGHT
                 papram[0]=0x01;
                 mPresenter.commandRobotAction(ConstValue.DV_LIGHT, papram);
+              // new LowBatteryDialog(getContext()).builder().show();
                 break;
             case R.id.top_icon3:
                 try {
@@ -248,6 +263,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     protected void onResume() {
         super.onResume();
         if (isBulueToothConnected()) {
+            looperThread.send(createMessage(APP_CONNECTED_STATUS,""));
             topIcon2Disconnect.setVisibility(View.INVISIBLE);
         } else {
             topIcon2Disconnect.setVisibility(View.VISIBLE);
@@ -268,55 +284,59 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private Handler m_Handler = new Handler();
 
     @Override
-    public void showCartoonAction(int value) {
-        mCurrentTouchTime=System.currentTimeMillis();
-        if(System.currentTimeMillis()-mCurrentTouchTime<noOperationTimeout) {
+    public void showCartoonAction(final int value) {
+        mCurrentTouchTime = System.currentTimeMillis();
+        if (System.currentTimeMillis() - mCurrentTouchTime < noOperationTimeout) {
             buddleText.setVisibility(View.INVISIBLE);
         }
         String actionName = "";
         if (m_animationTask == null) {
             m_animationTask = new AnimationTask();
         }
+
         if (value == cartoon_action_swing_left_hand) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_left_hand);
-            actionName = "swing_left_hand";
+            //actionName = "swing_left_hand";
         } else if (value == cartoon_action_swing_right_hand) {
             cartoonAction.setBackgroundResource(R.drawable.swigrighthand);
-            actionName = "swing_right_hand";
+            // actionName = "swing_right_hand";
         } else if (value == cartoon_action_swing_left_leg) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_swing_leftleg);
-            actionName = "swing_left_leg";
+            //  actionName = "swing_left_leg";
         } else if (value == cartoon_action_swing_right_leg) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_right_leg);
-            actionName = "swing_right_leg";
+            // actionName = "swing_right_leg";
         } else if (value == cartoon_action_hand_stand) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand);
-            actionName = "hand_stand";
+            // actionName = "hand_stand";
         } else if (value == cartoon_action_hand_stand_reverse) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand_reverse);
-            actionName = "hand_stand_reverse";
+            // actionName = "hand_stand_reverse";
         } else if (value == cartoon_aciton_squat) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_squat);
-            actionName = "squat";
+            // actionName = "squat";
         } else if (value == cartoon_action_enjoy) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_enjoy);
-            actionName = "enjoy";
+            //  actionName = "enjoy";
         } else if (value == cartoon_action_fall) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_fall);
-            actionName = "fall";
+            //  actionName = "fall";
         } else if (value == cartoon_action_greeting) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_greeting);
-            actionName = "greeting";
+            // actionName = "greeting";
         } else if (value == cartoon_action_shiver) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_shiver);
-            actionName = "shiver";
+            // actionName = "shiver";
         } else if (value == cartoon_action_sleep) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_sleep);
-            actionName = "sleep";
+            // actionName = "sleep";
         } else if (value == cartoon_action_smile) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_smile);
-            actionName = "smile enjoy";
+            // actionName = "smile enjoy";
+        }else if(value==cartoon_aciton_squat_reverse){
+            cartoonAction.setBackgroundResource(R.drawable.cartoon_squat_reverse);
         }
+
         //showBuddleText(actionName);
         // Type casting the Animation drawable
         frameAnimation = (AnimationDrawable) cartoonAction.getBackground();
@@ -326,19 +346,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         frameAnimation.setOneShot(true);
         boolean result = m_Handler.postDelayed(m_animationTask, time);
         frameAnimation.start();
-
     }
+
 
     private AnimationTask m_animationTask;
 
-    @Override
-    public void handleMessage(Bundle bundle) {
-        runOnUiThread(new Runnable() {
-            @Override public void run() {
 
-            }
-        });
-    }
+
 
     private class AnimationTask implements Runnable {
         @Override
@@ -355,20 +369,18 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mBuddleTextTimeOutTask= new TimerTask() {
             @Override
             public void run() {
+                if(looperThread==null){
+                    return;
+                }
                 looperThread.post(new Runnable() {
                     public void run() {
                        if(System.currentTimeMillis()-mCurrentTouchTime>noOperationTimeout) {
                            try {
-                               boolean isUiThread = Looper.getMainLooper().getThread() == Thread.currentThread();
-                               Random random = new Random();
-                               Log.i(TAG, "Timer out IS :   " + buddleTextTimeout + "main thread " + isUiThread);
-                               String[] arrayText = getResources().getStringArray(R.array.mainUi_buddle_text);
-                               int select = random.nextInt(arrayText.length);
-                               final String text = arrayText[select];
+                              // boolean isUiThread = Looper.getMainLooper().getThread() == Thread.currentThread();
                                runOnUiThread(new Runnable() {
                                    @Override
                                    public void run() {
-                                       showBuddleText(text);
+                                     randomBuddleText();
                                    }
                                });
                            } catch (Exception e) {
@@ -440,7 +452,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
     private void showBuddleText(String text) {
-        buddleText.setText(text);
+        buddleText.setText("\u3000"+text);
         buddleText.setVisibility(View.VISIBLE);
     }
 
@@ -515,36 +527,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 Log.d(TAG, "ROBOT SLEEP EVENT");
             } else if (mCmd == 0x73) {
                 Log.d(TAG, "ROBOT LOW BATTERY");
+                looperThread.send(createMessage(ROBOT_SLEEP_EVENT,""));
             } else if (mCmd == 0x74) {
                 Log.d(TAG, "ROBOT POWER OFF EVENT");
             } else if (mCmd == ConstValue.DV_READ_BATTERY) {
-               final byte[] mParams = Base64.decode(mMessage.getString("param"), Base64.DEFAULT);
-                for (int i = 0; i < mParams.length; i++) {
-                    Log.d(TAG, "index " + i + "value :" + mParams[i]);
-                            if (mParams[2] == 0x01&&mParams[2]!=mChargeValue) {
-                                Log.d(TAG, " IS CHARGE ");
-                                chargeAsynchronousTask();
-                                mChargeValue=mParams[2];
-                            } else if(mParams[2]==0x0&&mParams[2]!=mChargeValue) {
-                                stopchargeAsynchronousTask();
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        charging.setBackground(getDrawableRes("charging_normal"));
-                                        chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
-                                    }
-                                });
-                                mChargeValue=mParams[2];
-                            }
-                        runOnUiThread(new Runnable(){
-                            @Override
-                            public void run() {
-                                powerStatusUpdate(mParams[mParams.length - 1]);
-                            }
-                        });
+                String mParam=mMessage.getString("param");
+                batteryUiShow(mParam);
 
-
-                }
             } else {
                 Log.d(TAG, "ROBOT OTHER SITUATION" + mCmd);
             }
@@ -581,9 +570,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         return power_index;
     }
 
-    private void buddleTextShow(String text) {
-
-    }
 
     private double getScreenInch() {
         DisplayMetrics dm = new DisplayMetrics();
@@ -612,31 +598,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         return Math.sqrt(x + y);
     }
 
-    private void initUi() {
-        //Course icon
-//        int course_icon_margin_left = 22;
-//        int course_icon_margin_top = 260;
-//        RelativeLayout.LayoutParams rlParams = (RelativeLayout.LayoutParams) bottomIcon.getLayoutParams();
-//        rlParams.leftMargin = getAdaptiveScreenX(course_icon_margin_left);
-//        rlParams.topMargin = getAdaptiveScreenY(course_icon_margin_top);
-//        bottomIcon.setLayoutParams(rlParams);
-        //cartoon animation
-//        int cartoon_view_margin_left = 170;
-//        int cartoon_view_margin_top = 0;
-//        RelativeLayout.LayoutParams rlParams2 = (RelativeLayout.LayoutParams) cartoonBodyTouch.getLayoutParams();
-//        rlParams2.leftMargin = getAdaptiveScreenX(cartoon_view_margin_left);
-//        rlParams2.topMargin = getAdaptiveScreenY(cartoon_view_margin_top);
-//        cartoonBodyTouch.setLayoutParams(rlParams2);
-        //cartoon action
-//        int cartoon_action_margin_left = 170;
-//        int cartoon_action_margin_top = 0;
-//        RelativeLayout.LayoutParams rlParams3 = (RelativeLayout.LayoutParams) cartoonAction.getLayoutParams();
-//        rlParams3.leftMargin = getAdaptiveScreenX(cartoon_action_margin_left);
-//        rlParams3.topMargin = getAdaptiveScreenY(cartoon_action_margin_top);
-//        cartoonAction.setLayoutParams(rlParams3);
-        //habit alert
-
-    }
 
     private int getAdaptiveScreenX(int init_x) {
         return init_x * screen_width / init_screen_width;
@@ -645,6 +606,121 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int getAdaptiveScreenY(int init_y) {
         return init_y * screen_height / init_screen_height;
     }
+
+   private Message createMessage(byte cmd,String value) {
+        Message message = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putByte(STATUS_MACHINE,cmd);
+        message.setData(bundle);
+        return message;
+    }
+
+
+    @Override
+    public void handleMessage(Bundle bundle) {
+
+      Byte status= bundle.getByte(STATUS_MACHINE);
+       switch (status){
+           case APP_LAUNCH_STATUS:
+               Log.d(TAG,"APP_LAUNCH"+status);
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       showCartoonAction(cartoon_action_sleep);
+                       showBuddleText("开机来叫醒沉睡的alpha吧");
+                       buddleTextAsynchronousTask();
+                   }
+               });
+               break;
+           case APP_CONNECTED_STATUS:
+               Log.d(TAG,"APP_CONNECTED"+status);
+               runOnUiThread(new Runnable() {
+                                 @Override
+                                 public void run() {
+                                     showCartoonAction(cartoon_action_swing_right_hand);
+                                     showBuddleText("嗨，我是阿尔法");
+                                 }
+                             });
+               break;
+           case LOW_POWER_LESS_TWENTY_STATUS:
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       showCartoonAction(cartoon_aciton_squat_reverse);
+                       lowBatteryBuddleText();
+                   }
+               });
+               break;
+           case LOW_POWER_LESS_FILVE_STATUS:
+               break;
+           case ROBOT_SLEEP_EVENT:
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       showCartoonAction(cartoon_aciton_squat_reverse);
+                   }
+               });
+               break;
+           default:
+               Log.d(TAG,"NO SITUATION "+status);
+               break;
+       }
+    }
+
+  private void lowBatteryBuddleText(){
+      Random random = new Random();
+      Log.i(TAG, "LOW_POWER_LESS_TWENTY:   ");
+      String[] arrayText = getResources().getStringArray(R.array.mainUi_buddle_lowpower);
+      int select = random.nextInt(arrayText.length);
+      String text = arrayText[select];
+      showBuddleText(text );
+  }
+  private void randomBuddleText(){
+      Random random = new Random();
+      Log.i(TAG, "randomBuddleText :   " + buddleTextTimeout + "main thread " );
+      String[] arrayText = getResources().getStringArray(R.array.mainUi_buddle_text);
+      int select = random.nextInt(arrayText.length);
+      final String text = arrayText[select];
+      showBuddleText(text );
+  }
+  private void batteryUiShow(String param){
+      final byte[] mParams = Base64.decode(param, Base64.DEFAULT);
+      for (int i = 0; i < mParams.length; i++) {
+          Log.d(TAG, "index " + i + "value :" + mParams[i]);
+          if (mParams[2] == 0x01&&mParams[2]!=mChargeValue) {
+              Log.d(TAG, " IS CHARGE ");
+              lowBatteryIndicator=false;
+              chargeAsynchronousTask();
+              mChargeValue=mParams[2];
+          } else if(mParams[2]==0x0&&mParams[2]!=mChargeValue) {
+              stopchargeAsynchronousTask();
+              if(mParams[mParams.length-1]<LOWPOWER_THRESHOLD){
+                  if(!lowBatteryIndicator) {
+                      looperThread.send(createMessage(LOW_POWER_LESS_TWENTY_STATUS,""));
+                      lowBatteryIndicator=true;
+                  }
+              }
+              runOnUiThread(new Runnable() {
+                  @Override
+                  public void run() {
+                      charging.setBackground(getDrawableRes("charging_normal"));
+                      chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+
+                  }
+              });
+              mChargeValue=mParams[2];
+
+          }
+          runOnUiThread(new Runnable(){
+              @Override
+              public void run() {
+                  powerStatusUpdate(mParams[mParams.length - 1]);
+              }
+          });
+
+
+      }
+  }
 
 
 }
