@@ -27,7 +27,7 @@ import java.util.List;
  * 邮箱 784787081@qq.com
  */
 
-public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI {
+public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseOneLayout.CourseProgressListener {
 
     BaseHelper mHelper;
     CourseOneLayout mActionEdit;
@@ -84,7 +84,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
      */
     @Override
     public void getCourseOneData(List<ActionCourseOneContent> list) {
-        mActionEdit.setData(list, 1);
+        mActionEdit.setData(list, 1, this);
     }
 
 
@@ -169,4 +169,16 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     }
 
 
+    /**
+     * 当前完成进度
+     *
+     * @param current
+     */
+    @Override
+    public void completeCurrentCourse(int current) {
+        mPresenter.saveLastProgress("1", String.valueOf(current));
+        if (current == 3) {
+            mPresenter.saveCourseProgress("1", "1");
+        }
+    }
 }

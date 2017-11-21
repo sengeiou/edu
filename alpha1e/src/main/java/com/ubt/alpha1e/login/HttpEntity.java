@@ -38,6 +38,7 @@ public class HttpEntity {
     public static final String ADD_FEEDBACK = BASIC_UBX_SYS + "addFeedback";
     public static final String CHECK_APP_UPDATE = BASIC_UBX_SYS + "updateApp";
 
+
     public static final String COURSE_GET_PROGRESS = BASIC_UBX_SYS + "getCourseProgress";
 
 

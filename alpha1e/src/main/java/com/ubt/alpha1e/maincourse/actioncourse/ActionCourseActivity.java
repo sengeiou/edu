@@ -83,6 +83,9 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
             }
         });
         mRecyleviewContent.setAdapter(mMainCoursedapter);
+        mPresenter.getCourseProgress();
+        mPresenter.getLastProgress();
+
     }
 
     @Override
@@ -145,7 +148,6 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 .setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogPlus dialog) {
-
                     }
                 })
                 .setCancelable(true)
