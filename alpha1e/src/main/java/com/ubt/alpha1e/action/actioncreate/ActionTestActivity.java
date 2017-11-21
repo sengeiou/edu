@@ -5,18 +5,22 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
+import com.ubt.alpha1e.data.model.NewActionInfo;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IEditActionUI;
 
 
-public class ActionTestActivity extends BaseActivity implements IEditActionUI {
+public class ActionTestActivity extends BaseActivity implements IEditActionUI, BaseActionEditLayout.OnSaveSucessListener {
 
     ActionEditsStandard mActionEdit;
 
     private BaseHelper mHelper;
+
+    private boolean isSaveSuccess;
 
     @Override
     protected void initUI() {
@@ -41,6 +45,7 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI {
         mHelper.RegisterHelper();
         mActionEdit = (ActionEditsStandard) findViewById(R.id.action_edit);
         mActionEdit.setUp(mHelper);
+        mActionEdit.setOnSaveSucessListener(this);
     }
 
     @Override
@@ -116,9 +121,30 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI {
     }
 
 
-    public interface OnSaveSucessListener{
-        void startSave(Intent intent);
+    @Override
+    public void startSave(Intent intent) {
+        startActivityForResult(intent,  ActionsEditHelper.SaveActionReq);
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (requestCode == ActionsEditHelper.SaveActionReq) {
+
+            isSaveSuccess =(Boolean) data.getExtras().get(ActionsEditHelper.SaveActionResult);
+            if(isSaveSuccess){
+                ToastUtils.showShort("ui_save_action_success");
+                NewActionInfo actionInfo = ((ActionsEditHelper)mHelper).getNewActionInfo();
+                Intent intent = new Intent(this, SaveSuccessActivity.class);
+                startActivityForResult(intent, 555);
+            }
+
+        }else if(requestCode == 555) {
+            finish();
+        }
+
+    }
 }

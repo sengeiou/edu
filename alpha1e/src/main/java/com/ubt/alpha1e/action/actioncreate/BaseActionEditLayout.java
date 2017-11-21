@@ -259,7 +259,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         this.mHelper = baseHelper;
     }
 
-    public void set
+    OnSaveSucessListener listener;
+    public void setOnSaveSucessListener(OnSaveSucessListener listener){
+        this.listener = listener;
+    }
 
     /**
      * 初始化UI
@@ -785,8 +788,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         if (mDir != "") {
             inte.putExtra(ActionsEditSaveActivity.MUSIC_DIR, mDir);
         }
-//        mContext.startActivityForResult(inte, ActionsEditHelper.SaveActionReq);
-        mContext.startActivity(inte);
+        if(listener != null){
+            listener.startSave(inte);
+        }
+//        mContext.startActivity(inte);
     }
 
 
@@ -1125,7 +1130,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 }
 
             }
-            ivPlay.setImageResource(R.drawable.icon_pause_nor);
+            ivPlay.setImageResource(R.drawable.ic_pause);
             doPlayCurrentFrames();
             play();
 
@@ -2381,6 +2386,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         }
         adapter.notifyDataSetChanged();
     }
+
+    public interface OnSaveSucessListener{
+        void startSave(Intent intent);
+    }
+
 
 
 
