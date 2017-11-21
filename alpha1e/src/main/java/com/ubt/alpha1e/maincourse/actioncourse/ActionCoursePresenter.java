@@ -3,12 +3,20 @@ package com.ubt.alpha1e.maincourse.actioncourse;
 import android.content.Context;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.RequstMode.SaveCourseProQuest;
+import com.ubt.alpha1e.base.RequstMode.SaveCourseStatuRequest;
 import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
+import com.ubt.alpha1e.utils.log.UbtLog;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * MVPPlugin
@@ -68,14 +76,48 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
     }
 
 
-    public void getCourseScore(){
+    /**
+     * 获取课程
+     */
+    public void getCourseProgress() {
+        SaveCourseProQuest proQequest = new SaveCourseProQuest();
+        proQequest.setType(2);
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_GET_PROGRESS, proQequest, 100)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        UbtLog.d("getCourseProgress", "e===" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        UbtLog.d("getCourseProgress", "response===" + response);
+                    }
+                });
 
     }
 
 
-    public void getLastProgress(){
+
+
+
+
+    public void getLastProgress() {
+        SaveCourseStatuRequest statuRequest = new SaveCourseStatuRequest();
+        statuRequest.setType(2);
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_GET_STATU, statuRequest, 100)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        UbtLog.d("saveCourseProgress", "e===" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        UbtLog.d("saveCourseProgress", "response===" + response);
+                    }
+                });
 
     }
-
 
 }

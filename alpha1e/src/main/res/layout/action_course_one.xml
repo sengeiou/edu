@@ -142,7 +142,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
                     android:padding="10dp"
-                    android:src="@drawable/ic_tipscard_last_grey"
+                    android:src="@drawable/selector_course_one_left"
                     />
 
                 <TextView
@@ -166,7 +166,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:padding="10dp"
-                    android:src="@drawable/ic_tipscard_next_grey"
+                    android:src="@drawable/selector_course_one_right"
                     />
             </RelativeLayout>
 
@@ -483,7 +483,6 @@
         android:layout_height="match_parent"
         android:visibility="gone">
     </RelativeLayout>
-
 
 
 </RelativeLayout>

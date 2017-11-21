@@ -3,15 +3,23 @@ package com.ubt.alpha1e.maincourse.courseone;
 import android.content.Context;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.RequstMode.SaveCourseProQuest;
+import com.ubt.alpha1e.base.RequstMode.SaveCourseStatuRequest;
 import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
+import com.ubt.alpha1e.utils.log.UbtLog;
+import com.zhy.http.okhttp.callback.StringCallback;
 import com.zyyoona7.lib.HorizontalGravity;
 import com.zyyoona7.lib.VerticalGravity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
 
 
 /**
@@ -116,8 +124,12 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         CourseOne1Content one1Content7 = new CourseOne1Content();
         one1Content7.setIndex(0);
         one1Content7.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_2_1"));
-        one1Content7.setId(R.id.ll_add_frame);
+        one1Content7.setId(R.id.iv_hand_left);
         one1Content7.setDirection(0);
+        one1Content7.setX(10);
+        one1Content7.setY(-50);
+        one1Content7.setVertGravity(VerticalGravity.BELOW);
+        one1Content7.setHorizGravity(HorizontalGravity.LEFT);
         one1ContentList1.add(one1Content7);
         actionCourseOneContent2.setList(one1ContentList1);
         list.add(actionCourseOneContent2);
@@ -126,14 +138,18 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
          * 第三课时
          */
         ActionCourseOneContent actionCourseOneContent3 = new ActionCourseOneContent();
-        actionCourseOneContent2.setIndex(1);
-        actionCourseOneContent2.setCourseName(ResourceManager.getInstance(context).getStringResources("action_course_card1_3"));
+        actionCourseOneContent3.setIndex(1);
+        actionCourseOneContent3.setCourseName(ResourceManager.getInstance(context).getStringResources("action_course_card1_3"));
         List<CourseOne1Content> one1ContentList2 = new ArrayList<>();
         CourseOne1Content one1Content8 = new CourseOne1Content();
         one1Content8.setIndex(0);
         one1Content8.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_3_1"));
-        one1Content8.setId(R.id.ll_add_frame);
+        one1Content8.setId(R.id.iv_action_bgm);
         one1Content8.setDirection(0);
+        one1Content8.setX(0);
+        one1Content8.setY(0);
+        one1Content8.setVertGravity(VerticalGravity.CENTER);
+        one1Content8.setHorizGravity(HorizontalGravity.RIGHT);
         one1ContentList2.add(one1Content8);
         actionCourseOneContent3.setList(one1ContentList2);
         list.add(actionCourseOneContent3);
@@ -141,5 +157,55 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         if (isAttachView()) {
             mView.getCourseOneData(list);
         }
+    }
+
+
+    /**
+     * 保存课程最新进度
+     */
+    public void saveLastProgress(String progressOne, String courseTwo) {
+        SaveCourseProQuest proQequest = new SaveCourseProQuest();
+        proQequest.setCourseOne("1");
+        proQequest.setProgressOne(progressOne);
+        proQequest.setCourseTwo(courseTwo);
+        proQequest.setProgressTwo("1");
+        proQequest.setType(2);
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_SAVE_PROGRESS, proQequest, 100)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        UbtLog.d("saveLastProgress", "e===" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        UbtLog.d("saveLastProgress", "response===" + response);
+                    }
+                });
+
+    }
+
+
+    /**
+     * 保存每个关卡的分数
+     */
+    public void saveCourseProgress(String course,String statu) {
+        SaveCourseStatuRequest statuRequest = new SaveCourseStatuRequest();
+        statuRequest.setType(2);
+        statuRequest.setCourse(course);
+        statuRequest.setStatus(statu);
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_SAVE_STATU, statuRequest, 100)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        UbtLog.d("saveCourseProgress", "e===" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        UbtLog.d("saveCourseProgress", "response===" + response);
+                    }
+                });
+
     }
 }
