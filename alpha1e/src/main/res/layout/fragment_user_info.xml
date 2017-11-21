@@ -169,7 +169,7 @@
                 <TextView
                     style="@style/text_userinfo_left_style"
                     android:layout_alignParentLeft="true"
-                    android:text="教育"/>
+                    android:text="年级"/>
 
                 <TextView
                     android:id="@+id/tv_user_grade"

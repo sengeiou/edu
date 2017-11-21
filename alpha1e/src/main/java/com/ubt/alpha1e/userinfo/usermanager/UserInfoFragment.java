@@ -161,6 +161,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         super.onActivityCreated(savedInstanceState);
         UbtLog.d("UserInfoFragment", "onActivityCreated");
         initData();
+        Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().into(mImgHead);
     }
 
     private void initData() {
@@ -179,7 +180,6 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 mFemale.setChecked(true);
             }
         }
-        Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().into(mImgHead);
     }
 
     @Override
