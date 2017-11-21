@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.action.actioncreate;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
@@ -113,4 +114,11 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI {
     public void onChangeActionFinish() {
 
     }
+
+
+    public interface OnSaveSucessListener{
+        void startSave(Intent intent);
+    }
+
+
 }

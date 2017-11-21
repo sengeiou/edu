@@ -259,6 +259,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         this.mHelper = baseHelper;
     }
 
+    public void set
+
     /**
      * 初始化UI
      */
