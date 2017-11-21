@@ -105,6 +105,7 @@ public class BlueToothManager extends Thread implements ClentCallBack,
 
 	// 释放所有连接
 	synchronized public void releaseAllConnected() {
+		Log.d("buletoothManager","mListClient size   :"+mListClient.size() );
 		for (BlueToothClientHandler s : mListClient) {
 			s.releaseConnection();
 		}

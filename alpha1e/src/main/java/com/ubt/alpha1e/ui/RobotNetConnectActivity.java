@@ -415,7 +415,7 @@ public class RobotNetConnectActivity extends BaseActivity {
 		displayDialog();
 		if(mHelper != null){
 			//读取更新当前机器人网络状态
-			((NetworkHelper)mHelper).readNetworkStatus();
+//			((NetworkHelper)mHelper).readNetworkStatus();
 		}
 
 		super.onDestroy();

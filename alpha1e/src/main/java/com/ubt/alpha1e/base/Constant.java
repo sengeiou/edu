@@ -37,6 +37,8 @@ public class Constant {
     public final static String SP_PERMISSION_CAMERA = "sp_camera_permission";
     public final static String SP_PERMISSION_MICROPHONE = "sp_microphone_permission";
 
+    public final static String SP_ACTION_COURSE_CARD_ONE = "sp_action_course_one";
+
 
 
     /**

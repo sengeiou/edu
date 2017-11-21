@@ -19,7 +19,7 @@ public class MainCoursePresenter extends BasePresenterImpl<MainCourseContract.Vi
         List<CourseModel> list = new ArrayList<>();
         CourseModel courseModel1 = new CourseModel();
         courseModel1.setMainCourcesName("原理");
-        courseModel1.setLockType(1);
+        courseModel1.setLockType(0);
         courseModel1.setDrawableId(R.drawable.ic_lesson_yuanli);
         list.add(courseModel1);
         CourseModel courseModel2 = new CourseModel();
@@ -35,7 +35,7 @@ public class MainCoursePresenter extends BasePresenterImpl<MainCourseContract.Vi
         CourseModel courseModel4 = new CourseModel();
         courseModel4.setMainCourcesName("传感器");
         courseModel4.setDrawableId(R.drawable.ic_lesson_sensor);
-        courseModel4.setLockType(0);
+        courseModel4.setLockType(1);
         list.add(courseModel4);
         if (isAttachView()) {
             mView.getCourcesData(list);

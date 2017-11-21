@@ -10,10 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -25,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 /**
@@ -45,20 +42,6 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
     FrameLayout mViewPager;
     @BindView(R.id.iv_main_back)
     ImageView mIvMainBack;
-    @BindView(R.id.tv_user_center_info)
-    RadioButton mTvUserCenterInfo;
-    @BindView(R.id.tv_user_center_achievement)
-    RadioButton mTvUserCenterAchievement;
-    @BindView(R.id.tv_user_center_message)
-    RadioButton mTvUserCenterMessage;
-    @BindView(R.id.tv_user_center_dynamic)
-    RadioButton mTvUserCenterDynamic;
-    @BindView(R.id.tv_user_center_original)
-    RadioButton mTvUserCenterOriginal;
-    @BindView(R.id.tv_user_center_download)
-    RadioButton mTvUserCenterDownload;
-    @BindView(R.id.tv_user_center_setting)
-    RadioButton mTvUserCenterSetting;
     private List<LeftMenuModel> mMenuModels = new ArrayList<>();//左侧菜单栏信息
     private List<Fragment> mFragmentList = new ArrayList<>();
     private BaseQuickAdapter mBaseQuickAdapter;
@@ -89,59 +72,6 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         finish();
     }
 
-    /**
-     * 左侧按钮点击事件
-     *
-     * @param view
-     */
-    @OnCheckedChanged({R.id.tv_user_center_info, R.id.tv_user_center_dynamic, R.id.tv_user_center_achievement, R.id.tv_user_center_message, R.id.tv_user_center_original,
-            R.id.tv_user_center_setting, R.id.tv_user_center_download})
-    public void ClickLeftView(CompoundButton view, boolean ischanged) {
-        switch (view.getId()) {
-            case R.id.tv_user_center_info:
-                if (ischanged) {
-                    mCurrentPosition = 0;
-                }
-                break;
-            case R.id.tv_user_center_achievement:
-                if (ischanged) {
-                    mCurrentPosition = 1;
-                }
-                break;
-            case R.id.tv_user_center_message:
-                if (ischanged) {
-                    mCurrentPosition = 2;
-                }
-                break;
-            case R.id.tv_user_center_dynamic:
-                if (ischanged) {
-                    mCurrentPosition = 3;
-                }
-                break;
-
-            case R.id.tv_user_center_original:
-                if (ischanged) {
-                    mCurrentPosition = 4;
-                }
-                break;
-
-            case R.id.tv_user_center_download:
-                if (ischanged) {
-                    mCurrentPosition = 5;
-                }
-                break;
-
-            case R.id.tv_user_center_setting:
-                if (ischanged) {
-                    mCurrentPosition = 6;
-                }
-                break;
-        }
-        if (ischanged) {
-            LeftMenuModel menuModel = mMenuModels.get(mCurrentPosition);
-            loadFragment(mFragmentList.get(mCurrentPosition));
-        }
-    }
 
     /**
      * 初始化数据
@@ -159,6 +89,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         mTvTitle.setText(mMenuModels.get(0).getNameString());
         mMenuModels.get(0).setChick(true);
         mBaseQuickAdapter = new LeftAdapter(R.layout.layout_usercenter_left_item, mMenuModels);
+
         mBaseQuickAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

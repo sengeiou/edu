@@ -1,5 +1,7 @@
 package com.ubt.alpha1e.maincourse.actioncourse;
 
+import android.content.Context;
+
 import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
@@ -17,6 +19,6 @@ public class ActionCourseContract {
     }
 
     interface  Presenter extends BasePresenter<View> {
-        void getActionCourseData();
+        void getActionCourseData(Context context);
     }
 }

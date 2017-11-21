@@ -12,14 +12,7 @@
 
     </ImageView>
 
-    <ImageView
-        android:id="@+id/iv_principle_alpha"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/img_principle_alpha"/>
+    <include layout="@layout/layout_robot_principle" />
 
     <TextView
         android:id="@+id/tv_next"

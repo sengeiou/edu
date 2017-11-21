@@ -65,7 +65,7 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
         ((StartHelper) mHelper).doRunGetResServices();
 
         //add by lihai upgadeDB
-        // ((StartHelper) mHelper).UpgadeDB();
+       // ((StartHelper) mHelper).UpgadeDB();
 
         initUI();
 
@@ -300,12 +300,11 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
                     } else {
                         if (TextUtils.isEmpty(userModel.getAge())) {
                             inte.setClass(StartActivity.this, UserEditActivity.class);
-                        } else {
+                        }else{
                             inte.setClass(StartActivity.this, MainActivity.class);
                         }
                     }
                 }
-                inte.setClass(StartActivity.this, MainActivity.class);
                 StartActivity.this.startActivity(inte);
                 StartActivity.this.finish();
             }

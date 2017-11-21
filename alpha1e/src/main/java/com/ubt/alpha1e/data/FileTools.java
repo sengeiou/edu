@@ -92,6 +92,8 @@ public class FileTools {
 
     public static final String actions_default_head_url = "https://video.ubtrobot.com/default/sec_robot_action.png";
 
+    public final static String PIC_DCIM_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera/";
+
     public static List<Map<String,String>> tempList = null;
     public enum State {
         Success, Fail, Exception, No_file

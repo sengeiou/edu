@@ -71,7 +71,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.System.currentTimeMillis;
+ import static java.lang.System.currentTimeMillis;
 
 /**
  * @author：liuhai
@@ -87,7 +87,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     private ImageView ivRobot;
     private ImageView ivHandLeft, ivHandRight, ivLegLeft, ivLegRight;
-    private RecyclerView recyclerViewFrames;
+    public RecyclerView recyclerViewFrames;
     private List<Map<String, Object>> list_frames;
 
     private List<Map<String, Object>> list_autoFrames = new ArrayList<Map<String, Object>>();
@@ -156,7 +156,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private int currentMinus = 1;
     private TextView tvZoomPlus, tvZoomMinus;
 
-    private SeekBar sbVoice;
+    public SeekBar sbVoice;
     private int touch = 0;
 
     private int timePosition = 0;
@@ -165,7 +165,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private String mDir = "";
     private int musicTimes = 0;
 
-    private ImageView ivPlay;
+    public ImageView ivPlay;
     private TextView tvMusicTime;
 
     private boolean playFinish = true;
@@ -223,7 +223,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private int currentIndex = 1;
     private int scroll = 0;
 
-    private Context mContext;
+    public Context mContext;
     PrepareActionUtil mPrepareActionUtil;
     PrepareMusicUtil mPrepareMusicUtil;
 

@@ -7,11 +7,12 @@
     >
 
     <RelativeLayout
+        android:id="@+id/rl_content"
         android:layout_width="120dp"
         android:layout_height="120dp"
         >
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/fl_action_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -19,38 +20,37 @@
             <ImageView
                 android:id="@+id/iv_cources"
                 android:layout_width="match_parent"
-                android:layout_height="85dp"
+                android:layout_height="90dp"
                 android:scaleType="fitXY"
+                android:src="@drawable/ic_action_level1"
                 />
 
             <ImageView
                 android:id="@+id/iv_action_lock"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:alpha="150"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:scaleType="centerInside"
                 android:src="@drawable/img_locked"
                 />
-        </FrameLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_below="@+id/fl_action_top"
             android:background="@drawable/bg_main_course"
 
             >
 
             <TextView
-                android:id="@+id/tv_iction_cources_name"
+                android:id="@+id/tv_action_cources_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:gravity="center"
-                android:text="课程原理"
                 android:textColor="@color/black"
                 android:textSize="14sp"/>
 

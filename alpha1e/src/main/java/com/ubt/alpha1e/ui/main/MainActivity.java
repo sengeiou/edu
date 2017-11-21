@@ -16,6 +16,8 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
@@ -98,8 +100,22 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 startActivity(intent);
                 break;
             case R.id.top_icon2:
-                cartoonBodyTouch.setVisibility(View.VISIBLE);
-                cartoonAction.setVisibility(View.INVISIBLE);
+//                cartoonBodyTouch.setVisibility(View.VISIBLE);
+//                cartoonAction.setVisibility(View.INVISIBLE);
+
+                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
+                Intent bluetoothConnectIntent = new Intent();
+                if (isfirst) {
+                    Log.d(TAG, "第一次蓝牙连接");
+                    SPUtils.getInstance().put("firstBluetoothConnect", false);
+                    bluetoothConnectIntent.setClass(this, BluetoothguidestartrobotActivity.class);
+                } else {
+                    Log.d(TAG, "非第一次蓝牙连接 ");
+                    bluetoothConnectIntent.setClass(this, BluetoothandnetconnectstateActivity.class);
+                }
+                startActivity(bluetoothConnectIntent);
+                this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+
                 break;
             case R.id.top_icon3:
                 mLaunch.setClass(this, MyMainActivity.class);
@@ -108,10 +124,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.right_icon:
 //                mLaunch.setClass(this, ScanBluetoothActivity.class);
 //                startActivity(mLaunch);
-                startActivity(new Intent(this, ActionTestActivity.class));
 
+
+                //                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect",true);
                 break;
             case R.id.right_icon2:
+                startActivity(new Intent(this, ActionTestActivity.class));
+                this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 break;
             case R.id.right_icon3:
                 break;

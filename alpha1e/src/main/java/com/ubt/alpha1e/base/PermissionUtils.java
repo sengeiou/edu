@@ -111,7 +111,7 @@ public class PermissionUtils {
     /**
      * 用户勾选过不再提醒则显示该设置对话框跳转到应用详情页
      */
-    private void showRationSettingDialog(PermissionEnum permission) {
+    public void showRationSettingDialog(PermissionEnum permission) {
         final SettingService settingService = AndPermission.defineSettingDialog(mContext);
         String message = "";
         switch (permission) {

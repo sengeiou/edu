@@ -12,20 +12,34 @@
         android:layout_marginTop="20dp"
         >
 
-        <ImageView
-            android:id="@+id/iv_cources"
+        <RelativeLayout
+            android:id="@+id/rl_lock"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_lesson_action"
-            />
+            android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/iv_cources"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_lesson_action"
+                />
+
+            <ImageView
+                android:id="@+id/iv_lock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/img_locked"
+                />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_cources_name"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_below="@+id/iv_cources"
+            android:layout_below="@+id/rl_lock"
             android:background="@drawable/bg_main_course"
             android:gravity="center"
             android:text="课程原理"

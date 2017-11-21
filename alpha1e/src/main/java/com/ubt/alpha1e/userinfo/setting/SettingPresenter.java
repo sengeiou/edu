@@ -161,6 +161,10 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
     @Override
     public void doLogout() {
         SPUtils.getInstance().remove(Constant.SP_USER_INFO);
+        SPUtils.getInstance().remove(Constant.SP_USER_ID);
+        SPUtils.getInstance().remove(Constant.SP_USER_IMAGE);
+        SPUtils.getInstance().remove(Constant.SP_USER_NICKNAME);
+        SPUtils.getInstance().remove(Constant.SP_LOGIN_TOKEN);
     }
 
     public int getLanguageCurrentIndex() {
