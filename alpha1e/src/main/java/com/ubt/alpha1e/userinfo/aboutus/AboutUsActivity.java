@@ -118,8 +118,9 @@ public class AboutUsActivity extends MVPBaseActivity<AboutUsContract.View, About
                 if (mCoonLoadingDia != null) {
                     mCoonLoadingDia.cancel();
                 }
-                mCoonLoadingDia = SLoadingDialog.getInstance(getContext());
-                ((SLoadingDialog) mCoonLoadingDia).show(getStringResources("ui_about_update_already_latest"));
+                //mCoonLoadingDia = SLoadingDialog.getInstance(getContext());
+                //((SLoadingDialog) mCoonLoadingDia).show(getStringResources("ui_about_update_already_latest"));
+                ToastUtils.showShort(getStringResources("ui_about_update_already_latest"));
             }
         });
     }

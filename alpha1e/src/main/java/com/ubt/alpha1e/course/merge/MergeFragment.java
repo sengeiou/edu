@@ -3,6 +3,7 @@ package com.ubt.alpha1e.course.merge;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.course.CourseActivity;
+import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.split.SplitFragment;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.utils.SizeUtils;
@@ -32,6 +34,7 @@ import butterknife.Unbinder;
  * 邮箱 784787081@qq.com
  */
 
+@SuppressLint("ValidFragment")
 public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePresenter> implements MergeContract.View {
 
     private static final String TAG = MergeFragment.class.getSimpleName();
@@ -69,6 +72,7 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
     private int containerHeight;
     private int scale = 0;
 
+    private PrincipleHelper mHelper = null;
     private boolean hasInitRobot = false;
     private RelativeLayout.LayoutParams params = null;
 
@@ -95,11 +99,18 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
                     }
                     break;
                 case GO_TO_NEXT:
+                    ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,3);
                     ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_FEATURE);
                     break;
             }
         }
     };
+
+    @SuppressLint("ValidFragment")
+    public MergeFragment(PrincipleHelper helper){
+        super();
+        mHelper = helper;
+    }
 
     @Override
     protected void initUI() {
@@ -178,6 +189,12 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
         hasLostHandRight = true;
         hasLostLegLeft = true;
         hasLostLegRight = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mHelper.doLostPower();
     }
 
     @Override
@@ -383,12 +400,16 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
 
                         if(view.getId() == R.id.iv_hand_left){
                             hasLostHandLeft = false;
+                            mHelper.doOnLeftHand();
                         }else if(view.getId() == R.id.iv_hand_right){
                             hasLostHandRight = false;
+                            mHelper.doOnRightHand();
                         }else if(view.getId() == R.id.iv_leg_left ){
                             hasLostLegLeft = false;
+                            mHelper.doOnLeftFoot();
                         }else if(view.getId() == R.id.iv_leg_right){
                             hasLostLegRight = false;
+                            mHelper.doOnRightFoot();
                         }
 
                         Message hideViewMsg = new Message();

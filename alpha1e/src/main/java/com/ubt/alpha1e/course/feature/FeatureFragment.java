@@ -1,7 +1,10 @@
 package com.ubt.alpha1e.course.feature;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +17,18 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.animator.BezierView;
+import com.ubt.alpha1e.animator.FloatAnimator;
+import com.ubt.alpha1e.animator.IBezierView;
 import com.ubt.alpha1e.course.CourseActivity;
+import com.ubt.alpha1e.course.event.PrincipleEvent;
+import com.ubt.alpha1e.course.helper.PrincipleHelper;
+import com.ubt.alpha1e.course.principle.PrincipleFragment;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,9 +40,19 @@ import butterknife.Unbinder;
  * 邮箱 784787081@qq.com
  */
 
-public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, FeaturePresenter> implements FeatureContract.View {
+@SuppressLint("ValidFragment")
+public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, FeaturePresenter> implements FeatureContract.View,IBezierView {
 
     private static final String TAG = FeatureFragment.class.getSimpleName();
+
+    private static final int SHOW_VIEW = 1;
+    private static final int BEZIER_ANIMATOR_FINISH = 2;
+    private static final int PLAY_SOUND_FINISH = 3;
+    private static final int ENABLE_ALL_VIEW = 4;
+    private static final int RECEVICE_SENSOR = 5;
+    private static final int RECEVICE_HEAD = 6;
+    private static final int RECEVICE_VOICE_WAIT = 7;
+    private static final int LEARN_FINISH = 8;
 
     @BindView(R.id.tv_next)
     TextView tvNext;
@@ -77,30 +99,333 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
     BezierView bzvPrincipleVoiceObstacleAvoidance;
     @BindView(R.id.rl_principle_steering_engine_intro)
     RelativeLayout rlPrincipleSteeringEngineIntro;
+    @BindView(R.id.rl_principle_infrared_sensor_intro)
+    RelativeLayout rlPrincipleInfraredSensorIntro;
+    @BindView(R.id.rl_principle_soundbox_intro)
+    RelativeLayout rlPrincipleSoundboxIntro;
+    @BindView(R.id.rl_principle_head_intro)
+    RelativeLayout rlPrincipleHeadIntro;
+    @BindView(R.id.rl_principle_eye_intro)
+    RelativeLayout rlPrincipleEyeIntro;
+    @BindView(R.id.rl_principle_voice_intro)
+    RelativeLayout rlPrincipleVoiceIntro;
+    @BindView(R.id.rl_principle_voice_obstacle_avoidance_intro)
+    RelativeLayout rlPrincipleVoiceObstacleAvoidanceIntro;
     @BindView(R.id.tv_msg_show)
     TextView tvMsgShow;
 
-    private Animation biggerAnimation = null;
-    private Animation smallerAnimation = null;
+    private Animation biggerLeftBottomAnim = null;
+    private Animation biggerLeftTopAnim = null;
+    private Animation biggerRightTopAnim = null;
+    private Animation smallerLeftBottomAnim = null;
+    private Animation smallerLeftTopAnim = null;
+    private Animation smallerRightTopAnim = null;
 
+    private PrincipleHelper mHelper = null;
     private int containerWidth;
     private int containerHeight;
     private int scale = 0;
+    private int playIndex = 0;// 1、SteeringEngine 2、InfraredSensor 3、Soundbox  4、head  5、eye  6、voice   7、VoiceObstacleAvoidance
+    private int playCount = 0;
 
     private boolean hasInitRobot = false;
     private RelativeLayout.LayoutParams params = null;
+    private FloatAnimator mFloatAnimator = null;
+    private boolean hasReceviceSensor = false;
+    private boolean hasReceviceHead = false;
+    private boolean hasReceviceVoice = false;
+
+    private boolean hasLearnEngine = false;
+    private boolean hasLearnSensor = false;
+    private boolean hasLearnSoundbox = false;
+    private boolean hasLearnHead = false;
+    private boolean hasLearnEye = false;
+    private boolean hasLearnVoice = false;
+    private boolean hasLearnObstacle = false;
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case SHOW_VIEW:
+                    {
+                        int viewId = msg.arg1;
+                        if(viewId == R.id.bzv_principle_steering_engine){
+                            bzvPrincipleSteeringEngine.start();
+                        }else if(viewId == R.id.bzv_principle_infrared_sensor){
+                            bzvPrincipleInfraredSensor.start();
+                        }else if(viewId == R.id.bzv_principle_soundbox){
+                            bzvPrincipleSoundbox.start();
+                        }else if(viewId == R.id.bzv_principle_head){
+                            bzvPrincipleHead.start();
+                        }else if(viewId == R.id.bzv_principle_eye){
+                            bzvPrincipleEye.start();
+                        }else if(viewId == R.id.bzv_principle_voice){
+                            bzvPrincipleVoice.start();
+                        }else if(viewId == R.id.bzv_principle_voice_obstacle_avoidance){
+                            bzvPrincipleVoiceObstacleAvoidance.start();
+                        }
+                    }
+
+                    break;
+                case BEZIER_ANIMATOR_FINISH:
+                    int viewId = msg.arg1;
+                    if(viewId == R.id.bzv_principle_steering_engine){
+                        ivPrincipleSteeringEngine.setVisibility(View.VISIBLE);
+                        mFloatAnimator.addShow(ivPrincipleSteeringEngine);
+                    }else if(viewId == R.id.bzv_principle_infrared_sensor){
+                        ivPrincipleInfraredSensor.setVisibility(View.VISIBLE);
+                        mFloatAnimator.addShow(ivPrincipleInfraredSensor);
+                    }else if(viewId == R.id.bzv_principle_soundbox){
+                        ivPrincipleSoundbox.setVisibility(View.VISIBLE);
+                        mFloatAnimator.addShow(ivPrincipleSoundbox);
+                    }else if(viewId == R.id.bzv_principle_head){
+                        ivPrincipleHead.setVisibility(View.VISIBLE);
+                        mFloatAnimator.addShow(ivPrincipleHead);
+                    }else if(viewId == R.id.bzv_principle_eye){
+                        ivPrincipleEye.setVisibility(View.VISIBLE);
+                        mFloatAnimator.addShow(ivPrincipleEye);
+                    }else if(viewId == R.id.bzv_principle_voice){
+                        ivPrincipleVoice.setVisibility(View.VISIBLE);
+                        mFloatAnimator.addShow(ivPrincipleVoice);
+                    }else if(viewId == R.id.bzv_principle_voice_obstacle_avoidance){
+                        ivPrincipleVoiceObstacleAvoidance.setVisibility(View.VISIBLE);
+                        mFloatAnimator.addShow(ivPrincipleVoiceObstacleAvoidance);
+                    }
+                    break;
+                case PLAY_SOUND_FINISH:
+                    if(playIndex == 1){
+                        if(playCount == 0){
+                            if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                                showView(tvMsgShow, false, smallerLeftBottomAnim);
+                            }
+                            showView(rlPrincipleSteeringEngineIntro, true, biggerLeftBottomAnim);
+                            playCount = 1;
+                            playSound("id_elephant.wav");
+                        }else if(playCount == 1){
+                            //finish
+                            playIndex = 0;
+                            playCount = 0;
+                            hasLearnEngine = true;
+                            showView(rlPrincipleSteeringEngineIntro, false, smallerLeftBottomAnim);
+                            mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);
+                        }
+                    }else if(playIndex == 2){
+
+                        if(playCount == 0){
+                            /*if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                                showView(tvMsgShow, false, smallerLeftBottomAnim);
+                            }
+                            showView(rlPrincipleInfraredSensorIntro, true, biggerRightTopAnim);
+                            playCount = 1;
+                            playSound("id_elephant.wav");*/
+
+                        }else if(playCount == 1){
+                            //finish
+                            playIndex = 0;
+                            playCount = 0;
+                            hasLearnSensor = true;
+                            showView(rlPrincipleInfraredSensorIntro, false, smallerRightTopAnim);
+                            mHelper.doReadInfraredSensor((byte)0);
+                            mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);
+                        }
+
+                    }else if(playIndex == 3){
+                        if(playCount == 0){
+                            if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                                showView(tvMsgShow, false, smallerLeftBottomAnim);
+                            }
+                            showView(rlPrincipleSoundboxIntro, true, biggerRightTopAnim);
+                            playCount = 1;
+                            playSound("id_elephant.wav");
+                        }else if(playCount == 1){
+                            //finish
+                            playIndex = 0;
+                            playCount = 0;
+                            hasLearnSoundbox = true;
+                            showView(rlPrincipleSoundboxIntro, false, smallerRightTopAnim);
+                            mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);
+                        }
+                    }else if(playIndex == 4){
+                        if(playCount == 0){
+                            /*if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                                showView(tvMsgShow, false, smallerLeftBottomAnim);
+                            }
+                            showView(rlPrincipleHeadIntro, true, biggerLeftTopAnim);
+                            playCount = 1;
+                            playSound("id_elephant.wav");*/
+                        }else if(playCount == 1){
+                            //finish
+                            playIndex = 0;
+                            playCount = 0;
+                            hasLearnHead = true;
+                            showView(rlPrincipleHeadIntro, false, smallerLeftTopAnim);
+                            mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);
+                            mHelper.doReadHeadClick((byte)0);
+                        }
+                    }else if(playIndex == 5){
+                        if(playCount == 0){
+                            if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                                showView(tvMsgShow, false, smallerLeftBottomAnim);
+                            }
+                            showView(rlPrincipleEyeIntro, true, biggerLeftTopAnim);
+                            playCount = 1;
+                            playSound("id_elephant.wav");
+                        }else if(playCount == 1){
+                            //finish
+                            playIndex = 0;
+                            playCount = 0;
+                            hasLearnEye = true;
+                            showView(rlPrincipleEyeIntro, false, smallerLeftTopAnim);
+                            mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);
+                        }
+                    }else if(playIndex == 6){
+                        if(playCount == 0){
+                            /*if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                                showView(tvMsgShow, false, smallerLeftBottomAnim);
+                            }
+                            showView(rlPrincipleVoiceIntro, true, biggerLeftBottomAnim);
+                            playCount = 1;
+                            playSound("id_elephant.wav");*/
+                        }else if(playCount == 1){
+                            //finish
+                            playIndex = 0;
+                            playCount = 0;
+                            hasLearnVoice = true;
+                            showView(rlPrincipleVoiceIntro, false, smallerLeftBottomAnim);
+                            mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);
+                        }
+                    }else if(playIndex == 7){
+                        if(playCount == 0){
+                            if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                                showView(tvMsgShow, false, smallerLeftBottomAnim);
+                            }
+                            showView(rlPrincipleVoiceObstacleAvoidanceIntro, true, biggerLeftBottomAnim);
+                            playCount = 1;
+                            playSound("id_elephant.wav");
+                        }else if(playCount == 1){
+                            //finish
+                            playIndex = 0;
+                            playCount = 0;
+                            hasLearnObstacle = true;
+                            showView(rlPrincipleVoiceObstacleAvoidanceIntro, false, smallerLeftBottomAnim);
+                            mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);
+                        }
+                    }
+
+                    break;
+                case ENABLE_ALL_VIEW:
+                    setAllEnable(true);
+                    break;
+                case LEARN_FINISH:
+                    mHandler.sendEmptyMessage(ENABLE_ALL_VIEW);
+                    UbtLog.d(TAG,"getLearnCount() = " + getLearnCount());
+                    if(getLearnCount() == 7){
+                        ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,4);
+                        new ConfirmDialog(getContext()).builder()
+                                .setTitle(getStringRes("ui_setting_principle_learn_finish"))
+                                .setMsg(getStringRes("ui_setting_principle_learn_next"))
+                                .setCancelable(false)
+                                .setPositiveButton(getStringRes("ui_common_confirm"), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                        getActivity().finish();
+                                    }
+                                }).show();
+                    }else {
+                        if(getLearnCount() < 5){
+                            setViewEnable(tvNext,false,0.3f);
+                        }else {
+                            setViewEnable(tvNext,true,0.3f);
+                        }
+                    }
+                    break;
+
+                case RECEVICE_SENSOR:
+                    if(!hasReceviceSensor && playIndex == 2){
+                        hasReceviceSensor = true;
+                        if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                            showView(tvMsgShow, false, smallerLeftBottomAnim);
+                        }
+                        showView(rlPrincipleInfraredSensorIntro, true, biggerRightTopAnim);
+                        playCount = 1;
+                        playSound("id_elephant.wav");
+                    }
+                    break;
+                case RECEVICE_HEAD:
+                    if(!hasReceviceHead && playIndex == 4){
+                        hasReceviceHead = true;
+                        if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                            showView(tvMsgShow, false, smallerLeftBottomAnim);
+                        }
+                        showView(rlPrincipleHeadIntro, true, biggerLeftTopAnim);
+                        playCount = 1;
+                        playSound("id_elephant.wav");
+                    }
+                    break;
+                case RECEVICE_VOICE_WAIT:
+                    if(!hasReceviceVoice && playIndex == 6){
+                        hasReceviceVoice = true;
+                        if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                            showView(tvMsgShow, false, smallerLeftBottomAnim);
+                        }
+                        showView(rlPrincipleVoiceIntro, true, biggerLeftBottomAnim);
+                        playCount = 1;
+                        playSound("id_elephant.wav");
+                    }
+                    break;
+            }
+
+        }
+    };
+
+    private int getLearnCount(){
+        int i = 0;
+        if(hasLearnEngine) i++;
+        if(hasLearnSensor) i++;
+        if(hasLearnSoundbox) i++;
+        if(hasLearnHead) i++;
+        if(hasLearnEye) i++;
+        if(hasLearnVoice) i++;
+        if(hasLearnObstacle) i++;
+        return i;
+    }
+
+    @SuppressLint("ValidFragment")
+    public FeatureFragment(PrincipleHelper helper) {
+        super();
+        mHelper = helper;
+    }
+
 
     @Override
     protected void initUI() {
+        tvNext.setText(getStringRes("ui_setting_principle_end"));
+        setViewEnable(tvNext,false,0.3f);
+        ivPrincipleSteeringEngine.setVisibility(View.INVISIBLE);
+        ivPrincipleInfraredSensor.setVisibility(View.INVISIBLE);
+        ivPrincipleSoundbox.setVisibility(View.INVISIBLE);
+        ivPrincipleHead.setVisibility(View.INVISIBLE);
+        ivPrincipleEye.setVisibility(View.INVISIBLE);
+        ivPrincipleVoice.setVisibility(View.INVISIBLE);
+        ivPrincipleVoiceObstacleAvoidance.setVisibility(View.INVISIBLE);
 
         scale = (int) this.getResources().getDisplayMetrics().density;
         containerWidth = this.getResources().getDisplayMetrics().widthPixels;
         containerHeight = this.getResources().getDisplayMetrics().heightPixels;
+        mFloatAnimator = FloatAnimator.getIntanse();
+        mFloatAnimator.clear();
 
-        biggerAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.scan_bigger_anim_right_bottom);
-        biggerAnimation.setDuration(500);
-        smallerAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.scan_smaller_anim_right_bottom);
-        smallerAnimation.setDuration(500);
+        biggerLeftBottomAnim = AnimationUtils.loadAnimation(getContext(), R.anim.scan_bigger_anim_left_bottom);
+        smallerLeftBottomAnim = AnimationUtils.loadAnimation(getContext(), R.anim.scan_smaller_anim_left_bottom);
+
+        biggerLeftTopAnim = AnimationUtils.loadAnimation(getContext(), R.anim.scan_bigger_anim_left_top);
+        smallerLeftTopAnim = AnimationUtils.loadAnimation(getContext(), R.anim.scan_smaller_anim_left_top);
+
+        biggerRightTopAnim = AnimationUtils.loadAnimation(getContext(), R.anim.scan_bigger_anim_right_top);
+        smallerRightTopAnim = AnimationUtils.loadAnimation(getContext(), R.anim.scan_smaller_anim_right_top);
 
         UbtLog.d(TAG, "scale = " + scale
                 + "  width = " + this.getResources().getDisplayMetrics().widthPixels
@@ -122,6 +447,57 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                 });
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mHelper.doInit();
+
+        showView(bzvPrincipleSteeringEngine,100);
+        showView(bzvPrincipleInfraredSensor,300);
+        showView(bzvPrincipleSoundbox,500);
+        showView(bzvPrincipleHead,700);
+        showView(bzvPrincipleEye,900);
+        showView(bzvPrincipleVoice,1100);
+        showView(bzvPrincipleVoiceObstacleAvoidance,1300);
+
+    }
+
+    private void showView(View view,int delayTime){
+        Message msg = new Message();
+        msg.what = SHOW_VIEW;
+        msg.arg1 = view.getId();
+        mHandler.sendMessageDelayed(msg,delayTime);
+    }
+
+    @Subscribe
+    public void onEventPrinciple(PrincipleEvent event) {
+        if(!(((CourseActivity)getActivity()).getCurrentFragment() instanceof FeatureFragment) ){
+            return;
+        }
+
+        if(event.getEvent() == PrincipleEvent.Event.PLAY_SOUND){
+            int status = event.getStatus();
+            if(status == 1){
+                mHandler.sendEmptyMessage(PLAY_SOUND_FINISH);
+            }
+        }else if(event.getEvent() == PrincipleEvent.Event.CALL_GET_INFRARED_DISTANCE){
+            int infraredDistance = event.getInfraredDistance();
+            UbtLog.d(TAG,"infraredDistance = " + infraredDistance);
+            if(infraredDistance > 0 && infraredDistance < 30){
+                mHandler.sendEmptyMessage(RECEVICE_SENSOR);
+            }
+        }else if(event.getEvent() == PrincipleEvent.Event.CALL_CLICK_HEAD){
+            int status = event.getStatus();
+            UbtLog.d(TAG,"CALL_CLICK_HEAD = " + status);
+            if(status == 2){
+                mHandler.sendEmptyMessage(RECEVICE_HEAD);
+            }
+        }else if(event.getEvent() == PrincipleEvent.Event.VOICE_WAIT){
+            mHandler.sendEmptyMessage(RECEVICE_HEAD);
+        }
 
 
     }
@@ -150,12 +526,29 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
     @Override
+    public boolean isBulueToothConnected() {
+        return super.isBulueToothConnected();
+    }
+
+    @Override
     public void onDestroyView() {
+        if(mHandler.hasMessages(SHOW_VIEW)){
+            mHandler.removeMessages(SHOW_VIEW);
+        }
+        if(mHandler.hasMessages(ENABLE_ALL_VIEW)){
+            mHandler.removeMessages(ENABLE_ALL_VIEW);
+        }
+        if(mHandler.hasMessages(LEARN_FINISH)){
+            mHandler.removeMessages(LEARN_FINISH);
+        }
+
+        EventBus.getDefault().unregister(this);
         super.onDestroyView();
         unbinder.unbind();
     }
@@ -197,6 +590,14 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
         initViewLine(ivRobot, ivPrincipleEye);
         initViewLine(ivRobot, ivPrincipleVoice);
         initViewLine(ivRobot, ivPrincipleVoiceObstacleAvoidance);
+
+        bzvPrincipleSteeringEngine.setCallbackListence(this);
+        bzvPrincipleInfraredSensor.setCallbackListence(this);
+        bzvPrincipleSoundbox.setCallbackListence(this);
+        bzvPrincipleHead.setCallbackListence(this);
+        bzvPrincipleEye.setCallbackListence(this);
+        bzvPrincipleVoice.setCallbackListence(this);
+        bzvPrincipleVoiceObstacleAvoidance.setCallbackListence(this);
     }
 
     private void initViewLayout(View view, int scale, int margetTop) {
@@ -298,7 +699,6 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
             bzvPrincipleVoiceObstacleAvoidance.addPoint(targetX - (targetX - startX) / 2, targetY - (targetY - startY) / 2 - 30);
             bzvPrincipleVoiceObstacleAvoidance.addPoint(targetX, targetY);
         }
-
     }
 
     private int[] getlocation(View view) {
@@ -323,7 +723,14 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
             R.id.iv_principle_eye,
             R.id.iv_principle_voice,
             R.id.iv_principle_voice_obstacle_avoidance,
-            R.id.rl_principle_steering_engine_intro})
+            R.id.rl_principle_steering_engine_intro,
+            R.id.rl_principle_infrared_sensor_intro,
+            R.id.rl_principle_soundbox_intro,
+            R.id.rl_principle_head_intro,
+            R.id.rl_principle_eye_intro,
+            R.id.rl_principle_voice_intro,
+            R.id.rl_principle_voice_obstacle_avoidance_intro
+            })
     public void onViewClicked(View view) {
         UbtLog.d(TAG, "view = " + view);
         switch (view.getId()) {
@@ -334,50 +741,138 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
             case R.id.tv_next:
                 //((CourseActivity) getContext()).finish();
 
-                /*bzvPrincipleSteeringEngine.start();
-                bzvPrincipleInfraredSensor.start();
-                bzvPrincipleSoundbox.start();
-                bzvPrincipleHead.start();
-                bzvPrincipleEye.start();
-                bzvPrincipleVoice.start();
-                bzvPrincipleVoiceObstacleAvoidance.start();*/
+                new ConfirmDialog(getContext()).builder()
+                        .setMsg(getStringRes("ui_setting_principle_skip_tip"))
+                        .setCancelable(true)
+                        .setPositiveButton(getStringRes("ui_common_confirm"), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,4);
 
-                if(tvMsgShow.getVisibility() == View.VISIBLE){
-                    showView(tvMsgShow, false, smallerAnimation);
-                }else {
-                    showView(tvMsgShow, true, biggerAnimation);
+                                getActivity().finish();
+                            }
+                        }).setNegativeButton(getStringRes("ui_common_cancel"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                }).show();
+
+                if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                    showView(tvMsgShow, false, smallerLeftBottomAnim);
+                } else {
+                    showView(tvMsgShow, true, biggerLeftBottomAnim);
                 }
 
                 break;
             case R.id.tv_msg_show:
                 break;
             case R.id.iv_principle_steering_engine:
-                UbtLog.d(TAG, "rlPrincipleSteeringEngineIntro = " + rlPrincipleSteeringEngineIntro);
-                showView(rlPrincipleSteeringEngineIntro, true, biggerAnimation);
-
-                //bzvPrincipleSteeringEngine.start();
+                tvMsgShow.setText(getStringRes("ui_principle_engine_tips"));
+                showView(tvMsgShow, true, biggerLeftBottomAnim);
+                startPlaySound(ivPrincipleSteeringEngine,1,"id_happy.wav");
                 break;
             case R.id.iv_principle_infrared_sensor:
-                bzvPrincipleInfraredSensor.start();
+                hasReceviceSensor = false;
+                tvMsgShow.setText(getStringRes("ui_principle_sensor_tips"));
+                showView(tvMsgShow, true, biggerLeftBottomAnim);
+                startPlaySound(ivPrincipleInfraredSensor,2,"id_happy.wav");
+                mHelper.doReadInfraredSensor((byte)1);
                 break;
             case R.id.iv_principle_soundbox:
-                bzvPrincipleSoundbox.start();
+                tvMsgShow.setText(getStringRes("ui_principle_soundbox_tips"));
+                showView(tvMsgShow, true, biggerLeftBottomAnim);
+                startPlaySound(ivPrincipleSoundbox,3,"id_happy.wav");
+                //showView(rlPrincipleSoundboxIntro, true, biggerRightTopAnim);
                 break;
             case R.id.iv_principle_head:
-                bzvPrincipleHead.start();
+                hasReceviceHead = false;
+                tvMsgShow.setText(getStringRes("ui_principle_head_tips"));
+                showView(tvMsgShow, true, biggerLeftBottomAnim);
+                startPlaySound(ivPrincipleHead,4,"id_happy.wav");
+                mHelper.doReadHeadClick((byte)1);
+                //showView(rlPrincipleHeadIntro, true, biggerLeftTopAnim);
                 break;
             case R.id.iv_principle_eye:
-                bzvPrincipleEye.start();
+                tvMsgShow.setText(getStringRes("ui_principle_eye_tips"));
+                showView(tvMsgShow, true, biggerLeftBottomAnim);
+                startPlaySound(ivPrincipleEye,5,"id_happy.wav");
+                //showView(rlPrincipleEyeIntro, true, biggerLeftTopAnim);
                 break;
             case R.id.iv_principle_voice:
-                bzvPrincipleVoice.start();
+                hasReceviceVoice = false;
+                tvMsgShow.setText(getStringRes("ui_principle_voice_tips"));
+                showView(tvMsgShow, true, biggerLeftBottomAnim);
+                startPlaySound(ivPrincipleVoice,6,"id_happy.wav");
                 break;
             case R.id.iv_principle_voice_obstacle_avoidance:
-                bzvPrincipleVoiceObstacleAvoidance.start();
+                tvMsgShow.setText(getStringRes("ui_principle_obstacle_tips"));
+                showView(tvMsgShow, true, biggerLeftBottomAnim);
+                startPlaySound(ivPrincipleVoiceObstacleAvoidance,7,"id_happy.wav");
+
                 break;
             case R.id.rl_principle_steering_engine_intro:
-                showView(rlPrincipleSteeringEngineIntro, false, smallerAnimation);
+                showView(rlPrincipleSteeringEngineIntro, false, smallerLeftBottomAnim);
                 break;
+            case R.id.rl_principle_infrared_sensor_intro:
+                showView(rlPrincipleInfraredSensorIntro, false, smallerRightTopAnim);
+                break;
+            case R.id.rl_principle_soundbox_intro:
+                showView(rlPrincipleSoundboxIntro, false, smallerRightTopAnim);
+                break;
+            case R.id.rl_principle_head_intro:
+                showView(rlPrincipleHeadIntro, false, smallerLeftTopAnim);
+                break;
+            case R.id.rl_principle_eye_intro:
+                showView(rlPrincipleEyeIntro, false, smallerLeftTopAnim);
+                break;
+            case R.id.rl_principle_voice_intro:
+                showView(rlPrincipleVoiceIntro, false, smallerLeftBottomAnim);
+                break;
+            case R.id.rl_principle_voice_obstacle_avoidance_intro:
+                showView(rlPrincipleVoiceObstacleAvoidanceIntro, false, smallerLeftBottomAnim);
+                break;
+
+        }
+    }
+
+    private void startPlaySound(View view, int index, String soundFile){
+        playCount = 0;
+        playIndex = index;
+        setAllEnable(false);
+        setViewEnable(view,true,1);
+        playSound(soundFile);
+    }
+
+    private void playSound(String soundFile){
+        mHelper.playSoundAudio("{\"filename\":\""+ soundFile +"\",\"playcount\":1}");
+    }
+
+    private void setAllEnable(boolean enable){
+        setViewEnable(ivPrincipleSteeringEngine,enable,0.3f);
+        setViewEnable(ivPrincipleInfraredSensor,enable,0.3f);
+        setViewEnable(ivPrincipleSoundbox,enable,0.3f);
+        setViewEnable(ivPrincipleHead,enable,0.3f);
+        setViewEnable(ivPrincipleEye,enable,0.3f);
+        setViewEnable(ivPrincipleVoice,enable,0.3f);
+        setViewEnable(ivPrincipleVoiceObstacleAvoidance,enable,0.3f);
+
+        setViewEnable(bzvPrincipleSteeringEngine,enable,0);
+        setViewEnable(bzvPrincipleInfraredSensor,enable,0);
+        setViewEnable(bzvPrincipleSoundbox,enable,0);
+        setViewEnable(bzvPrincipleHead,enable,0);
+        setViewEnable(bzvPrincipleEye,enable,0);
+        setViewEnable(bzvPrincipleVoice,enable,0);
+        setViewEnable(bzvPrincipleVoiceObstacleAvoidance,enable,0);
+    }
+
+    private void setViewEnable(View mView, boolean enable,float alpha){
+        //mView.setEnabled(enable);
+        mView.setClickable(enable);
+        if (enable) {
+            mView.setAlpha(1f);
+        } else {
+            mView.setAlpha(alpha);
         }
     }
 
@@ -391,6 +886,39 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
         }
 
         if (isShow) {
+
+            if(rlPrincipleSteeringEngineIntro.getVisibility() == View.VISIBLE){
+                rlPrincipleSteeringEngineIntro.setVisibility(View.GONE);
+            }
+
+            if(rlPrincipleInfraredSensorIntro.getVisibility() == View.VISIBLE){
+                rlPrincipleInfraredSensorIntro.setVisibility(View.GONE);
+            }
+
+            if(rlPrincipleSoundboxIntro.getVisibility() == View.VISIBLE){
+                rlPrincipleSoundboxIntro.setVisibility(View.GONE);
+            }
+
+            if(rlPrincipleHeadIntro.getVisibility() == View.VISIBLE){
+                rlPrincipleHeadIntro.setVisibility(View.GONE);
+            }
+
+            if(rlPrincipleEyeIntro.getVisibility() == View.VISIBLE){
+                rlPrincipleEyeIntro.setVisibility(View.GONE);
+            }
+
+            if(rlPrincipleVoiceIntro.getVisibility() == View.VISIBLE){
+                rlPrincipleVoiceIntro.setVisibility(View.GONE);
+            }
+
+            if(rlPrincipleVoiceObstacleAvoidanceIntro.getVisibility() == View.VISIBLE){
+                rlPrincipleVoiceObstacleAvoidanceIntro.setVisibility(View.GONE);
+            }
+
+            if(tvMsgShow.getVisibility() == View.VISIBLE){
+                tvMsgShow.setVisibility(View.GONE);
+            }
+
             view.setVisibility(View.VISIBLE);
         } else {
             view.setVisibility(View.GONE);
@@ -400,4 +928,12 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
         }
     }
 
+    @Override
+    public void onAnimatorEnd(View view) {
+        UbtLog.d(TAG,"onAnimatorEnd = " + view);
+        Message msg = new Message();
+        msg.what = BEZIER_ANIMATOR_FINISH;
+        msg.arg1 = view.getId();
+        mHandler.sendMessage(msg);
+    }
 }

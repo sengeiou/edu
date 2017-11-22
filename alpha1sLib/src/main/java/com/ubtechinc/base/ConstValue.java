@@ -111,6 +111,11 @@ public class ConstValue {
 	 */
 	public static final byte DV_ACTION_FINISH = (byte) 0x31;
 
+    /**
+     * 控制16个舵机
+     */
+    public static final byte CTRL_ONE_ENGINE_ON = (byte) 0x22;
+
 	/**
 	 * 控制16个舵机
 	 */
@@ -323,6 +328,20 @@ public class ConstValue {
 	 */
 	public static final byte DV_FALL_DOWN = (byte) 0x71;
 
+	/**
+	 * 1E进入课程
+	 */
+	public static final byte DV_ENTER_COURSE = (byte) 0x75;
+
+	/**
+	 * 语音唤醒
+	 */
+	public static final byte DV_VOICE_WAIT = (byte) 0x78;
+
+	/**
+	 * 1E启用禁用拍头课程
+	 */
+	public static final byte DV_CAN_CLICK_HEAD = (byte) 0x79;
 
 	/**
 	 * 1E机器人获取产品productID和DSN

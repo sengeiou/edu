@@ -12,10 +12,10 @@ import com.ubt.alpha1e.mvp.BaseView;
 
 public class PrincipleContract {
     interface View extends BaseView {
-        
+
     }
 
     interface  Presenter extends BasePresenter<View> {
-        
+
     }
 }
