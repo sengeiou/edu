@@ -31,11 +31,8 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     @Override
     public void requestCartoonAction(String json) {
-<<<<<<< HEAD
           //  mView.showCartoonAction(1);
-=======
-        mView.showCartoonAction("text");
->>>>>>> develop1
+
     }
 
     @Override
@@ -55,9 +52,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     @Override
     public void dealMessage(String json) {
-<<<<<<< HEAD
-
-=======
         try {
             JSONObject mObject = new JSONObject(json);
             mObject.getString("cmd");
@@ -65,13 +59,12 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             mObject.getString("param").getBytes();
 
 //            UbtLog.d(TAG, "CMD  " + mObject.getString("cmd") + "len " + mObject.getString("param").getBytes()[0]);
-            if (Integer.parseInt(mObject.getString("cmd")) == ConstValue.DV_READ_BATTERY) {
-                mView.showCartoonAction("leg");
-            }
+//            if (Integer.parseInt(mObject.getString("cmd")) == ConstValue.DV_READ_BATTERY) {
+//                mView.showCartoonAction("leg");
+//            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
->>>>>>> develop1
     }
 
     /**

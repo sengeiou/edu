@@ -21,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.haha.perflib.Main;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.base.Constant;
@@ -39,6 +41,7 @@ import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
+import com.ubt.alpha1e.ui.helper.BluetoothHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
@@ -52,6 +55,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -129,7 +133,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int cartoon_action_swing_left_hand = 3;
     private int cartoon_action_hand_stand = 4;
     private int cartoon_action_hand_stand_reverse = 5;
-    private int cartoon_aciton_squat = 6;
+    private int cartoon_action_squat = 6;
     private int cartoon_action_enjoy = 7;
     private int cartoon_action_fall = 8;
     private int cartoon_action_greeting = 9;
@@ -159,6 +163,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private final byte ROBOT_LOW_POWER_LESS_FIVE_STATUS =0x05;
     private final byte ROBOT_SLEEP_EVENT=0x06;
     private final byte ROBOT_HIT_HEAD=0x07;
+    private final byte ROBOT_INIT_ACTION=0x08;
 
     private final int LOW_BATTERY_TWENTY_THRESHOLD=20;
     private final int LOW_BATTERY_FIVE_THRESHOLD=5;
@@ -167,6 +172,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int index_one_vol=1; //volatage
     private int index_two_charging=2; //charging or uncharging
     private int index_three_powerPercent=3;//power value
+    private BluetoothHelper mBtHelper;
+    private int APP_CURRENT_STATUS=-1;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,9 +183,23 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         getScreenInch();
         initUI();
         mHelper=MainUiBtHelper.getInstance(getContext());
-        looperThread.sendDelayMessage(createMessage(APP_LAUNCH_STATUS,""),500);
+        while(looperThread==null);
+        looperThread.send(createMessage(APP_LAUNCH_STATUS,""));
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mBroadcastReceiver1, filter1);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isBulueToothConnected()) {
+            looperThread.send(createMessage(APP_BLUETOOTH_CONNECTED,""));
+            topIcon2Disconnect.setVisibility(View.INVISIBLE);
+        } else {
+            looperThread.send(createMessage(APP_LAUNCH_STATUS,""));
+            topIcon2Disconnect.setVisibility(View.VISIBLE);
+        }
+
     }
     private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
 
@@ -190,7 +211,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                 switch(state) {
                     case BluetoothAdapter.STATE_OFF:
-                        looperThread.send(createMessage(APP_BLUETOOTH_CLOSE,""));
+                        ((AlphaApplication) getContext().getApplicationContext())
+                                .setCurrentBluetooth(null);
+
+                        break;
+                    case BluetoothAdapter.STATE_ON:
                         break;
                 }
 
@@ -288,18 +313,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (isBulueToothConnected()) {
-            looperThread.send(createMessage(APP_BLUETOOTH_CONNECTED,""));
-            topIcon2Disconnect.setVisibility(View.INVISIBLE);
-        } else {
-            looperThread.send(createMessage(APP_LAUNCH_STATUS,""));
-            topIcon2Disconnect.setVisibility(View.VISIBLE);
-        }
 
-    }
 
 
     @Override
@@ -343,7 +357,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         } else if (value == cartoon_action_hand_stand_reverse) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand_reverse);
             // actionName = "hand_stand_reverse";
-        } else if (value == cartoon_aciton_squat) {
+        } else if (value == cartoon_action_squat) {
             cartoonAction.setBackgroundResource(R.drawable.cartoon_squat);
             // actionName = "squat";
         } else if (value == cartoon_action_enjoy) {
@@ -557,6 +571,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         try {
             JSONObject mMessage = new JSONObject(event.message);
             int mCmd = Integer.parseInt(mMessage.getString("cmd"));
+            if(mCmd<0){
+                mCmd=255+mCmd;
+            }
             UbtLog.d(TAG, "CMD IS   " + mCmd);
           if(mCmd==ConstValue.DV_TAP_HEAD) {
               looperThread.send(createMessage(ROBOT_HIT_HEAD,""));
@@ -574,9 +591,28 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             } else if (mCmd == ConstValue.DV_READ_BATTERY) {
                 String mParam=mMessage.getString("param");
                 batteryUiShow(mParam);
-            } else {
-                Log.d(TAG, "ROBOT OTHER SITUATION" + mCmd);
-            }
+            } else if(mCmd==ConstValue.DV_COMMON_COMMAND) {
+              String mParam=mMessage.getString("param");
+              final byte[] mParams = Base64.decode(mParam, Base64.DEFAULT);
+              UbtLog.d(TAG,"DV COMMON COMMAND 0: +"+mParams[0] +"index 1: "+mParams[1]+"index 2: " +mParams[2]);
+            }else if(mCmd==ConstValue.DV_CURRENT_PLAY_NAME){
+              String mParam=mMessage.getString("param");
+              final byte[] mParams = Base64.decode(mParam, Base64.DEFAULT);
+              try {
+                String actionName=new String(mParams, 1, mParams.length-1, "utf-8");
+                UbtLog.d(TAG,"ACTION NAME IS "+actionName);
+                  if(APP_CURRENT_STATUS==ROBOT_SLEEP_EVENT) {
+                      if (actionName.contains("初始化")) {
+                          looperThread.send(createMessage(ROBOT_INIT_ACTION, ""));
+                      }
+                  }
+              }catch(UnsupportedEncodingException e){
+                  e.printStackTrace();
+              }
+
+          } else {
+              Log.d(TAG, "ROBOT OTHER SITUATION" + mCmd);
+          }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -679,7 +715,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                  @Override
                                  public void run() {
                                      showCartoonTouchView();
-                                     showCartoonAction(cartoon_aciton_squat);
+                                     showCartoonAction(cartoon_action_squat);
                                      showBuddleText("嗨，我是阿尔法");
                                  }
                              });
@@ -729,10 +765,21 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    }
                });
                break;
+           case ROBOT_INIT_ACTION:
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       showCartoonAction(cartoon_action_squat);
+                   }
+               });
+               break;
+
            default:
                Log.d(TAG,"NO SITUATION "+status);
                break;
+
        }
+       APP_CURRENT_STATUS=status;
     }
 
   private void lowBatteryBuddleText(){

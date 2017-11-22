@@ -358,4 +358,10 @@ public class ConstValue {
 	 */
 	public static final byte DV_CLIENT_ID2 = (byte) 0x82;
 
+	/**
+	 *  1E 机器人通用命令
+	 */
+	public static final byte DV_COMMON_COMMAND=(byte)0x93;
+
+
 }
