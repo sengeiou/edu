@@ -22,14 +22,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
+
 import com.ubt.alpha1e.base.loopHandler.HandlerCallback;
 import com.ubt.alpha1e.base.loopHandler.LooperThread;
 import com.ubt.alpha1e.blockly.LedColorEnum;
 import com.ubt.alpha1e.blockly.ScanBluetoothActivity;
+
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
+
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
@@ -216,31 +223,18 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 startActivity(intent);
                 break;
             case R.id.top_icon2:
-                cartoonAction.setVisibility(View.VISIBLE);
-                if (index >= 12) {
-                    index = 0;
+                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
+                Intent bluetoothConnectIntent = new Intent();
+                if (isfirst) {
+                    Log.d(TAG, "第一次蓝牙连接");
+                    SPUtils.getInstance().put("firstBluetoothConnect", false);
+                    bluetoothConnectIntent.setClass(this, BluetoothguidestartrobotActivity.class);
+                } else {
+                    Log.d(TAG, "非第一次蓝牙连接 ");
+                    bluetoothConnectIntent.setClass(this, BluetoothandnetconnectstateActivity.class);
                 }
-                if(index%2==0){
-                    Log.d(TAG,"Enter the course center");
-                    byte[] papram = new byte[1];
-                    papram[0]=0x01;
-                    mPresenter.commandRobotAction(ConstValue.ENTER_COURSE_MODE,papram);
-                }else {
-                    Log.d(TAG,"Exit the course center");
-                    byte[] papram = new byte[1];
-                    papram[0]=0x0;
-                    mPresenter.commandRobotAction(ConstValue.ENTER_COURSE_MODE,papram);
-                }
-                LedColorEnum colorEnum = LedColorEnum.WHITE;
-                showCartoonAction(index++);
-                byte [] mParams={0,0,0,0,0};
-                mParams[0]=0x04;
-                mParams[1] = ByteHexHelper.intToHexByte(colorEnum.getR());
-                mParams[2] = ByteHexHelper.intToHexByte(colorEnum.getG());
-                mParams[3] = ByteHexHelper.intToHexByte(colorEnum.getB());
-                mParams[4] = ByteHexHelper.intToHexByte(Integer.valueOf(0xff));//time
-                mPresenter.commandRobotAction((byte)0x61,mParams);
-
+                startActivity(bluetoothConnectIntent);
+                this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 break;
             case R.id.top_icon3:
                 try {
@@ -250,8 +244,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
                 break;
             case R.id.right_icon:
-                mLaunch.setClass(this, ScanBluetoothActivity.class);
-                startActivity(mLaunch);
+//                mLaunch.setClass(this, ScanBluetoothActivity.class);
+//                startActivity(mLaunch);
+                startActivity(new Intent(this, ActionTestActivity.class));
+
+                //                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect",true);
                 break;
             case R.id.right_icon2:
                 break;
@@ -283,6 +280,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 Log.d(TAG, "click right leg");
                 showCartoonAction(cartoon_action_swing_right_leg);
                 break;
+            case R.id.bottom_icon:
+                startActivity(new Intent(this, MainCourseActivity.class));
+                break;
             default:
                 break;
         }
@@ -300,6 +300,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
 
     }
+    
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -551,7 +552,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(MessageEvent event) {
-        Log.d(TAG, "RECEIVE THE MESSAGE IN MAIN THREAD" + event.message);
+//        Log.d(TAG, "RECEIVE THE MESSAGE IN MAIN THREAD" + event.message);
         mPresenter.dealMessage(event.message);
         try {
             JSONObject mMessage = new JSONObject(event.message);

@@ -40,6 +40,10 @@ import com.ubt.alpha1e.ui.TimesHideRecycleViewAdapter;
 import com.ubt.alpha1e.ui.TimesRecycleViewAdapter;
 import com.ubt.alpha1e.ui.WebContentActivity;
 import com.ubt.alpha1e.ui.custom.ActionGuideView;
+import com.ubt.alpha1e.ui.dialog.DialogActions;
+import com.ubt.alpha1e.ui.dialog.DialogMusic;
+import com.ubt.alpha1e.ui.dialog.DialogPreview;
+import com.ubt.alpha1e.ui.dialog.DialogTips;
 import com.ubt.alpha1e.ui.dialog.IMessageListeter;
 import com.ubt.alpha1e.ui.dialog.MyAlertDialog;
 import com.ubt.alpha1e.ui.fragment.SaveSuccessFragment;
@@ -123,11 +127,9 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
     private Map<String, Object> mCopyItem = new HashMap<String, Object>();
 
 
-//    private RelativeLayout rlRoot;
 
 
 
-    //    private FastScroller fastScroller;
     private int firstVisibleItemPosition = -1;
     private int lastVisibleItemPosition = -1;
 
@@ -136,11 +138,9 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
     private List<Map<String, Object>> timeDatas = new ArrayList<Map<String, Object>>();
     public static final String TIME = "time";
     public static final String SHOW = "show";
-    //    private FastScroller timeFastScroll;
     private SeekBar sbTime;
     private int current =0;
 
-//    private String init = "\"90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90\"";
 
     public String [] init = {"90", "90", "90", "90", "90","90", "90", "60","76","110", "90", "90",
             "120", "104", "70", "90"};
@@ -233,19 +233,6 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
     private int time;
 
-    //指引暂时没用
-    private TextView tvClickRobot;
-    private TextView tvClickBasic;
-    private TextView tvClickAdvance;
-    private TextView tvClickMusic;
-    private TextView tvClickReset;
-    private TextView tvClickAuto;
-    private TextView tvClickHelp;
-    private TextView tvClickResetIndex;
-    private TextView tvClickMark;
-    private TextView tvClickAddFrame;
-    private TextView tvClickItem;
-    private TextView tvClickChangeTime;
 
 
     private ActionGuideView actionGuideView;
@@ -287,7 +274,8 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         if(AlphaApplication.isPad()){
             setContentView(R.layout.activity_new_edit_for_pad);
         }else{
-            setContentView(R.layout.activity_new_edit);
+//            setContentView(R.layout.activity_new_edit);
+            setContentView(R.layout.activity_create_action);
         }
 
         mHelper = new ActionsEditHelper(this, this);
@@ -360,18 +348,6 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
 
     private void initGuide() {
-        tvClickRobot = (TextView) findViewById(R.id.tv_click_robot);
-        tvClickBasic = (TextView) findViewById(R.id.tv_click_basic);
-        tvClickAdvance = (TextView) findViewById(R.id.tv_click_advance);
-        tvClickMusic = (TextView) findViewById(R.id.tv_click_music);
-        tvClickReset = (TextView) findViewById(R.id.tv_click_reset);
-        tvClickAuto = (TextView) findViewById(R.id.tv_click_auto);
-        tvClickHelp = (TextView) findViewById(R.id.tv_click_help);
-        tvClickResetIndex = (TextView) findViewById(R.id.tv_click_reset_index);
-        tvClickMark = (TextView) findViewById(R.id.tv_click_mark);
-        tvClickAddFrame = (TextView) findViewById(R.id.tv_click_add);
-        tvClickItem = (TextView) findViewById(R.id.tv_click_item);
-//        tvClickChangeTime = ;
     }
 
     private void initMediaPlayer() {
@@ -386,9 +362,9 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 mediaPlayer.seekTo(0);
                 sbVoice.setProgress(0);
                 tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long)handleMusicTime(mediaPlayer.getDuration())));
-                ivPlay.setImageResource(R.drawable.button_play);
+                ivPlay.setImageResource(R.drawable.ic_play_enable);
                 ivAddFrame.setEnabled(true);
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 recyclerViewTimesHide.setVisibility(View.GONE);
 //                if(isFinishFramePlay){
                     setEnable(true);
@@ -482,7 +458,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             playFinish = true;
             mHandler.removeMessages(0);
             mediaPlayer.stop();
-            ivPlay.setImageResource(R.drawable.button_play);
+            ivPlay.setImageResource(R.drawable.ic_play_enable);
         }
     }
 
@@ -544,7 +520,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
                 }
                 UbtLog.d(TAG,"ivZhen scrollBy dx:" + dx + "-dy:" + dy);
-                ivZhen.scrollTo(500, 500);
+//                ivZhen.scrollTo(500, 500);
 //                recyclerViewFrames.scrollBy(dx, dy);
             }
         });
@@ -705,7 +681,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 goneEditFrameLayout();
                 change =false;
                 if(list_frames.size()>0){
-                    ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                    ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                     adapter.setDefSelect(-1);
                 }
 
@@ -723,13 +699,13 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
 
                 if(mediaPlayer!= null && mediaPlayer.isPlaying() && !mDir.equals("")){
-                    ivPlay.setImageResource(R.drawable.button_play);
+                    ivPlay.setImageResource(R.drawable.ic_play_enable);
                     pause();
                     doPlayCurrentFrames();
                     UbtLog.d(TAG, "setEnable true");
                     setEnable(true);
                     ivAddFrame.setEnabled(true);
-                    ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                    ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                     playFinish = true;
                 }else{
                     UbtLog.d(TAG,  "doPlayCurrentFrames");
@@ -744,7 +720,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                         }
 
                     }
-                    ivPlay.setImageResource(R.drawable.icon_pause_nor);
+                    ivPlay.setImageResource(R.drawable.ic_pause);
                     doPlayCurrentFrames();
                     play();
 
@@ -760,7 +736,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 ivCancelChange.setVisibility(View.INVISIBLE);
                 goneEditFrameLayout();
                 change =false;
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 adapter.setDefSelect(-1);
             }
         });
@@ -779,8 +755,6 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         list_frames = new ArrayList<Map<String, Object>>();
         adapter = new FrameRecycleViewAdapter(this, list_frames, density);
         recyclerViewFrames.setAdapter(adapter);
-//        fastScroller = (FastScroller) findViewById(R.id.fastscroll);
-//        fastScroller.setRecyclerView(recyclerViewFrames);
 
         recyclerViewFrames.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -829,7 +803,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
         ivAddFrame = (ImageView) findViewById(R.id.iv_add_frame);
         ivAddFrame.setEnabled(true);
-        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
         ivBack = (ImageView) findViewById(R.id.iv_back);
         ivReset = (ImageView) findViewById(R.id.iv_reset);
         ivAutoRead = (ImageView) findViewById(R.id.iv_auto_read);
@@ -2265,8 +2239,8 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 }
 
                 if(lostRightLeg == false){
-//                    DialogTips dialog = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_holde_robot"), 1, ActionsCreateActivity.this);
-//                    dialog.show();
+                    DialogTips dialog = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_holde_robot"), 1, ActionsCreateActivity.this);
+                    dialog.show();
                 }else{
                     lostLeftLeg();
                 }
@@ -2283,8 +2257,8 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                     return;
                 }
                 if(lostLeftLeg == false){
-//                    DialogTips dialog = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_holde_robot"), 2, ActionsCreateActivity.this);
-//                    dialog.show();
+                    DialogTips dialog = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_holde_robot"), 2, ActionsCreateActivity.this);
+                    dialog.show();
                 }else{
                     lostRightLeg();
                 }
@@ -2309,10 +2283,10 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                     autoRead = false;
                     needAdd = false;
                     autoAng = "";
-                    ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                    ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                     setButtonEnable(true);
-//                    DialogPreview dialogPreview = new DialogPreview(ActionsCreateActivity.this, list_autoFrames, ActionsCreateActivity.this);
-//                    dialogPreview.show();
+                    DialogPreview dialogPreview = new DialogPreview(ActionsCreateActivity.this, list_autoFrames, ActionsCreateActivity.this);
+                    dialogPreview.show();
                     UbtLog.d(TAG, "list_autoFrames:" + list_autoFrames.toString());
                 }else if(cut) {
                     adapter.notifyDataSetChanged();
@@ -2322,8 +2296,8 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 }
                 else{
                     if(ids.size() <=0){
-//                        DialogTips dialogTips = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_click_to_cutoff"), 0, ActionsCreateActivity.this);
-//                        dialogTips.show();
+                        DialogTips dialogTips = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_click_to_cutoff"), 0, ActionsCreateActivity.this);
+                        dialogTips.show();
                         goneEditFrameLayout();
                         adapter.setDefSelect(-1);
                         return;
@@ -2384,7 +2358,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 doReset();
                 resetState();
                 ivAddFrame.setEnabled(true);
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
             }
         });
 
@@ -2393,11 +2367,11 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             public void onClick(View v) {
 
                 if(ids.size() <=0){
-//                    DialogTips dialogTips = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_click_to_cutoff"), 0, ActionsCreateActivity.this);
-//                    dialogTips.show();
+                    DialogTips dialogTips = new DialogTips(ActionsCreateActivity.this, ActionsCreateActivity.this.getStringResources("ui_create_click_to_cutoff"), 0, ActionsCreateActivity.this);
+                    dialogTips.show();
                 }else{
-//                    DialogMusic dialogMusic = new DialogMusic(ActionsCreateActivity.this, ActionsCreateActivity.this, 1);
-//                    dialogMusic.show();
+                    DialogMusic dialogMusic = new DialogMusic(ActionsCreateActivity.this, ActionsCreateActivity.this, 1);
+                    dialogMusic.show();
                 }
 
 
@@ -2414,20 +2388,20 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         ivActionLib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                initActionsData();
-//                initActionLibs();
-//                DialogActions dialogActions = new DialogActions(ActionsCreateActivity.this, getStringResources("ui_create_basic_action"), listBasicActionLib, 0);
-//                dialogActions.show();
+                initActionsData();
+                initActionLibs();
+                DialogActions dialogActions = new DialogActions(ActionsCreateActivity.this, getStringResources("ui_create_basic_action"), listBasicActionLib, 0);
+                dialogActions.show();
             }
         });
 
         ivActionLibMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                initActionsData();
-//                initActionLibs();
-//                DialogActions dialogActions = new DialogActions(ActionsCreateActivity.this, getStringResources("ui_create_advance_action"), listHighActionLib, 1);
-//                dialogActions.show();
+                initActionsData();
+                initActionLibs();
+                DialogActions dialogActions = new DialogActions(ActionsCreateActivity.this, getStringResources("ui_create_advance_action"), listHighActionLib, 1);
+                dialogActions.show();
             }
         });
 
@@ -2435,8 +2409,8 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             @Override
             public void onClick(View v) {
                 initBgm();
-//                DialogActions dialogActions = new DialogActions(ActionsCreateActivity.this, getStringResources("ui_create_music"), listSongs, 2);
-//                dialogActions.show();
+                DialogActions dialogActions = new DialogActions(ActionsCreateActivity.this, getStringResources("ui_create_music"), listSongs, 2);
+                dialogActions.show();
             }
         });
 
@@ -2472,7 +2446,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                                 .get(ActionsEditHelper.MAP_FRAME)).getData());
                 resetState();
                 ivAddFrame.setEnabled(true);
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
             }
         });
 
@@ -2488,7 +2462,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 }
                 change = true;
                 ivCancelChange.setVisibility(View.VISIBLE);
-                ivAddFrame.setImageResource(R.drawable.icon_confirm_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_confirm);
 //                goneEditFrameLayout();
                 //改变最右边的添加按钮，并提示用户修改好动作后点击修改
 //                ivAddFrame.setImageResource(getResources().getDrawable());
@@ -2501,7 +2475,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             public void onClick(View v) {
                 copy = true;
                 ivPaste.setEnabled(true);
-                ivPaste.setImageResource(R.drawable.icon_paste_nor);
+                ivPaste.setImageResource(R.drawable.ic_paste);
                 mCopyItem = mCurrentEditItem;
             }
         });
@@ -2511,7 +2485,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             public void onClick(View v) {
                 cut = true;
                 ivPaste.setEnabled(true);
-                ivPaste.setImageResource(R.drawable.icon_paste_nor);
+                ivPaste.setImageResource(R.drawable.ic_paste);
                 mCutItem = mCurrentEditItem;
             }
         });
@@ -2544,7 +2518,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 adapter.notifyDataSetChanged();
                 adapter.setDefSelect(-1);
                 goneEditFrameLayout();
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 ivCancelChange.setVisibility(View.INVISIBLE);
             }
         });
@@ -2657,10 +2631,10 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         copy = false;
 //        cut = false;
         ivPaste.setEnabled(false);
-        ivPaste.setImageResource(R.drawable.icon_paste_dis);
+        ivPaste.setImageResource(R.drawable.ic_paste_disable);
         adapter.setDefSelect(-1);
         ivAddFrame.setEnabled(true);
-        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
 
 
     }
@@ -2911,10 +2885,10 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
             @Override
             public void run() {
-                ivPlay.setImageResource(R.drawable.button_play);
+                ivPlay.setImageResource(R.drawable.ic_play_enable);
                 setEnable(true);
                 ivAddFrame.setEnabled(true);
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
 
 
             }
@@ -2933,11 +2907,11 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             @Override
             public void run() {
                 if(playFinish){
-                    ivPlay.setImageResource(R.drawable.button_play);
+                    ivPlay.setImageResource(R.drawable.ic_play_enable);
                     setEnable(true);
                 }
                 ivAddFrame.setEnabled(true);
-                ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 adapter.setPlayIndex(-1);
 
             }
@@ -3051,7 +3025,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
     private void readEngOneByOne (){
         if(ids.size() >0){
             UbtLog.d(TAG, "readEngOneByOne:" + i);
-            if(i==ids.size()-1){
+            if(i==ids.size()){
                 i=0;
                 addFrame();
             }else{
@@ -3062,7 +3036,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             UbtLog.d(TAG,"laizhelile");
             change = false;
             adapter.setDefSelect(-1);
-            ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+            ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
             ivCancelChange.setVisibility(View.INVISIBLE);
         }
     }
@@ -3088,7 +3062,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                         .get(ActionsEditHelper.MAP_FRAME)).totle_time = adapter.getTime();
             }
 
-            ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+            ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
             ivCancelChange.setVisibility(View.INVISIBLE);
             adapter.setDefSelect(-1);
             adapter.setTime();
@@ -3247,7 +3221,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
     private void updateAddViewEnable() {
         ivAddFrame.setEnabled(true);
-        ivAddFrame.setImageResource(R.drawable.icon_add_nor);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
     }
 
 
@@ -3283,7 +3257,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
                 sbVoice.setProgress(mediaPlayer.getCurrentPosition());
             }else if(msg.what == 1){
                 if(playFinish){
-                    ivPlay.setImageResource(R.drawable.button_play);
+                    ivPlay.setImageResource(R.drawable.ic_play_enable);
                 }
             }
         }
@@ -3304,7 +3278,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         }
 
         if(mediaPlayer!= null && mediaPlayer.isPlaying() && !mDir.equals("")){
-            ivPlay.setImageResource(R.drawable.button_play);
+            ivPlay.setImageResource(R.drawable.ic_play_enable);
             pause();
             doPlayCurrentFrames();
             playFinish = true;
@@ -3335,11 +3309,6 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
 
 
 
-    private List<Map<String, Object>> previewList = new ArrayList<Map<String, Object>>();
-
-
-    private  Date lastTime_play = null;
-
     private NewActionInfo getPreviewActions() {
         List<FrameActionInfo> frames = new ArrayList<FrameActionInfo>();
         frames.add(FrameActionInfo.getDefaultFrame());
@@ -3351,10 +3320,6 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         UbtLog.d(TAG, "mCurrentNewAction:" + mCurrentNewAction.frameActions.toString());
         return mCurrentNewAction;
     }
-
-
-    String mCurrentSourcePath;
-
 
 
     public void setMusic() {
@@ -3390,6 +3355,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
             mediaPlayer.prepareAsync();//数据缓冲
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
                 public void onPrepared(MediaPlayer mp) {
 //                    mp.start();
                     mp.seekTo(0);
@@ -3543,7 +3509,7 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         ivLegLeft.setSelected(false);
         ivLegRight.setSelected(false);
         ivAddFrame.setEnabled(false);
-        ivAddFrame.setImageResource(R.drawable.icon_add_dis);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
         ids.clear();
     }
 
@@ -3569,6 +3535,1247 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
         return df.format(accuracy_num);
     }
 
+
+
+    public void addLibAction(Map<String, Object> map, int type){
+
+        if(type ==0){
+            String name = (String) map.get(ACTION_NAME);
+
+            if(name.equals(basicAction[0])){
+                for(int i=0; i<listWarrior.size(); i++){
+                    String time = (String) listWarrior.get(i).get(ACTION_TIME);
+                    String angles = (String) listWarrior.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                        adapter.notifyDataSetChanged();
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+
+                }
+            }else if(name.equals(basicAction[1])){
+                for(int i=0; i<listStoop.size(); i++){
+                    String time = (String) listStoop.get(i).get(ACTION_TIME);
+                    String angles = (String) listStoop.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                        adapter.notifyDataSetChanged();
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+
+                }
+            }else if(name.equals(basicAction[2])){
+                for(int i=0; i<listSquat.size(); i++){
+                    String time = (String) listSquat.get(i).get(ACTION_TIME);
+                    String angles = (String) listSquat.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(name.equals(basicAction[3])){
+                for(int i=0; i<listLeftHand.size(); i++){
+                    String time = (String) listLeftHand.get(i).get(ACTION_TIME);
+                    String angles = (String) listLeftHand.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(name.equals(basicAction[4])){
+                for(int i=0; i<listRightHand.size(); i++){
+                    String time = (String) listRightHand.get(i).get(ACTION_TIME);
+                    String angles = (String) listRightHand.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(name.equals(basicAction[5])){
+                for(int i=0; i<listMechDance1.size(); i++){
+                    String time = (String) listMechDance1.get(i).get(ACTION_TIME);
+                    String angles = (String) listMechDance1.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    if(musicTimes ==0){
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    }else{
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, list_frames.size()  + "");
+                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    }
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(name.equals(basicAction[6])){
+                for(int i=0; i<listMechDance2.size(); i++){
+                    String time = (String) listMechDance2.get(i).get(ACTION_TIME);
+                    String angles = (String) listMechDance2.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+//                    if(musicTimes ==0){
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+//                    }else{
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, list_frames.size()  + "");
+//                    }
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(name.equals(basicAction[7])){
+                for(int i=0; i<listHug.size(); i++){
+                    String time = (String) listHug.get(i).get(ACTION_TIME);
+                    String angles = (String) listHug.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+//                    if(musicTimes ==0){
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+//                    }else{
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, list_frames.size()  + "");
+//                    }
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(name.equals(basicAction[8])){
+                for(int i=0; i<listHappy.size(); i++){
+                    String time = (String) listHappy.get(i).get(ACTION_TIME);
+                    String angles = (String) listHappy.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+//                    if(musicTimes ==0){
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+//                    }else{
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, list_frames.size()  + "");
+//                    }
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(name.equals(basicAction[9])){
+                for(int i=0; i<listSalute.size(); i++){
+                    String time = (String) listSalute.get(i).get(ACTION_TIME);
+                    String angles = (String) listSalute.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+//                    if(musicTimes ==0){
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+//                    }else{
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, list_frames.size()  + "");
+//                    }
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+
+            updateAddViewEnable();
+        }else if(type == 1) {
+            UbtLog.d(TAG, "map:" + map);
+
+            if(map.get(ACTION_NAME).equals(highActionName[0])){
+                for(int i=0; i<listWalk.size(); i++){
+                    String time = (String) listWalk.get(i).get(ACTION_TIME);
+                    String angles = (String) listWalk.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);      //暂时用100ms,用实际的有点问题
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+//                    if(musicTimes ==0){
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+//                    }else{
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, list_frames.size()  + "");
+//                    }
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(map.get(ACTION_NAME).equals(highActionName[1])){
+                UbtLog.d(TAG, "hui");
+                for(int i=0; i<listTwist.size(); i++){
+                    String time = (String) listTwist.get(i).get(ACTION_TIME);
+                    String angles = (String) listTwist.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(map.get(ACTION_NAME).equals(highActionName[2])){
+                UbtLog.d(TAG, "ta");
+                for(int i=0; i<listSteppin.size(); i++){
+                    String time = (String) listSteppin.get(i).get(ACTION_TIME);
+                    String angles = (String) listSteppin.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+
+
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(map.get(ACTION_NAME).equals(highActionName[3])){
+                UbtLog.d(TAG, "dance1");
+                for(int i=0; i<listBent.size(); i++){
+                    String time = (String) listBent.get(i).get(ACTION_TIME);
+                    String angles = (String) listBent.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+
+            }else if(map.get(ACTION_NAME).equals(highActionName[4])){
+                UbtLog.d(TAG, "dance2");
+                for(int i=0; i<listArm.size(); i++){
+                    String time = (String) listArm.get(i).get(ACTION_TIME);
+                    String angles = (String) listArm.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+//                    if(musicTimes ==0){
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+//                    }else{
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, list_frames.size()  + "");
+//                    }
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(map.get(ACTION_NAME).equals(highActionName[5])){
+                UbtLog.d(TAG, "dance3");
+                for(int i=0; i<listDance1.size(); i++){
+                    String time = (String) listDance1.get(i).get(ACTION_TIME);
+                    String angles = (String) listDance1.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+//                    if(musicTimes ==0){
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+//                    }else{
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, list_frames.size()  + "");
+//                    }
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(map.get(ACTION_NAME).equals(highActionName[6])){
+                UbtLog.d(TAG, "dance4");
+                for(int i=0; i<listDance2.size(); i++){
+                    String time = (String) listDance2.get(i).get(ACTION_TIME);
+                    String angles = (String) listDance2.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+//                    if(musicTimes ==0){
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+//                    }else{
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, list_frames.size()  + "");
+//                    }
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(map.get(ACTION_NAME).equals(highActionName[7])){
+                UbtLog.d(TAG, "xie");
+                for(int i=0; i<listCurtain.size(); i++){
+                    String time = (String) listCurtain.get(i).get(ACTION_TIME);
+                    String angles = (String) listCurtain.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+//                    if(musicTimes ==0){
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+//                    }else{
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, list_frames.size()  + "");
+//                    }
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }else if(map.get(ACTION_NAME).equals(highActionName[8])){
+                for(int i=0; i<listBye.size(); i++){
+                    String time = (String) listBye.get(i).get(ACTION_TIME);
+                    String angles = (String) listBye.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+//                    if(musicTimes ==0){
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+//                    }else{
+//                        addMap.put(ActionsEditHelper.MAP_FRAME_NAME, list_frames.size()  + "");
+//                    }
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    if(musicTimes ==0){
+                        list_frames.add(addMap);
+                        currentIndex++;
+                    }else{
+                        handleFrameAndTime(addMap);
+                    }
+
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            updateAddViewEnable();
+
+
+        }else if(type ==2){
+
+            String name = (String)map.get(SONGS_NAME);
+            int songType = (int)map.get(SONGS_TYPE);
+            UbtLog.d(TAG, "name:" + name + "songType:" + songType);
+            setPlayFile(name+".mp3", songType);
+
+        }
+
+    }
+
+
+    String mCurrentSourcePath;
+
+    private void setPlayFile(String fileName, int type) {
+
+        mCurrentSourcePath = FileTools.tmp_file_cache + "/" + fileName;
+        boolean isFileCreateSuccess = false;
+        if(type == 0){
+            isFileCreateSuccess = FileTools.writeAssetsToSd("music/" + fileName, this, mCurrentSourcePath);
+        }else if(type == 1){
+            isFileCreateSuccess = FileTools.copyFile(FileTools.record+File.separator+fileName,mCurrentSourcePath, true);
+        }
+
+
+        UbtLog.d(TAG, "isFileCreateSuccess:" + isFileCreateSuccess);
+        if(isFileCreateSuccess){
+
+            UbtLog.d(TAG, "mDir:" + mDir);
+
+            if(mDir.equals("")){
+                try {
+//                    mDir = mCurrentSourcePath;
+//                    sbVoice.setVisibility(View.VISIBLE);
+                    setMusic();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else{
+                DialogMusic dialogMusic = new DialogMusic(ActionsCreateActivity.this, this, 0);
+                dialogMusic.show();
+            }
+
+
+        }
+
+    }
+
+
+    public void startAutoRead() {
+        setButtonEnable(false);
+
+        autoRead = true;
+        ivAddFrame.setImageResource(R.drawable.ic_stop);
+        mHandler.sendEmptyMessage(MSG_AUTO_READ);
+    }
+
+
+    public boolean canPlay(){
+        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(this)){
+            UbtLog.d(TAG, "边充边玩未打开");
+            Toast.makeText(this, AlphaApplication.getBaseActivity().getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
+            return false;
+        }else{
+            return  true;
+        }
+
+    }
+
+
+    public  void doPlayAutoRead(){
+
+        //检测是否在充电状态和边充边玩状态是否打开
+        UbtLog.d(TAG, "mHelper.getChargingState():" + mHelper.getChargingState() + "SettingHelper" + SettingHelper.isPlayCharging(this));
+        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(this)){
+            UbtLog.d(TAG, "边充边玩未打开");
+            Toast.makeText(this, AlphaApplication.getBaseActivity().getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
+            ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,
+                    getEditingPreviewActions());
+
+
+        } else {
+            doPlayPreview = true;
+            ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_play,
+                    getEditingPreviewActions());
+
+        }
+
+        resetState();
+        ivAddFrame.setEnabled(true);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
+
+    }
+
+
+    private List<Map<String, Object>> previewList = new ArrayList<Map<String, Object>>();
+    public void previewAction(Map<String, Object> map, int type){
+        UbtLog.d(TAG, "previewAction:" );
+        if(type ==0){
+
+
+
+            String name = (String) map.get(ACTION_NAME);
+
+            if(name.equals(basicAction[0])){
+                for(int i=0; i<listWarrior.size(); i++){
+                    String time = (String) listWarrior.get(i).get(ACTION_TIME);
+                    String angles = (String) listWarrior.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(name.equals(basicAction[1])){
+                for(int i=0; i<listStoop.size(); i++){
+                    String time = (String) listStoop.get(i).get(ACTION_TIME);
+                    String angles = (String) listStoop.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(name.equals(basicAction[2])){
+                for(int i=0; i<listSquat.size(); i++){
+                    String time = (String) listSquat.get(i).get(ACTION_TIME);
+                    String angles = (String) listSquat.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(name.equals(basicAction[3])){
+                for(int i=0; i<listLeftHand.size(); i++){
+                    String time = (String) listLeftHand.get(i).get(ACTION_TIME);
+                    String angles = (String) listLeftHand.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(name.equals(basicAction[4])){
+                for(int i=0; i<listRightHand.size(); i++){
+                    String time = (String) listRightHand.get(i).get(ACTION_TIME);
+                    String angles = (String) listRightHand.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(name.equals(basicAction[5])){
+                for(int i=0; i<listMechDance1.size(); i++){
+                    String time = (String) listMechDance1.get(i).get(ACTION_TIME);
+                    String angles = (String) listMechDance1.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(name.equals(basicAction[6])){
+                for(int i=0; i<listMechDance2.size(); i++){
+                    String time = (String) listMechDance2.get(i).get(ACTION_TIME);
+                    String angles = (String) listMechDance2.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(name.equals(basicAction[7])){
+                for(int i=0; i<listHug.size(); i++){
+                    String time = (String) listHug.get(i).get(ACTION_TIME);
+                    String angles = (String) listHug.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(name.equals(basicAction[8])){
+                for(int i=0; i<listHappy.size(); i++){
+                    String time = (String) listHappy.get(i).get(ACTION_TIME);
+                    String angles = (String) listHappy.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(name.equals(basicAction[9])){
+                for(int i=0; i<listSalute.size(); i++){
+                    String time = (String) listSalute.get(i).get(ACTION_TIME);
+                    String angles = (String) listSalute.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }
+
+
+        }else if(type == 1) {
+            UbtLog.d(TAG, "map:" + map);
+
+            if(map.get(ACTION_NAME).equals(highActionName[0])){
+                for(int i=0; i<listWalk.size(); i++){
+                    String time = (String) listWalk.get(i).get(ACTION_TIME);
+                    String angles = (String) listWalk.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(map.get(ACTION_NAME).equals(highActionName[1])){
+                UbtLog.d(TAG, "hui");
+                for(int i=0; i<listTwist.size(); i++){
+                    String time = (String) listTwist.get(i).get(ACTION_TIME);
+                    String angles = (String) listTwist.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(map.get(ACTION_NAME).equals(highActionName[2])){
+                UbtLog.d(TAG, "ta");
+                for(int i=0; i<listSteppin.size(); i++){
+                    String time = (String) listSteppin.get(i).get(ACTION_TIME);
+                    String angles = (String) listSteppin.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(map.get(ACTION_NAME).equals(highActionName[3])){
+                UbtLog.d(TAG, "dance1");
+                for(int i=0; i<listBent.size(); i++){
+                    String time = (String) listBent.get(i).get(ACTION_TIME);
+                    String angles = (String) listBent.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(map.get(ACTION_NAME).equals(highActionName[4])){
+                UbtLog.d(TAG, "dance2");
+                for(int i=0; i<listArm.size(); i++){
+                    String time = (String) listArm.get(i).get(ACTION_TIME);
+                    String angles = (String) listArm.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(map.get(ACTION_NAME).equals(highActionName[5])){
+                UbtLog.d(TAG, "dance3");
+                for(int i=0; i<listDance1.size(); i++){
+                    String time = (String) listDance1.get(i).get(ACTION_TIME);
+                    String angles = (String) listDance1.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(map.get(ACTION_NAME).equals(highActionName[6])){
+                UbtLog.d(TAG, "dance4");
+                for(int i=0; i<listDance2.size(); i++){
+                    String time = (String) listDance2.get(i).get(ACTION_TIME);
+                    String angles = (String) listDance2.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(map.get(ACTION_NAME).equals(highActionName[7])){
+                UbtLog.d(TAG, "xie");
+                for(int i=0; i<listCurtain.size(); i++){
+                    String time = (String) listCurtain.get(i).get(ACTION_TIME);
+                    String angles = (String) listCurtain.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }else if(map.get(ACTION_NAME).equals(highActionName[8])){
+                UbtLog.d(TAG, "xie");
+                for(int i=0; i<listBye.size(); i++){
+                    String time = (String) listBye.get(i).get(ACTION_TIME);
+                    String angles = (String) listBye.get(i).get(ACTION_ANGLE);
+
+                    FrameActionInfo info = new FrameActionInfo();
+                    info.eng_angles = angles;
+                    info.eng_time = Integer.valueOf(time);
+                    info.totle_time = Integer.valueOf(time);
+
+                    Map addMap = new HashMap<String, Object>();
+                    addMap.put(ActionsEditHelper.MAP_FRAME, info);
+                    String item_name = this.getStringResources("ui_readback_index");
+                    item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+                    //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+                    addMap.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+                    addMap.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+                    UbtLog.d(TAG, "list_frames size:" + list_frames.size());
+                    previewList.add(addMap);
+
+                }
+                doPlayPreviewFrames();
+                previewList.clear();
+            }
+
+
+        }
+    }
+
+
+    private  Date lastTime_play = null;
+    private void doPlayPreviewFrames() {
+
+        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(this)){
+            Toast.makeText(this, getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 防止过快点击-----------start
+        Date curDate = new Date(System.currentTimeMillis());
+        float time_difference = 500;
+        if (lastTime_play != null) {
+            time_difference = curDate.getTime()
+                    - lastTime_play.getTime();
+        }
+        lastTime_play = curDate;
+        if (time_difference < 500) {
+            return;
+        }
+
+
+        resetState();
+        ivAddFrame.setEnabled(true);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
+
+        doPlayPreview = true;
+        if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
+            UbtLog.d(TAG, "doPlayPreviewFrames Do_Stop");
+            ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,
+                    getPreviewActions());
+
+
+        } else {
+            UbtLog.d(TAG, "doPlayPreviewFrames Do_play doPlayPreview:" + doPlayPreview);
+            ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_play,
+                    getPreviewActions());
+            doPlayPreview = true;
+
+
+        }
+    }
+
+
+    public void changeCurrentItemTime(int time){
+        ((FrameActionInfo) mCurrentEditItem
+                .get(ActionsEditHelper.MAP_FRAME)).totle_time = time;
+    }
 
 
 

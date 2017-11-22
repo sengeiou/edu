@@ -20,6 +20,6 @@ public class PsdVerifyCodeContract {
     interface  Presenter extends BasePresenter<View> {
         void doGetVerifyCode(String telephone);
 
-        void doVerifyCode(String verifyCode);
+        void doVerifyCode(String telephone,String verifyCode);
     }
 }

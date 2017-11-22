@@ -18,7 +18,6 @@ import com.tencent.ai.tvs.env.ELoginPlatform;
 import com.tencent.ai.tvs.info.QQOpenInfoManager;
 import com.tencent.ai.tvs.info.WxInfoManager;
 import com.tencent.connect.common.Constants;
-import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
@@ -42,6 +41,8 @@ import org.json.JSONObject;
 
 import okhttp3.Call;
 
+import static com.ubt.alpha1e.base.Constant.SP_CLIENT_ID;
+
 
 /**
  * MVPPlugin
@@ -64,8 +65,8 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
     private int loginType = 0; //默认 0 QQ， 1 WX;
 
-    public static final String PID = "";
-    public static final String DSN = "";
+    public static final String PID = "95518e46-af79-494e-b2fa-a6db6409ae6b:77022ec0a7614dbcb33c7ab73d4e2ceb";
+    public static final String DSN = "123456";
 
     public static void LaunchActivity(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
@@ -117,6 +118,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
             @Override
             public void onClick(View view) {
                 loginType = 0;
+                proxy.clearToken(ELoginPlatform.QQOpen, LoginActivity.this);
                 proxy.requestLogin(ELoginPlatform.QQOpen, PID, DSN, LoginActivity.this);
             }
         });
@@ -129,8 +131,6 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
                 proxy.requestLogin(ELoginPlatform.WX, PID, DSN, LoginActivity.this);
             }
         });
-
-
     }
 
     @Override
@@ -143,12 +143,16 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     public void onSuccess(int i) {
         Log.e(TAG, "login onSuccess" + i);
 
-/*
+
         if(i==AuthorizeListener.WX_TVSIDRECV_TYPE){  //和机器人联调的
             UbtLog.d(TAG, "sss wx:"+ proxy.getClientId(ELoginPlatform.WX));
-            UbtLog.d(TAG, "sss qq:"+ proxy.getClientId(ELoginPlatform.QQOpen));
+            SPUtils.getInstance().put(SP_CLIENT_ID, proxy.getClientId(ELoginPlatform.WX));
         }
-*/
+
+        if(i== AuthorizeListener.QQOPEN_TVSIDRECV_TYPE){
+            UbtLog.d(TAG, "sss qq:"+ proxy.getClientId(ELoginPlatform.QQOpen));
+            SPUtils.getInstance().put(SP_CLIENT_ID, proxy.getClientId(ELoginPlatform.QQOpen));
+        }
 
 
         String accessToken = "";
@@ -165,7 +169,10 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
         } else {
             accessToken = wxInfoManager.accessToken;
             openID = wxInfoManager.openID;
+            if(i==AuthorizeListener.USERINFORECV_TYPE){
                 doThirdLogin(accessToken, openID);
+            }
+
         }
 
         Log.e(TAG, "accessToken:" + accessToken + "--openID:" + openID + "--appID:" + appID);
@@ -196,7 +203,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            ((AlphaApplication) this.getApplication()).doExitApp(true);
+            System.exit(0);
         }
         return super.onKeyDown(keyCode, event);
     }

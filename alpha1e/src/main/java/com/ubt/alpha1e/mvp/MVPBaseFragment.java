@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.mvp;
 
+
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -104,7 +105,9 @@ public abstract class MVPBaseFragment<V extends BaseView, T extends BasePresente
 
     @Override
     public Context getContext() {
-        return super.getContext();
+        //Android4.4 没有getContext方法，换成getActivity 11.13 lihai
+        //return super.getContext();
+        return super.getActivity();
     }
 
     public <T> T getInstance(Object o, int i) {

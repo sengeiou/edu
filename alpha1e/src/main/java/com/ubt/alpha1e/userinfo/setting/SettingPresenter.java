@@ -1,34 +1,29 @@
 package com.ubt.alpha1e.userinfo.setting;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.tencent.ai.tvs.LoginProxy;
+import com.tencent.ai.tvs.env.ELoginPlatform;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
-import com.ubt.alpha1e.data.FileTools;
-import com.ubt.alpha1e.data.IFileListener;
 import com.ubt.alpha1e.data.ISharedPreferensListenet;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.ui.SettingActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
 
 import java.util.List;
 
-import cn.jpush.android.api.JPushInterface;
 
 /**
  * MVPPlugin
@@ -165,9 +160,21 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
                 }, -1);
     }
 
+
+    private String appidWx = "wxfa7003941d57a391";
+    private String appidQQOpen = "1106515940";
+    private LoginProxy proxy;
     @Override
     public void doLogout() {
         SPUtils.getInstance().remove(Constant.SP_USER_INFO);
+        SPUtils.getInstance().remove(Constant.SP_USER_ID);
+        SPUtils.getInstance().remove(Constant.SP_USER_IMAGE);
+        SPUtils.getInstance().remove(Constant.SP_USER_NICKNAME);
+        SPUtils.getInstance().remove(Constant.SP_LOGIN_TOKEN);
+        proxy =  LoginProxy.getInstance(appidWx, appidQQOpen);
+        proxy.clearToken(ELoginPlatform.QQOpen, mView.getContext());
+        proxy.clearToken(ELoginPlatform.WX, mView.getContext());
+
     }
 
     public int getLanguageCurrentIndex() {
@@ -189,11 +196,7 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
     @Override
     public void onSharedPreferenOpreaterFinish(boolean isSuccess, long request_code, String value) {
         if (request_code == do_set_message_note) {
-            if (JPushInterface.isPushStopped(mView.getContext().getApplicationContext())) {
-                JPushInterface.resumePush(mView.getContext().getApplicationContext());
-            } else {
-                JPushInterface.stopPush(mView.getContext().getApplicationContext());
-            }
+
         }
     }
 }

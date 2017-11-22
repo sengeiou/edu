@@ -55,6 +55,8 @@
                     android:paddingLeft="10dp"
                     android:textColor="@color/txt_new_edtion"
                     android:textColorHint="@color/T23"
+                    android:maxLength="400"
+                    android:imeOptions="flagNoExtractUi"
                     android:hint="@string/ui_setting_feedback_placeholder"
                     android:textSize="15sp" />
 
@@ -84,6 +86,8 @@
                         android:background="#F9F9F9"
                         android:paddingRight="10dp"
                         android:paddingLeft="10dp"
+                        android:maxLength="20"
+                        android:imeOptions="flagNoExtractUi"
                         android:textColor="@color/txt_new_edtion"
                         android:textColorHint="@color/T23"
                         android:hint="@string/ui_login_email_placeholder"
@@ -117,6 +121,8 @@
                         android:background="#F9F9F9"
                         android:paddingRight="10dp"
                         android:paddingLeft="10dp"
+                        android:maxLength="16"
+                        android:imeOptions="flagNoExtractUi"
                         android:textColor="@color/txt_new_edtion"
                         android:textColorHint="@color/T23"
                         android:hint="@string/ui_login_phone_placeholder"

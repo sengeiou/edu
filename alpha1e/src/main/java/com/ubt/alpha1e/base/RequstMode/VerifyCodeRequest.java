@@ -10,20 +10,32 @@ package com.ubt.alpha1e.base.RequstMode;
  */
 
 public class VerifyCodeRequest extends BaseRequest {
-    private String verifyCode;
 
-    public String getVerifyCode() {
-        return verifyCode;
+    private String phone;
+
+    private String code;
+
+    public String getPhone() {
+        return phone;
     }
 
-    public void setVerifyCode(String verifyCode) {
-        this.verifyCode = verifyCode;
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     @Override
     public String toString() {
         return "VerifyCodeRequest{" +
-                "verifyCode='" + verifyCode + '\'' +
+                "phone='" + phone + '\'' +
+                "code='" + code + '\'' +
                 '}';
     }
 }

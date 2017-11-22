@@ -716,8 +716,11 @@
     <string name="ui_network_no_password_tips">无密码提示</string>
     <string name="ui_network_un_pass_tip">您未输入Wi-Fi密码，确定继续连接么？</string>
     <string name="ui_network_connecting">正在为Alpha联网</string>
+    <string name="dialog_network_connecting">联网中...</string>
     <string name="ui_network_connect_failer">Alpha联网失败</string>
     <string name="ui_network_connect_success">Alpha联网成功</string>
+    <string name="dialog_network_connect_failer">联网失败</string>
+    <string name="dialog_network_connect_success">联网成功</string>
     <string name="ui_network_connect_all_robot">为已连接机器人同步配网</string>
     <string name="ui_network_select">选择Wi-Fi</string>
     <string name="ui_network_change">更换Wi-Fi</string>
@@ -830,17 +833,26 @@
     <string name="ui_task_known">我知道了</string>
     <string name="ui_create_guide_help">点击这里查看帮助内容</string>
     <string name="ui_task_chanllege_fail">闯关失败,再试试吧!</string>
+<<<<<<< HEAD
     <!--MAIN ui-->
     >
+=======
+
+>>>>>>> develop1
     <string name="ui_main_right_icon">遥控器</string>
     <string name="ui_main_right_icon2">动作</string>
     <string name="ui_main_right_icon3">编程</string>
     <string name="ui_main_right_icon4">社区</string>
     <string name="ui_main_course_center">课程中心</string>
     <string name="control_center">关闭</string>
+<<<<<<< HEAD
     <string name="lowpower_indicator">电量低于20%</string>
     <string name="buddle_text_init_status">开机来叫醒沉睡的alpha吧</string>
     􀀔􀀑􀀃􀖦􁚆􁴿􀱯􁈻
+=======
+
+
+>>>>>>> develop1
     <string name="ui_setting_clear_cache">清除缓存数据</string>
     <string name="ui_setting_use_memory_title">Alpha1E已用空间</string>
     <string name="ui_setting_cache_retio_title">占用手机</string>
@@ -867,7 +879,22 @@
     <string name="ui_setting_password_modify_success">修改密码成功</string>
     <string name="ui_setting_password_modify_fail">修改密码失败</string>
     <string name="ui_setting_common_next">下一步</string>
+<<<<<<< HEAD
 
+=======
+    <string name="ui_setting_password_verify_fail">验证码检验失败</string>
+    <string name="ui_setting_verify_code_send_success">验证码检验发送成功</string>
+    <string name="ui_setting_verify_code_send_fail">验证码检验发送失败</string>
+    <string name="ui_telephone_request">请输入电话号码</string>
+    <string name="ui_old_password_request">请输入6位旧密码</string>
+    <string name="ui_new_password_request">请输入6位新密码</string>
+    <string name="ui_setting_principle_tip_1">主人，我是Alpha，很高兴见到你，欢迎来到奇幻的编程世界；</string>
+    <string name="ui_setting_principle_tip_2">通过编程，主人可以强化我的技能，我能唱歌、跳舞还有很多很多的技能；</string>
+    <string name="ui_setting_principle_tip_3">现在让我为大家表演一段音乐或舞蹈吧。</string>
+    <string name="ui_setting_app_update_tips">是否需要更新版本？</string>
+    <string name="ui_common_no">否</string>
+    <string name="ui_common_yes">是</string>
+>>>>>>> develop1
 
     <!-- 不需要翻译 -->
     <string name="ui_pc_update_url">http://www.ubtrobot.com/download/index.html</string>
@@ -935,4 +962,17 @@
 
     <string name="empty_no_noticedata">你目前没有任何消息</string>
     <string name="empty_no_dynamiaction">你目前没有任何原创动作</string>
+
+    <string name="dialog_permission_location_setting">您尚未开启\"ALpha 1E\"位置权限,请到设置中开启</string>
+    <string name="dialog_permission_camera_setting">您尚未开启\"ALpha 1E\"相机权限,请到设置中开启</string>
+    <string name="dialog_permission_storage_setting">您尚未开启\"ALpha 1E\"存储权限,请到设置中开启</string>
+    <string name="dialog_permission_microphone_setting">您尚未开启\"ALpha 1E\"录音权限,请到设置中开启</string>
+    <string name="dialog_go_setting">去设置</string>
+
+
+    <string name="ui_common_save_success">保存成功</string>
+    <string name="ui_common_save_fail">保存失败</string>
+    <string name="ui_common_save_to_dcim">长按保存到相册</string>
+
+    <string name="ui_principle_head_tips">小朋友，请摸摸我的头！</string>
 </resources>

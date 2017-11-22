@@ -860,4 +860,70 @@
     <string name="ui_advance_action_curtain">Curtain call</string>
     <string name="ui_advance_action_bye">Goodbye</string>
 
+
+    <string name="user_center_title">个人中心</string>
+    <string name="user_center_info">信息</string>
+    <string name="user_center_achievement">成就</string>
+    <string name="user_center_message">消息</string>
+    <string name="user_center_dynamic">动态</string>
+    <string name="user_center_original">原创</string>
+    <string name="user_center_download">下载</string>
+    <string name="user_center_setting">设置</string>
+
+    <string name="empty_no_noticedata">你目前没有任何消息</string>
+    <string name="empty_no_dynamiaction">你目前没有任何原创动作</string>
+
+    <string name="dialog_permission_location_setting">您尚未开启\"ALpha 1E\"位置权限,请到设置中开启</string>
+    <string name="dialog_permission_camera_setting">您尚未开启\"ALpha 1E\"相机权限,请到设置中开启</string>
+    <string name="dialog_permission_storage_setting">您尚未开启\"ALpha 1E\"存储权限,请到设置中开启</string>
+    <string name="dialog_permission_microphone_setting">您尚未开启\"ALpha 1E\"录音权限,请到设置中开启</string>
+    <string name="dialog_go_setting">去设置</string>
+
+    <string name="ui_main_right_icon">遥控器</string>
+    <string name="ui_main_right_icon2">动作</string>
+    <string name="ui_main_right_icon3">编程</string>
+    <string name="ui_main_right_icon4">社区</string>
+    <string name="ui_main_course_center">课程中心</string>
+
+    <string name="ui_setting_clear_cache">清除缓存数据</string>
+    <string name="ui_setting_use_memory_title">Alpha1E已用空间</string>
+    <string name="ui_setting_cache_retio_title">占用手机</string>
+    <string name="ui_setting_clear_cache_warning">是否清理全部缓存？</string>
+    <string name="ui_setting_clear_cache_success">已成功清理#的空间</string>
+    <string name="ui_setting_has_not_cache">暂无缓存</string>
+    <string name="ui_setting_scan_code_attention">扫描关注</string>
+    <string name="ui_setting_password_massage">重置密码管理</string>
+    <string name="ui_setting_help_feedback">帮助反馈</string>
+    <string name="ui_setting_idea_feedback">意见反馈</string>
+    <string name="ui_setting_feedback_detail">问题详情</string>
+    <string name="ui_setting_hot_question">热点问题</string>
+    <string name="ui_setting_search_result">搜索结果</string>
+    <string name="ui_setting_feedback_placeholder">请输入你的意见</string>
+    <string name="ui_setting_feedback_input">请输入...</string>
+    <string name="ui_setting_telephone">手机号</string>
+    <string name="ui_setting_verify_code">验证码</string>
+    <string name="ui_setting_old_password">旧密码</string>
+    <string name="ui_setting_new_password">新密码</string>
+    <string name="ui_setting_confirm_password">确认密码</string>
+    <string name="ui_setting_forget_password">忘记密码</string>
+    <string name="ui_setting_logout_tip">您确定要退出您当前的账号？</string>
+    <string name="ui_setting_logout">退出</string>
+    <string name="ui_setting_password_modify_success">修改密码成功</string>
+    <string name="ui_setting_password_modify_fail">修改密码失败</string>
+    <string name="ui_setting_common_next">下一步</string>
+    <string name="ui_setting_password_verify_fail">验证码检验失败</string>
+    <string name="ui_setting_verify_code_send_success">验证码检验发送成功</string>
+    <string name="ui_setting_verify_code_send_fail">验证码检验发送失败</string>
+    <string name="ui_telephone_request">请输入电话号码</string>
+    <string name="ui_old_password_request">请输入6位旧密码</string>
+    <string name="ui_new_password_request">请输入6位新密码</string>
+    <string name="ui_setting_principle_tip_1">主人，我是Alpha，很高兴见到你，欢迎来到奇幻的编程世界；</string>
+    <string name="ui_setting_principle_tip_2">通过编程，主人可以强化我的技能，我能唱歌、跳舞还有很多很多的技能；</string>
+    <string name="ui_setting_principle_tip_3">现在让我为大家表演一段音乐或舞蹈吧。</string>
+    <string name="ui_setting_app_update_tips">是否需要更新版本？</string>
+    <string name="ui_common_no">否</string>
+    <string name="ui_common_yes">是</string>
+    <string name="ui_common_save_success">保存成功</string>
+    <string name="ui_common_save_fail">保存失败</string>
+    <string name="ui_common_save_to_dcim">长按保存到相册</string>
 </resources>

@@ -18,8 +18,7 @@ import com.ubt.alpha1e.adapter.FeedbackRecyclerAdapter;
 import com.ubt.alpha1e.data.model.FeedbackInfo;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
-import com.ubt.alpha1e.userinfo.helpfeedback.HelpFeedbackActivity;
-import com.ubt.alpha1e.userinfo.helpfeedback.feelback.FeelbackActivity;
+import com.ubt.alpha1e.userinfo.helpfeedback.feedback.FeedbackActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
@@ -65,7 +64,50 @@ public class HotQuestionFragment extends MVPBaseFragment<HotQuestionContract.Vie
     @Override
     protected void initUI() {
         mFeedbackInfoDatas = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+
+        FeedbackInfo f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "机器人无法连接手机";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "机器人无法连接电脑";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "机器人可以添加新的舞蹈吗?";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "机器人怎样添加动作?";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "机器人启动后不能正常复位?";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "机器人启动后不能正常复位?";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        f = new FeedbackInfo();
+        f.feedbackId = 1;
+        f.feedbackName = "移动端控制不了机器人?";
+        f.feedbackIntroduction = f.feedbackName + "解决方法";
+        mFeedbackInfoDatas.add(f);
+
+        for (int i = 0; i < 2; i++) {
             FeedbackInfo f1 = new FeedbackInfo();
             f1.feedbackId = 1;
             f1.feedbackName = ((MVPBaseActivity)getActivity()).getStringResources("ui_setting_hot_question") + "标题_" + i;
@@ -122,7 +164,7 @@ public class HotQuestionFragment extends MVPBaseFragment<HotQuestionContract.Vie
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_feedback:
-                FeelbackActivity.LaunchActivity(getContext());
+                FeedbackActivity.LaunchActivity(getContext());
                 break;
         }
     }

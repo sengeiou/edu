@@ -65,8 +65,8 @@ public class FileTools {
     public static final String theme_cache = file_path + "/themes";
     public static final String theme_log_name = "theme_logs";
     public static final String theme_festival_log_name = "theme_festival_log_name";
-    public static final String theme_pkg_file = theme_cache + "/language_v2.6.1.ubt";
-    public static final String theme_pkg_festival_file = theme_cache + "/festival_language_v2.6.1.ubt";
+    public static final String theme_pkg_file = theme_cache + "/language_v1.0.1.ubt";
+    public static final String theme_pkg_festival_file = theme_cache + "/festival_language_v1.0.1.ubt";
     public static final String update_cache = file_path + "/update";
     public static final String actions_download_cache = file_path + "/actions";
     public static final String actions_new_cache = file_path + "/creates";
@@ -91,6 +91,8 @@ public class FileTools {
     public static final String actions_walk_robot_path = action_robot_file_path + "/walk";  //新增行走文件夹
 
     public static final String actions_default_head_url = "https://video.ubtrobot.com/default/sec_robot_action.png";
+
+    public final static String PIC_DCIM_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera/";
 
     public static List<Map<String,String>> tempList = null;
     public enum State {

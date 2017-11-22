@@ -10,8 +10,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -127,12 +129,24 @@ public class WifiSelectAlertDialog {
 
         // 定义Dialog布局和参数
         mDialog = new Dialog(mContext, R.style.AlertDialogStyle);
+        Window dialogWindow = mDialog.getWindow();
+        dialogWindow.setGravity(Gravity.BOTTOM);
+        dialogWindow.setWindowAnimations(R.style.dialogstyle); // 添加动画
         mDialog.setContentView(view);
         mDialog.setOnDismissListener(mOnDismissListener);
 
         // 调整dialog背景大小
         llBg.setLayoutParams(new FrameLayout.LayoutParams((int) (mDisplay
-                .getWidth() * 0.75), LinearLayout.LayoutParams.WRAP_CONTENT));
+                .getWidth() * 0.7), (int)(mDisplay.getHeight() * 0.7)));
+
+
+////        WindowManager m = getWindowManager();
+////        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
+//        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+//        p.height = (int) (mDisplay.getHeight() * 0.5); // 高度设置为屏幕的0.6
+//        p.width = (int) (mDisplay.getWidth() * 0.7); // 宽度设置为屏幕的0.65
+//        dialogWindow.setAttributes(p);
+
 
         mWifiHelper.doStartScan();
         return this;

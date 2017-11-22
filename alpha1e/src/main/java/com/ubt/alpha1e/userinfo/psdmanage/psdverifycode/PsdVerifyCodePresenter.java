@@ -1,18 +1,14 @@
 package com.ubt.alpha1e.userinfo.psdmanage.psdverifycode;
 
-import android.content.Context;
-
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.GetCodeRequest;
-import com.ubt.alpha1e.base.RequstMode.ModifyMessagePsdRequest;
 import com.ubt.alpha1e.base.RequstMode.VerifyCodeRequest;
 import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.userinfo.psdmanage.PsdManagePresenter;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -43,12 +39,13 @@ public class PsdVerifyCodePresenter extends BasePresenterImpl<PsdVerifyCodeContr
     }
 
     @Override
-    public void doVerifyCode(String verifyCode) {
+    public void doVerifyCode(String telephone,String verifyCode) {
 
         VerifyCodeRequest verifyCodeRequest = new VerifyCodeRequest();
-        verifyCodeRequest.setVerifyCode(verifyCode);
+        verifyCodeRequest.setPhone(telephone);
+        verifyCodeRequest.setCode(verifyCode);
 
-        String url = HttpEntity.REQUEST_SMS_CODE;
+        String url = HttpEntity.VERIDATA_CODE;
         doRequestFromWeb(url,verifyCodeRequest, DO_VERIFY_CODE);
     }
 

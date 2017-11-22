@@ -283,6 +283,7 @@ public abstract class BaseActivity extends
 
     protected void onResume() {
         super.onResume();
+
 //        ((AlphaApplication) this.getApplication()).setBaseActivity(this);
 //        MobclickAgent.onResume(this);
 //
@@ -713,6 +714,11 @@ public abstract class BaseActivity extends
         if(currentActivityLable.equals("ActionsNewEditActivity")){
             return true;
         }
+        if(currentActivityLable.equals("ActionTestActivity")){
+            return true;
+        }
+
+
 
         return false;
     }

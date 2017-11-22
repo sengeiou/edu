@@ -11,7 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.ui.ActionsNewEditActivity;
+import com.ubt.alpha1e.action.ActionsCreateActivity;
+import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 /**
@@ -36,12 +37,12 @@ public class DialogMusic extends Dialog {
     private TextView tvContent;
     private LinearLayout llTips;
 
-    private ActionsNewEditActivity activity;
+    private BaseActivity activity;
 
     private int type = 0;
 
 
-    public DialogMusic(Context context, ActionsNewEditActivity activity, int type){
+    public DialogMusic(Context context, BaseActivity activity, int type){
         super(context);
         dialogMusic = this;
         this.context = context;
@@ -94,9 +95,9 @@ public class DialogMusic extends Dialog {
             public void onClick(View v) {
                 if(type==0){
                     UbtLog.d(TAG, "select music");
-                    activity.setMusic();
+                    ((ActionsCreateActivity)activity).setMusic();
                 }else if(type == 1){
-                    activity.startAutoRead();
+                    ((ActionsCreateActivity)activity).startAutoRead();
                 }
                 dismiss();
 

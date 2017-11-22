@@ -10,7 +10,7 @@ import com.ubt.alpha1e.mvp.BaseView;
 
 public class PsdModifyContract {
     interface View extends BaseView {
-        void onModifyPassword(boolean isSuccess, String error_msg);
+        void onModifyPassword(boolean isSuccess, String msg);
     }
 
     interface  Presenter extends BasePresenter<View> {

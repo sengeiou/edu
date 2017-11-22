@@ -5,16 +5,25 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Message;
+import android.text.TextUtils;
 
+import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.RequstMode.BaseRequest;
+import com.ubt.alpha1e.base.RequstMode.CheckUpdateRequest;
+import com.ubt.alpha1e.base.RequstMode.FeedbackRequest;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.JsonTools;
+import com.ubt.alpha1e.data.model.BaseModel;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.GetDataFromWeb;
 import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.update.UpdateTools;
+import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -34,7 +43,7 @@ public class AboutUsPresenter extends BasePresenterImpl<AboutUsContract.View> im
 
     private static final String TAG = AboutUsPresenter.class.getSimpleName();
 
-    private final int do_check_update = 1001;
+    private final int DO_CHECK_UPDATE = 1001;
 
     @Override
     public boolean isOnlyWifiDownload(Context context) {
@@ -60,80 +69,74 @@ public class AboutUsPresenter extends BasePresenterImpl<AboutUsContract.View> im
     }
 
     @Override
-    public void doUpdateApk() {
+    public void doUpdateApk(String version) {
         if (AlphaApplicationValues.getCurrentEdit() == AlphaApplicationValues.EdtionCode.for_factory_edit) {
             mView.noteNewestVersion();
             return;
         }
 
-        String url = HttpAddress.getRequestUrl(HttpAddress.Request_type.check_update);
-        String params = HttpAddress.getParamsForPost(new String[]{"1", "2", "1"},
-                        HttpAddress.Request_type.check_update, mView.getContext());
-        requestDataFromWebByGet(url,params,do_check_update);
+        CheckUpdateRequest checkUpdateRequest = new CheckUpdateRequest();
+        checkUpdateRequest.setVersion(version);
+        checkUpdateRequest.setType("1");
 
+        String url = HttpEntity.CHECK_APP_UPDATE;
+        doRequestFromWeb(url, checkUpdateRequest, DO_CHECK_UPDATE);
     }
 
-    private void requestDataFromWebByGet(String url,String params,int id){
+    /**
+     * 请求网络操作
+     */
+    public void doRequestFromWeb(String url, BaseRequest baseRequest, int requestId) {
 
-        OkHttpClientUtils.getJsonByPostRequest(url,params,id)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        switch (id){
-                            case do_check_update:
-                                mView.noteApkUpsateFail(((MVPBaseActivity)mView.getContext()).getStringResources("ui_common_network_request_failed"));
-                                break;
-                            default:
-                                break;
-                        }
-                    }
+        OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage());
+                switch (id){
+                    case DO_CHECK_UPDATE:
+                        mView.noteApkUpsateFail(((MVPBaseActivity)mView.getContext()).getStringResources("ui_common_network_request_failed"));
+                        break;
+                }
+            }
 
-                    @Override
-                    public void onResponse(String json, int id) {
-                        if (do_check_update == id) {
-                            if (JsonTools.getJsonStatus(json)) {
-                                UbtLog.d(TAG,"json = " + json );
-                                JSONObject obj = JsonTools.getJsonModel(json);
-                                String versionName = "";
-                                String versionPath = "";
-                                String versionSize = "";
-                                String versionInfo = "";
-
-                                try {
-                                    versionName = obj.getString("versionName");
-                                    versionPath = obj.getString("versionPath");
-                                } catch (JSONException e1) {
-                                    versionName = "";
-                                    versionPath = "";
-                                }
-
-                                try {
-                                    versionSize = obj.getString("versionSize");
-                                } catch (JSONException e1) {
-                                    versionSize = "";
-                                }
-
-                                try {
-                                    versionInfo = obj.getString("versionResume");
-                                } catch (JSONException e1) {
-                                    versionInfo = "";
-                                }
-
-                                if (UpdateTools.compareVersion(versionName, mView.getContext())) {
-
-                                    final String _versionPath = versionPath;
-                                    final String _versionNameSizeInfo = versionName + "#"+ versionSize + "#" + versionInfo;
-                                    mView.noteApkUpdate(_versionPath, _versionNameSizeInfo);
-
-                                } else {
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d(TAG,"response = " + response);
+                switch (id){
+                    case DO_CHECK_UPDATE:
+                    {
+                        if (JsonTools.getJsonStatus(response) ) {
+                            JSONObject result  = JsonTools.getJsonModel(response);
+                            UbtLog.d(TAG,"result = " + result);
+                            try {
+                                if(result == null){
                                     mView.noteNewestVersion();
+                                }else {
+                                    String versionPath = result.getString("path");
+                                    UbtLog.d(TAG,"versionPath = " + versionPath);
+                                    if(!TextUtils.isEmpty(versionPath)){
+                                        mView.noteApkUpdate(versionPath);
+                                    }else {
+                                        mView.noteNewestVersion();
+                                    }
                                 }
-                            } else {
-                                mView.noteApkUpsateFail(((MVPBaseActivity)mView.getContext()).getStringResources("ui_common_network_request_failed"));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
+
+                        }else {
+                            mView.noteApkUpsateFail(((MVPBaseActivity)mView.getContext()).getStringResources("ui_common_network_request_failed"));
                         }
+
                     }
-                });
+                    break;
+
+                }
+
+            }
+        });
+
     }
 
 }
