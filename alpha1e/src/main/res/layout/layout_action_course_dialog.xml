@@ -9,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:padding="4dp"
         android:textColor="@color/tv_user_edit_color"
-        android:textSize="16sp"/>
+        android:textSize="18sp"/>
 </LinearLayout>

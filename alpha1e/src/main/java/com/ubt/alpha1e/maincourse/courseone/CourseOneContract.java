@@ -20,5 +20,6 @@ public class CourseOneContract {
 
     interface  Presenter extends BasePresenter<View> {
         void getCourseOneData(Context context);
+        void getCourseTwoData(Context context);
     }
 }

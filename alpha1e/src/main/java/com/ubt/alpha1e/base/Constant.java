@@ -39,7 +39,7 @@ public class Constant {
 
     public final static String SP_ACTION_COURSE_CARD_ONE = "sp_action_course_one";
 
-
+    public final static String SP_ACTION_COURSE_CARD_TWO = "sp_action_course_two";
 
     /**
      * 信鸽信息

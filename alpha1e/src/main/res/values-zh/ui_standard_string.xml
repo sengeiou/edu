@@ -976,10 +976,12 @@
     <string name="action_course_card2_2">2.了解基础高级动作模版</string>
     <string name="action_course_card2_3">3.添加指定动作出招</string>
 
-    <string name="action_course_card2_1_1">阿尔法有自己的动作库，这可是一个大宝库，里面有各种各样的动作，可以用来添加到时间轴上去，动作库分为基础动作和高级动作。</string>
+    <string name="action_course_card2_1_all">阿尔法有自己的动作库，这可是一个大宝库，里面有各种各样的动作，可以用来添加到时间轴上去，动作库分为基础动作和高级动作。</string>
     <string name="action_course_card2_2_1">这里是基础动作库，里面的动作简单又快速，还可以将这些动作添加到时间轴上</string>
     <string name="action_course_card2_2_2">这里是高级动作库，里面的动作酷炫又好玩，还可以将这些动作添加到时间轴上。</string>
 
     <string name="action_course_card2_3_1">3.添加指定动作出招</string>
+    <string name="action_course_card2_3_1_1">学习完动作库的知识，现在让我们来完成一个小任务吧，你会把基础动作“出招”添加到时间轴上吗？</string>
+    <string name="action_course_card2_3_1_2">点击基础动作模版  点击预览出招动作 点击添加</string>
 
 </resources>

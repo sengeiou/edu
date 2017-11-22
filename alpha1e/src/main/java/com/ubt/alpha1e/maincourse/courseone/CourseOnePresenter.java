@@ -31,7 +31,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
 
 
     /**
-     * 获取课时列表
+     * 获取第一关卡课时列表
      *
      * @param context
      */
@@ -159,6 +159,80 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         }
     }
 
+    /**
+     * 获取第二关卡课时列表
+     *
+     * @param context
+     */
+    @Override
+    public void getCourseTwoData(Context context) {
+        List<ActionCourseOneContent> list = new ArrayList<>();
+        /**
+         * 第一课时
+         */
+        ActionCourseOneContent actionCourseOneContent1 = new ActionCourseOneContent();
+
+        actionCourseOneContent1.setIndex(0);
+        actionCourseOneContent1.setCourseName(ResourceManager.getInstance(context).getStringResources("action_course_card2_1"));
+        List<CourseOne1Content> one1ContentList = new ArrayList<>();
+        CourseOne1Content one1Content1 = new CourseOne1Content();
+        one1Content1.setIndex(0);
+        one1Content1.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card2_2_1"));
+        one1Content1.setId(R.id.iv_action_lib);
+        one1Content1.setDirection(0);
+        one1Content1.setX(0);
+        one1Content1.setY(-50);
+        one1Content1.setVertGravity(VerticalGravity.CENTER);
+        one1Content1.setHorizGravity(HorizontalGravity.RIGHT);
+        one1ContentList.add(one1Content1);
+        actionCourseOneContent1.setList(one1ContentList);
+        list.add(actionCourseOneContent1);
+
+        /**
+         * 第二课时
+         */
+        ActionCourseOneContent actionCourseOneContent2 = new ActionCourseOneContent();
+        actionCourseOneContent2.setIndex(1);
+        actionCourseOneContent2.setCourseName(ResourceManager.getInstance(context).getStringResources("action_course_card2_2"));
+        List<CourseOne1Content> one1ContentList1 = new ArrayList<>();
+        CourseOne1Content one1Content7 = new CourseOne1Content();
+        one1Content7.setIndex(0);
+        one1Content7.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card2_2_2"));
+        one1Content7.setId(R.id.iv_action_lib_more);
+        one1Content7.setDirection(0);
+        one1Content7.setX(10);
+        one1Content7.setY(-50);
+        one1Content7.setVertGravity(VerticalGravity.CENTER);
+        one1Content7.setHorizGravity(HorizontalGravity.RIGHT);
+        one1ContentList1.add(one1Content7);
+        actionCourseOneContent2.setList(one1ContentList1);
+        list.add(actionCourseOneContent2);
+
+        /**
+         * 第三课时
+         */
+        ActionCourseOneContent actionCourseOneContent3 = new ActionCourseOneContent();
+        actionCourseOneContent3.setIndex(1);
+        actionCourseOneContent3.setCourseName(ResourceManager.getInstance(context).getStringResources("action_course_card2_3"));
+        List<CourseOne1Content> one1ContentList2 = new ArrayList<>();
+        CourseOne1Content one1Content8 = new CourseOne1Content();
+        one1Content8.setIndex(0);
+        one1Content8.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card2_3_1_2"));
+        one1Content8.setId(R.id.iv_action_bgm);
+        one1Content8.setDirection(0);
+        one1Content8.setX(0);
+        one1Content8.setY(0);
+        one1Content8.setVertGravity(VerticalGravity.CENTER);
+        one1Content8.setHorizGravity(HorizontalGravity.RIGHT);
+        one1ContentList2.add(one1Content8);
+        actionCourseOneContent3.setList(one1ContentList2);
+        list.add(actionCourseOneContent3);
+
+        if (isAttachView()) {
+            mView.getCourseOneData(list);
+        }
+    }
+
 
     /**
      * 保存课程最新进度
@@ -189,7 +263,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
     /**
      * 保存每个关卡的分数
      */
-    public void saveCourseProgress(String course,String statu) {
+    public void saveCourseProgress(String course, String statu) {
         SaveCourseStatuRequest statuRequest = new SaveCourseStatuRequest();
         statuRequest.setType(2);
         statuRequest.setCourse(course);
