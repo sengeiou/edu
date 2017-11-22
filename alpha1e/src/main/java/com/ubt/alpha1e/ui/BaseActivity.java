@@ -24,6 +24,7 @@ import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ThemeInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.event.RobotEvent;
+import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
 import com.ubt.alpha1e.ui.dialog.LowPowerDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IUI;
@@ -257,7 +258,8 @@ public abstract class BaseActivity extends
             @Override
             public void run() {
                 try {
-                    LowPowerDialog.getInstance(BaseActivity.this).show();
+                    //LowPowerDialog.getInstance(BaseActivity.this).show();
+                    new LowBatteryDialog(BaseActivity.this).builder().show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

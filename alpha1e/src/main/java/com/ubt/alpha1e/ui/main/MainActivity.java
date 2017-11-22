@@ -1,11 +1,14 @@
 package com.ubt.alpha1e.ui.main;
 
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -29,8 +32,6 @@ import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
-import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
-import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
@@ -138,23 +139,27 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     Timer mChargetimer;
     TimerTask mChargingTimeoutTask;
     private byte mChargeValue=0;
+    private int mPowerValue=0;
     long mCurrentTouchTime=0;
     private long noOperationTimeout=1*60*1000;
     private boolean lowBatteryIndicator=false;
     private int LOWPOWER_THRESHOLD=20;
     private String STATUS_MACHINE="status_machine";
     private final byte APP_LAUNCH_STATUS=0x01;
-    private final byte APP_CONNECTED_STATUS=0x02;
-    private final byte APP_NOT_OPERATION=0x03;
-    private final byte LOW_POWER_LESS_TWENTY_STATUS=0x04;
-    private final byte LOW_POWER_LESS_FILVE_STATUS=0x05;
-    private final byte ROBOT_CHARGING=0x06;
-    private final byte ROBOT_CHARGING_ENOUGH=0x07;
-    private final byte ROBOT_SLEEP_EVENT=0x08;
+    private final byte APP_BLUETOOTH_CONNECTED =0x02;
+    private final byte APP_BLUETOOTH_CLOSE=0x03;
+    private final byte ROBOT_LOW_POWER_LESS_TWENTY_STATUS =0x04;
+    private final byte ROBOT_LOW_POWER_LESS_FIVE_STATUS =0x05;
+    private final byte ROBOT_SLEEP_EVENT=0x06;
+    private final byte ROBOT_HIT_HEAD=0x07;
 
-
-
-
+    private final int LOW_BATTERY_TWENTY_THRESHOLD=20;
+    private final int LOW_BATTERY_FIVE_THRESHOLD=5;
+    private  boolean ENTER_LOW_BATTERY_FIVE=false;
+    private  boolean ENTER_LOW_BATTERY_TWENTY=false;
+    private int index_one_vol=1; //volatage
+    private int index_two_charging=2; //charging or uncharging
+    private int index_three_powerPercent=3;//power value
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,9 +169,28 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         getScreenInch();
         initUI();
         mHelper=MainUiBtHelper.getInstance(getContext());
-        looperThread.sendDelayMessage(createMessage(APP_LAUNCH_STATUS,""),2000);
-
+        looperThread.sendDelayMessage(createMessage(APP_LAUNCH_STATUS,""),500);
+        IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(mBroadcastReceiver1, filter1);
     }
+    private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                switch(state) {
+                    case BluetoothAdapter.STATE_OFF:
+                        looperThread.send(createMessage(APP_BLUETOOTH_CLOSE,""));
+                        break;
+                }
+
+            }
+        }
+    };
+
 
     @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3,
             R.id.right_icon4, R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
@@ -196,6 +220,17 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 if (index >= 12) {
                     index = 0;
                 }
+                if(index%2==0){
+                    Log.d(TAG,"Enter the course center");
+                    byte[] papram = new byte[1];
+                    papram[0]=0x01;
+                    mPresenter.commandRobotAction(ConstValue.ENTER_COURSE_MODE,papram);
+                }else {
+                    Log.d(TAG,"Exit the course center");
+                    byte[] papram = new byte[1];
+                    papram[0]=0x0;
+                    mPresenter.commandRobotAction(ConstValue.ENTER_COURSE_MODE,papram);
+                }
                 LedColorEnum colorEnum = LedColorEnum.WHITE;
                 showCartoonAction(index++);
                 byte [] mParams={0,0,0,0,0};
@@ -205,13 +240,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 mParams[3] = ByteHexHelper.intToHexByte(colorEnum.getB());
                 mParams[4] = ByteHexHelper.intToHexByte(Integer.valueOf(0xff));//time
                 mPresenter.commandRobotAction((byte)0x61,mParams);
-                byte[] papram = new byte[1];
-                papram[0]=0x01;
-                mPresenter.commandRobotAction(ConstValue.ENTER_COURSE_MODE,mParams);
-                //TURN OFF LIGHT
-                papram[0]=0x01;
-                mPresenter.commandRobotAction(ConstValue.DV_LIGHT, papram);
-              // new LowBatteryDialog(getContext()).builder().show();
+
                 break;
             case R.id.top_icon3:
                 try {
@@ -263,9 +292,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     protected void onResume() {
         super.onResume();
         if (isBulueToothConnected()) {
-            looperThread.send(createMessage(APP_CONNECTED_STATUS,""));
+            looperThread.send(createMessage(APP_BLUETOOTH_CONNECTED,""));
             topIcon2Disconnect.setVisibility(View.INVISIBLE);
         } else {
+            looperThread.send(createMessage(APP_LAUNCH_STATUS,""));
             topIcon2Disconnect.setVisibility(View.VISIBLE);
         }
 
@@ -335,6 +365,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             // actionName = "smile enjoy";
         }else if(value==cartoon_aciton_squat_reverse){
             cartoonAction.setBackgroundResource(R.drawable.cartoon_squat_reverse);
+        }
+        if(value==cartoon_aciton_squat_reverse||value==cartoon_action_sleep){
+            hiddenCartoonTouchView();
+        }else {
+            showCartoonTouchView();
         }
 
         //showBuddleText(actionName);
@@ -520,20 +555,24 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mPresenter.dealMessage(event.message);
         try {
             JSONObject mMessage = new JSONObject(event.message);
-            //  "mac","cmd" "param","len"
             int mCmd = Integer.parseInt(mMessage.getString("cmd"));
             UbtLog.d(TAG, "CMD IS   " + mCmd);
-            if (mCmd == 0x72) {
+          if(mCmd==ConstValue.DV_TAP_HEAD) {
+              looperThread.send(createMessage(ROBOT_HIT_HEAD,""));
+          }else if(mCmd==ConstValue.DV_6D_GESTURE){
+               UbtLog.d(TAG,"DV_6D_GESTURE");
+          }else if (mCmd == ConstValue.DV_SLEEP_EVENT) {
                 Log.d(TAG, "ROBOT SLEEP EVENT");
-            } else if (mCmd == 0x73) {
-                Log.d(TAG, "ROBOT LOW BATTERY");
                 looperThread.send(createMessage(ROBOT_SLEEP_EVENT,""));
-            } else if (mCmd == 0x74) {
-                Log.d(TAG, "ROBOT POWER OFF EVENT");
+            } else if (mCmd == ConstValue.DV_LOW_BATTERY) {
+              Log.d(TAG, "ROBOT LOW BATTERY");
+              String mParam=mMessage.getString("param");
+              final byte[] mParams = Base64.decode(mParam, Base64.DEFAULT);
+              UbtLog.d(TAG,"LOW BATTERY +"+mParams[0]);
+              lowBatteryFunction(mParams[0],0);
             } else if (mCmd == ConstValue.DV_READ_BATTERY) {
                 String mParam=mMessage.getString("param");
                 batteryUiShow(mParam);
-
             } else {
                 Log.d(TAG, "ROBOT OTHER SITUATION" + mCmd);
             }
@@ -626,38 +665,66 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
+                       hiddenCartoonTouchView();
                        showCartoonAction(cartoon_action_sleep);
                        showBuddleText("开机来叫醒沉睡的alpha吧");
                        buddleTextAsynchronousTask();
                    }
                });
                break;
-           case APP_CONNECTED_STATUS:
+           case APP_BLUETOOTH_CONNECTED:
                Log.d(TAG,"APP_CONNECTED"+status);
                runOnUiThread(new Runnable() {
                                  @Override
                                  public void run() {
-                                     showCartoonAction(cartoon_action_swing_right_hand);
+                                     showCartoonTouchView();
+                                     showCartoonAction(cartoon_aciton_squat);
                                      showBuddleText("嗨，我是阿尔法");
                                  }
                              });
                break;
-           case LOW_POWER_LESS_TWENTY_STATUS:
+           case APP_BLUETOOTH_CLOSE:
                runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
+                       topIcon2Disconnect.setVisibility(View.VISIBLE);
+                       showCartoonAction(cartoon_action_sleep);
+                   }
+               });
+           case ROBOT_LOW_POWER_LESS_TWENTY_STATUS:
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       hiddenCartoonTouchView();
                        showCartoonAction(cartoon_aciton_squat_reverse);
                        lowBatteryBuddleText();
                    }
                });
                break;
-           case LOW_POWER_LESS_FILVE_STATUS:
+           case ROBOT_LOW_POWER_LESS_FIVE_STATUS:
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       hiddenCartoonTouchView();
+                       showCartoonAction(cartoon_aciton_squat_reverse);
+                       lowBatteryBuddleText();
+                   }
+               });
                break;
            case ROBOT_SLEEP_EVENT:
                runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
+                       hiddenCartoonTouchView();
                        showCartoonAction(cartoon_aciton_squat_reverse);
+                   }
+               });
+               break;
+           case ROBOT_HIT_HEAD:
+               runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       showCartoonAction(cartoon_action_enjoy);
                    }
                });
                break;
@@ -687,16 +754,21 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
       final byte[] mParams = Base64.decode(param, Base64.DEFAULT);
       for (int i = 0; i < mParams.length; i++) {
           Log.d(TAG, "index " + i + "value :" + mParams[i]);
-          if (mParams[2] == 0x01&&mParams[2]!=mChargeValue) {
+          if (mParams[index_two_charging] == 0x01&&mParams[index_two_charging]!=mChargeValue) {
               Log.d(TAG, " IS CHARGE ");
+              recoveryLowBatteryFlag();
               lowBatteryIndicator=false;
-              chargeAsynchronousTask();
-              mChargeValue=mParams[2];
-          } else if(mParams[2]==0x0&&mParams[2]!=mChargeValue) {
+              if(mParams[index_three_powerPercent]==100||mParams[index_three_powerPercent]==99){
+                  stopchargeAsynchronousTask();
+              }else {
+                  chargeAsynchronousTask();
+              }
+              mChargeValue=mParams[index_two_charging];
+          } else if(mParams[index_two_charging]==0x0&&mParams[index_two_charging]!=mChargeValue) {
               stopchargeAsynchronousTask();
               if(mParams[mParams.length-1]<LOWPOWER_THRESHOLD){
                   if(!lowBatteryIndicator) {
-                      looperThread.send(createMessage(LOW_POWER_LESS_TWENTY_STATUS,""));
+                      looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_TWENTY_STATUS,""));
                       lowBatteryIndicator=true;
                   }
               }
@@ -708,19 +780,54 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
                   }
               });
-              mChargeValue=mParams[2];
-
+              mChargeValue=mParams[index_two_charging];
+              mPowerValue=mParams[mParams.length - 1];
           }
           runOnUiThread(new Runnable(){
               @Override
               public void run() {
+                  UbtLog.d(TAG,"LOW BATTERY +"+mParams[mParams.length - 1]);
+                  lowBatteryFunction(mParams[mParams.length - 1],mPowerValue);
                   powerStatusUpdate(mParams[mParams.length - 1]);
+                  mPowerValue=mParams[mParams.length - 1];
               }
           });
 
 
       }
   }
+   private void recoveryLowBatteryFlag(){
+       ENTER_LOW_BATTERY_TWENTY=false;
+       ENTER_LOW_BATTERY_FIVE=false;
+   }
 
-
+   private void hiddenCartoonTouchView(){
+       cartoonChest.setVisibility(View.INVISIBLE);
+       cartoonHead.setVisibility(View.INVISIBLE);
+       cartoonLeftHand.setVisibility(View.INVISIBLE);
+       cartoonRightHand.setVisibility(View.INVISIBLE);
+       cartoonLeftLeg.setVisibility(View.INVISIBLE);
+       cartoonRightLeg.setVisibility(View.INVISIBLE);
+   }
+    private void showCartoonTouchView(){
+        cartoonChest.setVisibility(View.VISIBLE);
+        cartoonHead.setVisibility(View.VISIBLE);
+        cartoonLeftHand.setVisibility(View.VISIBLE);
+        cartoonRightHand.setVisibility(View.VISIBLE);
+        cartoonLeftLeg.setVisibility(View.VISIBLE);
+        cartoonRightLeg.setVisibility(View.VISIBLE);
+    }
+    private void lowBatteryFunction(int currentValue,int lastValue){
+        if(currentValue==LOW_BATTERY_TWENTY_THRESHOLD|| (lastValue>LOW_BATTERY_TWENTY_THRESHOLD&& LOW_BATTERY_TWENTY_THRESHOLD<currentValue)){
+            if(!ENTER_LOW_BATTERY_TWENTY) {
+                looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_TWENTY_STATUS, ""));
+                ENTER_LOW_BATTERY_TWENTY=true;
+            }
+        }else if(currentValue==LOW_BATTERY_FIVE_THRESHOLD){
+            if(!ENTER_LOW_BATTERY_FIVE) {
+                looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_FIVE_STATUS, ""));
+                ENTER_LOW_BATTERY_FIVE=true;
+            }
+        }
+    }
 }
