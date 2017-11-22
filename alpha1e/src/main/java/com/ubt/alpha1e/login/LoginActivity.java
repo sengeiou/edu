@@ -18,7 +18,6 @@ import com.tencent.ai.tvs.env.ELoginPlatform;
 import com.tencent.ai.tvs.info.QQOpenInfoManager;
 import com.tencent.ai.tvs.info.WxInfoManager;
 import com.tencent.connect.common.Constants;
-import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
@@ -66,7 +65,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
     private int loginType = 0; //默认 0 QQ， 1 WX;
 
-    public static final String PID = "b0851325-3056-4853-921b-dcba21b491a3:8c901ad100ad44d98b6276adeb861058";
+    public static final String PID = "95518e46-af79-494e-b2fa-a6db6409ae6b:77022ec0a7614dbcb33c7ab73d4e2ceb";
     public static final String DSN = "123456";
 
     public static void LaunchActivity(Context context) {
@@ -204,7 +203,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            ((AlphaApplication) this.getApplication()).doExitApp(true);
+            System.exit(0);
         }
         return super.onKeyDown(keyCode, event);
     }
