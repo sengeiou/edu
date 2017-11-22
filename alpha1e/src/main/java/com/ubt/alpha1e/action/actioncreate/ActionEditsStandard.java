@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 
 /**
@@ -31,7 +32,12 @@ public class ActionEditsStandard extends BaseActionEditLayout {
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_create_action;
+        if(AlphaApplication.isPad()){
+            return R.layout.activity_create_action_for_pad;
+        }else{
+            return R.layout.activity_create_action;
+        }
+
     }
 
     @Override

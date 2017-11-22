@@ -50,6 +50,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content1.setIndex(0);
         one1Content1.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_1"));
         one1Content1.setId(R.id.ll_frame);
+        one1Content1.setVoiceName("{\"filename\":\"cry.wav\",\"playcount\":1}");
         one1Content1.setDirection(0);
         one1Content1.setX(0);
         one1Content1.setY(-50);
@@ -61,6 +62,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content2.setIndex(1);
         one1Content2.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_2"));
         one1Content2.setId(R.id.iv_zoom_plus);
+        one1Content2.setVoiceName("{\"filename\":\"cry.wav\",\"playcount\":1}");
         one1Content2.setDirection(1);
         one1Content2.setX(0);
         one1Content2.setY(0);
@@ -72,6 +74,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content3.setIndex(2);
         one1Content3.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_3"));
         one1Content3.setId(R.id.rl_musicz_zpne);
+        one1Content3.setVoiceName("{\"filename\":\"cry.wav\",\"playcount\":1}");
         one1Content3.setX(0);
         one1Content3.setY(-40);
         one1Content3.setVertGravity(VerticalGravity.CENTER);
@@ -83,6 +86,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content4.setIndex(3);
         one1Content4.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_4"));
         one1Content4.setId(R.id.iv_reset_index);
+        one1Content4.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
         one1Content4.setDirection(0);
         one1Content4.setX(70);
         one1Content4.setY(20);
@@ -94,6 +98,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content5.setIndex(4);
         one1Content5.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_5"));
         one1Content5.setId(R.id.iv_add_frame);
+        one1Content5.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
         one1Content5.setDirection(1);
         one1Content5.setX(0);
         one1Content5.setY(0);
@@ -105,6 +110,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content6.setIndex(5);
         one1Content6.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_6"));
         one1Content6.setId(R.id.iv_play_music);
+        one1Content6.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
         one1Content6.setDirection(0);
         one1Content6.setX(0);
         one1Content6.setY(0);
@@ -125,6 +131,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content7.setIndex(0);
         one1Content7.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_2_1"));
         one1Content7.setId(R.id.iv_hand_left);
+        one1Content7.setVoiceName("happy.wav");
         one1Content7.setDirection(0);
         one1Content7.setX(10);
         one1Content7.setY(-50);
@@ -145,6 +152,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content8.setIndex(0);
         one1Content8.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_3_1"));
         one1Content8.setId(R.id.iv_action_bgm);
+        one1Content8.setVoiceName("happy.wav");
         one1Content8.setDirection(0);
         one1Content8.setX(0);
         one1Content8.setY(0);
@@ -179,6 +187,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content1.setIndex(0);
         one1Content1.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card2_2_1"));
         one1Content1.setId(R.id.iv_action_lib);
+        one1Content1.setVoiceName("happy.wav");
         one1Content1.setDirection(0);
         one1Content1.setX(0);
         one1Content1.setY(-50);
@@ -199,6 +208,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content7.setIndex(0);
         one1Content7.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card2_2_2"));
         one1Content7.setId(R.id.iv_action_lib_more);
+        one1Content7.setVoiceName("happy.wav");
         one1Content7.setDirection(0);
         one1Content7.setX(10);
         one1Content7.setY(-50);
@@ -219,6 +229,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content8.setIndex(0);
         one1Content8.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card2_3_1_2"));
         one1Content8.setId(R.id.iv_action_bgm);
+        one1Content8.setVoiceName("happy.wav");
         one1Content8.setDirection(0);
         one1Content8.setX(0);
         one1Content8.setY(0);

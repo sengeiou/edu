@@ -19,6 +19,8 @@ public class CourseOne1Content {
      */
     private int id;
 
+    private String voiceName;
+
     /**
      * 方向
      */
@@ -97,12 +99,21 @@ public class CourseOne1Content {
         this.y = y;
     }
 
+    public String getVoiceName() {
+        return voiceName;
+    }
+
+    public void setVoiceName(String voiceName) {
+        this.voiceName = voiceName;
+    }
+
     @Override
     public String toString() {
         return "CourseOne1Content{" +
                 "index=" + index +
                 ", content='" + content + '\'' +
                 ", id=" + id +
+                ", voiceName='" + voiceName + '\'' +
                 ", direction=" + direction +
                 ", vertGravity=" + vertGravity +
                 ", horizGravity=" + horizGravity +

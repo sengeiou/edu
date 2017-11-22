@@ -14,6 +14,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
+import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zyyoona7.lib.EasyPopup;
 
@@ -166,17 +167,12 @@ public class CourseOneLayout extends BaseActionEditLayout {
         textView.setText(oneContent.getContent());
         textView.setBackgroundResource(oneContent.getDirection() == 0 ? R.drawable.bubble_guide_left : R.drawable.bubble_guide_right);
         View archView = findViewById(oneContent.getId());
-        contentView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCirclePop.dismiss();
-            }
-        });
         mCirclePop = new EasyPopup(mContext)
                 .setContentView(contentView)
                 //是否允许点击PopupWindow之外的地方消失
-                .setFocusAndOutsideEnable(true)
+                .setFocusAndOutsideEnable(false)
                 .createPopup()
+
                 .setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
                     public void onDismiss() {
@@ -186,6 +182,8 @@ public class CourseOneLayout extends BaseActionEditLayout {
                 });
 
         mCirclePop.showAtAnchorView(archView, oneContent.getVertGravity(), oneContent.getHorizGravity(), oneContent.getX(), oneContent.getY());
+        ((ActionsEditHelper) mHelper).playCourse(oneContent.getVoiceName());
+        UbtLog.d("EditHelper",oneContent.getVoiceName());
         //mCirclePop.showAtAnchorView(recyclerViewFrames, VerticalGravity.ABOVE, HorizontalGravity.ALIGN_RIGHT);
     }
 

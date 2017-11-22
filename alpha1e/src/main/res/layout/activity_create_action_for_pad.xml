@@ -78,7 +78,7 @@
         <LinearLayout
             android:id="@+id/ll_left"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
             >
@@ -118,13 +118,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/ll_left"
-            android:layout_marginTop="-10dp"
+            android:layout_marginBottom="20dp"
             >
 
 
 
             <include
-                layout="@layout/layout_robot"
+                layout="@layout/layout_robot_for_pad"
                 />
 
 

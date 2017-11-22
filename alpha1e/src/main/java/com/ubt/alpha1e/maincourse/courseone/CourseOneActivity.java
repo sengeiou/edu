@@ -95,7 +95,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     @Override
     public void getCourseOneData(List<ActionCourseOneContent> list) {
         this.list = list;
-        mActionEdit.setData(list, 2, this);
+        mActionEdit.setData(list, 1, this);
     }
 
     /**
@@ -137,7 +137,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        returnCardActivity();
+        finish();
     }
 
     @Override

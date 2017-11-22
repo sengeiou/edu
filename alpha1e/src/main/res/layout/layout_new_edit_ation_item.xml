@@ -6,7 +6,6 @@
     android:clickable="true"
     android:visibility="gone">
 
-    <!--android:background="@color/sec_new_frame_bg"-->
 
     <RelativeLayout
         android:id="@+id/lay_frame_data"

@@ -139,7 +139,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private SeekBar sbTime;
     private int current = 0;
 
-//    private String init = "\"90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90\"";
 
     public String[] init = {"90", "90", "90", "90", "90", "90", "90", "60", "76", "110", "90", "90",
             "120", "104", "70", "90"};
@@ -228,7 +227,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     PrepareActionUtil mPrepareActionUtil;
     PrepareMusicUtil mPrepareMusicUtil;
 
-    private BaseHelper mHelper;
+    public BaseHelper mHelper;
 
     public BaseActionEditLayout(Context context) {
         super(context);
@@ -258,6 +257,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     public void setUp(BaseHelper baseHelper) {
         this.mHelper = baseHelper;
+    }
+
+    OnSaveSucessListener listener;
+    public void setOnSaveSucessListener(OnSaveSucessListener listener){
+        this.listener = listener;
     }
 
     /**
@@ -784,8 +788,13 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         if (mDir != "") {
             inte.putExtra(ActionsEditSaveActivity.MUSIC_DIR, mDir);
         }
-        mContext.startActivity(inte);
+        if(listener != null){
+            listener.startSave(inte);
+        }
+//        mContext.startActivity(inte);
     }
+
+
 
     public void pause() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
@@ -1121,7 +1130,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 }
 
             }
-            ivPlay.setImageResource(R.drawable.icon_pause_nor);
+            ivPlay.setImageResource(R.drawable.ic_pause);
             doPlayCurrentFrames();
             play();
 
@@ -2377,6 +2386,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         }
         adapter.notifyDataSetChanged();
     }
+
+    public interface OnSaveSucessListener{
+        void startSave(Intent intent);
+    }
+
 
 
 
