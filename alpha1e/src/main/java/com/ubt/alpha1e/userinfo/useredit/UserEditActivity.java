@@ -145,7 +145,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     }
 
     private void checkSaveEnable(){
-        if(mTvUserName.getText().length()>0 && !mTvUserAge.getText().toString().equals("未填写")
+        if(mTvUserName.getText().toString().trim().length()>0 && !mTvUserName.getText().toString().trim().equals("") && !mTvUserAge.getText().toString().equals("未填写")
                 && !mTvUserGrade.getText().toString().equals("未填写")){
             ivSave.setEnabled(true);
         }else{
@@ -185,10 +185,17 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                 mPresenter.showImageHeadDialog(UserEditActivity.this);
                 break;
             case R.id.tv_user_age:
+                if(ageList.size()==0){
+                    ToastUtils.showShort("网络异常");
+                    return;
+                }
                 mPresenter.showAgeDialog(UserEditActivity.this, ageList, mPresenter.getPosition(age,ageList));
                 break;
             case R.id.tv_user_grade:
-
+                if(gradeList.size()==0){
+                    ToastUtils.showShort("网络异常");
+                    return;
+                }
                 mPresenter.showGradeDialog(UserEditActivity.this, mPresenter.getPosition(grade,gradeList), gradeList);
                 break;
             case R.id.iv_complete_info:

@@ -299,7 +299,7 @@ public abstract class BaseActivity extends
             if(stopFloatService() /*&& isServiceRun(getApplicationContext(), "com.ubt.alpha1e.ui.custom.FloatControlViewService")*/){
                 CommonCtrlView.closeCommonCtrlView();
             }else{
-                CommonCtrlView.getInstace(this);
+//                CommonCtrlView.getInstace(this);
             }
         }else{
             CommonCtrlView.closeCommonCtrlView();
@@ -715,6 +715,9 @@ public abstract class BaseActivity extends
         if(currentActivityLable.equals("ActionTestActivity")){
             return true;
         }
+
+
+
         return false;
     }
 

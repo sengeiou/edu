@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.tencent.ai.tvs.LoginProxy;
+import com.tencent.ai.tvs.env.ELoginPlatform;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
@@ -158,6 +160,10 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
                 }, -1);
     }
 
+
+    private String appidWx = "wxfa7003941d57a391";
+    private String appidQQOpen = "1106515940";
+    private LoginProxy proxy;
     @Override
     public void doLogout() {
         SPUtils.getInstance().remove(Constant.SP_USER_INFO);
@@ -165,6 +171,10 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
         SPUtils.getInstance().remove(Constant.SP_USER_IMAGE);
         SPUtils.getInstance().remove(Constant.SP_USER_NICKNAME);
         SPUtils.getInstance().remove(Constant.SP_LOGIN_TOKEN);
+        proxy =  LoginProxy.getInstance(appidWx, appidQQOpen);
+        proxy.clearToken(ELoginPlatform.QQOpen, mView.getContext());
+        proxy.clearToken(ELoginPlatform.WX, mView.getContext());
+
     }
 
     public int getLanguageCurrentIndex() {
