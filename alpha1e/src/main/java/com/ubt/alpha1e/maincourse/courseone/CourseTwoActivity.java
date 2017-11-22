@@ -1,6 +1,5 @@
 package com.ubt.alpha1e.maincourse.courseone;
 
-
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,7 +15,7 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.FileTools;
-import com.ubt.alpha1e.maincourse.courselayout.CourseOneLayout;
+import com.ubt.alpha1e.maincourse.courselayout.CourseTwoLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -28,16 +27,19 @@ import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
-
 /**
- * MVPPlugin
- * 邮箱 784787081@qq.com
+ * @author：liuhai
+ * @date：2017/11/22 15:36
+ * @modifier：ubt
+ * @modify_date：2017/11/22 15:36
+ * [A brief description]
+ * version
  */
 
-public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseOneLayout.CourseProgressListener {
+public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseTwoLayout.CourseProgressListener {
 
     BaseHelper mHelper;
-    CourseOneLayout mActionEdit;
+    CourseTwoLayout mActionEdit;
     RelativeLayout mRlInstruction;
     private TextView mTextView;
     /**
@@ -55,7 +57,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mHelper = new ActionsEditHelper(CourseOneActivity.this, this);
+        mHelper = new ActionsEditHelper(CourseTwoActivity.this, this);
         mHelper.RegisterHelper();
         initUI();
     }
@@ -66,7 +68,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
             super.handleMessage(msg);
             if (msg.what == 1111) {
                 mRlInstruction.setVisibility(View.GONE);
-                mPresenter.getCourseOneData(CourseOneActivity.this);
+                mPresenter.getCourseTwoData(CourseTwoActivity.this);
             }
         }
     };
@@ -74,15 +76,16 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
 
     @Override
     protected void initUI() {
-        mActionEdit = (CourseOneLayout) findViewById(R.id.action_edit);
+        mActionEdit = (CourseTwoLayout) findViewById(R.id.action_edit_two);
         mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
         mTextView = (TextView) findViewById(R.id.tv_all_introduc);
-        mTextView.setText(ResourceManager.getInstance(this).getStringResources("action_course_card1_1_all"));
+        mTextView.setText(ResourceManager.getInstance(this).getStringResources("action_course_card2_1_all"));
+
         mActionEdit.setUp(mHelper);
-        boolean flag = SPUtils.getInstance().getBoolean(Constant.SP_ACTION_COURSE_CARD_ONE);
+        boolean flag = SPUtils.getInstance().getBoolean(Constant.SP_ACTION_COURSE_CARD_TWO);
         if (!flag) {
             mRlInstruction.setVisibility(View.VISIBLE);
-            SPUtils.getInstance().put(Constant.SP_ACTION_COURSE_CARD_ONE, false);
+            SPUtils.getInstance().put(Constant.SP_ACTION_COURSE_CARD_TWO, false);
             mHandler.sendEmptyMessageDelayed(1111, 3000);
         }
     }
@@ -137,7 +140,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
+        returnCardActivity();
     }
 
     @Override
@@ -152,7 +155,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
 
     @Override
     public int getContentViewId() {
-        return R.layout.activity_action_course_one;
+        return R.layout.activity_action_course_two;
     }
 
     @Override
@@ -220,5 +223,8 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
 
     }
 
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
 }

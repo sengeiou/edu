@@ -14,7 +14,6 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
-import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zyyoona7.lib.EasyPopup;
 
@@ -31,8 +30,8 @@ import java.util.List;
  * version
  */
 
-public class CourseOneLayout extends BaseActionEditLayout {
-    private String TAG = CourseOneLayout.class.getSimpleName();
+public class CourseTwoLayout extends BaseActionEditLayout {
+    private String TAG = CourseTwoLayout.class.getSimpleName();
     private ImageView ivLeft;
     private ImageView ivRight;
     private TextView tvCourseContent;
@@ -51,15 +50,15 @@ public class CourseOneLayout extends BaseActionEditLayout {
 
     private int currentIndex = 0;
 
-    public CourseOneLayout(Context context) {
+    public CourseTwoLayout(Context context) {
         super(context);
     }
 
-    public CourseOneLayout(Context context, @Nullable AttributeSet attrs) {
+    public CourseTwoLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CourseOneLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CourseTwoLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -167,12 +166,17 @@ public class CourseOneLayout extends BaseActionEditLayout {
         textView.setText(oneContent.getContent());
         textView.setBackgroundResource(oneContent.getDirection() == 0 ? R.drawable.bubble_guide_left : R.drawable.bubble_guide_right);
         View archView = findViewById(oneContent.getId());
+        contentView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCirclePop.dismiss();
+            }
+        });
         mCirclePop = new EasyPopup(mContext)
                 .setContentView(contentView)
                 //是否允许点击PopupWindow之外的地方消失
-                .setFocusAndOutsideEnable(false)
+                .setFocusAndOutsideEnable(true)
                 .createPopup()
-
                 .setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
                     public void onDismiss() {
@@ -182,34 +186,43 @@ public class CourseOneLayout extends BaseActionEditLayout {
                 });
 
         mCirclePop.showAtAnchorView(archView, oneContent.getVertGravity(), oneContent.getHorizGravity(), oneContent.getX(), oneContent.getY());
-        ((ActionsEditHelper) mHelper).playCourse(oneContent.getVoiceName());
-        UbtLog.d("EditHelper",oneContent.getVoiceName());
         //mCirclePop.showAtAnchorView(recyclerViewFrames, VerticalGravity.ABOVE, HorizontalGravity.ALIGN_RIGHT);
     }
 
     /**
      * 第二课时
      */
+
     private void showPop1() {
+        View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one, null);
+        TextView textView = contentView.findViewById(R.id.tv_content);
+        UbtLog.d(TAG, mContents.get(currentCourse - 1).getList().toString());
+        CourseOne1Content oneContent = mContents.get(currentCourse - 1).getList().get(0);
+        textView.setText(oneContent.getContent());
+        textView.setBackgroundResource(oneContent.getDirection() == 0 ? R.drawable.bubble_guide_left : R.drawable.bubble_guide_right);
+        View archView = findViewById(oneContent.getId());
+        contentView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCirclePop.dismiss();
+                setLayoutByCurrentCourse();
+            }
+        });
         mCirclePop = new EasyPopup(mContext)
-                .setContentView(R.layout.layout_pop_course_one_two)
-                // .setWidth(420)
-                // .setHeight(200)
+                .setContentView(contentView)
                 //是否允许点击PopupWindow之外的地方消失
                 .setFocusAndOutsideEnable(true)
                 .createPopup()
                 .setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
                     public void onDismiss() {
-                        currentCourse++;
-                        setLayoutByCurrentCourse();
+                        UbtLog.d(TAG, "课时一完成");
+                         
                     }
                 });
-        CourseOne1Content oneContent = mContents.get(currentCourse - 1).getList().get(0);
-        View archView = findViewById(oneContent.getId());
+
         mCirclePop.showAtAnchorView(archView, oneContent.getVertGravity(), oneContent.getHorizGravity(), oneContent.getX(), oneContent.getY());
     }
-
 
     private void showPop2() {
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one, null);

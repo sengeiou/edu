@@ -25,11 +25,18 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ResponseMode.CourseDetailScoreModule;
+import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.maincourse.adapter.ActionCoursedapter;
 import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
+import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +52,7 @@ import butterknife.OnClick;
 
 public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.View, ActionCoursePresenter> implements ActionCourseContract.View, BaseQuickAdapter.OnItemClickListener {
 
+    private static final String TAG = ActionCourseActivity.class.getSimpleName();
     @BindView(R.id.iv_main_back)
     ImageView mIvMainBack;
     @BindView(R.id.recyleview_content)
@@ -52,11 +60,14 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
     private List<ActionCourseModel> mActionCourseModels;
     private ActionCoursedapter mMainCoursedapter;
 
+    private static final int REQUESTCODE = 10000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initUI();
         mPresenter.getActionCourseData(this);
+        LoadingDialog.show(this);
     }
 
     @OnClick(R.id.iv_main_back)
@@ -77,14 +88,11 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 super.getItemOffsets(outRect, view, parent, state);
                 outRect.right = 30;
                 outRect.left = 30;
-                if (parent.getChildAdapterPosition(view) == 4) {
-                    outRect.top = 50;
-                }
+                outRect.top = 50;
             }
         });
+
         mRecyleviewContent.setAdapter(mMainCoursedapter);
-        mPresenter.getCourseProgress();
-        mPresenter.getLastProgress();
 
     }
 
@@ -103,18 +111,67 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         return R.layout.activity_action_course_layout;
     }
 
+
+    /**
+     * 获取关卡列表
+     *
+     * @param list
+     */
     @Override
     public void setActionCourseData(List<ActionCourseModel> list) {
         mActionCourseModels.clear();
         mActionCourseModels.addAll(list);
         mMainCoursedapter.notifyDataSetChanged();
         UbtLog.d("MainCourse", "list==" + list.toString());
+        mPresenter.getLastProgress();
+    }
+
+    /**
+     * 获取最新进度
+     *
+     * @param result 最新进度返回结果
+     */
+    @Override
+    public void getLastProgressResult(boolean result) {
+        ToastUtils.showShort(result ? "获取进度成功" : "获取进度失败");
+        mPresenter.getCourseProgress();
+    }
+
+    /**
+     * 获取关卡分数
+     *
+     * @param list 返回每个关卡列表
+     */
+    @Override
+    public void getCourseScores(List<CourseDetailScoreModule> list) {
+        if (null != list && list.size() > 0) {
+            UbtLog.d(TAG, "list===" + list.size());
+            for (CourseDetailScoreModule module : list) {
+                int coureseIndex = Integer.parseInt(module.getCourse());
+                int statu = Integer.parseInt(module.getStatus());
+                mActionCourseModels.get(coureseIndex - 1).setActionCourcesScore(statu);
+                mActionCourseModels.get(coureseIndex - 1).setActionLockType(1);
+            }
+        } else {
+            //如果后台获取失败，则从本地获取到最后保存的记录
+            LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+            if (null != record) {
+                int course = record.getCourseLevel();
+                for (int i = 0; i < course; i++) {
+                    mActionCourseModels.get(i).setActionLockType(1);
+                    mActionCourseModels.get(i).setActionCourcesScore(1);
+                }
+            }
+        }
+        mMainCoursedapter.notifyDataSetChanged();
+        LoadingDialog.dismiss(this);
+
     }
 
     @Override
-    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+    public void onItemClick(BaseQuickAdapter adapter, View view, final int position) {
 
-        if (mActionCourseModels.get(position).getActionLockType() == 1) {
+        if (mActionCourseModels.get(position).getActionLockType() == 0) {
             return;
         }
 
@@ -139,9 +196,70 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_pos) {
-                            startActivity(new Intent(ActionCourseActivity.this, CourseOneActivity.class));
+                            if (position == 0) {
+                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseOneActivity.class), REQUESTCODE);
+                            }else if(position==1){
+                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseTwoActivity.class), REQUESTCODE);
+                            }
                             dialog.dismiss();
+                        }
+                    }
+                })
+                .setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogPlus dialog) {
+                    }
+                })
+                .setCancelable(true)
+                .create().show();
+    }
 
+    // 为了获取结果
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // RESULT_OK，判断另外一个activity已经结束数据输入功能，Standard activity result:
+        // operation succeeded. 默认值是-1
+        if (resultCode == 1) {
+            if (requestCode == REQUESTCODE) {
+                //设置结果显示框的显示数值
+                int course = data.getIntExtra("course", 1);
+                int leavel = data.getIntExtra("leavel", 1);
+                boolean isComplete = data.getBooleanExtra("isComplete", false);
+                int score = data.getIntExtra("score", 0);
+                showResultDialog(course, isComplete);
+                UbtLog.d(TAG, "course==" + course + "   leavel==" + leavel + "  isComplete==" + isComplete + "  socre===" + score);
+                mPresenter.saveCourseProgress(String.valueOf(course), isComplete ? "1" : "0");
+
+            }
+        }
+    }
+
+
+    public void showResultDialog(final int course, boolean result) {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_action_course_result, null);
+        TextView tvResult = contentView.findViewById(R.id.tv_result);
+        tvResult.setText(result ? "闯关成功" : "闯关失败");
+        TextView title = contentView.findViewById(R.id.tv_card_name);
+        title.setText(mActionCourseModels.get(course - 1).getTitle());
+        ((ImageView) contentView.findViewById(R.id.iv_result)).setImageResource(result ? R.drawable.img_level_success : R.drawable.img_level_fail);
+        ViewHolder viewHolder = new ViewHolder(contentView);
+        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        int width = (int) ((display.getWidth()) * 0.6); //设置宽度
+
+        DialogPlus.newDialog(this)
+                .setContentHolder(viewHolder)
+                .setGravity(Gravity.CENTER)
+                .setContentWidth(width)
+                .setContentBackgroundResource(android.R.color.transparent)
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        if (view.getId() == R.id.btn_retry) {//点击确定以后刷新列表并解锁下一关
+                            mActionCourseModels.get(course).setActionLockType(1);
+                            mMainCoursedapter.notifyDataSetChanged();
+                            dialog.dismiss();
                         }
                     }
                 })

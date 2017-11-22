@@ -201,6 +201,13 @@ public class ActionsEditHelper extends BaseHelper implements
             msg.what = msg_on_read_all_eng;
             msg.obj = param;
             mHandler.sendMessage(msg);
+        } else if (cmd == ConstValue.DV_SET_PLAY_SOUND) {
+            if (param != null) {
+                UbtLog.d("EditHelper", "sound:" + ByteHexHelper.bytesToHexString(param) + "param[0]:" + param[0]);
+                if (param[0] == 1) {
+                    UbtLog.d("EditHelper", "播放完成");
+                }
+            }
         }
     }
 
@@ -212,6 +219,11 @@ public class ActionsEditHelper extends BaseHelper implements
         byte[] params = new byte[1];
         params[0] = ByteHexHelper.intToHexByte(id);
         doSendComm(ConstValue.CTRL_ONE_ENGINE, params);
+    }
+
+    public void playCourse(String str) {
+        byte[] params = ByteHexHelper.hexStringToBytes2(str);
+        doSendComm(ConstValue.DV_SET_PLAY_SOUND, params);
     }
 
     public void doLostLeftHandAndRead() {

@@ -227,7 +227,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     PrepareActionUtil mPrepareActionUtil;
     PrepareMusicUtil mPrepareMusicUtil;
 
-    private BaseHelper mHelper;
+    public BaseHelper mHelper;
 
     public BaseActionEditLayout(Context context) {
         super(context);
