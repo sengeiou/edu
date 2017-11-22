@@ -300,7 +300,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
 
     }
-    
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

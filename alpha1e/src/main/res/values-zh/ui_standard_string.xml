@@ -833,26 +833,18 @@
     <string name="ui_task_known">我知道了</string>
     <string name="ui_create_guide_help">点击这里查看帮助内容</string>
     <string name="ui_task_chanllege_fail">闯关失败,再试试吧!</string>
-<<<<<<< HEAD
-    <!--MAIN ui-->
-    >
-=======
 
->>>>>>> develop1
+    <!--MAIN ui-->
+
     <string name="ui_main_right_icon">遥控器</string>
     <string name="ui_main_right_icon2">动作</string>
     <string name="ui_main_right_icon3">编程</string>
     <string name="ui_main_right_icon4">社区</string>
     <string name="ui_main_course_center">课程中心</string>
     <string name="control_center">关闭</string>
-<<<<<<< HEAD
     <string name="lowpower_indicator">电量低于20%</string>
     <string name="buddle_text_init_status">开机来叫醒沉睡的alpha吧</string>
-    􀀔􀀑􀀃􀖦􁚆􁴿􀱯􁈻
-=======
 
-
->>>>>>> develop1
     <string name="ui_setting_clear_cache">清除缓存数据</string>
     <string name="ui_setting_use_memory_title">Alpha1E已用空间</string>
     <string name="ui_setting_cache_retio_title">占用手机</string>
@@ -879,9 +871,7 @@
     <string name="ui_setting_password_modify_success">修改密码成功</string>
     <string name="ui_setting_password_modify_fail">修改密码失败</string>
     <string name="ui_setting_common_next">下一步</string>
-<<<<<<< HEAD
 
-=======
     <string name="ui_setting_password_verify_fail">验证码检验失败</string>
     <string name="ui_setting_verify_code_send_success">验证码检验发送成功</string>
     <string name="ui_setting_verify_code_send_fail">验证码检验发送失败</string>
@@ -894,7 +884,7 @@
     <string name="ui_setting_app_update_tips">是否需要更新版本？</string>
     <string name="ui_common_no">否</string>
     <string name="ui_common_yes">是</string>
->>>>>>> develop1
+
 
     <!-- 不需要翻译 -->
     <string name="ui_pc_update_url">http://www.ubtrobot.com/download/index.html</string>
