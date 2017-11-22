@@ -16,6 +16,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.login.LoginActivity;
@@ -129,8 +130,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 //                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect",true);
                 break;
             case R.id.right_icon2:
-                startActivity(new Intent(this, ActionTestActivity.class));
-                this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                if(isBulueToothConnected()){
+                    startActivity(new Intent(this, ActionTestActivity.class));
+                    this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                }else{
+                    ToastUtils.showShort("请先连接蓝牙");
+                }
+
                 break;
             case R.id.right_icon3:
                 break;

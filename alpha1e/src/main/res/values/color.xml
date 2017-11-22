@@ -149,4 +149,5 @@
     <color name="action_save_text_color">#9F9FA3</color>
     <color name="action_dialog_filter_color">#E7E8E9</color>
     <color name="action_dilog_title">#16A4E3</color>
+    <color name="action_guid_text_color">#36ACF0</color>
 </resources>
