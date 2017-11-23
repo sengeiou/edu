@@ -253,13 +253,13 @@ public abstract class BaseActivity extends
         back.setOnClickListener(listener);
     }
 
-    public void onNoteLowPower() {
+    public void onNoteLowPower(final int value ) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 try {
                     //LowPowerDialog.getInstance(BaseActivity.this).show();
-                    new LowBatteryDialog(BaseActivity.this).builder().show();
+                    new LowBatteryDialog(BaseActivity.this).setBatteryThresHold(value).builder().show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

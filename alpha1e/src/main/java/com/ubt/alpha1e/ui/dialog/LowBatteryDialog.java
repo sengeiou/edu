@@ -20,8 +20,9 @@ public class LowBatteryDialog {
     private Context context;
     private Dialog dialog;
     private LinearLayout lLayout_bg;
-    private TextView txt_title;
+    private TextView txt_lowBattery;
     private Display display;
+    int power=0;
     private boolean showTitle = false;
     private boolean showMsg = false;
 
@@ -32,14 +33,20 @@ public class LowBatteryDialog {
         display = windowManager.getDefaultDisplay();
     }
 
+    public LowBatteryDialog setBatteryThresHold(int value){
+           power=value;
+        return this ;
+    }
+
     public LowBatteryDialog builder() {
         // 获取Dialog布局
         View view = LayoutInflater.from(context).inflate(R.layout.view_lowbatterydialog, null);
 
         // 获取自定义Dialog布局中的控件
        // lLayout_bg = (LinearLayout) view.findViewById(R.id.lLayout_bg);
-        txt_title = (TextView) view.findViewById(R.id.txt_title);
-        txt_title.setVisibility(View.VISIBLE);
+        txt_lowBattery = (TextView) view.findViewById(R.id.txt_lowBattery);
+        txt_lowBattery.setText("电量低于"+power+"%");
+        txt_lowBattery.setVisibility(View.VISIBLE);
 
         // 定义Dialog布局和参数
         dialog = new Dialog(context, R.style.AlertDialogStyle);

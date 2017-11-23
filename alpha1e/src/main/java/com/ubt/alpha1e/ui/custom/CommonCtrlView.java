@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
@@ -265,6 +267,13 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         txt_action_name = (TextView) view.findViewById(R.id.action_test);
         txt_action_name_m = (TextView) view.findViewById(R.id.action_test);
         txt_cycle_num = (TextView) view.findViewById(R.id.action_test);
+
+        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+        btn_cycle.setColorFilter(filter);
+        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
 
         UbtLog.d(TAG, "playingName=" + playingName);
         if(playingName.equals("NO_VALUE")){

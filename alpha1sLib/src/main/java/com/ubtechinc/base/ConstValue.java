@@ -361,7 +361,7 @@ public class ConstValue {
 	/**
 	 *  1E 机器人通用命令
 	 */
-	public static final byte DV_COMMON_COMMAND=(byte)0x93;
+	public static final int DV_COMMON_COMMAND=0x93;
 
 
 }

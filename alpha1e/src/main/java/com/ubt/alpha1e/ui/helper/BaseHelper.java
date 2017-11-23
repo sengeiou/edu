@@ -54,6 +54,8 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     private static Timer read_battery_timer = null;
     private static Date lastTime_doReadState = null;
     private static boolean isNeedNoteLowPower = true;
+    private static boolean isNeedNoteLowPowerTwenty=true;
+    private static boolean isNeedNoteLowPowerFive=true;
     protected static long readUserHeadImgRequest = 1111001;
     public static boolean hasHandshakeBseven = false;
     public static boolean hasSupportA2DP = false;
@@ -67,6 +69,8 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     public static boolean mLightState = true;
 
     public static String mCourseAccessToken = "";
+    private int LOW_BATTERY_TWENTY=20;
+    private int LOW_BATTERY_FIVE=5;
 
 
     private static boolean isCharging = false; //用来判断机器人当前是否在充电中,false 表示没有充电中,true表示充电中.
@@ -246,18 +250,20 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 int power = param[3];
                 if (power <= 10 && isNeedNoteLowPower) {
                     isNeedNoteLowPower = false;
-                    AlphaApplication.getBaseActivity().onNoteLowPower();
+                   // AlphaApplication.getBaseActivity().onNoteLowPower();
                 } else if (power > 10) {
                     isNeedNoteLowPower = true;
                 }
                 if(param[2]==0){
-                    if(power<20){
+                    if(power!=5&&power<=20&&isNeedNoteLowPowerTwenty){
                         UbtLog.d(TAG,"LESS 20 SHOW DIALOG");
-                        new LowBatteryDialog(mContext).builder().show();
+                        AlphaApplication.getBaseActivity().onNoteLowPower(LOW_BATTERY_TWENTY);
+                        isNeedNoteLowPowerTwenty=false;
                     }
-                    if(power<5){
+                    if(power<=5&&isNeedNoteLowPowerFive){
                         UbtLog.d(TAG,"LESS 5 SHOW DIALOG");
-                        new LowBatteryDialog(mContext).builder().show();
+                        AlphaApplication.getBaseActivity().onNoteLowPower(LOW_BATTERY_FIVE);
+                        isNeedNoteLowPowerFive=false;
                     }
                 }
             } catch (Exception e) {
