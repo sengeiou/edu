@@ -25,10 +25,10 @@ public final class LooperThread extends Thread {
         // Note: Looper is usually already created in the Activity
         boolean looperIsNotPreparedInCurrentThread = Looper.myLooper() == null;
 
+
         if (looperIsNotPreparedInCurrentThread) {
             Looper.prepare();
         }
-
         handler = new Handler(new Handler.Callback() {
             @Override public boolean handleMessage(Message message) {
                 Log.d(getClass().getSimpleName(), message.getData().toString());
@@ -51,6 +51,7 @@ public final class LooperThread extends Thread {
     }
 
     public static void send(Message message) {
+        while(handler==null);
         handler.sendMessage(message);
     }
     public static void sendDelayMessage(Message message,long delay){
