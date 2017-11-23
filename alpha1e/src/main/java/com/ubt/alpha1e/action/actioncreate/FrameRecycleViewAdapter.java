@@ -178,7 +178,7 @@ public class FrameRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             if (defItem != -1) {
                 if (defItem == position) {
                     UbtLog.d(TAG, "onBindViewHolder select");
-                    viewHolder.itemView.setBackgroundResource(R.drawable.buttonstyle_ba_on);
+                    viewHolder.itemView.setBackgroundResource(R.drawable.buttonstyle_trans);
                     viewHolder.rlNormal.setVisibility(View.GONE);
                     viewHolder.rlEditLayout.setVisibility(View.VISIBLE);
                     changeViewLen(viewHolder.rlRoot, 1, "1000");
