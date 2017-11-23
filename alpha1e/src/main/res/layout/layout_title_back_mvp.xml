@@ -69,6 +69,8 @@
             android:imeOptions="flagNoExtractUi"
             android:layout_toRightOf="@+id/iv_search"
             android:background="@color/transparent"
+            android:lines="1"
+            android:maxLength="20"
             android:paddingRight="10dp"
             android:paddingLeft="0dp"
             android:layout_marginLeft="10dp"

@@ -12,10 +12,16 @@ import com.ubt.alpha1e.mvp.BaseView;
 
 public class CourseContract {
     interface View extends BaseView {
-        
+        void onSaveCourseProgress(boolean isSuccess,String msg);
+
+        void onGetCourseProgress(boolean isSuccess,String msg,int progress);
     }
 
     interface  Presenter extends BasePresenter<View> {
-        
+        void doSaveCourseProgress(int type, int courseOne, int progressOne);
+
+        void doGetCourseProgress(int type);
+
+        int doGetLocalProgress();
     }
 }

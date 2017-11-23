@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.course.CourseActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.MainCoursedapter;
 import com.ubt.alpha1e.maincourse.model.CourseModel;
@@ -97,7 +99,15 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        if (position == 1) {
+        if(position == 0){
+
+            if(isBulueToothConnected()){
+                CourseActivity.launchActivity(this);
+            }else {
+                ToastUtils.showShort(getStringResources("ui_action_connect_robot"));
+            }
+
+        }else if (position == 1) {
             startActivity(new Intent(this, ActionCourseActivity.class));
         }
     }

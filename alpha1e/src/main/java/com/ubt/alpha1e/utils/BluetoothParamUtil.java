@@ -66,11 +66,7 @@ public class BluetoothParamUtil {
     public static byte[] stringToBytes(String params){
         byte[] paramBytes = new byte[0];
         try {
-            if(((AlphaApplication)AlphaApplication.getBaseActivity().getApplicationContext()).isAlpha1E()){
-                paramBytes = params.getBytes("UTF-8");
-            }else {
-                paramBytes = params.getBytes("GBK");
-            }
+            paramBytes = params.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -85,11 +81,7 @@ public class BluetoothParamUtil {
     public static String bytesToString(byte[] params){
         String result = null;
         try {
-            if(((AlphaApplication)AlphaApplication.getBaseActivity().getApplicationContext()).isAlpha1E()){
-                result = new String(params,"UTF-8");
-            }else {
-                result = new String(params,"GBK");
-            }
+            result = new String(params,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
