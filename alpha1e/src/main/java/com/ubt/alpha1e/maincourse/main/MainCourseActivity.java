@@ -13,10 +13,11 @@ import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.course.CourseActivity;
+import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.MainCoursedapter;
 import com.ubt.alpha1e.maincourse.model.CourseModel;
-import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.services.RecordSoftService;
 import com.ubt.alpha1e.services.SyncDataService;
@@ -118,6 +119,8 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
 
         }else if (position == 1) {
             startActivity(new Intent(this, ActionCourseActivity.class));
+        }else if(position == 2){
+            startActivity(new Intent(this, BlocklyActivity.class));
         }
     }
 }
