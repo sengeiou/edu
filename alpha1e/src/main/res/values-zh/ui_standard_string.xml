@@ -164,7 +164,7 @@
     <string name="ui_leftmenu_my_collect">我的收藏</string>
     <string name="ui_leftmenu_my_theme">我的主题</string>
     <string name="ui_leftmenu_settings">设置</string>
-    <string name="ui_leftmenu_about">关于</string>
+    <string name="ui_leftmenu_about">关于APP</string>
     <string name="ui_theme_default">默认主题</string>
     <string name="ui_theme_download">下载</string>
     <string name="ui_theme_using">使用中</string>
@@ -173,16 +173,16 @@
     <string name="ui_theme_detial">详情</string>
     <string name="ui_theme_use_success">主题应用成功</string>
     <string name="ui_theme_use_fail">主题应用失败</string>
-    <string name="ui_settings_clear_cache">清空缓存</string>
+    <string name="ui_settings_clear_cache">清除缓存大小</string>
     <string name="ui_settings_clear_cache_success">缓存清除成功</string>
-    <string name="ui_settings_language">多语言</string>
+    <string name="ui_settings_language">语言</string>
     <string name="ui_settings_language_setting">正在设置语言...</string>
     <string name="ui_settings_language_updating">正在更新语言包...</string>
-    <string name="ui_settings_wifi">仅WI-FI网络下载</string>
-    <string name="ui_settings_message_remind">消息提醒</string>
+    <string name="ui_settings_wifi">仅WI-FI下载</string>
+    <string name="ui_settings_message_remind">通知</string>
     <string name="ui_settings_play_during_charging">边充边玩</string>
     <string name="ui_settings_play_during_charging_tips">为保护您的爱机，充电状态下使用机器已被禁止，如需打开请前往设置</string>
-    <string name="ui_settings_logout">退出登录</string>
+    <string name="ui_settings_logout">退出账号</string>
     <string name="ui_settings_logout_failed">退出登录失败</string>
     <string name="ui_settings_select_one">请选择语言</string>
     <string name="ui_settings_success">设置成功</string>
@@ -659,7 +659,7 @@
     <string name="ui_official_hot">热门</string>
     <string name="ui_official_recommend">推荐</string>
     <string name="ui_release_empty_action">小主人，您没有未发布的动作哦</string>
-    <string name="ui_contact_title">联系我们</string>
+    <string name="ui_contact_title">关于我们</string>
     <string name="ui_contact_phone">客服电话</string>
     <string name="ui_contact_email">客服邮箱</string>
     <string name="ui_contact_qrcode_title">关注优必选微信公众号</string>
@@ -954,10 +954,28 @@
     <string name="dialog_permission_microphone_setting">您尚未开启\"ALpha 1E\"录音权限,请到设置中开启</string>
     <string name="dialog_go_setting">去设置</string>
 
-
     <string name="ui_common_save_success">保存成功</string>
     <string name="ui_common_save_fail">保存失败</string>
     <string name="ui_common_save_to_dcim">长按保存到相册</string>
 
+    <string name="ui_principle_engine_tips">小朋友，请活动我的关节！</string>
+    <string name="ui_principle_sensor_tips">小朋友，请用你的小手在我胸前晃动。</string>
+    <string name="ui_principle_soundbox_tips">小朋友，想听我唱歌吗？</string>
     <string name="ui_principle_head_tips">小朋友，请摸摸我的头！</string>
+    <string name="ui_principle_eye_tips">小朋友，请看我的眼睛！</string>
+    <string name="ui_principle_voice_tips">嗨，您好，请叫我的名字！</string>
+    <string name="ui_principle_obstacle_tips">小朋友，请把我胸前的袋子打开，里面有惊喜哦！</string>
+
+    <string name="ui_setting_principle_eye_tip">我的眼睛是明亮的LED灯，它有很多不同的颜色哦。</string>
+    <string name="ui_setting_principle_soundbox_tip">我的头两边，就是扬声器的位置，你听到的阿尔法的声音和音乐，都是从这里发出的。</string>
+    <string name="ui_setting_principle_voice_tip">看到我胸前有两个小小的圆点了吗？那就是我的麦克风，也就是阿尔法的耳朵，有了它们，我才能听清楚小主人的命令。</string>
+    <string name="ui_setting_principle_sensor_tip">我胸前这片黑色的传感器叫做红外距离传感器，有了它，阿尔法走路时才能知道有没有墙或障碍物 。</string>
+    <string name="ui_setting_principle_engine_tip">这个黑色的方块就是我的舵机，相当于人类的关节，多靠它，我们才能灵活地跳舞、做各种动作、可以挑战不同的角度和速度，我的全身一共有16个舵机，是不是很厉害呢？</string>
+    <string name="ui_setting_principle_head_tip">我的头顶有触摸传感器，当你摸我的头顶，我会停止正在做的动作，乖乖地恢复原位。</string>
+    <string name="ui_setting_principle_obstacle_tip">胸前的凹槽，就是放置外接传感器的地方啦，当你将传感器放进我的身体，我才能对周围的环境有更多的感受。</string>
+    <string name="ui_setting_principle_skip_tip">此关卡尚未完成，确定跳过此关卡？</string>
+    <string name="ui_setting_principle_end">结束</string>
+    <string name="ui_setting_principle_learn_finish">原理课程完成啦！</string>
+    <string name="ui_setting_principle_learn_next">下一课程 动作编程</string>
+
 </resources>

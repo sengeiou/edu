@@ -209,7 +209,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
-        JSONObject mData=new JSONObject();
+        /*JSONObject mData=new JSONObject();
         try {
             mData.put("mac", mac);
             mData.put("cmd", cmd);
@@ -218,7 +218,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
             EventBus.getDefault().post(new MainActivity.MessageEvent(mData.toString()));
         }catch(JSONException e){
             e.printStackTrace();
-        }
+        }*/
         if (cmd == ConstValue.DV_READ_BATTERY) {
             // ��ֹ�ظ���Ӧ-------------------start
             Date curDate = new Date(System.currentTimeMillis());

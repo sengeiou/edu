@@ -16,6 +16,7 @@ import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.login.LoginActivity;
+import com.ubt.alpha1e.ui.dialog.AlertDialog;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.LoadingDialog;
 import com.ubt.alpha1e.userinfo.aboutus.AboutUsActivity;
@@ -240,6 +241,7 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
 
                     }
                 }).show();
+
 
 
                 break;

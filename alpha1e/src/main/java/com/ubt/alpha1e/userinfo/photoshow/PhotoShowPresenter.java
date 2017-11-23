@@ -23,7 +23,7 @@ public class PhotoShowPresenter extends BasePresenterImpl<PhotoShowContract.View
 
     @Override
     public void doSavePhoto() {
-        String targetPath = FileTools.PIC_DCIM_PATH + "ubt_wechat.png";
+        String targetPath = FileTools.PIC_DCIM_PATH + "ubt_wechat.jpg";
         File file = new File(targetPath);
         if(file.exists()){
             mView.onSavePhoto(true,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_common_save_success"));

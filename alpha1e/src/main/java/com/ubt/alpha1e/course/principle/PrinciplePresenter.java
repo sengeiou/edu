@@ -10,5 +10,5 @@ import com.ubt.alpha1e.mvp.BasePresenterImpl;
  */
 
 public class PrinciplePresenter extends BasePresenterImpl<PrincipleContract.View> implements PrincipleContract.Presenter{
-    
+
 }

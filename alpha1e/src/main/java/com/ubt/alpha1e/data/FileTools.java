@@ -363,8 +363,7 @@ public class FileTools {
                 }
                 int totle = 0;
                 for (int i = 0; i < cacheListFileNames.length; i++) {
-                    File file = new File(FileTools.image_cache,
-                            cacheListFileNames[i]);
+                    File file = new File(FileTools.image_cache, cacheListFileNames[i]);
                     if (file.exists()) {
                         try {
                             totle += file.length();

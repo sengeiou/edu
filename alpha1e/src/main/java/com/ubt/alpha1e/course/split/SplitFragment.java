@@ -3,6 +3,7 @@ package com.ubt.alpha1e.course.split;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.course.CourseActivity;
+import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -31,6 +33,7 @@ import butterknife.Unbinder;
  * 邮箱 784787081@qq.com
  */
 
+@SuppressLint("ValidFragment")
 public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPresenter> implements SplitContract.View {
 
     private static final String TAG = SplitFragment.class.getSimpleName();
@@ -76,6 +79,8 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
     private boolean hasLostLegLeft = false;
     private boolean hasLostLegRight = false;
 
+    private PrincipleHelper mHelper = null;
+
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -94,11 +99,19 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
                     }
                     break;
                 case GO_TO_NEXT:
+                    ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,2);
                     ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_MERGE);
                     break;
             }
         }
     };
+
+
+    @SuppressLint("ValidFragment")
+    public SplitFragment(PrincipleHelper helper){
+        super();
+        mHelper = helper;
+    }
 
     @Override
     protected void initUI() {
@@ -213,7 +226,7 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
     @Override
     public void onResume() {
         super.onResume();
-
+        mHelper.doInit();
     }
 
     @Override
@@ -392,21 +405,26 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
                             targetY = containerHeight/2 - view.getHeight()/2;
                             ivHandLeftBg.setBackgroundResource(R.drawable.icon_principle_leftarm_white);
                             hasLostHandLeft = true;
+
+                            mHelper.doLostLeftHand();
                         }else if(view.getId() == R.id.iv_hand_right){
                             targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRightBg.getWidth() + SizeUtils.dip2px(getContext(),30);
                             targetY = containerHeight/2 - view.getHeight()/2;
                             ivHandRightBg.setBackgroundResource(R.drawable.icon_principle_rightarm_white);
                             hasLostHandRight = true;
+                            mHelper.doLostRightHand();
                         }else if(view.getId() == R.id.iv_leg_left ){
                             targetX = containerWidth/2 - ivRobot.getWidth()/2 - ivHandLeftBg.getWidth()*2 - ivLegLeft.getWidth()- SizeUtils.dip2px(getContext(),30)*2;
                             targetY = containerHeight/2 - view.getHeight()/2;
                             ivLegLeftBg.setBackgroundResource(R.drawable.icon_principle_leftleg_white);
                             hasLostLegLeft = true;
+                            mHelper.doLostLeftFoot();
                         }else if(view.getId() == R.id.iv_leg_right){
                             targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRightBg.getWidth()*2 + SizeUtils.dip2px(getContext(),30)*2;
                             targetY = containerHeight/2 - view.getHeight()/2;
                             ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_white);
                             hasLostLegRight = true;
+                            mHelper.doLostRightFoot();
                         }
                     }else {
                         targetX = startX;
