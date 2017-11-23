@@ -132,4 +132,15 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         });
     }
 
+    private void Test(){
+        //Enter the course enter
+        byte[] papram = new byte[1];
+        papram[0]=0x01;
+        commandRobotAction(ConstValue.DV_ENTER_COURSE,papram);
+        //Exit the course enter
+        papram[0]=0x0;
+        commandRobotAction(ConstValue.DV_ENTER_COURSE, papram);
+
+    }
+
 }

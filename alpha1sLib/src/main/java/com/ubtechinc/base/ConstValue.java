@@ -342,11 +342,6 @@ public class ConstValue {
 	 */
 	public static final byte DV_LOW_BATTERY=(byte)0x74;
 	/**
-	 *  手机端告诉机器人，进入课程模式
-	 */
-	public static final byte ENTER_COURSE_MODE=(byte)0x75;
-
-	/**
 	 * 1E进入课程
 	 */
 	public static final byte DV_ENTER_COURSE = (byte) 0x75;

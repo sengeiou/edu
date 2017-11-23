@@ -42,6 +42,7 @@ import com.ubt.alpha1e.ui.helper.BluetoothHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
+import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
 import com.zyyoona7.lib.EasyPopup;
@@ -52,6 +53,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -304,6 +306,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.cartoon_chest:
                 Log.d(TAG, "click chest");
                 showCartoonAction(cartoon_action_smile);
+                sendCommandToRobot("/home/root/UBTFT/action/waiting/waiting-1.hts");
                 break;
             case R.id.cartoon_left_hand:
                 Log.d(TAG, "click left hand");
@@ -941,4 +944,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private void showDisconnectIcon(){
         topIcon2Disconnect.setVisibility(View.VISIBLE);
     }
+  private void sendCommandToRobot(String absouteActionPath){
+      byte[] actions = BluetoothParamUtil.stringToBytes(absouteActionPath);
+      mPresenter.commandRobotAction(ConstValue.DV_PLAYACTION,actions);
+  }
+
 }
