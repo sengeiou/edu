@@ -8,6 +8,6 @@
     <!-- 内容 -->
     <solid android:color="@color/action_dialog_filter_color" />
     <!-- 拐角 -->
-    <corners android:radius="8px" />
+    <corners android:radius="8dp" />
 
 </shape>

@@ -26,7 +26,6 @@ import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ResponseMode.CourseDetailScoreModule;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.maincourse.adapter.ActionCoursedapter;
 import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
@@ -73,6 +72,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
     @OnClick(R.id.iv_main_back)
     public void onClick(View view) {
         finish();
+        this.overridePendingTransition(0, R.anim.activity_close_down_up);
     }
 
     @Override
@@ -122,8 +122,8 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         mActionCourseModels.clear();
         mActionCourseModels.addAll(list);
         mMainCoursedapter.notifyDataSetChanged();
-        UbtLog.d("MainCourse", "list==" + list.toString());
-        mPresenter.getLastProgress();
+        mPresenter.getCourseProgress();
+
     }
 
     /**
@@ -133,8 +133,11 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
      */
     @Override
     public void getLastProgressResult(boolean result) {
-        ToastUtils.showShort(result ? "获取进度成功" : "获取进度失败");
-        mPresenter.getCourseProgress();
+        mPresenter.getLastProgress();
+        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+        if (null != record) {
+            UbtLog.d(TAG, "record===" + record.toString() + "  record.size===" + DataSupport.findAll(LocalActionRecord.class).size());
+        }
     }
 
     /**
@@ -163,7 +166,26 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 }
             }
         }
+
+        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+        if (null != record) {
+            int course = record.getCourseLevel();
+            int level = record.getPeriodLevel();
+            if (course == 1) {
+                if (level == 3) {
+                    mActionCourseModels.get(1).setActionLockType(1);
+                }
+            } else if (course == 2) {
+                if (level == 3) {
+                    mActionCourseModels.get(2).setActionLockType(1);
+                }
+            }
+            if (!record.isUpload()) {
+                mPresenter.saveLastProgress(String.valueOf(record.getCourseLevel()), String.valueOf(record.getPeriodLevel()));
+            }
+        }
         mMainCoursedapter.notifyDataSetChanged();
+
         LoadingDialog.dismiss(this);
 
     }
@@ -191,16 +213,17 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 .setContentHolder(viewHolder)
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(width)
-                .setContentBackgroundResource(R.drawable.alert_backgroud)
+                .setContentBackgroundResource(R.drawable.action_dialog_filter_rect)
                 .setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_pos) {
                             if (position == 0) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseOneActivity.class), REQUESTCODE);
-                            }else if(position==1){
+                            } else if (position == 1) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseTwoActivity.class), REQUESTCODE);
                             }
+                            ActionCourseActivity.this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                             dialog.dismiss();
                         }
                     }
@@ -213,6 +236,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 .setCancelable(true)
                 .create().show();
     }
+
 
     // 为了获取结果
     @Override
@@ -230,12 +254,17 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 showResultDialog(course, isComplete);
                 UbtLog.d(TAG, "course==" + course + "   leavel==" + leavel + "  isComplete==" + isComplete + "  socre===" + score);
                 mPresenter.saveCourseProgress(String.valueOf(course), isComplete ? "1" : "0");
-
             }
         }
     }
 
 
+    /**
+     * 显示完成结果
+     *
+     * @param course
+     * @param result
+     */
     public void showResultDialog(final int course, boolean result) {
         View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_action_course_result, null);
         TextView tvResult = contentView.findViewById(R.id.tv_result);

@@ -340,4 +340,10 @@ public class ConstValue {
 	 */
 	public static final byte DV_CLIENT_ID2 = (byte) 0x82;
 
+	/**
+	 * 1E进入课程
+	 */
+	public static final byte DV_ENTER_COURSE = (byte) 0x75;
+
+
 }

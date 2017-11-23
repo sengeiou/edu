@@ -153,7 +153,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        UbtLog.d("ActionCourseActivity", "e===" + e.getMessage());
+                        UbtLog.d("getCourseProgress", "e===" + e.getMessage());
                         if (isAttachView()) {
                             mView.getLastProgressResult(false);
                         }
@@ -161,11 +161,11 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
 
                     @Override
                     public void onResponse(String response, int id) {
-                        UbtLog.d("ActionCourseActivity", "response===" + response);
+                        UbtLog.d("getCourseProgress", "response===" + response);
                         BaseResponseModel<CourseLastProgressModule> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<CourseLastProgressModule>>() {
                                 }.getType());
-                        UbtLog.d("ActionCourseActivity", "baseResponseModel==" + baseResponseModel.status + "  " + "info  " + baseResponseModel.info + baseResponseModel.models);
+                        UbtLog.d("getCourseProgress", "baseResponseModel==" + baseResponseModel.status + "  " + "info  " + baseResponseModel.info + baseResponseModel.models);
                         if (baseResponseModel.status) {
                             CourseLastProgressModule courseLastProgressModule = baseResponseModel.models;
                             LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
@@ -183,6 +183,8 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
                                     record1.setPeriodLevel(1);
                                     record1.setUpload(true);
                                 }
+                                UbtLog.d("getCourseProgress", "record1===" + record1.toString());
+
                                 record1.save();
                             } else {
                                 //本地有记录，证明需要更新本地数据，或者上传记录
@@ -195,7 +197,6 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
                                         values.put("periodLevel", Integer.parseInt(courseLastProgressModule.getCourseTwo()));
                                         values.put("isUpload", true);
                                         DataSupport.updateAll(LocalActionRecord.class, values);
-
                                     } else if (Integer.parseInt(courseLastProgressModule.getCourseOne()) == course) {
                                         if (Integer.parseInt(courseLastProgressModule.getCourseTwo()) > level) {
                                             ContentValues values = new ContentValues();
@@ -280,6 +281,12 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
                     @Override
                     public void onResponse(String response, int id) {
                         UbtLog.d("saveLastProgress", "response===" + response);
+                        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+                        if (null != record) {
+                            ContentValues values = new ContentValues();
+                            values.put("isUpload", true);
+                            DataSupport.updateAll(LocalActionRecord.class, values);
+                        }
                     }
                 });
 

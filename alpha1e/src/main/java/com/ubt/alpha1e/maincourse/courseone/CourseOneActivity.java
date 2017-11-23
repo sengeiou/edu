@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IEditActionUI;
+import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ConstValue;
 
 import org.litepal.crud.DataSupport;
 
@@ -34,8 +37,9 @@ import java.util.List;
  * 邮箱 784787081@qq.com
  */
 
-public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseOneLayout.CourseProgressListener {
+public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseOneLayout.CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
 
+    private static final String TAG = CourseOneActivity.class.getSimpleName();
     BaseHelper mHelper;
     CourseOneLayout mActionEdit;
     RelativeLayout mRlInstruction;
@@ -57,7 +61,9 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
         super.onCreate(savedInstanceState);
         mHelper = new ActionsEditHelper(CourseOneActivity.this, this);
         mHelper.RegisterHelper();
+        ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
+        sendStartStudy(true);
     }
 
     Handler mHandler = new Handler() {
@@ -67,10 +73,39 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
             if (msg.what == 1111) {
                 mRlInstruction.setVisibility(View.GONE);
                 mPresenter.getCourseOneData(CourseOneActivity.this);
+            } else if (msg.what == 1112) {
+                mActionEdit.playComplete();
+
             }
         }
     };
 
+
+    private boolean isFocus;
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        // TODO Auto-generated method stub
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && !isFocus) {
+            isFocus = true;
+            UbtLog.d(TAG, "onWindowFocusChanged");
+            boolean flag = SPUtils.getInstance().getBoolean(Constant.SP_ACTION_COURSE_CARD_ONE);
+            if (!flag) {
+                mRlInstruction.setVisibility(View.VISIBLE);
+                SPUtils.getInstance().put(Constant.SP_ACTION_COURSE_CARD_ONE, true);
+                mHandler.sendEmptyMessageDelayed(1111, 3000);
+            } else {
+                mPresenter.getCourseOneData(CourseOneActivity.this);
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
 
     @Override
     protected void initUI() {
@@ -79,12 +114,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
         mTextView = (TextView) findViewById(R.id.tv_all_introduc);
         mTextView.setText(ResourceManager.getInstance(this).getStringResources("action_course_card1_1_all"));
         mActionEdit.setUp(mHelper);
-        boolean flag = SPUtils.getInstance().getBoolean(Constant.SP_ACTION_COURSE_CARD_ONE);
-        if (!flag) {
-            mRlInstruction.setVisibility(View.VISIBLE);
-            SPUtils.getInstance().put(Constant.SP_ACTION_COURSE_CARD_ONE, false);
-            mHandler.sendEmptyMessageDelayed(1111, 3000);
-        }
+
     }
 
     /**
@@ -95,7 +125,18 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     @Override
     public void getCourseOneData(List<ActionCourseOneContent> list) {
         this.list = list;
-        mActionEdit.setData(list, 1, this);
+        int level = 1;
+        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+        if (null != record) {
+            int course = record.getCourseLevel();
+            level = record.getPeriodLevel();
+            if (course == 1 && level == 3) {
+                level = 1;
+            } else {
+                level = 1;
+            }
+        }
+        mActionEdit.setData(list, level, this);
     }
 
     /**
@@ -106,19 +147,55 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     @Override
     public void completeCurrentCourse(int current) {
         currentCourse = current;
-        ContentValues values = new ContentValues();
-        values.put("CourseLevel", 1);
-        values.put("periodLevel", current);
-        values.put("isUpload", false);
-        DataSupport.updateAll(LocalActionRecord.class, values);
+        saveLastProgress(current);
         if (current == 3) {
+            sendStartStudy(false);
             returnCardActivity();
+        }
+    }
+
+    public void sendStartStudy(boolean isEnter) {
+        //Enter the course enter
+        byte[] papram = new byte[1];
+        if (isEnter) {
+            papram[0] = 0x01;
+            mHelper.doSendComm(ConstValue.DV_ENTER_COURSE, papram);
+        }//Exit the course enter
+        else {
+            papram[0] = 0x00;
+            mHelper.doSendComm(ConstValue.DV_ENTER_COURSE, papram);
+        }
+
+    }
+
+    /**
+     * 保存进度到数据库
+     *
+     * @param current
+     */
+    private void saveLastProgress(int current) {
+        UbtLog.d(TAG, "保存进度到数据库1" + current);
+        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+        if (null != record) {
+            UbtLog.d(TAG, "保存进度到数据库2" + record.toString());
+            int course = record.getCourseLevel();
+            int level = record.getPeriodLevel();
+            if (course == 1 && level < current) {
+                UbtLog.d(TAG, "保存进度到数据库3" + "保存成功");
+                ContentValues values = new ContentValues();
+                values.put("CourseLevel", 1);
+                values.put("periodLevel", current);
+                values.put("isUpload", false);
+                DataSupport.updateAll(LocalActionRecord.class, values);
+            }
         }
     }
 
     @Override
     public void finishActivity() {
-        returnCardActivity();
+        finish();
+        //关闭窗体动画显示
+        this.overridePendingTransition(0,R.anim.activity_close_down_up);
     }
 
     /**
@@ -132,12 +209,29 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
         intent.putExtra("score", currentCourse == list.size() ? 1 : 0);
         setResult(1, intent);
         finish();
+        //关闭窗体动画显示
+        this.overridePendingTransition(0,R.anim.activity_close_down_up);
+    }
+
+
+    //监听手机屏幕上的按键
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            UbtLog.d("CourseOneActivity", "返回键");
+            //如果点击的是后退键  首先判断webView是否能够后退
+            //如果点击的是后退键  首先判断webView是否能够后退   返回值是boolean类型的
+            finish();
+            //关闭窗体动画显示
+            this.overridePendingTransition(0,R.anim.activity_close_down_up);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+    protected void onDestroy() {
+        super.onDestroy();
+        mActionEdit.dismiss();
     }
 
     @Override
@@ -221,4 +315,23 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     }
 
 
+    @Override
+    public void playComplete() {
+        UbtLog.d("EditHelper", "播放完成");
+        mHandler.sendEmptyMessage(1112);
+    }
+
+    @Override
+    public void onDisconnect() {
+        finish();
+        //关闭窗体动画显示
+        this.overridePendingTransition(0,R.anim.activity_close_down_up);
+    }
+
+    @Override
+    public void onLostBtCoon() {
+        super.onLostBtCoon();
+        finish();
+
+    }
 }

@@ -51,6 +51,7 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     @OnClick(R.id.iv_main_back)
     public void onClick(View view) {
         finish();
+        this.overridePendingTransition(0,R.anim.activity_close_down_up);
     }
 
 
@@ -100,8 +101,9 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (position == 1) {
             startActivity(new Intent(this, ActionCourseActivity.class));
-        }else  if(position == 2){
+        } else if (position == 2) {
             startActivity(new Intent(this, BlocklyActivity.class));
         }
+        this.overridePendingTransition(R.anim.activity_open_up_down, 0);
     }
 }

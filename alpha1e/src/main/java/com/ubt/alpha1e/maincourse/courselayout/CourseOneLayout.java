@@ -1,6 +1,9 @@
 package com.ubt.alpha1e.maincourse.courselayout;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -12,11 +15,12 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
+import com.ubt.alpha1e.action.model.ActionConstant;
+import com.ubt.alpha1e.base.popup.EasyPopup;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
-import com.zyyoona7.lib.EasyPopup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +84,8 @@ public class CourseOneLayout extends BaseActionEditLayout {
         this.currentCourse = currentCourse;
         this.courseProgressListener = courseProgressListener;
         setLayoutByCurrentCourse();
-
+        onActionConfirm(ActionConstant.getBasicActionList(mContext).get(0));
+        isSaveAction = true;
     }
 
     /**
@@ -95,17 +100,11 @@ public class CourseOneLayout extends BaseActionEditLayout {
             ivLeft.setEnabled(false);
             ivRight.setEnabled(true);
         } else if (currentCourse == 2) {
-            if (courseProgressListener != null) {
-                courseProgressListener.completeCurrentCourse(1);
-            }
             ivLeft.setEnabled(true);
             ivRight.setEnabled(true);
-            tvCourseContent.setText(mContents.get(1).getCourseName());
             showPop1();
+            tvCourseContent.setText(mContents.get(1).getCourseName());
         } else if (currentCourse == 3) {
-            if (courseProgressListener != null) {
-                courseProgressListener.completeCurrentCourse(2);
-            }
             ivLeft.setEnabled(true);
             ivRight.setEnabled(false);
             tvCourseContent.setText(mContents.get(2).getCourseName());
@@ -129,10 +128,16 @@ public class CourseOneLayout extends BaseActionEditLayout {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_left:
-
+                currentCourse--;
+                setLayoutByCurrentCourse();
                 break;
             case R.id.iv_right:
-
+                if (currentCourse == 1) {
+                    currentCourse++;
+                } else if (currentCourse == 2) {
+                    currentCourse++;
+                }
+                setLayoutByCurrentCourse();
                 break;
 
             case R.id.iv_back:
@@ -145,6 +150,64 @@ public class CourseOneLayout extends BaseActionEditLayout {
         }
     }
 
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1111) {
+                ivLeft.setEnabled(false);
+                ivRight.setEnabled(true);
+            } else if (msg.what == 1112) {
+                ivLeft.setEnabled(true);
+                ivRight.setEnabled(true);
+            } else if (msg.what == 1113) {
+                ivLeft.setEnabled(true);
+                ivRight.setEnabled(false);
+            }
+        }
+    };
+
+
+    public void playComplete() {
+        UbtLog.d("EditHelper", "播放完成");
+        if (((Activity) mContext).isFinishing()) {
+            return;
+        }
+        if (null != mCirclePop) {
+            mCirclePop.dismiss();
+        }
+        if (currentCourse == 1) {
+            ivLeft.setEnabled(false);
+            ivRight.setEnabled(false);
+            if (currentIndex < mContents.get(0).getList().size()) {
+                showPop(currentIndex);
+            } else {
+                if (courseProgressListener != null) {
+                    courseProgressListener.completeCurrentCourse(1);
+                }
+                currentIndex = 0;
+                mHandler.sendEmptyMessageDelayed(1111, 3000);
+            }
+        } else if (currentCourse == 2) {
+            if (courseProgressListener != null) {
+                courseProgressListener.completeCurrentCourse(2);
+            }
+            ivLeft.setEnabled(true);
+            ivRight.setEnabled(false);
+            mHandler.sendEmptyMessageDelayed(1112, 3000);
+        } else if (currentCourse == 3) {
+            ivLeft.setEnabled(true);
+            ivRight.setEnabled(false);
+            mHandler.sendEmptyMessageDelayed(1113, 3000);
+            if (courseProgressListener != null) {
+                courseProgressListener.completeCurrentCourse(3);
+            }
+        }
+
+
+    }
+
+
     EasyPopup mCirclePop = null;
 
 
@@ -154,12 +217,7 @@ public class CourseOneLayout extends BaseActionEditLayout {
      * @param index
      */
     private void showPop(int index) {
-        if (index >= mContents.get(currentCourse - 1).getList().size()) {
-            currentCourse++;
-            currentIndex = 0;
-            setLayoutByCurrentCourse();
-            return;
-        }
+
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one, null);
         TextView textView = contentView.findViewById(R.id.tv_content);
         UbtLog.d(TAG, mContents.get(currentCourse - 1).getList().toString());
@@ -172,19 +230,18 @@ public class CourseOneLayout extends BaseActionEditLayout {
                 //是否允许点击PopupWindow之外的地方消失
                 .setFocusAndOutsideEnable(false)
                 .createPopup()
-
+                .setBackgroundDimEnable(true)
+                .setDimValue(0.4f)
                 .setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
                     public void onDismiss() {
                         currentIndex++;
-                        showPop(currentIndex);
                     }
                 });
 
         mCirclePop.showAtAnchorView(archView, oneContent.getVertGravity(), oneContent.getHorizGravity(), oneContent.getX(), oneContent.getY());
         ((ActionsEditHelper) mHelper).playCourse(oneContent.getVoiceName());
-        UbtLog.d("EditHelper",oneContent.getVoiceName());
-        //mCirclePop.showAtAnchorView(recyclerViewFrames, VerticalGravity.ABOVE, HorizontalGravity.ALIGN_RIGHT);
+        UbtLog.d("EditHelper", oneContent.getVoiceName());
     }
 
     /**
@@ -193,24 +250,29 @@ public class CourseOneLayout extends BaseActionEditLayout {
     private void showPop1() {
         mCirclePop = new EasyPopup(mContext)
                 .setContentView(R.layout.layout_pop_course_one_two)
-                // .setWidth(420)
-                // .setHeight(200)
                 //是否允许点击PopupWindow之外的地方消失
-                .setFocusAndOutsideEnable(true)
+                .setFocusAndOutsideEnable(false)
                 .createPopup()
-                .setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        currentCourse++;
-                        setLayoutByCurrentCourse();
-                    }
-                });
+                .setBackgroundDimEnable(true)
+                .setDimValue(0.4f)
+        ;
         CourseOne1Content oneContent = mContents.get(currentCourse - 1).getList().get(0);
         View archView = findViewById(oneContent.getId());
         mCirclePop.showAtAnchorView(archView, oneContent.getVertGravity(), oneContent.getHorizGravity(), oneContent.getX(), oneContent.getY());
+        ((ActionsEditHelper) mHelper).playCourse(oneContent.getVoiceName());
+        UbtLog.d("EditHelper", oneContent.getVoiceName());
     }
 
 
+    public void dismiss() {
+        if (null != mCirclePop) {
+            mCirclePop.dismiss();
+        }
+    }
+
+    /**
+     * 播放第三课时
+     */
     private void showPop2() {
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one, null);
         TextView textView = contentView.findViewById(R.id.tv_content);
@@ -219,29 +281,17 @@ public class CourseOneLayout extends BaseActionEditLayout {
         textView.setText(oneContent.getContent());
         textView.setBackgroundResource(oneContent.getDirection() == 0 ? R.drawable.bubble_guide_left : R.drawable.bubble_guide_right);
         View archView = findViewById(oneContent.getId());
-        contentView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCirclePop.dismiss();
-                setLayoutByCurrentCourse();
-            }
-        });
         mCirclePop = new EasyPopup(mContext)
                 .setContentView(contentView)
                 //是否允许点击PopupWindow之外的地方消失
-                .setFocusAndOutsideEnable(true)
-                .createPopup()
-                .setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        UbtLog.d(TAG, "课时一完成");
-                        if (courseProgressListener != null) {
-                            courseProgressListener.completeCurrentCourse(3);
-                        }
-                    }
-                });
+                .setFocusAndOutsideEnable(false)
+                .setBackgroundDimEnable(true)
+                .setDimValue(0.4f)
+                .createPopup();
 
         mCirclePop.showAtAnchorView(archView, oneContent.getVertGravity(), oneContent.getHorizGravity(), oneContent.getX(), oneContent.getY());
+        ((ActionsEditHelper) mHelper).playCourse(oneContent.getVoiceName());
+        UbtLog.d("EditHelper", oneContent.getVoiceName());
     }
 
 

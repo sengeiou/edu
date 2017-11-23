@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -71,7 +72,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
- import static java.lang.System.currentTimeMillis;
+import static java.lang.System.currentTimeMillis;
 
 /**
  * @author：liuhai
@@ -98,7 +99,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     private ImageView ivAddFrame;
     private ImageView ivBack, ivReset, ivAutoRead, ivSave, ivHelp;
-    private ImageView ivActionLib, ivActionLibMore, ivActionBgm;
+    public ImageView ivActionLib, ivActionLibMore, ivActionBgm;
 
     public NewActionInfo mCurrentNewAction;
     public ActionsEditHelper.StartType mCurrentStartType = ActionsEditHelper.StartType.new_type;
@@ -125,7 +126,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private Map<String, Object> mCutItem = new HashMap<String, Object>();
     private int selectPos = -1;
     private Map<String, Object> mCopyItem = new HashMap<String, Object>();
-
 
 
     private int firstVisibleItemPosition = -1;
@@ -260,7 +260,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     }
 
     OnSaveSucessListener listener;
-    public void setOnSaveSucessListener(OnSaveSucessListener listener){
+
+    public void setOnSaveSucessListener(OnSaveSucessListener listener) {
         this.listener = listener;
     }
 
@@ -293,17 +294,25 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         list_frames = new ArrayList<Map<String, Object>>();
         adapter = new FrameRecycleViewAdapter(mContext, list_frames, density, this);
         recyclerViewFrames.setAdapter(adapter);
+
+        recyclerViewFrames.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                outRect.right = 10;
+            }
+        });
         adapter.setOnItemListener(new FrameRecycleViewAdapter.OnItemListener() {
             @Override
-            public void onItemClick(View view,int pos, Map<String, Object> data) {
-                UbtLog.d(TAG, "getNewPlayerState:"  + ((ActionsEditHelper) mHelper).getNewPlayerState());
+            public void onItemClick(View view, int pos, Map<String, Object> data) {
+                UbtLog.d(TAG, "getNewPlayerState:" + ((ActionsEditHelper) mHelper).getNewPlayerState());
 
                 if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
                     return;
                 }
 
-                if(musicTimes !=0){
-                    if(pos == list_frames.size()-1){
+                if (musicTimes != 0) {
+                    if (pos == list_frames.size() - 1) {
                         return;
                     }
                 }
@@ -316,7 +325,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 updateAddViewEnable();
             }
         });
-
 
         recyclerViewFrames.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -702,6 +710,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         }
     }
 
+    public boolean isSaveAction;
+
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN
@@ -709,9 +719,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
             ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,
                     null);
-
-            return doBack();
-
+            if (isSaveAction) {
+                return false;
+            } else {
+                return doBack();
+            }
         }
         return false;
     }
@@ -788,12 +800,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         if (mDir != "") {
             inte.putExtra(ActionsEditSaveActivity.MUSIC_DIR, mDir);
         }
-        if(listener != null){
+        if (listener != null) {
             listener.startSave(inte);
         }
 //        mContext.startActivity(inte);
     }
-
 
 
     public void pause() {
@@ -972,7 +983,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
      * 修改动作帧
      */
     private void doChangeItem() {
-        if(ids.size() <=0){
+        if (ids.size() <= 0) {
             goneEditFrameLayout();
             showLostDialog(0, ResourceManager.getInstance(mContext).getStringResources("ui_create_click_to_cutoff"));
             return;
@@ -988,7 +999,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private void doCancelChange() {
         ivCancelChange.setVisibility(View.INVISIBLE);
         goneEditFrameLayout();
-        change =false;
+        change = false;
         ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
         adapter.setDefSelect(-1);
     }
@@ -1019,11 +1030,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private void doPasteItem() {
         int index = selectPos;
         UbtLog.d(TAG, "index:" + index);
-        if(copy){
-            list_frames.add(index+1, copyItem(mCopyItem));
-        }else if(cut){
+        if (copy) {
+            list_frames.add(index + 1, copyItem(mCopyItem));
+        } else if (cut) {
             UbtLog.d(TAG, "index:" + index);
-            list_frames.add(index+1, copyItem(mCutItem));
+            list_frames.add(index + 1, copyItem(mCutItem));
             list_frames.remove(mCutItem);
             mCutItem.clear();
         }
@@ -1942,7 +1953,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         ids.clear();
     }
 
-    private void setButtonEnable(boolean enable) {
+    public void setButtonEnable(boolean enable) {
         ivReset.setEnabled(enable);
         ivAutoRead.setEnabled(enable);
         ivSave.setEnabled(enable);
@@ -1953,7 +1964,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         ivHelp.setEnabled(enable);
     }
 
-    private void setEnable(boolean enable) {
+    public void setEnable(boolean enable) {
         ivReset.setEnabled(enable);
         ivAutoRead.setEnabled(enable);
         ivSave.setEnabled(enable);
@@ -2269,8 +2280,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 setEnable(true);
                 ivAddFrame.setEnabled(true);
                 ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
-
-
             }
         });
     }
@@ -2343,13 +2352,12 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     }
 
 
-
     @Override
-    public  void doPlayAutoRead(){
+    public void doPlayAutoRead() {
 
         //检测是否在充电状态和边充边玩状态是否打开
-         UbtLog.d(TAG, "mHelper.getChargingState():" + mHelper.getChargingState() + "SettingHelper" + SettingHelper.isPlayCharging(mContext));
-        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)){
+        UbtLog.d(TAG, "mHelper.getChargingState():" + mHelper.getChargingState() + "SettingHelper" + SettingHelper.isPlayCharging(mContext));
+        if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
             UbtLog.d(TAG, "边充边玩未打开");
             Toast.makeText(mContext, AlphaApplication.getBaseActivity().getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
             return;
@@ -2374,24 +2382,24 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     }
 
 
-
-
     @Override
-    public void cancelAutoData(){
+    public void cancelAutoData() {
         int count = list_autoFrames.size();
         currentIndex = currentIndex - count;
         UbtLog.d(TAG, "count:" + count);
-        for(int i=0; i<count; i++){
-            list_frames.remove(list_frames.size()-1);
+        for (int i = 0; i < count; i++) {
+            list_frames.remove(list_frames.size() - 1);
         }
         adapter.notifyDataSetChanged();
     }
 
-    public interface OnSaveSucessListener{
-        void startSave(Intent intent);
+    public void onDisConnect() {
+        ((Activity) mContext).finish();
     }
 
-
+    public interface OnSaveSucessListener {
+        void startSave(Intent intent);
+    }
 
 
 }

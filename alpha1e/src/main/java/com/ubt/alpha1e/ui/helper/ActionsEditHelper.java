@@ -15,6 +15,7 @@ import com.ubt.alpha1e.data.BasicSharedPreferencesOperator.DataType;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.NewActionInfo;
 import com.ubt.alpha1e.ui.BaseActivity;
+import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ByteHexHelper;
 import com.ubtechinc.base.ConstValue;
@@ -187,6 +188,15 @@ public class ActionsEditHelper extends BaseHelper implements
     }
 
     @Override
+    public void onDeviceDisConnected(String mac) {
+        super.onDeviceDisConnected(mac);
+        UbtLog.d("ActionsEditHelper", "--onDeviceDisConnected--" + this);
+        if (mListener != null) {
+            mListener.onDisconnect();
+        }
+    }
+
+    @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
         if (cmd == ConstValue.READ_ALL_ENGINE) {
@@ -206,9 +216,30 @@ public class ActionsEditHelper extends BaseHelper implements
                 UbtLog.d("EditHelper", "sound:" + ByteHexHelper.bytesToHexString(param) + "param[0]:" + param[0]);
                 if (param[0] == 1) {
                     UbtLog.d("EditHelper", "播放完成");
+                    if (mListener != null) {
+                        mListener.playComplete();
+                    }
                 }
             }
+        } else if (cmd == 0xE1) {
+            UbtLog.d("EditHelper", "退出课程");
         }
+    }
+
+    PlayCompleteListener mListener;
+
+    public PlayCompleteListener getListener() {
+        return mListener;
+    }
+
+    public void setListener(PlayCompleteListener listener) {
+        mListener = listener;
+    }
+
+    public interface PlayCompleteListener {
+        void playComplete();
+
+        void onDisconnect();
     }
 
     public void doLostPower() {
@@ -221,10 +252,16 @@ public class ActionsEditHelper extends BaseHelper implements
         doSendComm(ConstValue.CTRL_ONE_ENGINE, params);
     }
 
+    /**
+     * 课程播放
+     *
+     * @param str
+     */
     public void playCourse(String str) {
-        byte[] params = ByteHexHelper.hexStringToBytes2(str);
-        doSendComm(ConstValue.DV_SET_PLAY_SOUND, params);
+
+        doSendComm(ConstValue.DV_SET_PLAY_SOUND, BluetoothParamUtil.stringToBytes(str));
     }
+
 
     public void doLostLeftHandAndRead() {
         doLostOnePower(1);
