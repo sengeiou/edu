@@ -18,6 +18,8 @@ import com.ubt.alpha1e.maincourse.adapter.MainCoursedapter;
 import com.ubt.alpha1e.maincourse.model.CourseModel;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.services.RecordSoftService;
+import com.ubt.alpha1e.services.SyncDataService;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
@@ -72,6 +74,13 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
         });
         mRecyleviewContent.setAdapter(mMainCoursedapter);
         mMainCoursedapter.setOnItemClickListener(this);
+
+        doSyncData();
+    }
+
+    private void doSyncData(){
+        Intent mIntent = new Intent(this, SyncDataService.class);
+        startService(mIntent);
     }
 
     @Override

@@ -958,6 +958,8 @@
     <string name="ui_common_save_fail">保存失败</string>
     <string name="ui_common_save_to_dcim">长按保存到相册</string>
 
+    <string name="ui_principle_lost_engine_tips">我的胳膊和腿都是可以拆分掉的哦，拖动我的关节看看。</string>
+    <string name="ui_principle_on_engine_tips">请小朋友把我的关节组装起来吧！这样我就可以继续活动了。</string>
     <string name="ui_principle_engine_tips">小朋友，请活动我的关节！</string>
     <string name="ui_principle_sensor_tips">小朋友，请用你的小手在我胸前晃动。</string>
     <string name="ui_principle_soundbox_tips">小朋友，想听我唱歌吗？</string>

@@ -61,6 +61,8 @@ public class CourseActivity extends MVPBaseActivity<CourseContract.View, CourseP
     public Fragment mCurrentFragment;
     private LinkedHashMap<Integer, Fragment> mFragmentCache = new LinkedHashMap<>();
 
+    private int mEnterPropress = 0;
+
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -78,19 +80,32 @@ public class CourseActivity extends MVPBaseActivity<CourseContract.View, CourseP
     @Override
     protected void initUI() {
 
+
         int mCurrentProgress = mPresenter.doGetLocalProgress();
+        mEnterPropress = mCurrentProgress;
+        Fragment fragment = null;
+        int index = 0;
+        UbtLog.d(TAG,"mEnterPropress = " + mEnterPropress);
+        if(mCurrentProgress == 1){
+            fragment = new SplitFragment((PrincipleHelper) mHelper);
+            index = FRAGMENT_SPLIT;
+        }else if(mCurrentProgress == 2){
+            fragment = new MergeFragment((PrincipleHelper) mHelper);
+            index = FRAGMENT_MERGE;
+        }else if(mCurrentProgress == 3){
+            fragment = new FeatureFragment((PrincipleHelper) mHelper);
+            index = FRAGMENT_FEATURE;
+        }else {
+            fragment = new PrincipleFragment((PrincipleHelper) mHelper);
+            index = FRAGMENT_PRINCIPLE;
+        }
 
         mFragmentTransaction = this.mFragmentManager.beginTransaction();
-        PrincipleFragment mPrincipleFragment = new PrincipleFragment((PrincipleHelper) mHelper);
-        //FeatureFragment mFeatureFragment = new FeatureFragment();
-        //mFragmentTransaction.add(R.id.rl_content, mFeatureFragment);
-        mFragmentTransaction.add(R.id.rl_content, mPrincipleFragment);
+        mFragmentTransaction.add(R.id.rl_content, fragment);
         mFragmentTransaction.commit();
-        mCurrentFragment = mPrincipleFragment;
-        mFragmentCache.put(FRAGMENT_PRINCIPLE, mPrincipleFragment);
+        mCurrentFragment = fragment;
+        mFragmentCache.put(index, fragment);
 
-        //mCurrentFragment = mFeatureFragment;
-        //mFragmentCache.put(FRAGMENT_FEATURE, mFeatureFragment);
     }
 
     @Override
@@ -143,6 +158,7 @@ public class CourseActivity extends MVPBaseActivity<CourseContract.View, CourseP
 
     @Override
     protected void onDestroy() {
+        ((PrincipleHelper)mHelper).doInit();
         ((PrincipleHelper)mHelper).doEnterCourse((byte)0);
         EventBus.getDefault().unregister(this);
         super.onDestroy();
@@ -179,6 +195,10 @@ public class CourseActivity extends MVPBaseActivity<CourseContract.View, CourseP
 
     public Fragment getCurrentFragment(){
         return mCurrentFragment;
+    }
+
+    public int getEnterPropress(){
+        return mEnterPropress;
     }
 
     private void loadFragment(Fragment targetFragment) {
