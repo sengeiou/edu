@@ -1327,12 +1327,24 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         }else if(event.getType() == BlocklyEvent.CALL_ROBOT_FALL_DOWN) {
             UbtLog.d(TAG, "robot fall down and stop block run!");
             if(isLoadFinish && mWebView != null){
-                mWebView.loadUrl("javascript:listenRobotStopEvent()");
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadUrl("javascript:listenRobotStopEvent()");
+                    }
+                });
+
             }
         }else if(event.getType() == BlocklyEvent.CALL_TAPPED_ROBOT_HEAD) {
             UbtLog.d(TAG, "tapped robot head and stop block run!");
             if(isLoadFinish && mWebView != null){
-                mWebView.loadUrl("javascript:listenRobotStopEvent()");
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadUrl("javascript:listenRobotStopEvent()");
+                    }
+                });
+
             }
         }
     }
