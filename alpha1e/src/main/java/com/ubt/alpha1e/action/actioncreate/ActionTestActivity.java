@@ -14,11 +14,12 @@ import com.ubt.alpha1e.ui.custom.ActionGuideView;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IEditActionUI;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import static com.ubt.alpha1e.base.Constant.SP_GUIDE_STEP;
 
 
-public class ActionTestActivity extends BaseActivity implements IEditActionUI, BaseActionEditLayout.OnSaveSucessListener {
+public class ActionTestActivity extends BaseActivity implements IEditActionUI, BaseActionEditLayout.OnSaveSucessListener, ActionsEditHelper.PlayCompleteListener {
 
     ActionEditsStandard mActionEdit;
 
@@ -48,6 +49,8 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_action_test);
         mHelper = new ActionsEditHelper(this, this);
+
+        ((ActionsEditHelper)mHelper).setListener(this);
         mHelper.RegisterHelper();
         mActionEdit = (ActionEditsStandard) findViewById(R.id.action_edit);
         mActionEdit.setUp(mHelper);
@@ -164,12 +167,22 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
             if(isSaveSuccess){
                 NewActionInfo actionInfo = ((ActionsEditHelper)mHelper).getNewActionInfo();
                 Intent intent = new Intent(this, SaveSuccessActivity.class);
-                startActivityForResult(intent, 555);
+                startActivity(intent);
+                finish();
             }
 
-        }else if(requestCode == 555) {
-            finish();
         }
 
+    }
+
+    @Override
+    public void playComplete() {
+
+    }
+
+    @Override
+    public void onDisconnect() {
+        UbtLog.d("ActionTest", "onDisconnect");
+        finish();
     }
 }
