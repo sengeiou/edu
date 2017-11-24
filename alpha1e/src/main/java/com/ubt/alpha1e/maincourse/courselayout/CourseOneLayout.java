@@ -210,6 +210,9 @@ public class CourseOneLayout extends BaseActionEditLayout {
             } else if (msg.what == 1113) {
                 ivLeft.setEnabled(true);
                 ivRight.setEnabled(false);
+                if (courseProgressListener != null) {
+                    courseProgressListener.completeCurrentCourse(3);
+                }
             } else if (msg.what == 1115) {
                 if (null != mCirclePop) {
                     mCirclePop.dismiss();
@@ -252,10 +255,8 @@ public class CourseOneLayout extends BaseActionEditLayout {
         } else if (currentCourse == 3) {
             ivLeft.setEnabled(true);
             ivRight.setEnabled(false);
-            mHandler.sendEmptyMessageDelayed(1113, 2000);
-            if (courseProgressListener != null) {
-                courseProgressListener.completeCurrentCourse(3);
-            }
+            mHandler.sendEmptyMessageDelayed(1113, 1000);
+
         }
 
 
