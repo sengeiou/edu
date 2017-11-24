@@ -2,9 +2,11 @@ package com.ubt.alpha1e.ui.helper;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
@@ -21,6 +23,7 @@ import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.dialog.AlertDialog;
+import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
 import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -51,6 +54,8 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     private static Timer read_battery_timer = null;
     private static Date lastTime_doReadState = null;
     private static boolean isNeedNoteLowPower = true;
+    private static boolean isNeedNoteLowPowerTwenty=true;
+    private static boolean isNeedNoteLowPowerFive=true;
     protected static long readUserHeadImgRequest = 1111001;
     public static boolean hasHandshakeBseven = false;
     public static boolean hasSupportA2DP = false;
@@ -64,6 +69,8 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     public static boolean mLightState = true;
 
     public static String mCourseAccessToken = "";
+    private int LOW_BATTERY_TWENTY=20;
+    private int LOW_BATTERY_FIVE=5;
 
 
     private static boolean isCharging = false; //用来判断机器人当前是否在充电中,false 表示没有充电中,true表示充电中.
@@ -209,19 +216,18 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
-         JSONObject mData = new JSONObject();
-         /*JSONObject mData=new JSONObject();
+
+         JSONObject mData=new JSONObject();
          try {
             mData.put("mac", mac);
             mData.put("cmd", cmd);
-            mData.put("param", param.toString());
+            mData.put("param", Base64.encodeToString(param,Base64.DEFAULT));
             mData.put("len", len);
             EventBus.getDefault().post(new MainActivity.MessageEvent(mData.toString()));
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
         if (cmd == ConstValue.DV_READ_BATTERY) {
-            // ��ֹ�ظ���Ӧ-------------------start
             Date curDate = new Date(System.currentTimeMillis());
             float time_difference = 500;
             if (lastTime_doReadState != null) {
@@ -247,9 +253,24 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 int power = param[3];
                 if (power <= 10 && isNeedNoteLowPower) {
                     isNeedNoteLowPower = false;
-                    AlphaApplication.getBaseActivity().onNoteLowPower();
+                   // AlphaApplication.getBaseActivity().onNoteLowPower();
                 } else if (power > 10) {
                     isNeedNoteLowPower = true;
+                }
+                if(param[2]==0){
+                    if(power>5&&power<=20&&isNeedNoteLowPowerTwenty){
+                        UbtLog.d(TAG,"LESS 20 SHOW DIALOG");
+                        AlphaApplication.getBaseActivity().onNoteLowPower(LOW_BATTERY_TWENTY);
+                        isNeedNoteLowPowerTwenty=false;
+                    }
+                    if(power<=5&&isNeedNoteLowPowerFive){
+                        UbtLog.d(TAG,"LESS 5 SHOW DIALOG");
+                        AlphaApplication.getBaseActivity().onNoteLowPower(LOW_BATTERY_FIVE);
+                        isNeedNoteLowPowerFive=false;
+                    }
+                }else {
+                    isNeedNoteLowPowerTwenty=true;
+                    isNeedNoteLowPowerFive=true;
                 }
             } catch (Exception e) {
                 UbtLog.e(TAG, "Exception:" + e.getMessage());

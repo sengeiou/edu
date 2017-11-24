@@ -12,7 +12,7 @@ import com.ubt.alpha1e.mvp.BaseView;
 
 public class MainContract {
     interface View extends BaseView {
-        void showCartoonAction(String json);
+        void showCartoonAction(int value );
 
         void showBluetoothStatus(String status);
 
@@ -27,7 +27,7 @@ public class MainContract {
 
         void requestBluetoothStatus(String status);
 
-        void commandRobotAction(String json);
+        void commandRobotAction(byte cmd,byte[]params);
 
         void dealMessage(String json);
     }

@@ -50,6 +50,7 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
     private TextView tvConfirm;
     private OnCourseDialogListener mDialogListener;
     private PrepareDataModel selectDataModel;
+    private boolean isShow = true;
 
     public ActionCourseTwoUtil(Context context) {
         this.mContext = context;
@@ -80,7 +81,7 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
         RecyclerView recyclerView = contentView.findViewById(R.id.rv_actions);
         GridLayoutManager layoutManager = new GridLayoutManager(mContext, 5);
         recyclerView.setLayoutManager(layoutManager);
-        actionAdapter = new ActionAdapter(R.layout.item_actions, list);
+        actionAdapter = new ActionAdapter(R.layout.item_actions1, list);
         actionAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(actionAdapter);
         actionAdapter.bindToRecyclerView(recyclerView);
@@ -95,6 +96,13 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
                 .setCancelable(true)
                 .create().show();
         // showPop(recyclerView);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                isShow = false;
+//                actionAdapter.notifyDataSetChanged();
+//            }
+//        }, 2000);
     }
 
     private void showPop(View archView) {
@@ -174,6 +182,12 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
             ((ImageView) helper.getView(R.id.iv_action_icon)).setImageResource(item.getDrawableId());
             ImageView ivSelect = helper.getView(R.id.iv_action_select);
             ivSelect.setVisibility(item.isSelected() ? View.VISIBLE : View.GONE);
+            if (item.getPrepareName().equals(list.get(0).getPrepareName()) && isShow) {
+                helper.getView(R.id.iv_hand).setVisibility(View.VISIBLE);
+            } else {
+                helper.getView(R.id.iv_hand).setVisibility(View.GONE);
+            }
+
         }
     }
 

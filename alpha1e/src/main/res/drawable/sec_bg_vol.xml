@@ -6,8 +6,16 @@
         android:drawable="@color/sec_ctrl_bottom">
     </item>
     <item
-        android:id="@+android:id/progress"
-        android:drawable="@drawable/sec_vol_prg">
+        android:id="@+android:id/progress">
+    <clip>
+        <shape>
+            <corners android:radius="5dip" />
+            <gradient
+                android:angle="0"
+                android:endColor="#55C726"
+                android:startColor="#55C726" />
+        </shape>
+    </clip>
     </item>
 
 </layer-list>

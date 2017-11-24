@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
+    <item android:drawable="@drawable/hand_stand31"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand30"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand29"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand28"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand27"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand26"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand25"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand24"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand23"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand22"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand21"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand20"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand19"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand18"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand17"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand16"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand15"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand14"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand13"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand12"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand11"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand10"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand9"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand8"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand7"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand6"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand5"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand4"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand3"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand2"  android:duration="40"/>
+    <item android:drawable="@drawable/hand_stand1"  android:duration="40"/>
+</animation-list>

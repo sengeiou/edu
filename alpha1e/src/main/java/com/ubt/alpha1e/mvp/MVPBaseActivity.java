@@ -29,7 +29,6 @@ import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ThemeInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.event.RobotEvent;
-import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.dialog.LowPowerDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IUI;
@@ -99,7 +98,7 @@ public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresente
 
     private String currentActivityLable;
 
-    //    public CommonCtrlView commonCtrlView;
+    //    public ControlCenterActivity commonCtrlView;
     private resetFloatViewListener resetFloatViewListener;
 
     static final Class<?>[] sConstructorSignature = new Class[]{
@@ -422,6 +421,7 @@ public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresente
 
         UbtLog.d(TAG, "--wmma--onResume!");
 
+
 //        if (((AlphaApplication) this.getApplicationContext())
 //                .getCurrentBluetooth() != null) {
 //            UbtLog.d(TAG, "--wmma--bluetooth ssss");
@@ -454,12 +454,12 @@ public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresente
 
     @Subscribe
     public void onEventRobot(RobotEvent event) {
-        if (event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS) {
-            UbtLog.d(TAG, "--CONNECT_SUCCESS--");
-            if (!stopFloatService()) {
-                CommonCtrlView.getInstace(this);
-            }
-        }
+//        if (event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS) {
+//            UbtLog.d(TAG, "--CONNECT_SUCCESS--");
+//            if (!stopFloatService()) {
+//                ControlCenterActivity.getInstace(this);
+//            }
+//        }
     }
 
     public void doCheckLanguage() {

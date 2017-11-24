@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
+<item android:drawable="@drawable/greetting1"  android:duration="40"/>
+    <item android:drawable="@drawable/greetting2"  android:duration="40"/>
+    <item android:drawable="@drawable/greetting3"  android:duration="40"/>
+    <item android:drawable="@drawable/greetting4"  android:duration="40"/>
+    <item android:drawable="@drawable/greetting5"  android:duration="40"/>
+    <item android:drawable="@drawable/greetting6"  android:duration="40"/>
+    <item android:drawable="@drawable/greetting7"  android:duration="40"/>
+    <item android:drawable="@drawable/greetting8"  android:duration="40"/>
+    <item android:drawable="@drawable/greetting9"  android:duration="40"/>
+<item android:drawable="@drawable/greetting10"  android:duration="40"/>
+<item android:drawable="@drawable/greetting11"  android:duration="40"/>
+<item android:drawable="@drawable/greetting12"  android:duration="40"/>
+<item android:drawable="@drawable/greetting13"  android:duration="40"/>
+<item android:drawable="@drawable/greetting14"  android:duration="40"/>
+<item android:drawable="@drawable/greetting15"  android:duration="40"/>
+<item android:drawable="@drawable/greetting16"  android:duration="40"/>
+<item android:drawable="@drawable/greetting17"  android:duration="40"/>
+<item android:drawable="@drawable/greetting18"  android:duration="40"/>
+<item android:drawable="@drawable/greetting19"  android:duration="40"/>
+
+<item android:drawable="@drawable/greetting20"  android:duration="40"/>
+<item android:drawable="@drawable/greetting21"  android:duration="40"/>
+<item android:drawable="@drawable/greetting22"  android:duration="40"/>
+<item android:drawable="@drawable/greetting23"  android:duration="40"/>
+<item android:drawable="@drawable/greetting24"  android:duration="40"/>
+<item android:drawable="@drawable/greetting25"  android:duration="40"/>
+<item android:drawable="@drawable/greetting26"  android:duration="40"/>
+<item android:drawable="@drawable/greetting27"  android:duration="40"/>
+<item android:drawable="@drawable/greetting28"  android:duration="40"/>
+<item android:drawable="@drawable/greetting29"  android:duration="40"/>
+
+<item android:drawable="@drawable/greetting30"  android:duration="40"/>
+<item android:drawable="@drawable/greetting31"  android:duration="40"/>
+<item android:drawable="@drawable/greetting32"  android:duration="40"/>
+<item android:drawable="@drawable/greetting33"  android:duration="40"/>
+<item android:drawable="@drawable/greetting34"  android:duration="40"/>
+<item android:drawable="@drawable/greetting35"  android:duration="40"/>
+<item android:drawable="@drawable/greetting36"  android:duration="40"/>
+<item android:drawable="@drawable/greetting37"  android:duration="40"/>
+<item android:drawable="@drawable/greetting38"  android:duration="40"/>
+<item android:drawable="@drawable/greetting39"  android:duration="40"/>
+
+<item android:drawable="@drawable/greetting40"  android:duration="40"/>
+<item android:drawable="@drawable/greetting41"  android:duration="40"/>
+<item android:drawable="@drawable/greetting42"  android:duration="40"/>
+<item android:drawable="@drawable/greetting43"  android:duration="40"/>
+<item android:drawable="@drawable/greetting44"  android:duration="40"/>
+<item android:drawable="@drawable/greetting45"  android:duration="40"/>
+<item android:drawable="@drawable/greetting46"  android:duration="40"/>
+<item android:drawable="@drawable/greetting47"  android:duration="40"/>
+<item android:drawable="@drawable/greetting48"  android:duration="40"/>
+<item android:drawable="@drawable/greetting49"  android:duration="40"/>
+
+<item android:drawable="@drawable/greetting50"  android:duration="40"/>
+<item android:drawable="@drawable/greetting51"  android:duration="40"/>
+<item android:drawable="@drawable/greetting52"  android:duration="40"/>
+<item android:drawable="@drawable/greetting53"  android:duration="40"/>
+<item android:drawable="@drawable/greetting54"  android:duration="40"/>
+<item android:drawable="@drawable/greetting55"  android:duration="40"/>
+<item android:drawable="@drawable/greetting56"  android:duration="40"/>
+<item android:drawable="@drawable/greetting57"  android:duration="40"/>
+<item android:drawable="@drawable/greetting58"  android:duration="40"/>
+<item android:drawable="@drawable/greetting59"  android:duration="40"/>
+
+<item android:drawable="@drawable/greetting60"  android:duration="40"/>
+<item android:drawable="@drawable/greetting61"  android:duration="40"/>
+
+</animation-list>
