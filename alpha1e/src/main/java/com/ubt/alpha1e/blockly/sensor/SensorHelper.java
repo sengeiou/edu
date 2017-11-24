@@ -202,10 +202,10 @@ public class SensorHelper extends BaseHelper {
         byte[] params = new byte[6];
         params[0] = direct;
         params[1] = speed;
-        params[2] = step[0];
-        params[3] = step[1];
-        params[4] = step[2];
-        params[5] = step[3];
+        params[2] = step[3];
+        params[3] = step[2];
+        params[4] = step[1];
+        params[5] = step[0];
         doSendComm(ConstValue.DV_WALK, params);
     }
 
