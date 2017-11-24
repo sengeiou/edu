@@ -175,6 +175,26 @@ public class ToastUtils {
     }
 
     /**
+     * 安全地显示短时自定义吐司并可以指定显示位置
+     */
+    public static View showCustomShortWithGravity(@LayoutRes final int layoutId,
+                                                  final int gravity, final int xOffset, final int yOffset) {
+        final View view = getView(layoutId);
+        HANDLER.post(new Runnable() {
+            @Override
+            public void run() {
+                cancel();
+                sToast = new Toast(AlphaApplication.mContext);
+                sToast.setView(view);
+                sToast.setDuration(Toast.LENGTH_SHORT);
+                sToast.setGravity(gravity, xOffset, yOffset);
+                sToast.show();
+            }
+        });
+        return view;
+    }
+
+    /**
      * 安全地显示长时自定义吐司
      */
     public static View showCustomLong(@LayoutRes final int layoutId) {

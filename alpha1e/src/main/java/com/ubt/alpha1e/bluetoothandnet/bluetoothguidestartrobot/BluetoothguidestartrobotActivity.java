@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.PermissionUtils;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
@@ -130,7 +129,7 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
                     }
 
                 }else {
-                    ToastUtils.showShort("请确认站立，并选择");
+//                    ToastUtils.showShort("请确认站立，并选择");
                 }
                 break;
             default:

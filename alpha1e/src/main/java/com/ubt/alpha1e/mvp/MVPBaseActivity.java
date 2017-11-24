@@ -33,6 +33,7 @@ import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.dialog.LowPowerDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IUI;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.umeng.analytics.MobclickAgent;
@@ -315,22 +316,16 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
 
     public void initSkin() {
 
-//        boolean fromNotice = false;
-//        //从系统通知栏进入
-//        if(this instanceof ActionsLibPreviewWebActivity
-//                || this instanceof WebContentActivity){
-//            fromNotice = getIntent().getExtras().getBoolean(ActionsLibPreviewWebActivity.FROM_NOTICE,false);
-//        }
-//
-//        if(this instanceof StartInitSkinActivity || fromNotice){
-//            initSkinPath();
-//        }else {
-//            if(SkinManager.getInstance().getSkinContext() == null){
-//                UbtLog.e(TAG,"getSkinContext = null" );
-//                //有时候报错的时候，没有crash到，没有重启，语言包context为空，调用语言包错误，
-//                initSkinPath();
-//            }
-//        }
+
+        if(this instanceof MainActivity ){
+            initSkinPath();
+        }else {
+            if(SkinManager.getInstance().getSkinContext() == null){
+                UbtLog.e(TAG,"getSkinContext = null" );
+                //有时候报错的时候，没有crash到，没有重启，语言包context为空，调用语言包错误，
+                initSkinPath();
+            }
+        }
     }
 
     private void initSkinPath() {
