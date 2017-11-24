@@ -8,7 +8,7 @@ public class DBOperater extends SQLiteOpenHelper {
 
 	private String mDbCreateStr = "";
 
-	public static int DB_VERSION = 7;
+	public static int DB_VERSION = 2;
 
 	public DBOperater(Context context, String db_name, String db_create_str) {
 		super(context, db_name, null, DB_VERSION);

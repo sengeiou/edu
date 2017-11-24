@@ -116,54 +116,6 @@ public class UpgradeOperater {
             upgadeVersion1TO2(db);
             UbtLog.d(TAG,"1 升级 2 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
 
-            upgadeVersion2TO3(db);
-            UbtLog.d(TAG,"2 升级 3 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
-
-            upgadeVersion3TO4(db);
-            UbtLog.d(TAG,"3 升级 4 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
-
-            upgadeVersion4TO5(db);
-            UbtLog.d(TAG,"4 升级 5 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
-
-            //2017.9.30
-            upgadeVersion5TO6(db);
-            UbtLog.d(TAG,"5 升级 6 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
-
-        }else if(db.getVersion() == 2){ // 2 到 3 执行升级操作
-
-            upgadeVersion2TO3(db);
-            UbtLog.d(TAG,"2 升级 3 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
-
-            upgadeVersion3TO4(db);
-            UbtLog.d(TAG,"3 升级 4 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
-
-            upgadeVersion4TO5(db);
-            UbtLog.d(TAG,"4 升级 5 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
-
-            //2017.9.30
-            upgadeVersion5TO6(db);
-            UbtLog.d(TAG,"5 升级 6 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
-        }else if(db.getVersion() == 3){
-            //2017-07-13 update
-            upgadeVersion3TO4(db);
-            UbtLog.d(TAG,"3 升级 4 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
-
-            upgadeVersion4TO5(db);
-            UbtLog.d(TAG,"4 升级 5 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
-            //2017.9.30
-            upgadeVersion5TO6(db);
-            UbtLog.d(TAG,"5 升级 6 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
-        } else if(db.getVersion() == 4){
-            //2017-08-03 update
-            upgadeVersion4TO5(db);
-            UbtLog.d(TAG,"4 升级 5 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
-            //2017.9.30
-            upgadeVersion5TO6(db);
-            UbtLog.d(TAG,"5 升级 6 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
-        }else if(db.getVersion() == 5){  //2017/9/30 临时版本
-            //2017.9.30
-            upgadeVersion5TO6(db);
-            UbtLog.d(TAG,"5 升级 6 结束，是否成功："+isSuccess+ "     升级后数据库版本："+db.getVersion());
         }
         return isSuccess;
     }
@@ -173,26 +125,6 @@ public class UpgradeOperater {
         insertDefaulteDataFrom1TO2(db);
 
         updateDBVersion(db,2);
-    }
-
-    public void upgadeVersion2TO3(SQLiteDatabase db){
-        updateDefaulteDataFrom2TO3(db);
-        updateDBVersion(db,3);
-    }
-
-    public void upgadeVersion3TO4(SQLiteDatabase db){
-        updateDefaulteDataFrom3TO4(db);
-        updateDBVersion(db,4);
-    }
-
-    public void upgadeVersion4TO5(SQLiteDatabase db){
-        updateDefaulteDataFrom4TO5(db);
-        updateDBVersion(db,5);
-    }
-
-    public void upgadeVersion5TO6(SQLiteDatabase db){
-        updateDefaulteDataFrom5TO6(db);
-        updateDBVersion(db,6);
     }
 
     private void updateDBVersion(SQLiteDatabase db,int version){
@@ -284,8 +216,11 @@ public class UpgradeOperater {
                 "  [actionCollectTime] INT64,\n" +
                 "  [isCollect] INT,\n" +
                 "  [isPraise] INT,\n" +
+                "  [actionHot] INT,\n" +
                 "  CONSTRAINT [sqlite_autoindex_actions_download_logs_1] PRIMARY KEY ([actionId],[actionLocalSonType],[actionLocalSortType]));";
         db.execSQL(createTableSQL);
+
+        createBlockly(db);
 
         createTableSQL = "CREATE TABLE [db_version] (\n" +
                 "  [version] INT NOT NULL\n" +
@@ -309,61 +244,60 @@ public class UpgradeOperater {
         db.execSQL(str_insert);
 
         //init remote_action_list
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(1,'Move back.hts','后退','Move back',0,'');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(1,'Backward.hts','后退','Move back',0,'');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(2,'Move forward.hts','前进','Move forward',0,'');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(2,'Forward.hts','前进','Move forward',0,'');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(3,'Move Leftward.hts','左移','Move Leftward',0,'');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(3,'Leftward.hts','左移','Move Leftward',0,'');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(4,'Move Rightward.hts','右移','Move Rightward',0,'');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(4,'Rightward.hts','右移','Move Rightward',0,'');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(5,'Turn Left.hts','左转','Turn Left',0,'');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(5,'TurnLeft.hts','左转','Turn Left',0,'');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(6,'Turn Right.hts','右转','Turn Right',0,'');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(6,'TurnRight.hts','右转','Turn Right',0,'');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(7,'Left foot shot.hts','左脚射门','Left foot shot',1,'gamepad_settings_item_left_foot_shot.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(7,'Shoot left.hts','左脚射门','Left foot shot',1,'icon_remote_football1.png');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(8,'Right foot shot.hts','右脚射门','Right foot shot',1,'gamepad_settings_item_right_foot_shot.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(8,'Shoot right.hts','右脚射门','Right foot shot',1,'icon_remote_football4.png');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(9,'Left tackle.hts','左脚铲球','Left tackle',1,'gamepad_settings_item_left_tackle.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(9,'Left slide tackle.hts','左脚铲球','Left tackle',1,'icon_remote_football5.png');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(10,'Right tackle.hts','右脚铲球','Right tackle',1,'gamepad_settings_item_right_tackle.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(10,'Right slide tackle.hts','右脚铲球','Right tackle',1,'icon_remote_football2.png');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(11,'Down up front.hts','前倒起身','Down up front',1,'gamepad_settings_item_down_up_front.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(11,'Fall forward rise.hts','前倒起身','Down up front',1,'icon_remote_football6.png');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(12,'Pour up.hts','后倒起身','Pour up',1,'gamepad_settings_item_pour_up.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(12,'Fall backward rise.hts','后倒起身','Pour up',1,'icon_remote_football3.png');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(14,'Ground step fine tuning.hts','碎步微调','Ground step fine tuning',1,'gamepad_settings_item_ground_step_fine_tuning.png');";
+
+        //格斗家
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(17,'Left hits forward.hts','左手前击','Left hits forward',2,'icon_remote_boxing1.png');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(17,'Left front strike.hts','左手前击','Left front strike',2,'gamepad_settings_item_left_front_strike.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(18,'Right hits forward.hts','右手前击','Right hits forward',2,'icon_remote_boxing2.png');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(18,'Right hand front strike.hts','右手前击','Right hand front strike',2,'gamepad_settings_item_right_hand_front_strike.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(19,'Hit left.hts','左侧击','Hit left',2,'icon_remote_boxing3.png');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(19,'Left click.hts','左侧击','Left click',2,'gamepad_settings_item_left_click.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(20,'Hit right.hts','右侧击','Hit right',2,'icon_remote_boxing4.png');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(20,'Right click.hts','右侧击','Right click',2,'gamepad_settings_item_right_click.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(21,'Fall forward rise.hts','前倒起身','Fall forward rise',2,'icon_remote_boxing5.png');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(21,'Defense.hts','防御','Defense',2,'gamepad_settings_item_defense.png');";
-        db.execSQL(str_insert);
-
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(22,'Celebrate.hts','庆祝','Celebrate',2,'gamepad_settings_item_celebrate.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(22,'Fall backward rise.hts','后倒起身','Fall backward rise',2,'icon_remote_boxing6.png');";
         db.execSQL(str_insert);
 
 
@@ -423,126 +357,7 @@ public class UpgradeOperater {
         db.execSQL(str_insert);
     }
 
-    public void updateDefaulteDataFrom2TO3(SQLiteDatabase db){
-
-        //更新足球员
-        String updateSQL = "update remote_action_list set action_name='Backward.hts',action_name_ch='后退',action_name_en='Backward' where action_index=1;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Forward.hts',action_name_ch='前进',action_name_en='Forward' where action_index=2;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Leftward.hts',action_name_ch='左移',action_name_en='Leftward' where action_index=3;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Rightward.hts',action_name_ch='右移',action_name_en='Rightward' where action_index=4;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='TurnLeft.hts',action_name_ch='左转',action_name_en='TurnLeft' where action_index=5;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='TurnRight.hts',action_name_ch='右转',action_name_en='TurnRight' where action_index=6;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Shoot left.hts',action_name_ch='左脚射门',action_name_en='Shoot left' where action_index=7;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Shoot right.hts',action_name_ch='右脚射门',action_name_en='Shoot right' where action_index=8;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Left slide tackle.hts',action_name_ch='左脚铲球',action_name_en='Left slide tackle' where action_index=9;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Right slide tackle.hts',action_name_ch='右脚铲球',action_name_en='Right slide tackle' where action_index=10;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Fall forward rise.hts',action_name_ch='前倒起身',action_name_en='Fall forward rise' where action_index=11;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Fall backward rise.hts',action_name_ch='后倒起身',action_name_en='Fall backward rise' where action_index=12;";
-        db.execSQL(updateSQL);
-
-        //删除足球员(碎步微调） 先把碎步微调设置成其他7
-        updateSQL = "update remote_info_logs set log_action_index = 7 where log_action_index = 14;";
-        db.execSQL(updateSQL);
-        updateSQL = "delete from remote_action_list where action_index=14;";
-        db.execSQL(updateSQL);
-
-        //更新格斗家
-        updateSQL = "update remote_action_list set action_name='Left hits forward.hts',action_name_ch='左手前击',action_name_en='Left hits forward' where action_index=17;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Right hits forward.hts',action_name_ch='右手前击',action_name_en='Right hits forward' where action_index=18;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Hit left.hts',action_name_ch='左侧击',action_name_en='Hit left' where action_index=19;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Hit right.hts',action_name_ch='右侧击',action_name_en='Hit right' where action_index=20;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Fall forward rise.hts',action_name_ch='前倒起身',action_name_en='Fall forward rise',action_image_name='gamepad_settings_item_down_up_front_g.png' where action_index=21;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Fall backward rise.hts',action_name_ch='后倒起身',action_name_en='Fall backward rise',action_image_name='gamepad_settings_item_pour_up_g.png' where action_index=22;";
-        db.execSQL(updateSQL);
-
-        //update db version
-        updateSQL = "update db_version set version= 3;";
-        db.execSQL(updateSQL);
-    }
-
-    public void updateDefaulteDataFrom3TO4(SQLiteDatabase db){
-
-        //更新足球员
-        String updateSQL = "update remote_action_list set action_name='Backward1.hts',action_name_ch='后退',action_name_en='Backward' where action_index=1;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Forward1.hts',action_name_ch='前进',action_name_en='Forward' where action_index=2;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Leftward1.hts',action_name_ch='左移',action_name_en='Leftward' where action_index=3;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Rightward1.hts',action_name_ch='右移',action_name_en='Rightward' where action_index=4;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='TurnLeft1.hts',action_name_ch='左转',action_name_en='TurnLeft' where action_index=5;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='TurnRight1.hts',action_name_ch='右转',action_name_en='TurnRight' where action_index=6;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Shoot left1.hts',action_name_ch='左脚射门',action_name_en='Shoot left' where action_index=7;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Shoot right1.hts',action_name_ch='右脚射门',action_name_en='Shoot right' where action_index=8;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Left slide tackle1.hts',action_name_ch='左脚铲球',action_name_en='Left slide tackle' where action_index=9;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Right slide tackle1.hts',action_name_ch='右脚铲球',action_name_en='Right slide tackle' where action_index=10;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Fall forward rise1.hts',action_name_ch='前倒起身',action_name_en='Fall forward rise' where action_index=11;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Fall backward rise1.hts',action_name_ch='后倒起身',action_name_en='Fall backward rise' where action_index=12;";
-        db.execSQL(updateSQL);
-
-        //更新格斗家
-        updateSQL = "update remote_action_list set action_name='Fall forward rise1.hts',action_name_ch='前倒起身',action_name_en='Fall forward rise',action_image_name='gamepad_settings_item_down_up_front_g.png' where action_index=21;";
-        db.execSQL(updateSQL);
-        updateSQL = "update remote_action_list set action_name='Fall backward rise1.hts',action_name_ch='后倒起身',action_name_en='Fall backward rise',action_image_name='gamepad_settings_item_pour_up_g.png' where action_index=22;";
-        db.execSQL(updateSQL);
-
-        //update db version
-        updateSQL = "update db_version set version= 4;";
-        db.execSQL(updateSQL);
-    }
-
-    public void updateDefaulteDataFrom4TO5(SQLiteDatabase db){
+    public void createBlockly(SQLiteDatabase db){
 
         String createTableSQL = "CREATE TABLE IF NOT EXISTS [blockly_lesson] (\n" +
                 "  [lesson_index] integer NOT NULL PRIMARY KEY autoincrement, \n" +
@@ -615,30 +430,8 @@ public class UpgradeOperater {
                 "  );";
         db.execSQL(createTableSQL);
 
-        //增加置顶字段
-        String updateTableSQL = "alter table actions_online_cache_logs add actionHot INT;";
-        db.execSQL(updateTableSQL);
-
-        //update db version
-        String updateSQL = "update db_version set version= 5;";
-        db.execSQL(updateSQL);
     }
 
-    //2017/9/30临时添加
-    public void updateDefaulteDataFrom5TO6(SQLiteDatabase db){
 
-        //更新足球员
-        String updateSQL = "update remote_action_list set action_name='Backward2.hts',action_name_ch='后退',action_name_en='Backward' where action_index=1;";
-        db.execSQL(updateSQL);
-
-        updateSQL = "update remote_action_list set action_name='Forward2.hts',action_name_ch='前进',action_name_en='Forward' where action_index=2;";
-        db.execSQL(updateSQL);
-
-
-
-        //update db version
-        updateSQL = "update db_version set version= 6;";
-        db.execSQL(updateSQL);
-    }
 
 }

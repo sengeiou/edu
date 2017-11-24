@@ -27,6 +27,7 @@ public class Constant {
     public final static String SP_USER_IMAGE = "sp_user_image";
     public final static String SP_USER_NICKNAME = "sp_user_nickname";
     public static final String PRINCIPLE_PROGRESS = "sp_principle_progress_";
+    public static final String SP_SHOW_REMOTE_PUBLISH = "sp_show_remote_publish";
 
     /**
      * 首次申请权限

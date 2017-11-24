@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.BuildConfig;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
@@ -28,6 +29,7 @@ import com.ubt.alpha1e.ui.helper.StartHelper;
 import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
+import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.umeng.analytics.MobclickAgent;
 
@@ -65,7 +67,7 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
         ((StartHelper) mHelper).doRunGetResServices();
 
         //add by lihai upgadeDB
-       // ((StartHelper) mHelper).UpgadeDB();
+       ((StartHelper) mHelper).UpgadeDB();
 
         initUI();
 
