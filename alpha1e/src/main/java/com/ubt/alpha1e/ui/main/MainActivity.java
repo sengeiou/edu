@@ -226,6 +226,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if(!isBulueToothConnected()){
              looperThread.send(createMessage(APP_BLUETOOTH_CLOSE,""));
         }else {
+            if(isNetworkConnect){
+                hiddenDisconnectIcon();
+            }
             cartoonAction.setBackgroundResource(R.drawable.main_robot);
         }
     }
@@ -819,7 +822,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
              runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
-                       hiddenCartoonTouchView();
                        recoveryBatteryUi();
                        showBuddleText("开机来叫醒沉睡的alpha吧");
                        showCartoonAction(cartoon_action_sleep);
@@ -864,7 +866,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
-                       hiddenCartoonTouchView();
                        showCartoonAction(cartoon_aciton_squat_reverse);
                        lowBatteryBuddleText();
                        new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_FIVE_THRESHOLD).builder().show();
@@ -875,7 +876,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
-                       hiddenCartoonTouchView();
                        showCartoonAction(cartoon_aciton_squat_reverse);
                    }
                });
@@ -900,7 +900,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
-                       hiddenCartoonTouchView();
                        showCartoonAction(cartoon_aciton_squat_reverse);
                        recoveryBatteryUi();
                        showDisconnectIcon();
