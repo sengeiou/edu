@@ -353,7 +353,7 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
     public void playComplete() {
         UbtLog.d("EditHelper", "播放完成");
         if (isAllIntroduc) {
-            mHandler.sendEmptyMessage(1112);
+            mHandler.sendEmptyMessageDelayed(1112,2000);
         } else {
             mHandler.sendEmptyMessageDelayed(1111, 2000);
         }

@@ -64,7 +64,7 @@
     <application
         android:name=".AlphaApplication"
         android:allowBackup="true"
-
+        android:debuggable="true"
         android:hardwareAccelerated="false"
         android:exported="true"
         android:icon="@drawable/ic_launcher"

@@ -13,6 +13,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -25,17 +26,12 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
-
-
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loopHandler.HandlerCallback;
 import com.ubt.alpha1e.base.loopHandler.LooperThread;
-
-
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
-
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.login.LoginActivity;
@@ -52,6 +48,7 @@ import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
+import com.zhy.changeskin.SkinManager;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -59,12 +56,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
 
 
 /**
@@ -611,6 +610,29 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             showBuddleTextView();
         }
     }
+    private Date lastTime;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == event.ACTION_DOWN
+                && event.getKeyCode() == event.KEYCODE_BACK) {
+            Date curDate = new Date(System.currentTimeMillis());
+            float time_difference = 1000;
+            if (lastTime != null) {
+                time_difference = curDate.getTime() - lastTime.getTime();
+            }
+
+            if (time_difference < 1000) {
+                CommonCtrlView.closeCommonCtrlView();
+                SkinManager.getInstance().cleanInstance();
+                ((AlphaApplication) this.getApplication()).doExitApp(false);
+            } else {
+                showToast("ui_home_exit");
+            }
+            lastTime = curDate;
+        }
+        return true;
+    }
+
 
     @Override
     public void showBluetoothStatus(String status) {

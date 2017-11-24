@@ -136,7 +136,7 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
         //ActionsHelper.doStopMp3ForMyDownload();
 
         if (index == -1) {
-            mPlayer.doStopPlay();
+            //mPlayer.doStopPlay();
             ActionInfo info = new ActionInfo();
             info.actionName = "Default foot";
             MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_gamepad;

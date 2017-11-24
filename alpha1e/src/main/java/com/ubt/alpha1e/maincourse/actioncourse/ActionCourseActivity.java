@@ -177,7 +177,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 }
             } else if (course == 2) {
                 if (level == 3) {
-                    mActionCourseModels.get(2).setActionLockType(1);
+                    mActionCourseModels.get(2).setActionLockType(0);
                 }
             }
             if (!record.isUpload()) {
@@ -193,7 +193,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, final int position) {
 
-        if (mActionCourseModels.get(position).getActionLockType() == 0) {
+        if (mActionCourseModels.get(position).getActionLockType() == 0 || position > 1) {
             return;
         }
 
