@@ -932,7 +932,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     public void onRationSetting() {
 
                     }
-                }, PermissionUtils.PermissionEnum.STORAGE);
+                }, PermissionUtils.PermissionEnum.STORAGE,mContext);
                 break;
             case R.id.iv_zoom_plus:
                 ivZoomPlus();
