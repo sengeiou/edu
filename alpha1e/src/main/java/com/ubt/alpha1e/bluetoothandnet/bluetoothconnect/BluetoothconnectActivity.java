@@ -271,7 +271,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
            UbtLog.d(TAG,"搜索到蓝牙地址 ："+bluetoothDevice.getAddress());
         }
 
-        if(!(bluetoothDevice.getName().toLowerCase().contains("alpha"))){
+        if(!(bluetoothDevice.getName().toLowerCase().contains("alpha1e"))){
             return;
         }
 
