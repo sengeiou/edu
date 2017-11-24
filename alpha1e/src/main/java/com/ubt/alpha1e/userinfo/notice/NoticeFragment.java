@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.popup.EasyPopup;
 import com.ubt.alpha1e.base.popup.HorizontalGravity;
 import com.ubt.alpha1e.base.popup.VerticalGravity;
@@ -100,7 +99,18 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         mNoticeAdapter.bindToRecyclerView(mRecyclerviewNotice);
         mNoticeAdapter.setOnItemLongClickListener(this);
         emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_empty, null);
-        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(ResourceManager.getInstance(getActivity()).getStringResources("empty_no_noticedata"));
+        String emptyMsg = "";
+        if (mParam1.equals("1")) {
+            emptyMsg = "你目前没有任何成就";
+        } else if (mParam1.equals("2")) {
+            emptyMsg = "你目前没有任何消息";
+        } else if (mParam1.equals("3")) {
+            emptyMsg = "你目前没有任何动态";
+        } else if (mParam1.equals("5")) {
+            emptyMsg = "你目前没有任何下载";
+        }
+        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(emptyMsg);
+
         ((ImageView) emptyView.findViewById(R.id.iv_no_data)).setImageResource(R.drawable.ic_setting_push_deafult);
         emptyView.setOnClickListener(new View.OnClickListener() {
             @Override

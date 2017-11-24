@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.base.Constant;
@@ -24,14 +26,17 @@ import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.MyMainActivity;
+import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
+import com.zhy.changeskin.SkinManager;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -182,6 +187,29 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             e.printStackTrace();
         }
     }
+    private Date lastTime;
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == event.ACTION_DOWN
+                && event.getKeyCode() == event.KEYCODE_BACK) {
+            Date curDate = new Date(System.currentTimeMillis());
+            float time_difference = 1000;
+            if (lastTime != null) {
+                time_difference = curDate.getTime() - lastTime.getTime();
+            }
+
+            if (time_difference < 1000) {
+                CommonCtrlView.closeCommonCtrlView();
+                SkinManager.getInstance().cleanInstance();
+                ((AlphaApplication) this.getApplication()).doExitApp(false);
+            } else {
+                showToast("ui_home_exit");
+            }
+            lastTime = curDate;
+        }
+        return true;
+    }
+
 
     @Override
     public void showBluetoothStatus(String status) {

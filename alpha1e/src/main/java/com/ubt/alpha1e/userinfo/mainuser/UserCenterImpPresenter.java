@@ -56,13 +56,19 @@ public class UserCenterImpPresenter extends BasePresenterImpl<UserCenterContact.
             for (int i = 0; i < 7; i++) {
                 if (i == 0) {
                     fragmentList.add(UserInfoFragment.newInstance(leftMenuModels.get(i).getNameString(), ""));
+                } else if (i == 1) {
+                    fragmentList.add(NoticeFragment.newInstance("1", ""));
+                } else if (i == 2) {
+                    fragmentList.add(NoticeFragment.newInstance("2", ""));
+                } else if (i == 3) {
+                    fragmentList.add(NoticeFragment.newInstance("3", ""));
                 } else if (i == 4) {
                     fragmentList.add(DynamicActionFragment.newInstance("", ""));
+                } else if (i == 5) {
+                    fragmentList.add(NoticeFragment.newInstance("5", ""));
                 } else if (i == 6) {
                     Fragment fragment = SettingFragment.newInstance(leftMenuModels.get(i).getNameString(), "");
                     fragmentList.add(fragment);
-                } else {
-                    fragmentList.add(NoticeFragment.newInstance("", ""));
                 }
             }
 

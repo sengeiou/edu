@@ -15,12 +15,16 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.blockly.BlocklyProjectMode;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.ISharedPreferensListenet;
+import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -171,6 +175,8 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
         SPUtils.getInstance().remove(Constant.SP_USER_IMAGE);
         SPUtils.getInstance().remove(Constant.SP_USER_NICKNAME);
         SPUtils.getInstance().remove(Constant.SP_LOGIN_TOKEN);
+        DataSupport.deleteAll(LocalActionRecord.class);
+        DataSupport.deleteAll(BlocklyProjectMode.class);
         proxy =  LoginProxy.getInstance(appidWx, appidQQOpen);
         proxy.clearToken(ELoginPlatform.QQOpen, mView.getContext());
         proxy.clearToken(ELoginPlatform.WX, mView.getContext());
