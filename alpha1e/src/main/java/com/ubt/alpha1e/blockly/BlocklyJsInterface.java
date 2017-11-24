@@ -15,6 +15,7 @@ import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.RobotInfoActivity;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ByteHexHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -41,6 +42,16 @@ public class BlocklyJsInterface {
 
     private BaseActivity mBaseActivity;
     private String mActions = "";
+
+    public static final String FORWARD = "forward";
+    public static final String BACK = "back";
+    public static final String LEFT = "left";
+    public static final String RIGHT= "right";
+    public static final String FAST = "fast";
+    public static final String MID = "mid";
+    public static final String SLOW = "slow";
+
+
 
     public BlocklyJsInterface(BaseActivity baseActivity) {
         mBaseActivity = baseActivity;
@@ -222,16 +233,43 @@ public class BlocklyJsInterface {
 
     @JavascriptInterface
     public void displayWalk(String params) {
+//        forward,fast,10
         UbtLog.d(TAG, "params:" + params);
         if (params != "" && params != null) {
             String direction = params.split(",")[0];
             String speed = params.split(",")[1];
             String time = params.split(",")[2];
-            String actionName = direction + "_" + speed;
 
-            ((BlocklyActivity) mBaseActivity).playRobotAction(actionName, true, time, false);
+
+            ((BlocklyActivity) mBaseActivity).doWalk(parseDirection(direction),parseSpeed(speed), ByteHexHelper.intToHexByte(Integer.valueOf(time)));
+//            String actionName = direction + "_" + speed;
+//            ((BlocklyActivity) mBaseActivity).playRobotAction(actionName, true, time, false);
         }
 
+    }
+
+    private byte parseDirection(String direct) {
+        if(direct.equals(FORWARD)){
+            return WalkDirectionEnum.FORWARD.getValue();
+        }else if(direct.equals(BACK)){
+            return WalkDirectionEnum.BACK.getValue();
+        }else if(direct.equals(LEFT)){
+            return  WalkDirectionEnum.LEFT.getValue();
+        }else if(direct.equals(RIGHT)) {
+            return WalkDirectionEnum.RIGHT.getValue();
+        }
+        return 0;
+    }
+
+    private byte parseSpeed(String speed) {
+        if(speed.equals(FAST)){
+            return WalkSpeedEnum.FAST.getValue();
+        }else if(speed.equals(MID)) {
+            return WalkSpeedEnum.MID.getValue();
+        }else if(speed.equals(SLOW)){
+            return  WalkSpeedEnum.SLOW.getValue();
+        }
+        return 1;
     }
 
 

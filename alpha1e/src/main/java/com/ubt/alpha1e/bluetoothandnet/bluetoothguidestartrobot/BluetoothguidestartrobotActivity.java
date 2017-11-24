@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.PermissionUtils;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
@@ -103,7 +102,7 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
                                 startBluetoothConnect();
                             }else {
                                 UbtLog.d(TAG, "bluetoothEnable true 没有授权");//ok
-                                PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION);
+                                PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION,this);
                             }
                         }else {
                             UbtLog.d(TAG, "bluetoothEnable false 提醒去打开蓝牙");//ok
@@ -125,12 +124,12 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
                             startBluetoothConnect();
                         }else {
                             UbtLog.d(TAG, "bluetoothEnable true 没有授权"); //ok
-                            PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION);
+                            PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION,this);
                         }
                     }
 
                 }else {
-                    ToastUtils.showShort("请确认站立，并选择");
+//                    ToastUtils.showShort("请确认站立，并选择");
                 }
                 break;
             default:

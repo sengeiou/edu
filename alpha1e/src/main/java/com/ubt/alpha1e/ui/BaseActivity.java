@@ -380,10 +380,11 @@ public abstract class BaseActivity extends
                 // TODO Auto-generated method stub
                 Toast.makeText(
                         BaseActivity.this,getStringResources("ui_home_conn_lost"), Toast.LENGTH_SHORT).show();
+                MyLog.writeLog("蓝牙掉线", this.getClass().getName() + "-->onLostBtCoon");
+                ((AlphaApplication) BaseActivity.this.getApplication()).doLostConn(BaseActivity.this);
             }
         });
-        MyLog.writeLog("蓝牙掉线", this.getClass().getName() + "-->onLostBtCoon");
-        ((AlphaApplication) this.getApplication()).doLostConn(this);
+
 
     }
 

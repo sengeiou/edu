@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
@@ -54,6 +55,7 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     @OnClick(R.id.iv_main_back)
     public void onClick(View view) {
         finish();
+        this.overridePendingTransition(0, R.anim.activity_close_down_up);
     }
 
 
@@ -78,7 +80,7 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
         doSyncData();
     }
 
-    private void doSyncData(){
+    private void doSyncData() {
         Intent mIntent = new Intent(this, SyncDataService.class);
         startService(mIntent);
     }
@@ -108,18 +110,20 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        if(position == 0){
+        if (position == 0) {
 
-            if(isBulueToothConnected()){
+            if (isBulueToothConnected()) {
                 CourseActivity.launchActivity(this);
-            }else {
+            } else {
                 ToastUtils.showShort(getStringResources("ui_action_connect_robot"));
             }
 
-        }else if (position == 1) {
+        } else if (position == 1) {
             startActivity(new Intent(this, ActionCourseActivity.class));
-        }else if(position == 2){
+
+        } else if (position == 2) {
             startActivity(new Intent(this, BlocklyActivity.class));
         }
+        this.overridePendingTransition(R.anim.activity_open_up_down, 0);
     }
 }

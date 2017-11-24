@@ -73,7 +73,7 @@ public class FileTools {
     public static final String actions_new_log_name = "actions_new_logs";
     public static final String package_name = "com.ubt.alpha1e";
     public static final String db_log_cache = file_path + "/logs";
-    public static final String db_log_name = "UbtLogs_20160506001";
+    public static final String db_log_name = "Alpha1E_20171123001";
     public static final String db_log_version = "UbtLogs_version.txt";
     public static final String tmp_file_cache = file_path + "/tmps";
 
@@ -87,7 +87,7 @@ public class FileTools {
     public static final String action_robot_file_path = "action";
     public static final String actions_download_robot_path = action_robot_file_path + "/my download";
     public static final String actions_creation_robot_path = action_robot_file_path + "/my creation";
-    public static final String actions_gamepad_robot_path = action_robot_file_path + "/gamepad";
+    public static final String actions_gamepad_robot_path = action_robot_file_path + "/controller";
     public static final String actions_walk_robot_path = action_robot_file_path + "/walk";  //新增行走文件夹
 
     public static final String actions_default_head_url = "https://video.ubtrobot.com/default/sec_robot_action.png";

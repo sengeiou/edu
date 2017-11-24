@@ -178,7 +178,7 @@ public class FrameRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
             if (defItem != -1) {
                 if (defItem == position) {
                     UbtLog.d(TAG, "onBindViewHolder select");
-                    viewHolder.itemView.setBackgroundResource(R.drawable.buttonstyle_ba_on);
+                    viewHolder.itemView.setBackgroundResource(R.drawable.buttonstyle_trans);
                     viewHolder.rlNormal.setVisibility(View.GONE);
                     viewHolder.rlEditLayout.setVisibility(View.VISIBLE);
                     changeViewLen(viewHolder.rlRoot, 1, "1000");
@@ -202,20 +202,23 @@ public class FrameRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
                 viewHolder.rlEditLayout.setVisibility(View.GONE);
             }
 
-            if(position == playIndex){
-                UbtLog.d(TAG, "playing view VISIBLE");
-                viewHolder.rlNormal.setVisibility(View.VISIBLE);
-                UbtLog.d(TAG, "is 333");
-                viewHolder.itemView.setBackgroundResource(R.drawable.buttonstyle_ba_on);
+            if(playIndex != -1){
+                if(position == playIndex){
+                    UbtLog.d(TAG, "playing view VISIBLE");
+                    viewHolder.rlNormal.setVisibility(View.VISIBLE);
+                    UbtLog.d(TAG, "is 333");
+                    viewHolder.itemView.setBackgroundResource(R.drawable.buttonstyle_ba_on);
 
-            }else{
-                viewHolder.playingView.setVisibility(View.GONE);
-                viewHolder.rlNormal.setVisibility(View.VISIBLE);
+                }else{
+                    viewHolder.playingView.setVisibility(View.GONE);
+                    viewHolder.rlNormal.setVisibility(View.VISIBLE);
 
-                UbtLog.d(TAG, "is 444");
-                viewHolder.itemView.setBackgroundResource(R.drawable.buttonstyle_ba);
+                    UbtLog.d(TAG, "is 444");
+                    viewHolder.itemView.setBackgroundResource(R.drawable.buttonstyle_ba);
 
+                }
             }
+
 
         }
 

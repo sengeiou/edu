@@ -68,5 +68,15 @@
 
     </RelativeLayout>
 
-
+    <TextView
+        android:id="@+id/iv_next"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:background="@drawable/course_rectangle"
+        android:gravity="center"
+        android:text="即将推出"
+        android:textColor="@color/tv_blue_color"
+        android:textSize="20sp"
+        android:visibility="visible"
+        />
 </RelativeLayout>

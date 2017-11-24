@@ -27,6 +27,7 @@ public class Constant {
     public final static String SP_USER_IMAGE = "sp_user_image";
     public final static String SP_USER_NICKNAME = "sp_user_nickname";
     public static final String PRINCIPLE_PROGRESS = "sp_principle_progress_";
+    public static final String SP_SHOW_REMOTE_PUBLISH = "sp_show_remote_publish";
 
     /**
      * 首次申请权限
@@ -38,7 +39,9 @@ public class Constant {
     public final static String SP_PERMISSION_CAMERA = "sp_camera_permission";
     public final static String SP_PERMISSION_MICROPHONE = "sp_microphone_permission";
 
+    public final static String SP_ACTION_COURSE_CARD_ONE = "sp_action_course_one";
 
+    public final static String SP_ACTION_COURSE_CARD_TWO = "sp_action_course_two";
 
     /**
      * 信鸽信息
@@ -76,4 +79,20 @@ public class Constant {
      * 头像
      */
     public final static int KEY_NICK_HEAD = 5;
+
+    /**
+     * 记录动作编辑指引tag
+     */
+    public final static String SP_GUIDE_STEP = "sp_guide_step";
+
+
+    /**
+     * 动作课程播放路径
+     */
+    public final static  String COURSE_ACTION_PATH ="action/course/motion/";
+
+    /**
+     * Block跳转蓝牙连接页面标志
+     */
+    public final static String BLUETOOTH_REQUEST = "bluetooth_request";
 }

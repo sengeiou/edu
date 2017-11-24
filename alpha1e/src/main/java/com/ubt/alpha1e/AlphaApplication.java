@@ -23,6 +23,7 @@ import com.ubt.alpha1e.data.DB.ActionsOnlineCacheOperater;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ISharedPreferensListenet;
 import com.ubt.alpha1e.data.model.UserInfo;
+import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
 import com.ubt.alpha1e.services.AutoScanConnectService;
 import com.ubt.alpha1e.ui.AboutUsActivity;
 import com.ubt.alpha1e.ui.ActionUnpublishedActivity;
@@ -335,6 +336,8 @@ public class AlphaApplication extends LoginApplication {
                         || mActivity instanceof RobotControlActivity
                         || mActivity instanceof BlocklyActivity
                         || mActivity instanceof BlocklyCourseActivity
+                        || mActivity instanceof CourseOneActivity
+
                         ) {
                     if (mActivity instanceof MyActionsActivity) {
                         if (MyActionsActivity.requestPosition == 1

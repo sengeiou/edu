@@ -541,15 +541,14 @@ public class ActionPlayer implements BlueToothInteracter {
             UbtLog.d(TAG, "finishPlayActionName = " + finishPlayActionName + "    mCurrentPlayActionName = " + mCurrentPlayActionName);
 
             boolean isStopLocal = false;
-            if(finishPlayActionName.contains(mCurrentPlayActionName) || mCurrentPlayActionName.contains(finishPlayActionName)){
-                //1S\1p 与1E返回的不一致，故两个条件判断，前者为1E,后者1s\1p
+            if(finishPlayActionName.contains(mCurrentPlayActionName)){
                 isStopLocal = true;
             }
             if(!isStopLocal){
                 //如果回复播放完成的动作名称与本地当前播放动作名称不一致，则不予处理
                 return;
             }
-
+            UbtLog.d(TAG, "mCurrentPlayType = " + mCurrentPlayType);
             if (mCurrentPlayType == Play_type.cycle_action) {
                 UbtLog.d(TAG, "-->notePlayFinish Play_type.cycle_action");
                 if (thiz != null) {
@@ -579,7 +578,7 @@ public class ActionPlayer implements BlueToothInteracter {
             }
 
         } else if (cmd == ConstValue.DV_PLAYACTION) {
-            UbtLog.d(TAG, "-->notePlay ConstValue.DV_PLAYACTION");
+            UbtLog.d(TAG, "-->notePlay ConstValue.DV_PLAYACTION " + param[0] + "    = " + mCurrentPlayType);
             if (param[0] == 2) {
                 if (mCurrentPlayType == Play_type.cycle_action)
                     thiz.doStopCycle(true);
