@@ -15,6 +15,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.courselayout.CourseTwoLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
@@ -58,6 +59,11 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
 
     List<ActionCourseOneContent> list;
 
+    /**
+     * 是否从总介绍播放
+     */
+    private boolean isAllIntroduc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +79,7 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1111) {
+                isAllIntroduc = true;
                 mRlInstruction.setVisibility(View.GONE);
                 mPresenter.getCourseTwoData(CourseTwoActivity.this);
             } else if (msg.what == 1112) {
@@ -94,11 +101,13 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
             isFocus = true;
             UbtLog.d(TAG, "onWindowFocusChanged");
             boolean flag = SPUtils.getInstance().getBoolean(Constant.SP_ACTION_COURSE_CARD_TWO);
+            flag = false;
             if (!flag) {
                 mRlInstruction.setVisibility(View.VISIBLE);
-                SPUtils.getInstance().put(Constant.SP_ACTION_COURSE_CARD_TWO, true);
-                mHandler.sendEmptyMessageDelayed(1111, 3000);
+                SPUtils.getInstance().put(Constant.SP_ACTION_COURSE_CARD_TWO, false);
+                ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑2总介.hts");
             } else {
+                isAllIntroduc = true;
                 mPresenter.getCourseTwoData(CourseTwoActivity.this);
             }
         }
@@ -152,7 +161,7 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
         saveLastProgress(current);
         if (current == 3) {
             isCompleteSuccess = true;
-            mHandler.sendEmptyMessageDelayed(1113, 3000);
+            mHandler.sendEmptyMessageDelayed(1113, 2000);
         }
     }
 
@@ -336,13 +345,18 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
 
     }
 
+
     /**
-     * 音频播完
+     * 动作播放完成
      */
     @Override
     public void playComplete() {
-        mHandler.sendEmptyMessage(1112);
-
+        UbtLog.d("EditHelper", "播放完成");
+        if (isAllIntroduc) {
+            mHandler.sendEmptyMessage(1112);
+        } else {
+            mHandler.sendEmptyMessageDelayed(1111, 2000);
+        }
     }
 
     /**
@@ -356,6 +370,7 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
     @Override
     public void onLostBtCoon() {
         super.onLostBtCoon();
+        ToastUtils.showShort("蓝牙掉线！！");
         finish();
 //关闭窗体动画显示
         this.overridePendingTransition(0, R.anim.activity_close_down_up);

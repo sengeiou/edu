@@ -83,4 +83,10 @@ public class Constant {
      * 记录动作编辑指引tag
      */
     public final static String SP_GUIDE_STEP = "sp_guide_step";
+
+
+    /**
+     * 动作课程播放路径
+     */
+    public final static  String COURSE_ACTION_PATH ="action/course/motion/";
 }

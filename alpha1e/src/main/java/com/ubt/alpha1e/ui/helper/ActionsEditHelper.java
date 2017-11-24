@@ -199,7 +199,7 @@ public class ActionsEditHelper extends BaseHelper implements
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
-        UbtLog.d("EditHelper", "cmd==" + cmd + "  params==" + ByteHexHelper.bytesToHexString(param));
+        // UbtLog.d("EditHelper", "cmd==" + cmd + "  params==" + ByteHexHelper.bytesToHexString(param));
         if (cmd == ConstValue.READ_ALL_ENGINE) {
             UbtLog.d("onReceiveData", ByteHexHelper.bytesToHexString(param));
             Message msg = new Message();
@@ -218,12 +218,18 @@ public class ActionsEditHelper extends BaseHelper implements
                 if (param[0] == 1) {
                     UbtLog.d("EditHelper", "播放完成");
                     if (mListener != null) {
-                        mListener.playComplete();
+                       // mListener.playComplete();
                     }
                 }
             }
         } else if (cmd == 0xE1) {
             UbtLog.d("EditHelper", "退出课程");
+        } else if (cmd == ConstValue.DV_ACTION_FINISH)// 动作播放完毕
+        {
+            UbtLog.d("ActionEditHelper", "动作播放完成");
+            if (mListener != null) {
+                mListener.playComplete();
+            }
         }
     }
 
@@ -261,6 +267,19 @@ public class ActionsEditHelper extends BaseHelper implements
     public void playCourse(String str) {
 
         doSendComm(ConstValue.DV_SET_PLAY_SOUND, BluetoothParamUtil.stringToBytes(str));
+    }
+
+    /**
+     * 播放动作
+     *
+     * @param actionName
+     */
+    public void playAction(String actionName) {
+
+        byte[] actions = BluetoothParamUtil.stringToBytes(actionName);
+        ((AlphaApplication) mContext
+                .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) mContext.getApplicationContext())
+                .getCurrentBluetooth().getAddress(), ConstValue.DV_PLAYACTION, actions, actions.length, false);
     }
 
 

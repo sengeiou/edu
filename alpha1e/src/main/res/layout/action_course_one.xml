@@ -154,7 +154,7 @@
                     android:layout_toRightOf="@+id/iv_left"
                     android:gravity="center"
                     android:text="认识时间轴"
-                    android:textColor="@color/action_frame_color"
+                    android:textColor="@color/tv_blue_color"
                     android:textSize="17sp"
                     />
 

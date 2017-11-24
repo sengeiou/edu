@@ -7,5 +7,18 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
         android:src="@drawable/img_hand"/>
+
+    <TextView
+        android:id="@+id/tv_bottom_lostleft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edit_user"
+        android:padding="20dp"
+        android:text="点击机器人的关节部分机器人掉电，掰动机器人的关节至理想的动作点击时间轴的添加按钮 完成动作添加"
+        android:textColor="@color/tv_blue_color"
+        android:textSize="14sp"
+        android:visibility="gone"
+        />
 </LinearLayout>

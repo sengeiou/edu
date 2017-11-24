@@ -47,7 +47,7 @@
                     android:layout_width="280dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@color/tv_user_edit_color"
+                    android:textColor="@color/tv_blue_color"
                     android:textSize="16sp"
                     />
             </LinearLayout>

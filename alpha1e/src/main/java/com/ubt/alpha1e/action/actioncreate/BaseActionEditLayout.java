@@ -86,8 +86,8 @@ import static java.lang.System.currentTimeMillis;
 public abstract class BaseActionEditLayout extends LinearLayout implements View.OnClickListener, PrepareActionUtil.OnDialogListener, DialogTips.OnLostClickListener, DialogMusic.OnMusicDialogListener, DialogPreview.OnActionPreviewListener, FrameRecycleViewAdapter.OnchangeCurrentItemTimeListener {
     private static final String TAG = "BaseActionEditLayout";
 
-    private ImageView ivRobot;
-    private ImageView ivHandLeft, ivHandRight, ivLegLeft, ivLegRight;
+    public ImageView ivRobot;
+    public ImageView ivHandLeft, ivHandRight, ivLegLeft, ivLegRight;
     public RecyclerView recyclerViewFrames;
     private List<Map<String, Object>> list_frames;
 
@@ -97,8 +97,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private LinearLayoutManager layoutManager;
     private LinearLayoutManager layoutManagerTime;
 
-    private ImageView ivAddFrame;
-    private ImageView ivBack, ivReset, ivAutoRead, ivSave, ivHelp;
+    public ImageView ivAddFrame;
+    public ImageView ivBack, ivReset, ivAutoRead, ivSave, ivHelp;
     public ImageView ivActionLib, ivActionLibMore, ivActionBgm;
 
     public NewActionInfo mCurrentNewAction;
@@ -142,10 +142,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     public String[] init = {"90", "90", "90", "90", "90", "90", "90", "60", "76", "110", "90", "90",
             "120", "104", "70", "90"};
-    private boolean lostLeftHand = false;
+    public boolean lostLeftHand = false;
     private boolean lostRightHand = false;
     private boolean lostLeftLeg = false;
-    private boolean lostRightLeg = false;
+    public boolean lostRightLeg = false;
     private boolean needAdd = false;
     private List<Integer> ids = new ArrayList<Integer>();
     private int readCount = -1;

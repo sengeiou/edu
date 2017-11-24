@@ -15,8 +15,9 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
-import com.ubt.alpha1e.action.model.ActionConstant;
 import com.ubt.alpha1e.base.popup.EasyPopup;
+import com.ubt.alpha1e.base.popup.HorizontalGravity;
+import com.ubt.alpha1e.base.popup.VerticalGravity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
@@ -84,7 +85,6 @@ public class CourseOneLayout extends BaseActionEditLayout {
         this.currentCourse = currentCourse;
         this.courseProgressListener = courseProgressListener;
         setLayoutByCurrentCourse();
-        onActionConfirm(ActionConstant.getBasicActionList(mContext).get(0));
         isSaveAction = true;
     }
 
@@ -101,7 +101,7 @@ public class CourseOneLayout extends BaseActionEditLayout {
             ivRight.setEnabled(true);
         } else if (currentCourse == 2) {
             ivLeft.setEnabled(true);
-            ivRight.setEnabled(true);
+            ivRight.setEnabled(false);
             showPop1();
             tvCourseContent.setText(mContents.get(1).getCourseName());
         } else if (currentCourse == 3) {
@@ -121,6 +121,41 @@ public class CourseOneLayout extends BaseActionEditLayout {
         rlContent = findViewById(R.id.rl_course_content);
         ivLeft.setOnClickListener(this);
         ivRight.setOnClickListener(this);
+        ivAddFrame.setEnabled(false);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
+        setImageViewBg();
+    }
+
+
+    public void setImageViewBg() {
+        ivReset.setEnabled(false);
+        ivAutoRead.setEnabled(false);
+        ivSave.setEnabled(false);
+        ivActionLib.setEnabled(false);
+        ivActionLibMore.setEnabled(false);
+        ivActionBgm.setEnabled(false);
+        ivPlay.setEnabled(false);
+        ivHelp.setEnabled(false);
+        ivAddFrame.setEnabled(false);
+    }
+
+    /**
+     * 设置添加按钮高亮
+     */
+    public void setAddButton() {
+        setImageViewBg();
+        ivAddFrame.setEnabled(true);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
+    }
+
+    /**
+     * 设置播放按钮高亮
+     */
+    public void setPlayButton() {
+        setImageViewBg();
+        ivAddFrame.setEnabled(false);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
+        ivPlay.setEnabled(true);
     }
 
 
@@ -145,6 +180,18 @@ public class CourseOneLayout extends BaseActionEditLayout {
                     courseProgressListener.finishActivity();
                 }
                 break;
+            case R.id.iv_add_frame:
+                addFrameOnClick();
+                ivLeft.setEnabled(true);
+                ivRight.setEnabled(false);
+                mHandler.sendEmptyMessageDelayed(1112, 3000);
+                lostLeftHand = false;
+                lostRightLeg = false;
+                ivHandLeft.setSelected(false);
+                if (courseProgressListener != null) {
+                    courseProgressListener.completeCurrentCourse(2);
+                }
+                break;
             default:
 
         }
@@ -163,6 +210,13 @@ public class CourseOneLayout extends BaseActionEditLayout {
             } else if (msg.what == 1113) {
                 ivLeft.setEnabled(true);
                 ivRight.setEnabled(false);
+            } else if (msg.what == 1115) {
+                if (null != mCirclePop) {
+                    mCirclePop.dismiss();
+                }
+                ivAddFrame.setEnabled(true);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
+                showAddPop();
             }
         }
     };
@@ -185,8 +239,9 @@ public class CourseOneLayout extends BaseActionEditLayout {
                 if (courseProgressListener != null) {
                     courseProgressListener.completeCurrentCourse(1);
                 }
+                setImageViewBg();
                 currentIndex = 0;
-                mHandler.sendEmptyMessageDelayed(1111, 3000);
+                mHandler.sendEmptyMessageDelayed(1111, 500);
             }
         } else if (currentCourse == 2) {
             if (courseProgressListener != null) {
@@ -194,11 +249,10 @@ public class CourseOneLayout extends BaseActionEditLayout {
             }
             ivLeft.setEnabled(true);
             ivRight.setEnabled(false);
-            mHandler.sendEmptyMessageDelayed(1112, 3000);
         } else if (currentCourse == 3) {
             ivLeft.setEnabled(true);
             ivRight.setEnabled(false);
-            mHandler.sendEmptyMessageDelayed(1113, 3000);
+            mHandler.sendEmptyMessageDelayed(1113, 2000);
             if (courseProgressListener != null) {
                 courseProgressListener.completeCurrentCourse(3);
             }
@@ -217,21 +271,23 @@ public class CourseOneLayout extends BaseActionEditLayout {
      * @param index
      */
     private void showPop(int index) {
-
+        if (index == 3) {
+            setAddButton();
+        } else if (index == 4) {
+            setPlayButton();
+        }
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one, null);
         TextView textView = contentView.findViewById(R.id.tv_content);
         UbtLog.d(TAG, mContents.get(currentCourse - 1).getList().toString());
         CourseOne1Content oneContent = mContents.get(currentCourse - 1).getList().get(index);
         textView.setText(oneContent.getContent());
-        textView.setBackgroundResource(oneContent.getDirection() == 0 ? R.drawable.bubble_guide_left : R.drawable.bubble_guide_right);
+        textView.setBackgroundResource(oneContent.getDirection() == 0 ? R.drawable.bubble_left : R.drawable.bubble_right);
         View archView = findViewById(oneContent.getId());
         mCirclePop = new EasyPopup(mContext)
                 .setContentView(contentView)
                 //是否允许点击PopupWindow之外的地方消失
                 .setFocusAndOutsideEnable(false)
                 .createPopup()
-                .setBackgroundDimEnable(true)
-                .setDimValue(0.4f)
                 .setOnDismissListener(new PopupWindow.OnDismissListener() {
                     @Override
                     public void onDismiss() {
@@ -240,27 +296,94 @@ public class CourseOneLayout extends BaseActionEditLayout {
                 });
 
         mCirclePop.showAtAnchorView(archView, oneContent.getVertGravity(), oneContent.getHorizGravity(), oneContent.getX(), oneContent.getY());
-        ((ActionsEditHelper) mHelper).playCourse(oneContent.getVoiceName());
-        UbtLog.d("EditHelper", oneContent.getVoiceName());
+        // ((ActionsEditHelper) mHelper).playCourse(oneContent.getVoiceName());
+        ((ActionsEditHelper) mHelper).playAction(oneContent.getActionPath());
+        UbtLog.d("EditHelper", oneContent.getActionPath());
     }
 
     /**
      * 第二课时
      */
     private void showPop1() {
+        showAddLeftPop();
+        lostRightLeg = true;
+        lostLeft();
+        mHandler.sendEmptyMessageDelayed(1115, 3000);
+
+//        View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one_two, null);
+//        contentView.findViewById(R.id.tv_bottom_lostleft).setVisibility(View.GONE);
+//        mCirclePop = new EasyPopup(mContext)
+//                .setContentView(contentView)
+//                //是否允许点击PopupWindow之外的地方消失
+//                .setFocusAndOutsideEnable(false)
+//                .createPopup()
+//        ;
+//        CourseOne1Content oneContent = mContents.get(currentCourse - 1).getList().get(0);
+//        View archView = findViewById(oneContent.getId());
+//        mCirclePop.showAtAnchorView(archView, oneContent.getVertGravity(), oneContent.getHorizGravity(), oneContent.getX(), oneContent.getY());
+//        UbtLog.d("EditHelper", oneContent.getVoiceName());
+//
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mCirclePop.dismiss();
+//                lostRightLeg = true;
+//                lostLeft();
+//                showAddLeftPop();
+//                mHandler.sendEmptyMessageDelayed(1115, 3000);
+//            }
+//        }, 1000);
+
+    }
+
+
+    /**
+     * 左手臂弹框
+     */
+    private void showAddLeftPop() {
+        View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one1, null);
+        TextView textView = contentView.findViewById(R.id.tv_content);
+        textView.setText("点击机器人的关节部分机器人掉电，掰动机器人的关节至理想的动作");
+        textView.setBackgroundResource(R.drawable.bubble_right);
         mCirclePop = new EasyPopup(mContext)
-                .setContentView(R.layout.layout_pop_course_one_two)
+                .setContentView(contentView)
                 //是否允许点击PopupWindow之外的地方消失
                 .setFocusAndOutsideEnable(false)
                 .createPopup()
-                .setBackgroundDimEnable(true)
-                .setDimValue(0.4f)
+
         ;
-        CourseOne1Content oneContent = mContents.get(currentCourse - 1).getList().get(0);
-        View archView = findViewById(oneContent.getId());
-        mCirclePop.showAtAnchorView(archView, oneContent.getVertGravity(), oneContent.getHorizGravity(), oneContent.getX(), oneContent.getY());
-        ((ActionsEditHelper) mHelper).playCourse(oneContent.getVoiceName());
-        UbtLog.d("EditHelper", oneContent.getVoiceName());
+
+        mCirclePop.showAtAnchorView(findViewById(R.id.iv_hand_left), VerticalGravity.CENTER, HorizontalGravity.LEFT, 0, 0);
+
+
+    }
+
+
+    /**
+     * 添加按钮
+     */
+    private void showAddPop() {
+        UbtLog.d(TAG, "showAddPop");
+        View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one, null);
+        TextView textView = contentView.findViewById(R.id.tv_content);
+
+        textView.setText("点击时间轴的添加按钮 完成动作添加");
+        textView.setBackgroundResource(R.drawable.bubble_right);
+        mCirclePop = new EasyPopup(mContext)
+                .setContentView(contentView)
+                //是否允许点击PopupWindow之外的地方消失
+                .setFocusAndOutsideEnable(false)
+                .createPopup()
+        ;
+
+        mCirclePop.showAtAnchorView(ivAddFrame, VerticalGravity.CENTER, HorizontalGravity.LEFT, 20, 0);
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mCirclePop.dismiss();
+            }
+        }, 2000);
     }
 
 
@@ -274,23 +397,25 @@ public class CourseOneLayout extends BaseActionEditLayout {
      * 播放第三课时
      */
     private void showPop2() {
+        setImageViewBg();
+        ivActionBgm.setEnabled(true);
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one, null);
         TextView textView = contentView.findViewById(R.id.tv_content);
         UbtLog.d(TAG, mContents.get(currentCourse - 1).getList().toString());
         CourseOne1Content oneContent = mContents.get(currentCourse - 1).getList().get(0);
         textView.setText(oneContent.getContent());
-        textView.setBackgroundResource(oneContent.getDirection() == 0 ? R.drawable.bubble_guide_left : R.drawable.bubble_guide_right);
+        textView.setBackgroundResource(oneContent.getDirection() == 0 ? R.drawable.bubble_left : R.drawable.bubble_right);
         View archView = findViewById(oneContent.getId());
         mCirclePop = new EasyPopup(mContext)
                 .setContentView(contentView)
                 //是否允许点击PopupWindow之外的地方消失
                 .setFocusAndOutsideEnable(false)
-                .setBackgroundDimEnable(true)
-                .setDimValue(0.4f)
+//                .setBackgroundDimEnable(true)
+//                .setDimValue(0.4f)
                 .createPopup();
 
         mCirclePop.showAtAnchorView(archView, oneContent.getVertGravity(), oneContent.getHorizGravity(), oneContent.getX(), oneContent.getY());
-        ((ActionsEditHelper) mHelper).playCourse(oneContent.getVoiceName());
+        ((ActionsEditHelper) mHelper).playAction(oneContent.getActionPath());
         UbtLog.d("EditHelper", oneContent.getVoiceName());
     }
 

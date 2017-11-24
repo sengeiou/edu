@@ -16,6 +16,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.courselayout.CourseOneLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
@@ -49,12 +50,18 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
      */
     private int currentCourse;
 
+
     /**
      * 当前第几个
      */
     private int currentIndex;
 
     List<ActionCourseOneContent> list;
+
+    /**
+     * 是否从总介绍播放
+     */
+    private boolean isAllIntroduc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +78,11 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1111) {
+                isAllIntroduc = true;
                 mRlInstruction.setVisibility(View.GONE);
                 mPresenter.getCourseOneData(CourseOneActivity.this);
             } else if (msg.what == 1112) {
                 mActionEdit.playComplete();
-
             }
         }
     };
@@ -91,11 +98,13 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
             isFocus = true;
             UbtLog.d(TAG, "onWindowFocusChanged");
             boolean flag = SPUtils.getInstance().getBoolean(Constant.SP_ACTION_COURSE_CARD_ONE);
+            flag = false;
             if (!flag) {
                 mRlInstruction.setVisibility(View.VISIBLE);
-                SPUtils.getInstance().put(Constant.SP_ACTION_COURSE_CARD_ONE, true);
-                mHandler.sendEmptyMessageDelayed(1111, 3000);
+                //SPUtils.getInstance().put(Constant.SP_ACTION_COURSE_CARD_ONE, false);
+                ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑1总介.hts");
             } else {
+                isAllIntroduc = true;
                 mPresenter.getCourseOneData(CourseOneActivity.this);
             }
         }
@@ -195,7 +204,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     public void finishActivity() {
         finish();
         //关闭窗体动画显示
-        this.overridePendingTransition(0,R.anim.activity_close_down_up);
+        this.overridePendingTransition(0, R.anim.activity_close_down_up);
     }
 
     /**
@@ -210,7 +219,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
         setResult(1, intent);
         finish();
         //关闭窗体动画显示
-        this.overridePendingTransition(0,R.anim.activity_close_down_up);
+        this.overridePendingTransition(0, R.anim.activity_close_down_up);
     }
 
 
@@ -223,7 +232,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
             //如果点击的是后退键  首先判断webView是否能够后退   返回值是boolean类型的
             finish();
             //关闭窗体动画显示
-            this.overridePendingTransition(0,R.anim.activity_close_down_up);
+            this.overridePendingTransition(0, R.anim.activity_close_down_up);
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -318,20 +327,26 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     @Override
     public void playComplete() {
         UbtLog.d("EditHelper", "播放完成");
-        mHandler.sendEmptyMessage(1112);
+        if (isAllIntroduc) {
+            mHandler.sendEmptyMessage(1112);
+        } else {
+            mHandler.sendEmptyMessageDelayed(1111, 2000);
+        }
     }
 
     @Override
     public void onDisconnect() {
         finish();
         //关闭窗体动画显示
-        this.overridePendingTransition(0,R.anim.activity_close_down_up);
+        this.overridePendingTransition(0, R.anim.activity_close_down_up);
     }
 
     @Override
     public void onLostBtCoon() {
         super.onLostBtCoon();
+        ToastUtils.showShort("蓝牙掉线！！");
         finish();
+        this.overridePendingTransition(0, R.anim.activity_close_down_up);
 
     }
 }

@@ -20,6 +20,7 @@ public class CourseOne1Content {
     private int id;
 
     private String voiceName;
+    private String actionPath;
 
     /**
      * 方向
@@ -82,6 +83,13 @@ public class CourseOne1Content {
     }
 
 
+    public String getActionPath() {
+        return actionPath;
+    }
+
+    public void setActionPath(String actionPath) {
+        this.actionPath = actionPath;
+    }
 
     public int getX() {
         return x;
@@ -114,6 +122,7 @@ public class CourseOne1Content {
                 ", content='" + content + '\'' +
                 ", id=" + id +
                 ", voiceName='" + voiceName + '\'' +
+                ", actionPath='" + actionPath + '\'' +
                 ", direction=" + direction +
                 ", vertGravity=" + vertGravity +
                 ", horizGravity=" + horizGravity +
