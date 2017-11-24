@@ -328,7 +328,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     public void playComplete() {
         UbtLog.d("EditHelper", "播放完成");
         if (isAllIntroduc) {
-            mHandler.sendEmptyMessage(1112);
+            mHandler.sendEmptyMessageDelayed(1112,2000);
         } else {
             mHandler.sendEmptyMessageDelayed(1111, 2000);
         }
@@ -346,7 +346,6 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
         super.onLostBtCoon();
         ToastUtils.showShort("蓝牙掉线！！");
         finish();
-        this.overridePendingTransition(0, R.anim.activity_close_down_up);
 
     }
 }
