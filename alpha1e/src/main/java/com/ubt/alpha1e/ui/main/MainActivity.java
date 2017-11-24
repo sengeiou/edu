@@ -35,9 +35,6 @@ import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
-import com.zyyoona7.lib.EasyPopup;
-import com.zyyoona7.lib.HorizontalGravity;
-import com.zyyoona7.lib.VerticalGravity;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -173,22 +170,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
                 break;
             case R.id.right_icon3:
-                mCirclePop = new EasyPopup(this)
-                        .setContentView(R.layout.main_ui_buddletext)
-                        //是否允许点击PopupWindow之外的地方消失
-                        .setFocusAndOutsideEnable(true)
-                        .createPopup();
-                    mCirclePop.showAtAnchorView(cartoonHead,VerticalGravity.ALIGN_TOP,  HorizontalGravity.RIGHT, 20 , 0);
-                    TextView mBuddleText=mCirclePop.getView(R.id.tv_delete);
-                    if (index== 0) {
-                    mBuddleText.setText("从机场到下榻宾馆沿途，欢迎的人群几乎就没有间断。他们簇拥在街道两侧，纷纷向习近平总书记、国家主席挥舞中老两国国旗，表达着老挝人民对中国的深厚感情和对习近平总书记、国家主席来访的由衷喜悦");
-                } else if (index == 1) {
-                    mBuddleText.setText("从机场到下榻宾馆沿途，欢迎的人群几乎就没有间断。他们簇拥在街道两侧，纷纷向习近平总书记");
-                } else if (index== 2) {
-                    mBuddleText.setText("从机场到下榻宾馆沿途，欢迎的人群几乎就没有间断");
-                    index = 0;
-                }
-                index++;
                 break;
             case R.id.right_icon4:
                 break;
