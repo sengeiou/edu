@@ -29,6 +29,8 @@ import static android.R.attr.id;
 public class MainPresenter extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
     private String TAG = "MainPresenter";
 
+
+
     @Override
     public void requestCartoonAction(String json) {
           //  mView.showCartoonAction(1);

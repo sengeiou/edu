@@ -337,6 +337,9 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 //                BluetoothandnetconnectstateActivity.this.finish();
                 break;
             case R.id.ib_close:
+                /*Intent backIntent = new Intent();
+                backIntent.putExtra("isConnect", isBulueToothConnected());
+                setResult(101,backIntent);*/
                 BluetoothandnetconnectstateActivity.this.finish();
                 break;
             case R.id.ig_get_bluetooth_list:

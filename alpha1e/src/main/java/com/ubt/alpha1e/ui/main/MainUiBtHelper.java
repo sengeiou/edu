@@ -64,7 +64,7 @@ public class MainUiBtHelper extends BaseHelper {
 
     @Override
     public void onConnectState(boolean bsucceed, String mac) {
-
+       UbtLog.d(TAG,"MAIN UI "+bsucceed +"mac address" +mac);
     }
 
     @Override
