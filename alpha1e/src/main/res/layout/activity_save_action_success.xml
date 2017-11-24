@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/img_cancel"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
@@ -28,7 +28,7 @@
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ui_cycle_title"
+            android:text="保存并发布"
             android:textColor="@color/T1"
             android:textSize="18sp"
             />
@@ -42,7 +42,6 @@
         android:layout_marginTop="8dp"
         android:src="@drawable/img_save_succeed"/>
 
-    <!-- android:layout_marginTop="87dp"-->
 
     <LinearLayout
         android:layout_marginTop="18dp"
@@ -76,22 +75,23 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:gravity="center_horizontal"
-        android:text="@string/ui_readback_view_save"
+        android:text="你可以在个人中心-原创 中查看动作"
         android:textSize="14sp"
         android:textColor="@color/T2"
         />
 
     <Button
         android:id="@+id/btn_to_other"
-        android:layout_height="44dp"
-        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         android:layout_marginTop="12dp"
         android:background="@drawable/btn_publick"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:gravity="center"
-        android:textStyle="bold"
-        android:text="@string/ui_distribute_release_to_square"
-        android:textColor="@color/T1"
-        android:textSize="18sp"
+        android:text="发布到社区"
+        android:textColor="#fff"
+        android:textSize="16sp"
         />
 
 </LinearLayout>

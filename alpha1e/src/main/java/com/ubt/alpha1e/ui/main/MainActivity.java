@@ -126,15 +126,17 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //                mLaunch.setClass(this, ScanBluetoothActivity.class);
 //                startActivity(mLaunch);
 
+
                 //                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect",true);
                 break;
             case R.id.right_icon2:
-                if (isBulueToothConnected()) {
+                if(isBulueToothConnected()){
                     startActivity(new Intent(this, ActionTestActivity.class));
                     this.overridePendingTransition(R.anim.activity_open_up_down, 0);
-                } else {
-                    ToastUtils.showShort("请连接蓝牙!");
+                }else{
+                    ToastUtils.showShort("请先连接蓝牙");
                 }
+
                 break;
             case R.id.right_icon3:
                 break;

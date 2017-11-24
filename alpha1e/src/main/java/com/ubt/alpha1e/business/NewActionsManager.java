@@ -3,10 +3,10 @@ package com.ubt.alpha1e.business;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator.DataType;
 import com.ubt.alpha1e.data.FileTools;
@@ -244,16 +244,18 @@ public class NewActionsManager implements IFileListener {
     public void saveActionToServer() {
 
         try {
-            if(((AlphaApplication) mContext
-            ).getCurrentUserInfo() == null)
-            {
-                isSaveSuccess = false;
-                notifyListeners();
-                Toast.makeText(mContext,"请先登录",Toast.LENGTH_SHORT).show();
-                return;
-            }
-            long actionUserId = ((AlphaApplication) mContext
-            ).getCurrentUserInfo().userId;
+//            if(((AlphaApplication) mContext
+//            ).getCurrentUserInfo() == null)
+//            {
+//                isSaveSuccess = false;
+//                notifyListeners();
+//                Toast.makeText(mContext,"请先登录",Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//            long actionUserId = ((AlphaApplication) mContext).getCurrentUserInfo().userId;
+            String actionUserId = SPUtils.getInstance().getString(Constant.SP_USER_ID);
+            UbtLog.d(TAG, "actionUserId:" + actionUserId);
+
             File file = new File(FileTools.actions_new_cache + File.separator + mChangeNewActionInfo.actionId + ".zip");
             File imageFile;
             if (!TextUtils.isEmpty(mChangeNewActionInfo.actionHeadUrl)) {

@@ -77,4 +77,9 @@ public class Constant {
      * 头像
      */
     public final static int KEY_NICK_HEAD = 5;
+
+    /**
+     * 记录动作编辑指引tag
+     */
+    public final static String SP_GUIDE_STEP = "sp_guide_step";
 }
