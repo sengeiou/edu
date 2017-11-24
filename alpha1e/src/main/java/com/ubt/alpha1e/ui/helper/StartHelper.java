@@ -329,59 +329,10 @@ public class StartHelper extends BaseHelper implements
             public void run() {
                 UpgradeOperater.getInstance(StartHelper.this.mBaseActivity, FileTools.db_log_cache, FileTools.db_log_name).execUpgradeOperater();
 
-                replyOldDownloadData();
             }
         }).start();
     }
 
-    /**
-     * 恢复 UbtLogs_20160422001 我的下载中的数据
-     */
-    public void replyOldDownloadData(){
-
-        final String dbFilePath = FileTools.db_log_cache + File.separator + "UbtLogs_20160422001";
-        File dbFile = new File(dbFilePath);
-        if(dbFile.exists()){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    boolean isSuccess = false;
-                    try {
-                        List<ActionRecordInfo> oldInfos = ActionsRecordOperaterOld.getInstance(StartHelper.this.mBaseActivity, FileTools.db_log_cache, "UbtLogs_20160422001").getAllRecoed();
-                        if(oldInfos.size() != 0){
-                            List<ActionRecordInfo> infos = new ArrayList<ActionRecordInfo>();
-                            infos.addAll(oldInfos);
-
-                            List<ActionRecordInfo> mCurrentInfos = ActionsRecordOperater.getInstance(StartHelper.this.mBaseActivity, FileTools.db_log_cache, FileTools.db_log_name).getAllRecoed();
-                            for(ActionRecordInfo info : infos){
-                                for(ActionRecordInfo currentInfo : mCurrentInfos){
-                                    if(info.action.actionId == currentInfo.action.actionId){
-                                        oldInfos.remove(info);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        //处理过后，看是否还有数据
-                        if(oldInfos.size() != 0){
-                            for(ActionRecordInfo oldInfo : oldInfos){
-                                ActionsRecordOperater.getInstance(StartHelper.this.mBaseActivity, FileTools.db_log_cache, FileTools.db_log_name).addRecord(oldInfo);
-                            }
-                        }
-                        isSuccess = true;
-                    }catch (Exception ex){
-                        isSuccess = false;
-                        ex.printStackTrace();
-                    }
-
-                    if(isSuccess){
-                        new File(dbFilePath).delete();
-                    }
-                }
-            }).start();
-        }
-    }
 
     @Override
     public void onGetImage(boolean isSuccess, Bitmap bitmap, long request_code) {

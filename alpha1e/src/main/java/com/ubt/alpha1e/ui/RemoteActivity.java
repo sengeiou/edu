@@ -36,7 +36,7 @@ import java.util.List;
 
 public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaUI {
 
-    private static final String TAG = "RemoteActivity";
+    private static final String TAG = RemoteActivity.class.getSimpleName();
 
     public static final int UPLOADING_FILE = 101;
     public static final int SEND_FILE_FINISH = 102;
@@ -67,8 +67,8 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
     private TextView titleView = null;
 
-    private LinearLayout lay_setting;
-    private LinearLayout lay_back;
+    private ImageView ivSetting;
+    private LinearLayout llBack;
 
     private List<View> mButtons;
     private static Date lastTime_onNote = null;
@@ -78,7 +78,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
     private boolean keepExec = false;
     private View longClickItem = null;
 
-    private RemoteGuideView guideView;
+    //private RemoteGuideView guideView;
 
     private Handler handler = new Handler() {
         @Override
@@ -128,27 +128,33 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         UbtLog.d(TAG,"layoutId isPad == " + isPad);
         if (RemoteHelper.mCurrentType == RemoteRecordOperater.ModelType.FIGHTER) {
             if(isPad){
-                layoutId = R.layout.activity_remote_fighter_pad;
+                layoutId = R.layout.activity_remote_football_1;
             }else {
-                layoutId = R.layout.activity_remote_fighter;
+                //layoutId = R.layout.activity_remote_fighter;
+                layoutId = R.layout.activity_remote_football_1;
             }
         } else if(RemoteHelper.mCurrentType == RemoteRecordOperater.ModelType.FOOTBALL_PLAYER){
             if(isPad){
-                layoutId = R.layout.activity_remote_football_pad;
+                layoutId = R.layout.activity_remote_football_1;
             }else {
-                layoutId = R.layout.activity_remote_football;
+                layoutId = R.layout.activity_remote_football_1;
             }
         }else{
-            if(isPad){
+            /*if(isPad){
                 layoutId = R.layout.activity_remote_costom_pad;
             }else {
                 layoutId = R.layout.activity_remote_costom;
-            }
-            mRemoteRoleInfo = (RemoteRoleInfo)getIntent().getSerializableExtra(RemoteHelper.REMOTE_ROLE_INFO_PARAM);
+            }*/
+            layoutId = R.layout.activity_remote_football_1;
         }
 
+        mRemoteRoleInfo = (RemoteRoleInfo)getIntent().getSerializableExtra(RemoteHelper.REMOTE_ROLE_INFO_PARAM);
         setContentView(layoutId);
         mButtons = new ArrayList<>();
+
+        String dd = "/home/root/UBTFT/action/controller/Backward.hts";
+        String dd1 = "action/controller/Backward.hts";
+        UbtLog.d(TAG,"=====" + dd.contains(dd1));
     }
 
     @Override
@@ -160,19 +166,19 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         mCoonLoadingDia = LoadingDialog.getInstance(this, this);
         initUI();
         initControlListener();
-        if(guideView == null && !RemoteGuideView.isShowGuide(RemoteActivity.this)){
+        /*if(guideView == null && !RemoteGuideView.isShowGuide(RemoteActivity.this)){
              guideView = new RemoteGuideView(RemoteActivity.this);
-        }
+        }*/
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if(guideView != null){
+        /*if(guideView != null){
             guideView.closeGuideView();
             guideView = null;
-        }
+        }*/
     }
 
     @Override
@@ -246,9 +252,14 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
             mButtons.add(img_action_6);
         }
 
-        lay_setting = (LinearLayout) findViewById(R.id.lay_setting);
-        lay_back = (LinearLayout) findViewById(R.id.lay_back);
+        ivSetting = (ImageView) findViewById(R.id.iv_title_right);
+        ivSetting.setBackgroundResource(R.drawable.icon_setting);
+        ivSetting.setVisibility(View.VISIBLE);
+        llBack = (LinearLayout) findViewById(R.id.ll_base_back);
 
+        TextView ivTitleName = (TextView) findViewById(R.id.tv_base_title_name);
+        ivTitleName.setText(mRemoteRoleInfo.roleName);
+        ivTitleName.setTextColor(getResources().getColor(R.color.white));
     }
 
     private void replaceImageView1To6(ImageView imageView, RemoteItem mRemoteItem){
@@ -289,15 +300,6 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
     };
 
     private void execActions(View view){
-        //检测是否在充电状态和边充边玩状态是否打开
-        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(RemoteActivity.this)){
-            Toast.makeText(RemoteActivity.this, getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(isFirstPlayAction(mHelper)){
-            return;
-        }
 
         playIndex = -1;
         for (int i = 0; i < mButtons.size(); i++) {
@@ -334,30 +336,8 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         }
     }
 
-    /**
-     * 判断是否首次播放
-     * @param mHelper
-     * @return
-     */
-    private boolean isFirstPlayAction(BaseHelper mHelper){
-        if(mHelper.isFirstPlayAction()){
-            mHelper.setIsFirstPlayAction();
-            mHelper.showFirstPlayTip();
-            return true;
-        }else {
-            return false;
-        }
-    }
-
     @Override
     protected void initControlListener() {
-        /*btn_up.setOnClickListener(controlListener);
-        btn_left.setOnClickListener(controlListener);
-        btn_right.setOnClickListener(controlListener);
-        btn_down.setOnClickListener(controlListener);
-
-        btn_to_left.setOnClickListener(controlListener);
-        btn_to_right.setOnClickListener(controlListener);*/
 
         //方向键可以长按一直执行
         btn_up.setOnTouchListener(viewOnTouchListener);
@@ -387,18 +367,18 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
             img_action_6.setOnClickListener(controlListener);
         }
 
-        lay_setting.setOnClickListener(new View.OnClickListener() {
+        ivSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent inte = new Intent();
+                /*Intent inte = new Intent();
                 if(RemoteHelper.mCurrentType == RemoteRecordOperater.ModelType.CUSTOM){
                     inte.putExtra("roleId",mRemoteRoleInfo.roleid+"");
                 }
                 inte.setClass(RemoteActivity.this, RemoteSetActivity.class);
-                RemoteActivity.this.startActivity(inte);
+                RemoteActivity.this.startActivity(inte);*/
             }
         });
-        lay_back.setOnClickListener(new View.OnClickListener() {
+        llBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handler.sendEmptyMessage(EXEC_STOP_ACTION);
@@ -492,6 +472,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
     @Override
     public void notePlayFinish(List<String> mSourceActionNameList, ActionPlayer.Play_type mCurrentPlayType, String hashCode) {
+        UbtLog.d(TAG,"--notePlayFinish--");
         if(keepExec){
             execActions(longClickItem);
         }

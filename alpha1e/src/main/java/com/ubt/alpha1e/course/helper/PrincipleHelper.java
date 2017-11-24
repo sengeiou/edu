@@ -248,7 +248,7 @@ public class PrincipleHelper extends BaseHelper {
     }
 
     public void playFile(String fileName){
-        String filePath = "action/course/" + fileName;
+        String filePath = "action/course/principle/" + fileName;
         UbtLog.d(TAG,"filePath = " + filePath);
         doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(filePath));
     }
