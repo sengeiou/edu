@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/B6"
+    android:background="@drawable/action_dialog_filter_rect"
    >
 
 
@@ -20,14 +20,18 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#ECF1F4"
+        android:visibility="gone"
         />
 
     <TextView
         android:id="@+id/tv_confirm"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
         android:text="@string/ui_common_confirm"
         android:textSize="18sp"
+        android:background="@drawable/btn_alert_bg"
         android:textColor="#2c87f1"
         android:gravity="center"
         />
