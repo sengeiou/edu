@@ -58,6 +58,8 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
     ImageButton btnWifiDownload;
     @BindView(R.id.btn_message_note)
     ImageButton btnMessageNote;
+    @BindView(R.id.btn_auto_upgrade)
+    ImageButton btnAutoUpgrade;
     @BindView(R.id.rl_about)
     RelativeLayout rlAbout;
     @BindView(R.id.rl_contact_us)
@@ -139,6 +141,12 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
 
         mCoonLoadingDia = LoadingDialog.getInstance(getContext());
 
+        if (mPresenter.isAutoUpgrade()) {
+            btnAutoUpgrade.setBackgroundResource(R.drawable.menu_setting_select);
+        } else {
+            btnAutoUpgrade.setBackgroundResource(R.drawable.menu_setting_unselect);
+        }
+
         if (mPresenter.isOnlyWifiDownload(getContext())) {
             btnWifiDownload.setBackgroundResource(R.drawable.menu_setting_select);
         } else {
@@ -182,7 +190,7 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rl_clear_cache, R.id.rl_password_massage, R.id.btn_wifi_download, R.id.btn_message_note, R.id.rl_language, R.id.rl_help_feedback, R.id.rl_about, R.id.rl_contact_us, R.id.rl_logout})
+    @OnClick({R.id.rl_clear_cache, R.id.rl_password_massage, R.id.btn_wifi_download, R.id.btn_message_note,R.id.btn_auto_upgrade, R.id.rl_language, R.id.rl_help_feedback, R.id.rl_about, R.id.rl_contact_us, R.id.rl_logout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_clear_cache:
@@ -209,6 +217,16 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
                     mPresenter.doSetMessageNote(getContext(), true);
                 }
                 break;
+            case R.id.btn_auto_upgrade:
+                if (mPresenter.isAutoUpgrade()) {
+                    btnAutoUpgrade.setBackgroundResource(R.drawable.menu_setting_unselect);
+                    mPresenter.doSetAutoUpgrade(false);
+                } else {
+                    btnAutoUpgrade.setBackgroundResource(R.drawable.menu_setting_select);
+                    mPresenter.doSetAutoUpgrade(true);
+                }
+                break;
+
             case R.id.rl_language:
                 mPresenter.showLanguageDialog(getContext(), mCurrentLanguageIndex, mLanguageTitleList);
                 break;
