@@ -26,9 +26,12 @@ import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 
+
 import com.ubt.alpha1e.base.loopHandler.HandlerCallback;
 import com.ubt.alpha1e.base.loopHandler.LooperThread;
 
+
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 
@@ -39,6 +42,7 @@ import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
@@ -48,7 +52,6 @@ import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
-import com.zyyoona7.lib.EasyPopup;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -124,7 +127,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     int init_screen_height = 375;
     RelativeLayout.LayoutParams params;
     private AnimationDrawable frameAnimation;
-    private EasyPopup mCirclePop;
     private int powerThreshold[] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100};
     int index = 0;
     private int cartoon_action_swing_right_leg = 0;
@@ -311,13 +313,20 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
                 break;
             case R.id.right_icon:
-//                mLaunch.setClass(this, ScanBluetoothActivity.class);
-//                startActivity(mLaunch);
-                startActivity(new Intent(this, ActionTestActivity.class));
-
-                //                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect",true);
+                if(isBulueToothConnected()){
+                    mLaunch.setClass(this, RemoteSelActivity.class);
+                    //startActivity(new Intent(this, ActionTestActivity.class));
+                    startActivity(mLaunch);
+                }
                 break;
             case R.id.right_icon2:
+
+                if(isBulueToothConnected()){
+                    startActivity(new Intent(this, ActionTestActivity.class));
+                    this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                }else{
+                    ToastUtils.showShort("请先连接蓝牙");
+                }
                 break;
             case R.id.right_icon3:
                 break;
@@ -354,7 +363,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 showCartoonAction(cartoon_action_swing_right_leg);
                 break;
             case R.id.bottom_icon:
-                startActivity(new Intent(this, MainCourseActivity.class));
+                if (isBulueToothConnected()) {
+                    startActivity(new Intent(this, MainCourseActivity.class));
+                    this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                } else {
+                    ToastUtils.showShort("请连接蓝牙!");
+                }
                 break;
             default:
                 break;

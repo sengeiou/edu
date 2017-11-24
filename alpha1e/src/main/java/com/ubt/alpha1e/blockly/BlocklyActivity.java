@@ -33,6 +33,7 @@ import com.ubt.alpha1e.blockly.bean.RobotSensor;
 import com.ubt.alpha1e.blockly.sensor.SensorHelper;
 import com.ubt.alpha1e.blockly.sensor.SensorObservable;
 import com.ubt.alpha1e.blockly.sensor.SensorObserver;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.NewActionPlayer;
 import com.ubt.alpha1e.business.thrid_party.IWeiXinListener;
@@ -131,6 +132,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     public static final int DO_DOWNLOAD_BLOCKLY = 6011;
     public static final int DO_PLAY_AGAIN = 6012;
     public static final int DO_PLAY_SOUND_EFFECT_FINISH = 6013;
+
 
     private WebView mWebView;
     private BlocklyJsInterface mBlocklyJsInterface;
@@ -293,13 +295,14 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         }
 
         UbtLog.d(TAG, "UserID => " + getCurrentUserID() + "    isFromCourse = " + isFromCourse);
-        mSyncAlertDialog = new SyncDownloadAlertDialog(BlocklyActivity.this)
-                .builder()
-                .setMsg(getStringResources("ui_init_blockly"))
-                .setImageResoure(R.drawable.data_loading)
-                .setCancelable(true,20);
-
-        requestUpdate();
+//        mSyncAlertDialog = new SyncDownloadAlertDialog(BlocklyActivity.this)
+//                .builder()
+//                .setMsg(getStringResources("ui_init_blockly"))
+//                .setImageResoure(R.drawable.data_loading)
+//                .setCancelable(true,20);
+//
+//        requestUpdate();
+        init();
     }
 
     /**
@@ -755,6 +758,14 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
     }
 
+
+    public void doWalk(byte direct, byte speed, byte step) {
+        if(mSensorHelper != null){
+            mSensorHelper.doWalk(direct, speed, step);
+        }
+    }
+
+
     // Block停止执行，通知机器人停止动作
 
     public void stopPlay(){
@@ -762,6 +773,10 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         playCount = 0;
         if(isBulueToothConnected() && mMyActionsHelper != null){
             mMyActionsHelper.stopPlayAction();
+        }
+
+        if(mSensorHelper != null){
+            mSensorHelper.doStopWalk();
         }
 
         if(isPlayLocalAudio){
@@ -1087,7 +1102,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     public void connectBluetooth() {
         UbtLog.d(TAG, "connectBluetooth");
         Intent intent = new Intent();
-        intent.setClass(BlocklyActivity.this, ScanBluetoothActivity.class);
+        intent.putExtra(com.ubt.alpha1e.base.Constant.BLUETOOTH_REQUEST, true);
+        intent.setClass(BlocklyActivity.this, BluetoothconnectActivity.class);
         startActivityForResult(intent, REQUEST_CODE);
     }
 
@@ -1847,32 +1863,32 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
     public void playSoundAudio(String params) {
         //{"type":"animal", "key":"id_elephant.wav", "description":"大象"，"playcount":3}
-        if(((AlphaApplication) getApplicationContext()).isAlpha1E()){
+//        if(((AlphaApplication) getApplicationContext()).isAlpha1E()){
             if(mSensorHelper != null){
                 mSensorHelper.playSoundAudio(params);
             }
-        }else {
-            try {
-                UbtLog.d(TAG,"params = " + params);
-                JSONObject jsonObject = new JSONObject(params);
-                String audioName = jsonObject.getString("filename");
-                mPlayAudioCount = jsonObject.getInt("playcount");
-
-                if(mPlayAudioCount > 0){
-                    isPlayLocalAudio = true;
-                    mPlayAudioNum = 1;
-                    mPlayAudioName = getBlocklyDir(BlocklyActivity.this) + "/voice/" + audioName;
-                    playMP3(mPlayAudioName);
-                }else {
-                    isPlayLocalAudio = false;
-                    mPlayAudioCount = 0;
-                    mPlayAudioNum = 0;
-                    mPlayAudioName = "";
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+//        }else {
+//            try {
+//                UbtLog.d(TAG,"params = " + params);
+//                JSONObject jsonObject = new JSONObject(params);
+//                String audioName = jsonObject.getString("filename");
+//                mPlayAudioCount = jsonObject.getInt("playcount");
+//
+//                if(mPlayAudioCount > 0){
+//                    isPlayLocalAudio = true;
+//                    mPlayAudioNum = 1;
+//                    mPlayAudioName = getBlocklyDir(BlocklyActivity.this) + "/voice/" + audioName;
+//                    playMP3(mPlayAudioName);
+//                }else {
+//                    isPlayLocalAudio = false;
+//                    mPlayAudioCount = 0;
+//                    mPlayAudioNum = 0;
+//                    mPlayAudioName = "";
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
     }
 

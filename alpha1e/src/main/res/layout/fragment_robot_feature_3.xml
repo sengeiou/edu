@@ -312,7 +312,7 @@
                 android:layout_height="match_parent"
                 android:padding="10dp"
                 android:gravity="center_vertical"
-                android:text="@string/ui_setting_principle_eye_tip"
+                android:text="@string/ui_setting_principle_head_tip"
                 android:textColor="@color/white"
                 android:textSize="12sp"/>
 
@@ -435,9 +435,9 @@
         android:paddingLeft="10dp"
         android:gravity="center"
         android:textSize="16sp"
-        android:textColor="@color/white"
-        android:text="@string/ui_setting_common_next"
-        android:background="@drawable/bg_button"
+        android:textColor="@color/tv_center_color"
+        android:text="@string/ui_setting_principle_end"
+        android:background="@drawable/btn_next"
         />
 
     <ImageView

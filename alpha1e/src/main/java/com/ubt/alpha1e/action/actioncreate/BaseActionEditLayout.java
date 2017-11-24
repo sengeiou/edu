@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -85,9 +86,9 @@ import static java.lang.System.currentTimeMillis;
 public abstract class BaseActionEditLayout extends LinearLayout implements View.OnClickListener, PrepareActionUtil.OnDialogListener, DialogTips.OnLostClickListener, DialogMusic.OnMusicDialogListener, DialogPreview.OnActionPreviewListener, FrameRecycleViewAdapter.OnchangeCurrentItemTimeListener {
     private static final String TAG = "BaseActionEditLayout";
 
-    private ImageView ivRobot;
-    private ImageView ivHandLeft, ivHandRight, ivLegLeft, ivLegRight;
-    private RecyclerView recyclerViewFrames;
+    public ImageView ivRobot;
+    public ImageView ivHandLeft, ivHandRight, ivLegLeft, ivLegRight;
+    public RecyclerView recyclerViewFrames;
     private List<Map<String, Object>> list_frames;
 
     private List<Map<String, Object>> list_autoFrames = new ArrayList<Map<String, Object>>();
@@ -96,9 +97,9 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private LinearLayoutManager layoutManager;
     private LinearLayoutManager layoutManagerTime;
 
-    private ImageView ivAddFrame;
-    private ImageView ivBack, ivReset, ivAutoRead, ivSave, ivHelp;
-    private ImageView ivActionLib, ivActionLibMore, ivActionBgm;
+    public ImageView ivAddFrame;
+    public ImageView ivBack, ivReset, ivAutoRead, ivSave, ivHelp;
+    public ImageView ivActionLib, ivActionLibMore, ivActionBgm;
 
     public NewActionInfo mCurrentNewAction;
     public ActionsEditHelper.StartType mCurrentStartType = ActionsEditHelper.StartType.new_type;
@@ -127,7 +128,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private Map<String, Object> mCopyItem = new HashMap<String, Object>();
 
 
-
     private int firstVisibleItemPosition = -1;
     private int lastVisibleItemPosition = -1;
 
@@ -139,14 +139,13 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private SeekBar sbTime;
     private int current = 0;
 
-//    private String init = "\"90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90\"";
 
     public String[] init = {"90", "90", "90", "90", "90", "90", "90", "60", "76", "110", "90", "90",
             "120", "104", "70", "90"};
-    private boolean lostLeftHand = false;
+    public boolean lostLeftHand = false;
     private boolean lostRightHand = false;
     private boolean lostLeftLeg = false;
-    private boolean lostRightLeg = false;
+    public boolean lostRightLeg = false;
     private boolean needAdd = false;
     private List<Integer> ids = new ArrayList<Integer>();
     private int readCount = -1;
@@ -157,7 +156,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private int currentMinus = 1;
     private TextView tvZoomPlus, tvZoomMinus;
 
-    private SeekBar sbVoice;
+    public SeekBar sbVoice;
     private int touch = 0;
 
     private int timePosition = 0;
@@ -166,7 +165,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private String mDir = "";
     private int musicTimes = 0;
 
-    private ImageView ivPlay;
+    public ImageView ivPlay;
     private TextView tvMusicTime;
 
     private boolean playFinish = true;
@@ -224,11 +223,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private int currentIndex = 1;
     private int scroll = 0;
 
-    private Context mContext;
+    public Context mContext;
     PrepareActionUtil mPrepareActionUtil;
     PrepareMusicUtil mPrepareMusicUtil;
 
-    private BaseHelper mHelper;
+    public BaseHelper mHelper;
 
     public BaseActionEditLayout(Context context) {
         super(context);
@@ -260,6 +259,12 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         this.mHelper = baseHelper;
     }
 
+    OnSaveSucessListener listener;
+
+    public void setOnSaveSucessListener(OnSaveSucessListener listener) {
+        this.listener = listener;
+    }
+
     /**
      * 初始化UI
      */
@@ -289,17 +294,25 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         list_frames = new ArrayList<Map<String, Object>>();
         adapter = new FrameRecycleViewAdapter(mContext, list_frames, density, this);
         recyclerViewFrames.setAdapter(adapter);
+
+        recyclerViewFrames.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                outRect.right = 10;
+            }
+        });
         adapter.setOnItemListener(new FrameRecycleViewAdapter.OnItemListener() {
             @Override
-            public void onItemClick(View view,int pos, Map<String, Object> data) {
-                UbtLog.d(TAG, "getNewPlayerState:"  + ((ActionsEditHelper) mHelper).getNewPlayerState());
+            public void onItemClick(View view, int pos, Map<String, Object> data) {
+                UbtLog.d(TAG, "getNewPlayerState:" + ((ActionsEditHelper) mHelper).getNewPlayerState());
 
                 if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
                     return;
                 }
 
-                if(musicTimes !=0){
-                    if(pos == list_frames.size()-1){
+                if (musicTimes != 0) {
+                    if (pos == list_frames.size() - 1) {
                         return;
                     }
                 }
@@ -312,7 +325,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 updateAddViewEnable();
             }
         });
-
 
         recyclerViewFrames.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -698,6 +710,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         }
     }
 
+    public boolean isSaveAction;
+
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN
@@ -705,9 +719,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
             ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,
                     null);
-
-            return doBack();
-
+            if (isSaveAction) {
+                return false;
+            } else {
+                return doBack();
+            }
         }
         return false;
     }
@@ -784,8 +800,12 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         if (mDir != "") {
             inte.putExtra(ActionsEditSaveActivity.MUSIC_DIR, mDir);
         }
-        mContext.startActivity(inte);
+        if (listener != null) {
+            listener.startSave(inte);
+        }
+//        mContext.startActivity(inte);
     }
+
 
     public void pause() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
@@ -912,7 +932,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     public void onRationSetting() {
 
                     }
-                }, PermissionUtils.PermissionEnum.STORAGE);
+                }, PermissionUtils.PermissionEnum.STORAGE,mContext);
                 break;
             case R.id.iv_zoom_plus:
                 ivZoomPlus();
@@ -963,7 +983,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
      * 修改动作帧
      */
     private void doChangeItem() {
-        if(ids.size() <=0){
+        if (ids.size() <= 0) {
             goneEditFrameLayout();
             showLostDialog(0, ResourceManager.getInstance(mContext).getStringResources("ui_create_click_to_cutoff"));
             return;
@@ -979,7 +999,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private void doCancelChange() {
         ivCancelChange.setVisibility(View.INVISIBLE);
         goneEditFrameLayout();
-        change =false;
+        change = false;
         ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
         adapter.setDefSelect(-1);
     }
@@ -1010,11 +1030,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private void doPasteItem() {
         int index = selectPos;
         UbtLog.d(TAG, "index:" + index);
-        if(copy){
-            list_frames.add(index+1, copyItem(mCopyItem));
-        }else if(cut){
+        if (copy) {
+            list_frames.add(index + 1, copyItem(mCopyItem));
+        } else if (cut) {
             UbtLog.d(TAG, "index:" + index);
-            list_frames.add(index+1, copyItem(mCutItem));
+            list_frames.add(index + 1, copyItem(mCutItem));
             list_frames.remove(mCutItem);
             mCutItem.clear();
         }
@@ -1121,7 +1141,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 }
 
             }
-            ivPlay.setImageResource(R.drawable.icon_pause_nor);
+            ivPlay.setImageResource(R.drawable.ic_pause);
             doPlayCurrentFrames();
             play();
 
@@ -1933,7 +1953,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         ids.clear();
     }
 
-    private void setButtonEnable(boolean enable) {
+    public void setButtonEnable(boolean enable) {
         ivReset.setEnabled(enable);
         ivAutoRead.setEnabled(enable);
         ivSave.setEnabled(enable);
@@ -1944,7 +1964,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         ivHelp.setEnabled(enable);
     }
 
-    private void setEnable(boolean enable) {
+    public void setEnable(boolean enable) {
         ivReset.setEnabled(enable);
         ivAutoRead.setEnabled(enable);
         ivSave.setEnabled(enable);
@@ -2260,8 +2280,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 setEnable(true);
                 ivAddFrame.setEnabled(true);
                 ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
-
-
             }
         });
     }
@@ -2334,13 +2352,12 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     }
 
 
-
     @Override
-    public  void doPlayAutoRead(){
+    public void doPlayAutoRead() {
 
         //检测是否在充电状态和边充边玩状态是否打开
-         UbtLog.d(TAG, "mHelper.getChargingState():" + mHelper.getChargingState() + "SettingHelper" + SettingHelper.isPlayCharging(mContext));
-        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)){
+        UbtLog.d(TAG, "mHelper.getChargingState():" + mHelper.getChargingState() + "SettingHelper" + SettingHelper.isPlayCharging(mContext));
+        if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
             UbtLog.d(TAG, "边充边玩未打开");
             Toast.makeText(mContext, AlphaApplication.getBaseActivity().getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
             return;
@@ -2365,19 +2382,24 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     }
 
 
-
-
     @Override
-    public void cancelAutoData(){
+    public void cancelAutoData() {
         int count = list_autoFrames.size();
         currentIndex = currentIndex - count;
         UbtLog.d(TAG, "count:" + count);
-        for(int i=0; i<count; i++){
-            list_frames.remove(list_frames.size()-1);
+        for (int i = 0; i < count; i++) {
+            list_frames.remove(list_frames.size() - 1);
         }
         adapter.notifyDataSetChanged();
     }
 
+    public void onDisConnect() {
+        ((Activity) mContext).finish();
+    }
+
+    public interface OnSaveSucessListener {
+        void startSave(Intent intent);
+    }
 
 
 }

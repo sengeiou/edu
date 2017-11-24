@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/B6"
+    android:background="@drawable/action_dialog_filter_rect"
    >
 
     <RelativeLayout
@@ -18,7 +18,7 @@
             android:text="@string/ui_create_basic_action"
             android:textSize="16sp"
             android:padding="16dp"
-            android:background="#ECF1F4"
+            android:textColor="@color/tv_user_edit_color"
             />
 
 
@@ -37,13 +37,6 @@
 
 
 
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#ECF1F4"
-        />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_actions"
         android:layout_width="match_parent"
@@ -53,16 +46,14 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#ECF1F4"
-        />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_margin="10dp"
         >
 
         <TextView
@@ -74,24 +65,21 @@
             android:gravity="center"
             android:textSize="16sp"
             android:textColor="#2c87f1"
+            android:visibility="gone"
             />
 
-        <View
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="#ECF1F4"
-            />
 
         <TextView
             android:id="@+id/tv_confirm"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:text="@string/ui_common_confirm"
             android:textSize="16sp"
             android:gravity="center"
-            android:textColor="#ECF1F4"
+            android:textColor="@color/tv_user_edit_color"
             android:onClick="false"
+            android:background="@drawable/btn_alert_bg"
+            android:padding="10dp"
             />
 
 

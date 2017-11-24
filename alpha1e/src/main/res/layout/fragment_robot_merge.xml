@@ -27,9 +27,9 @@
         android:paddingLeft="10dp"
         android:gravity="center"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/tv_center_color"
         android:text="@string/ui_setting_common_next"
-        android:background="@drawable/bg_button"
+        android:background="@drawable/btn_next"
         />
 
 </RelativeLayout>

@@ -347,6 +347,14 @@ public class ConstValue {
 	public static final byte DV_ENTER_COURSE = (byte) 0x75;
 
 	/**
+	 * 步态算法行走
+	 */
+	public static final byte DV_WALK = (byte) 0x76;
+
+	public static final byte DV_STOP_WALK = (byte) 0x77;
+
+
+	/**
 	 * 语音唤醒
 	 */
 	public static final byte DV_VOICE_WAIT = (byte) 0x78;
@@ -372,10 +380,12 @@ public class ConstValue {
 	 */
 	public static final byte DV_CLIENT_ID2 = (byte) 0x82;
 
+
 	/**
 	 *  1E 机器人通用命令
 	 */
 	public static final int DV_COMMON_COMMAND=0x93;
+
 
 
 }

@@ -92,7 +92,9 @@ public class CoursePresenter extends BasePresenterImpl<CourseContract.View> impl
 
                     }
                     break;
+                    case GET_COURSE_PROGRESS:
 
+                        break;
                 }
 
             }

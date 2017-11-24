@@ -104,19 +104,22 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
                 case PLAY_SOUND_NEXT:
                     UbtLog.d(TAG,"mCurrentPlayProgress = " + mCurrentPlayProgress);
                     if(mCurrentPlayProgress == 0){
-                        mHelper.playSoundAudio("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
+                        //mHelper.playSoundAudio("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
+                        mHelper.playFile("原理1.hts");
                         rlDialogue1.setVisibility(View.VISIBLE);
                         rlDialogue1.startAnimation(biggerAnimation);
                         mCurrentPlayProgress = 1;
                         startFloatAnimation(rlDialogue1,500);
                     }else if(mCurrentPlayProgress == 1){
-                        mHelper.playSoundAudio("{\"filename\":\"id_tiger.wav\",\"playcount\":1}");
+                        //mHelper.playSoundAudio("{\"filename\":\"id_tiger.wav\",\"playcount\":1}");
+                        mHelper.playFile("原理2.hts");
                         rlDialogue2.setVisibility(View.VISIBLE);
                         rlDialogue2.startAnimation(biggerAnimation);
                         mCurrentPlayProgress = 2;
                         startFloatAnimation(rlDialogue2,500);
                     }else if(mCurrentPlayProgress == 2){
-                        mHelper.playSoundAudio("{\"filename\":\"id_happy.wav\",\"playcount\":1}");
+                        //mHelper.playSoundAudio("{\"filename\":\"id_happy.wav\",\"playcount\":1}");
+                        mHelper.playFile("原理3.hts");
                         rlDialogue3.setVisibility(View.VISIBLE);
                         rlDialogue3.startAnimation(biggerAnimation);
                         mCurrentPlayProgress = 3;
@@ -145,7 +148,6 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
                         ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,1);
                         ((CourseActivity)getContext()).switchFragment(CourseActivity.FRAGMENT_SPLIT);
                     }
-
 
                     /*if(mCurrentPlayProgress == 4){
                         ((CourseActivity)getContext()).switchFragment(CourseActivity.FRAGMENT_SPLIT);
@@ -259,9 +261,9 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
 
         if(event.getEvent() == PrincipleEvent.Event.PLAY_SOUND){
             int status = event.getStatus();
-            if(status == 1){
+            //if(status == 1){
                 mHandler.sendEmptyMessage(PLAY_SOUND_NEXT);
-            }
+            //}
         }
     }
 

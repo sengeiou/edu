@@ -23,6 +23,8 @@ public class PrincipleEvent {
 
     public enum Event{
         PLAY_SOUND,
+        PLAY_SOUND_1,
+        PLAY_FILE,
         CALL_GET_INFRARED_DISTANCE,
         CALL_CLICK_HEAD,
         DISCONNECTED,

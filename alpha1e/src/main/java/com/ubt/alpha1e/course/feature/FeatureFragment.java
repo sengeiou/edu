@@ -196,21 +196,21 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                     break;
                 case PLAY_SOUND_FINISH:
                     if(playIndex == 1){
-                        if(playCount == 0){
+                        /*if(playCount == 0){
                             if (tvMsgShow.getVisibility() == View.VISIBLE) {
                                 showView(tvMsgShow, false, smallerLeftBottomAnim);
                             }
                             showView(rlPrincipleSteeringEngineIntro, true, biggerLeftBottomAnim);
                             playCount = 1;
                             playSound("id_elephant.wav");
-                        }else if(playCount == 1){
+                        }else if(playCount == 1){*/
                             //finish
                             playIndex = 0;
                             playCount = 0;
                             hasLearnEngine = true;
                             showView(rlPrincipleSteeringEngineIntro, false, smallerLeftBottomAnim);
                             mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);
-                        }
+                        //}
                     }else if(playIndex == 2){
 
                         if(playCount == 0){
@@ -223,6 +223,22 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
 
                         }else if(playCount == 1){
                             //finish
+                            /*playIndex = 0;
+                            playCount = 0;
+                            hasLearnSensor = true;
+                            showView(rlPrincipleInfraredSensorIntro, false, smallerRightTopAnim);
+                            mHelper.playFile("红外2.hts");
+                            mHelper.doReadInfraredSensor((byte)0);
+                            mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);*/
+
+                            if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                                showView(tvMsgShow, false, smallerLeftBottomAnim);
+                            }
+                            showView(rlPrincipleInfraredSensorIntro, true, biggerRightTopAnim);
+                            mHelper.playFile("红外传感.hts");
+                            playCount = 2;
+                        }else if(playCount == 2){
+                            //finish
                             playIndex = 0;
                             playCount = 0;
                             hasLearnSensor = true;
@@ -232,21 +248,13 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                         }
 
                     }else if(playIndex == 3){
-                        if(playCount == 0){
-                            if (tvMsgShow.getVisibility() == View.VISIBLE) {
-                                showView(tvMsgShow, false, smallerLeftBottomAnim);
-                            }
-                            showView(rlPrincipleSoundboxIntro, true, biggerRightTopAnim);
-                            playCount = 1;
-                            playSound("id_elephant.wav");
-                        }else if(playCount == 1){
-                            //finish
-                            playIndex = 0;
-                            playCount = 0;
-                            hasLearnSoundbox = true;
-                            showView(rlPrincipleSoundboxIntro, false, smallerRightTopAnim);
-                            mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);
-                        }
+
+                        //finish
+                        playIndex = 0;
+                        playCount = 0;
+                        hasLearnSoundbox = true;
+                        showView(rlPrincipleSoundboxIntro, false, smallerRightTopAnim);
+                        mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);
                     }else if(playIndex == 4){
                         if(playCount == 0){
                             /*if (tvMsgShow.getVisibility() == View.VISIBLE) {
@@ -256,6 +264,13 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                             playCount = 1;
                             playSound("id_elephant.wav");*/
                         }else if(playCount == 1){
+                            if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                                showView(tvMsgShow, false, smallerLeftBottomAnim);
+                            }
+                            showView(rlPrincipleHeadIntro, true, biggerLeftTopAnim);
+                            mHelper.playFile("触摸传感.hts");
+                            playCount = 2;
+                        }else if(playCount == 2){
                             //finish
                             playIndex = 0;
                             playCount = 0;
@@ -265,21 +280,13 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                             mHelper.doReadHeadClick((byte)0);
                         }
                     }else if(playIndex == 5){
-                        if(playCount == 0){
-                            if (tvMsgShow.getVisibility() == View.VISIBLE) {
-                                showView(tvMsgShow, false, smallerLeftBottomAnim);
-                            }
-                            showView(rlPrincipleEyeIntro, true, biggerLeftTopAnim);
-                            playCount = 1;
-                            playSound("id_elephant.wav");
-                        }else if(playCount == 1){
-                            //finish
-                            playIndex = 0;
-                            playCount = 0;
-                            hasLearnEye = true;
-                            showView(rlPrincipleEyeIntro, false, smallerLeftTopAnim);
-                            mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);
-                        }
+
+                        //finish
+                        playIndex = 0;
+                        playCount = 0;
+                        hasLearnEye = true;
+                        showView(rlPrincipleEyeIntro, false, smallerLeftTopAnim);
+                        mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);
                     }else if(playIndex == 6){
                         if(playCount == 0){
                             /*if (tvMsgShow.getVisibility() == View.VISIBLE) {
@@ -289,6 +296,14 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                             playCount = 1;
                             playSound("id_elephant.wav");*/
                         }else if(playCount == 1){
+                            if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                                showView(tvMsgShow, false, smallerLeftBottomAnim);
+                            }
+                            showView(rlPrincipleVoiceIntro, true, biggerLeftBottomAnim);
+                            playSound("麦克风.hts");
+                            playCount = 2;
+
+                        }else if(playCount == 2){
                             //finish
                             playIndex = 0;
                             playCount = 0;
@@ -303,7 +318,7 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                             }
                             showView(rlPrincipleVoiceObstacleAvoidanceIntro, true, biggerLeftBottomAnim);
                             playCount = 1;
-                            playSound("id_elephant.wav");
+                            playSound("百宝袋.hts");
                         }else if(playCount == 1){
                             //finish
                             playIndex = 0;
@@ -323,6 +338,7 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                     UbtLog.d(TAG,"getLearnCount() = " + getLearnCount());
                     if(getLearnCount() == 7){
                         ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,4);
+                        playSound("胜利.hts");
                         new ConfirmDialog(getContext()).builder()
                                 .setTitle(getStringRes("ui_setting_principle_learn_finish"))
                                 .setMsg(getStringRes("ui_setting_principle_learn_next"))
@@ -346,34 +362,22 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                 case RECEVICE_SENSOR:
                     if(!hasReceviceSensor && playIndex == 2){
                         hasReceviceSensor = true;
-                        if (tvMsgShow.getVisibility() == View.VISIBLE) {
-                            showView(tvMsgShow, false, smallerLeftBottomAnim);
-                        }
-                        showView(rlPrincipleInfraredSensorIntro, true, biggerRightTopAnim);
+                        playSound("红外传感2.hts");
                         playCount = 1;
-                        playSound("id_elephant.wav");
                     }
                     break;
                 case RECEVICE_HEAD:
                     if(!hasReceviceHead && playIndex == 4){
                         hasReceviceHead = true;
-                        if (tvMsgShow.getVisibility() == View.VISIBLE) {
-                            showView(tvMsgShow, false, smallerLeftBottomAnim);
-                        }
-                        showView(rlPrincipleHeadIntro, true, biggerLeftTopAnim);
                         playCount = 1;
-                        playSound("id_elephant.wav");
+                        playSound("触摸传感2.hts");
                     }
                     break;
                 case RECEVICE_VOICE_WAIT:
                     if(!hasReceviceVoice && playIndex == 6){
                         hasReceviceVoice = true;
-                        if (tvMsgShow.getVisibility() == View.VISIBLE) {
-                            showView(tvMsgShow, false, smallerLeftBottomAnim);
-                        }
-                        showView(rlPrincipleVoiceIntro, true, biggerLeftBottomAnim);
                         playCount = 1;
-                        playSound("id_elephant.wav");
+                        playSound("麦克2.hts");
                     }
                     break;
             }
@@ -399,11 +403,12 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
         mHelper = helper;
     }
 
-
     @Override
     protected void initUI() {
         tvNext.setText(getStringRes("ui_setting_principle_end"));
-        setViewEnable(tvNext,false,0.3f);
+        if(((CourseActivity)getActivity()).getEnterPropress() < 4){
+            setViewEnable(tvNext,false,0.5f);
+        }
         ivPrincipleSteeringEngine.setVisibility(View.INVISIBLE);
         ivPrincipleInfraredSensor.setVisibility(View.INVISIBLE);
         ivPrincipleSoundbox.setVisibility(View.INVISIBLE);
@@ -454,7 +459,6 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
         super.onResume();
 
         mHelper.doInit();
-
         showView(bzvPrincipleSteeringEngine,100);
         showView(bzvPrincipleInfraredSensor,300);
         showView(bzvPrincipleSoundbox,500);
@@ -480,9 +484,12 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
 
         if(event.getEvent() == PrincipleEvent.Event.PLAY_SOUND){
             int status = event.getStatus();
-            if(status == 1){
+            //if(status == 1){
                 mHandler.sendEmptyMessage(PLAY_SOUND_FINISH);
-            }
+            //}
+        }else if(event.getEvent() == PrincipleEvent.Event.PLAY_FILE){
+            //mHandler.sendEmptyMessage(PLAY_SOUND_FINISH);
+
         }else if(event.getEvent() == PrincipleEvent.Event.CALL_GET_INFRARED_DISTANCE){
             int infraredDistance = event.getInfraredDistance();
             UbtLog.d(TAG,"infraredDistance = " + infraredDistance);
@@ -496,10 +503,15 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                 mHandler.sendEmptyMessage(RECEVICE_HEAD);
             }
         }else if(event.getEvent() == PrincipleEvent.Event.VOICE_WAIT){
-            mHandler.sendEmptyMessage(RECEVICE_HEAD);
+            mHandler.sendEmptyMessage(RECEVICE_VOICE_WAIT);
         }
+    }
 
-
+    private void reset(){
+        playIndex = 0;
+        playCount = 0;
+        setAllEnable(true);
+        mHelper.doInit();
     }
 
     @Override
@@ -510,7 +522,7 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
     @Override
     public int getContentViewId() {
         scale = (int) this.getResources().getDisplayMetrics().density;
-        if (scale == 3) {
+        if (scale >= 3) {
             return R.layout.fragment_robot_feature_3;
         } else {
             return R.layout.fragment_robot_feature;
@@ -735,102 +747,124 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
         UbtLog.d(TAG, "view = " + view);
         switch (view.getId()) {
             case R.id.iv_back:
-                //((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_MERGE);
-                ((CourseActivity) getContext()).finish();
+                int enterPropress = ((CourseActivity) getContext()).getEnterPropress();
+                if(enterPropress > 2){
+                    ((CourseActivity) getContext()).finish();
+                }else {
+                    ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_MERGE);
+                }
                 break;
             case R.id.tv_next:
-                //((CourseActivity) getContext()).finish();
+                if(((CourseActivity)getActivity()).getEnterPropress() < 4 && getLearnCount() < 7){
+                    new ConfirmDialog(getContext()).builder()
+                            .setMsg(getStringRes("ui_setting_principle_skip_tip"))
+                            .setCancelable(true)
+                            .setPositiveButton(getStringRes("ui_common_confirm"), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,4);
+                                    getActivity().finish();
+                                }
+                            }).setNegativeButton(getStringRes("ui_common_cancel"), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                new ConfirmDialog(getContext()).builder()
-                        .setMsg(getStringRes("ui_setting_principle_skip_tip"))
-                        .setCancelable(true)
-                        .setPositiveButton(getStringRes("ui_common_confirm"), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,4);
-
-                                getActivity().finish();
-                            }
-                        }).setNegativeButton(getStringRes("ui_common_cancel"), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                }).show();
-
-                if (tvMsgShow.getVisibility() == View.VISIBLE) {
-                    showView(tvMsgShow, false, smallerLeftBottomAnim);
-                } else {
-                    showView(tvMsgShow, true, biggerLeftBottomAnim);
+                        }
+                    }).show();
+                }else {
+                    getActivity().finish();
                 }
 
                 break;
-            case R.id.tv_msg_show:
-                break;
+
             case R.id.iv_principle_steering_engine:
-                tvMsgShow.setText(getStringRes("ui_principle_engine_tips"));
-                showView(tvMsgShow, true, biggerLeftBottomAnim);
-                startPlaySound(ivPrincipleSteeringEngine,1,"id_happy.wav");
+                //tvMsgShow.setText(getStringRes("ui_principle_engine_tips"));
+                //showView(tvMsgShow, true, biggerLeftBottomAnim);
+                if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                    showView(tvMsgShow, false, smallerLeftBottomAnim);
+                }
+                showView(rlPrincipleSteeringEngineIntro, true, biggerLeftBottomAnim);
+                startPlaySound(ivPrincipleSteeringEngine,1,"舵机.hts");
                 break;
             case R.id.iv_principle_infrared_sensor:
                 hasReceviceSensor = false;
                 tvMsgShow.setText(getStringRes("ui_principle_sensor_tips"));
                 showView(tvMsgShow, true, biggerLeftBottomAnim);
-                startPlaySound(ivPrincipleInfraredSensor,2,"id_happy.wav");
+                startPlaySound(ivPrincipleInfraredSensor,2,"红外传感1.hts");
                 mHelper.doReadInfraredSensor((byte)1);
                 break;
             case R.id.iv_principle_soundbox:
-                tvMsgShow.setText(getStringRes("ui_principle_soundbox_tips"));
-                showView(tvMsgShow, true, biggerLeftBottomAnim);
-                startPlaySound(ivPrincipleSoundbox,3,"id_happy.wav");
+                //tvMsgShow.setText(getStringRes("ui_principle_soundbox_tips"));
+                //showView(tvMsgShow, true, biggerLeftBottomAnim);
+
+                if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                    showView(tvMsgShow, false, smallerLeftBottomAnim);
+                }
+                showView(rlPrincipleSoundboxIntro, true, biggerRightTopAnim);
+                startPlaySound(ivPrincipleSoundbox,3,"扬声器.hts");
                 //showView(rlPrincipleSoundboxIntro, true, biggerRightTopAnim);
                 break;
             case R.id.iv_principle_head:
                 hasReceviceHead = false;
                 tvMsgShow.setText(getStringRes("ui_principle_head_tips"));
                 showView(tvMsgShow, true, biggerLeftBottomAnim);
-                startPlaySound(ivPrincipleHead,4,"id_happy.wav");
+                startPlaySound(ivPrincipleHead,4,"触摸传感1.hts");
                 mHelper.doReadHeadClick((byte)1);
                 //showView(rlPrincipleHeadIntro, true, biggerLeftTopAnim);
                 break;
             case R.id.iv_principle_eye:
-                tvMsgShow.setText(getStringRes("ui_principle_eye_tips"));
-                showView(tvMsgShow, true, biggerLeftBottomAnim);
-                startPlaySound(ivPrincipleEye,5,"id_happy.wav");
+                //tvMsgShow.setText(getStringRes("ui_principle_eye_tips"));
+                //showView(tvMsgShow, true, biggerLeftBottomAnim);
+                if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                    showView(tvMsgShow, false, smallerLeftBottomAnim);
+                }
+                showView(rlPrincipleEyeIntro, true, biggerLeftTopAnim);
+                startPlaySound(ivPrincipleEye,5,"眼睛LED.hts");
                 //showView(rlPrincipleEyeIntro, true, biggerLeftTopAnim);
                 break;
             case R.id.iv_principle_voice:
                 hasReceviceVoice = false;
                 tvMsgShow.setText(getStringRes("ui_principle_voice_tips"));
                 showView(tvMsgShow, true, biggerLeftBottomAnim);
-                startPlaySound(ivPrincipleVoice,6,"id_happy.wav");
+                startPlaySound(ivPrincipleVoice,6,"麦克1.hts");
                 break;
             case R.id.iv_principle_voice_obstacle_avoidance:
                 tvMsgShow.setText(getStringRes("ui_principle_obstacle_tips"));
                 showView(tvMsgShow, true, biggerLeftBottomAnim);
-                startPlaySound(ivPrincipleVoiceObstacleAvoidance,7,"id_happy.wav");
+                startPlaySound(ivPrincipleVoiceObstacleAvoidance,7,"百宝1.hts");
 
+                break;
+            case R.id.tv_msg_show:
+                showView(tvMsgShow, false, smallerLeftBottomAnim);
+                reset();
                 break;
             case R.id.rl_principle_steering_engine_intro:
                 showView(rlPrincipleSteeringEngineIntro, false, smallerLeftBottomAnim);
+                reset();
                 break;
             case R.id.rl_principle_infrared_sensor_intro:
                 showView(rlPrincipleInfraredSensorIntro, false, smallerRightTopAnim);
+                reset();
                 break;
             case R.id.rl_principle_soundbox_intro:
                 showView(rlPrincipleSoundboxIntro, false, smallerRightTopAnim);
+                reset();
                 break;
             case R.id.rl_principle_head_intro:
                 showView(rlPrincipleHeadIntro, false, smallerLeftTopAnim);
+                reset();
                 break;
             case R.id.rl_principle_eye_intro:
                 showView(rlPrincipleEyeIntro, false, smallerLeftTopAnim);
+                reset();
                 break;
             case R.id.rl_principle_voice_intro:
                 showView(rlPrincipleVoiceIntro, false, smallerLeftBottomAnim);
+                reset();
                 break;
             case R.id.rl_principle_voice_obstacle_avoidance_intro:
                 showView(rlPrincipleVoiceObstacleAvoidanceIntro, false, smallerLeftBottomAnim);
+                reset();
                 break;
 
         }
@@ -842,10 +876,13 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
         setAllEnable(false);
         setViewEnable(view,true,1);
         playSound(soundFile);
+        //playSound(soundFile);
+
     }
 
     private void playSound(String soundFile){
-        mHelper.playSoundAudio("{\"filename\":\""+ soundFile +"\",\"playcount\":1}");
+        //mHelper.playSoundAudio("{\"filename\":\""+ soundFile +"\",\"playcount\":1}");
+        mHelper.playFile(soundFile);
     }
 
     private void setAllEnable(boolean enable){

@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +29,7 @@ import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.AlertDialog;
 import com.ubt.alpha1e.ui.dialog.WifiSelectAlertDialog;
 import com.ubt.alpha1e.ui.helper.NetworkHelper;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -148,6 +150,9 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_close:
+                Intent intent = new Intent();
+                intent.setClass(NetconnectActivity.this,MainActivity.class);
+                startActivity(intent);
                 NetconnectActivity.this.finish();
                 break;
             case R.id.ib_return:
@@ -158,6 +163,10 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                 gotoSelectWifi();
                 break;
             case R.id.ig_see_wifi_pwd:
+                if(TextUtils.isEmpty(ed_wifi_pwd.getText().toString())){
+                    UbtLog.d(TAG,"密码为null 不可点击切换!!!");
+                    return;
+                }
                 if(seePWD == 0){
                     seePWD = 1 ;
                     ig_see_wifi_pwd.setBackground(ContextCompat.getDrawable(NetconnectActivity.this,R.drawable.net_see_pwd));
@@ -298,7 +307,8 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                     break;
                 case NETWORK_CONNECT_FAIL_DIALOG_DISPLAY:
                     displayDialog();
-                    ToastUtils.showCustomShort(R.layout.bluetooth_wifi_connect_fail);
+                    ToastUtils.showCustomShortWithGravity(R.layout.bluetooth_wifi_connect_fail,
+                            Gravity.CENTER, 0 , 0);
                     break;
                 case UPDATE_WIFI_NAME:
                     String remoteConnectName = (String) msg.obj;

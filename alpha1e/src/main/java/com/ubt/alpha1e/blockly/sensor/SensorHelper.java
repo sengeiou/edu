@@ -88,6 +88,8 @@ public class SensorHelper extends BaseHelper {
         }else if(cmd == ConstValue.DV_TAP_HEAD) {
             UbtLog.d(TAG, "robot tapped head: " + BluetoothParamUtil.bytesToString(param));
             EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_TAPPED_ROBOT_HEAD));
+        }else if(cmd == ConstValue.DV_WALK){
+            UbtLog.d(TAG, "机器人回复步态行走");
         }
     }
 
@@ -186,6 +188,26 @@ public class SensorHelper extends BaseHelper {
     public void requestPort(String params) {
         UbtLog.d(TAG, "params:" + params);
         doSendComm(ConstValue.REQUEST_WIFI_PORT, BluetoothParamUtil.stringToBytes(params));
+    }
+
+    /**
+     *
+     * @param direct 方向：前后左右
+     * @param speed  速度：快，中，慢
+     * @param step   步数0-100
+     */
+
+    public void doWalk(byte direct, byte speed, byte step){
+        UbtLog.d(TAG, "doWalk params:" + direct + "--" + speed + "--" + step);
+        byte[] params = new byte[3];
+        params[0] = direct;
+        params[1] = speed;
+        params[2] = step;
+        doSendComm(ConstValue.DV_WALK, params);
+    }
+
+    public void doStopWalk(){
+        doSendComm(ConstValue.DV_STOP_WALK, null);
     }
 
 

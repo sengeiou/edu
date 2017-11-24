@@ -20,6 +20,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -125,6 +126,8 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
 
     private boolean isConnecting = false;
     boolean isFirst = false ; //是否是首次打开
+    private boolean fromBlockRequest = false; //从Blockly跳转到蓝牙连接
+
 
     public Timer timer = new Timer();
 
@@ -141,6 +144,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
         }else {
             ib_return.setVisibility(View.VISIBLE);
         }
+        fromBlockRequest = getIntent().getBooleanExtra(Constant.BLUETOOTH_REQUEST, false);
         AutoScanConnectService.doEntryManalConnect(true);
         mHelper = new BluetoothHelper(BluetoothconnectActivity.this, BluetoothconnectActivity.this);
 
@@ -267,7 +271,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
            UbtLog.d(TAG,"搜索到蓝牙地址 ："+bluetoothDevice.getAddress());
         }
 
-        if(!(bluetoothDevice.getName().toLowerCase().contains("alpha"))){
+        if(!(bluetoothDevice.getName().toLowerCase().contains("alpha1e"))){
             return;
         }
 
@@ -549,8 +553,12 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
                     e.printStackTrace();
                 }
             }else {
+                if(fromBlockRequest){
+                    setResult(RESULT_OK);
+                }
                  BluetoothconnectActivity.this.finish();
             }
+
         }else {
             try {
                 rl_content_bluetooth_connect_sucess.setVisibility(View.INVISIBLE);

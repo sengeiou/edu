@@ -138,7 +138,7 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
         if (index == -1) {
             mPlayer.doStopPlay();
             ActionInfo info = new ActionInfo();
-            info.actionName = "Default foot1";
+            info.actionName = "Default foot";
             MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_gamepad;
             MyActionsHelper.mCurrentPlayType = MyActionsHelper.Action_type.Unkown;
             mPlayer.doPlayAction(info);
@@ -362,13 +362,14 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
                         continue;
                     }
                     boolean isSend = false;
-                    for (int j = 0; j < mActionsNames.size(); j++) {
+                    //1E 不需发送文件
+                    /*for (int j = 0; j < mActionsNames.size(); j++) {
                         String file_name = item.hts_name.substring(0, item.hts_name.lastIndexOf("."));
                         if (file_name.equalsIgnoreCase(mActionsNames.get(j))) {
                             isSend = true;
                             break;
                         }
-                    }
+                    }*/
                     if (!isSend) {
                         unSyncFileNames.add(item.hts_name);
                     }
@@ -437,6 +438,7 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
         //逐个动作表文件名
         if ((cmd & 0xff) == (ConstValue.UV_GETACTIONFILE & 0xff)) {
                 String names = BluetoothParamUtil.bytesToString(param);
+                UbtLog.d(TAG,"names = " + names);
                 mActionsNames.add(names);
         }
         //动作文件读取完毕
@@ -508,6 +510,12 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
                 mHandler.sendMessage(msg);
             }
         });
+    }
+
+    public void dd(){
+        byte[] params = new byte[1];
+        params[0] = (byte)1;
+        doSendComm(ConstValue.SET_PALYING_CHARGING, params);
     }
 
     public void doDelRemoteRole(final RemoteRoleInfo roleInfo){
