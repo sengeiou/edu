@@ -55,7 +55,7 @@
                     android:paddingLeft="10dp"
                     android:textColor="@color/txt_new_edtion"
                     android:textColorHint="@color/T23"
-                    android:maxLength="400"
+                    android:maxLength="200"
                     android:imeOptions="flagNoExtractUi"
                     android:hint="@string/ui_setting_feedback_placeholder"
                     android:textSize="15sp" />

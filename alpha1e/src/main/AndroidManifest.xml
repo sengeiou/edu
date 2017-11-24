@@ -9,6 +9,7 @@
         android:name="design_width"
         android:value="1920">
 
+
     </meta-data>
     <meta-data
         android:name="design_height"
@@ -104,6 +105,7 @@
         <service android:name=".services.ActivationService"/>
         <service android:name=".services.RecordSoftService"/>
         <service android:name=".services.AutoScanConnectService"/>
+        <service android:name=".services.SyncDataService"/>
 
         <!-- Facebook -->
         <meta-data
@@ -634,7 +636,8 @@
             android:theme="@style/NoTitleThemeFullScreen">
         </activity>
 
-        <activity android:name=".action.actioncreate.SaveSuccessActivity"
+        <activity
+            android:name=".action.actioncreate.SaveSuccessActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
     </application>

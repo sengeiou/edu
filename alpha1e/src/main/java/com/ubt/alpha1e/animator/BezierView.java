@@ -95,6 +95,8 @@ public class BezierView extends View {
 
     private PointF mCurPoint; // 当前移动的控制点
 
+    private IBezierView mCallback = null;
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -108,6 +110,8 @@ public class BezierView extends View {
                     mState |= STATE_READY | STATE_TOUCH;
                     if (mLoop) {
                         start();
+                    }else {
+                        onAnimatorEnd();
                     }
                     return;
                 }
@@ -719,4 +723,14 @@ public class BezierView extends View {
         mLoop = loop;
     }
 
+
+    public void setCallbackListence(IBezierView callback){
+        mCallback = callback;
+    }
+
+    private void onAnimatorEnd(){
+        if(mCallback != null){
+            mCallback.onAnimatorEnd(this);
+        }
+    }
 }

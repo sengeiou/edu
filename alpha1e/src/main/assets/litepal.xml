@@ -32,9 +32,10 @@
     	</list>
     -->
     <list>
-        <mapping class="com.ubt.alpha1e.maincourse.model.LocalActionRecord"/>
-
-    </list>
+         <mapping class="com.ubt.alpha1e.maincourse.model.LocalActionRecord"/>
+          <mapping class="com.ubt.alpha1e.blockly.BlocklyProjectMode"/>
+ 
+     </list>
 
     <!--
     	Define the cases of the tables and columns name. Java is a

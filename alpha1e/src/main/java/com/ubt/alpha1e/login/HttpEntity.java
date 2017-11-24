@@ -37,6 +37,8 @@ public class HttpEntity {
     public static final String VERIDATA_CODE = BASIC_UBX_SYS + "validateCode";
     public static final String ADD_FEEDBACK = BASIC_UBX_SYS + "addFeedback";
     public static final String CHECK_APP_UPDATE = BASIC_UBX_SYS + "updateApp";
+    public static final String SAVE_COURSE_PROGRESS = BASIC_UBX_SYS + "saveCourseProgress";
+    public static final String GET_COURSE_PROGRESS = BASIC_UBX_SYS + "getCourseProgress";
 
 
     public static final String COURSE_GET_PROGRESS = BASIC_UBX_SYS + "getCourseProgress";

@@ -26,6 +26,7 @@ public class Constant {
     public final static String SP_USER_ID = "sp_login_userId";
     public final static String SP_USER_IMAGE = "sp_user_image";
     public final static String SP_USER_NICKNAME = "sp_user_nickname";
+    public static final String PRINCIPLE_PROGRESS = "sp_principle_progress_";
 
     /**
      * 首次申请权限
