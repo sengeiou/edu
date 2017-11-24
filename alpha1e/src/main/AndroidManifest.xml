@@ -226,9 +226,8 @@
             android:theme="@style/NoTitleTheme"/>
         <activity
             android:name=".ui.RemoteSelActivity"
-            android:label="@string/title_activity_remote_sel"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme"/>
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".ui.RemoteAddActivity"
             android:label="@string/title_activity_remote_add"
@@ -246,7 +245,6 @@
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".ui.RemoteActivity"
-            android:label="@string/title_activity_remote"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
