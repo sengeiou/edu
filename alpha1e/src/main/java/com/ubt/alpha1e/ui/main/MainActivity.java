@@ -836,11 +836,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void handleMessage(Bundle bundle) {
 
       Byte status= bundle.getByte(STATUS_MACHINE);
-        if(MainActivity.this==null){
-            UbtLog.d(TAG,"Main activity is null ");
-            return ;
-        }
-
         UbtLog.d(TAG,"STATE MACHINE IS "+status);
         switch (status){
            case APP_LAUNCH_STATUS:
@@ -849,9 +844,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    @Override
                    public void run() {
                        recoveryBatteryUi();
-                       showBuddleText("开机来叫醒沉睡的alpha吧");
                        showCartoonAction(cartoon_action_sleep);
                        buddleTextAsynchronousTask();
+                       showBuddleText("开机来叫醒沉睡的alpha吧");
                    }
                });
                break;
