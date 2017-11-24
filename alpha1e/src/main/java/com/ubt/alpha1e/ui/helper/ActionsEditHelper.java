@@ -199,6 +199,7 @@ public class ActionsEditHelper extends BaseHelper implements
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
+        UbtLog.d("EditHelper", "cmd==" + cmd + "  params==" + ByteHexHelper.bytesToHexString(param));
         if (cmd == ConstValue.READ_ALL_ENGINE) {
             UbtLog.d("onReceiveData", ByteHexHelper.bytesToHexString(param));
             Message msg = new Message();
