@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/B6"
+    android:background="@drawable/action_dialog_filter_rect"
     >
 
 
@@ -15,32 +15,25 @@
         android:text="@string/ui_create_preview_action"
         android:textSize="16sp"
         android:padding="16dp"
-        android:background="#ECF1F4"
-        />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#ECF1F4"
         />
 
 
+    <ImageView
+        android:id="@+id/iv_preview_play"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_play_enable"
+        android:layout_gravity="center"
+        />
 
     <LinearLayout
         android:id="@+id/ll_tips"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp"
         android:gravity="center"
         >
 
-        <ImageView
-            android:id="@+id/iv_preview_play"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/button_play"
-            />
 
         <TextView
             android:id="@+id/tv_index"
@@ -75,44 +68,37 @@
 
 
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#ECF1F4"
-        />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_margin="16dp"
         >
 
         <TextView
             android:id="@+id/tv_cancel"
-            android:layout_width="0dp"
+            android:layout_width="120dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:text="@string/ui_common_cancel"
             android:gravity="center"
             android:textSize="16sp"
-            android:textColor="#2c87f1"
+            android:textColor="@color/tv_user_edit_color"
+            android:background="@drawable/btn_alert_bg"
             />
 
-        <View
-            android:layout_width="2dp"
-            android:layout_height="40dp"
-            android:background="#ECF1F4"
-            />
+
 
         <TextView
             android:id="@+id/tv_confirm"
-            android:layout_width="0dp"
+            android:layout_width="120dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_marginLeft="20dp"
             android:text="@string/ui_common_confirm"
             android:textSize="16sp"
             android:gravity="center"
-            android:textColor="#2c87f1"
+            android:textColor="@color/tv_user_edit_color"
+            android:background="@drawable/btn_alert_bg"
             />
 
 

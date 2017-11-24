@@ -69,7 +69,7 @@ public class DialogPreview extends Dialog {
                 tvTime.setText(TimeUtils.getTimeFromMillisecond((long)index*200));
             }else if(msg.what == 2) {
                 playFinish = true;
-                ivPlay.setImageResource(R.drawable.button_play);
+                ivPlay.setImageResource(R.drawable.ic_play_enable);
                 UbtLog.d(TAG, "finish:" + list.size());
                 timer.cancel();
                 mHandler.sendEmptyMessageDelayed(3,200);
@@ -123,7 +123,7 @@ public class DialogPreview extends Dialog {
                 if(onActionPreviewListener != null){
                     onActionPreviewListener.doPlayAutoRead();
                 }
-                ivPlay.setImageResource(R.drawable.icon_pause_nor);
+                ivPlay.setImageResource(R.drawable.ic_stop);
                 int time = list.size()*200;
                 playFinish = false;
                 index = 0;

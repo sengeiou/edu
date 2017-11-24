@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:background="@drawable/bg_edit"
+    android:background="@drawable/img_zhezhao"
     android:visibility="gone"
     >
 
@@ -42,7 +42,7 @@
                 android:layout_below="@+id/iv_preview"
                 android:layout_centerHorizontal="true"
                 android:text="@string/ui_readback_preview"
-                android:textColor="@color/sec_txt_main"
+                android:textColor="@color/btn_get_code_color"
                 android:textSize="16dp" />
 
 
@@ -70,7 +70,7 @@
                 android:layout_below="@+id/iv_change"
                 android:layout_centerHorizontal="true"
                 android:text="@string/ui_readback_alter"
-                android:textColor="@color/sec_txt_main"
+                android:textColor="@color/btn_get_code_color"
                 android:textSize="16dp" />
 
         </RelativeLayout>
@@ -98,7 +98,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/iv_copy"
                 android:text="@string/ui_readback_copy"
-                android:textColor="@color/sec_txt_main"
+                android:textColor="@color/btn_get_code_color"
                 android:textSize="16dp" />
 
         </RelativeLayout>
@@ -125,7 +125,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/iv_cut"
                 android:text="@string/ui_create_menu_cut"
-                android:textColor="@color/sec_txt_main"
+                android:textColor="@color/btn_get_code_color"
                 android:textSize="16dp" />
 
         </RelativeLayout>
@@ -151,7 +151,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/iv_paste"
                 android:text="@string/ui_readback_paste"
-                android:textColor="@color/sec_txt_main"
+                android:textColor="@color/btn_get_code_color"
                 android:textSize="16dp" />
 
 
@@ -178,7 +178,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/iv_delete"
                 android:text="@string/ui_common_delete"
-                android:textColor="@color/sec_txt_main"
+                android:textColor="@color/btn_get_code_color"
                 android:textSize="16dp" />
 
         </RelativeLayout>

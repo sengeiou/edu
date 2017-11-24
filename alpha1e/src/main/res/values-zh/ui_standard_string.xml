@@ -834,7 +834,56 @@
     <string name="ui_create_guide_help">点击这里查看帮助内容</string>
     <string name="ui_task_chanllege_fail">闯关失败,再试试吧!</string>
 
+    <!--MAIN ui-->
 
+    <string name="ui_main_right_icon">遥控器</string>
+    <string name="ui_main_right_icon2">动作</string>
+    <string name="ui_main_right_icon3">编程</string>
+    <string name="ui_main_right_icon4">社区</string>
+    <string name="ui_main_course_center">课程中心</string>
+    <string name="control_center">关闭</string>
+    <string name="lowpower_indicator">电量低于</string>
+    <string name="buddle_text_init_status">开机来叫醒沉睡的alpha吧</string>
+
+    <string name="ui_setting_clear_cache">清除缓存数据</string>
+    <string name="ui_setting_use_memory_title">Alpha1E已用空间</string>
+    <string name="ui_setting_cache_retio_title">占用手机</string>
+    <string name="ui_setting_clear_cache_warning">是否清理全部缓存？</string>
+    <string name="ui_setting_clear_cache_success">已成功清理#的空间</string>
+    <string name="ui_setting_has_not_cache">暂无缓存</string>
+    <string name="ui_setting_scan_code_attention">扫描关注</string>
+    <string name="ui_setting_password_massage">重置密码管理</string>
+    <string name="ui_setting_help_feedback">帮助反馈</string>
+    <string name="ui_setting_idea_feedback">意见反馈</string>
+    <string name="ui_setting_feedback_detail">问题详情</string>
+    <string name="ui_setting_hot_question">热点问题</string>
+    <string name="ui_setting_search_result">搜索结果</string>
+    <string name="ui_setting_feedback_placeholder">请输入你的意见</string>
+    <string name="ui_setting_feedback_input">请输入...</string>
+    <string name="ui_setting_telephone">手机号</string>
+    <string name="ui_setting_verify_code">验证码</string>
+    <string name="ui_setting_old_password">旧密码</string>
+    <string name="ui_setting_new_password">新密码</string>
+    <string name="ui_setting_confirm_password">确认密码</string>
+    <string name="ui_setting_forget_password">忘记密码</string>
+    <string name="ui_setting_logout_tip">您确定要退出您当前的账号？</string>
+    <string name="ui_setting_logout">退出</string>
+    <string name="ui_setting_password_modify_success">修改密码成功</string>
+    <string name="ui_setting_password_modify_fail">修改密码失败</string>
+    <string name="ui_setting_common_next">下一步</string>
+
+    <string name="ui_setting_password_verify_fail">验证码检验失败</string>
+    <string name="ui_setting_verify_code_send_success">验证码检验发送成功</string>
+    <string name="ui_setting_verify_code_send_fail">验证码检验发送失败</string>
+    <string name="ui_telephone_request">请输入电话号码</string>
+    <string name="ui_old_password_request">请输入6位旧密码</string>
+    <string name="ui_new_password_request">请输入6位新密码</string>
+    <string name="ui_setting_principle_tip_1">主人，我是Alpha，很高兴见到你，欢迎来到奇幻的编程世界；</string>
+    <string name="ui_setting_principle_tip_2">通过编程，主人可以强化我的技能，我能唱歌、跳舞还有很多很多的技能；</string>
+    <string name="ui_setting_principle_tip_3">现在让我为大家表演一段音乐或舞蹈吧。</string>
+    <string name="ui_setting_app_update_tips">是否需要更新版本？</string>
+    <string name="ui_common_no">否</string>
+    <string name="ui_common_yes">是</string>
 
 
     <!-- 不需要翻译 -->
@@ -910,54 +959,37 @@
     <string name="dialog_permission_microphone_setting">您尚未开启\"ALpha 1E\"录音权限,请到设置中开启</string>
     <string name="dialog_go_setting">去设置</string>
 
-    <string name="ui_main_right_icon">遥控器</string>
-    <string name="ui_main_right_icon2">动作</string>
-    <string name="ui_main_right_icon3">编程</string>
-    <string name="ui_main_right_icon4">社区</string>
-    <string name="ui_main_course_center">课程中心</string>
-
-    <string name="ui_setting_clear_cache">清除缓存数据</string>
-    <string name="ui_setting_use_memory_title">Alpha1E已用空间</string>
-    <string name="ui_setting_cache_retio_title">占用手机</string>
-    <string name="ui_setting_clear_cache_warning">是否清理全部缓存？</string>
-    <string name="ui_setting_clear_cache_success">已成功清理#的空间</string>
-    <string name="ui_setting_has_not_cache">暂无缓存</string>
-    <string name="ui_setting_scan_code_attention">扫描关注</string>
-    <string name="ui_setting_password_massage">重置管理密码</string>
-    <string name="ui_setting_help_feedback">帮助反馈</string>
-    <string name="ui_setting_idea_feedback">意见反馈</string>
-    <string name="ui_setting_feedback_detail">问题详情</string>
-    <string name="ui_setting_hot_question">热点问题</string>
-    <string name="ui_setting_search_result">搜索结果</string>
-    <string name="ui_setting_feedback_placeholder">请输入你的意见</string>
-    <string name="ui_setting_feedback_input">请输入...</string>
-    <string name="ui_setting_telephone">手机号</string>
-    <string name="ui_setting_verify_code">验证码</string>
-    <string name="ui_setting_old_password">旧密码</string>
-    <string name="ui_setting_new_password">新密码</string>
-    <string name="ui_setting_confirm_password">确认密码</string>
-    <string name="ui_setting_forget_password">忘记密码</string>
-    <string name="ui_setting_logout_tip">您确定要退出您当前的账号？</string>
-    <string name="ui_setting_logout">退出</string>
-    <string name="ui_setting_password_modify_success">修改密码成功</string>
-    <string name="ui_setting_password_modify_fail">修改密码失败</string>
-    <string name="ui_setting_common_next">下一步</string>
-    <string name="ui_setting_password_verify_fail">验证码检验失败</string>
-    <string name="ui_setting_verify_code_send_success">验证码检验发送成功</string>
-    <string name="ui_setting_verify_code_send_fail">验证码检验发送失败</string>
-    <string name="ui_telephone_request">请输入电话号码</string>
-    <string name="ui_old_password_request">请输入6位旧密码</string>
-    <string name="ui_new_password_request">请输入6位新密码</string>
-    <string name="ui_setting_principle_tip_1">主人，我是Alpha，很高兴见到你，欢迎来到奇幻的编程世界；</string>
-    <string name="ui_setting_principle_tip_2">通过编程，主人可以强化我的技能，我能唱歌、跳舞还有很多很多的技能；</string>
-    <string name="ui_setting_principle_tip_3">现在让我为大家表演一段音乐或舞蹈吧。</string>
-    <string name="ui_setting_app_update_tips">是否需要更新版本？</string>
-    <string name="ui_common_no">否</string>
-    <string name="ui_common_yes">是</string>
     <string name="ui_common_save_success">保存成功</string>
     <string name="ui_common_save_fail">保存失败</string>
     <string name="ui_common_save_to_dcim">长按保存到相册</string>
 
+
+    <!--动作编辑课程 -->
+    <string name="action_course_card1_1">1.认识时间轴</string>
+    <string name="action_course_card1_2">2.熟悉动作添加</string>
+    <string name="action_course_card1_3">3.了解音乐库</string>
+    <string name="action_course_card1_1_all">阿尔法的动作很酷吧，这些动作是怎样创建出来的呢？让我们先来了解一下动作编辑器吧。</string>
+    <string name="action_course_card1_1_1"> 时间轴: 这是时间轴，它就像一个奇妙的盒子，上面装着音乐，下面装着动作，添加的动作会按先后顺序显示在轴上。右侧的“+ 、-”图标：点击这里，可以让时间轴变大变小，这样才能看清上面的动作，更好地编辑它们。</string>
+    <string name="action_course_card1_1_2">点击这里，可以让时间轴变大变小，这样才能看清上面的动作，更好地编辑它们。</string>
+    <string name="action_course_card1_1_3">音乐轴: 在这里，可以给阿尔法的动作配上音乐，让它随着音乐节拍跳舞、做动作。仔细听清音乐节拍，使用标记工具，可以帮你将动作安放在恰当的节拍上。</string>
+    <string name="action_course_card1_1_4">动作帧: 给机器人添加的动作会显示在这里，不同动作按先后顺序，一个接一个地排整齐。也可以设定每一个动作时间的长短。</string>
+    <string name="action_course_card1_1_5">添加按钮: 当我们掰动好机器人的动作后，点击添加按钮，机器人的动作就可以记录下来了。</string>
+    <string name="action_course_card1_1_6">播放按钮: 当我们添加好动作和音乐后，很好奇它们在机器人身上是怎样表现的，点击这个按钮，就可以看到了哦。</string>
+    <string name="action_course_card1_2_1">点击机器人的关节部分机器人掉电，掰动机器人的关节至理想的动作点击时间轴的添加按钮 完成动作添加</string>
+    <string name="action_course_card1_3_1">这是音乐库，里面有很多好听又欢快的音乐，进入这里，可以把这些音乐添加到时间轴上，让阿尔法的动作有音乐相伴，更生动有趣啦。</string>
+
+
+    <string name="action_course_card2_1">1.基础模版</string>
+    <string name="action_course_card2_2">2.高级模版</string>
+    <string name="action_course_card2_3">3.任务添加出招</string>
+
+    <string name="action_course_card2_1_all">阿尔法有自己的动作库，这可是一个大宝库，里面有各种各样的动作，可以用来添加到时间轴上去，动作库分为基础动作和高级动作。</string>
+    <string name="action_course_card2_2_1">这里是基础动作库，里面的动作简单又快速，还可以将这些动作添加到时间轴上</string>
+    <string name="action_course_card2_2_2">这里是高级动作库，里面的动作酷炫又好玩，还可以将这些动作添加到时间轴上。</string>
+
+    <string name="action_course_card2_3_1">3.添加指定动作出招</string>
+    <string name="action_course_card2_3_1_1">学习完动作库的知识，现在让我们来完成一个小任务吧，你会把基础动作“出招”添加到时间轴上吗？</string>
+    <string name="action_course_card2_3_1_2">点击基础动作模版  点击预览出招动作 点击添加</string>
     <string name="ui_principle_lost_engine_tips">我的胳膊和腿都是可以拆分掉的哦，拖动我的关节看看。</string>
     <string name="ui_principle_on_engine_tips">请小朋友把我的关节组装起来吧！这样我就可以继续活动了。</string>
     <string name="ui_principle_engine_tips">小朋友，请活动我的关节！</string>

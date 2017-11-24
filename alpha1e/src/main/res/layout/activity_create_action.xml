@@ -18,10 +18,10 @@
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:src="@drawable/back_icon"
-            android:layout_centerVertical="true"
+
             />
 
         <ImageView
@@ -118,6 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/ll_left"
+            android:layout_marginTop="-10dp"
             >
 
 
@@ -141,6 +142,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/rl_action_line"
+        android:layout_marginBottom="20dp"
         android:gravity="center"
         android:visibility="gone"
         >
@@ -149,7 +151,7 @@
             android:id="@+id/iv_del_music"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_delete_nor"
+            android:src="@drawable/ic_delete"
             android:layout_centerHorizontal="true"
             />
 
@@ -302,7 +304,8 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        >
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -408,38 +411,6 @@
 
 
         </RelativeLayout>
-
-  <!--      <RelativeLayout
-            android:id="@+id/rl_music"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="40dp"
-            android:visibility="gone"
-            >
-
-            <TextView
-                android:id="@+id/tv_music"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Music"/>
-
-            <ImageView
-                android:id="@+id/iv_play_voice"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_below="@+id/tv_music"
-                android:src="@drawable/play_playing"/>
-
-            <TextView
-                android:id="@+id/tv_music_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/iv_play_voice"
-                android:text="0:03"/>
-
-        </RelativeLayout>-->
-
 
 
 

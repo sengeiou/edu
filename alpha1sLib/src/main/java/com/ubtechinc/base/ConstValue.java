@@ -327,7 +327,20 @@ public class ConstValue {
 	 * 1E机器人跌倒事件，该事件是机器人主动上报
 	 */
 	public static final byte DV_FALL_DOWN = (byte) 0x71;
+	/**
+	 *  1E 机器人机器人6D方位变化事件上报  1. 站立 2.倒立  3.左卧 4.右卧 5.躺着 6.趴着
+	 *
+	 */
+    public static final byte DV_6D_GESTURE=(byte)0x72;
+	/**
+	 *  1E机器人 进入到休眠事件 （机器人 通知客户端）
+	 */
+	public static final byte DV_SLEEP_EVENT=(byte)0x73;
 
+	/**
+	 *  1E机器人进入到 低电量模式（机器人 通知客户端）
+	 */
+	public static final byte DV_LOW_BATTERY=(byte)0x74;
 	/**
 	 * 1E进入课程
 	 */
@@ -366,5 +379,13 @@ public class ConstValue {
 	 * 1E机器人发送CLIENT ID 分两段
 	 */
 	public static final byte DV_CLIENT_ID2 = (byte) 0x82;
+
+
+	/**
+	 *  1E 机器人通用命令
+	 */
+	public static final int DV_COMMON_COMMAND=0x93;
+
+
 
 }

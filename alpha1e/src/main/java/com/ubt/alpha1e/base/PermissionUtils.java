@@ -54,7 +54,7 @@ public class PermissionUtils {
      *
      * @param callback 回调结果
      */
-    public void request(PermissionLocationCallback callback, PermissionEnum permission) {
+    public void request(PermissionLocationCallback callback, PermissionEnum permission, Context context) {
         this.mCallback = callback;
         String sp_key = "";
         String[] permiss = null;
@@ -87,7 +87,7 @@ public class PermissionUtils {
             mCallback.onSuccessful();
         } else if (isFirstLocation && AndPermission.hasAlwaysDeniedPermission(mContext, Arrays.asList(permiss))) {
             mCallback.onRationSetting();
-            showRationSettingDialog(permission);
+            showRationSettingDialog(permission, context);
         } else {
             AndPermission.with(mContext)
                     .requestCode(10000)
@@ -111,7 +111,7 @@ public class PermissionUtils {
     /**
      * 用户勾选过不再提醒则显示该设置对话框跳转到应用详情页
      */
-    public void showRationSettingDialog(PermissionEnum permission) {
+    public void showRationSettingDialog(PermissionEnum permission, Context context) {
         final SettingService settingService = AndPermission.defineSettingDialog(mContext);
         String message = "";
         switch (permission) {
@@ -132,15 +132,15 @@ public class PermissionUtils {
         }
         UbtLog.d("psermission", "message==" + message);
 
-        new ConfirmDialog(mContext).builder()
+        new ConfirmDialog(context).builder()
                 .setMsg(message)
                 .setCancelable(true)
-                .setPositiveButton(ResourceManager.getInstance(mContext).getStringResources("dialog_go_setting"), new View.OnClickListener() {
+                .setPositiveButton(ResourceManager.getInstance(context).getStringResources("dialog_go_setting"), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         settingService.execute();
                     }
-                }).setNegativeButton(ResourceManager.getInstance(mContext).getStringResources("ui_common_cancel"), new View.OnClickListener() {
+                }).setNegativeButton(ResourceManager.getInstance(context).getStringResources("ui_common_cancel"), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

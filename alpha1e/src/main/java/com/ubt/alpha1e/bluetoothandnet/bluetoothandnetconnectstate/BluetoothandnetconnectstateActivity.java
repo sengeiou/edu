@@ -337,6 +337,9 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 //                BluetoothandnetconnectstateActivity.this.finish();
                 break;
             case R.id.ib_close:
+                /*Intent backIntent = new Intent();
+                backIntent.putExtra("isConnect", isBulueToothConnected());
+                setResult(101,backIntent);*/
                 BluetoothandnetconnectstateActivity.this.finish();
                 break;
             case R.id.ig_get_bluetooth_list:
@@ -353,7 +356,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                             startBluetoothConnect();
                         }else {
                             UbtLog.d(TAG, "bluetoothEnable true 没有授权");//ok
-                            PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION);
+                            PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION,this);
                         }
                     }else {
                         UbtLog.d(TAG, "bluetoothEnable false 提醒去打开蓝牙");//ok
@@ -375,7 +378,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                         startBluetoothConnect();
                     }else {
                         UbtLog.d(TAG, "bluetoothEnable true 没有授权"); //ok
-                        PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION);
+                        PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION,this);
                     }
                 }
 

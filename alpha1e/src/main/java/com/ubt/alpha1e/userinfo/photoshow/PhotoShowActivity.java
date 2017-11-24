@@ -6,15 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
-
-import java.security.Permission;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,7 +57,7 @@ public class PhotoShowActivity extends MVPBaseActivity<PhotoShowContract.View, P
                     public void onRationSetting() {
 
                     }
-                }, PermissionUtils.PermissionEnum.STORAGE);
+                }, PermissionUtils.PermissionEnum.STORAGE,PhotoShowActivity.this);
 
                 return false;
             }

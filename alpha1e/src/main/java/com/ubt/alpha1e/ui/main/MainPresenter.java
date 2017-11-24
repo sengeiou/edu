@@ -29,9 +29,12 @@ import static android.R.attr.id;
 public class MainPresenter extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
     private String TAG = "MainPresenter";
 
+
+
     @Override
     public void requestCartoonAction(String json) {
-        mView.showCartoonAction("text");
+          //  mView.showCartoonAction(1);
+
     }
 
     @Override
@@ -45,8 +48,8 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     }
 
     @Override
-    public void commandRobotAction(String json) {
-
+    public void commandRobotAction(byte cmd, byte[] params) {
+        MainUiBtHelper.getInstance(mView.getContext()).sendCommand(cmd,params);
     }
 
     @Override
@@ -56,10 +59,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             mObject.getString("cmd");
             mObject.getInt("len");
             mObject.getString("param").getBytes();
-//            UbtLog.d(TAG, "CMD  " + mObject.getString("cmd") + "len " + mObject.getString("param").getBytes()[0]);
-            if (Integer.parseInt(mObject.getString("cmd")) == ConstValue.DV_READ_BATTERY) {
-                mView.showCartoonAction("leg");
-            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -128,6 +127,17 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 AlphaApplication.initXG();
             }
         });
+    }
+
+    private void Test(){
+        //Enter the course enter
+        byte[] papram = new byte[1];
+        papram[0]=0x01;
+        commandRobotAction(ConstValue.DV_ENTER_COURSE,papram);
+        //Exit the course enter
+        papram[0]=0x0;
+        commandRobotAction(ConstValue.DV_ENTER_COURSE, papram);
+
     }
 
 }

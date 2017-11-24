@@ -24,7 +24,7 @@ import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ThemeInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.event.RobotEvent;
-import com.ubt.alpha1e.ui.custom.CommonCtrlView;
+import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
 import com.ubt.alpha1e.ui.dialog.LowPowerDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IUI;
@@ -78,7 +78,7 @@ public abstract class BaseActivity extends
 
     private String currentActivityLable;
 
-//    public CommonCtrlView commonCtrlView;
+//    public ControlCenterActivity commonCtrlView;
     private resetFloatViewListener resetFloatViewListener;
 
 
@@ -253,12 +253,13 @@ public abstract class BaseActivity extends
         back.setOnClickListener(listener);
     }
 
-    public void onNoteLowPower() {
+    public void onNoteLowPower(final int value ) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 try {
-                    LowPowerDialog.getInstance(BaseActivity.this).show();
+                    //LowPowerDialog.getInstance(BaseActivity.this).show();
+                    new LowBatteryDialog(BaseActivity.this).setBatteryThresHold(value).builder().show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -282,28 +283,29 @@ public abstract class BaseActivity extends
 
     protected void onResume() {
         super.onResume();
-        ((AlphaApplication) this.getApplication()).setBaseActivity(this);
-        MobclickAgent.onResume(this);
 
-        doCheckLanguage();
-
-        if (mHelper != null){
-            mHelper.RegisterHelper();
-        }
-
-        UbtLog.d(TAG, "--wmma--onResume!");
-
-        if (((AlphaApplication) this.getApplicationContext())
-                .getCurrentBluetooth() != null){
-            UbtLog.d(TAG, "--wmma--bluetooth ssss");
-            if(stopFloatService() /*&& isServiceRun(getApplicationContext(), "com.ubt.alpha1e.ui.custom.FloatControlViewService")*/){
-                CommonCtrlView.closeCommonCtrlView();
-            }else{
-//                CommonCtrlView.getInstace(this);
-            }
-        }else{
-            CommonCtrlView.closeCommonCtrlView();
-        }
+//        ((AlphaApplication) this.getApplication()).setBaseActivity(this);
+//        MobclickAgent.onResume(this);
+//
+//        doCheckLanguage();
+//
+//        if (mHelper != null){
+//            mHelper.RegisterHelper();
+//        }
+//
+//        UbtLog.d(TAG, "--wmma--onResume!");
+//
+//        if (((AlphaApplication) this.getApplicationContext())
+//                .getCurrentBluetooth() != null){
+//            UbtLog.d(TAG, "--wmma--bluetooth ssss");
+//            if(stopFloatService() /*&& isServiceRun(getApplicationContext(), "com.ubt.alpha1e.ui.custom.FloatControlViewService")*/){
+//                ControlCenterActivity.closeCommonCtrlView();
+//            }else{
+//                ControlCenterActivity.getInstace(this);
+//            }
+//        }else{
+//            ControlCenterActivity.closeCommonCtrlView();
+//        }
 
     }
 
@@ -324,12 +326,12 @@ public abstract class BaseActivity extends
 
     @Subscribe
     public void onEventRobot(RobotEvent event) {
-        if(event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS){
-            UbtLog.d(TAG,"--CONNECT_SUCCESS--");
-            if (!stopFloatService()){
-                CommonCtrlView.getInstace(this);
-            }
-        }
+//        if(event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS){
+//            UbtLog.d(TAG,"--CONNECT_SUCCESS--");
+//            if (!stopFloatService()){
+//                ControlCenterActivity.getInstace(this);
+//            }
+//        }
     }
 
     public void doCheckLanguage() {

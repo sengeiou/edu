@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lLayout_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="229dp"
+        android:layout_height="130dp"
+        android:background="@drawable/alert_backgroud"
+        >
+
+        <TextView
+            android:id="@+id/txt_lowBattery"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:drawableTop="@drawable/lowpowerindicator20"
+            android:gravity="center"
+            android:text="@string/lowpower_indicator"
+            android:textAppearance="@style/ActionsSquareTab"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+
+</LinearLayout>

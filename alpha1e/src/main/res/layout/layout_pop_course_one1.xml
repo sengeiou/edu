@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+    >
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bubble_right"
+        android:gravity="center"
+        android:text="点击机器人的关节部分机器人掉电，掰动机器人的关节至理想的动作"
+        android:textColor="@color/tv_blue_color"
+        android:textSize="13sp"
+        />
+
+</RelativeLayout>

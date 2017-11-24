@@ -15,11 +15,11 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.base.popup.EasyPopup;
+import com.ubt.alpha1e.base.popup.HorizontalGravity;
+import com.ubt.alpha1e.base.popup.VerticalGravity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.userinfo.model.NoticeModel;
-import com.zyyoona7.lib.EasyPopup;
-import com.zyyoona7.lib.HorizontalGravity;
-import com.zyyoona7.lib.VerticalGravity;
 
 import java.util.ArrayList;
 import java.util.List;

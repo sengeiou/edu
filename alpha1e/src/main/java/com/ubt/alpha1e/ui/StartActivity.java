@@ -69,6 +69,34 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
         //add by lihai upgadeDB
        ((StartHelper) mHelper).UpgadeDB();
 
+        UbtLog.d(TAG,"BUILD_TYPE = " + BuildConfig.BUILD_TYPE + "   DEBUG = " +BuildConfig.DEBUG );
+        if(!"release".equals(BuildConfig.BUILD_TYPE)){
+            UbtLog.d(TAG,"BUILD_TYPE == " + BuildConfig.BUILD_TYPE + "   DEBUG = " +BuildConfig.DEBUG );
+            //String userStr = "{userId='751092', nickName='为爱奋斗', sex='1', grade='幼儿园中班及以下', age='5', headPic='http://q.qlogo.cn/qqapp/1106515940/2C8C4C2F028186E077E92AD322462565/100 ', phone='13670062587'}";
+            String userStr="{userId='748872', nickName='刘海', sex='1', grade='小学四年级', age='9', headPic='http://q.qlogo.cn/qqapp/1106515940/AB8F9F9F67B93213C91B21D02C18C0B4/100', phone='15999550702'}";
+            String userId = "748872";
+            String userImage = "http://q.qlogo.cn/qqapp/1106515940/2C8C4C2F028186E077E92AD322462565/100";
+            String nickName = "为爱奋斗";
+            String loginToken = "9a1948ecc7314f74960c05bc8f7127ff748872";
+            UserModel u = GsonImpl.get().toObject(userStr,UserModel.class);
+
+            SPUtils.getInstance().put(Constant.SP_USER_ID, userId);
+            SPUtils.getInstance().put(Constant.SP_USER_IMAGE, userImage);
+            SPUtils.getInstance().put(Constant.SP_USER_NICKNAME, nickName);
+            SPUtils.getInstance().put(Constant.SP_LOGIN_TOKEN, loginToken);
+            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, u);
+        }else {
+            UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+
+            UbtLog.d(TAG,"userModel 1= " + userModel);
+            UbtLog.d(TAG,"userModel 2= " + SPUtils.getInstance().getString(Constant.SP_USER_INFO));
+            UbtLog.d(TAG,"userModel 3= " + SPUtils.getInstance().getString(Constant.SP_USER_ID));
+            UbtLog.d(TAG,"userModel 4= " + SPUtils.getInstance().getString(Constant.SP_USER_IMAGE));
+            UbtLog.d(TAG,"userModel 5= " + SPUtils.getInstance().getString(Constant.SP_USER_NICKNAME));
+            UbtLog.d(TAG,"userModel 6= " + SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN));
+        }
+
+
         initUI();
 
     }
