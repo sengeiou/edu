@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
@@ -43,7 +44,7 @@ public class PrincipleHelper extends BaseHelper {
 
         //UbtLog.d(TAG,"cmd = " + cmd + "    = " + param[0]);
         if(cmd == ConstValue.DV_SET_PLAY_SOUND){
-            PrincipleEvent playSoundEvent = new PrincipleEvent(PrincipleEvent.Event.PLAY_SOUND);
+            PrincipleEvent playSoundEvent = new PrincipleEvent(PrincipleEvent.Event.PLAY_SOUND_1);
             playSoundEvent.setStatus(param[0]);
             EventBus.getDefault().post(playSoundEvent);
         }else if(cmd == ConstValue.CTRL_ONE_ENGINE){
@@ -70,9 +71,15 @@ public class PrincipleHelper extends BaseHelper {
             UbtLog.d(TAG,"--DV_PLAYACTION--" + param[0]);
         }else if (cmd == ConstValue.DV_ACTION_FINISH){
             String finishPlayActionName = BluetoothParamUtil.bytesToString(param);
-            UbtLog.d(TAG, "finishPlayActionName = " + finishPlayActionName );
+            UbtLog.d(TAG, "finishPlayActionName = " + finishPlayActionName);
 
-
+            if(!TextUtils.isEmpty(finishPlayActionName) && finishPlayActionName.contains("初始化")){
+                //return;
+            }else {
+                PrincipleEvent playSoundEvent = new PrincipleEvent(PrincipleEvent.Event.PLAY_SOUND);
+                playSoundEvent.setStatus(param[0]);
+                EventBus.getDefault().post(playSoundEvent);
+            }
         }
 
     }
@@ -240,9 +247,10 @@ public class PrincipleHelper extends BaseHelper {
         doSendComm(ConstValue.DV_PLAYACTION,BluetoothParamUtil.stringToBytes(initFile));
     }
 
-    public void playFile(String params){
-        UbtLog.d(TAG,"params = " + params);
-        doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(params));
+    public void playFile(String fileName){
+        String filePath = "action/course/" + fileName;
+        UbtLog.d(TAG,"filePath = " + filePath);
+        doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(filePath));
     }
 
     @Override

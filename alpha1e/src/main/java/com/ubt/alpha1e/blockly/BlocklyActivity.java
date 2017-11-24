@@ -293,13 +293,14 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         }
 
         UbtLog.d(TAG, "UserID => " + getCurrentUserID() + "    isFromCourse = " + isFromCourse);
-        mSyncAlertDialog = new SyncDownloadAlertDialog(BlocklyActivity.this)
-                .builder()
-                .setMsg(getStringResources("ui_init_blockly"))
-                .setImageResoure(R.drawable.data_loading)
-                .setCancelable(true,20);
-
-        requestUpdate();
+//        mSyncAlertDialog = new SyncDownloadAlertDialog(BlocklyActivity.this)
+//                .builder()
+//                .setMsg(getStringResources("ui_init_blockly"))
+//                .setImageResoure(R.drawable.data_loading)
+//                .setCancelable(true,20);
+//
+//        requestUpdate();
+        init();
     }
 
     /**
@@ -1847,32 +1848,32 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
     public void playSoundAudio(String params) {
         //{"type":"animal", "key":"id_elephant.wav", "description":"大象"，"playcount":3}
-        if(((AlphaApplication) getApplicationContext()).isAlpha1E()){
+//        if(((AlphaApplication) getApplicationContext()).isAlpha1E()){
             if(mSensorHelper != null){
                 mSensorHelper.playSoundAudio(params);
             }
-        }else {
-            try {
-                UbtLog.d(TAG,"params = " + params);
-                JSONObject jsonObject = new JSONObject(params);
-                String audioName = jsonObject.getString("filename");
-                mPlayAudioCount = jsonObject.getInt("playcount");
-
-                if(mPlayAudioCount > 0){
-                    isPlayLocalAudio = true;
-                    mPlayAudioNum = 1;
-                    mPlayAudioName = getBlocklyDir(BlocklyActivity.this) + "/voice/" + audioName;
-                    playMP3(mPlayAudioName);
-                }else {
-                    isPlayLocalAudio = false;
-                    mPlayAudioCount = 0;
-                    mPlayAudioNum = 0;
-                    mPlayAudioName = "";
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
+//        }else {
+//            try {
+//                UbtLog.d(TAG,"params = " + params);
+//                JSONObject jsonObject = new JSONObject(params);
+//                String audioName = jsonObject.getString("filename");
+//                mPlayAudioCount = jsonObject.getInt("playcount");
+//
+//                if(mPlayAudioCount > 0){
+//                    isPlayLocalAudio = true;
+//                    mPlayAudioNum = 1;
+//                    mPlayAudioName = getBlocklyDir(BlocklyActivity.this) + "/voice/" + audioName;
+//                    playMP3(mPlayAudioName);
+//                }else {
+//                    isPlayLocalAudio = false;
+//                    mPlayAudioCount = 0;
+//                    mPlayAudioNum = 0;
+//                    mPlayAudioName = "";
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
     }
 

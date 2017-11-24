@@ -12,16 +12,24 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.course.CourseActivity;
+import com.ubt.alpha1e.course.event.PrincipleEvent;
+import com.ubt.alpha1e.course.feature.FeatureFragment;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +48,8 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
 
     private static final int HIDE_VIEW = 1;
     private static final int GO_TO_NEXT = 2;
+    private static final int SHOW_DIALOG = 3;
+    private static final int HIDE_DIALOG = 4;
 
     private final int ANIMATOR_TIME = 500;
 
@@ -66,6 +76,8 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
     ImageView ivLegLeftBg;
     @BindView(R.id.iv_leg_right_bg)
     ImageView ivLegRightBg;
+    @BindView(R.id.tv_msg_show)
+    TextView tvMsgShow;
 
     private int containerWidth;
     private int containerHeight;
@@ -73,6 +85,8 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
 
     private boolean hasInitRobot = false;
     private RelativeLayout.LayoutParams params = null;
+    private Animation smallerLeftBottomAnim = null;
+    private Animation biggerLeftBottomAnim = null;
 
     private boolean hasLostHandLeft = false;
     private boolean hasLostHandRight = false;
@@ -102,10 +116,29 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
                     ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,2);
                     ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_MERGE);
                     break;
+                case SHOW_DIALOG:
+                    mHelper.playFile("拆卸.hts");
+                    tvMsgShow.setText(getStringRes("ui_principle_lost_engine_tips"));
+                    showView(tvMsgShow, true, biggerLeftBottomAnim);
+                    break;
+                case HIDE_DIALOG:
+                    showView(tvMsgShow, false, smallerLeftBottomAnim);
+                    break;
             }
         }
     };
 
+    @Subscribe
+    public void onEventPrinciple(PrincipleEvent event) {
+        if(!(((CourseActivity)getActivity()).getCurrentFragment() instanceof SplitFragment) ){
+            return;
+        }
+
+        if(event.getEvent() == PrincipleEvent.Event.PLAY_SOUND){
+            int status = event.getStatus();
+            mHandler.sendEmptyMessage(HIDE_DIALOG);
+        }
+    }
 
     @SuppressLint("ValidFragment")
     public SplitFragment(PrincipleHelper helper){
@@ -119,6 +152,9 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
         scale = (int) this.getResources().getDisplayMetrics().density;
         containerWidth = this.getResources().getDisplayMetrics().widthPixels;
         containerHeight = this.getResources().getDisplayMetrics().heightPixels;
+
+        biggerLeftBottomAnim = AnimationUtils.loadAnimation(getContext(), R.anim.scan_bigger_anim_left_bottom);
+        smallerLeftBottomAnim = AnimationUtils.loadAnimation(getContext(), R.anim.scan_smaller_anim_left_bottom);
 
         UbtLog.d(TAG, "scale = " + scale
                 + "  width = " + this.getResources().getDisplayMetrics().widthPixels
@@ -145,13 +181,12 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
                 });
             }
         });
-
         initData();
     }
 
     private void initRobot() {
 
-        if (scale == 3.0) {
+        if (scale >= 3.0) {
 
             initViewLayout(ivRobot, scale);
 
@@ -172,6 +207,8 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
             initViewLayout(ivLegRightBg, scale);
 
         }
+
+        mHandler.sendEmptyMessage(SHOW_DIALOG);
     }
 
     private void initViewLayout(View view, int scale ) {
@@ -219,6 +256,7 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
@@ -226,11 +264,13 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
     @Override
     public void onResume() {
         super.onResume();
-        mHelper.doInit();
+
+
     }
 
     @Override
     public void onDestroyView() {
+        EventBus.getDefault().unregister(this);
         super.onDestroyView();
         unbinder.unbind();
     }
@@ -239,12 +279,41 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
-                ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_PRINCIPLE);
+                int enterPropress = ((CourseActivity) getContext()).getEnterPropress();
+                if(enterPropress > 0){
+                    ((CourseActivity) getContext()).finish();
+                }else {
+                    ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_PRINCIPLE);
+                }
                 break;
             case R.id.tv_next:
                 doAplitAll();
-                mHandler.sendEmptyMessageDelayed(GO_TO_NEXT,600);
+                mHandler.sendEmptyMessageDelayed(GO_TO_NEXT, 600);
                 break;
+        }
+    }
+
+    private void showView(View view, boolean isShow, Animation anim) {
+        if (view.getVisibility() == View.VISIBLE && isShow) {
+            return;
+        }
+
+        if (view.getVisibility() != View.VISIBLE && !isShow) {
+            return;
+        }
+
+        if (isShow) {
+
+            if(tvMsgShow.getVisibility() == View.VISIBLE){
+                tvMsgShow.setVisibility(View.GONE);
+            }
+
+            view.setVisibility(View.VISIBLE);
+        } else {
+            view.setVisibility(View.GONE);
+        }
+        if (anim != null) {
+            view.startAnimation(anim);
         }
     }
 

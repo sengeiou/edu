@@ -3,8 +3,7 @@
      xmlns:tools="http://schemas.android.com/tools"
     package="com.ubt.alpha1e"
     android:versionCode="1"
-    android:versionName="V1.0.0.1">
-
+    android:versionName="V1.0.0.3">
     <meta-data android:name="design_width" android:value="1920">
 
     </meta-data>
@@ -103,6 +102,7 @@
         <service android:name=".services.ActivationService"/>
         <service android:name=".services.RecordSoftService"/>
         <service android:name=".services.AutoScanConnectService"/>
+        <service android:name=".services.SyncDataService"/>
 
         <!-- Facebook -->
         <meta-data
