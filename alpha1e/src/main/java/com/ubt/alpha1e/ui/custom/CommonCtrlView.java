@@ -281,7 +281,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         }
 
         if((currentState == ActionPlayer.Play_state.action_playing || currentNewPlayState == NewActionPlayer.PlayerState.PLAYING) && playingName != ""){
-            btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_pause_icon_ft"));
+            btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
             gifImageView.setVisibility(View.VISIBLE);
             txt_action_name_m.setText(playingName);
         }else if((currentState == ActionPlayer.Play_state.action_pause || currentNewPlayState == NewActionPlayer.PlayerState.PAUSING) && playingName != ""){
@@ -313,8 +313,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         });
 
         btn_cycle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                 if(!BaseHelper.hasSdcard){
                     Toast.makeText(mBaseActivity,mBaseActivity.getStringResources("ui_remote_synchoronize_no_sd"),Toast.LENGTH_SHORT).show();
                     return;
@@ -340,11 +340,11 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             @Override
             public void onClick(View v) {
                 UbtLog.d(TAG, "--wmma--current Action Type=" + AlphaApplication.getActionType());
-                //检测是否在充电状态和边充边玩状态是否打开
-                if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)){
-                    Toast.makeText(mContext, mContext.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                //检测是否在充电状态和边充边玩状态是否打开
+//                if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)){
+//                    Toast.makeText(mContext, mContext.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
 
                 mHelper.doActionCommand(
                         MyActionsHelper.Command_type.Do_default, "", AlphaApplication.getActionType());
@@ -694,7 +694,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     @Override
     public void notePlayStart(List<String> mSourceActionNameList, ActionInfo action, ActionPlayer.Play_type mCurrentPlayType) {
         UbtLog.d(TAG, "--wmma--notePlayStart callback!");
-        btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_pause_icon_ft"));
+        btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
         gifImageView.setVisibility(View.VISIBLE);
         if (action != null) {
             String name = action.actionName;
@@ -713,12 +713,12 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         if (mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_download || mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_new) {
             mHelper.doPauseMp3ForMyDownload();
         }
-        if (mCurrentPlayType == ActionPlayer.Play_type.cycle_action) {
-            btn_cycle.setBackground(mBaseActivity.getDrawableRes("action_control_cycle_icon_ft"));
-            txt_cycle_num.setVisibility(View.GONE);
-        }
-        btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
-        gifImageView.setVisibility(View.INVISIBLE);
+//        if (mCurrentPlayType == ActionPlayer.Play_type.cycle_action) {
+//            btn_cycle.setBackground(mBaseActivity.getDrawableRes("action_control_cycle_icon_ft"));
+//            txt_cycle_num.setVisibility(View.GONE);
+//        }
+//        btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
+//        gifImageView.setVisibility(View.INVISIBLE);
 
     }
 
@@ -728,7 +728,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         if (mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_download ||mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_new) {
             mHelper.doPauseMp3ForMyDownload();
         }
-        btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_pause_icon_ft"));
+        btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
         gifImageView.setVisibility(View.VISIBLE);
     }
 
@@ -742,7 +742,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 mHelper.doStopMp3ForMyDownload();
                 txt_action_name_m.setText("");
                 mBaseActivity.saveCurrentPlayingActionName("");
-                btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
+                btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
                 gifImageView.setVisibility(View.INVISIBLE);
             }
         });
@@ -754,7 +754,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         mBaseActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_pause_icon_ft"));
+                btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
 
                 String name = ((MyActionsHelper) mHelper).getNewPlayerName();
                 mBaseActivity.saveCurrentPlayingActionName(name);
@@ -771,7 +771,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         mBaseActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
+                btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
                 gifImageView.setVisibility(View.INVISIBLE);
             }
         });
@@ -784,7 +784,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             @Override
             public void run() {
                 txt_action_name_m.setText("");
-                btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
+                btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
                 gifImageView.setVisibility(View.INVISIBLE);
                 mBaseActivity.saveCurrentPlayingActionName("");
             }
@@ -817,7 +817,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             }
             txt_action_name_m.setText(action_name);
             mBaseActivity.saveCurrentPlayingActionName(action_name);
-            btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_pause_icon_ft"));
+            btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
             gifImageView.setVisibility(View.VISIBLE);
         }
 

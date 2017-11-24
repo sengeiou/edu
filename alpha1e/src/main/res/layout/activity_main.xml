@@ -161,7 +161,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="388dp"
         android:layout_marginTop="116dp"
-        android:text="你好，我是Alpha"
+        android:text="嗨，我是阿尔法"
         android:gravity="center"
         android:textSize="13sp"
         android:textStyle="bold"

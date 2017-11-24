@@ -213,6 +213,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         registerReceiver(mBroadcastReceiver1, filter1);
         looperThread = new LooperThread(this);
         looperThread.start();
+        buddleTextAsynchronousTask();
     }
 
     @Override
@@ -524,17 +525,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
     public void buddleTextAsynchronousTask() {
-        if(mBuddleTextTimer!=null){
-            UbtLog.d(TAG,"RANDOM BUDDLE TEXT TIMER RUNNING");
-            return;
-        }
+        stopBuddleTextAsynchronousTask();
         mBuddleTextTimer= new Timer();
         mBuddleTextTimeOutTask= new TimerTask() {
             @Override
             public void run() {
-                if(looperThread==null){
-                    return;
-                }
                 looperThread.post(new Runnable() {
                     public void run() {
                        if(System.currentTimeMillis()-mCurrentTouchTime>noOperationTimeout) {
@@ -556,11 +551,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                public void run() {
                                    try {
                                        if (buddleText != null) {
-                                           if(buddleText.getText().equals("\"嗨，我是阿尔法\"")||buddleText.getText().equals("开机来叫醒沉睡的alpha吧")){
-                                               buddleText.setVisibility(View.VISIBLE);
-                                           }else {
+                                           UbtLog.d(TAG,"buddleText   "+buddleText.getText());
                                                buddleText.setVisibility(View.INVISIBLE);
-                                           }
                                        }
                                    }catch(RuntimeException e){
                                        e.printStackTrace();
@@ -707,7 +699,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             if(mCmd<0){
                 mCmd=255+mCmd;
             }
-            UbtLog.d(TAG, "CMD IS   " + mCmd);
+          //  UbtLog.d(TAG, "CMD IS   " + mCmd);
           if(mCmd==ConstValue.DV_TAP_HEAD) {
               looperThread.send(createMessage(ROBOT_HIT_HEAD,""));
           }else if(mCmd==ConstValue.DV_6D_GESTURE){
@@ -751,7 +743,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
               }
 
           } else {
-              UbtLog.d(TAG, "ROBOT OTHER SITUATION" + mCmd);
+            //  UbtLog.d(TAG, "ROBOT OTHER SITUATION" + mCmd);
           }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -760,7 +752,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
     private int powerStatusUpdate(byte mParam) {
-        UbtLog.d(TAG, "POWER VALUE " + mParam);
+       // UbtLog.d(TAG, "POWER VALUE " + mParam);
         int power_index = 0;
         if (mParam < powerThreshold[powerThreshold.length / 2]) {
             for (int j = 0; j < powerThreshold.length / 2; j++) {
@@ -781,7 +773,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
             }
         }
-        UbtLog.d(TAG, "Current power is " + power_index);
+        //UbtLog.d(TAG, "Current power is " + power_index);
+        if(cartoonBodyTouchBg!=null)
         cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[power_index]));
         return power_index;
     }
@@ -839,14 +832,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG,"STATE MACHINE IS "+status);
         switch (status){
            case APP_LAUNCH_STATUS:
-
              runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
                        recoveryBatteryUi();
-                       showCartoonAction(cartoon_action_sleep);
-                       buddleTextAsynchronousTask();
                        showBuddleText("开机来叫醒沉睡的alpha吧");
+                       showCartoonAction(cartoon_action_sleep);
                    }
                });
                break;
@@ -955,7 +946,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
   private void batteryUiShow(String param){
       final byte[] mParams = Base64.decode(param, Base64.DEFAULT);
       for (int i = 0; i < mParams.length; i++) {
-          UbtLog.d(TAG, "index " + i + "value :" + mParams[i]);
+        //  UbtLog.d(TAG, "index " + i + "value :" + mParams[i]);
           if (mParams[index_two_charging] == 0x01&&mParams[index_two_charging]!=mChargeValue) {
               IS_CHARGING=true;
               UbtLog.d(TAG, " IS CHARGING ");
@@ -1041,9 +1032,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
   }
 
   private void hiddenDisconnectIcon(){
+      if(topIcon2Disconnect!=null)
       topIcon2Disconnect.setVisibility(View.INVISIBLE);
   }
     private void showDisconnectIcon(){
+        if(topIcon2Disconnect!=null)
         topIcon2Disconnect.setVisibility(View.VISIBLE);
     }
   private void sendCommandToRobot(String absouteActionPath){
