@@ -36,7 +36,6 @@ import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 
-import com.ubt.alpha1e.data.model.CreateRecordModel;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.login.LoginActivity;
@@ -402,15 +401,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 100 ){
-            if(isBtConnect !=isBulueToothConnected()){
-                if(isBulueToothConnected()){
-                   // looperThread.send(createMessage(APP_BLUETOOTH_CONNECTED,""));
-                    showBuddleText("嗨，我是阿尔法");
-                    showCartoonTouchView();
-                    if(isNetworkConnect){
-                        hiddenDisconnectIcon();
-                    }
-                    showCartoonAction(cartoon_action_squat);
+            if(isBtConnect !=isBulueToothConnected()) {
+                if (isBulueToothConnected()) {
+                    looperThread.send(createMessage(APP_BLUETOOTH_CONNECTED, ""));
                 }
             }
         }
@@ -421,7 +414,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG, "X ,Y  " + (event.getX() + "," + event.getY()));
         mCurrentTouchTime=System.currentTimeMillis();
         if(System.currentTimeMillis()-mCurrentTouchTime<noOperationTimeout) {
-            buddleText.setVisibility(View.INVISIBLE);
+            hiddenBuddleTextView();
         }
         return super.onTouchEvent(event);
     }
@@ -433,7 +426,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         try {
             mCurrentTouchTime = System.currentTimeMillis();
             if (System.currentTimeMillis() - mCurrentTouchTime < noOperationTimeout) {
-                buddleText.setVisibility(View.INVISIBLE);
+                hiddenBuddleTextView();
             }
             String actionName = "";
             if (m_animationTask == null) {
@@ -530,38 +523,26 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mBuddleTextTimeOutTask= new TimerTask() {
             @Override
             public void run() {
-                looperThread.post(new Runnable() {
-                    public void run() {
-                       if(System.currentTimeMillis()-mCurrentTouchTime>noOperationTimeout) {
-                           try {
-                              // boolean isUiThread = Looper.getMainLooper().getThread() == Thread.currentThread();
-                               runOnUiThread(new Runnable() {
-                                   @Override
-                                   public void run() {
-                                     randomBuddleText();
-                                   }
-                               });
-                           } catch (Exception e) {
-                               // TODO Auto-generated catch block
-                               e.printStackTrace();
-                           }
-                       }else {
-                           runOnUiThread(new Runnable() {
-                               @Override
-                               public void run() {
-                                   try {
-                                       if (buddleText != null) {
-                                           UbtLog.d(TAG,"buddleText   "+buddleText.getText());
-                                               buddleText.setVisibility(View.INVISIBLE);
-                                       }
-                                   }catch(RuntimeException e){
-                                       e.printStackTrace();
-                                   }
-                               }
-                           });
-                       }
+                if(System.currentTimeMillis()-mCurrentTouchTime>noOperationTimeout) {
+                    if (looperThread != null) {
+                        looperThread.post(new Runnable() {
+                            public void run() {
+                                try {
+                                    // boolean isUiThread = Looper.getMainLooper().getThread() == Thread.currentThread();
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            randomBuddleText();
+                                        }
+                                    });
+                                } catch (Exception e) {
+                                    // TODO Auto-generated catch block
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
                     }
-                });
+                }
             }
         };
        mBuddleTextTimer.schedule(mBuddleTextTimeOutTask, 0, buddleTextTimeout); //execute in every 50000 ms
@@ -627,7 +608,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private void showBuddleText(String text) {
         if(buddleText!=null) {
             buddleText.setText("\u3000" + text);
-            buddleText.setVisibility(View.VISIBLE);
+            showBuddleTextView();
         }
     }
 
@@ -1043,5 +1024,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
       byte[] actions = BluetoothParamUtil.stringToBytes(absouteActionPath);
       mPresenter.commandRobotAction(ConstValue.DV_PLAYACTION,actions);
   }
+  private void hiddenBuddleTextView(){
+      buddleText.setVisibility(View.INVISIBLE);
+  }
+  private void showBuddleTextView(){
+      buddleText.setVisibility(View.VISIBLE);
+  }
+
 
 }
