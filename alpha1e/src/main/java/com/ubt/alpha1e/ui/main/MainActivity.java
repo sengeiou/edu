@@ -266,7 +266,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3,
             R.id.right_icon4, R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
-            R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg})
+            R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg,R.id.bottom_icon})
     protected void switchActivity(View view) {
         UbtLog.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
@@ -331,6 +331,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 break;
             case R.id.right_icon4:
+                ToastUtils.showShort("程序猿正在施工中！！！");
                 break;
             case R.id.cartoon_head:
                 UbtLog.d(TAG, "click head");
@@ -552,8 +553,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                @Override
                                public void run() {
                                    try {
-                                       if (buddleText != null)
-                                       buddleText.setVisibility(View.INVISIBLE);
+                                       if (buddleText != null) {
+                                           if(buddleText.getText().equals("\"嗨，我是阿尔法\"")||buddleText.getText().equals("开机来叫醒沉睡的alpha吧")){
+                                               buddleText.setVisibility(View.VISIBLE);
+                                           }else {
+                                               buddleText.setVisibility(View.INVISIBLE);
+                                           }
+                                       }
                                    }catch(RuntimeException e){
                                        e.printStackTrace();
                                    }
@@ -585,8 +591,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             runOnUiThread(new Runnable() {
                                 @Override public void run() {
                                    if(IS_CHARGING) {
-                                       charging.setBackground(getDrawableRes("charging"));
-                                       chargingDot.setBackground(getDrawableRes("charging_dot"));
+                                       if(charging!=null) {
+                                           charging.setBackground(getDrawableRes("charging"));
+                                           chargingDot.setBackground(getDrawableRes("charging_dot"));
+                                       }
                                    }
                                 }
                             });
@@ -594,8 +602,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             runOnUiThread(new Runnable() {
                                 @Override public void run() {
                                     if(IS_CHARGING) {
-                                        charging.setBackground(getDrawableRes("charging"));
-                                        chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+                                        if(charging!=null) {
+                                            charging.setBackground(getDrawableRes("charging"));
+                                            chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+                                        }
                                     }
                                 }
                             });
@@ -847,11 +857,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void handleMessage(Bundle bundle) {
 
       Byte status= bundle.getByte(STATUS_MACHINE);
-        if(MainActivity.this==null){
-            UbtLog.d(TAG,"Main activity is null ");
-            return ;
-        }
-
         UbtLog.d(TAG,"STATE MACHINE IS "+status);
         switch (status){
            case APP_LAUNCH_STATUS:
@@ -860,9 +865,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    @Override
                    public void run() {
                        recoveryBatteryUi();
-                       showBuddleText("开机来叫醒沉睡的alpha吧");
                        showCartoonAction(cartoon_action_sleep);
                        buddleTextAsynchronousTask();
+                       showBuddleText("开机来叫醒沉睡的alpha吧");
                    }
                });
                break;
