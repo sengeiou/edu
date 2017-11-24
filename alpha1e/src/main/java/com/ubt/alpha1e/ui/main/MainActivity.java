@@ -32,6 +32,7 @@ import com.ubt.alpha1e.base.loopHandler.LooperThread;
 
 
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 
@@ -320,7 +321,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
                 break;
             case R.id.right_icon2:
-
                 if(isBulueToothConnected()){
                     startActivity(new Intent(this, ActionTestActivity.class));
                     this.overridePendingTransition(R.anim.activity_open_up_down, 0);
@@ -329,6 +329,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
                 break;
             case R.id.right_icon3:
+                startActivity(new Intent(this, BlocklyActivity.class));
+                this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 break;
             case R.id.right_icon4:
                 break;
