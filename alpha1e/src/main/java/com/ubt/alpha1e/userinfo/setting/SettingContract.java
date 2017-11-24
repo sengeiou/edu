@@ -30,7 +30,11 @@ public class SettingContract {
 
         boolean isMessageNote(Context context);
 
+        boolean isAutoUpgrade();
+
         void doSetMessageNote(Context context, boolean isNote);
+
+        void doSetAutoUpgrade(boolean isAutoUpgrade);
 
         void showLanguageDialog(Context context, int currentPosition, List<String> languageList);
 

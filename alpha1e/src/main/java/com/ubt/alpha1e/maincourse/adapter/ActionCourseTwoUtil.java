@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.maincourse.adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -23,6 +25,9 @@ import com.ubt.alpha1e.action.model.ActionConstant;
 import com.ubt.alpha1e.action.model.PrepareDataModel;
 import com.ubt.alpha1e.action.model.PrepareMusicModel;
 import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.base.popup.EasyPopup;
+import com.ubt.alpha1e.base.popup.HorizontalGravity;
+import com.ubt.alpha1e.base.popup.VerticalGravity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +50,7 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
     private TextView tvConfirm;
     private OnCourseDialogListener mDialogListener;
     private PrepareDataModel selectDataModel;
+    private boolean isShow = true;
 
     public ActionCourseTwoUtil(Context context) {
         this.mContext = context;
@@ -75,7 +81,7 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
         RecyclerView recyclerView = contentView.findViewById(R.id.rv_actions);
         GridLayoutManager layoutManager = new GridLayoutManager(mContext, 5);
         recyclerView.setLayoutManager(layoutManager);
-        actionAdapter = new ActionAdapter(R.layout.item_actions, list);
+        actionAdapter = new ActionAdapter(R.layout.item_actions1, list);
         actionAdapter.setOnItemClickListener(this);
         recyclerView.setAdapter(actionAdapter);
         actionAdapter.bindToRecyclerView(recyclerView);
@@ -89,32 +95,42 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
                 .setOnClickListener(this)
                 .setCancelable(true)
                 .create().show();
+        // showPop(recyclerView);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isShow = false;
+                actionAdapter.notifyDataSetChanged();
+            }
+        }, 2000);
     }
 
-//    private void showPop() {
-//        View archView = actionAdapter.getViewByPosition(0, R.id.iv_action_icon);
-//        View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one, null);
-//        TextView textView = contentView.findViewById(R.id.tv_content);
-//         textView.setText(ResourceManager.getInstance(mContext).getStringResources(""));
-//        textView.setBackgroundResource(oneContent.getDirection() == 0 ? R.drawable.bubble_guide_left : R.drawable.bubble_guide_right);
-//        EasyPopup mCirclePop = new EasyPopup(mContext)
-//                .setContentView(contentView)
-//                //是否允许点击PopupWindow之外的地方消失
-//                .setFocusAndOutsideEnable(false)
-//                .createPopup()
-//                .setBackgroundDimEnable(true)
-//                .setDimValue(0.4f)
-//                .setOnDismissListener(new PopupWindow.OnDismissListener() {
-//                    @Override
-//                    public void onDismiss() {
-//                        ivActionLib.setEnabled(true);
-//
-//                    }
-//                });
-//
-//        mCirclePop.showAtAnchorView(archView, oneContent.getVertGravity(), oneContent.getHorizGravity(), oneContent.getX(), oneContent.getY());
-//
-//    }
+    private void showPop(View archView) {
+        View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one, null);
+        TextView textView = contentView.findViewById(R.id.tv_content);
+        textView.setText("点击基础动作模版  点击预览出招动作 点击添加");
+        textView.setBackgroundResource(R.drawable.bubble_left);
+        final EasyPopup mCirclePop = new EasyPopup(mContext)
+                .setContentView(contentView)
+                //是否允许点击PopupWindow之外的地方消失
+                .setFocusAndOutsideEnable(false)
+                .createPopup()
+                .setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        //   ivActionLib.setEnabled(true);
+                    }
+                });
+
+        mCirclePop.showAtAnchorView(archView, VerticalGravity.ALIGN_TOP, HorizontalGravity.ALIGN_RIGHT, 0, 0);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mCirclePop.dismiss();
+            }
+        }, 2000);
+    }
+
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -166,6 +182,12 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
             ((ImageView) helper.getView(R.id.iv_action_icon)).setImageResource(item.getDrawableId());
             ImageView ivSelect = helper.getView(R.id.iv_action_select);
             ivSelect.setVisibility(item.isSelected() ? View.VISIBLE : View.GONE);
+            if (item.getPrepareName().equals(list.get(0).getPrepareName()) && isShow) {
+                helper.getView(R.id.iv_hand).setVisibility(View.VISIBLE);
+            } else {
+                helper.getView(R.id.iv_hand).setVisibility(View.GONE);
+            }
+
         }
     }
 

@@ -731,7 +731,7 @@
     <string name="ui_netwok_known">我知道了</string>
     <string name="ui_network_guide_tips">为机器人联网，功能更强大哦~</string>
     <string name="ui_order_guide_tips">自定义指令，打造你的专属机器人~</string>
-    <string name="ui_robot_auto_upgrad">自动升级机器人</string>
+    <string name="ui_robot_auto_upgrad">自动升级</string>
     <string name="ui_robot_software_version">机器人固件版本</string>
     <string name="ui_robot_hard_version">机器人硬件版本</string>
     <string name="ui_robot_ip_address">机器人IP地址</string>
