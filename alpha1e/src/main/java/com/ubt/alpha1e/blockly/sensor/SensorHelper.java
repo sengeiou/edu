@@ -194,15 +194,18 @@ public class SensorHelper extends BaseHelper {
      *
      * @param direct 方向：前后左右
      * @param speed  速度：快，中，慢
-     * @param step   步数0-100
+     * @param step   步数0-100,占4个参数
      */
 
-    public void doWalk(byte direct, byte speed, byte step){
+    public void doWalk(byte direct, byte speed, byte[] step){
         UbtLog.d(TAG, "doWalk params:" + direct + "--" + speed + "--" + step);
-        byte[] params = new byte[3];
+        byte[] params = new byte[6];
         params[0] = direct;
         params[1] = speed;
-        params[2] = step;
+        params[2] = step[3];
+        params[3] = step[2];
+        params[4] = step[1];
+        params[5] = step[0];
         doSendComm(ConstValue.DV_WALK, params);
     }
 

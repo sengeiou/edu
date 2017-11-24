@@ -241,7 +241,7 @@ public class BlocklyJsInterface {
             String time = params.split(",")[2];
 
 
-            ((BlocklyActivity) mBaseActivity).doWalk(parseDirection(direction),parseSpeed(speed), ByteHexHelper.intToHexByte(Integer.valueOf(time)));
+            ((BlocklyActivity) mBaseActivity).doWalk(parseDirection(direction),parseSpeed(speed), ByteHexHelper.intToFourHexBytes(Integer.valueOf(time)));
 //            String actionName = direction + "_" + speed;
 //            ((BlocklyActivity) mBaseActivity).playRobotAction(actionName, true, time, false);
         }

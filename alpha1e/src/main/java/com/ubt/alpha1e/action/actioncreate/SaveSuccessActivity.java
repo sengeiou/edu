@@ -44,8 +44,8 @@ public class SaveSuccessActivity extends Activity implements View.OnClickListene
         switch (view.getId()){
             case R.id.img_cancel:
                 UbtLog.d(TAG, "img_cancel");
-                setResult(RESULT_OK);
                 finish();
+                this.overridePendingTransition(0, R.anim.activity_close_down_up);
                 break;
             case R.id.btn_to_other:
                 ToastUtils.showShort("社区暂未开放");

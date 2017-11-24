@@ -26,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baoyz.pg.PG;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -1112,11 +1111,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         }
 
         if (list_frames.size() > 0) {
-            if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
-                UbtLog.d(TAG, "边充边玩未打开");
-                ToastUtils.showShort(ResourceManager.getInstance(mContext).getStringResources("ui_settings_play_during_charging_tips"));
-                return;
-            }
+//            if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
+//                UbtLog.d(TAG, "边充边玩未打开");
+//                ToastUtils.showShort(ResourceManager.getInstance(mContext).getStringResources("ui_settings_play_during_charging_tips"));
+//                return;
+//            }
         }
 
         if (mediaPlayer != null && mediaPlayer.isPlaying() && !mDir.equals("")) {
@@ -1910,10 +1909,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public void doReset() {
         UbtLog.d(TAG, "doReset");
 
-        if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
-            Toast.makeText(mContext, mContext.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
+//            Toast.makeText(mContext, mContext.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         String angles = "90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90";
         FrameActionInfo info = new FrameActionInfo();
@@ -2192,10 +2191,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     private void doPlayPreviewFrames() {
 
-        if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
-            Toast.makeText(mContext, ResourceManager.getInstance(mContext).getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
+//            Toast.makeText(mContext, ResourceManager.getInstance(mContext).getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         // 防止过快点击-----------start
         Date curDate = new Date(System.currentTimeMillis());
@@ -2357,11 +2356,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
         //检测是否在充电状态和边充边玩状态是否打开
         UbtLog.d(TAG, "mHelper.getChargingState():" + mHelper.getChargingState() + "SettingHelper" + SettingHelper.isPlayCharging(mContext));
-        if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
-            UbtLog.d(TAG, "边充边玩未打开");
-            Toast.makeText(mContext, AlphaApplication.getBaseActivity().getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
+//            UbtLog.d(TAG, "边充边玩未打开");
+//            Toast.makeText(mContext, AlphaApplication.getBaseActivity().getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
             ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,

@@ -101,6 +101,16 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
     }
 
     @Override
+    public void doSetAutoUpgrade(boolean isAutoUpgrade) {
+        SPUtils.getInstance().put(Constant.SP_AUTO_UPGRADE,isAutoUpgrade);
+    }
+
+    @Override
+    public boolean isAutoUpgrade() {
+        return SPUtils.getInstance().getBoolean(Constant.SP_AUTO_UPGRADE,true);
+    }
+
+    @Override
     public void showLanguageDialog(Context context, int currentPosition, final List<String> languageList) {
         View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_useredit_wheel, null);
         ViewHolder viewHolder = new ViewHolder(contentView);

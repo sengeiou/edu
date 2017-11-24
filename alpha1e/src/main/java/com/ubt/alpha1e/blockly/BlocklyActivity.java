@@ -759,7 +759,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     }
 
 
-    public void doWalk(byte direct, byte speed, byte step) {
+    public void doWalk(byte direct, byte speed, byte[] step) {
         if(mSensorHelper != null){
             mSensorHelper.doWalk(direct, speed, step);
         }
