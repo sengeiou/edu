@@ -33,6 +33,7 @@ import com.ubt.alpha1e.blockly.bean.RobotSensor;
 import com.ubt.alpha1e.blockly.sensor.SensorHelper;
 import com.ubt.alpha1e.blockly.sensor.SensorObservable;
 import com.ubt.alpha1e.blockly.sensor.SensorObserver;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.NewActionPlayer;
 import com.ubt.alpha1e.business.thrid_party.IWeiXinListener;
@@ -131,6 +132,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     public static final int DO_DOWNLOAD_BLOCKLY = 6011;
     public static final int DO_PLAY_AGAIN = 6012;
     public static final int DO_PLAY_SOUND_EFFECT_FINISH = 6013;
+
 
     private WebView mWebView;
     private BlocklyJsInterface mBlocklyJsInterface;
@@ -756,6 +758,14 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
     }
 
+
+    public void doWalk(byte direct, byte speed, byte step) {
+        if(mSensorHelper != null){
+            mSensorHelper.doWalk(direct, speed, step);
+        }
+    }
+
+
     // Block停止执行，通知机器人停止动作
 
     public void stopPlay(){
@@ -763,6 +773,10 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         playCount = 0;
         if(isBulueToothConnected() && mMyActionsHelper != null){
             mMyActionsHelper.stopPlayAction();
+        }
+
+        if(mSensorHelper != null){
+            mSensorHelper.doStopWalk();
         }
 
         if(isPlayLocalAudio){
@@ -1088,7 +1102,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     public void connectBluetooth() {
         UbtLog.d(TAG, "connectBluetooth");
         Intent intent = new Intent();
-        intent.setClass(BlocklyActivity.this, ScanBluetoothActivity.class);
+        intent.putExtra(com.ubt.alpha1e.base.Constant.BLUETOOTH_REQUEST, true);
+        intent.setClass(BlocklyActivity.this, BluetoothconnectActivity.class);
         startActivityForResult(intent, REQUEST_CODE);
     }
 

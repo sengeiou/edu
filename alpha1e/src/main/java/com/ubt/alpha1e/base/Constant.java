@@ -76,4 +76,9 @@ public class Constant {
      * 头像
      */
     public final static int KEY_NICK_HEAD = 5;
+
+    /**
+     * Block跳转蓝牙连接页面标志
+     */
+    public final static String BLUETOOTH_REQUEST = "bluetooth_request";
 }
