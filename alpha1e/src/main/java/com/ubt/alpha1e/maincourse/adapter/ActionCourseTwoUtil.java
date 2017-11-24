@@ -96,13 +96,13 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
                 .setCancelable(true)
                 .create().show();
         // showPop(recyclerView);
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                isShow = false;
-//                actionAdapter.notifyDataSetChanged();
-//            }
-//        }, 2000);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isShow = false;
+                actionAdapter.notifyDataSetChanged();
+            }
+        }, 2000);
     }
 
     private void showPop(View archView) {
