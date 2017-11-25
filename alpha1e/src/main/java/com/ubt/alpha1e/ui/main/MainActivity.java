@@ -226,7 +226,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG,"onResume");
         initUI();
         if(!isBulueToothConnected()){
-             looperThread.send(createMessage(APP_BLUETOOTH_CLOSE,""));
+            cartoonAction.setBackgroundResource(R.drawable.sleep21);
         }else {
             if(isNetworkConnect){
                 hiddenDisconnectIcon();
@@ -306,11 +306,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 break;
             case R.id.top_icon3:
+                if(isBulueToothConnected()) {
                 try {
                     CommonCtrlView.getInstace(getContext());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }else {
+                ToastUtils.showShort("请先连接蓝牙");
+            }
                 break;
             case R.id.right_icon:
                 if(isBulueToothConnected()){
@@ -431,6 +435,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             if (m_animationTask == null) {
                 m_animationTask = new AnimationTask();
             }
+//            if (frameAnimation.isRunning()) {
+//                UbtLog.d(TAG, "cartoon running " +  Cartoon_animation_last_execute);
+//                return ;
+//            }
                 if (value == cartoon_action_swing_left_hand) {
                     cartoonAction.setBackgroundResource(R.drawable.cartoon_left_hand);
                     actionName = "swing_left_hand";
@@ -511,7 +519,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         public void run() {
             UbtLog.d(TAG, "stop the animation");
             if (frameAnimation.isRunning()) {
-                frameAnimation.stop();
+               frameAnimation.stop();
             }
         }
     }
@@ -528,12 +536,14 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             public void run() {
                                 try {
                                     // boolean isUiThread = Looper.getMainLooper().getThread() == Thread.currentThread();
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            randomBuddleText();
-                                        }
-                                    });
+                                   if( Cartoon_animation_last_execute!=cartoon_action_sleep) {
+                                       runOnUiThread(new Runnable() {
+                                           @Override
+                                           public void run() {
+                                               randomBuddleText();
+                                           }
+                                       });
+                                   }
                                 } catch (Exception e) {
                                     // TODO Auto-generated catch block
                                     e.printStackTrace();
@@ -697,31 +707,28 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             if(!mMessage.getString("mac").equals(current_mac_address)){
                 app_bluetooth_conencted_executed=false;
             }
+            String mParam=mMessage.getString("param");
+            final byte[] mParams = Base64.decode(mParam, Base64.DEFAULT);
             current_mac_address=mMessage.getString("mac");
             int mCmd = Integer.parseInt(mMessage.getString("cmd"));
             if(mCmd<0){
                 mCmd=255+mCmd;
             }
-          //  UbtLog.d(TAG, "CMD IS   " + mCmd);
+          UbtLog.d(TAG, "CMD IS   " + mCmd);
           if(mCmd==ConstValue.DV_TAP_HEAD) {
               looperThread.send(createMessage(ROBOT_HIT_HEAD,""));
           }else if(mCmd==ConstValue.DV_6D_GESTURE){
-               UbtLog.d(TAG,"DV_6D_GESTURE");
+               UbtLog.d(TAG,"DV_6D_GESTURE index[0]:"+mParams[0]);
           }else if (mCmd == ConstValue.DV_SLEEP_EVENT) {
               UbtLog.d(TAG, "ROBOT SLEEP EVENT");
                 looperThread.send(createMessage(ROBOT_SLEEP_EVENT,""));
             } else if (mCmd == ConstValue.DV_LOW_BATTERY) {
               UbtLog.d(TAG, "ROBOT LOW BATTERY");
-              String mParam=mMessage.getString("param");
-              final byte[] mParams = Base64.decode(mParam, Base64.DEFAULT);
               UbtLog.d(TAG,"LOW BATTERY +"+mParams[0]);
               lowBatteryFunction(mParams[0]);
             } else if (mCmd == ConstValue.DV_READ_BATTERY) {
-                String mParam=mMessage.getString("param");
                 batteryUiShow(mParam);
             } else if(mCmd==ConstValue.DV_COMMON_COMMAND) {
-              String mParam=mMessage.getString("param");
-              final byte[] mParams = Base64.decode(mParam, Base64.DEFAULT);
               UbtLog.d(TAG,"DV COMMON COMMAND [0]: +"+mParams[0] +"index [1]: "+mParams[1]+"index [2]: " +mParams[2]);
               if(mParams[0]==DV_COMMON_COMMAND_POWEROFF_ZERO){
                   if(mParams[1]==DV_COMMON_COMMAND_POWEROFF_ONE){
@@ -731,8 +738,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                   }
               }
             }else if(mCmd==ConstValue.DV_CURRENT_PLAY_NAME){
-              String mParam=mMessage.getString("param");
-              final byte[] mParams = Base64.decode(mParam, Base64.DEFAULT);
               try {
                 String actionName=new String(mParams, 1, mParams.length-1, "utf-8");
                 UbtLog.d(TAG,"ACTION NAME IS "+actionName);
