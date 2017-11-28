@@ -92,7 +92,7 @@ public class MyMainActivity extends BaseActivity implements
                     }
                     break;
                 case START_AUTO_SCAN_CONNECT_SERVICE:
-//                    startAutoScanConnectService();
+                    startAutoScanConnectService();
                     break;
                 default:
                     break;

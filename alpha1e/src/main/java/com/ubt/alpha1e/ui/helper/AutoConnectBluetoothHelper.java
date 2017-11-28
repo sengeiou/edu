@@ -1,72 +1,72 @@
 package com.ubt.alpha1e.ui.helper;
 
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
-import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Message;
-import android.view.View;
+        import android.app.Activity;
+        import android.bluetooth.BluetoothAdapter;
+        import android.bluetooth.BluetoothClass;
+        import android.bluetooth.BluetoothDevice;
+        import android.content.BroadcastReceiver;
+        import android.content.Context;
+        import android.content.Intent;
+        import android.content.IntentFilter;
+        import android.graphics.Bitmap;
+        import android.os.CountDownTimer;
+        import android.os.Handler;
+        import android.os.Message;
+        import android.view.View;
 
-import com.tencent.ai.tvs.env.ELoginPlatform;
-import com.ubt.alpha1e.AlphaApplication;
-import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.business.FileSendManager;
-import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
-import com.ubt.alpha1e.data.FileTools;
-import com.ubt.alpha1e.data.JsonTools;
-import com.ubt.alpha1e.data.TimeTools;
-import com.ubt.alpha1e.data.model.NetworkInfo;
-import com.ubt.alpha1e.event.RobotEvent;
-import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
-import com.ubt.alpha1e.net.http.basic.GetDataFromWeb;
-import com.ubt.alpha1e.net.http.basic.HttpAddress;
-import com.ubt.alpha1e.net.http.basic.HttpAddress.Request_type;
-import com.ubt.alpha1e.net.http.basic.IJsonListener;
-import com.ubt.alpha1e.services.ActivationService;
-import com.ubt.alpha1e.services.AutoScanConnectService;
-import com.ubt.alpha1e.services.RecordSoftService;
-import com.ubt.alpha1e.ui.BaseActivity;
-import com.ubt.alpha1e.ui.dialog.AlertDialog;
-import com.ubt.alpha1e.update.BluetoothUpdateManager;
-import com.ubt.alpha1e.update.EngineUpdateManager;
-import com.ubt.alpha1e.update.IBluetoothUpdateManagerListener;
-import com.ubt.alpha1e.update.IEngineUpdateManagerListener;
-import com.ubt.alpha1e.update.RobotSoftUpdateManager;
-import com.ubt.alpha1e.utils.BluetoothParamUtil;
-import com.ubt.alpha1e.utils.GsonImpl;
-import com.ubt.alpha1e.utils.log.MyLog;
-import com.ubt.alpha1e.utils.log.UbtLog;
-import com.ubtechinc.base.AlphaInfo;
-import com.ubtechinc.base.BlueToothManager;
-import com.ubtechinc.base.BluetoothUtil;
-import com.ubtechinc.base.ConstValue;
-import com.ubtechinc.sqlite.DBAlphaInfoManager;
+        import com.tencent.ai.tvs.env.ELoginPlatform;
+        import com.ubt.alpha1e.AlphaApplication;
+        import com.ubt.alpha1e.base.SPUtils;
+        import com.ubt.alpha1e.business.FileSendManager;
+        import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
+        import com.ubt.alpha1e.data.FileTools;
+        import com.ubt.alpha1e.data.JsonTools;
+        import com.ubt.alpha1e.data.TimeTools;
+        import com.ubt.alpha1e.data.model.NetworkInfo;
+        import com.ubt.alpha1e.event.RobotEvent;
+        import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
+        import com.ubt.alpha1e.net.http.basic.GetDataFromWeb;
+        import com.ubt.alpha1e.net.http.basic.HttpAddress;
+        import com.ubt.alpha1e.net.http.basic.HttpAddress.Request_type;
+        import com.ubt.alpha1e.net.http.basic.IJsonListener;
+        import com.ubt.alpha1e.services.ActivationService;
+        import com.ubt.alpha1e.services.AutoScanConnectService;
+        import com.ubt.alpha1e.services.RecordSoftService;
+        import com.ubt.alpha1e.ui.BaseActivity;
+        import com.ubt.alpha1e.ui.dialog.AlertDialog;
+        import com.ubt.alpha1e.update.BluetoothUpdateManager;
+        import com.ubt.alpha1e.update.EngineUpdateManager;
+        import com.ubt.alpha1e.update.IBluetoothUpdateManagerListener;
+        import com.ubt.alpha1e.update.IEngineUpdateManagerListener;
+        import com.ubt.alpha1e.update.RobotSoftUpdateManager;
+        import com.ubt.alpha1e.utils.BluetoothParamUtil;
+        import com.ubt.alpha1e.utils.GsonImpl;
+        import com.ubt.alpha1e.utils.log.MyLog;
+        import com.ubt.alpha1e.utils.log.UbtLog;
+        import com.ubtechinc.base.AlphaInfo;
+        import com.ubtechinc.base.BlueToothManager;
+        import com.ubtechinc.base.BluetoothUtil;
+        import com.ubtechinc.base.ConstValue;
+        import com.ubtechinc.sqlite.DBAlphaInfoManager;
 
-import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
+        import org.greenrobot.eventbus.EventBus;
+        import org.json.JSONException;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+        import java.io.File;
+        import java.io.UnsupportedEncodingException;
+        import java.util.ArrayList;
+        import java.util.Date;
+        import java.util.List;
+        import java.util.Map;
+        import java.util.Timer;
+        import java.util.TimerTask;
 
-import static com.ubt.alpha1e.base.Constant.SP_CLIENT_ID;
+        import static com.ubt.alpha1e.base.Constant.SP_CLIENT_ID;
 
-public class BluetoothHelper extends BaseHelper implements IJsonListener,
+   public class AutoConnectBluetoothHelper extends BaseHelper implements IJsonListener,
         IEngineUpdateManagerListener,IBluetoothUpdateManagerListener,FileSendManager.IFileSendManager {
 
-    private static final String TAG = "BluetoothHelper";
+    private static final String TAG = "AutoConnectBluetoothHelper";
     public Boolean thiz_state;
 
     public static final String map_val_rebot_head_resource = "map_val_head_resource";
@@ -130,9 +130,8 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
 
     private boolean isNextConnect = true;
 
-
-    private int clientIdSendWhich = 0 ; //clientId发送到哪一段
-    String clientid[] = null;
+   private int clientIdSendWhich = 0 ; //clientId发送到哪一段
+   String clientid[] = null;
 
     // -------------------------------
     private BaseWebRunnable mCurrentWait;
@@ -156,21 +155,21 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                 BluetoothClass cod = newDevices.getBluetoothClass();
                 //UbtLog.d(TAG,"接收到的蓝牙名称:"+new_name+"     蓝牙地址:"+newDevices.getAddress()+"  蓝牙类型："+cod.toString() + "    getBondState  " + newDevices.getBondState());
                 //if(!cod.toString().equals("1f00")){// CoD为"1f00"为BLE设备,过滤掉
-                    mDevicesList.add(newDevices);
-                    //MyLog.writeLog(TAG, "接收到的蓝牙总数量：" + mDevicesList.size());
-                    mUI.onGetNewDevices(mDevicesList);
+                mDevicesList.add(newDevices);
+                //MyLog.writeLog(TAG, "接收到的蓝牙总数量：" + mDevicesList.size());
+                mUI.onGetNewDevices(mDevicesList);
 
-                    RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.SCAN_ROBOT);
-                    robotEvent.setBluetoothDevice(newDevices);
-                    robotEvent.setRssi(arg1.getExtras().getShort(BluetoothDevice.EXTRA_RSSI));
-                    EventBus.getDefault().post(robotEvent);
+                RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.SCAN_ROBOT);
+                robotEvent.setBluetoothDevice(newDevices);
+                robotEvent.setRssi(arg1.getExtras().getShort(BluetoothDevice.EXTRA_RSSI));
+                EventBus.getDefault().post(robotEvent);
 
-                    if (newDevices.getBondState() != BluetoothDevice.BOND_BONDED) {
-                        //信号强度。
-                        short rssi = arg1.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
-                        //UbtLog.d(TAG,"接收到的蓝牙名称:"+new_name+"     蓝牙地址:"+newDevices.getAddress()+"  rssi:: " + rssi);
-                    }
-                    //}
+                if (newDevices.getBondState() != BluetoothDevice.BOND_BONDED) {
+                    //信号强度。
+                    short rssi = arg1.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
+                    //UbtLog.d(TAG,"接收到的蓝牙名称:"+new_name+"     蓝牙地址:"+newDevices.getAddress()+"  rssi:: " + rssi);
+                }
+                //}
             }
 
         }
@@ -251,7 +250,6 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                 String mac = (String) msg.obj;
                 doSendComm(mac, ConstValue.DV_HANDSHAKE, null);
             }else if (msg.what == MSG_DO_COON_BT_SUCCESS) {
-                //add 2017.11.28
 //                doDealConnectSuccessResult();
 //                mUI.onCoonected(true);
                 UbtLog.d(TAG,"    发送 获取 product 和 dsn  命令");
@@ -281,7 +279,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                             @Override
                             public void onClick(View view) {
                                 EngineUpdateManager.getInstance(AlphaApplication.getBaseActivity(),
-                                        objStr, BluetoothHelper.this).Update();
+                                        objStr, AutoConnectBluetoothHelper.this).Update();
                             }
                         }).setNegativeButton(AlphaApplication.getBaseActivity().getStringResources("ui_common_cancel"), new View.OnClickListener() {
                     @Override
@@ -303,13 +301,13 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                             public void onClick(View view) {
                                 mUI.noteUpdateBin();
                                 BluetoothUpdateManager.getInstance(mContext,
-                                        objStr, BluetoothHelper.this).Update();
+                                        objStr, AutoConnectBluetoothHelper.this).Update();
                             }
                         }).setNegativeButton(AlphaApplication.getBaseActivity().getStringResources("ui_common_cancel"), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mHandler.sendEmptyMessage(MSG_DO_READ_SOFT_VERSION);
-                            }
+                    @Override
+                    public void onClick(View v) {
+                        mHandler.sendEmptyMessage(MSG_DO_READ_SOFT_VERSION);
+                    }
                 }).show();
             }else if(msg.what == MSG_DO_UPDATE_BLUETOOTH){
 
@@ -335,7 +333,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                 if (has_sdcard && !isAutoConnect){
                     doRequestForUpdateBin(mCurrentLocalSoftVersion,mCurrentLocalHardVersion);
                 } else {
-                    BluetoothHelper.this.doUpdateUI();
+                    AutoConnectBluetoothHelper.this.doUpdateUI();
                 }
             }else if(msg.what == MSG_DO_CHECK_UPDATE_SOFT){
 
@@ -394,7 +392,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
         super.UnRegisterHelper();
     }
 
-    public BluetoothHelper(IScanUI _ui, Context context) {
+    public AutoConnectBluetoothHelper(IScanUI _ui, Context context) {
         super(context);
 
         MyLog.writeLog(TAG, "create ScanHelper");
@@ -899,6 +897,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
             }else {
                 doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes("start:"+clientid[0]));
             }
+            UbtLog.d(TAG,"发送clientid 0  "+":"+clientid[0]);
         }else if(cmd == ConstValue.DV_CLIENT_ID){
             UbtLog.d(TAG,"cmd = " + cmd + "    发送clientId 1 段成功 ");
             if(clientid != null && clientIdSendWhich == clientid.length ){
@@ -915,6 +914,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                 }else {
                     doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes("start:"+clientid[clientIdSendWhich-1]));
                 }
+                UbtLog.d(TAG,"发送 clientid  "+(clientIdSendWhich-1)+":"+clientid[clientIdSendWhich-1]);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -930,9 +930,9 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
         ((AlphaApplication) mContext.getApplicationContext())
                 .setRobotSoftVersion(mCurrentLocalSoftVersion);
         // 激活机器人
-        BluetoothHelper.this.doActivate();
+        AutoConnectBluetoothHelper.this.doActivate();
         // 记录机器人版本号
-        BluetoothHelper.this.doRecordSoftVersion();
+        AutoConnectBluetoothHelper.this.doRecordSoftVersion();
         // 设置机器边充边玩状态
         byte[] params = new byte[1];
         if (SettingHelper.isPlayCharging(mContext)) {
@@ -966,9 +966,9 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
         Message msg = new Message();
         msg.what = MSG_DO_CHECK_BLUETOOTH;
         msg.obj = GetDataFromWeb.getJsonByPost(do_check_bluetooth_version_request,
-                HttpAddress.getRequestUrl(Request_type.check_update),
+                HttpAddress.getRequestUrl(HttpAddress.Request_type.check_update),
                 HttpAddress.getParamsForPost(new String[]{version_prod,
-                                version_prod_type, "0"}, Request_type.check_update,
+                                version_prod_type, "0"}, HttpAddress.Request_type.check_update,
                         mContext), this);
         mHandler.sendMessage(msg);
     }
@@ -1003,9 +1003,9 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
             Message msg = new Message();
             msg.what = MSG_DO_CHECK_BIN;
             msg.obj = GetDataFromWeb.getJsonByPost(do_check_bin_version_request,
-                    HttpAddress.getRequestUrl(Request_type.check_update),
+                    HttpAddress.getRequestUrl(HttpAddress.Request_type.check_update),
                     HttpAddress.getParamsForPost(new String[]{version_prod,
-                                    version_prod_type, "0"}, Request_type.check_update,
+                                    version_prod_type, "0"}, HttpAddress.Request_type.check_update,
                             mContext), this);
             mHandler.sendMessage(msg);
         }
@@ -1145,8 +1145,8 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                 int local_soft_version = Integer
                         .parseInt(mCurrentLocalSoftVersion);
                 MyLog.writeLog(TAG,"remote_soft_version-->"
-                                + remote_soft_version + ",local_soft_version"
-                                + local_soft_version);
+                        + remote_soft_version + ",local_soft_version"
+                        + local_soft_version);
 
                 //remote_soft_version = 0;
                 if (remote_soft_version > local_soft_version) {
@@ -1276,3 +1276,4 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
         FileSendManager.getInstance(this, mContext.getApplicationContext()).release();
     }
 }
+

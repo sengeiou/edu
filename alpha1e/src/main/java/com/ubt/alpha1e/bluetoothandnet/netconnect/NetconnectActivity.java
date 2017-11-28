@@ -437,6 +437,8 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         mHandler.removeMessages(NETWORK_CONNECT_FAIL);
         mHandler.removeMessages(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY);
         mHandler.removeMessages(UPDATE_WIFI_NAME);
+
+        LoadingDialog.dismiss(this);
     }
 
     @Override

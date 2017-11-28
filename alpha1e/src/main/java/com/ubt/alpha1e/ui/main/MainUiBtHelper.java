@@ -5,8 +5,15 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 
+import com.ubt.alpha1e.data.model.NetworkInfo;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
+import com.ubt.alpha1e.utils.BluetoothParamUtil;
+import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ConstValue;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by Administrator on 2017/11/20.
@@ -42,6 +49,18 @@ public class MainUiBtHelper extends BaseHelper {
         super.onReceiveData(mac, cmd, param, len);
         try {
             UbtLog.d(TAG,"cmd = " + cmd + "  param = " + new String(param,"UTF-8"));
+
+            if(cmd == ConstValue.DV_READ_NETWORK_STATUS){
+
+                String networkInfoJson = BluetoothParamUtil.bytesToString(param);
+                UbtLog.d(TAG,"cmd = " + cmd + "    networkInfoJson = " + networkInfoJson);
+                NetworkInfo networkInfo = GsonImpl.get().toObject(networkInfoJson,NetworkInfo.class);
+
+                RobotEvent event = new RobotEvent(RobotEvent.Event.NETWORK_STATUS);
+                event.setNetworkInfo(networkInfo);
+                EventBus.getDefault().post(event);
+
+            }
             //Execute on the mainActivity
         }catch (Exception ex){
 
@@ -70,5 +89,13 @@ public class MainUiBtHelper extends BaseHelper {
     @Override
     public void DistoryHelper() {
 
+    }
+
+    /**
+     * 读取 1E 联网状态
+     */
+    public void readNetworkStatus(){
+        UbtLog.d(TAG,"--readNetworkStatus-- " );
+        doSendComm(ConstValue.DV_READ_NETWORK_STATUS, null);
     }
 }
