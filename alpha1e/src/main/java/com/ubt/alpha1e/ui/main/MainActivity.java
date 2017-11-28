@@ -871,7 +871,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    public void run() {
                        showDisconnectIcon();
                        stopchargeAsynchronousTask();
-                       showCartoonAction(cartoon_action_sleep);
+                       //showCartoonAction(cartoon_action_sleep);
+                       cartoonAction.setBackgroundResource(R.drawable.sleep21);
                        recoveryBatteryUi();
                    }
                });
