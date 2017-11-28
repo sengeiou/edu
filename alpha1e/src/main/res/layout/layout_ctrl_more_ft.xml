@@ -82,25 +82,25 @@
             android:layout_centerInParent="true"
             android:maxHeight="2dp"
             android:minHeight="2dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:layout_toRightOf="@+id/btn_vol_logo"
             android:layout_toLeftOf="@+id/btn_lig_logo"
             android:progressDrawable="@drawable/sec_bg_vol"
-            android:thumb="@drawable/cc_lightoff" />
+            android:thumb="@drawable/cc_volumecontrol"
+            android:splitTrack="false"
+            />
         <ImageView
             android:id="@+id/btn_lig_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-          android:layout_alignParentRight="true"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-             android:src="@drawable/cc_lightoff" />
+            android:src="@drawable/cc_lightoff" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/lay_ctrl_more_close"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="80dp"
       >
         <View
             android:layout_width="match_parent"
@@ -108,11 +108,10 @@
             android:background="@color/A11" />
         <TextView
             android:id="@+id/cc_exit"
-            android:layout_width="36dp"
+            android:layout_width="100dp"
             android:layout_height="40dp"
-            android:layout_marginTop="80dp"
-            android:layout_centerInParent="true"
             android:text="@string/control_center"
+            android:layout_centerInParent="true"
             android:textSize="18sp"
             android:textColor="@color/black"
             android:visibility="visible"/>
