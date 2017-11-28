@@ -29,6 +29,6 @@ public class NoticeAdapter extends BaseQuickAdapter<NoticeModel, BaseViewHolder>
     protected void convert(BaseViewHolder helper, NoticeModel item) {
         helper.setText(R.id.tv_notice_title, item.getNoticeTitle());
         helper.setText(R.id.tv_notice_content, item.getNoticeContent());
-        helper.getView(R.id.rl_root).setBackgroundTintList(mContext.getResources().getColorStateList(R.color.white));
+        helper.getView(R.id.rl_root).setBackgroundColor(mContext.getResources().getColor(R.color.white));
     }
 }

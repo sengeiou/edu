@@ -38,6 +38,8 @@ import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.services.AutoScanConnectService;
+import com.ubt.alpha1e.ui.MyMainActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
@@ -215,6 +217,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         looperThread = new LooperThread(this);
         looperThread.start();
         buddleTextAsynchronousTask();
+
+//        AutoScanConnectService.startService(MainActivity.this); //add by dicy.cheng 打开自动连接
     }
 
     @Override
@@ -230,11 +234,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         initUI();
         if(!isBulueToothConnected()){
              showDisconnectIcon();
-             looperThread.send(createMessage(APP_LAUNCH_STATUS));
+             looperThread.send(createMessage(APP_BLUETOOTH_CLOSE));
+              m_Handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    AutoScanConnectService.startService(MainActivity.this); //add by dicy.cheng 打开自动连接
+                }
+            },100);
         }else {
-            if(isNetworkConnect){
-                hiddenDisconnectIcon();
-            }
+            MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
             cartoonAction.setBackgroundResource(R.drawable.main_robot);
         }
     }
@@ -400,8 +408,40 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             NetworkInfo networkInfo = (NetworkInfo)  event.getNetworkInfo();
             UbtLog.d(TAG,"networkInfo == " + networkInfo.status);
             isNetworkConnect=networkInfo.status;
+            if(isNetworkConnect){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        hiddenDisconnectIcon();
+                    }
+                });
+            }else {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showDisconnectIcon();
+                    }
+                });
+            }
         }else if(event.getEvent()== RobotEvent.Event.DISCONNECT){//Bluetooth Disconect
             UbtLog.d(TAG,"DISCONNECTED ");
+            if(MainUiBtHelper.getInstance(getContext()).isLostCoon()){
+                UbtLog.d(TAG,"mainactivity isLostCoon");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showDisconnectIcon();
+                        looperThread.send(createMessage(APP_BLUETOOTH_CLOSE));
+                    }
+                });
+            }
+        }else if(event.getEvent()== RobotEvent.Event.CONNECT_SUCCESS){
+            UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 1");
+            if(!MainUiBtHelper.getInstance(getContext()).isLostCoon()){
+                UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 2");
+                MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
+                cartoonAction.setBackgroundResource(R.drawable.main_robot);
+            }
         }
 
     }

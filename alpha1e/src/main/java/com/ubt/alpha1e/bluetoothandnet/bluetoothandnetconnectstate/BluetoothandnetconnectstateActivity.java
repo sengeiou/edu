@@ -29,6 +29,7 @@ import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
+import com.ubt.alpha1e.services.AutoScanConnectService;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
 import com.ubt.alpha1e.ui.helper.IScanUI;
@@ -169,6 +170,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lst_robots_result_datas = new ArrayList<>();
+        AutoScanConnectService.doEntryManalConnect(true);
         mHelper = new BluetoothHelper(BluetoothandnetconnectstateActivity.this, BluetoothandnetconnectstateActivity.this);
         initUI();
     }
@@ -277,6 +279,8 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         } catch (Exception e) {
             e.printStackTrace();
         }
+//        AutoScanConnectService.doEntryManalConnect(false);
+        AutoScanConnectService.doStopSelf();
         super.onDestroy();
     }
 
@@ -453,6 +457,9 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     public void onCoonected(boolean state) {
         UbtLog.d(TAG,"网络连接状态 onCoonected =  " + state);
         if (state) {
+            if(rl_content_device_list == null){
+                return;
+            }
             rl_content_device_list.setVisibility(View.GONE);
             ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_connect_sucess));
             if(mCurrentRobotInfo != null){
@@ -466,15 +473,16 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 if(!mHelper.isLostCoon()){
                     mHelper.readNetworkStatus();
                 }
-
             }
         }else {
-            rl_content_device_list.setVisibility(View.GONE);
-            ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.buletooth_con_fail));
-            ed_bluetooth_name.setText("");
+            if(rl_content_device_list != null){
+                rl_content_device_list.setVisibility(View.GONE);
+                ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.buletooth_con_fail));
+                ed_bluetooth_name.setText("");
 
-            ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
-            ed_wifi_name.setText("");
+                ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
+                ed_wifi_name.setText("");
+            }
         }
     }
 

@@ -16,6 +16,7 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
+import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.ActionsDownLoadManager;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
@@ -298,7 +299,9 @@ public class AlphaApplication extends LoginApplication {
     public void doLostConn(Activity mCurrentAct) {
         CommonCtrlView.closeCommonCtrlView();
         MyActionsHelper.doStopMp3ForMyDownload();
-        MyActionsHelper.getInstance((BaseActivity) mCurrentAct).resetPlayer();
+        if(mCurrentAct !=null){
+            MyActionsHelper.getInstance((BaseActivity) mCurrentAct).resetPlayer();
+        }
         ActionPlayer.StopCycleThread(true);
         ActionsDownLoadManager.resetData();
 
@@ -337,6 +340,7 @@ public class AlphaApplication extends LoginApplication {
                         || mActivity instanceof BlocklyActivity
                         || mActivity instanceof BlocklyCourseActivity
                         || mActivity instanceof CourseOneActivity
+                        || mActivity instanceof NetconnectActivity //add by dicy.cheng  当在网络连接页面时，如果蓝牙掉线，则该网络连接页面也关掉
 
                         ) {
                     if (mActivity instanceof MyActionsActivity) {

@@ -57,9 +57,9 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
-                        if (view.getId() == R.id.rl_take_photo||view.getId()==R.id.tv_take_photo) {
+                        if (view.getId() == R.id.rl_take_photo || view.getId() == R.id.tv_take_photo) {
                             mView.takeImageFromShoot();
-                        } else if (view.getId() == R.id.rl_take_ablum||view.getId()==R.id.tv_take_ablum) {
+                        } else if (view.getId() == R.id.rl_take_ablum || view.getId() == R.id.tv_take_ablum) {
                             mView.takeImageFromAblum();
                         }
                         dialog.dismiss();
@@ -142,7 +142,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
         View contentView = LayoutInflater.from(activity).inflate(R.layout.dialog_useredit_wheel, null);
         ViewHolder viewHolder = new ViewHolder(contentView);
         final LoopView loopView = (LoopView) contentView.findViewById(R.id.loopView);
-       
+
         DialogPlus.newDialog(activity)
                 .setContentHolder(viewHolder)
                 .setGravity(Gravity.BOTTOM)
@@ -212,7 +212,17 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                                 }.getType());
                         UbtLog.d("userEdit", "baseResponseModel==" + baseResponseModel.status + "  " + "info" + baseResponseModel.info + baseResponseModel.models);
                         if (baseResponseModel.status) {
-                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
+                            if (null != baseResponseModel.models) {
+                                UserModel model = baseResponseModel.models;
+                                UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+                                userModel.setAge(model.getAge());
+                                userModel.setSex(model.getSex());
+                                userModel.setPhone(model.getPhone());
+                                userModel.setHeadPic(model.getHeadPic());
+                                userModel.setGrade(model.getGrade());
+                                userModel.setNickName(model.getNickName());
+                                SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
+                            }
                             if (isAttachView()) {
                                 mView.updateUserModelSuccess(baseResponseModel.models);
                             }
@@ -248,7 +258,17 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                                 }.getType());
                         UbtLog.d("userEditHead", "baseResponseModel==" + baseResponseModel.status + "  " + baseResponseModel.models);
                         if (baseResponseModel.status) {
-                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
+                            if (null != baseResponseModel.models) {
+                                UserModel model = baseResponseModel.models;
+                                UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+                                userModel.setAge(model.getAge());
+                                userModel.setSex(model.getSex());
+                                userModel.setPhone(model.getPhone());
+                                userModel.setHeadPic(model.getHeadPic());
+                                userModel.setGrade(model.getGrade());
+                                userModel.setNickName(model.getNickName());
+                                SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
+                            }
                             if (isAttachView()) {
                                 mView.updateUserModelSuccess(baseResponseModel.models);
                             }
