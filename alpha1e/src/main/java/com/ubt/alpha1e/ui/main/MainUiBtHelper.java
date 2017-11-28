@@ -48,8 +48,6 @@ public class MainUiBtHelper extends BaseHelper {
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
         try {
-            UbtLog.d(TAG,"cmd = " + cmd + "  param = " + new String(param,"UTF-8"));
-
             if(cmd == ConstValue.DV_READ_NETWORK_STATUS){
 
                 String networkInfoJson = BluetoothParamUtil.bytesToString(param);
