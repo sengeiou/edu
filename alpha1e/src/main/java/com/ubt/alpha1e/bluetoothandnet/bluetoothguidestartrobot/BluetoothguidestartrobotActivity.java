@@ -15,6 +15,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.services.AutoScanConnectService;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.yanzhenjie.permission.Permission;
@@ -48,6 +49,7 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initUI();
+        AutoScanConnectService.doEntryManalConnect(true);
     }
 
     @Override
@@ -144,6 +146,12 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
         this.startActivity(intent);
         this.overridePendingTransition(R.anim.activity_open_up_down,0);
         BluetoothguidestartrobotActivity.this.finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AutoScanConnectService.doStopSelf();
     }
 
     @Override

@@ -219,7 +219,7 @@
         </RelativeLayout>
         <TextView
             android:id="@+id/tv_advice1"
-            android:text="  连接小提示：手机靠近我就可以自动连接上哦！"
+            android:text="  连接小提示：手机靠近我的后背，可以自动连接上哦！"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"

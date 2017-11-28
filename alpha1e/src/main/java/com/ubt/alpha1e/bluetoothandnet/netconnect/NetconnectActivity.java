@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
@@ -167,6 +168,9 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                     UbtLog.d(TAG,"密码为null 不可点击切换!!!");
                     return;
                 }
+                if(ig_see_wifi_pwd == null){
+                    return;
+                }
                 if(seePWD == 0){
                     seePWD = 1 ;
                     ig_see_wifi_pwd.setBackground(ContextCompat.getDrawable(NetconnectActivity.this,R.drawable.net_see_pwd));
@@ -237,9 +241,26 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
      * 开始联网
      */
     private void startNetwork(){
+
+        if (((AlphaApplication) this.getApplicationContext())
+                .getCurrentBluetooth() == null) {
+            UbtLog.d(TAG,"蓝牙已经断开");
+            ToastUtils.showShort("蓝牙已经断开，请重新连接蓝牙");
+//            NetconnectActivity.this.finish();
+            return;
+        }
+        mHandler.postDelayed(overTimeDo,60000);
         LoadingDialog.show(this,"联网中...");
         ((NetworkHelper)mHelper).doConnectNetwork(ed_wifi_name.getText().toString(), ed_wifi_pwd.getText().toString());
     }
+
+    Runnable overTimeDo = new Runnable() {
+        @Override
+        public void run() {
+            LoadingDialog.dismiss(NetconnectActivity.this);
+            ToastUtils.showShort("机器人wifi连接失败");
+        }
+    };
 
     /**
      * 文本内容改变监听器
@@ -254,6 +275,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         @Override
         public void afterTextChanged(Editable editable) {
             UbtLog.d(TAG,"afterTextChanged 改变");
+
             setNetworkButtonState();
         }
 
@@ -269,7 +291,9 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
      * 内容为空时，不可点击，非空时，可以点击
      */
     private void setNetworkButtonState(){
-
+        if(ed_wifi_name == null){
+            return;
+        }
         if(ed_wifi_name.getText().toString().trim().length() > 0){
             UbtLog.d(TAG,"afterTextChanged ENBLE");
             btn_send_wifi_pwd.setEnabled(true);
@@ -313,15 +337,24 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                 case UPDATE_WIFI_NAME:
                     String remoteConnectName = (String) msg.obj;
                     if(!TextUtils.isEmpty(remoteConnectName)){
+                        if(ed_wifi_name == null){
+                            return;
+                        }
                         ed_wifi_name.setText(remoteConnectName);
                         ed_wifi_pwd.requestFocus();
                     }else {
                         NetworkInfo mWifiInfo = getCurrentLocalConnectNetworkInfo();
                         if (mWifiInfo.isConnected()) {
                             UbtLog.d(TAG,"mWifiInfo.getExtraInfo() == " + mWifiInfo.getExtraInfo());
+                            if(ed_wifi_name == null){
+                                return;
+                            }
                             ed_wifi_name.setText(mWifiInfo.getExtraInfo().replaceAll("\"",""));
                             ed_wifi_pwd.requestFocus();
                         }else {
+                            if(ed_wifi_name == null){
+                                return;
+                            }
                             ed_wifi_name.setText("");
                         }
                     }
@@ -336,6 +369,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
      * 消失对话框
      */
     private void displayDialog(){
+        mHandler.removeCallbacks(overTimeDo);
         LoadingDialog.dismiss(NetconnectActivity.this);
     }
 
@@ -384,6 +418,9 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
 
             wifiName = event.getSelectWifiName();
             UbtLog.d(TAG,"选择的wifi ："+wifiName);
+            if(ed_wifi_name == null){
+                return;
+            }
             ed_wifi_name.setText(event.getSelectWifiName());
             ed_wifi_pwd.requestFocus();
         }else if(event.getEvent() == NetworkEvent.Event.DO_CONNECT_WIFI){
@@ -428,6 +465,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
 
     @Override
     protected void onDestroy() {
+        LoadingDialog.dismiss(this);
         super.onDestroy();
         if(mHelper != null){
             //读取更新当前机器人网络状态
@@ -437,8 +475,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         mHandler.removeMessages(NETWORK_CONNECT_FAIL);
         mHandler.removeMessages(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY);
         mHandler.removeMessages(UPDATE_WIFI_NAME);
-
-        LoadingDialog.dismiss(this);
+        mHandler.removeCallbacks(overTimeDo);
     }
 
     @Override

@@ -111,6 +111,9 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     public static final int MSG_DO_UPGRADE_PROGRESS_DISPLAY = 7; //关闭更新进度框
     public static final int MSG_DO_BLUETOOTH_DISCONNECT = 8; //蓝牙断开
 
+
+    public static final int REQUEST_CODE = 500;
+
     private List<Map<String, Object>> lst_robots_result_datas;
 
     private BluetoothHelper mHelper;
@@ -127,6 +130,9 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                     NetworkInfo networkInfo = (NetworkInfo) msg.obj;
                     UbtLog.d(TAG,"networkInfo == " + networkInfo);
 //                    if(networkInfo != null && networkInfo.status){
+                    if(ed_wifi_name == null){
+                        return;
+                    }
                     ed_wifi_name.setText(networkInfo.name);
 
                     if(networkInfo.status){
@@ -155,6 +161,9 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 case MSG_DO_BLUETOOTH_DISCONNECT:
                     UbtLog.d(TAG,"MSG_DO_BLUETOOTH_DISCONNECT ..... " );
                     ((AlphaApplication) getApplicationContext()).doLostConnect();
+                    if(ig_bluetooth == null){
+                        return;
+                    }
                     ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.buletooth_con_fail));
                     ed_bluetooth_name.setText("");
                     ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
@@ -303,11 +312,17 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 String name = b.getName();
                 String macAddr = b.getAddress();
                 UbtLog.d(TAG,"当前连接设备："+name +" mac地址："+macAddr);
+                if(ed_bluetooth_name == null){
+                    return;
+                }
                 ed_bluetooth_name.setText(name);
                 ed_wifi_name.requestFocus();
 
                 mHelper.readNetworkStatus();
         }else {
+            if(rl_content_device_list == null){
+                return;
+            }
             rl_content_device_list.setVisibility(View.GONE);
             ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.buletooth_con_fail));
             ed_bluetooth_name.setText("");
@@ -330,7 +345,21 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         Intent intent = new Intent();
         intent.putExtra("isFirst","no");
         intent.setClass(BluetoothandnetconnectstateActivity.this,BluetoothconnectActivity.class);
-        this.startActivity(intent);
+        this.startActivityForResult(intent,REQUEST_CODE);
+//        this.startActivity(intent);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK){
+            UbtLog.d(TAG, "onActivityResult RESULT_OK!");
+            if (requestCode == REQUEST_CODE){
+                BluetoothandnetconnectstateActivity.this.finish();
+            }
+        }
 
     }
 

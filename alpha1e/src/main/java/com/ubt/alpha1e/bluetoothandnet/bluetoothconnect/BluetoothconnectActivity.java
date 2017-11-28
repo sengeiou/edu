@@ -326,14 +326,23 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
 
 
             }
+            if(tv_devices_num == null){
+                return;
+            }
             tv_devices_num.setText("发现 "+lst_robots_result_datas.size()+" 台机器人");
 
             mdevicesAdapter.notifyDataSetChanged();
         }else{
+            if(tv_devices_num == null){
+                return;
+            }
             tv_devices_num.setText("正在搜索机器人......");
         }
 
         if(!isConnecting && getDistance(rssi) < 0.8 ){
+            if(tv_devices_num == null){
+                return;
+            }
             tv_devices_num.setText("进行自动连接蓝牙......");
 
             mCurrentRobotInfo = receiveRobot;
@@ -435,6 +444,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_close:
+                BluetoothconnectActivity.this.setResult(RESULT_OK);
                 BluetoothconnectActivity.this.finish();
                 break;
             case R.id.ib_return:
@@ -469,6 +479,9 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
         isConnecting = false;
         isSearchDevice = true ;
         lst_robots_result_datas.clear();
+        if(tv_devices_num == null){
+            return;
+        }
         tv_devices_num.setText("正在搜索机器人......");
         buletooth_device_list.setAdapter(mdevicesAdapter);
 

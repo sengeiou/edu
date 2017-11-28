@@ -16,6 +16,7 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.ActionsDownLoadManager;
@@ -53,6 +54,7 @@ import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.fragment.ActionsLibMainFragment3;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.update.EngineUpdateManager;
 import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -341,6 +343,8 @@ public class AlphaApplication extends LoginApplication {
                         || mActivity instanceof BlocklyCourseActivity
                         || mActivity instanceof CourseOneActivity
                         || mActivity instanceof NetconnectActivity //add by dicy.cheng  当在网络连接页面时，如果蓝牙掉线，则该网络连接页面也关掉
+                        || mActivity instanceof MainActivity
+                        || mActivity instanceof BluetoothandnetconnectstateActivity
 
                         ) {
                     if (mActivity instanceof MyActionsActivity) {
@@ -354,6 +358,7 @@ public class AlphaApplication extends LoginApplication {
                         continue;
                     }
                 }
+                UbtLog.d(TAG,"mActivity finish");
                 mActivity.finish();
             } catch (Exception e) {
                 e.printStackTrace();

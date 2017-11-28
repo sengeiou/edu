@@ -117,9 +117,11 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 ((BaseActivity) mContext).onLostBtCoon();
             } else if (mContext != null && mContext instanceof MVPBaseActivity) {
 //                ((MVPBaseActivity) mContext).onLostBtCoon();
+                UbtLog.e(TAG, "----onLostBtCoon---" + cmd + "    mContext =MVPBaseActivity ");
                 ((AlphaApplication) mContext.getApplicationContext()).doLostConn(AlphaApplication.getBaseActivity());
             } else {
                 //自动连接等
+                UbtLog.e(TAG, "----onLostBtCoon---" + cmd + "    mContext = else");
                 ((AlphaApplication) mContext.getApplicationContext()).doLostConn(AlphaApplication.getBaseActivity());
             }
             return;

@@ -232,14 +232,17 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if(!isBulueToothConnected()){
              showDisconnectIcon();
              looperThread.send(createMessage(APP_BLUETOOTH_CLOSE,""));
-            m_Handler.postDelayed(new Runnable() {
+             m_Handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     AutoScanConnectService.startService(MainActivity.this); //add by dicy.cheng 打开自动连接
                 }
-            },100);
+             },100);
         }else {
             MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
+            if(cartoonAction == null){
+                return;
+            }
             cartoonAction.setBackgroundResource(R.drawable.main_robot);
         }
     }
@@ -431,6 +434,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             if(!MainUiBtHelper.getInstance(getContext()).isLostCoon()){
                 UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 2");
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
+                if(cartoonAction == null){
+                    return;
+                }
                 cartoonAction.setBackgroundResource(R.drawable.main_robot);
             }
         }
@@ -1088,9 +1094,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
       mPresenter.commandRobotAction(ConstValue.DV_PLAYACTION,actions);
   }
   private void hiddenBuddleTextView(){
+      if(buddleText == null){
+          return;
+      }
       buddleText.setVisibility(View.INVISIBLE);
   }
   private void showBuddleTextView(){
+      if(buddleText == null){
+          return;
+      }
       buddleText.setVisibility(View.VISIBLE);
   }
 
