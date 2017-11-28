@@ -98,14 +98,14 @@ public class CourseOneLayout extends BaseActionEditLayout {
             tvCourseContent.setText(mContents.get(0).getCourseName());
             showPop(0);
             ivLeft.setEnabled(false);
-            ivRight.setEnabled(true);
+            ivRight.setEnabled(false);
         } else if (currentCourse == 2) {
-            ivLeft.setEnabled(true);
+            ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
             showPop1();
             tvCourseContent.setText(mContents.get(1).getCourseName());
         } else if (currentCourse == 3) {
-            ivLeft.setEnabled(true);
+            ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
             tvCourseContent.setText(mContents.get(2).getCourseName());
             showPop2();
@@ -115,6 +115,7 @@ public class CourseOneLayout extends BaseActionEditLayout {
     @Override
     public void init(Context context) {
         super.init(context);
+        isOnCourse = true;
         ivLeft = (ImageView) findViewById(R.id.iv_left);
         ivRight = (ImageView) findViewById(R.id.iv_right);
         tvCourseContent = (TextView) findViewById(R.id.tv_course_index);
@@ -182,9 +183,9 @@ public class CourseOneLayout extends BaseActionEditLayout {
                 break;
             case R.id.iv_add_frame:
                 addFrameOnClick();
-                ivLeft.setEnabled(true);
+                ivLeft.setEnabled(false);
                 ivRight.setEnabled(false);
-                mHandler.sendEmptyMessageDelayed(1112, 3000);
+                mHandler.sendEmptyMessageDelayed(1112, 2000);
                 lostLeftHand = false;
                 lostRightLeg = false;
                 ivHandLeft.setSelected(false);
@@ -210,9 +211,7 @@ public class CourseOneLayout extends BaseActionEditLayout {
             } else if (msg.what == 1113) {
                 ivLeft.setEnabled(true);
                 ivRight.setEnabled(false);
-                if (courseProgressListener != null) {
-                    courseProgressListener.completeCurrentCourse(3);
-                }
+
             } else if (msg.what == 1115) {
                 if (null != mCirclePop) {
                     mCirclePop.dismiss();
@@ -247,6 +246,7 @@ public class CourseOneLayout extends BaseActionEditLayout {
                 mHandler.sendEmptyMessageDelayed(1111, 500);
             }
         } else if (currentCourse == 2) {
+            UbtLog.d(TAG, "playComplete==" + 2);
             if (courseProgressListener != null) {
                 courseProgressListener.completeCurrentCourse(2);
             }
@@ -256,12 +256,24 @@ public class CourseOneLayout extends BaseActionEditLayout {
             ivLeft.setEnabled(true);
             ivRight.setEnabled(false);
             mHandler.sendEmptyMessageDelayed(1113, 1000);
-
+            if (courseProgressListener != null) {
+                courseProgressListener.completeCurrentCourse(3);
+            }
         }
 
 
     }
 
+
+    public void onPause() {
+        mHandler.removeMessages(1111);
+        mHandler.removeMessages(1112);
+        mHandler.removeMessages(1113);
+        mHandler.removeMessages(1115);
+        if (null != mCirclePop) {
+            mCirclePop.dismiss();
+        }
+    }
 
     EasyPopup mCirclePop = null;
 

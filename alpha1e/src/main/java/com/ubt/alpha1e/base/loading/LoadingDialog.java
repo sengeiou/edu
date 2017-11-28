@@ -62,6 +62,14 @@ public class LoadingDialog extends Dialog {
         //一定要在setContentView之后调用，否则无效
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         getWindow().getDecorView().getBackground().setAlpha(120);
+        WindowManager windowManager = getWindow().getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = this.getWindow().getAttributes();
+        // Dialog宽度
+        lp.width = display.getWidth();
+        lp.height = display.getHeight();
+        Window window = getWindow();
+        window.setAttributes(lp);
         // 必须放在加载布局后
         //setparams();
         TextView tv = (TextView) findViewById(R.id.tv_load);

@@ -180,7 +180,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
                                 } else {
                                     record1.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
                                     record1.setCourseLevel(1);
-                                    record1.setPeriodLevel(1);
+                                    record1.setPeriodLevel(0);
                                     record1.setUpload(true);
                                 }
                                 UbtLog.d("getCourseProgress", "record1===" + record1.toString());

@@ -94,9 +94,9 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     public void onWindowFocusChanged(boolean hasFocus) {
         // TODO Auto-generated method stub
         super.onWindowFocusChanged(hasFocus);
+        UbtLog.d(TAG, "onWindowFocusChanged");
         if (hasFocus && !isFocus) {
             isFocus = true;
-            UbtLog.d(TAG, "onWindowFocusChanged");
             boolean flag = SPUtils.getInstance().getBoolean(Constant.SP_ACTION_COURSE_CARD_ONE);
             flag = false;
             if (!flag) {
@@ -113,7 +113,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     @Override
     protected void onResume() {
         super.onResume();
-
+        UbtLog.d(TAG, "------------onResume------");
     }
 
     @Override
@@ -137,13 +137,21 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
         int level = 1;
         LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
         if (null != record) {
+            UbtLog.d(TAG, "record===" + record.toString());
             int course = record.getCourseLevel();
-            level = record.getPeriodLevel();
-            if (course == 1 && level == 3) {
-                level = 1;
-            } else {
-                level = 1;
+            int recordlevel = record.getPeriodLevel();
+            if (course == 1) {
+                if (recordlevel == 0) {
+                    level = 1;
+                } else if (recordlevel == 1) {
+                    level = 2;
+                } else if (recordlevel == 2) {
+                    level = 3;
+                } else if (recordlevel == 3) {
+                    level = 1;
+                }
             }
+
         }
         mActionEdit.setData(list, level, this);
     }
@@ -158,7 +166,6 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
         currentCourse = current;
         saveLastProgress(current);
         if (current == 3) {
-            sendStartStudy(false);
             returnCardActivity();
         }
     }
@@ -196,6 +203,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
                 values.put("periodLevel", current);
                 values.put("isUpload", false);
                 DataSupport.updateAll(LocalActionRecord.class, values);
+                mPresenter.saveLastProgress("1", String.valueOf(current));
             }
         }
     }
@@ -214,12 +222,22 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
         Intent intent = new Intent();
         intent.putExtra("course", 1);//第几关
         intent.putExtra("leavel", currentCourse);//第几个课时
-        intent.putExtra("isComplete", currentCourse == list.size() ? true : false);
+        intent.putExtra("isComplete", true);
         intent.putExtra("score", currentCourse == list.size() ? 1 : 0);
         setResult(1, intent);
         finish();
         //关闭窗体动画显示
         this.overridePendingTransition(0, R.anim.activity_close_down_up);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        UbtLog.d(TAG, "------------onPause___________");
+        mActionEdit.onPause();
+        sendStartStudy(false);
+        isFocus = false;
+        isAllIntroduc = false;
     }
 
 
@@ -241,6 +259,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     protected void onDestroy() {
         super.onDestroy();
         mActionEdit.dismiss();
+        UbtLog.d(TAG, "------------onDestroy------------");
     }
 
     @Override
@@ -328,7 +347,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
     public void playComplete() {
         UbtLog.d("EditHelper", "播放完成");
         if (isAllIntroduc) {
-            mHandler.sendEmptyMessageDelayed(1112,2000);
+            mHandler.sendEmptyMessageDelayed(1112, 2000);
         } else {
             mHandler.sendEmptyMessageDelayed(1111, 2000);
         }

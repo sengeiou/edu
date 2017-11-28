@@ -103,15 +103,12 @@ public class CourseTwoLayout extends BaseActionEditLayout implements ActionCours
             ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
         } else if (currentCourse == 2) {
-            ivLeft.setEnabled(true);
-            ivRight.setEnabled(true);
+            ivLeft.setEnabled(false);
+            ivRight.setEnabled(false);
             tvCourseContent.setText("2.高级模版");
             showPop1();
         } else if (currentCourse == 3) {
-            if (courseProgressListener != null) {
-                courseProgressListener.completeCurrentCourse(2);
-            }
-            ivLeft.setEnabled(true);
+            ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
             tvCourseContent.setText("3.任务添加出招");
             showPop2();
@@ -121,6 +118,7 @@ public class CourseTwoLayout extends BaseActionEditLayout implements ActionCours
     @Override
     public void init(Context context) {
         super.init(context);
+        isOnCourse = true;
         ivLeft = (ImageView) findViewById(R.id.iv_left);
         ivRight = (ImageView) findViewById(R.id.iv_right);
         tvCourseContent = (TextView) findViewById(R.id.tv_course_index);
@@ -175,17 +173,25 @@ public class CourseTwoLayout extends BaseActionEditLayout implements ActionCours
             } else if (msg.what == 1113) {
                 ivLeft.setEnabled(true);
                 ivRight.setEnabled(false);
-            } else if (msg.what == 1114) {
-                if (courseProgressListener != null) {
-                    courseProgressListener.completeCurrentCourse(3);
-                }
-            }else if(msg.what==1116){
-                if(null!=mCirclePop){
+            } else if (msg.what == 1116) {
+                if (null != mCirclePop) {
                     mCirclePop.dismiss();
                 }
+                ivLeft.setEnabled(true);
             }
         }
     };
+
+    /**
+     * Activity onPause
+     */
+    public void onPause() {
+        mHandler.removeMessages(1111);
+        mHandler.removeMessages(1112);
+        mHandler.removeMessages(1113);
+        mHandler.removeMessages(1116);
+        dismiss();
+    }
 
     public void dismiss() {
         if (null != mCirclePop) {
@@ -210,11 +216,11 @@ public class CourseTwoLayout extends BaseActionEditLayout implements ActionCours
             if (courseProgressListener != null) {
                 courseProgressListener.completeCurrentCourse(2);
             }
-            ivLeft.setEnabled(true);
+            ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
             mHandler.sendEmptyMessageDelayed(1112, 1000);
         } else if (currentCourse == 3) {
-            ivLeft.setEnabled(true);
+            ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
             mHandler.sendEmptyMessageDelayed(1113, 1000);
         }
@@ -334,7 +340,7 @@ public class CourseTwoLayout extends BaseActionEditLayout implements ActionCours
                 });
 
         mCirclePop.showAtAnchorView(archView, VerticalGravity.CENTER, HorizontalGravity.RIGHT, 0, 0);
-        mHandler.sendEmptyMessageDelayed(1116,3000);
+        mHandler.sendEmptyMessageDelayed(1116, 3000);
 
     }
 
