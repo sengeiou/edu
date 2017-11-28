@@ -65,6 +65,7 @@
         android:name=".AlphaApplication"
         android:allowBackup="true"
         android:debuggable="true"
+        android:hardwareAccelerated="true"
         android:exported="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -130,7 +131,7 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:theme="@style/NoTitleThemeFullScreen">
         </activity>
         <activity
@@ -596,6 +597,7 @@
         <activity
             android:name=".maincourse.actioncourse.ActionCourseActivity"
             android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
@@ -623,11 +625,13 @@
         <activity
             android:name=".maincourse.courseone.CourseOneActivity"
             android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/NoTitleThemeFullScreen">
         </activity>
         <activity
             android:name=".maincourse.courseone.CourseTwoActivity"
             android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/NoTitleThemeFullScreen">
         </activity>
 
