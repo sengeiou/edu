@@ -154,9 +154,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private byte mChargeValue=0;
     private int mPowerValue=0;
     long mCurrentTouchTime=0;
+    //ONE MINUTE
     private long noOperationTimeout=1*60*1000;
-    private boolean lowBatteryIndicator=false;
-    private int LOWPOWER_THRESHOLD=20;
     private String STATUS_MACHINE="status_machine";
     private final byte APP_LAUNCH_STATUS=0x01;
     private final byte APP_BLUETOOTH_CONNECTED =0x02;
@@ -167,11 +166,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private final byte ROBOT_HIT_HEAD=0x07;
     private final byte ROBOT_WAKEUP_ACTION =0x08;
     private final byte ROBOT_POWEROFF=0x09;
-    private final byte ROBOT_cartoon_action_hand_stand=0x0a;
-    private final byte ROBOT_cartoon_action_hand_stand_reverse=0x0b;
-    private final byte ROBOT_cartoon_squat=0x0c;
-    private final byte ROBOT_cartoon_action_fall=0x0d;
-    private final byte ROBOT_cartoon_default_gesture=0x0e;
+    private final byte ROBOT_hand_stand =0x0a;
+    private final byte ROBOT_fall =0x0b;
+    private final byte ROBOT_CHARGING=0x0c;
+    private final byte ROBOT_default_gesture =0x0d;
     private final int LOW_BATTERY_TWENTY_THRESHOLD=20;
     private final int LOW_BATTERY_FIVE_THRESHOLD=5;
     private  boolean ENTER_LOW_BATTERY_FIVE=false;
@@ -724,11 +722,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
           }else if(mCmd==ConstValue.DV_6D_GESTURE){
                UbtLog.d(TAG,"DV_6D_GESTURE index[0]:"+mParams[0]);
               if(mParams[0]==ROBOT_HEAD_UP_STAND){
-                 looperThread.send(createMessage(ROBOT_cartoon_default_gesture));
+                 looperThread.send(createMessage(ROBOT_default_gesture));
               } else if(mParams[0]==ROBOT_HEAD_DOWN) {
-                  looperThread.send(createMessage(ROBOT_cartoon_action_hand_stand));
+                  looperThread.send(createMessage(ROBOT_hand_stand));
               }else if(mParams[0]==ROBOT_LEFT_SHOULDER_SLEEP||mParams[0]==ROBOT_RIGHT_SHOULDER_SLEEP||mParams[0]==ROBOT_HEAD_UP_SLEEP||mParams[0]==ROBOT_HEAD_DOWN_SLEEP){
-                   looperThread.send(createMessage(ROBOT_cartoon_action_fall));
+                   looperThread.send(createMessage(ROBOT_fall));
               }
           }else if (mCmd == ConstValue.DV_SLEEP_EVENT) {
               UbtLog.d(TAG, "ROBOT SLEEP EVENT");
@@ -776,23 +774,23 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if (mParam < powerThreshold[powerThreshold.length / 2]) {
             for (int j = 0; j < powerThreshold.length / 2; j++) {
                 if (mParam < powerThreshold[j + 1] && mParam > powerThreshold[j]) {
-                    if(j==0){
                         power_index = j;
-                    }else {
-                        power_index = j - 1;
-                    }
+                        break;
                 }
                 if (mParam == powerThreshold[j]) {
                     power_index = j;
+                    break;
                 }
             }
         } else {
             for (int j = powerThreshold.length / 2; j < powerThreshold.length; j++) {
-                if (powerThreshold[j - 1] < mParam && mParam < powerThreshold[j]) {
-                    power_index = j - 1;
+                if (powerThreshold[j] < mParam && mParam < powerThreshold[j+1]) {
+                    power_index = j;
+                    break;
                 }
                 if (mParam == powerThreshold[j]) {
                     power_index = j;
+                    break;
                 }
             }
         }
@@ -944,7 +942,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    }
                });
                break;
-            case ROBOT_cartoon_action_hand_stand: //机器人被翻转，虚拟形象翻转
+            case ROBOT_hand_stand: //机器人被翻转，虚拟形象翻转
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -952,23 +950,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     }
                 });
                 break;
-            case ROBOT_cartoon_action_hand_stand_reverse: //机器人恢复站立，虚拟形象恢复站立
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showCartoonAction(cartoon_action_hand_stand_reverse);
-                    }
-                });
-                break;
-            case ROBOT_cartoon_squat: //没有使用该指令
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showCartoonAction(cartoon_action_squat);
-                    }
-                });
-                break;
-            case ROBOT_cartoon_action_fall:
+            case ROBOT_fall:
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -976,7 +958,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     }
                 });
                 break;
-            case ROBOT_cartoon_default_gesture:
+            case ROBOT_default_gesture:
                 runOnUiThread(new Runnable() {
                     @Override
                           public void run(){
@@ -984,7 +966,14 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     }
                 });
                 break;
-
+            case ROBOT_CHARGING:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run(){
+                        showCartoonAction(cartoon_action_squat);
+                    }
+                });
+                break;
            default:
                UbtLog.d(TAG,"NO SITUATION "+status);
                break;
@@ -1016,8 +1005,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
           if (mParams[index_two_charging] == 0x01&&mParams[index_two_charging]!=mChargeValue) {
               IS_CHARGING=true;
               UbtLog.d(TAG, " IS CHARGING ");
+              looperThread.send(createMessage(ROBOT_CHARGING));
               recoveryLowBatteryFlag();
-              lowBatteryIndicator=false;
               chargeAsynchronousTask();
           } else if(mParams[index_two_charging]==0x0&&mParams[index_two_charging]!=mChargeValue) {
               IS_CHARGING=false;
@@ -1071,12 +1060,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
     }
     private void lowBatteryFunction(int currentValue){
-        if(currentValue==(LOW_BATTERY_TWENTY_THRESHOLD-1)){
+        if(currentValue==(LOW_BATTERY_TWENTY_THRESHOLD)){//ROBOT END BATTERY CAPACITY <=5
             if(!ENTER_LOW_BATTERY_TWENTY) {
                 looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_TWENTY_STATUS));
                 ENTER_LOW_BATTERY_TWENTY=true;
             }
-        }else if(currentValue==(LOW_BATTERY_FIVE_THRESHOLD-1)){
+        }else if(currentValue==(LOW_BATTERY_FIVE_THRESHOLD)){//ROBOT END BATTERY CAPACITY <=20
             if(!ENTER_LOW_BATTERY_FIVE) {
                 looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_FIVE_STATUS));
                 ENTER_LOW_BATTERY_FIVE=true;
