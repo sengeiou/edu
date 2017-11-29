@@ -229,6 +229,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     public BaseHelper mHelper;
 
+    public boolean isOnCourse;//是否正在课程页面
+
     public BaseActionEditLayout(Context context) {
         super(context);
         mContext = context;
@@ -307,7 +309,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             public void onItemClick(View view, int pos, Map<String, Object> data) {
                 UbtLog.d(TAG, "getNewPlayerState:" + ((ActionsEditHelper) mHelper).getNewPlayerState());
 
-                if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
+                if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING || isOnCourse) {
                     return;
                 }
 
@@ -932,7 +934,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     public void onRationSetting() {
 
                     }
-                }, PermissionUtils.PermissionEnum.STORAGE,mContext);
+                }, PermissionUtils.PermissionEnum.STORAGE, mContext);
                 break;
             case R.id.iv_zoom_plus:
                 ivZoomPlus();

@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.maincourse.courseone;
 
+import android.content.ContentValues;
 import android.content.Context;
 
 import com.ubt.alpha1e.R;
@@ -12,10 +13,13 @@ import com.ubt.alpha1e.base.popup.VerticalGravity;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
+import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -274,6 +278,12 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
                     @Override
                     public void onResponse(String response, int id) {
                         UbtLog.d("saveLastProgress", "response===" + response);
+                        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+                        if (null != record) {
+                            ContentValues values = new ContentValues();
+                            values.put("isUpload", true);
+                            DataSupport.updateAll(LocalActionRecord.class, values);
+                        }
                     }
                 });
 

@@ -137,15 +137,21 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
         int level = 1;
         LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
         if (null != record) {
+            UbtLog.d(TAG, "record===" + record.toString());
             int course = record.getCourseLevel();
-            level = record.getPeriodLevel();
+            int recordlevel = record.getPeriodLevel();
             if (course == 2) {
-                if (level == 3) {
+                if (recordlevel == 1) {
+                    if (record.isUpload()) {
+                        level = 2;
+                    }
+                } else if (recordlevel == 2) {
+                    level = 3;
+                } else if (recordlevel == 3) {
                     level = 1;
                 }
-            } else {
-                level = 1;
             }
+
         }
         mActionEdit.setData(list, level, this);
     }
@@ -198,6 +204,7 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
                 values.put("periodLevel", current);
                 values.put("isUpload", false);
                 DataSupport.updateAll(LocalActionRecord.class, values);
+                mPresenter.saveLastProgress("2", String.valueOf(current));
             } else if (course == 2) {
                 if (level < current) {
                     UbtLog.d(TAG, "保存进度到数据库3" + "保存成功");
@@ -206,6 +213,7 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
                     values.put("periodLevel", current);
                     values.put("isUpload", false);
                     DataSupport.updateAll(LocalActionRecord.class, values);
+                    mPresenter.saveLastProgress("2", String.valueOf(current));
                 }
             }
         }
@@ -229,7 +237,7 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
         Intent intent = new Intent();
         intent.putExtra("course", 2);//第几关
         intent.putExtra("leavel", 3);//第几个课时
-        intent.putExtra("isComplete", currentCourse == list.size() ? true : false);
+        intent.putExtra("isComplete", true);
         intent.putExtra("score", currentCourse == list.size() ? 1 : 0);
         setResult(1, intent);
         finish();
@@ -254,11 +262,24 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
         return super.onKeyDown(keyCode, event);
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        UbtLog.d(TAG, "-------onPause-------");
+        mActionEdit.onPause();
+        sendStartStudy(false);
+        isAllIntroduc=false;
+        isFocus=false;
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mActionEdit.dismiss();
+        UbtLog.d(TAG, "-------onDestroy-------");
     }
+
 
     @Override
     protected void initControlListener() {
@@ -353,7 +374,7 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
     public void playComplete() {
         UbtLog.d("EditHelper", "播放完成");
         if (isAllIntroduc) {
-            mHandler.sendEmptyMessageDelayed(1112,2000);
+            mHandler.sendEmptyMessageDelayed(1112, 2000);
         } else {
             mHandler.sendEmptyMessageDelayed(1111, 2000);
         }

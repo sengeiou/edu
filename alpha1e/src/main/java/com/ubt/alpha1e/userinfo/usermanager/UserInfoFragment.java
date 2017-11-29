@@ -30,6 +30,7 @@ import com.ubt.alpha1e.base.NetUtil;
 import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.custom.ShapedImageView;
 import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
@@ -61,6 +62,8 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, UserEditPresenter> implements UserEditContract.View, AndroidAdjustResizeBugFix.OnKeyChangerListeler, MyTextWatcher.WatcherListener {
+    private static final String TAG = UserInfoFragment.class.getSimpleName();
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     //    @BindView(R.id.scrollview_user)
@@ -132,7 +135,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         assistActivity = new AndroidAdjustResizeBugFix(getActivity());
         assistActivity.setOnKeyChangerListeler(this);
         mPresenter.getLoopData();
-
+        // LoadingDialog.show(getActivity());
     }
 
 
@@ -167,7 +170,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     private void initData() {
         mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
         UbtLog.d("Usercenter", "usermode===" + mUserModel.toString());
-        InputFilter[] filters = { new NameLengthFilter(20) };
+        InputFilter[] filters = {new NameLengthFilter(20)};
         mTvUserName.setFilters(filters);
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
         mTvUserName.setText(mUserModel.getNickName());
@@ -312,7 +315,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                     public void onRationSetting() {
                         // ToastUtils.showShort("申请拍照权限已经被拒绝过");
                     }
-                }, PermissionUtils.PermissionEnum.CAMERA,getActivity());
+                }, PermissionUtils.PermissionEnum.CAMERA, getActivity());
 
     }
 
@@ -365,15 +368,18 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     @Override
     public void updateUserModelSuccess(UserModel userModel) {
         this.mUserModel = userModel;
+        LoadingDialog.dismiss(getActivity());
     }
 
     @Override
     public void updateUserModelFailed() {
+        LoadingDialog.dismiss(getActivity());
         ToastUtils.showShort("update failed");
     }
 
     @Override
     public void updateLoopData(UserAllModel userAllModel) {
+        LoadingDialog.dismiss(getActivity());
         if (null != userAllModel) {
             if (null != userAllModel.getAgeList() && userAllModel.getAgeList().size() > 0) {
                 ageList = userAllModel.getAgeList();
@@ -381,6 +387,20 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
             if (null != userAllModel.getGradeList() && userAllModel.getGradeList().size() > 0) {
                 gradeList = userAllModel.getGradeList();
             }
+//            String headPic = userAllModel.getHeadPic();
+//            UbtLog.d(TAG, "headpic===" + headPic);
+//            UserModel model = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+//            if (null != model) {
+//                model.setHeadPic(headPic);
+//                model.setGrade(userAllModel.getGrade());
+//                model.setSex(userAllModel.getSex());
+//                model.setNickName(userAllModel.getNickName());
+//                model.setPhone(userAllModel.getPhone());
+//                model.setAge(userAllModel.getAge());
+//                SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, model);
+//                initData();
+//                Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().into(mImgHead);
+//            }
         } else {
 
         }
@@ -397,7 +417,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-
+        UbtLog.d("ThreadName", "threadName==" + Thread.currentThread().getName());
         if (requestCode == GetUserHeadRequestCodeByFile
                 || requestCode == GetUserHeadRequestCodeByShoot) {
             if (resultCode == RESULT_OK) {
@@ -418,7 +438,9 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                     Bitmap bitmap = FileUtils.getBitmapFormUri(getActivity(), mImageUri);
                     mImgHead.setImageBitmap(bitmap);
                     headPath = FileUtils.SaveImage(getActivity(), "head", bitmap);
+                    UbtLog.d("ThreadName", "threadName==" + Thread.currentThread().getName());
                     mPresenter.updateHead(headPath);
+                    LoadingDialog.show(getActivity());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

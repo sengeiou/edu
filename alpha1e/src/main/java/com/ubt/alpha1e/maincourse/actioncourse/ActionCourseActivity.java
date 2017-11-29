@@ -112,6 +112,18 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
     }
 
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        UbtLog.d(TAG,"------------------onPause-----------------");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        UbtLog.d(TAG,"------------------onDestroy-----------------");
+    }
+
     /**
      * 获取关卡列表
      *
@@ -176,9 +188,8 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                     mActionCourseModels.get(1).setActionLockType(1);
                 }
             } else if (course == 2) {
-                if (level == 3) {
-                    mActionCourseModels.get(2).setActionLockType(0);
-                }
+                mActionCourseModels.get(1).setActionLockType(1);
+
             }
             if (!record.isUpload()) {
                 mPresenter.saveLastProgress(String.valueOf(record.getCourseLevel()), String.valueOf(record.getPeriodLevel()));

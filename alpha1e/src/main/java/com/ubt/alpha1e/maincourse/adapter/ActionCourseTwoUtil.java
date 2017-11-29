@@ -25,6 +25,7 @@ import com.ubt.alpha1e.action.model.ActionConstant;
 import com.ubt.alpha1e.action.model.PrepareDataModel;
 import com.ubt.alpha1e.action.model.PrepareMusicModel;
 import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.popup.EasyPopup;
 import com.ubt.alpha1e.base.popup.HorizontalGravity;
 import com.ubt.alpha1e.base.popup.VerticalGravity;
@@ -93,7 +94,7 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(width)
                 .setOnClickListener(this)
-                .setCancelable(true)
+                .setCancelable(false)
                 .create().show();
         // showPop(recyclerView);
         new Handler().postDelayed(new Runnable() {
@@ -152,14 +153,18 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
 
     @Override
     public void onClick(DialogPlus dialog, View view) {
-        dialog.dismiss();
         switch (view.getId()) {
             case R.id.tv_cancel:
 
                 break;
             case R.id.tv_confirm:
                 if (null != mDialogListener) {
-                    mDialogListener.onCourseConfirm(selectDataModel);
+                    if (null != selectDataModel) {
+                        mDialogListener.onCourseConfirm(selectDataModel);
+                        dialog.dismiss();
+                    }else{
+                        ToastUtils.showShort("请选择出招动作");
+                    }
                 }
                 break;
             default:

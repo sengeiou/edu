@@ -367,18 +367,18 @@ public class ConstValue {
 	/**
 	 * 1E机器人获取产品productID和DSN
 	 */
-	public static final byte DV_PRODUCT_AND_DSN = (byte) 0x80;
+	public static final byte DV_PRODUCT_AND_DSN = (byte) 0x82;
 
 
 	/**
 	 * 1E机器人发送CLIENT ID
 	 */
-	public static final byte DV_CLIENT_ID = (byte) 0x81;
+	public static final byte DV_CLIENT_ID = (byte) 0x83;
 
 	/**
 	 * 1E机器人发送CLIENT ID 分两段
 	 */
-	public static final byte DV_CLIENT_ID2 = (byte) 0x82;
+//	public static final byte DV_CLIENT_ID2 = (byte) 0x82;
 
 
 	/**
