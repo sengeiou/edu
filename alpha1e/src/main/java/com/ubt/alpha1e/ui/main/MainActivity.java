@@ -171,6 +171,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private final byte ROBOT_cartoon_action_hand_stand=0x0a;
     private final byte ROBOT_cartoon_action_hand_stand_reverse=0x0b;
     private final byte ROBOT_cartoon_squat=0x0c;
+    private final byte ROBOT_cartoon_action_fall=0x0d;
+    private final byte ROBOT_cartoon_default_gesture=0x0e;
     private final int LOW_BATTERY_TWENTY_THRESHOLD=20;
     private final int LOW_BATTERY_FIVE_THRESHOLD=5;
     private  boolean ENTER_LOW_BATTERY_FIVE=false;
@@ -203,6 +205,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     boolean isBtConnect =false;
     boolean isNetworkConnect=false;
     String WakeUpActionName="初始化";
+    private int ROBOT_HEAD_UP_STAND=1;
+    private int ROBOT_HEAD_DOWN=2;
+    private int ROBOT_LEFT_SHOULDER_SLEEP=3;
+    private int ROBOT_RIGHT_SHOULDER_SLEEP=4;
+    private int ROBOT_HEAD_UP_SLEEP=5;
+    private int ROBOT_HEAD_DOWN_SLEEP=6;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -709,12 +718,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
               //looperThread.send(createMessage(ROBOT_HIT_HEAD));
           }else if(mCmd==ConstValue.DV_6D_GESTURE){
                UbtLog.d(TAG,"DV_6D_GESTURE index[0]:"+mParams[0]);
-              if(mParams[0]==1){
-                 // looperThread.send(createMessage(ROBOT_cartoon_squat));
-              } else if(mParams[0]==2) {
+              if(mParams[0]==ROBOT_HEAD_UP_STAND){
+                 looperThread.send(createMessage(ROBOT_cartoon_default_gesture));
+              } else if(mParams[0]==ROBOT_HEAD_DOWN) {
                   looperThread.send(createMessage(ROBOT_cartoon_action_hand_stand));
-              }else if(mParams[0]==5){
-                  //looperThread.send(createMessage(ROBOT_cartoon_action_hand_stand,""));
+              }else if(mParams[0]==ROBOT_LEFT_SHOULDER_SLEEP||mParams[0]==ROBOT_RIGHT_SHOULDER_SLEEP||mParams[0]==ROBOT_HEAD_UP_SLEEP||mParams[0]==ROBOT_HEAD_DOWN_SLEEP){
+                   looperThread.send(createMessage(ROBOT_cartoon_action_fall));
               }
           }else if (mCmd == ConstValue.DV_SLEEP_EVENT) {
               UbtLog.d(TAG, "ROBOT SLEEP EVENT");
@@ -954,6 +963,23 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     }
                 });
                 break;
+            case ROBOT_cartoon_action_fall:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showCartoonAction(cartoon_action_fall);
+                    }
+                });
+                break;
+            case ROBOT_cartoon_default_gesture:
+                runOnUiThread(new Runnable() {
+                    @Override
+                          public void run(){
+                            cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                    }
+                });
+                break;
+
            default:
                UbtLog.d(TAG,"NO SITUATION "+status);
                break;

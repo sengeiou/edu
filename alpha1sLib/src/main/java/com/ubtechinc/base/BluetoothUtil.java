@@ -396,6 +396,7 @@ public class BluetoothUtil {
 					// This is a blocking call and will only return on a
 					// successful connection or an exception
 					Log.e(TAG, "socket.run()");
+
 					mmSocket.connect();
 					Log.i(TAG, "已经连接上服务端！可以发送信息。");
 
