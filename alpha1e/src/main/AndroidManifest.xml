@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ubt.alpha1e"
-    android:versionCode="1"
-    android:versionName="V1.0.0.4">
-    <meta-data android:name="design_width" android:value="1920">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.ubt.alpha1e"
+          android:versionCode="1"
+          android:versionName="V1.0.0.4">
+
+    <meta-data
+        android:name="design_width"
+        android:value="1920">
 
     </meta-data>
     <meta-data
@@ -65,8 +68,8 @@
         android:name=".AlphaApplication"
         android:allowBackup="true"
         android:debuggable="true"
-        android:hardwareAccelerated="true"
         android:exported="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -130,8 +133,8 @@
             android:name=".ui.main.MainActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="landscape"
             android:launchMode="singleTask"
+            android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen">
         </activity>
         <activity
@@ -604,8 +607,8 @@
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".maincourse.actioncourse.ActionCourseActivity"
-            android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
@@ -633,16 +636,20 @@
 
         <activity
             android:name=".maincourse.courseone.CourseOneActivity"
-            android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen">
         </activity>
         <activity
             android:name=".maincourse.courseone.CourseTwoActivity"
-            android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/NoTitleThemeFullScreen">
-        </activity>
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.courseone.CourseLevelActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".action.actioncreate.SaveSuccessActivity"

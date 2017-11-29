@@ -64,18 +64,6 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content1.setHorizGravity(HorizontalGravity.RIGHT);
         one1ContentList.add(one1Content1);
 
-//        CourseOne1Content one1Content2 = new CourseOne1Content();
-//        one1Content2.setIndex(1);
-//        one1Content2.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_2"));
-//        one1Content2.setId(R.id.iv_zoom_plus);
-//        one1Content2.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
-//        one1Content2.setActionPath(Constant.COURSE_ACTION_PATH + "时间轴.hts");
-//        one1Content2.setDirection(1);
-//        one1Content2.setX(0);
-//        one1Content2.setY(0);
-//        one1Content2.setVertGravity(VerticalGravity.CENTER);
-//        one1Content2.setHorizGravity(HorizontalGravity.LEFT);
-//        one1ContentList.add(one1Content2);
 
         CourseOne1Content one1Content3 = new CourseOne1Content();
         one1Content3.setIndex(2);

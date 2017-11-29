@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/img_bg_action"
     android:gravity="center"
+    android:id="@+id/id_container"
     >
 
     <RelativeLayout
@@ -437,7 +438,15 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/actions_edit_add_selector"
                 />
-
+            <ImageView
+                android:id="@+id/iv_add_frame1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/actions_edit_add_selector"
+                android:visibility="invisible"
+                />
 
         </RelativeLayout>
 

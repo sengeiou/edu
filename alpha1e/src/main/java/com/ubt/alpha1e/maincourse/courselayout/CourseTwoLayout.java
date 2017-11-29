@@ -98,14 +98,14 @@ public class CourseTwoLayout extends BaseActionEditLayout implements ActionCours
         UbtLog.d(TAG, "currentCourse==" + currentCourse);
         rlContent.setVisibility(View.VISIBLE);
         if (currentCourse == 1) {
-            tvCourseContent.setText("1.基础模版");
+            tvCourseContent.setText("1.基础模板");
             showPop(0);
             ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
         } else if (currentCourse == 2) {
             ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
-            tvCourseContent.setText("2.高级模版");
+            tvCourseContent.setText("2.高级模板");
             showPop1();
         } else if (currentCourse == 3) {
             ivLeft.setEnabled(false);
