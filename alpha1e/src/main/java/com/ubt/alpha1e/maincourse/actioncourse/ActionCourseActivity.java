@@ -115,13 +115,13 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
     @Override
     protected void onPause() {
         super.onPause();
-        UbtLog.d(TAG,"------------------onPause-----------------");
+        UbtLog.d(TAG, "------------------onPause-----------------");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        UbtLog.d(TAG,"------------------onDestroy-----------------");
+        UbtLog.d(TAG, "------------------onDestroy-----------------");
     }
 
     /**
@@ -229,6 +229,10 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_pos) {
+                            int n = position + 1;
+//                            Intent intent = new Intent(ActionCourseActivity.this, CourseLevelActivity.class);
+//                            intent.putExtra("currentCard", n);
+//                            startActivityForResult(intent, REQUESTCODE);
                             if (position == 0) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseOneActivity.class), REQUESTCODE);
                             } else if (position == 1) {

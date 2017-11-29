@@ -63,6 +63,7 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
      * @param type
      */
     public void showActionDialog(int type, OnCourseDialogListener mDialogListener) {
+        selectDataModel=null;
         this.mDialogListener = mDialogListener;
         this.mType = type;
         String title = "";
@@ -135,8 +136,8 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        selectDataModel = (PrepareDataModel) adapter.getData().get(position);
         if (position == 0) {
+            selectDataModel = (PrepareDataModel) adapter.getData().get(position);
             list.get(0).setSelected(true);
             tvConfirm.setTextColor(mContext.getResources().getColor(R.color.text_confirm_color));
             tvConfirm.setEnabled(true);

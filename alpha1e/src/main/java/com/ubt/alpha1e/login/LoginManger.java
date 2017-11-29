@@ -41,6 +41,7 @@ public class LoginManger implements AuthorizeListener {
 
     private OnLoginListener onLoginListener;
     private int loginType = 0; // 0表示WX， 1表示QQOpen
+    private OnRefreshListener onRefreshListener;
 
     private volatile static LoginManger instance;
 
@@ -65,8 +66,9 @@ public class LoginManger implements AuthorizeListener {
         this.onLoginListener = onLoginListener;
     }
 
-    public void refreshLoginToken(String productId, String dsn){
+    public void refreshLoginToken(String productId, String dsn, OnRefreshListener onRefreshListener){
         UbtLog.d(TAG, "refreshLoginToken");
+        this.onRefreshListener = onRefreshListener;
         int type = SPUtils.getInstance().getInt(Constant.SP_LOGIN_TYPE);
         if(type == 0){
             if (proxy.isTokenExist(ELoginPlatform.WX, LoginApplication.getInstance())) {
@@ -147,8 +149,14 @@ public class LoginManger implements AuthorizeListener {
             }
         }else if(i == AuthorizeListener.QQOPEN_TVSIDRECV_TYPE){
             UbtLog.d(TAG, "client qq" );
+            if(onRefreshListener != null){
+                onRefreshListener.onSuccess();
+            }
         }else if( i == AuthorizeListener.WX_TVSIDRECV_TYPE){
             UbtLog.d(TAG, "client wx");
+            if(onRefreshListener != null){
+                onRefreshListener.onSuccess();
+            }
         }
 
         SPUtils.getInstance().put(Constant.SP_LOGIN_TYPE, loginType);
@@ -162,6 +170,12 @@ public class LoginManger implements AuthorizeListener {
         UbtLog.d(TAG, "onError:" + i);
         if(onLoginListener != null){
             onLoginListener.onError(i);
+        }
+
+        if(i == AuthorizeListener.QQOPEN_TVSIDRECV_TYPE || i == AuthorizeListener.WX_TVSIDRECV_TYPE){
+            if(onRefreshListener != null){
+                onRefreshListener.onError();
+            }
         }
     }
 
@@ -178,5 +192,10 @@ public class LoginManger implements AuthorizeListener {
         void onSuccess(int i,LoginInfoManager infoManager);
         void onError(int i);
         void onCancel(int i);
+    }
+
+    public interface OnRefreshListener{
+        void onSuccess();
+        void onError();
     }
 }
