@@ -63,6 +63,6 @@
         <storage value="external"></storage>
     -->
 
-    <storage value="external"/>
+  <!--  <storage value="external"/>-->
 
 </litepal>

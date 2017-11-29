@@ -264,7 +264,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 case DO_PLAY_SOUND_EFFECT_FINISH:
                     if(mWebView != null){
                         UbtLog.d(TAG, "play sound or emoji finish!");
-                        mWebView.loadUrl("javascript:playSoundEffectFinish()");
+//                        mWebView.loadUrl("javascript:playSoundEffectFinish()");
+                        mWebView.loadUrl("javascript:continueSteps()");
                     }
                     break;
                 default:
@@ -1330,7 +1331,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 mWebView.post(new Runnable() {
                     @Override
                     public void run() {
-                        mWebView.loadUrl("javascript:listenRobotStopEvent()");
+//                        mWebView.loadUrl("javascript:listenRobotStopEvent()");
+                        mWebView.loadUrl("javascript:robotFall()");
                     }
                 });
 
@@ -1341,11 +1343,20 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 mWebView.post(new Runnable() {
                     @Override
                     public void run() {
-                        mWebView.loadUrl("javascript:listenRobotStopEvent()");
+//                        mWebView.loadUrl("javascript:listenRobotStopEvent()");
+                        mWebView.loadUrl("javascript:robotTouched()");
                     }
                 });
 
             }
+        }else if(event.getType() == BlocklyEvent.CALL_ROBOT_WALK_STOP){
+            UbtLog.d(TAG, "机器人上报步态行走停止或者异常!");
+            mWebView.post(new Runnable() {
+                @Override
+                public void run() {
+                    mWebView.loadUrl("javascript:continueSteps()");
+                }
+            });
         }
     }
 
@@ -2453,10 +2464,6 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         String updateUrl = HttpAddress.WebBlocklyUpdateAdderss + readBlocklyLocalVersion(BlocklyActivity.this);
         UbtLog.d(TAG,"updateUrl = " + updateUrl);
 
-        /*if(blockFilesExists()){
-            mHandler.sendEmptyMessage(DO_NO_LAST_VERSION);
-            return;
-        }*/
 
         OkHttpClientUtils.getJsonByGetRequest(updateUrl, -1).execute(new StringCallback() {
             @Override

@@ -59,6 +59,7 @@ import com.ubt.alpha1e.xingepush.XGUBTManager;
 import com.ubtechinc.base.BlueToothManager;
 import com.ubtechinc.sqlite.DBAlphaInfoManager;
 import com.umeng.analytics.MobclickAgent;
+import com.zhy.changeskin.SkinManager;
 
 import org.litepal.LitePal;
 
@@ -135,7 +136,7 @@ public class AlphaApplication extends LoginApplication {
      */
     public void initSkin(Context ctx) {
         //改放到在baseActivity 初始化
-        //SkinManager.getInstance().init(ctx);
+        SkinManager.getInstance().init(ctx);
     }
 
     public static void initXG() {

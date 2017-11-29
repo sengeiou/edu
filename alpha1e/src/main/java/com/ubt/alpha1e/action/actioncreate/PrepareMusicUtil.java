@@ -104,6 +104,7 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
                 .setCancelable(true)
                 .create();
         mDialogPlus.show();
+        selectDataModel = null;
     }
 
     /**

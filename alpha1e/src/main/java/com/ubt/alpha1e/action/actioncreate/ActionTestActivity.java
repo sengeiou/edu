@@ -7,6 +7,7 @@ import android.util.DisplayMetrics;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.NewActionInfo;
 import com.ubt.alpha1e.ui.BaseActivity;
@@ -183,6 +184,7 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
     @Override
     public void onDisconnect() {
         UbtLog.d("ActionTest", "onDisconnect");
+        ToastUtils.showShort("蓝牙断开");
         finish();
     }
 }

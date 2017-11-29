@@ -266,7 +266,10 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d("getLoopData", "onError:" + e.getMessage());
-                mView.updateLoopData(null);
+                if(mView != null){
+                    mView.updateLoopData(null);
+                }
+
             }
 
             @Override
