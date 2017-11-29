@@ -195,8 +195,8 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
 
         ivTitleName.setText(getStringResources("ui_home_remote"));
         ivTitleName.setTextColor(getResources().getColor(R.color.white));
-        ivTitleRight.setVisibility(View.VISIBLE);
-        ivTitleRight.setBackgroundResource(R.drawable.icon_remote_add);
+        ivTitleRight.setVisibility(View.INVISIBLE);
+//        ivTitleRight.setBackgroundResource(R.drawable.icon_remote_add);
         if(SPUtils.getInstance().getBoolean(Constant.SP_SHOW_REMOTE_PUBLISH,true)){
             findViewById(R.id.rl_head_tip).setVisibility(View.VISIBLE);
         }

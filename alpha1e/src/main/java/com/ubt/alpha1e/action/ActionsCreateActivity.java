@@ -2669,10 +2669,10 @@ public class ActionsCreateActivity extends BaseActivity implements IEditActionUI
     public void doReset() {
         UbtLog.d(TAG, "doReset");
 
-        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(ActionsCreateActivity.this)){
-            Toast.makeText(ActionsCreateActivity.this, ActionsCreateActivity.this.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(ActionsCreateActivity.this)){
+//            Toast.makeText(ActionsCreateActivity.this, ActionsCreateActivity.this.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         String angles = "90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90";
         FrameActionInfo info = new FrameActionInfo();

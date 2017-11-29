@@ -253,8 +253,8 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         }
 
         ivSetting = (ImageView) findViewById(R.id.iv_title_right);
-        ivSetting.setBackgroundResource(R.drawable.icon_setting);
-        ivSetting.setVisibility(View.VISIBLE);
+//        ivSetting.setBackgroundResource(R.drawable.icon_setting);
+        ivSetting.setVisibility(View.INVISIBLE);
         llBack = (LinearLayout) findViewById(R.id.ll_base_back);
 
         TextView ivTitleName = (TextView) findViewById(R.id.tv_base_title_name);

@@ -322,10 +322,10 @@ public class CommonCtrlView_bak implements IActionsUI, IMainUI {
             public void onClick(View v) {
                 UbtLog.d(TAG, "--wmma--current Action Type=" + AlphaApplication.getActionType());
                 //检测是否在充电状态和边充边玩状态是否打开
-                if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)){
-                    Toast.makeText(mContext, mContext.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)){
+//                    Toast.makeText(mContext, mContext.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
 
                 mHelper.doActionCommand(
                         MyActionsHelper.Command_type.Do_default, "", AlphaApplication.getActionType());

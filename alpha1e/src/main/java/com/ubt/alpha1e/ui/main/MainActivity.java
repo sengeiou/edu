@@ -42,6 +42,7 @@ import com.ubt.alpha1e.services.AutoScanConnectService;
 import com.ubt.alpha1e.ui.MyMainActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
@@ -304,21 +305,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 startActivity(intent);
                 break;
             case R.id.top_icon2:
-                boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
-                Intent bluetoothConnectIntent = new Intent();
-                if (isfirst) {
-                    UbtLog.d(TAG, "第一次蓝牙连接");
-                    SPUtils.getInstance().put("firstBluetoothConnect", false);
-                    bluetoothConnectIntent.setClass(this, BluetoothguidestartrobotActivity.class);
-                } else {
-                    UbtLog.d(TAG, "非第一次蓝牙连接 ");
-                    bluetoothConnectIntent.setClass(this, BluetoothandnetconnectstateActivity.class);
-
-                }
-                //startActivity(bluetoothConnectIntent);
-                isBtConnect = isBulueToothConnected();
-                startActivityForResult(bluetoothConnectIntent, 100);
-                this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                gotoConnectBluetooth();
                 break;
             case R.id.top_icon3:
                 if(isBulueToothConnected()) {
@@ -336,6 +323,19 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     mLaunch.setClass(this, RemoteSelActivity.class);
                     //startActivity(new Intent(this, ActionTestActivity.class));
                     startActivity(mLaunch);
+                }else {
+                    UbtLog.d(TAG,"蓝牙没连接，请去连接蓝牙");
+                    new ConfirmDialog(this).builder()
+                            .setTitle("提示")
+                            .setMsg("请先连接蓝牙和Wi-Fi")
+                            .setCancelable(true)
+                            .setPositiveButton("去连接", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    UbtLog.d(TAG, "去连接蓝牙 ");
+                                    gotoConnectBluetooth();
+                                }
+                            }).show();
                 }
                 break;
             case R.id.right_icon2:
@@ -396,6 +396,24 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
     }
 
+
+    void gotoConnectBluetooth(){
+        boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
+        Intent bluetoothConnectIntent = new Intent();
+        if (isfirst) {
+            UbtLog.d(TAG, "第一次蓝牙连接");
+            SPUtils.getInstance().put("firstBluetoothConnect", false);
+            bluetoothConnectIntent.setClass(this, BluetoothguidestartrobotActivity.class);
+        } else {
+            UbtLog.d(TAG, "非第一次蓝牙连接 ");
+            bluetoothConnectIntent.setClass(this, BluetoothandnetconnectstateActivity.class);
+
+        }
+        //startActivity(bluetoothConnectIntent);
+        isBtConnect = isBulueToothConnected();
+        startActivityForResult(bluetoothConnectIntent, 100);
+        this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+    }
 
     @Override
     public void onLostBtCoon() {
