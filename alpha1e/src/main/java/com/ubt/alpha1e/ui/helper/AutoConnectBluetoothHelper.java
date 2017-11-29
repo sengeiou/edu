@@ -1,69 +1,69 @@
 package com.ubt.alpha1e.ui.helper;
 
-        import android.app.Activity;
-        import android.bluetooth.BluetoothAdapter;
-        import android.bluetooth.BluetoothClass;
-        import android.bluetooth.BluetoothDevice;
-        import android.content.BroadcastReceiver;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.content.IntentFilter;
-        import android.graphics.Bitmap;
-        import android.os.CountDownTimer;
-        import android.os.Handler;
-        import android.os.Message;
-        import android.view.View;
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
 
-        import com.tencent.ai.tvs.env.ELoginPlatform;
-        import com.ubt.alpha1e.AlphaApplication;
-        import com.ubt.alpha1e.base.SPUtils;
-        import com.ubt.alpha1e.business.FileSendManager;
-        import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
-        import com.ubt.alpha1e.data.FileTools;
-        import com.ubt.alpha1e.data.JsonTools;
-        import com.ubt.alpha1e.data.TimeTools;
-        import com.ubt.alpha1e.data.model.NetworkInfo;
-        import com.ubt.alpha1e.event.RobotEvent;
-        import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
-        import com.ubt.alpha1e.net.http.basic.GetDataFromWeb;
-        import com.ubt.alpha1e.net.http.basic.HttpAddress;
-        import com.ubt.alpha1e.net.http.basic.HttpAddress.Request_type;
-        import com.ubt.alpha1e.net.http.basic.IJsonListener;
-        import com.ubt.alpha1e.services.ActivationService;
-        import com.ubt.alpha1e.services.AutoScanConnectService;
-        import com.ubt.alpha1e.services.RecordSoftService;
-        import com.ubt.alpha1e.ui.BaseActivity;
-        import com.ubt.alpha1e.ui.dialog.AlertDialog;
-        import com.ubt.alpha1e.update.BluetoothUpdateManager;
-        import com.ubt.alpha1e.update.EngineUpdateManager;
-        import com.ubt.alpha1e.update.IBluetoothUpdateManagerListener;
-        import com.ubt.alpha1e.update.IEngineUpdateManagerListener;
-        import com.ubt.alpha1e.update.RobotSoftUpdateManager;
-        import com.ubt.alpha1e.utils.BluetoothParamUtil;
-        import com.ubt.alpha1e.utils.GsonImpl;
-        import com.ubt.alpha1e.utils.log.MyLog;
-        import com.ubt.alpha1e.utils.log.UbtLog;
-        import com.ubtechinc.base.AlphaInfo;
-        import com.ubtechinc.base.BlueToothManager;
-        import com.ubtechinc.base.BluetoothUtil;
-        import com.ubtechinc.base.ConstValue;
-        import com.ubtechinc.sqlite.DBAlphaInfoManager;
+import com.tencent.ai.tvs.env.ELoginPlatform;
+import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.business.FileSendManager;
+import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
+import com.ubt.alpha1e.data.FileTools;
+import com.ubt.alpha1e.data.JsonTools;
+import com.ubt.alpha1e.data.TimeTools;
+import com.ubt.alpha1e.data.model.NetworkInfo;
+import com.ubt.alpha1e.event.RobotEvent;
+import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
+import com.ubt.alpha1e.net.http.basic.GetDataFromWeb;
+import com.ubt.alpha1e.net.http.basic.HttpAddress;
+import com.ubt.alpha1e.net.http.basic.HttpAddress.Request_type;
+import com.ubt.alpha1e.net.http.basic.IJsonListener;
+import com.ubt.alpha1e.services.ActivationService;
+import com.ubt.alpha1e.services.AutoScanConnectService;
+import com.ubt.alpha1e.services.RecordSoftService;
+import com.ubt.alpha1e.ui.BaseActivity;
+import com.ubt.alpha1e.ui.dialog.AlertDialog;
+import com.ubt.alpha1e.update.BluetoothUpdateManager;
+import com.ubt.alpha1e.update.EngineUpdateManager;
+import com.ubt.alpha1e.update.IBluetoothUpdateManagerListener;
+import com.ubt.alpha1e.update.IEngineUpdateManagerListener;
+import com.ubt.alpha1e.update.RobotSoftUpdateManager;
+import com.ubt.alpha1e.utils.BluetoothParamUtil;
+import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.log.MyLog;
+import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.AlphaInfo;
+import com.ubtechinc.base.BlueToothManager;
+import com.ubtechinc.base.BluetoothUtil;
+import com.ubtechinc.base.ConstValue;
+import com.ubtechinc.sqlite.DBAlphaInfoManager;
 
-        import org.greenrobot.eventbus.EventBus;
-        import org.json.JSONException;
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
 
-        import java.io.File;
-        import java.io.UnsupportedEncodingException;
-        import java.util.ArrayList;
-        import java.util.Date;
-        import java.util.List;
-        import java.util.Map;
-        import java.util.Timer;
-        import java.util.TimerTask;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
-        import static com.ubt.alpha1e.base.Constant.SP_CLIENT_ID;
+import static com.ubt.alpha1e.base.Constant.SP_CLIENT_ID;
 
-   public class AutoConnectBluetoothHelper extends BaseHelper implements IJsonListener,
+public class AutoConnectBluetoothHelper extends BaseHelper implements IJsonListener,
         IEngineUpdateManagerListener,IBluetoothUpdateManagerListener,FileSendManager.IFileSendManager {
 
     private static final String TAG = "AutoConnectBluetoothHelper";
@@ -130,8 +130,8 @@ package com.ubt.alpha1e.ui.helper;
 
     private boolean isNextConnect = true;
 
-   private int clientIdSendWhich = 0 ; //clientId发送到哪一段
-   String clientid[] = null;
+    private int clientIdSendWhich = 0 ; //clientId发送到哪一段
+    String clientid[] = null;
 
     // -------------------------------
     private BaseWebRunnable mCurrentWait;
@@ -1276,4 +1276,3 @@ package com.ubt.alpha1e.ui.helper;
         FileSendManager.getInstance(this, mContext.getApplicationContext()).release();
     }
 }
-

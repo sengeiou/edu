@@ -425,6 +425,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void onEventRobot(RobotEvent event) {
         super.onEventRobot(event);
         if(event.getEvent() == RobotEvent.Event.NETWORK_STATUS) {
+            AutoScanConnectService.doStopSelf();
             NetworkInfo networkInfo = (NetworkInfo)  event.getNetworkInfo();
             UbtLog.d(TAG,"networkInfo == " + networkInfo.status);
             isNetworkConnect=networkInfo.status;
@@ -457,6 +458,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             }
         }else if(event.getEvent()== RobotEvent.Event.CONNECT_SUCCESS){
             UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 1");
+//            AutoScanConnectService.doStopSelf();
             if(!MainUiBtHelper.getInstance(getContext()).isLostCoon()){
                 UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 2");
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
@@ -727,7 +729,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             if(mCmd<0){
                 mCmd=255+mCmd;
             }
-          UbtLog.d(TAG, "CMD IS   " + mCmd);
+//          UbtLog.d(TAG, "CMD IS   " + mCmd);
           if(mCmd==ConstValue.DV_TAP_HEAD) {
               //looperThread.send(createMessage(ROBOT_HIT_HEAD));
           }else if(mCmd==ConstValue.DV_6D_GESTURE){
@@ -777,6 +779,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    protected void onStop() {
+        AutoScanConnectService.doEntryManalConnect(true);
+        AutoScanConnectService.doStopSelf();
+        super.onStop();
     }
 
     private int powerStatusUpdate(byte mParam) {

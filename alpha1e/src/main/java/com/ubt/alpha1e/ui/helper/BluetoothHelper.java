@@ -156,21 +156,21 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                 BluetoothClass cod = newDevices.getBluetoothClass();
                 //UbtLog.d(TAG,"接收到的蓝牙名称:"+new_name+"     蓝牙地址:"+newDevices.getAddress()+"  蓝牙类型："+cod.toString() + "    getBondState  " + newDevices.getBondState());
                 //if(!cod.toString().equals("1f00")){// CoD为"1f00"为BLE设备,过滤掉
-                    mDevicesList.add(newDevices);
-                    //MyLog.writeLog(TAG, "接收到的蓝牙总数量：" + mDevicesList.size());
-                    mUI.onGetNewDevices(mDevicesList);
+                mDevicesList.add(newDevices);
+                //MyLog.writeLog(TAG, "接收到的蓝牙总数量：" + mDevicesList.size());
+                mUI.onGetNewDevices(mDevicesList);
 
-                    RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.SCAN_ROBOT);
-                    robotEvent.setBluetoothDevice(newDevices);
-                    robotEvent.setRssi(arg1.getExtras().getShort(BluetoothDevice.EXTRA_RSSI));
-                    EventBus.getDefault().post(robotEvent);
+                RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.SCAN_ROBOT);
+                robotEvent.setBluetoothDevice(newDevices);
+                robotEvent.setRssi(arg1.getExtras().getShort(BluetoothDevice.EXTRA_RSSI));
+                EventBus.getDefault().post(robotEvent);
 
-                    if (newDevices.getBondState() != BluetoothDevice.BOND_BONDED) {
-                        //信号强度。
-                        short rssi = arg1.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
-                        //UbtLog.d(TAG,"接收到的蓝牙名称:"+new_name+"     蓝牙地址:"+newDevices.getAddress()+"  rssi:: " + rssi);
-                    }
-                    //}
+                if (newDevices.getBondState() != BluetoothDevice.BOND_BONDED) {
+                    //信号强度。
+                    short rssi = arg1.getExtras().getShort(BluetoothDevice.EXTRA_RSSI);
+                    //UbtLog.d(TAG,"接收到的蓝牙名称:"+new_name+"     蓝牙地址:"+newDevices.getAddress()+"  rssi:: " + rssi);
+                }
+                //}
             }
 
         }
@@ -306,10 +306,10 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                                         objStr, BluetoothHelper.this).Update();
                             }
                         }).setNegativeButton(AlphaApplication.getBaseActivity().getStringResources("ui_common_cancel"), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mHandler.sendEmptyMessage(MSG_DO_READ_SOFT_VERSION);
-                            }
+                    @Override
+                    public void onClick(View v) {
+                        mHandler.sendEmptyMessage(MSG_DO_READ_SOFT_VERSION);
+                    }
                 }).show();
             }else if(msg.what == MSG_DO_UPDATE_BLUETOOTH){
 
@@ -1145,8 +1145,8 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                 int local_soft_version = Integer
                         .parseInt(mCurrentLocalSoftVersion);
                 MyLog.writeLog(TAG,"remote_soft_version-->"
-                                + remote_soft_version + ",local_soft_version"
-                                + local_soft_version);
+                        + remote_soft_version + ",local_soft_version"
+                        + local_soft_version);
 
                 //remote_soft_version = 0;
                 if (remote_soft_version > local_soft_version) {

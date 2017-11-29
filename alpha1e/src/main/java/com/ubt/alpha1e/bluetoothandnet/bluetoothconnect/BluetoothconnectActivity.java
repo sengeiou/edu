@@ -344,7 +344,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
                 return;
             }
             tv_devices_num.setText("进行自动连接蓝牙......");
-
+            UbtLog.d(TAG,"进行自动连接");
             mCurrentRobotInfo = receiveRobot;
             isConnecting = true;
             mHelper.doCancelCoon();
