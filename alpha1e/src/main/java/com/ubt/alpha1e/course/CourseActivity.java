@@ -59,7 +59,7 @@ public class CourseActivity extends MVPBaseActivity<CourseContract.View, CourseP
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     public Fragment mCurrentFragment;
-    private LinkedHashMap<Integer, Fragment> mFragmentCache = new LinkedHashMap<>();
+    //private LinkedHashMap<Integer, Fragment> mFragmentCache = new LinkedHashMap<>();
 
     private int mEnterPropress = 0;
 
@@ -82,6 +82,7 @@ public class CourseActivity extends MVPBaseActivity<CourseContract.View, CourseP
 
 
         int mCurrentProgress = mPresenter.doGetLocalProgress();
+        mCurrentProgress = 0;
         mEnterPropress = mCurrentProgress;
         Fragment fragment = null;
         int index = 0;
@@ -104,7 +105,7 @@ public class CourseActivity extends MVPBaseActivity<CourseContract.View, CourseP
         mFragmentTransaction.add(R.id.rl_content, fragment);
         mFragmentTransaction.commit();
         mCurrentFragment = fragment;
-        mFragmentCache.put(index, fragment);
+        //mFragmentCache.put(index, fragment);
 
     }
 
@@ -165,30 +166,18 @@ public class CourseActivity extends MVPBaseActivity<CourseContract.View, CourseP
     }
 
     public void switchFragment(int index){
+        UbtLog.d(TAG,"switchFragment index = " + index);
         if(index == FRAGMENT_PRINCIPLE){
-
-            Fragment f = mFragmentCache.containsKey(FRAGMENT_PRINCIPLE) ? mFragmentCache.get(FRAGMENT_PRINCIPLE) : new PrincipleFragment((PrincipleHelper) mHelper);
-            if (!mFragmentCache.containsKey(FRAGMENT_PRINCIPLE)) {
-                mFragmentCache.put(FRAGMENT_PRINCIPLE, f);
-            }
+            Fragment f = new PrincipleFragment((PrincipleHelper) mHelper);
             loadFragment(f);
         }else if(index == FRAGMENT_SPLIT){
-            Fragment f = mFragmentCache.containsKey(FRAGMENT_SPLIT) ? mFragmentCache.get(FRAGMENT_SPLIT) : new SplitFragment((PrincipleHelper) mHelper);
-            if (!mFragmentCache.containsKey(FRAGMENT_SPLIT)) {
-                mFragmentCache.put(FRAGMENT_SPLIT, f);
-            }
+            Fragment f = new SplitFragment((PrincipleHelper) mHelper);
             loadFragment(f);
         }else if(index == FRAGMENT_MERGE){
-            Fragment f = mFragmentCache.containsKey(FRAGMENT_MERGE) ? mFragmentCache.get(FRAGMENT_MERGE) : new MergeFragment((PrincipleHelper) mHelper);
-            if (!mFragmentCache.containsKey(FRAGMENT_MERGE)) {
-                mFragmentCache.put(FRAGMENT_MERGE, f);
-            }
+            Fragment f = new MergeFragment((PrincipleHelper) mHelper);
             loadFragment(f);
         }else if(index == FRAGMENT_FEATURE){
-            Fragment f = mFragmentCache.containsKey(FRAGMENT_FEATURE) ? mFragmentCache.get(FRAGMENT_FEATURE) : new FeatureFragment((PrincipleHelper) mHelper);
-            if (!mFragmentCache.containsKey(FRAGMENT_FEATURE)) {
-                mFragmentCache.put(FRAGMENT_FEATURE, f);
-            }
+            Fragment f = new FeatureFragment((PrincipleHelper) mHelper);
             loadFragment(f);
         }
     }
@@ -205,20 +194,21 @@ public class CourseActivity extends MVPBaseActivity<CourseContract.View, CourseP
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         UbtLog.d(TAG,"targetFragment.isAdded()->>>"+(!targetFragment.isAdded()));
         if (!targetFragment.isAdded()) {
-            mCurrentFragment.onStop();
 
             transaction
-                    .hide(mCurrentFragment)
+                    .remove(mCurrentFragment)
                     .add(R.id.rl_content, targetFragment)
                     .commit();
-        } else {
-            mCurrentFragment.onStop();
-            targetFragment.onResume();
 
+            //mCurrentFragment.onDestroyView();
+        } else {
+
+            targetFragment.onResume();
             transaction
-                    .hide(mCurrentFragment)
+                    .remove(mCurrentFragment)
                     .show(targetFragment)
                     .commit();
+            //mCurrentFragment.onDestroyView();
         }
         mCurrentFragment = targetFragment;
     }

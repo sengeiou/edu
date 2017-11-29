@@ -93,10 +93,9 @@ public class FeedbackActivity extends MVPBaseActivity<FeedbackContract.View, Fee
 
     private void doCommit() {
         UbtLog.d(TAG, "doCommit");
-        String content = edtFeedback.getText().toString();
-        String phone = edtPhone.getText().toString();
-        String email = edtEmail.getText().toString();
-
+        String content = edtFeedback.getText().toString().trim();
+        String phone = edtPhone.getText().toString().trim();
+        String email = edtEmail.getText().toString().trim();
         if (TextUtils.isEmpty(content)) {
             ToastUtils.showShort(getStringResources("ui_about_feedback_empty"));
             return;
@@ -112,12 +111,12 @@ public class FeedbackActivity extends MVPBaseActivity<FeedbackContract.View, Fee
             return;
         }
 
-        if (TextUtils.isEmpty(phone) ) {
+        if (TextUtils.isEmpty(phone)) {
             ToastUtils.showShort(getStringResources("ui_telephone_request"));
             return;
         }
 
-        mPresenter.doFeedBack(content,phone,email);
+        mPresenter.doFeedBack(content,email,phone);
     }
 
     @Override

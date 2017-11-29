@@ -44,7 +44,7 @@ public class PrincipleHelper extends BaseHelper {
 
         //UbtLog.d(TAG,"cmd = " + cmd + "    = " + param[0]);
         if(cmd == ConstValue.DV_SET_PLAY_SOUND){
-            PrincipleEvent playSoundEvent = new PrincipleEvent(PrincipleEvent.Event.PLAY_SOUND_1);
+            PrincipleEvent playSoundEvent = new PrincipleEvent(PrincipleEvent.Event.PLAY_SOUND);
             playSoundEvent.setStatus(param[0]);
             EventBus.getDefault().post(playSoundEvent);
         }else if(cmd == ConstValue.CTRL_ONE_ENGINE){
@@ -76,7 +76,7 @@ public class PrincipleHelper extends BaseHelper {
             if(!TextUtils.isEmpty(finishPlayActionName) && finishPlayActionName.contains("初始化")){
                 //return;
             }else {
-                PrincipleEvent playSoundEvent = new PrincipleEvent(PrincipleEvent.Event.PLAY_SOUND);
+                PrincipleEvent playSoundEvent = new PrincipleEvent(PrincipleEvent.Event.PLAY_ACTION_FINISH);
                 playSoundEvent.setStatus(param[0]);
                 EventBus.getDefault().post(playSoundEvent);
             }
