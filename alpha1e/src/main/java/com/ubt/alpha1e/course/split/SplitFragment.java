@@ -134,8 +134,7 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
             return;
         }
 
-        if(event.getEvent() == PrincipleEvent.Event.PLAY_SOUND){
-            int status = event.getStatus();
+        if(event.getEvent() == PrincipleEvent.Event.PLAY_ACTION_FINISH){
             mHandler.sendEmptyMessage(HIDE_DIALOG);
         }
     }
@@ -170,15 +169,19 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
 
             @Override
             public void onGlobalLayout() {
-                rlRobot.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!hasInitRobot && ivRobot.getHeight() > 0) {
-                            hasInitRobot = true;
-                            initRobot();
+                UbtLog.d(TAG,"rlRobot = " + rlRobot + " mHandler = " + mHandler);
+                if(rlRobot != null){
+                    rlRobot.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!hasInitRobot && ivRobot.getHeight() > 0) {
+                                hasInitRobot = true;
+                                initRobot();
+                            }
                         }
-                    }
-                });
+                    });
+                }
+
             }
         });
         initData();

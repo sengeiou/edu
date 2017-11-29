@@ -137,7 +137,7 @@ public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.V
                     //每次editText有变化的时候，则移除上次发出的延迟线程
                     mHandler.removeCallbacks(delayRun);
                 }
-                editString = s.toString();
+                editString = s.toString().trim();
 
                 //延迟800ms，如果不再输入字符，则执行该线程的run方法
                 mHandler.postDelayed(delayRun, 500);

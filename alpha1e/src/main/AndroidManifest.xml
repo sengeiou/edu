@@ -228,6 +228,7 @@
             android:theme="@style/NoTitleTheme"/>
         <activity
             android:name=".ui.RemoteSelActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
@@ -247,6 +248,7 @@
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".ui.RemoteActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
@@ -525,10 +527,12 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".userinfo.helpfeedback.feedback.FeedbackActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.helpfeedback.feedbackdetail.FeedbackDetailActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
@@ -570,24 +574,28 @@
 
         <activity
             android:name=".userinfo.aboutus.AboutUsActivity"
-            android:label="@string/title_activity_about_us"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.cleancache.CleanCacheActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.contactus.ContactUsActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.photoshow.PhotoShowActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".userinfo.psdmanage.PsdManageActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
@@ -602,6 +610,7 @@
 
         <activity
             android:name=".course.CourseActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 

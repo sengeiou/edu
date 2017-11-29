@@ -60,7 +60,7 @@ public class CleanCacheActivity extends MVPBaseActivity<CleanCacheContract.View,
     protected void initUI() {
         UbtLog.d(TAG, "--initUI--" + getStringResources("ui_settings_clear_cache"));
         tvBaseTitleName.setText(getStringResources("ui_settings_clear_cache"));
-
+        UbtLog.d(TAG,"doReadCacheSize");
         mPresenter.doReadCacheSize();
     }
 
@@ -84,6 +84,7 @@ public class CleanCacheActivity extends MVPBaseActivity<CleanCacheContract.View,
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+        UbtLog.d(TAG,"initUI");
         initUI();
     }
 
@@ -142,6 +143,10 @@ public class CleanCacheActivity extends MVPBaseActivity<CleanCacheContract.View,
 
             @Override
             public void run() {
+                UbtLog.d(TAG,"--onReadCacheSize--" + tvCacheSize);
+                if(tvCacheSize == null){
+                    return;
+                }
                 int kb = useSize / 1024;
                 if (kb > 1024) {
                     int mb = kb / 1024;
@@ -157,9 +162,7 @@ public class CleanCacheActivity extends MVPBaseActivity<CleanCacheContract.View,
                     }else {
                         tvUseRatio.setText(getStringResources("ui_setting_cache_retio_title") + "0%");
                     }
-
                 }
-
             }
         });
     }

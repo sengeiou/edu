@@ -63,6 +63,26 @@
 
         </android.support.v7.widget.RecyclerView>
 
+        <RelativeLayout
+            android:id="@+id/rl_empty_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:drawableTop="@drawable/icon_setting_search_default"
+                android:drawablePadding="5dp"
+                android:text="@string/ui_setting_empty_search_result"
+                android:textSize="16sp"
+                android:textColor="#85B4C9"
+                />
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>

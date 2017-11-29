@@ -86,7 +86,7 @@
                         android:background="#F9F9F9"
                         android:paddingRight="10dp"
                         android:paddingLeft="10dp"
-                        android:maxLength="20"
+                        android:maxLength="50"
                         android:imeOptions="flagNoExtractUi"
                         android:textColor="@color/txt_new_edtion"
                         android:textColorHint="@color/T23"
