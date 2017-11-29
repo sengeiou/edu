@@ -1,7 +1,7 @@
 <resources>
     <array name="ui_lanuages">
-        <item>@string/ui_settings_language_english</item>
         <item>@string/ui_setting_languages_s_chinese</item>
+        <item>@string/ui_settings_language_english</item>
         <!--<item>@string/ui_settings_language_t_chinese</item>
         <item>@string/ui_settings_language_japanese</item>
         <item>@string/ui_settings_language_franch</item>

@@ -32,6 +32,7 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.action.help.HelpActivity;
 import com.ubt.alpha1e.action.model.ActionConstant;
 import com.ubt.alpha1e.action.model.ActionDataModel;
 import com.ubt.alpha1e.action.model.PrepareDataModel;
@@ -877,7 +878,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 intent.putExtra(WebContentActivity.SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 intent.putExtra(WebContentActivity.WEB_TITLE, "");
                 intent.putExtra(WebContentActivity.WEB_URL, url);
-                intent.setClass(mContext, WebContentActivity.class);
+                intent.setClass(mContext, HelpActivity.class);
                 mContext.startActivity(intent);
                 break;
 
@@ -1393,6 +1394,9 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
      */
     @Override
     public void onActionConfirm(PrepareDataModel prepareDataModel) {
+        if(prepareDataModel == null){
+            return;
+        }
         List<ActionDataModel> list = prepareDataModel.getList();
         for (int i = 0; i < list.size(); i++) {
             String time = list.get(i).getXmlRunTime();
@@ -1519,6 +1523,9 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
      */
     @Override
     public void onMusicConfirm(PrepareMusicModel prepareMusicModel) {
+        if(prepareMusicModel == null){
+            return;
+        }
         String name = prepareMusicModel.getMusicName();
         int songType = prepareMusicModel.getMusicType();
         UbtLog.d(TAG, "name:" + name + "songType:" + songType);

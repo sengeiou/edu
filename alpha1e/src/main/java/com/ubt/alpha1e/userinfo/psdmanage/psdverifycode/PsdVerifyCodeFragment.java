@@ -171,7 +171,6 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
                 mPresenter.doGetVerifyCode(edtPhone.getText().toString());
                 break;
             case R.id.tv_confirm:
-
                 mCoonLoadingDia.cancel();
                 mCoonLoadingDia.show();
                 mPresenter.doVerifyCode(edtPhone.getText().toString(), edtVerifyCode.getText().toString());
@@ -193,8 +192,13 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
                 }
 
                 if (isSuccess) {
+                    edtPhone.setFocusable(false);
+                    edtPhone.setFocusableInTouchMode(false);
                     ToastUtils.showShort(getStringRes("ui_setting_verify_code_send_success"));
                 }else {
+                    edtPhone.setFocusable(true);
+                    edtPhone.setFocusableInTouchMode(true);
+
                     ToastUtils.showShort(getStringRes("ui_setting_verify_code_send_fail"));
                     requestCountDown.cancel();
                     tvGetVerifyCode.setText(getStringRes("ui_register_get_vertify_code"));
@@ -231,6 +235,8 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
 
         @Override
         public void onFinish() {
+            edtPhone.setFocusable(true);
+            edtPhone.setFocusableInTouchMode(true);
 
             tvGetVerifyCode.setText(getStringRes("ui_register_get_vertify_code"));
             setViewEnable(tvGetVerifyCode,true);

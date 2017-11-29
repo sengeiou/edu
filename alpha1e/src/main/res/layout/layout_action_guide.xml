@@ -72,6 +72,7 @@
             android:textColor="@color/action_guid_text_color"
             android:background="@drawable/bubble_right"
             android:layout_toLeftOf="@+id/iv_help"
+            android:layout_marginRight="-20dp"
             android:visibility="gone"
             />
 
@@ -79,6 +80,7 @@
             android:id="@+id/tv_click_reset"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="-20dp"
             android:text="@string/ui_create_guide_initial"
             android:gravity="center"
             android:textColor="@color/action_guid_text_color"
@@ -91,6 +93,7 @@
             android:id="@+id/tv_click_auto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="-20dp"
             android:text="@string/ui_create_guide_auto"
             android:gravity="center"
             android:textColor="@color/action_guid_text_color"
@@ -176,7 +179,7 @@
             android:layout_below="@+id/tv_click_basic"
             android:layout_toRightOf="@+id/ll_left"
             android:visibility="invisible"
-            android:layout_marginTop="-5dp"
+            android:layout_marginTop="-20dp"
             />
 
         <TextView
@@ -186,10 +189,10 @@
             android:text="@string/ui_create_guide_music"
             android:background="@drawable/bubble_left"
             android:textColor="@color/action_guid_text_color"
-            android:gravity="center"
+            android:gravity="left|center"
             android:layout_below="@+id/tv_click_advance"
             android:layout_toRightOf="@+id/ll_left"
-            android:layout_marginTop="-10dp"
+            android:layout_marginTop="-40dp"
             android:visibility="invisible"
             />
 

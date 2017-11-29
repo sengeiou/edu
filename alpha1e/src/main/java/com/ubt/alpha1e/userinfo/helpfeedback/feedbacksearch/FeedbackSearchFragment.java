@@ -10,6 +10,7 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.adapter.FeedbackRecyclerAdapter;
@@ -38,9 +39,12 @@ public class FeedbackSearchFragment extends MVPBaseFragment<FeedbackSearchContra
 
     @BindView(R.id.rv_feedback)
     RecyclerView rvFeedback;
+    @BindView(R.id.rl_empty_result)
+    RelativeLayout rlEmptyResult;
     Unbinder unbinder;
 
     public FeedbackRecyclerAdapter mAdapter;
+
     private List<FeedbackInfo> mFeedbackInfoDatas = null;
     private List<FeedbackInfo> mAllFeedbackInfoDatas = null;
 
@@ -48,12 +52,14 @@ public class FeedbackSearchFragment extends MVPBaseFragment<FeedbackSearchContra
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case REFRESH_DATA:
-                    UbtLog.d(TAG,"mFeedbackInfoDatas.size() = " + mFeedbackInfoDatas.size());
+                    UbtLog.d(TAG, "mFeedbackInfoDatas.size() = " + mFeedbackInfoDatas.size());
                     mAdapter.notifyDataSetChanged();
-                    if(mFeedbackInfoDatas.size() == 0){
-
+                    if (mFeedbackInfoDatas.size() == 0) {
+                        rlEmptyResult.setVisibility(View.VISIBLE);
+                    }else {
+                        rlEmptyResult.setVisibility(View.GONE);
                     }
                     break;
             }
@@ -114,8 +120,8 @@ public class FeedbackSearchFragment extends MVPBaseFragment<FeedbackSearchContra
         for (int i = 0; i < 2; i++) {
             FeedbackInfo f1 = new FeedbackInfo();
             f1.feedbackId = 1;
-            f1.feedbackName = ((MVPBaseActivity)getActivity()).getStringResources("ui_setting_hot_question") + "标题_" + i;
-            f1.feedbackIntroduction = ((MVPBaseActivity)getActivity()).getStringResources("ui_setting_hot_question") + "内容_" + i;
+            f1.feedbackName = ((MVPBaseActivity) getActivity()).getStringResources("ui_setting_hot_question") + "标题_" + i;
+            f1.feedbackIntroduction = ((MVPBaseActivity) getActivity()).getStringResources("ui_setting_hot_question") + "内容_" + i;
             mAllFeedbackInfoDatas.add(f1);
         }
 
@@ -123,6 +129,8 @@ public class FeedbackSearchFragment extends MVPBaseFragment<FeedbackSearchContra
     }
 
     public void initRecyclerViews() {
+        mFeedbackInfoDatas.addAll(mAllFeedbackInfoDatas);
+
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvFeedback.setLayoutManager(mLayoutManager);
         RecyclerView.ItemAnimator animator = rvFeedback.getItemAnimator();
@@ -133,7 +141,7 @@ public class FeedbackSearchFragment extends MVPBaseFragment<FeedbackSearchContra
         rvFeedback.setAdapter(mAdapter);
     }
 
-    public void refreshSearchResult(String editStr){
+    public void refreshSearchResult(String editStr) {
         mPresenter.doSearchResult(mAllFeedbackInfoDatas, editStr);
     }
 

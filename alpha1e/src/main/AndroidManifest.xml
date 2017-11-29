@@ -188,7 +188,7 @@
                 <data android:scheme="1106515940"/>
             </intent-filter>
         </activity>
-        <activity
+    <!--    <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="behind"
@@ -196,7 +196,7 @@
         <activity
             android:name="com.tencent.ai.tvs.ui.TVSAssistActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
-        </activity>
+        </activity>-->
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
@@ -231,6 +231,7 @@
             android:theme="@style/NoTitleTheme"/>
         <activity
             android:name=".ui.RemoteSelActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
@@ -250,6 +251,7 @@
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".ui.RemoteActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
@@ -528,10 +530,12 @@
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".userinfo.helpfeedback.feedback.FeedbackActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.helpfeedback.feedbackdetail.FeedbackDetailActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
@@ -573,24 +577,28 @@
 
         <activity
             android:name=".userinfo.aboutus.AboutUsActivity"
-            android:label="@string/title_activity_about_us"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.cleancache.CleanCacheActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.contactus.ContactUsActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.photoshow.PhotoShowActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".userinfo.psdmanage.PsdManageActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
@@ -605,6 +613,7 @@
 
         <activity
             android:name=".course.CourseActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
@@ -646,6 +655,11 @@
             android:name=".action.actioncreate.SaveSuccessActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity android:name=".action.help.HelpActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen" />
+
     </application>
 
 </manifest>

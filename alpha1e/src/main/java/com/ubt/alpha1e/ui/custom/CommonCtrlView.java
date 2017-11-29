@@ -694,7 +694,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     @Override
     public void notePlayStart(List<String> mSourceActionNameList, ActionInfo action, ActionPlayer.Play_type mCurrentPlayType) {
         UbtLog.d(TAG, "--wmma--notePlayStart callback!");
-        btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
+        //btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
         gifImageView.setVisibility(View.VISIBLE);
         if (action != null) {
             String name = action.actionName;
