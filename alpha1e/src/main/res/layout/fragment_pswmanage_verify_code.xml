@@ -3,7 +3,7 @@
     android:layout_height="match_parent">
 
     <ScrollView
-        android:layout_width="350dp"
+        android:layout_width="380dp"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
@@ -39,7 +39,7 @@
 
                 <RelativeLayout
                     android:id="@+id/rl_base_search"
-                    android:layout_width="200dp"
+                    android:layout_width="225dp"
                     android:layout_height="50dp"
                     android:layout_toRightOf="@+id/tv_phone"
                     android:layout_centerVertical="true"
@@ -47,7 +47,7 @@
 
                     <com.ubt.alpha1e.ui.custom.ClearableEditText
                         android:id="@+id/edt_phone"
-                        android:layout_width="120dp"
+                        android:layout_width="145dp"
                         android:layout_height="50dp"
                         android:gravity="center_vertical"
                         android:background="@color/transparent"
@@ -103,7 +103,7 @@
 
                 <com.ubt.alpha1e.ui.custom.ClearableEditText
                     android:id="@+id/edt_verify_code"
-                    android:layout_width="200dp"
+                    android:layout_width="225dp"
                     android:layout_height="50dp"
                     android:gravity="center_vertical"
                     android:layout_toRightOf="@+id/tv_verify_code"

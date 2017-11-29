@@ -47,7 +47,7 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
 
     private static final int SHOW_VIEW = 1;
     private static final int BEZIER_ANIMATOR_FINISH = 2;
-    private static final int PLAY_SOUND_FINISH = 3;
+    private static final int PLAY_ACTION_FINISH = 3;
     private static final int ENABLE_ALL_VIEW = 4;
     private static final int RECEVICE_SENSOR = 5;
     private static final int RECEVICE_HEAD = 6;
@@ -173,28 +173,28 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                     int viewId = msg.arg1;
                     if(viewId == R.id.bzv_principle_steering_engine){
                         ivPrincipleSteeringEngine.setVisibility(View.VISIBLE);
-                        mFloatAnimator.addShow(ivPrincipleSteeringEngine);
+                        //mFloatAnimator.addShow(ivPrincipleSteeringEngine);
                     }else if(viewId == R.id.bzv_principle_infrared_sensor){
                         ivPrincipleInfraredSensor.setVisibility(View.VISIBLE);
-                        mFloatAnimator.addShow(ivPrincipleInfraredSensor);
+                        //mFloatAnimator.addShow(ivPrincipleInfraredSensor);
                     }else if(viewId == R.id.bzv_principle_soundbox){
                         ivPrincipleSoundbox.setVisibility(View.VISIBLE);
-                        mFloatAnimator.addShow(ivPrincipleSoundbox);
+                        //mFloatAnimator.addShow(ivPrincipleSoundbox);
                     }else if(viewId == R.id.bzv_principle_head){
                         ivPrincipleHead.setVisibility(View.VISIBLE);
-                        mFloatAnimator.addShow(ivPrincipleHead);
+                        //mFloatAnimator.addShow(ivPrincipleHead);
                     }else if(viewId == R.id.bzv_principle_eye){
                         ivPrincipleEye.setVisibility(View.VISIBLE);
-                        mFloatAnimator.addShow(ivPrincipleEye);
+                        //mFloatAnimator.addShow(ivPrincipleEye);
                     }else if(viewId == R.id.bzv_principle_voice){
                         ivPrincipleVoice.setVisibility(View.VISIBLE);
-                        mFloatAnimator.addShow(ivPrincipleVoice);
+                        //mFloatAnimator.addShow(ivPrincipleVoice);
                     }else if(viewId == R.id.bzv_principle_voice_obstacle_avoidance){
                         ivPrincipleVoiceObstacleAvoidance.setVisibility(View.VISIBLE);
-                        mFloatAnimator.addShow(ivPrincipleVoiceObstacleAvoidance);
+                        //mFloatAnimator.addShow(ivPrincipleVoiceObstacleAvoidance);
                     }
                     break;
-                case PLAY_SOUND_FINISH:
+                case PLAY_ACTION_FINISH:
                     if(playIndex == 1){
                         /*if(playCount == 0){
                             if (tvMsgShow.getVisibility() == View.VISIBLE) {
@@ -441,15 +441,17 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
 
             @Override
             public void onGlobalLayout() {
-                rlRobot.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!hasInitRobot && ivRobot.getHeight() > 0) {
-                            hasInitRobot = true;
-                            initRobot();
+                if(rlRobot != null){
+                    rlRobot.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!hasInitRobot && ivRobot.getHeight() > 0) {
+                                hasInitRobot = true;
+                                initRobot();
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
     }
@@ -482,14 +484,9 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
             return;
         }
 
-        if(event.getEvent() == PrincipleEvent.Event.PLAY_SOUND){
-            int status = event.getStatus();
-            //if(status == 1){
-                mHandler.sendEmptyMessage(PLAY_SOUND_FINISH);
-            //}
-        }else if(event.getEvent() == PrincipleEvent.Event.PLAY_FILE){
-            //mHandler.sendEmptyMessage(PLAY_SOUND_FINISH);
+        if(event.getEvent() == PrincipleEvent.Event.PLAY_ACTION_FINISH){
 
+            mHandler.sendEmptyMessage(PLAY_ACTION_FINISH);
         }else if(event.getEvent() == PrincipleEvent.Event.CALL_GET_INFRARED_DISTANCE){
             int infraredDistance = event.getInfraredDistance();
             UbtLog.d(TAG,"infraredDistance = " + infraredDistance);
@@ -643,7 +640,7 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
             bzvPrincipleSteeringEngine.addPoint(startX, startY);
-            bzvPrincipleSteeringEngine.addPoint(targetX + (startX - targetX) / 2, targetY - (targetY - startY) / 2 - 30);
+            bzvPrincipleSteeringEngine.addPoint(targetX + (startX - targetX) / 2, targetY - (targetY - startY) / 2 - 20*scale);
             bzvPrincipleSteeringEngine.addPoint(targetX, targetY);
 
         } else if (targetView.getId() == R.id.iv_principle_infrared_sensor) {
@@ -654,7 +651,8 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
             bzvPrincipleInfraredSensor.addPoint(startX, startY);
-            bzvPrincipleInfraredSensor.addPoint(targetX + (startX - targetX) / 2, startY + 50);
+            bzvPrincipleInfraredSensor.addPoint(startX - 40*scale, startY );
+            bzvPrincipleInfraredSensor.addPoint(startX - 45*scale, startY - 20*scale);
             bzvPrincipleInfraredSensor.addPoint(targetX, targetY);
 
         } else if (targetView.getId() == R.id.iv_principle_soundbox) {
@@ -665,17 +663,19 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
             bzvPrincipleSoundbox.addPoint(startX, startY);
-            bzvPrincipleSoundbox.addPoint(targetX + (startX - targetX) / 2, targetY + 100);
+            bzvPrincipleSoundbox.addPoint(startX - 30 * scale, startY);
+            bzvPrincipleSoundbox.addPoint(targetX + (startX - targetX) / 2 , targetY + 60*scale);
             bzvPrincipleSoundbox.addPoint(targetX, targetY);
 
         } else if (targetView.getId() == R.id.iv_principle_head) {
 
-            startX = startPos[0] + startView.getWidth() / 2;
-            startY = startPos[1];
+            startX = startPos[0] + startView.getWidth() / 2 ;
+            startY = startPos[1] + 5*scale;
             targetX = targetPos[0] + targetView.getWidth() / 2;
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
             bzvPrincipleHead.addPoint(startX, startY);
+            bzvPrincipleHead.addPoint(startX-5*scale, startY-5*scale);
             bzvPrincipleHead.addPoint(targetX, targetY);
 
         } else if (targetView.getId() == R.id.iv_principle_eye) {
@@ -686,18 +686,18 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
             bzvPrincipleEye.addPoint(startX, startY);
-            bzvPrincipleEye.addPoint(targetX - (targetX - startX) / 2, targetY + 100);
+            bzvPrincipleEye.addPoint(targetX - 10*scale , targetY + 50*scale);
             bzvPrincipleEye.addPoint(targetX, targetY);
 
         } else if (targetView.getId() == R.id.iv_principle_voice) {
 
             startX = startPos[0] + startView.getWidth() / 2 + 46 / 2 * scale;
-            startY = startPos[1] + 118 / 2 * scale;
+            startY = startPos[1] + 126 / 2 * scale;
             targetX = targetPos[0] + targetView.getWidth() / 2;
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
             bzvPrincipleVoice.addPoint(startX, startY);
-            bzvPrincipleVoice.addPoint(targetX - (targetX - startX) / 2, startY + 50);
+            bzvPrincipleVoice.addPoint(targetX - (targetX - startX) / 2 , startY);
             bzvPrincipleVoice.addPoint(targetX, targetY);
 
         } else if (targetView.getId() == R.id.iv_principle_voice_obstacle_avoidance) {
@@ -708,7 +708,7 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
             targetY = targetPos[1] + targetView.getHeight() / 2;
 
             bzvPrincipleVoiceObstacleAvoidance.addPoint(startX, startY);
-            bzvPrincipleVoiceObstacleAvoidance.addPoint(targetX - (targetX - startX) / 2, targetY - (targetY - startY) / 2 - 30);
+            bzvPrincipleVoiceObstacleAvoidance.addPoint(targetX - (targetX - startX) / 2, targetY - (targetY - startY) / 2 - 20*scale);
             bzvPrincipleVoiceObstacleAvoidance.addPoint(targetX, targetY);
         }
     }
@@ -778,13 +778,12 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                 break;
 
             case R.id.iv_principle_steering_engine:
-                //tvMsgShow.setText(getStringRes("ui_principle_engine_tips"));
-                //showView(tvMsgShow, true, biggerLeftBottomAnim);
                 if (tvMsgShow.getVisibility() == View.VISIBLE) {
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
                 }
                 showView(rlPrincipleSteeringEngineIntro, true, biggerLeftBottomAnim);
                 startPlaySound(ivPrincipleSteeringEngine,1,"舵机.hts");
+                ivPrincipleSteeringEngine.bringToFront();
                 break;
             case R.id.iv_principle_infrared_sensor:
                 hasReceviceSensor = false;
@@ -792,17 +791,16 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                 showView(tvMsgShow, true, biggerLeftBottomAnim);
                 startPlaySound(ivPrincipleInfraredSensor,2,"红外传感1.hts");
                 mHelper.doReadInfraredSensor((byte)1);
+                ivPrincipleInfraredSensor.bringToFront();
                 break;
             case R.id.iv_principle_soundbox:
-                //tvMsgShow.setText(getStringRes("ui_principle_soundbox_tips"));
-                //showView(tvMsgShow, true, biggerLeftBottomAnim);
 
                 if (tvMsgShow.getVisibility() == View.VISIBLE) {
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
                 }
                 showView(rlPrincipleSoundboxIntro, true, biggerRightTopAnim);
                 startPlaySound(ivPrincipleSoundbox,3,"扬声器.hts");
-                //showView(rlPrincipleSoundboxIntro, true, biggerRightTopAnim);
+                ivPrincipleSoundbox.bringToFront();
                 break;
             case R.id.iv_principle_head:
                 hasReceviceHead = false;
@@ -810,29 +808,28 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                 showView(tvMsgShow, true, biggerLeftBottomAnim);
                 startPlaySound(ivPrincipleHead,4,"触摸传感1.hts");
                 mHelper.doReadHeadClick((byte)1);
-                //showView(rlPrincipleHeadIntro, true, biggerLeftTopAnim);
+                ivPrincipleHead.bringToFront();
                 break;
             case R.id.iv_principle_eye:
-                //tvMsgShow.setText(getStringRes("ui_principle_eye_tips"));
-                //showView(tvMsgShow, true, biggerLeftBottomAnim);
                 if (tvMsgShow.getVisibility() == View.VISIBLE) {
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
                 }
                 showView(rlPrincipleEyeIntro, true, biggerLeftTopAnim);
                 startPlaySound(ivPrincipleEye,5,"眼睛LED.hts");
-                //showView(rlPrincipleEyeIntro, true, biggerLeftTopAnim);
+                ivPrincipleEye.bringToFront();
                 break;
             case R.id.iv_principle_voice:
                 hasReceviceVoice = false;
                 tvMsgShow.setText(getStringRes("ui_principle_voice_tips"));
                 showView(tvMsgShow, true, biggerLeftBottomAnim);
                 startPlaySound(ivPrincipleVoice,6,"麦克1.hts");
+                ivPrincipleVoice.bringToFront();
                 break;
             case R.id.iv_principle_voice_obstacle_avoidance:
                 tvMsgShow.setText(getStringRes("ui_principle_obstacle_tips"));
                 showView(tvMsgShow, true, biggerLeftBottomAnim);
                 startPlaySound(ivPrincipleVoiceObstacleAvoidance,7,"百宝1.hts");
-
+                ivPrincipleVoiceObstacleAvoidance.bringToFront();
                 break;
             case R.id.tv_msg_show:
                 showView(tvMsgShow, false, smallerLeftBottomAnim);

@@ -39,7 +39,6 @@ import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.services.AutoScanConnectService;
-import com.ubt.alpha1e.ui.MyMainActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;

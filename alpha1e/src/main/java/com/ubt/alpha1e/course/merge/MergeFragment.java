@@ -153,15 +153,17 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
 
             @Override
             public void onGlobalLayout() {
-                rlRobot.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!hasInitRobot && ivRobot.getHeight() > 0) {
-                            hasInitRobot = true;
-                            initRobot();
+                if(rlRobot != null){
+                    rlRobot.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!hasInitRobot && ivRobot.getHeight() > 0) {
+                                hasInitRobot = true;
+                                initRobot();
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
         initData();
@@ -222,7 +224,7 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
             return;
         }
 
-        if(event.getEvent() == PrincipleEvent.Event.PLAY_SOUND_1){
+        if(event.getEvent() == PrincipleEvent.Event.PLAY_SOUND){
             int status = event.getStatus();
             if(status == 1){
                 mHandler.sendEmptyMessage(HIDE_DIALOG);

@@ -59,10 +59,11 @@ public class FileTools {
             .getExternalStorageDirectory().getPath();
     public static final String current_app_package = BuildConfig.APPLICATION_ID;
 
-    public static final String file_path = SDCardPath + "/ubt_alpha";
-    public static final String image_cache = file_path + "/imgs";
-    public static final String media_cache = file_path + "/medias/";
-    public static final String theme_cache = file_path + "/themes";
+    public static final String file_path = SDCardPath + "/ubt_alpha1e";
+    public static final String file_cache = file_path + "/cache";
+    public static final String image_cache = file_cache + "/images";
+    public static final String media_cache = file_cache + "/medias";
+    public static final String theme_cache = file_cache + "/themes";
     public static final String theme_log_name = "theme_logs";
     public static final String theme_festival_log_name = "theme_festival_log_name";
     public static final String theme_pkg_file = theme_cache + "/language_v1.0.1.ubt";
@@ -308,8 +309,7 @@ public class FileTools {
                         listener.onWriteFileStrFinish("", true, request_code);
                 } catch (Exception e) {
                     if (listener != null)
-                        listener.onWriteFileStrFinish(e.getMessage(), false,
-                                request_code);
+                        listener.onWriteFileStrFinish(e.getMessage(), false, request_code);
                 }
             }
         });
@@ -319,28 +319,10 @@ public class FileTools {
         pool.execute(new Runnable() {
             @Override
             public void run() {
-                File cacheList = new File(FileTools.image_cache);
-                String[] cacheListFileNames = cacheList
-                        .list(new FilenameFilter() {
-                            public boolean accept(File f, String name) {
-                                return name.indexOf(".") == -1;
-                            }
-                        });
-                if (cacheListFileNames == null) {
-                    listener.onClearCache();
-                    return;
-                }
-                for (int i = 0; i < cacheListFileNames.length; i++) {
-                    File file = new File(FileTools.image_cache,
-                            cacheListFileNames[i]);
-                    if (file.exists()) {
-                        try {
-                            deleteFileSafely(file);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+                deleteDir(FileTools.file_cache);
+                deleteDir(FileTools.image_cache);
+                deleteDir(FileTools.media_cache);
+                deleteDir(FileTools.theme_cache);
                 listener.onClearCache();
             }
         });
@@ -350,31 +332,50 @@ public class FileTools {
         pool.execute(new Runnable() {
             @Override
             public void run() {
-                File cacheList = new File(FileTools.image_cache);
-                String[] cacheListFileNames = cacheList
-                        .list(new FilenameFilter() {
-                            public boolean accept(File f, String name) {
-                                return name.indexOf(".") == -1;
-                            }
-                        });
-                if (cacheListFileNames == null) {
-                    listener.onReadCacheSize(0);
-                    return;
-                }
-                int totle = 0;
-                for (int i = 0; i < cacheListFileNames.length; i++) {
-                    File file = new File(FileTools.image_cache, cacheListFileNames[i]);
-                    if (file.exists()) {
-                        try {
-                            totle += file.length();
-                        } catch (Exception e) {
-                            totle += 0;
-                        }
-                    }
-                }
-                listener.onReadCacheSize(totle);
+                int rootCache = getDirFileSize(FileTools.file_cache);
+                int imageCache = getDirFileSize(FileTools.image_cache);
+                int mediaCache = getDirFileSize(FileTools.media_cache);
+                int themeCache = getDirFileSize(FileTools.theme_cache);
+                int totalCache = rootCache + imageCache + mediaCache + themeCache;
+                listener.onReadCacheSize(totalCache);
             }
         });
+    }
+
+    private static void deleteDir(String filePath){
+        File cacheList = new File(filePath);
+        if(!cacheList.exists()){
+            return;
+        }
+        File[] files = cacheList.listFiles();
+        for (File file : files) {
+            if (file.exists() && file.isFile()) {
+                try {
+                    deleteFileSafely(file);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static int getDirFileSize(String filePath){
+        File cacheList = new File(filePath);
+        if(!cacheList.exists()){
+            return 0;
+        }
+        int total = 0;
+        File[] files = cacheList.listFiles();
+        for(File file : files){
+            if (file.isFile()){
+                try {
+                    total += file.length();
+                } catch (Exception e) {
+                    total += 0;
+                }
+            }
+        }
+        return total;
     }
 
     public static String getPath(Context context, Uri uri) {

@@ -25,7 +25,6 @@ import com.ubt.alpha1e.data.model.ThemeInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
-import com.ubt.alpha1e.ui.dialog.LowPowerDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IUI;
 import com.ubt.alpha1e.utils.StatusBarUtils;
@@ -383,7 +382,7 @@ public abstract class BaseActivity extends
                 Toast.makeText(
                         BaseActivity.this,getStringResources("ui_home_conn_lost"), Toast.LENGTH_SHORT).show();
                 MyLog.writeLog("蓝牙掉线", this.getClass().getName() + "-->onLostBtCoon");
-                ((AlphaApplication) BaseActivity.this.getApplication()).doLostConn(BaseActivity.this);
+//                ((AlphaApplication) BaseActivity.this.getApplication()).doLostConn(BaseActivity.this);
             }
         });
 

@@ -133,13 +133,12 @@
             android:layout_centerHorizontal="true"/>
 
 
-
         <ImageView
             android:id="@+id/iv_principle_steering_engine"
             android:layout_width="132px"
             android:layout_height="111px"
-            android:layout_marginTop="25dp"
-            android:layout_marginRight="100dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginRight="95dp"
             android:layout_toLeftOf="@+id/v_empty"
             android:layout_below="@+id/v_empty"
             android:src="@drawable/icon_principle_steering_engine"
@@ -149,8 +148,8 @@
             android:id="@+id/iv_principle_infrared_sensor"
             android:layout_width="132px"
             android:layout_height="111px"
-            android:layout_marginBottom="25dp"
             android:layout_marginRight="125dp"
+            android:layout_marginBottom="0dp"
             android:layout_toLeftOf="@+id/v_empty"
             android:layout_above="@+id/iv_principle_steering_engine"
             android:src="@drawable/icon_principle_infrared_sensor"
@@ -160,8 +159,8 @@
             android:id="@+id/iv_principle_soundbox"
             android:layout_width="132px"
             android:layout_height="111px"
-            android:layout_marginBottom="30dp"
-            android:layout_marginRight="100dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginRight="95dp"
             android:layout_above="@+id/iv_principle_infrared_sensor"
             android:layout_toLeftOf="@+id/v_empty"
             android:src="@drawable/icon_principle_soundbox"
@@ -181,8 +180,8 @@
             android:id="@+id/iv_principle_eye"
             android:layout_width="132px"
             android:layout_height="111px"
-            android:layout_marginBottom="30dp"
-            android:layout_marginLeft="100dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="95dp"
             android:layout_above="@+id/iv_principle_voice"
             android:layout_toRightOf="@+id/v_empty"
             android:src="@drawable/icon_principle_eye"
@@ -192,7 +191,7 @@
             android:id="@+id/iv_principle_voice"
             android:layout_width="132px"
             android:layout_height="111px"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="0dp"
             android:layout_marginLeft="125dp"
             android:layout_toRightOf="@+id/v_empty"
             android:layout_above="@+id/iv_principle_voice_obstacle_avoidance"
@@ -203,8 +202,8 @@
             android:id="@+id/iv_principle_voice_obstacle_avoidance"
             android:layout_width="132px"
             android:layout_height="111px"
-            android:layout_marginTop="25dp"
-            android:layout_marginLeft="100dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginLeft="95dp"
             android:layout_toRightOf="@+id/v_empty"
             android:layout_below="@+id/v_empty"
             android:src="@drawable/icon_principle_voice_obstacle_avoidance"
@@ -216,8 +215,8 @@
             android:layout_height="396px"
             android:layout_toRightOf="@+id/iv_principle_steering_engine"
             android:layout_above="@+id/iv_principle_steering_engine"
-            android:layout_marginLeft="-386px"
-            android:layout_marginBottom="-140px"
+            android:layout_marginLeft="-380px"
+            android:layout_marginBottom="-180px"
             android:visibility="gone"
             >
 
@@ -243,8 +242,8 @@
             android:layout_height="361px"
             android:layout_toLeftOf="@+id/iv_principle_infrared_sensor"
             android:layout_below="@+id/iv_principle_infrared_sensor"
-            android:layout_marginRight="-80px"
-            android:layout_marginTop="-160px"
+            android:layout_marginRight="-90px"
+            android:layout_marginTop="-120px"
             android:visibility="gone"
             >
 
@@ -270,8 +269,8 @@
             android:layout_height="319px"
             android:layout_toLeftOf="@+id/iv_principle_soundbox"
             android:layout_below="@+id/iv_principle_soundbox"
-            android:layout_marginRight="-90px"
-            android:layout_marginTop="-180px"
+            android:layout_marginRight="-105px"
+            android:layout_marginTop="-230px"
             android:visibility="gone"
             >
 
@@ -283,7 +282,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:gravity="center_vertical"
                 android:text="@string/ui_setting_principle_soundbox_tip"
                 android:textColor="@color/white"
@@ -325,7 +324,7 @@
             android:layout_toRightOf="@+id/iv_principle_eye"
             android:layout_below="@+id/iv_principle_eye"
             android:layout_marginLeft="-80px"
-            android:layout_marginTop="-140px"
+            android:layout_marginTop="-210px"
             android:visibility="gone"
             >
 
@@ -351,8 +350,8 @@
             android:layout_height="400px"
             android:layout_toRightOf="@+id/iv_principle_voice"
             android:layout_above="@+id/iv_principle_voice"
-            android:layout_marginLeft="-80px"
-            android:layout_marginBottom="-80px"
+            android:layout_marginLeft="-75px"
+            android:layout_marginBottom="-105px"
             android:visibility="gone"
             >
 
@@ -379,7 +378,7 @@
             android:layout_toRightOf="@+id/iv_principle_voice_obstacle_avoidance"
             android:layout_above="@+id/iv_principle_voice_obstacle_avoidance"
             android:layout_marginLeft="-100px"
-            android:layout_marginBottom="-140px"
+            android:layout_marginBottom="-190px"
             android:visibility="gone"
             >
 

@@ -27,7 +27,7 @@ public class HttpEntity {
     public static final String BASIC_THIRD_LOGIN_URL = "http://10.10.20.71:8010/user-service-rest/v2/";
     public static final String THRID_LOGIN_URL = BASIC_THIRD_LOGIN_URL + "user/login/third";
 
-    public static final String BASIC_UBX_SYS = "http://10.10.1.14:8080/ubx/sys/";
+    public static final String BASIC_UBX_SYS = "http://10.10.1.14:8080/ubx/sys/"; //测试环境
     public static final String REQUEST_SMS_CODE = BASIC_UBX_SYS + "register";
     public static final String GET_USER_INFO = BASIC_UBX_SYS + "getUserInfo";
     public static final String BIND_ACCOUNT = BASIC_UBX_SYS + "bind";

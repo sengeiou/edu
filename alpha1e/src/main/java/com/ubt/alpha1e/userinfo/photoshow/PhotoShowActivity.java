@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.PermissionUtils;
@@ -41,7 +42,6 @@ public class PhotoShowActivity extends MVPBaseActivity<PhotoShowContract.View, P
         ivUbtWechat.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                UbtLog.d(TAG,"doSavePhoto");
                 PermissionUtils.getInstance(PhotoShowActivity.this).request(new PermissionUtils.PermissionLocationCallback() {
                     @Override
                     public void onSuccessful() {

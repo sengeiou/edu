@@ -90,6 +90,13 @@ public class SensorHelper extends BaseHelper {
             EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_TAPPED_ROBOT_HEAD));
         }else if(cmd == ConstValue.DV_WALK){
             UbtLog.d(TAG, "机器人回复步态行走");
+            if(param != null){
+                UbtLog.d(TAG, "emoji:" + ByteHexHelper.bytesToHexString(param) + "param[0]:" + param[0]);
+                if(param[0] == 0 || param[0] == 3){
+                    //表情播放完成后通知js，js端音效和表情完成是同一个方法
+                    EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_ROBOT_WALK_STOP));
+                }
+            }
         }
     }
 

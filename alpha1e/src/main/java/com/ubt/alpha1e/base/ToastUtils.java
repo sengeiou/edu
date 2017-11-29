@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.lang.ref.WeakReference;
 
@@ -32,6 +34,8 @@ import java.lang.ref.WeakReference;
  */
 
 public class ToastUtils {
+    private static final String TAG = ToastUtils.class.getSimpleName();
+
     private static final int COLOR_DEFAULT = 0xFEFFFFFF;
     private static final Handler HANDLER = new Handler(Looper.getMainLooper());
 
@@ -42,7 +46,7 @@ public class ToastUtils {
     private static int xOffset = 0;
     private static int yOffset = (int) (64 * AlphaApplication.mContext.getResources().getDisplayMetrics().density + 0.5);
     private static int bgColor = COLOR_DEFAULT;
-    private static int bgResource = -1;
+    private static int bgResource = R.drawable.toast_filter_rect;
     private static int msgColor = COLOR_DEFAULT;
 
     private ToastUtils() {
@@ -257,6 +261,7 @@ public class ToastUtils {
 
     private static void setBgAndGravity() {
         View toastView = sToast.getView();
+        //UbtLog.d(TAG,"bgResource = " + bgResource + "   bgColor = " + bgColor);
         if (bgResource != -1) {
             toastView.setBackgroundResource(bgResource);
         } else if (bgColor != COLOR_DEFAULT) {

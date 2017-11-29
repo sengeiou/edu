@@ -62,6 +62,7 @@ import com.ubt.alpha1e.xingepush.XGUBTManager;
 import com.ubtechinc.base.BlueToothManager;
 import com.ubtechinc.sqlite.DBAlphaInfoManager;
 import com.umeng.analytics.MobclickAgent;
+import com.zhy.changeskin.SkinManager;
 
 import org.litepal.LitePal;
 
@@ -109,6 +110,7 @@ public class AlphaApplication extends LoginApplication {
         initSkin(this);
         initConnectClient();
         initXG();
+        initLanguage();
         LitePal.initialize(this);
 //        LeakCanary.install(this);
         //   VCamera.setVideoCachePath(FileTools.media_cache);
@@ -138,7 +140,7 @@ public class AlphaApplication extends LoginApplication {
      */
     public void initSkin(Context ctx) {
         //改放到在baseActivity 初始化
-        //SkinManager.getInstance().init(ctx);
+        SkinManager.getInstance().init(ctx);
     }
 
     public static void initXG() {
@@ -156,6 +158,19 @@ public class AlphaApplication extends LoginApplication {
     public void initConnectClient() {
         ConnectClientUtil.getInstance().init();
     }
+
+    public void initLanguage(){
+        String currentLanguage = BasicSharedPreferencesOperator.getInstance(this,
+                BasicSharedPreferencesOperator.DataType.APP_INFO_RECORD).doReadSync(
+                BasicSharedPreferencesOperator.LANGUAGE_SET_KEY);
+
+       if(currentLanguage.equals(BasicSharedPreferencesOperator.NO_VALUE)){
+           BasicSharedPreferencesOperator.getInstance(this,
+                   BasicSharedPreferencesOperator.DataType.APP_INFO_RECORD).doWrite(
+                   BasicSharedPreferencesOperator.LANGUAGE_SET_KEY, "zh_CN",
+                   null, -1);
+       }
+   }
 
 
     @Override

@@ -54,7 +54,7 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
     private static final int START_FLOAT_ANIMATION_2 = 2;
     private static final int START_FLOAT_ANIMATION_3 = 3;
     private static final int START_FLOAT_ANIMATION = 4;
-    private static final int PLAY_SOUND_NEXT = 5;
+    private static final int PLAY_ACTION_NEXT = 5;
     private static final int GO_NEXT = 6;
 
 
@@ -75,6 +75,8 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
     private int scale = 0;
     private Animation biggerAnimation = null;
     private int mCurrentPlayProgress = 0;
+
+    private static String[] playActionFile = {"原理1.hts","原理2.hts","原理3.hts"};
 
     private Handler mHandler = new Handler() {
         @Override
@@ -101,25 +103,22 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
                     }
 
                     break;
-                case PLAY_SOUND_NEXT:
+                case PLAY_ACTION_NEXT:
                     UbtLog.d(TAG,"mCurrentPlayProgress = " + mCurrentPlayProgress);
                     if(mCurrentPlayProgress == 0){
-                        //mHelper.playSoundAudio("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
-                        mHelper.playFile("原理1.hts");
+                        mHelper.playFile(playActionFile[0]);
                         rlDialogue1.setVisibility(View.VISIBLE);
                         rlDialogue1.startAnimation(biggerAnimation);
                         mCurrentPlayProgress = 1;
                         startFloatAnimation(rlDialogue1,500);
                     }else if(mCurrentPlayProgress == 1){
-                        //mHelper.playSoundAudio("{\"filename\":\"id_tiger.wav\",\"playcount\":1}");
-                        mHelper.playFile("原理2.hts");
+                        mHelper.playFile(playActionFile[1]);
                         rlDialogue2.setVisibility(View.VISIBLE);
                         rlDialogue2.startAnimation(biggerAnimation);
                         mCurrentPlayProgress = 2;
                         startFloatAnimation(rlDialogue2,500);
                     }else if(mCurrentPlayProgress == 2){
-                        //mHelper.playSoundAudio("{\"filename\":\"id_happy.wav\",\"playcount\":1}");
-                        mHelper.playFile("原理3.hts");
+                        mHelper.playFile(playActionFile[2]);
                         rlDialogue3.setVisibility(View.VISIBLE);
                         rlDialogue3.startAnimation(biggerAnimation);
                         mCurrentPlayProgress = 3;
@@ -146,28 +145,8 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
                         mHandler.sendEmptyMessageDelayed(GO_NEXT,500);
                     }else {
                         ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,1);
-                        ((CourseActivity)getContext()).switchFragment(CourseActivity.FRAGMENT_SPLIT);
+                        ((CourseActivity)getActivity()).switchFragment(CourseActivity.FRAGMENT_SPLIT);
                     }
-
-                    /*if(mCurrentPlayProgress == 4){
-                        ((CourseActivity)getContext()).switchFragment(CourseActivity.FRAGMENT_SPLIT);
-                    }else {
-                        new ConfirmDialog(getContext()).builder()
-                                .setMsg(((MVPBaseActivity)getActivity()).getStringResources("ui_setting_principle_skip_tip"))
-                                .setCancelable(true)
-                                .setPositiveButton(((MVPBaseActivity)getActivity()).getStringResources("ui_common_confirm"), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,1);
-                                        ((CourseActivity)getContext()).switchFragment(CourseActivity.FRAGMENT_SPLIT);
-                                    }
-                                }).setNegativeButton(((MVPBaseActivity)getActivity()).getStringResources("ui_common_cancel"), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                            }
-                        }).show();
-                    }*/
 
                     break;
             }
@@ -259,11 +238,8 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
             return;
         }
 
-        if(event.getEvent() == PrincipleEvent.Event.PLAY_SOUND){
-            int status = event.getStatus();
-            //if(status == 1){
-                mHandler.sendEmptyMessage(PLAY_SOUND_NEXT);
-            //}
+        if(event.getEvent() == PrincipleEvent.Event.PLAY_ACTION_FINISH){
+            mHandler.sendEmptyMessage(PLAY_ACTION_NEXT);
         }
     }
 
@@ -273,7 +249,7 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
 
         ((CourseActivity)getActivity()).doGetCourseProgress(1);
 
-        mHandler.sendEmptyMessage(PLAY_SOUND_NEXT);
+        mHandler.sendEmptyMessage(PLAY_ACTION_NEXT);
     }
 
     @Override

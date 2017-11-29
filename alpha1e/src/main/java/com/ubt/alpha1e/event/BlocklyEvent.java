@@ -25,6 +25,7 @@ public class BlocklyEvent<T>{
     public static final int CALL_CONNECT_SOCKET = 10; //连接socket服务端
     public static final int CALL_TAPPED_ROBOT_HEAD = 11;
     public static final int CALL_ROBOT_FALL_DOWN = 12;
+    public static final int CALL_ROBOT_WALK_STOP = 13;
 
 
     private int type;

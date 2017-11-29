@@ -17,6 +17,7 @@ public class Constant {
      * 保存从腾讯tvs后台获取的clientId
      */
     public final static String SP_CLIENT_ID = "sp_client_id";
+    public final static String SP_LOGIN_TYPE = "sp_login_type";
 
 
     /**

@@ -126,6 +126,15 @@ public class PsdSettingFragment extends MVPBaseFragment<PsdSettingContract.View,
         return isPass;
     }
 
+    private boolean isSamePassword(){
+        if(edtPassword1.getText().toString().equals(edtPassword2.getText().toString())){
+            return true;
+        }else {
+            ToastUtils.showShort(getStringRes("ui_password_is_diff"));
+            return false;
+        }
+    }
+
     @Override
     protected void initControlListener() {
 
@@ -159,7 +168,7 @@ public class PsdSettingFragment extends MVPBaseFragment<PsdSettingContract.View,
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_confirm:
-                if(doCheck()){
+                if(doCheck() && isSamePassword()){
                     mCoonLoadingDia.cancel();
                     mCoonLoadingDia.show();
                     mPresenter.doSetUserPassword(edtPassword2.getText().toString());
