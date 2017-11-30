@@ -234,6 +234,7 @@ public class SkinManager {
 
     public ResourceManager getResourceManager() {
         if (!usePlugin) {
+            if(mContext!=null)
             mResourceManager = new ResourceManager(mContext.getResources(), mContext.getPackageName(), mSuffix);
         }
         return mResourceManager;
