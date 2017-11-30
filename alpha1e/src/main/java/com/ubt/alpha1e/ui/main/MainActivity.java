@@ -432,7 +432,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void onEventRobot(RobotEvent event) {
         super.onEventRobot(event);
         if(event.getEvent() == RobotEvent.Event.NETWORK_STATUS) {
-            AutoScanConnectService.doStopSelf();
+//            AutoScanConnectService.doStopSelf();
             NetworkInfo networkInfo = (NetworkInfo)  event.getNetworkInfo();
             UbtLog.d(TAG,"networkInfo == " + networkInfo.status);
             isNetworkConnect=networkInfo.status;
