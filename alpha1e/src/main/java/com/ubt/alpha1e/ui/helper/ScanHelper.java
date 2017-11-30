@@ -217,6 +217,7 @@ public class ScanHelper extends BaseHelper implements IJsonListener,
             if (state.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
                 //
                 mUI.onScanFinish();
+                UbtLog.d(TAG," ccy SCAN_ROBOT_FINISH  4" );
                 RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.SCAN_ROBOT_FINISH);
                 EventBus.getDefault().post(robotEvent);
             } else {

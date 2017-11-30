@@ -294,6 +294,7 @@ public class NewActionsManager implements IFileListener {
 
                         @Override
                         public void onResponse(String s,int i) {
+                            UbtLog.d(TAG, "onResponse:" + s);
                             try {
                                 JSONObject json = new JSONObject(s);
                                 if ((Boolean) json.get("status")) {
@@ -304,7 +305,7 @@ public class NewActionsManager implements IFileListener {
                                     FileTools.readFileString(FileTools.actions_new_cache,
                                             FileTools.actions_new_log_name,
                                             do_read_new_actions_for_save, thiz);
-                                    UbtLog.d(TAG, "onResponse:" + s);
+
                                 }
                             } catch (Exception e) {
                                 isSaveSuccess = false;
@@ -344,12 +345,15 @@ public class NewActionsManager implements IFileListener {
     @Override
     public void onReadImageFinish(Bitmap img, long request_code) {
         // TODO Auto-generated method stub
+        UbtLog.d(TAG, "wmma onReadImageFinish");
 
     }
 
     @Override
     public void onReadFileStrFinish(String erroe_str, String result,
                                     boolean result_state, long request_code) {
+        UbtLog.d(TAG, "wmma onReadFileStrFinish");
+
         if (request_code == do_read_new_actions_for_play
                 || request_code == do_read_new_actions_for_update
                 || request_code == do_read_new_actions_for_delete
@@ -419,6 +423,7 @@ public class NewActionsManager implements IFileListener {
     @Override
     public void onWriteFileStrFinish(String erroe_str, boolean result,
                                      long request_code) {
+
         if (request_code == do_record_new_actions_for_change) {
             for (int i = 0; i < mListenerLists.size(); i++) {
                 mListenerLists.get(i).onChangeNewActionsFinish();
@@ -438,18 +443,21 @@ public class NewActionsManager implements IFileListener {
     @Override
     public void onWriteDataFinish(long requestCode, State state) {
         // TODO Auto-generated method stub
+        UbtLog.d(TAG, "wmma onWriteDataFinish");
 
     }
 
     @Override
     public void onReadCacheSize(int size) {
         // TODO Auto-generated method stub
+        UbtLog.d(TAG, "wmma onReadCacheSize");
 
     }
 
     @Override
     public void onClearCache() {
         // TODO Auto-generated method stub
+        UbtLog.d(TAG, "wmma onClearCache");
 
     }
 }

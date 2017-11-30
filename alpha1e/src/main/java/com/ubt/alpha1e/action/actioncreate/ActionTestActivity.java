@@ -144,7 +144,10 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
 
     @Override
     public void onChangeActionFinish() {
-
+        NewActionInfo actionInfo = ((ActionsEditHelper)mHelper).getNewActionInfo();
+        Intent intent = new Intent(this, SaveSuccessActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 

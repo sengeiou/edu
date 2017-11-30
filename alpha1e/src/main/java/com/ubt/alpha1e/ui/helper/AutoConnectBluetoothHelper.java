@@ -1,69 +1,70 @@
 package com.ubt.alpha1e.ui.helper;
 
-        import android.app.Activity;
-        import android.bluetooth.BluetoothAdapter;
-        import android.bluetooth.BluetoothClass;
-        import android.bluetooth.BluetoothDevice;
-        import android.content.BroadcastReceiver;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.content.IntentFilter;
-        import android.graphics.Bitmap;
-        import android.os.CountDownTimer;
-        import android.os.Handler;
-        import android.os.Message;
-        import android.view.View;
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
 
-        import com.tencent.ai.tvs.env.ELoginPlatform;
-        import com.ubt.alpha1e.AlphaApplication;
-        import com.ubt.alpha1e.base.SPUtils;
-        import com.ubt.alpha1e.business.FileSendManager;
-        import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
-        import com.ubt.alpha1e.data.FileTools;
-        import com.ubt.alpha1e.data.JsonTools;
-        import com.ubt.alpha1e.data.TimeTools;
-        import com.ubt.alpha1e.data.model.NetworkInfo;
-        import com.ubt.alpha1e.event.RobotEvent;
-        import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
-        import com.ubt.alpha1e.net.http.basic.GetDataFromWeb;
-        import com.ubt.alpha1e.net.http.basic.HttpAddress;
-        import com.ubt.alpha1e.net.http.basic.HttpAddress.Request_type;
-        import com.ubt.alpha1e.net.http.basic.IJsonListener;
-        import com.ubt.alpha1e.services.ActivationService;
-        import com.ubt.alpha1e.services.AutoScanConnectService;
-        import com.ubt.alpha1e.services.RecordSoftService;
-        import com.ubt.alpha1e.ui.BaseActivity;
-        import com.ubt.alpha1e.ui.dialog.AlertDialog;
-        import com.ubt.alpha1e.update.BluetoothUpdateManager;
-        import com.ubt.alpha1e.update.EngineUpdateManager;
-        import com.ubt.alpha1e.update.IBluetoothUpdateManagerListener;
-        import com.ubt.alpha1e.update.IEngineUpdateManagerListener;
-        import com.ubt.alpha1e.update.RobotSoftUpdateManager;
-        import com.ubt.alpha1e.utils.BluetoothParamUtil;
-        import com.ubt.alpha1e.utils.GsonImpl;
-        import com.ubt.alpha1e.utils.log.MyLog;
-        import com.ubt.alpha1e.utils.log.UbtLog;
-        import com.ubtechinc.base.AlphaInfo;
-        import com.ubtechinc.base.BlueToothManager;
-        import com.ubtechinc.base.BluetoothUtil;
-        import com.ubtechinc.base.ConstValue;
-        import com.ubtechinc.sqlite.DBAlphaInfoManager;
+import com.tencent.ai.tvs.env.ELoginPlatform;
+import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.business.FileSendManager;
+import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
+import com.ubt.alpha1e.data.FileTools;
+import com.ubt.alpha1e.data.JsonTools;
+import com.ubt.alpha1e.data.TimeTools;
+import com.ubt.alpha1e.data.model.NetworkInfo;
+import com.ubt.alpha1e.event.RobotEvent;
+import com.ubt.alpha1e.login.LoginManger;
+import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
+import com.ubt.alpha1e.net.http.basic.GetDataFromWeb;
+import com.ubt.alpha1e.net.http.basic.HttpAddress;
+import com.ubt.alpha1e.net.http.basic.HttpAddress.Request_type;
+import com.ubt.alpha1e.net.http.basic.IJsonListener;
+import com.ubt.alpha1e.services.ActivationService;
+import com.ubt.alpha1e.services.AutoScanConnectService;
+import com.ubt.alpha1e.services.RecordSoftService;
+import com.ubt.alpha1e.ui.BaseActivity;
+import com.ubt.alpha1e.ui.dialog.AlertDialog;
+import com.ubt.alpha1e.update.BluetoothUpdateManager;
+import com.ubt.alpha1e.update.EngineUpdateManager;
+import com.ubt.alpha1e.update.IBluetoothUpdateManagerListener;
+import com.ubt.alpha1e.update.IEngineUpdateManagerListener;
+import com.ubt.alpha1e.update.RobotSoftUpdateManager;
+import com.ubt.alpha1e.utils.BluetoothParamUtil;
+import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.log.MyLog;
+import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.AlphaInfo;
+import com.ubtechinc.base.BlueToothManager;
+import com.ubtechinc.base.BluetoothUtil;
+import com.ubtechinc.base.ConstValue;
+import com.ubtechinc.sqlite.DBAlphaInfoManager;
 
-        import org.greenrobot.eventbus.EventBus;
-        import org.json.JSONException;
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
 
-        import java.io.File;
-        import java.io.UnsupportedEncodingException;
-        import java.util.ArrayList;
-        import java.util.Date;
-        import java.util.List;
-        import java.util.Map;
-        import java.util.Timer;
-        import java.util.TimerTask;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
-        import static com.ubt.alpha1e.base.Constant.SP_CLIENT_ID;
+import static com.ubt.alpha1e.base.Constant.SP_CLIENT_ID;
 
-   public class AutoConnectBluetoothHelper extends BaseHelper implements IJsonListener,
+public class AutoConnectBluetoothHelper extends BaseHelper implements IJsonListener,
         IEngineUpdateManagerListener,IBluetoothUpdateManagerListener,FileSendManager.IFileSendManager {
 
     private static final String TAG = "AutoConnectBluetoothHelper";
@@ -130,8 +131,8 @@ package com.ubt.alpha1e.ui.helper;
 
     private boolean isNextConnect = true;
 
-   private int clientIdSendWhich = 0 ; //clientId发送到哪一段
-   String clientid[] = null;
+    private int clientIdSendWhich = 0 ; //clientId发送到哪一段
+    String clientid[] = null;
 
     // -------------------------------
     private BaseWebRunnable mCurrentWait;
@@ -231,6 +232,7 @@ package com.ubt.alpha1e.ui.helper;
             if (state.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
                 //
                 mUI.onScanFinish();
+                UbtLog.d(TAG," ccy SCAN_ROBOT_FINISH 2   " );
                 RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.SCAN_ROBOT_FINISH);
                 EventBus.getDefault().post(robotEvent);
             } else {
@@ -252,9 +254,9 @@ package com.ubt.alpha1e.ui.helper;
             }else if (msg.what == MSG_DO_COON_BT_SUCCESS) {
 //                doDealConnectSuccessResult();
 //                mUI.onCoonected(true);
-                UbtLog.d(TAG,"    发送 获取 product 和 dsn  命令");
-                byte[] param_read = new byte[1];
-                doSendComm(ConstValue.DV_PRODUCT_AND_DSN, null);
+//                UbtLog.d(TAG,"    发送 获取 product 和 dsn  命令");
+//                byte[] param_read = new byte[1];
+//                doSendComm(ConstValue.DV_PRODUCT_AND_DSN, null);
 
             }else if(msg.what == MSG_DO_FINISHE_CONNECT){
                 UbtLog.d(TAG,"    蓝牙连接过程完成");
@@ -392,9 +394,11 @@ package com.ubt.alpha1e.ui.helper;
         super.UnRegisterHelper();
     }
 
+    Context mAtuoBluetoothContext = null;
+
     public AutoConnectBluetoothHelper(IScanUI _ui, Context context) {
         super(context);
-
+        mAtuoBluetoothContext = context ;
         MyLog.writeLog(TAG, "create ScanHelper");
         this.mUI = _ui;
 
@@ -457,9 +461,9 @@ package com.ubt.alpha1e.ui.helper;
 
             UbtLog.d(TAG,"mBtAdapter.isDiscovering() == " + mBtAdapter.isDiscovering() + "  = " + mContext);
             if (mBtAdapter.isDiscovering()) {
-                mBtAdapter.cancelDiscovery();
+                //mBtAdapter.cancelDiscovery();
                 //mUI.noteIsScaning();
-                //return;
+                return;
             }
             if (mDevicesList != null){
                 mDevicesList.clear();
@@ -658,6 +662,7 @@ package com.ubt.alpha1e.ui.helper;
             mHandler.sendMessage(msg);
 
         }else if (cmd == ConstValue.DV_HANDSHAKE) {
+            cancelScan();
             UbtLog.d(TAG, "发送01握手成功-" +  mUI);
             UbtLog.d(TAG,"handshakeBsevenNum:" + handshakeBsevenNum + "    lastTime_DV_HANDSHAKE_B_SEVEN = "+lastTime_DV_HANDSHAKE_B_SEVEN);
             if(lastTime_DV_HANDSHAKE_B_SEVEN == null && handshakeBsevenNum < handshakeBsevenNumMax){//
@@ -697,10 +702,14 @@ package com.ubt.alpha1e.ui.helper;
             ((AlphaApplication) mContext.getApplicationContext())
                     .setCurrentBluetooth(mBtAdapter.getRemoteDevice(mac));
 
-            MyLog.writeLog(TAG, "时间校准");
+//            MyLog.writeLog(TAG, "时间校准");
             byte[] timeParam = TimeTools.getCurrentDateTimeBytes();
 
-            doSendComm(ConstValue.DV_ADJUST_TIME, timeParam);
+//            doSendComm(ConstValue.DV_ADJUST_TIME, timeParam);
+
+            UbtLog.d(TAG,"    发送 获取 product 和 dsn  命令");
+            byte[] param_read = new byte[1];
+            doSendComm(ConstValue.DV_PRODUCT_AND_DSN, null);
 
             //update AlphaInfo
             AlphaInfo info = new AlphaInfo();
@@ -867,10 +876,72 @@ package com.ubt.alpha1e.ui.helper;
             if(productAndDsn != null && ss.length == 2){
                 UbtLog.d(TAG,"product =   "+ss[0]);
                 UbtLog.d(TAG,"dsn =  "+ss[1]);
+            }else {
+                return;
             }
             UbtLog.d(TAG,"再发送clientId 给机器人  ");
+            LoginManger.getInstance().init((Activity) mAtuoBluetoothContext,null);
+            LoginManger.getInstance().refreshLoginToken(ss[0],ss[1],onRefreshListener);
+//            UbtLog.d(TAG, "client:" +LoginManger.getInstance().getClientId());
 
-            String params = SPUtils.getInstance().getString(SP_CLIENT_ID, "");
+//            String params = SPUtils.getInstance().getString(SP_CLIENT_ID, "");
+//            UbtLog.d(TAG,"params :  "+params);
+//            if(params.equals("")){
+//                UbtLog.d(TAG,"params 为空  ");
+//                finishBluetoothConnect();
+//                return;
+//            }
+//            int clientidNum = params.length()/200 ;//clientId分段发送
+//            if(params.length()%200 >0){
+//                clientidNum ++ ;
+//            }
+//            clientid = new String[clientidNum] ;
+//            for(int i =0;i<clientidNum;i++){
+//                if(i+1 == clientidNum){
+//                    clientid[i] = params.substring(i*200,params.length());
+//                }else {
+//                    clientid[i] = params.substring(i*200,(i+1)*200);
+//                }
+//                UbtLog.d(TAG,"clientid  "+i+":"+clientid[i]);
+//            }
+//
+//            clientIdSendWhich = 1 ;
+//            if(clientid.length == 1){
+//                doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes("end:"+clientid[0]));
+//            }else {
+//                doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes("start:"+clientid[0]));
+//            }
+//            UbtLog.d(TAG,"发送clientid 0  "+":"+clientid[0]);
+        }else if(cmd == ConstValue.DV_CLIENT_ID){
+            UbtLog.d(TAG,"cmd = " + cmd + "    发送clientId 1 段成功 ");
+            if(clientid != null && clientIdSendWhich == clientid.length ){
+                UbtLog.d(TAG, "    发送clientId 完成 ");
+                clientIdSendWhich = 0;
+                finishBluetoothConnect();
+                return;
+            }
+            clientIdSendWhich ++ ;
+            UbtLog.d(TAG,"cmd = " + cmd + "    发送下一段clientId  命令 ");
+            try {
+                if(clientid != null && clientIdSendWhich == clientid.length){
+                    doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes("end:"+clientid[clientIdSendWhich-1]));
+                }else {
+                    doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes("start:"+clientid[clientIdSendWhich-1]));
+                }
+                UbtLog.d(TAG,"发送 clientid  "+(clientIdSendWhich-1)+":"+clientid[clientIdSendWhich-1]);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    LoginManger.OnRefreshListener onRefreshListener = new LoginManger.OnRefreshListener() {
+        @Override
+        public void onSuccess() {
+            UbtLog.d(TAG,"onRefreshListener onSuccess  ");
+            String params = LoginManger.getInstance().getClientId();
+//            String params = SPUtils.getInstance().getString(SP_CLIENT_ID, "");
             UbtLog.d(TAG,"params :  "+params);
             if(params.equals("")){
                 UbtLog.d(TAG,"params 为空  ");
@@ -898,28 +969,13 @@ package com.ubt.alpha1e.ui.helper;
                 doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes("start:"+clientid[0]));
             }
             UbtLog.d(TAG,"发送clientid 0  "+":"+clientid[0]);
-        }else if(cmd == ConstValue.DV_CLIENT_ID){
-            UbtLog.d(TAG,"cmd = " + cmd + "    发送clientId 1 段成功 ");
-            if(clientid != null && clientIdSendWhich == clientid.length ){
-                UbtLog.d(TAG, "    发送clientId 完成 ");
-                clientIdSendWhich = 0;
-                finishBluetoothConnect();
-                return;
-            }
-            clientIdSendWhich ++ ;
-            UbtLog.d(TAG,"cmd = " + cmd + "    发送下一段clientId  命令 ");
-            try {
-                if(clientid != null && clientIdSendWhich == clientid.length){
-                    doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes("end:"+clientid[clientIdSendWhich-1]));
-                }else {
-                    doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes("start:"+clientid[clientIdSendWhich-1]));
-                }
-                UbtLog.d(TAG,"发送 clientid  "+(clientIdSendWhich-1)+":"+clientid[clientIdSendWhich-1]);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
         }
-    }
+
+        @Override
+        public void onError() {
+            UbtLog.d(TAG,"onRefreshListener onError  ");
+        }
+    };
 
     /**
      * 处理连接成功结果逻辑，保存版本号等
@@ -940,7 +996,7 @@ package com.ubt.alpha1e.ui.helper;
         } else {
             params[0] = 0;
         }
-        doSendComm(ConstValue.SET_PALYING_CHARGING, params);
+//        doSendComm(ConstValue.SET_PALYING_CHARGING, params);
         AutoScanConnectService.doManalDisConnect(false);
     }
 
@@ -1276,4 +1332,3 @@ package com.ubt.alpha1e.ui.helper;
         FileSendManager.getInstance(this, mContext.getApplicationContext()).release();
     }
 }
-

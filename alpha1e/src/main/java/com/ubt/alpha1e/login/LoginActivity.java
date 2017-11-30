@@ -144,7 +144,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
 
     @Override
     public void onSuccess(int i, LoginInfoManager loginInfoManager) {
-        Log.e(TAG, "login onSuccess" + i);
+        Log.e(TAG, "login onSuccess" + i + "--loginInfoManager:" + loginInfoManager.toString() + "--openID:" + loginInfoManager.openID);
 
         String accessToken = loginInfoManager.accessToken;
         String openID = loginInfoManager.openID;
@@ -220,7 +220,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
     private void doThirdLogin(String accessToken, String openID) {
 
         String params = "";
-
+        UbtLog.d(TAG, "loginType:" + SPUtils.getInstance().getInt(Constant.SP_LOGIN_TYPE));
 
         if (SPUtils.getInstance().getInt(Constant.SP_LOGIN_TYPE) == 1) {
             params = "{"
