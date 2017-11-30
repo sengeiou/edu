@@ -685,7 +685,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 return;
             }
             playFinish = false;
-            mediaPlayer.prepare();
             mediaPlayer.start();
 
             //后台线程发送消息进行更新进度条
@@ -809,7 +808,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 //        mContext.startActivity(inte);
     }
 
-
     public void pause() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
@@ -858,8 +856,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 break;
             case R.id.iv_reset_index:
-                stopMusic();
-                ((ActionsEditHelper)mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop, null);
+//                stopMusic();
+//                ((ActionsEditHelper)mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop, null);
                 sbVoice.setProgress(0);
                 recyclerViewFrames.smoothScrollToPosition(0);
                 recyclerViewTimes.smoothScrollToPosition(0);

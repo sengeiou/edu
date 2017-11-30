@@ -98,14 +98,16 @@ public class LoginManger implements AuthorizeListener {
         UbtLog.d(TAG, "loginWX");
         loginType = 0;
         SPUtils.getInstance().put(Constant.SP_LOGIN_TYPE, loginType);
-        proxy.clearToken(ELoginPlatform.WX, LoginApplication.getInstance());
+//        if(proxy.isTokenExist(ELoginPlatform.WX, LoginApplication.getInstance())){
+//            proxy.clearToken(ELoginPlatform.WX, LoginApplication.getInstance());
+//        }
         proxy.requestLogin(ELoginPlatform.WX, PID, DSN, activity);
     }
 
     public void loginQQ(Activity activity){
         loginType = 1;
         SPUtils.getInstance().put(Constant.SP_LOGIN_TYPE, loginType);
-        proxy.clearToken(ELoginPlatform.QQOpen, LoginApplication.getInstance());
+//        proxy.clearToken(ELoginPlatform.QQOpen, LoginApplication.getInstance());
         proxy.requestLogin(ELoginPlatform.QQOpen, PID, DSN, activity);
     }
 

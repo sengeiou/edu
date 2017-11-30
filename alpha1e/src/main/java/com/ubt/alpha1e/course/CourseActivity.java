@@ -9,37 +9,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.animator.FloatAnimator;
 import com.ubt.alpha1e.base.ToastUtils;
-import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
-import com.ubt.alpha1e.course.feature.FeatureFragment;
+import com.ubt.alpha1e.course.feature1.FeatureFragment;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
-import com.ubt.alpha1e.course.merge.MergeFragment;
-import com.ubt.alpha1e.course.principle.PrincipleFragment;
-import com.ubt.alpha1e.course.split.SplitFragment;
+import com.ubt.alpha1e.course.merge1.MergeFragment;
+import com.ubt.alpha1e.course.principle1.PrincipleFragment;
+import com.ubt.alpha1e.course.split1.SplitFragment;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.userinfo.psdmanage.psdmodify.PsdModifyFragment;
-import com.ubt.alpha1e.userinfo.psdmanage.psdsetting.PsdSettingFragment;
-import com.ubt.alpha1e.userinfo.psdmanage.psdverifycode.PsdVerifyCodeFragment;
-import com.ubt.alpha1e.utils.SizeUtils;
+
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.LinkedHashMap;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 /**
@@ -59,7 +46,6 @@ public class CourseActivity extends MVPBaseActivity<CourseContract.View, CourseP
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     public Fragment mCurrentFragment;
-    //private LinkedHashMap<Integer, Fragment> mFragmentCache = new LinkedHashMap<>();
 
     private int mEnterPropress = 0;
 
@@ -80,32 +66,25 @@ public class CourseActivity extends MVPBaseActivity<CourseContract.View, CourseP
     @Override
     protected void initUI() {
 
-
         int mCurrentProgress = mPresenter.doGetLocalProgress();
         mCurrentProgress = 0;
         mEnterPropress = mCurrentProgress;
         Fragment fragment = null;
-        int index = 0;
         UbtLog.d(TAG,"mEnterPropress = " + mEnterPropress);
         if(mCurrentProgress == 1){
             fragment = new SplitFragment((PrincipleHelper) mHelper);
-            index = FRAGMENT_SPLIT;
         }else if(mCurrentProgress == 2){
             fragment = new MergeFragment((PrincipleHelper) mHelper);
-            index = FRAGMENT_MERGE;
         }else if(mCurrentProgress == 3){
             fragment = new FeatureFragment((PrincipleHelper) mHelper);
-            index = FRAGMENT_FEATURE;
         }else {
             fragment = new PrincipleFragment((PrincipleHelper) mHelper);
-            index = FRAGMENT_PRINCIPLE;
         }
 
         mFragmentTransaction = this.mFragmentManager.beginTransaction();
         mFragmentTransaction.add(R.id.rl_content, fragment);
         mFragmentTransaction.commit();
         mCurrentFragment = fragment;
-        //mFragmentCache.put(index, fragment);
 
     }
 
@@ -127,6 +106,26 @@ public class CourseActivity extends MVPBaseActivity<CourseContract.View, CourseP
                 }
             });
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mCurrentFragment instanceof PrincipleFragment){
+            finish();
+        }else if(mCurrentFragment instanceof SplitFragment){
+            switchFragment(FRAGMENT_PRINCIPLE);
+        }else if(mCurrentFragment instanceof MergeFragment){
+            switchFragment(FRAGMENT_SPLIT);
+        }else if(mCurrentFragment instanceof FeatureFragment){
+            switchFragment(FRAGMENT_MERGE);
+        }
+        //super.onBackPressed();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        this.overridePendingTransition(0, R.anim.activity_close_down_up);
     }
 
     @Override
@@ -193,22 +192,18 @@ public class CourseActivity extends MVPBaseActivity<CourseContract.View, CourseP
     private void loadFragment(Fragment targetFragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         UbtLog.d(TAG,"targetFragment.isAdded()->>>"+(!targetFragment.isAdded()));
-        if (!targetFragment.isAdded()) {
+        //transaction.setCustomAnimations(R.animator.fragment_open_up_down, 0);
 
+        if (!targetFragment.isAdded()) {
             transaction
                     .remove(mCurrentFragment)
                     .add(R.id.rl_content, targetFragment)
                     .commit();
-
-            //mCurrentFragment.onDestroyView();
         } else {
-
-            targetFragment.onResume();
             transaction
                     .remove(mCurrentFragment)
                     .show(targetFragment)
                     .commit();
-            //mCurrentFragment.onDestroyView();
         }
         mCurrentFragment = targetFragment;
     }

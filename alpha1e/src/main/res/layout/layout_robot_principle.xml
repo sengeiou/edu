@@ -133,10 +133,10 @@
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
         android:textColor="#104A70"
-        android:textSize="12sp"
+        android:textSize="11sp"
         android:background="@drawable/icon_message_show"
         android:layout_above="@+id/v_top"
-        android:layout_marginBottom="-30dp"
+        android:layout_marginBottom="-35dp"
         android:layout_toRightOf="@+id/iv_robot"
         android:visibility="gone"
         />

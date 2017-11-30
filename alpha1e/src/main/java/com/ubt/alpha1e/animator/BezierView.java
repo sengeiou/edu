@@ -50,7 +50,7 @@ public class BezierView extends View {
     private static final int BEZIER_WIDTH = 5;   // 贝塞尔曲线线宽
     private static final int TANGENT_WIDTH = 6;  // 切线线宽
     private static final int CONTROL_WIDTH = 12;    // 控制点连线线宽
-    private static final int CONTROL_RADIUS = 12;  // 控制点半径
+    private static final int CONTROL_RADIUS = 10;  // 控制点半径
     private static final int TEXT_SIZE = 40;    // 文字画笔尺寸
     private static final int TEXT_HEIGHT = 60;  // 文本高度
     private static final int RATE = 20; // 移动速率
@@ -186,10 +186,10 @@ public class BezierView extends View {
 
         // 控制点画笔
         mControlPaint = new Paint();
-        //mControlPaint.setColor(Color.BLACK);
-        mControlPaint.setColor(Color.TRANSPARENT);
+        mControlPaint.setColor(Color.parseColor("#FFA74C"));
+        //mControlPaint.setColor(Color.TRANSPARENT);
         mControlPaint.setAntiAlias(true);
-        mControlPaint.setStyle(Paint.Style.STROKE);
+        mControlPaint.setStyle(Paint.Style.FILL);
 
         // 切线画笔
         mTangentPaint = new Paint();
@@ -401,14 +401,20 @@ public class BezierView extends View {
             int size = mControlPoints.size();
             PointF point;
             for (int i = 0; i < size; i++) {
+
                 point = mControlPoints.get(i);
                 if (i > 0) {
                     // 控制点连线
-                    canvas.drawLine(mControlPoints.get(i - 1).x, mControlPoints.get(i - 1).y, point.x, point.y,
-                            mLinePaint);
+                    canvas.drawLine(mControlPoints.get(i - 1).x, mControlPoints.get(i - 1).y, point.x, point.y, mLinePaint);
                 }
-                // 控制点
-                canvas.drawCircle(point.x, point.y, CONTROL_RADIUS, mControlPaint);
+
+                if(i == 0){
+                    //modify lihai ,只画第一点
+                    // 控制点
+                    canvas.drawCircle(point.x, point.y, CONTROL_RADIUS, mControlPaint);
+                }
+                //canvas.drawCircle(point.x, point.y, CONTROL_RADIUS, mControlPaint);
+
                 // 控制点文本
                 canvas.drawText("p" + i, point.x + CONTROL_RADIUS * 2, point.y + CONTROL_RADIUS * 2, mTextPointPaint);
                 // 控制点文本展示
@@ -453,13 +459,14 @@ public class BezierView extends View {
             for (int i = 0; i < size; i++) {
                 point = mControlPoints.get(i);
                 if (i > 0) {
-                    canvas.drawLine(mControlPoints.get(i - 1).x, mControlPoints.get(i - 1).y, point.x, point.y,
-                            mLinePaint);
+                    canvas.drawLine(mControlPoints.get(i - 1).x, mControlPoints.get(i - 1).y, point.x, point.y, mLinePaint);
                 }
-                canvas.drawCircle(point.x, point.y, CONTROL_RADIUS, mControlPaint);
+                //初始化不需要画
+                //canvas.drawCircle(point.x, point.y, CONTROL_RADIUS, mControlPaint);
+
                 canvas.drawText("p" + i, point.x + CONTROL_RADIUS * 2, point.y + CONTROL_RADIUS * 2, mTextPointPaint);
-                canvas.drawText("p" + i + " ( " + new DecimalFormat("##0.0").format(point.x) + " , " + new DecimalFormat
-                        ("##0.0").format(point.y) + ") ", REGION_WIDTH, mHeight - (size - i) * TEXT_HEIGHT, mTextPaint);
+                canvas.drawText("p" + i + " ( " + new DecimalFormat("##0.0").format(point.x) + " , "
+                        + new DecimalFormat("##0.0").format(point.y) + ") ", REGION_WIDTH, mHeight - (size - i) * TEXT_HEIGHT, mTextPaint);
             }
         }
     }

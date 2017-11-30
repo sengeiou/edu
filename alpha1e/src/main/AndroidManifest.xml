@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ubt.alpha1e"
           android:versionCode="1"
-          android:versionName="V1.0.0.4">
+          android:versionName="V1.0.0.5">
 
     <meta-data
         android:name="design_width"
@@ -619,6 +619,30 @@
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
+        <activity
+            android:name=".course.principle.PrincipleActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".course.split.SplitActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".course.merge.MergeActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".course.feature.FeatureActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
         <!-- APP实现的Receiver，用于接收消息和结果反馈 -->
         <receiver android:name=".xingepush.XGMessageRecevicer">
             <intent-filter>
@@ -633,6 +657,7 @@
         <activity
             android:name=".action.actioncreate.ActionTestActivity"
             android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/NoTitleThemeFullScreen">
         </activity>
 
