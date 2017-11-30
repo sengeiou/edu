@@ -736,7 +736,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             if(mCmd<0){
                 mCmd=255+mCmd;
             }
-            UbtLog.d(TAG,"CMD IS  "+mCmd);
+          //  UbtLog.d(TAG,"CMD IS  "+mCmd);
           if(mCmd==ConstValue.DV_TAP_HEAD) {
               //looperThread.send(createMessage(ROBOT_HIT_HEAD));
           }else if(mCmd==ConstValue.DV_6D_GESTURE){
@@ -1028,7 +1028,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
   private void batteryUiShow(String param){
       final byte[] mParams = Base64.decode(param, Base64.DEFAULT);
       for (int i = 0; i < mParams.length; i++) {
-         UbtLog.d(TAG, "index " + i + "value :" + mParams[i]);
+        // UbtLog.d(TAG, "index " + i + "value :" + mParams[i]);
           if (mParams[index_two_charging] == 0x01&&mParams[index_two_charging]!=mChargeValue) {
               IS_CHARGING=true;
               UbtLog.d(TAG, " IS CHARGING ");
