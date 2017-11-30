@@ -1136,48 +1136,76 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
   private String loadAnimationResources(int value ){
       String actionName="";
-      if(cartoonAction!=null) {
+
           if (value == cartoon_action_swing_left_hand) {
-              cartoonAction.setBackgroundResource(R.drawable.cartoon_left_hand);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.cartoon_left_hand);
+              }
               actionName = "swing_left_hand";
           } else if (value == cartoon_action_swing_right_hand) {
-              cartoonAction.setBackgroundResource(R.drawable.swigrighthand);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.swigrighthand);
+              }
               actionName = "swing_right_hand";
           } else if (value == cartoon_action_swing_left_leg) {
-              cartoonAction.setBackgroundResource(R.drawable.cartoon_swing_leftleg);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.cartoon_swing_leftleg);
+              }
               actionName = "swing_left_leg";
           } else if (value == cartoon_action_swing_right_leg) {
-              cartoonAction.setBackgroundResource(R.drawable.cartoon_right_leg);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.cartoon_right_leg);
+              }
               actionName = "swing_right_leg";
           } else if (value == cartoon_action_hand_stand) {
-              cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand);
+              }
               actionName = "hand_stand";
           } else if (value == cartoon_action_hand_stand_reverse) {
-              cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand_reverse);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand_reverse);
+              }
               actionName = "hand_stand_reverse";
           } else if (value == cartoon_action_squat) {
-              cartoonAction.setBackgroundResource(R.drawable.cartoon_squat);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.cartoon_squat);
+              }
               actionName = "squat";
           } else if (value == cartoon_action_enjoy) {
-              cartoonAction.setBackgroundResource(R.drawable.cartoon_enjoy);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.cartoon_enjoy);
+              }
               actionName = "enjoy";
           } else if (value == cartoon_action_fall) {
-              cartoonAction.setBackgroundResource(R.drawable.cartoon_fall);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.cartoon_fall);
+              }
               actionName = "fall";
           } else if (value == cartoon_action_greeting) {
-              cartoonAction.setBackgroundResource(R.drawable.cartoon_greeting);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.cartoon_greeting);
+              }
               actionName = "greeting";
           } else if (value == cartoon_action_shiver) {
-              cartoonAction.setBackgroundResource(R.drawable.cartoon_shiver);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.cartoon_shiver);
+              }
               actionName = "shiver";
           } else if (value == cartoon_action_sleep) {
-              cartoonAction.setBackgroundResource(R.drawable.cartoon_sleep);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.cartoon_sleep);
+              }
               actionName = "sleep";
           } else if (value == cartoon_action_smile) {
-              cartoonAction.setBackgroundResource(R.drawable.cartoon_smile);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.cartoon_smile);
+              }
               actionName = "smile enjoy";
           } else if (value == cartoon_aciton_squat_reverse) {
-              cartoonAction.setBackgroundResource(R.drawable.cartoon_squat_reverse);
+              if(cartoonAction!=null) {
+                  cartoonAction.setBackgroundResource(R.drawable.cartoon_squat_reverse);
+              }
               actionName = "squat_reverse";
           }
           Cartoon_animation_last_execute = value;
@@ -1187,9 +1215,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
               showCartoonTouchView();
           }
           UbtLog.d(TAG, "ACTIO NAME IS " + actionName);
-      }
-
-      UbtLog.d(TAG, "ACTIO NAME IS last " + actionName);
       return actionName;
   }
 }
