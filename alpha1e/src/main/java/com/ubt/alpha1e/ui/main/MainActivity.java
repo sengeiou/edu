@@ -1183,7 +1183,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
       } else {
           showCartoonTouchView();
       }
-      UbtLog.d(TAG,"ACTIO NAME IS "+actionName);
+      UbtLog.d(TAG,"ACTIO NAME IS  "+actionName);
       return actionName;
   }
 }
