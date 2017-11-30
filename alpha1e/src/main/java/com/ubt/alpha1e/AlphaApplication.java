@@ -57,6 +57,7 @@ import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.update.EngineUpdateManager;
 import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
+import com.ubt.alpha1e.utils.crash.CrashHandler;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.xingepush.XGUBTManager;
 import com.ubtechinc.base.BlueToothManager;
