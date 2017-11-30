@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.course.split;
+package com.ubt.alpha1e.course.split1;
 
 
 import android.animation.AnimatorSet;
@@ -19,12 +19,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.course.CourseActivity;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
-import com.ubt.alpha1e.course.feature.FeatureFragment;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
-import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -50,6 +49,7 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
     private static final int GO_TO_NEXT = 2;
     private static final int SHOW_DIALOG = 3;
     private static final int HIDE_DIALOG = 4;
+    private static final int TAP_HEAD = 5;
 
     private final int ANIMATOR_TIME = 500;
 
@@ -124,6 +124,11 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
                 case HIDE_DIALOG:
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
                     break;
+                case TAP_HEAD:
+                    //拍头退出课程模式
+                    ToastUtils.showShort(getStringRes("ui_setting_principle_tap_head"));
+                    getActivity().finish();
+                    break;
             }
         }
     };
@@ -136,6 +141,8 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
 
         if(event.getEvent() == PrincipleEvent.Event.PLAY_ACTION_FINISH){
             mHandler.sendEmptyMessage(HIDE_DIALOG);
+        }else if(event.getEvent() == PrincipleEvent.Event.TAP_HEAD){
+            mHandler.sendEmptyMessage(TAP_HEAD);
         }
     }
 
@@ -282,12 +289,7 @@ public class SplitFragment extends MVPBaseFragment<SplitContract.View, SplitPres
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
-                int enterPropress = ((CourseActivity) getContext()).getEnterPropress();
-                if(enterPropress > 0){
-                    ((CourseActivity) getContext()).finish();
-                }else {
-                    ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_PRINCIPLE);
-                }
+                ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_PRINCIPLE);
                 break;
             case R.id.tv_next:
                 doAplitAll();

@@ -3,31 +3,30 @@ package com.ubt.alpha1e.course.merge;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.course.CourseActivity;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
+import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
-import com.ubt.alpha1e.course.split.SplitFragment;
-import com.ubt.alpha1e.mvp.MVPBaseFragment;
-import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
-import com.ubt.alpha1e.utils.SizeUtils;
+import com.ubt.alpha1e.course.split.SplitActivity;
+import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
@@ -35,20 +34,21 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+
 /**
  * MVPPlugin
  * 邮箱 784787081@qq.com
  */
 
-@SuppressLint("ValidFragment")
-public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePresenter> implements MergeContract.View {
+public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePresenter> implements MergeContract.View {
 
-    private static final String TAG = MergeFragment.class.getSimpleName();
+    private static final String TAG = MergeActivity.class.getSimpleName();
 
     private static final int HIDE_VIEW = 1;
     private static final int GO_TO_NEXT = 2;
     private static final int SHOW_DIALOG = 3;
     private static final int HIDE_DIALOG = 4;
+    private static final int TAP_HEAD = 5;
 
     private final int ANIMATOR_TIME = 500;
 
@@ -82,7 +82,6 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
     private int containerHeight;
     private int scale = 0;
 
-    private PrincipleHelper mHelper = null;
     private boolean hasInitRobot = false;
     private RelativeLayout.LayoutParams params = null;
     private Animation smallerLeftBottomAnim = null;
@@ -111,26 +110,34 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
                     }
                     break;
                 case GO_TO_NEXT:
-                    ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,3);
-                    ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_FEATURE);
+                    doSaveCourseProgress(1,1,3);
+                    FeatureActivity.launchActivity(MergeActivity.this,true);
                     break;
                 case SHOW_DIALOG:
-                    mHelper.playSoundAudio("{\"filename\":\"组装.mp3\",\"playcount\":1}");
-                    mHelper.doLostPower();
-                    tvMsgShow.setText(getStringRes("ui_principle_on_engine_tips"));
+                    ((PrincipleHelper)mHelper).playSoundAudio("{\"filename\":\"组装.mp3\",\"playcount\":1}");
+                    ((PrincipleHelper)mHelper).doLostPower();
+                    tvMsgShow.setText(getStringResources("ui_principle_on_engine_tips"));
                     showView(tvMsgShow, true, biggerLeftBottomAnim);
                     break;
                 case HIDE_DIALOG:
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
                     break;
+                case TAP_HEAD:
+                    //拍头退出课程模式
+                    ToastUtils.showShort(getStringResources("ui_setting_principle_tap_head"));
+                    finish();
+                    break;
             }
         }
     };
 
-    @SuppressLint("ValidFragment")
-    public MergeFragment(PrincipleHelper helper){
-        super();
-        mHelper = helper;
+    public static void launchActivity(Activity activity, boolean isFinish) {
+        Intent intent = new Intent(activity, MergeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
+        if(isFinish){
+            activity.finish();
+        }
     }
 
     @Override
@@ -138,6 +145,9 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
         scale = (int) this.getResources().getDisplayMetrics().density;
         containerWidth = this.getResources().getDisplayMetrics().widthPixels;
         containerHeight = this.getResources().getDisplayMetrics().heightPixels;
+
+        biggerLeftBottomAnim = AnimationUtils.loadAnimation(getContext(), R.anim.scan_bigger_anim_left_bottom);
+        smallerLeftBottomAnim = AnimationUtils.loadAnimation(getContext(), R.anim.scan_smaller_anim_left_bottom);
 
         UbtLog.d(TAG, "scale = " + scale
                 + "  width = " + this.getResources().getDisplayMetrics().widthPixels
@@ -213,22 +223,15 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
         hasLostLegRight = true;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
     @Subscribe
     public void onEventPrinciple(PrincipleEvent event) {
-        if(!(((CourseActivity)getActivity()).getCurrentFragment() instanceof MergeFragment) ){
-            return;
-        }
-
         if(event.getEvent() == PrincipleEvent.Event.PLAY_SOUND){
             int status = event.getStatus();
             if(status == 1){
                 mHandler.sendEmptyMessage(HIDE_DIALOG);
             }
+        }else if(event.getEvent() == PrincipleEvent.Event.TAP_HEAD){
+            mHandler.sendEmptyMessage(TAP_HEAD);
         }
     }
 
@@ -238,47 +241,52 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
     }
 
     @Override
-    public int getContentViewId() {
-        return R.layout.fragment_robot_merge;
-    }
-
-    @Override
     protected void initBoardCastListener() {
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        EventBus.getDefault().register(this);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
+    public int getContentViewId() {
+        return R.layout.fragment_robot_merge;
     }
 
     @Override
-    public void onDestroyView() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroyView();
-        unbinder.unbind();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+        mHelper = new PrincipleHelper(this);
+        initUI();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ((PrincipleHelper)mHelper).stopPlayAudio();
     }
 
     @OnClick({R.id.iv_back, R.id.tv_next})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
-                int enterPropress = ((CourseActivity) getContext()).getEnterPropress();
-                if(enterPropress > 1){
-                    ((CourseActivity) getContext()).finish();
-                }else {
-                    ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_SPLIT);
-                }
+                onBackPressed();
                 break;
             case R.id.tv_next:
                 doMergeAll();
                 mHandler.sendEmptyMessageDelayed(GO_TO_NEXT,600);
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ((PrincipleHelper)mHelper).doEnterCourse((byte)1);
+    }
+
+    @Override
+    public void onBackPressed() {
+        SplitActivity.launchActivity(this,true);
     }
 
     private void doMergeAll(){
@@ -326,21 +334,20 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
         }
 
         if (isShow) {
-
             if(tvMsgShow.getVisibility() == View.VISIBLE){
                 tvMsgShow.setVisibility(View.GONE);
             }
-
             view.setVisibility(View.VISIBLE);
         } else {
             view.setVisibility(View.GONE);
         }
+
         if (anim != null) {
             view.startAnimation(anim);
         }
     }
 
-    private void doAnimator(View view,float targetX, float targetY){
+    private void doAnimator(View view, float targetX, float targetY){
         // 属性动画移动
         ObjectAnimator y = ObjectAnimator.ofFloat(view, "y", view.getY(), targetY);
         ObjectAnimator x = ObjectAnimator.ofFloat(view, "x", view.getX(), targetX);
@@ -383,6 +390,7 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
                     startX = view.getX();
                     startY = view.getY();
 
+                    UbtLog.d(TAG,"ivLegLeftBg.getY() = " + ivLegLeftBg.getY() + "   ivLegRightBg.getY() = " + ivLegRightBg.getY());
                     if(view.getId() == R.id.iv_hand_left){
                         relativeTargetX = ivHandLeftBg.getX();
                         relativeTargetY = ivHandLeftBg.getY();
@@ -463,19 +471,26 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
                     }else {
                         targetX = relativeTargetX;
                         targetY = relativeTargetY;
+                        UbtLog.d(TAG,"targetX = " + targetX + "     targetY = " + targetY);
 
                         if(view.getId() == R.id.iv_hand_left){
                             hasLostHandLeft = false;
-                            mHelper.doOnLeftHand();
+                            ((PrincipleHelper)mHelper).doOnLeftHand();
                         }else if(view.getId() == R.id.iv_hand_right){
                             hasLostHandRight = false;
-                            mHelper.doOnRightHand();
+                            ((PrincipleHelper)mHelper).doOnRightHand();
                         }else if(view.getId() == R.id.iv_leg_left ){
                             hasLostLegLeft = false;
-                            mHelper.doOnLeftFoot();
+                            if(!hasLostLegRight){
+                                ((PrincipleHelper)mHelper).doOnLeftFoot();
+                                ((PrincipleHelper)mHelper).doOnRightFoot();
+                            }
                         }else if(view.getId() == R.id.iv_leg_right){
                             hasLostLegRight = false;
-                            mHelper.doOnRightFoot();
+                            if(!hasLostLegLeft){
+                                ((PrincipleHelper)mHelper).doOnLeftFoot();
+                                ((PrincipleHelper)mHelper).doOnRightFoot();
+                            }
                         }
 
                         Message hideViewMsg = new Message();
@@ -483,7 +498,7 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
                         hideViewMsg.arg1 = view.getId();
                         mHandler.sendMessageDelayed(hideViewMsg,ANIMATOR_TIME);
                     }
-
+                    UbtLog.d(TAG,"targetX => " + targetX + "     targetY = " + targetY + "  view = " +view.getWidth() + "   = " + view.getHeight());
                     // 属性动画移动
                     ObjectAnimator y = ObjectAnimator.ofFloat(view, "y", view.getY(), targetY);
                     ObjectAnimator x = ObjectAnimator.ofFloat(view, "x", view.getX(), targetX);
@@ -515,4 +530,32 @@ public class MergeFragment extends MVPBaseFragment<MergeContract.View, MergePres
             return touchable;
         }
     };
+
+    /**
+     * 获取课程进度
+     * @param type
+     */
+    public void doGetCourseProgress(int type){
+        mPresenter.doGetCourseProgress(type);
+    }
+
+    /**
+     * 保存课程进度
+     * @param type
+     * @param courseOne
+     * @param progressOne
+     */
+    public void doSaveCourseProgress(int type, int courseOne, int progressOne){
+        mPresenter.doSaveCourseProgress(type,courseOne,progressOne);
+    }
+
+    @Override
+    public void onSaveCourseProgress(boolean isSuccess, String msg) {
+
+    }
+
+    @Override
+    public void onGetCourseProgress(boolean isSuccess, String msg, int progress) {
+
+    }
 }

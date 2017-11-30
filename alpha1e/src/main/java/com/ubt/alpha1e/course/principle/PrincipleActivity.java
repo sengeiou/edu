@@ -1,14 +1,13 @@
 package com.ubt.alpha1e.course.principle;
 
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -18,44 +17,36 @@ import android.widget.TextView;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.animator.FloatAnimator;
 import com.ubt.alpha1e.base.ToastUtils;
-import com.ubt.alpha1e.course.CourseActivity;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
-import com.ubt.alpha1e.event.RobotEvent;
-import com.ubt.alpha1e.login.LoginActivity;
+import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.mvp.MVPBaseFragment;
-import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
-import com.ubtechinc.base.ConstValue;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
-import static com.ubt.alpha1e.utils.BluetoothParamUtil.stringToBytes;
 
 /**
  * MVPPlugin
  * 邮箱 784787081@qq.com
  */
 
-@SuppressLint("ValidFragment")
-public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, PrinciplePresenter> implements PrincipleContract.View {
+public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, PrinciplePresenter> implements PrincipleContract.View {
 
-    private static final String TAG = PrincipleFragment.class.getSimpleName();
+    private static final String TAG = PrincipleActivity.class.getSimpleName();
 
     private static final int START_FLOAT_ANIMATION_1 = 1;
     private static final int START_FLOAT_ANIMATION_2 = 2;
     private static final int START_FLOAT_ANIMATION_3 = 3;
     private static final int START_FLOAT_ANIMATION = 4;
     private static final int PLAY_ACTION_NEXT = 5;
-    private static final int GO_NEXT = 6;
+    private static final int TAP_HEAD = 6;
+    private static final int GO_NEXT = 7;
 
 
     @BindView(R.id.iv_principle_alpha)
@@ -68,9 +59,7 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
     RelativeLayout rlDialogue3;
     @BindView(R.id.tv_next)
     TextView tvNext;
-    Unbinder unbinder;
 
-    private PrincipleHelper mHelper = null;
     private FloatAnimator mFloatAnimator = null;
     private int scale = 0;
     private Animation biggerAnimation = null;
@@ -106,19 +95,19 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
                 case PLAY_ACTION_NEXT:
                     UbtLog.d(TAG,"mCurrentPlayProgress = " + mCurrentPlayProgress);
                     if(mCurrentPlayProgress == 0){
-                        mHelper.playFile(playActionFile[0]);
+                        ((PrincipleHelper)mHelper).playFile(playActionFile[0]);
                         rlDialogue1.setVisibility(View.VISIBLE);
                         rlDialogue1.startAnimation(biggerAnimation);
                         mCurrentPlayProgress = 1;
                         startFloatAnimation(rlDialogue1,500);
                     }else if(mCurrentPlayProgress == 1){
-                        mHelper.playFile(playActionFile[1]);
+                        ((PrincipleHelper)mHelper).playFile(playActionFile[1]);
                         rlDialogue2.setVisibility(View.VISIBLE);
                         rlDialogue2.startAnimation(biggerAnimation);
                         mCurrentPlayProgress = 2;
                         startFloatAnimation(rlDialogue2,500);
                     }else if(mCurrentPlayProgress == 2){
-                        mHelper.playFile(playActionFile[2]);
+                        ((PrincipleHelper)mHelper).playFile(playActionFile[2]);
                         rlDialogue3.setVisibility(View.VISIBLE);
                         rlDialogue3.startAnimation(biggerAnimation);
                         mCurrentPlayProgress = 3;
@@ -130,7 +119,7 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
                     break;
                 case GO_NEXT:
 
-                    mHelper.doInit();
+                    ((PrincipleHelper)mHelper).doInit();
                     if(mCurrentPlayProgress == 1){
                         rlDialogue2.setVisibility(View.VISIBLE);
                         rlDialogue2.startAnimation(biggerAnimation);
@@ -144,26 +133,35 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
                         mCurrentPlayProgress = 4;
                         mHandler.sendEmptyMessageDelayed(GO_NEXT,500);
                     }else {
-                        ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,1);
-                        ((CourseActivity)getActivity()).switchFragment(CourseActivity.FRAGMENT_SPLIT);
+                        doSaveCourseProgress(1,1,1);
+                        SplitActivity.launchActivity(PrincipleActivity.this,true);
                     }
 
+                    break;
+                case TAP_HEAD:
+                    //拍头退出课程模式
+                    UbtLog.d(TAG,"TAP_HEAD == " );
+                    ToastUtils.showShort(getStringResources("ui_setting_principle_tap_head"));
+                    finish();
                     break;
             }
         }
     };
+
+    public static void launchActivity(Activity activity,boolean isFinish) {
+        Intent intent = new Intent(activity, PrincipleActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
+        if(isFinish){
+            activity.finish();
+        }
+    }
 
     private void startFloatAnimation(View view,int delayTime){
         Message msg = new Message();
         msg.what = START_FLOAT_ANIMATION;
         msg.arg1 = view.getId();
         mHandler.sendMessageDelayed(msg,delayTime);
-    }
-
-    @SuppressLint("ValidFragment")
-    public PrincipleFragment(PrincipleHelper helper){
-        super();
-        mHelper = helper;
     }
 
     @Override
@@ -201,14 +199,19 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
         UbtLog.d(TAG, "ivPrincipleAlphaParams = " + ivPrincipleAlphaParams.width + "  " + ivPrincipleAlphaParams.height);
 
         mFloatAnimator = FloatAnimator.getIntanse();
+        mFloatAnimator.setDistance(30F);
 
         biggerAnimation = AnimationUtils.loadAnimation(getContext(),R.anim.scan_bigger_anim);
         biggerAnimation.setDuration(500);
-
     }
 
     @Override
     protected void initControlListener() {
+
+    }
+
+    @Override
+    protected void initBoardCastListener() {
 
     }
 
@@ -218,53 +221,44 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
     }
 
     @Override
-    protected void initBoardCastListener() {
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        EventBus.getDefault().register(this);
-        return rootView;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+        mHelper = new PrincipleHelper(this);
+        initUI();
     }
 
     @Subscribe
     public void onEventPrinciple(PrincipleEvent event) {
-        UbtLog.d(TAG,"getCurrentFragment : " + ((CourseActivity)getActivity()).getCurrentFragment());
-        if(!(((CourseActivity)getActivity()).getCurrentFragment() instanceof PrincipleFragment) ){
-            return;
-        }
-
+        UbtLog.d(TAG,"onEventPrinciple = " + event.getEvent());
         if(event.getEvent() == PrincipleEvent.Event.PLAY_ACTION_FINISH){
             mHandler.sendEmptyMessage(PLAY_ACTION_NEXT);
+        }else if(event.getEvent() == PrincipleEvent.Event.TAP_HEAD){
+            mHandler.sendEmptyMessage(TAP_HEAD);
         }
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
+        ((PrincipleHelper)mHelper).doEnterCourse((byte)1);
 
-        ((CourseActivity)getActivity()).doGetCourseProgress(1);
-
+        doGetCourseProgress(1);
         mHandler.sendEmptyMessage(PLAY_ACTION_NEXT);
     }
 
     @Override
-    public void onDestroyView() {
+    protected void onDestroy() {
         mFloatAnimator.stopFloatAnimator();
-        unbinder.unbind();
-        EventBus.getDefault().unregister(this);
-        super.onDestroyView();
+        super.onDestroy();
     }
 
     @OnClick({R.id.iv_back, R.id.rl_dialogue_2, R.id.rl_dialogue_1, R.id.rl_dialogue_3, R.id.tv_next})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
-                getActivity().finish();
+                onBackPressed();
                 break;
             case R.id.rl_dialogue_2:
                 break;
@@ -279,4 +273,40 @@ public class PrincipleFragment extends MVPBaseFragment<PrincipleContract.View, P
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        ((PrincipleHelper)mHelper).doInit();
+        ((PrincipleHelper)mHelper).doEnterCourse((byte)0);
+
+        this.finish();
+        this.overridePendingTransition(0, R.anim.activity_close_down_up);
+    }
+
+    /**
+     * 获取课程进度
+     * @param type
+     */
+    public void doGetCourseProgress(int type){
+        mPresenter.doGetCourseProgress(type);
+    }
+
+    /**
+     * 保存课程进度
+     * @param type
+     * @param courseOne
+     * @param progressOne
+     */
+    public void doSaveCourseProgress(int type, int courseOne, int progressOne){
+        mPresenter.doSaveCourseProgress(type,courseOne,progressOne);
+    }
+
+    @Override
+    public void onSaveCourseProgress(boolean isSuccess, String msg) {
+
+    }
+
+    @Override
+    public void onGetCourseProgress(boolean isSuccess, String msg, int progress) {
+
+    }
 }

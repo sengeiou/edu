@@ -101,7 +101,7 @@
     <ImageView
         android:id="@+id/iv_leg_left"
         android:layout_width="114px"
-        android:layout_height="wrap_content"
+        android:layout_height="322px"
         android:layout_marginRight="30dp"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/iv_hand_left"
