@@ -103,8 +103,8 @@ public class AlphaApplication extends LoginApplication {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-//        CrashHandler crashHandler = CrashHandler.getInstance();
-//        crashHandler.init(this);
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(this);
 
         initActivityLife();
         initSkin(this);
