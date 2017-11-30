@@ -52,6 +52,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
 
     private NewActionInfo mCurrentAction;
 
+
     private ImageView img_action_logo;
     private RelativeLayout lay_head_sel;
     private TextView txt_shooting;
@@ -109,11 +110,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
             setContentView(R.layout.activity_actions_edit_save);
         }
 
-//        setContentView(R.layout.activity_actions_edit_save);
 
-//            mCurrentAction = new NewActionInfo().getThiz(this.getIntent()
-//                .getExtras().get(ActionsEditHelper.NewActionInfo)
-//                .toString());
         mCurrentAction = getIntent().getParcelableExtra(ActionsEditHelper.NewActionInfo);//get parcelable object
 //        UbtLog.d(TAG, "mCurrentAction=" + mCurrentAction.frameActions);
         mSchemeId = getIntent().getStringExtra(SCHEME_ID);
@@ -683,6 +680,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
 
     @Override
     public void onChangeActionFinish() {
+        UbtLog.d(TAG, "wmma onChangeActionFinish");
         boolean state = ((ActionsEditHelper)mHelper).getActionSaveState();
 //
         edt_name.post(new Runnable() {

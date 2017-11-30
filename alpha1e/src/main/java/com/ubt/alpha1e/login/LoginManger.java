@@ -67,12 +67,13 @@ public class LoginManger implements AuthorizeListener {
     }
 
     public void refreshLoginToken(String productId, String dsn, OnRefreshListener onRefreshListener){
-        UbtLog.d(TAG, "refreshLoginToken");
+
         this.onRefreshListener = onRefreshListener;
         int type = SPUtils.getInstance().getInt(Constant.SP_LOGIN_TYPE);
+        UbtLog.d(TAG, "refreshLoginToken type:" + type);
         if(type == 0){
             if (proxy.isTokenExist(ELoginPlatform.WX, LoginApplication.getInstance())) {
-                UbtLog.d(TAG, "refreshLoginToken WX");
+                UbtLog.d(TAG, "refreshLoginToken wx");
                 proxy.requestTokenVerify(ELoginPlatform.WX, productId, dsn);
             }
         }else if(type == 1){
@@ -136,7 +137,7 @@ public class LoginManger implements AuthorizeListener {
     @Override
     public void onSuccess(int i) {
 
-        UbtLog.d(TAG, "onSuccess:" + i);
+        UbtLog.d(TAG, "onSuccess:" + i + "loginType:" + loginType);
         if(i == AuthorizeListener.TOKENVERIFY_TYPE){
             UbtLog.d(TAG, "refresh login token success!");
         }

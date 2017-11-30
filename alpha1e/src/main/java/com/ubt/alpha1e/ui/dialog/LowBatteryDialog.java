@@ -35,7 +35,7 @@ public class LowBatteryDialog {
 
     public LowBatteryDialog setBatteryThresHold(int value){
            power=value;
-        return this ;
+           return this ;
     }
 
     public LowBatteryDialog builder() {

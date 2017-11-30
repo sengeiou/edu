@@ -113,12 +113,14 @@ public class PrepareActionUtil implements BaseQuickAdapter.OnItemClickListener, 
 
     @Override
     public void onClick(DialogPlus dialog, View view) {
-        dialog.dismiss();
         switch (view.getId()) {
             case R.id.tv_cancel:
 
                 break;
             case R.id.tv_confirm:
+                if(selectDataModel == null){
+                    return;
+                }
                 if (null != mDialogListener) {
                     mDialogListener.onActionConfirm(selectDataModel);
                 }
@@ -126,6 +128,8 @@ public class PrepareActionUtil implements BaseQuickAdapter.OnItemClickListener, 
             default:
                 break;
         }
+
+        dialog.dismiss();
     }
 
 

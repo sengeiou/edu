@@ -280,6 +280,7 @@ public abstract class BaseActivity extends
 
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -288,9 +289,9 @@ public abstract class BaseActivity extends
 //
 //        doCheckLanguage();
 //
-//        if (mHelper != null){
-//            mHelper.RegisterHelper();
-//        }
+        if (mHelper != null){
+            mHelper.RegisterHelper();
+        }
 //
 //        UbtLog.d(TAG, "--wmma--onResume!");
 //
@@ -308,12 +309,13 @@ public abstract class BaseActivity extends
 
     }
 
+    @Override
     protected void onPause() {
         super.onPause();
-        if (mHelper != null) {
-            UbtLog.d(TAG, "--wmma--mHelper UnRegisterHelper! " + mHelper.getClass().getSimpleName());
-            mHelper.UnRegisterHelper();
-        }
+//        if (mHelper != null) {
+//            UbtLog.d(TAG, "--wmma--mHelper UnRegisterHelper! " + mHelper.getClass().getSimpleName());
+//            mHelper.UnRegisterHelper();
+//        }
         MobclickAgent.onPause(this);
     }
 
