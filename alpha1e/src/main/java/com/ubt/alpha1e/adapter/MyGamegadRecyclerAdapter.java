@@ -120,6 +120,8 @@ public class MyGamegadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             remoteLogoId = R.drawable.icon_football;
         }else if(position == 1){
             remoteLogoId = R.drawable.icon_fighter;
+        }else {
+            holder.ivRemote.setAlpha(0.5f);
         }
         holder.ivRemote.setImageResource(remoteLogoId);
 

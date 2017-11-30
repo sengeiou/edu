@@ -944,7 +944,7 @@ public class AutoConnectBluetoothHelper extends BaseHelper implements IJsonListe
 //            String params = SPUtils.getInstance().getString(SP_CLIENT_ID, "");
             UbtLog.d(TAG,"params :  "+params);
             if(params.equals("")){
-                UbtLog.d(TAG,"params 为空  ");
+                UbtLog.d(TAG,"params 为空   ");
                 finishBluetoothConnect();
                 return;
             }
