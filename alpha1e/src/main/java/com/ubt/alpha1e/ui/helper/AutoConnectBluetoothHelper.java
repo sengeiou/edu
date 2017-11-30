@@ -710,7 +710,7 @@ public class AutoConnectBluetoothHelper extends BaseHelper implements IJsonListe
             UbtLog.d(TAG,"    发送 获取 product 和 dsn  命令");
             byte[] param_read = new byte[1];
             doSendComm(ConstValue.DV_PRODUCT_AND_DSN, null);
-
+            this.doSendReadStateComm();
             //update AlphaInfo
             AlphaInfo info = new AlphaInfo();
             info.setBlueToothName(((AlphaApplication) mContext
