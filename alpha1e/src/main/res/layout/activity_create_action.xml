@@ -141,11 +141,12 @@
     <RelativeLayout
         android:id="@+id/rl_delete_music"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/rl_action_line"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
+        android:gravity="bottom|center"
+        android:paddingBottom="20dp"
         android:visibility="gone"
+        android:background="@drawable/img_zhezhao"
         >
 
         <ImageView
@@ -162,6 +163,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_del_music"
             android:text="@string/ui_create_delete_music"
+            android:textColor="#fff"
             android:gravity="center"
             />
 

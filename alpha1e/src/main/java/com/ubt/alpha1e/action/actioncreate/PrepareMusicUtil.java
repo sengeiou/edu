@@ -165,6 +165,9 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
 
                 break;
             case R.id.tv_confirm:
+                if(selectDataModel == null){
+                    return;
+                }
                 if (null != mDialogListener) {
                     mDialogListener.onMusicConfirm(selectDataModel);
                 }

@@ -63,6 +63,8 @@ public class ActionsEditHelper extends BaseHelper implements
                 mUI.onReadEng((byte[]) msg.obj);
             }
             if (msg.what == msg_on_change_action_finish) {
+                UbtLog.d("hand", "wmma msg_on_change_action_finish:" + mUI.getClass());
+
                 mUI.onChangeActionFinish();
             }
         }
@@ -395,6 +397,7 @@ public class ActionsEditHelper extends BaseHelper implements
     @Override
     public void onChangeNewActionsFinish() {
         // TODO Auto-generated method stub
+        UbtLog.d("achelper", "wmma msg_on_change_action_finish");
         Message msg = new Message();
         msg.what = msg_on_change_action_finish;
         mHandler.sendMessage(msg);

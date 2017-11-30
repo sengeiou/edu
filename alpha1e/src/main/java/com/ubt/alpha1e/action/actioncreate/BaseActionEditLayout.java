@@ -685,6 +685,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 return;
             }
             playFinish = false;
+            mediaPlayer.prepare();
             mediaPlayer.start();
 
             //后台线程发送消息进行更新进度条
@@ -752,19 +753,19 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 mContext,
                 ResourceManager.getInstance(mContext).getStringResources("ui_readback_quit_tip"),
                 ResourceManager.getInstance(mContext).getStringResources("ui_common_cancel"),
-                ResourceManager.getInstance(mContext).getStringResources("ui_common_save"), new IMessageListeter() {
+                ResourceManager.getInstance(mContext).getStringResources("ui_readback_quit_confirm"), new IMessageListeter() {
 
                     @Override
                     public void onViewAction(boolean isOk) {
                         if (isOk) {
-                            saveNewAction();
-                        } else {
+//                            saveNewAction();
                             doReset();
                             if (mediaPlayer != null) {
                                 mediaPlayer.stop();
                                 playFinish = true;
                             }
                             ((Activity) mContext).finish();
+                        } else {
                         }
                     }
                 }).show();
@@ -816,8 +817,9 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     }
 
     public void stopMusic() {
-        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+        if (mediaPlayer != null) {
             UbtLog.d(TAG, "mediaPlayer stop");
+            tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
             playFinish = true;
             mHandler.removeMessages(0);
             mediaPlayer.stop();
@@ -856,6 +858,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 break;
             case R.id.iv_reset_index:
+                stopMusic();
+                ((ActionsEditHelper)mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop, null);
                 sbVoice.setProgress(0);
                 recyclerViewFrames.smoothScrollToPosition(0);
                 recyclerViewTimes.smoothScrollToPosition(0);
@@ -1113,13 +1117,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             return;
         }
 
-        if (list_frames.size() > 0) {
-//            if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
-//                UbtLog.d(TAG, "边充边玩未打开");
-//                ToastUtils.showShort(ResourceManager.getInstance(mContext).getStringResources("ui_settings_play_during_charging_tips"));
-//                return;
-//            }
-        }
 
         if (mediaPlayer != null && mediaPlayer.isPlaying() && !mDir.equals("")) {
             ivPlay.setImageResource(R.drawable.icon_play_music);
@@ -1154,6 +1151,9 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
         UbtLog.d(TAG, "state:" + ((ActionsEditHelper) mHelper).getNewPlayerState());
         resetState();
+        if(list_frames.size() == 0){
+            return;
+        }
         if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
             ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_pause_or_continue,
                     getEditingActions());
@@ -1918,12 +1918,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public void doReset() {
         UbtLog.d(TAG, "doReset");
 
-//        if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
-//            Toast.makeText(mContext, mContext.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
-//            return;
-//        }
 
-        String angles = "90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90";
+        String angles = "93#20#66#86#156#127#90#74#95#104#89#89#104#81#76#90";
+
+//        String angles = "90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90";
         FrameActionInfo info = new FrameActionInfo();
         info.eng_angles = angles;
 

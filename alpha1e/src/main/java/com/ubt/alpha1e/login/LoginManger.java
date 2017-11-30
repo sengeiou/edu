@@ -66,16 +66,19 @@ public class LoginManger implements AuthorizeListener {
         this.onLoginListener = onLoginListener;
     }
 
-    public void refreshLoginToken(String productId, String dsn, OnRefreshListener onRefreshListener){
-        UbtLog.d(TAG, "refreshLoginToken");
-        this.onRefreshListener = onRefreshListener;
+    public void refreshLoginToken(String productId, String dsn/*, OnRefreshListener onRefreshListener*/){
+
+//        this.onRefreshListener = onRefreshListener;
         int type = SPUtils.getInstance().getInt(Constant.SP_LOGIN_TYPE);
+        UbtLog.d(TAG, "refreshLoginToken type:" + type);
         if(type == 0){
             if (proxy.isTokenExist(ELoginPlatform.WX, LoginApplication.getInstance())) {
+                UbtLog.d(TAG, "refreshLoginToken wx");
                 proxy.requestTokenVerify(ELoginPlatform.WX, productId, dsn);
             }
         }else if(type == 1){
             if (proxy.isTokenExist(ELoginPlatform.QQOpen, LoginApplication.getInstance())) {
+                UbtLog.d(TAG, "refreshLoginToken QQOpen");
                 proxy.requestTokenVerify(ELoginPlatform.QQOpen, productId, dsn);
             }
         }
@@ -94,12 +97,14 @@ public class LoginManger implements AuthorizeListener {
         }
         UbtLog.d(TAG, "loginWX");
         loginType = 0;
+        SPUtils.getInstance().put(Constant.SP_LOGIN_TYPE, loginType);
         proxy.clearToken(ELoginPlatform.WX, LoginApplication.getInstance());
         proxy.requestLogin(ELoginPlatform.WX, PID, DSN, activity);
     }
 
     public void loginQQ(Activity activity){
         loginType = 1;
+        SPUtils.getInstance().put(Constant.SP_LOGIN_TYPE, loginType);
         proxy.clearToken(ELoginPlatform.QQOpen, LoginApplication.getInstance());
         proxy.requestLogin(ELoginPlatform.QQOpen, PID, DSN, activity);
     }
@@ -132,7 +137,7 @@ public class LoginManger implements AuthorizeListener {
     @Override
     public void onSuccess(int i) {
 
-        UbtLog.d(TAG, "onSuccess:" + i);
+        UbtLog.d(TAG, "onSuccess:" + i + "loginType:" + loginType);
         if(i == AuthorizeListener.TOKENVERIFY_TYPE){
             UbtLog.d(TAG, "refresh login token success!");
         }
@@ -159,7 +164,7 @@ public class LoginManger implements AuthorizeListener {
             }
         }
 
-        SPUtils.getInstance().put(Constant.SP_LOGIN_TYPE, loginType);
+
 
 
 
