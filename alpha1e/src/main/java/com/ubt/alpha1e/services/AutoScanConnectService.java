@@ -94,13 +94,17 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 		}
 	};
 
+    static Context mContext = null ;
+
 	/**
 	 * 启动自动扫描连接服务
 	 * @param context
      */
 	public static void startService(Context context){
+
 		if(instance == null){
 			//add by dicy.cheng
+            mContext = context;
 			Intent mIntent = new Intent(context,AutoScanConnectService.class);
 			context.startService(mIntent);
 		}
@@ -146,7 +150,7 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 	}
 
 	private void initHelper() {
-		mHelper = new AutoConnectBluetoothHelper(this, this);
+		mHelper = new AutoConnectBluetoothHelper(this, mContext);
 		mHelper.RegisterHelper();
 	}
 
@@ -223,6 +227,7 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 			if(event.getEvent() == RobotEvent.Event.SCAN_ROBOT){
 				dealScanResult(event.getBluetoothDevice());
 			}else if(event.getEvent() == RobotEvent.Event.SCAN_ROBOT_FINISH){
+				UbtLog.d(TAG," ccy SCAN_ROBOT_FINISH  1" );
 				UbtLog.d(TAG,"isScanSuccess = " + isScanSuccess);
 				if(!isScanSuccess){
 					mHandler.sendEmptyMessage(SCAN_FAIL);

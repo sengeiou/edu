@@ -131,6 +131,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
 
     private boolean isNextConnect = true;
 
+    Context mBluetoothContext = null;
 
     private int clientIdSendWhich = 0 ; //clientId发送到哪一段
     String clientid[] = null;
@@ -233,6 +234,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
             if (state.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
                 //
                 mUI.onScanFinish();
+                UbtLog.d(TAG," ccy SCAN_ROBOT_FINISH  3" );
                 RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.SCAN_ROBOT_FINISH);
                 EventBus.getDefault().post(robotEvent);
             } else {
@@ -397,6 +399,8 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
 
     public BluetoothHelper(IScanUI _ui, Context context) {
         super(context);
+
+        mBluetoothContext = context ;
 
         MyLog.writeLog(TAG, "create ScanHelper");
         this.mUI = _ui;
@@ -877,36 +881,37 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
                 UbtLog.d(TAG,"dsn =  "+ss[1]);
             }
             UbtLog.d(TAG,"再发送clientId 给机器人  ");
-//            LoginManger.getInstance().refreshLoginToken(ss[0],ss[1],onRefreshListener);
+            LoginManger.getInstance().init((Activity)mBluetoothContext,null);
+            LoginManger.getInstance().refreshLoginToken(ss[0],ss[1],onRefreshListener);
 //            UbtLog.d(TAG, "client:" +LoginManger.getInstance().getClientId());
 
-            String params = SPUtils.getInstance().getString(SP_CLIENT_ID, "");
-            UbtLog.d(TAG,"params :  "+params);
-            if(params.equals("")){
-                UbtLog.d(TAG,"params 为空  ");
-                finishBluetoothConnect();
-                return;
-            }
-            int clientidNum = params.length()/200 ;//clientId分段发送
-            if(params.length()%200 >0){
-                clientidNum ++ ;
-            }
-            clientid = new String[clientidNum] ;
-            for(int i =0;i<clientidNum;i++){
-                if(i+1 == clientidNum){
-                    clientid[i] = params.substring(i*200,params.length());
-                }else {
-                    clientid[i] = params.substring(i*200,(i+1)*200);
-                }
-                UbtLog.d(TAG,"clientid  "+i+":"+clientid[i]);
-            }
-
-            clientIdSendWhich = 1 ;
-            if(clientid.length == 1){
-                doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes("end:"+clientid[0]));
-            }else {
-                doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes("start:"+clientid[0]));
-            }
+//            String params = SPUtils.getInstance().getString(SP_CLIENT_ID, "");
+//            UbtLog.d(TAG,"params :  "+params);
+//            if(params.equals("")){
+//                UbtLog.d(TAG,"params 为空  ");
+//                finishBluetoothConnect();
+//                return;
+//            }
+//            int clientidNum = params.length()/200 ;//clientId分段发送
+//            if(params.length()%200 >0){
+//                clientidNum ++ ;
+//            }
+//            clientid = new String[clientidNum] ;
+//            for(int i =0;i<clientidNum;i++){
+//                if(i+1 == clientidNum){
+//                    clientid[i] = params.substring(i*200,params.length());
+//                }else {
+//                    clientid[i] = params.substring(i*200,(i+1)*200);
+//                }
+//                UbtLog.d(TAG,"clientid  "+i+":"+clientid[i]);
+//            }
+//
+//            clientIdSendWhich = 1 ;
+//            if(clientid.length == 1){
+//                doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes("end:"+clientid[0]));
+//            }else {
+//                doSendComm(ConstValue.DV_CLIENT_ID, BluetoothParamUtil.stringToBytes("start:"+clientid[0]));
+//            }
         }else if(cmd == ConstValue.DV_CLIENT_ID){
             UbtLog.d(TAG,"cmd = " + cmd + "    发送clientId 1 段成功 ");
             if(clientid != null && clientIdSendWhich == clientid.length ){

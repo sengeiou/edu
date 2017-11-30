@@ -72,10 +72,12 @@ public class LoginManger implements AuthorizeListener {
         int type = SPUtils.getInstance().getInt(Constant.SP_LOGIN_TYPE);
         if(type == 0){
             if (proxy.isTokenExist(ELoginPlatform.WX, LoginApplication.getInstance())) {
+                UbtLog.d(TAG, "refreshLoginToken WX");
                 proxy.requestTokenVerify(ELoginPlatform.WX, productId, dsn);
             }
         }else if(type == 1){
             if (proxy.isTokenExist(ELoginPlatform.QQOpen, LoginApplication.getInstance())) {
+                UbtLog.d(TAG, "refreshLoginToken QQOpen");
                 proxy.requestTokenVerify(ELoginPlatform.QQOpen, productId, dsn);
             }
         }
@@ -94,12 +96,14 @@ public class LoginManger implements AuthorizeListener {
         }
         UbtLog.d(TAG, "loginWX");
         loginType = 0;
+        SPUtils.getInstance().put(Constant.SP_LOGIN_TYPE, loginType);
         proxy.clearToken(ELoginPlatform.WX, LoginApplication.getInstance());
         proxy.requestLogin(ELoginPlatform.WX, PID, DSN, activity);
     }
 
     public void loginQQ(Activity activity){
         loginType = 1;
+        SPUtils.getInstance().put(Constant.SP_LOGIN_TYPE, loginType);
         proxy.clearToken(ELoginPlatform.QQOpen, LoginApplication.getInstance());
         proxy.requestLogin(ELoginPlatform.QQOpen, PID, DSN, activity);
     }
@@ -159,7 +163,7 @@ public class LoginManger implements AuthorizeListener {
             }
         }
 
-        SPUtils.getInstance().put(Constant.SP_LOGIN_TYPE, loginType);
+
 
 
 
