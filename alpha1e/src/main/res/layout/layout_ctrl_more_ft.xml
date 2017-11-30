@@ -108,8 +108,8 @@
             android:background="@color/A11" />
         <TextView
             android:id="@+id/cc_exit"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/control_center"
             android:layout_centerInParent="true"
             android:textSize="18sp"
