@@ -1015,8 +1015,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
               runOnUiThread(new Runnable() {
                   @Override
                   public void run() {
-                      charging.setBackground(getDrawableRes("charging_normal"));
-                      chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+                      if(charging!=null) {
+                          charging.setBackground(getDrawableRes("charging_normal"));
+                          chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+                      }
                   }
               });
           }
