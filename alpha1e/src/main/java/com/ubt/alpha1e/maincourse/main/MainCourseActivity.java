@@ -11,11 +11,17 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.course.CourseActivity;
+import com.ubt.alpha1e.course.feature.FeatureActivity;
+import com.ubt.alpha1e.course.merge.MergeActivity;
+import com.ubt.alpha1e.course.principle.PrincipleActivity;
+import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.MainCoursedapter;
 import com.ubt.alpha1e.maincourse.model.CourseModel;
@@ -55,9 +61,13 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     @OnClick(R.id.iv_main_back)
     public void onClick(View view) {
         finish();
-        this.overridePendingTransition(0, R.anim.activity_close_down_up);
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        this.overridePendingTransition(0, R.anim.activity_close_down_up);
+    }
 
     @Override
     protected void initUI() {
@@ -113,7 +123,18 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
         if (position == 0) {
 
             if (isBulueToothConnected()) {
-                CourseActivity.launchActivity(this);
+                String progressKey = Constant.PRINCIPLE_PROGRESS + SPUtils.getInstance().getString(Constant.SP_USER_ID);
+                int progress = SPUtils.getInstance().getInt(progressKey,0);
+                if(progress == 1){
+                    SplitActivity.launchActivity(this,false);
+                }else if(progress == 2){
+                    MergeActivity.launchActivity(this,false);
+                }else if(progress == 3){
+                    FeatureActivity.launchActivity(this,false);
+                }else {
+                    PrincipleActivity.launchActivity(this,false);
+                }
+
             } else {
                 ToastUtils.showShort(getStringResources("ui_action_connect_robot"));
             }

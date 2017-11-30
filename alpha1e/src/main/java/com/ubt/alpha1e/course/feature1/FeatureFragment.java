@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.course.feature;
+package com.ubt.alpha1e.course.feature1;
 
 
 import android.annotation.SuppressLint;
@@ -19,10 +19,10 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.animator.BezierView;
 import com.ubt.alpha1e.animator.FloatAnimator;
 import com.ubt.alpha1e.animator.IBezierView;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.course.CourseActivity;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
-import com.ubt.alpha1e.course.principle.PrincipleFragment;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -53,6 +53,7 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
     private static final int RECEVICE_HEAD = 6;
     private static final int RECEVICE_VOICE_WAIT = 7;
     private static final int LEARN_FINISH = 8;
+    private static final int TAP_HEAD = 9;
 
     @BindView(R.id.tv_next)
     TextView tvNext;
@@ -300,7 +301,7 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                                 showView(tvMsgShow, false, smallerLeftBottomAnim);
                             }
                             showView(rlPrincipleVoiceIntro, true, biggerLeftBottomAnim);
-                            playSound("麦克风.hts");
+                            playActionFile("麦克风.hts");
                             playCount = 2;
 
                         }else if(playCount == 2){
@@ -318,7 +319,7 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                             }
                             showView(rlPrincipleVoiceObstacleAvoidanceIntro, true, biggerLeftBottomAnim);
                             playCount = 1;
-                            playSound("百宝袋.hts");
+                            playActionFile("百宝袋.hts");
                         }else if(playCount == 1){
                             //finish
                             playIndex = 0;
@@ -338,7 +339,7 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                     UbtLog.d(TAG,"getLearnCount() = " + getLearnCount());
                     if(getLearnCount() == 7){
                         ((CourseActivity)getActivity()).doSaveCourseProgress(1,1,4);
-                        playSound("胜利.hts");
+                        playActionFile("胜利.hts");
                         new ConfirmDialog(getContext()).builder()
                                 .setTitle(getStringRes("ui_setting_principle_learn_finish"))
                                 .setMsg(getStringRes("ui_setting_principle_learn_next"))
@@ -362,7 +363,7 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                 case RECEVICE_SENSOR:
                     if(!hasReceviceSensor && playIndex == 2){
                         hasReceviceSensor = true;
-                        playSound("红外传感2.hts");
+                        playActionFile("红外传感2.hts");
                         playCount = 1;
                     }
                     break;
@@ -370,15 +371,20 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                     if(!hasReceviceHead && playIndex == 4){
                         hasReceviceHead = true;
                         playCount = 1;
-                        playSound("触摸传感2.hts");
+                        playActionFile("触摸传感2.hts");
                     }
                     break;
                 case RECEVICE_VOICE_WAIT:
                     if(!hasReceviceVoice && playIndex == 6){
                         hasReceviceVoice = true;
                         playCount = 1;
-                        playSound("麦克2.hts");
+                        playActionFile("麦克2.hts");
                     }
+                    break;
+                case TAP_HEAD:
+                    //拍头退出课程模式
+                    ToastUtils.showShort(getStringRes("ui_setting_principle_tap_head"));
+                    getActivity().finish();
                     break;
             }
 
@@ -501,6 +507,8 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
             }
         }else if(event.getEvent() == PrincipleEvent.Event.VOICE_WAIT){
             mHandler.sendEmptyMessage(RECEVICE_VOICE_WAIT);
+        }else if(event.getEvent() == PrincipleEvent.Event.TAP_HEAD){
+            mHandler.sendEmptyMessage(TAP_HEAD);
         }
     }
 
@@ -747,12 +755,7 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
         UbtLog.d(TAG, "view = " + view);
         switch (view.getId()) {
             case R.id.iv_back:
-                int enterPropress = ((CourseActivity) getContext()).getEnterPropress();
-                if(enterPropress > 2){
-                    ((CourseActivity) getContext()).finish();
-                }else {
-                    ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_MERGE);
-                }
+                ((CourseActivity) getContext()).switchFragment(CourseActivity.FRAGMENT_MERGE);
                 break;
             case R.id.tv_next:
                 if(((CourseActivity)getActivity()).getEnterPropress() < 4 && getLearnCount() < 7){
@@ -782,14 +785,14 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
                 }
                 showView(rlPrincipleSteeringEngineIntro, true, biggerLeftBottomAnim);
-                startPlaySound(ivPrincipleSteeringEngine,1,"舵机.hts");
+                startPlayActionFile(ivPrincipleSteeringEngine,1,"舵机.hts");
                 ivPrincipleSteeringEngine.bringToFront();
                 break;
             case R.id.iv_principle_infrared_sensor:
                 hasReceviceSensor = false;
                 tvMsgShow.setText(getStringRes("ui_principle_sensor_tips"));
                 showView(tvMsgShow, true, biggerLeftBottomAnim);
-                startPlaySound(ivPrincipleInfraredSensor,2,"红外传感1.hts");
+                startPlayActionFile(ivPrincipleInfraredSensor,2,"红外传感1.hts");
                 mHelper.doReadInfraredSensor((byte)1);
                 ivPrincipleInfraredSensor.bringToFront();
                 break;
@@ -799,14 +802,14 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
                 }
                 showView(rlPrincipleSoundboxIntro, true, biggerRightTopAnim);
-                startPlaySound(ivPrincipleSoundbox,3,"扬声器.hts");
+                startPlayActionFile(ivPrincipleSoundbox,3,"扬声器.hts");
                 ivPrincipleSoundbox.bringToFront();
                 break;
             case R.id.iv_principle_head:
                 hasReceviceHead = false;
                 tvMsgShow.setText(getStringRes("ui_principle_head_tips"));
                 showView(tvMsgShow, true, biggerLeftBottomAnim);
-                startPlaySound(ivPrincipleHead,4,"触摸传感1.hts");
+                startPlayActionFile(ivPrincipleHead,4,"触摸传感1.hts");
                 mHelper.doReadHeadClick((byte)1);
                 ivPrincipleHead.bringToFront();
                 break;
@@ -815,20 +818,20 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
                 }
                 showView(rlPrincipleEyeIntro, true, biggerLeftTopAnim);
-                startPlaySound(ivPrincipleEye,5,"眼睛LED.hts");
+                startPlayActionFile(ivPrincipleEye,5,"眼睛LED.hts");
                 ivPrincipleEye.bringToFront();
                 break;
             case R.id.iv_principle_voice:
                 hasReceviceVoice = false;
                 tvMsgShow.setText(getStringRes("ui_principle_voice_tips"));
                 showView(tvMsgShow, true, biggerLeftBottomAnim);
-                startPlaySound(ivPrincipleVoice,6,"麦克1.hts");
+                startPlayActionFile(ivPrincipleVoice,6,"麦克1.hts");
                 ivPrincipleVoice.bringToFront();
                 break;
             case R.id.iv_principle_voice_obstacle_avoidance:
                 tvMsgShow.setText(getStringRes("ui_principle_obstacle_tips"));
                 showView(tvMsgShow, true, biggerLeftBottomAnim);
-                startPlaySound(ivPrincipleVoiceObstacleAvoidance,7,"百宝1.hts");
+                startPlayActionFile(ivPrincipleVoiceObstacleAvoidance,7,"百宝1.hts");
                 ivPrincipleVoiceObstacleAvoidance.bringToFront();
                 break;
             case R.id.tv_msg_show:
@@ -867,19 +870,17 @@ public class FeatureFragment extends MVPBaseFragment<FeatureContract.View, Featu
         }
     }
 
-    private void startPlaySound(View view, int index, String soundFile){
+    private void startPlayActionFile(View view, int index, String actionFile){
         playCount = 0;
         playIndex = index;
         setAllEnable(false);
         setViewEnable(view,true,1);
-        playSound(soundFile);
-        //playSound(soundFile);
+        playActionFile(actionFile);
 
     }
 
-    private void playSound(String soundFile){
-        //mHelper.playSoundAudio("{\"filename\":\""+ soundFile +"\",\"playcount\":1}");
-        mHelper.playFile(soundFile);
+    private void playActionFile(String acitonFile){
+        mHelper.playFile(acitonFile);
     }
 
     private void setAllEnable(boolean enable){

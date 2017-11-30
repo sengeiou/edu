@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ubt.alpha1e"
           android:versionCode="1"
-          android:versionName="V1.0.0.4">
+          android:versionName="V1.0.0.5">
 
     <meta-data
         android:name="design_width"
@@ -615,6 +615,30 @@
 
         <activity
             android:name=".course.CourseActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".course.principle.PrincipleActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".course.split.SplitActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".course.merge.MergeActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".course.feature.FeatureActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>

@@ -28,6 +28,7 @@ public class PrincipleEvent {
         CALL_CLICK_HEAD,
         DISCONNECTED,
         VOICE_WAIT,
+        TAP_HEAD
     }
 
     public Event getEvent() {

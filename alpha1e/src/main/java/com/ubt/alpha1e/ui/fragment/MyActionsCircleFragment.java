@@ -98,8 +98,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 //        mSyncRecyclerview.getItemAnimator().setSupportsChangeAnimations(false);
         mAdapter = new ActionsCircleAdapter(getActivity(),type);
         mSyncRecyclerview.setAdapter(mAdapter);
-
-        mHelper.stopPlayAction();
+        if(mHelper!=null) {
+            mHelper.stopPlayAction();
+        }
         MyActionsHelper.mCurrentSeletedNameList.clear();
         MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
 

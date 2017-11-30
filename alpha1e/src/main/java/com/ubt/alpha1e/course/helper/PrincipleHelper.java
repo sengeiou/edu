@@ -25,15 +25,6 @@ public class PrincipleHelper extends BaseHelper {
 
     private static final String TAG = PrincipleHelper.class.getSimpleName();
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-
-            }
-        }
-    };
-
     public PrincipleHelper(Context context) {
         super(context);
     }
@@ -44,6 +35,7 @@ public class PrincipleHelper extends BaseHelper {
 
         //UbtLog.d(TAG,"cmd = " + cmd + "    = " + param[0]);
         if(cmd == ConstValue.DV_SET_PLAY_SOUND){
+            UbtLog.d(TAG,"DV_SET_PLAY_SOUND cmd = " + cmd + "    = " + param[0]);
             PrincipleEvent playSoundEvent = new PrincipleEvent(PrincipleEvent.Event.PLAY_SOUND);
             playSoundEvent.setStatus(param[0]);
             EventBus.getDefault().post(playSoundEvent);
@@ -80,6 +72,10 @@ public class PrincipleHelper extends BaseHelper {
                 playSoundEvent.setStatus(param[0]);
                 EventBus.getDefault().post(playSoundEvent);
             }
+        }else if(cmd == ConstValue.DV_TAP_HEAD){
+            UbtLog.d(TAG,"TAP_HEAD = " + cmd);
+            PrincipleEvent tapHeadEvent = new PrincipleEvent(PrincipleEvent.Event.TAP_HEAD);
+            EventBus.getDefault().post(tapHeadEvent);
         }
 
     }
@@ -94,7 +90,12 @@ public class PrincipleHelper extends BaseHelper {
         doSendComm(ConstValue.DV_SET_PLAY_SOUND, BluetoothParamUtil.stringToBytes(params));
     }
 
-
+    /**
+     * 停止音效
+     */
+    public void stopPlayAudio() {
+        doSendComm(ConstValue.DV_SET_STOP_VOICE, null);
+    }
 
     private void doOnOnePower(int id){
         byte[] params = new byte[5];

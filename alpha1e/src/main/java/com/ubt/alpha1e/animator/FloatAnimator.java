@@ -29,6 +29,8 @@ public class FloatAnimator {
 
     private Random random = new Random();
 
+    private float distance = 30F;
+
     private FloatAnimator(){
 
     }
@@ -65,7 +67,7 @@ public class FloatAnimator {
      */
     public void startFloatAnimator(View view){
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY",  30.0F, -30.0f, 30.0f).setDuration(3800 + random.nextInt(400));
+        ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY",  distance, -1 * distance, distance).setDuration(3800 + random.nextInt(400));
         animator.setRepeatCount(ObjectAnimator.INFINITE);
         AnimatorSet mAnimatorSet = new AnimatorSet();
         mAnimatorSet.play(animator);
@@ -121,6 +123,10 @@ public class FloatAnimator {
             floatAnimator = new FloatAnimator();
         }
         return floatAnimator;
+    }
+
+    public void setDistance(float distance){
+        this.distance = distance;
     }
 
 
