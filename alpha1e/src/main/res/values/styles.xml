@@ -23,7 +23,14 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
-
+    <style name="NoTitleThemeFullScreenuser" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:textColor">@color/sec_txt_main</item>
+        <item name="android:textColorHint">@color/sec_txt_disc</item>
+        <item name="android:textAllCaps">false</item>
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+    </style>
     <!--<style name="button_click_theme" parent="@android:style/Widget">-->
     <!--<item name="android:layout_width">280dp</item>-->
     <!--<item name="android:layout_height">50dp</item>-->

@@ -501,7 +501,7 @@
             android:name=".userinfo.mainuser.UserCenterActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen"/>
+            android:theme="@style/NoTitleThemeFullScreenuser"/>
         <activity
             android:name=".userinfo.useredit.UserEditActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
