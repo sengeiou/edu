@@ -75,7 +75,7 @@ public class SplitPresenter extends BasePresenterImpl<SplitContract.View> implem
                 UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage());
                 switch (id){
                     case SAVE_COURSE_PROGRESS:
-                        mView.onSaveCourseProgress(false,"");
+                        //mView.onSaveCourseProgress(false,"");
                         break;
                 }
 

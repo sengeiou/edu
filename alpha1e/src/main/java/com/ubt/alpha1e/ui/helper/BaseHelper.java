@@ -195,9 +195,9 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     public void doSendReadStateComm() {
 
         //读机器人状态
-        byte[] params = new byte[1];
-        params[0] = 0;
-        doSendComm(ConstValue.DV_READSTATUS, params);
+//        byte[] params = new byte[1];
+//        params[0] = 0;
+//        doSendComm(ConstValue.DV_READSTATUS, params);
 
         //定时读电量
         if (read_battery_timer == null) {

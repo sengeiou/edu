@@ -430,7 +430,6 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         ivPrincipleVoice.setVisibility(View.INVISIBLE);
         ivPrincipleVoiceObstacleAvoidance.setVisibility(View.INVISIBLE);
 
-        scale = (int) this.getResources().getDisplayMetrics().density;
         containerWidth = this.getResources().getDisplayMetrics().widthPixels;
         containerHeight = this.getResources().getDisplayMetrics().heightPixels;
         mFloatAnimator = FloatAnimator.getIntanse();
@@ -544,8 +543,10 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     @Override
     public int getContentViewId() {
         scale = (int) this.getResources().getDisplayMetrics().density;
-        if (scale >= 3) {
+        if (scale == 3) {
             return R.layout.fragment_robot_feature_3;
+        }else if(scale == 4){
+            return R.layout.fragment_robot_feature_4;
         } else {
             return R.layout.fragment_robot_feature;
         }
@@ -579,7 +580,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
 
         if (scale == 2.0) {
 
-            initViewLayout(ivRobot, scale, 0);
+            /*initViewLayout(ivRobot, scale, 0);
 
             initViewLayout(ivHandLeft, scale, 110);
 
@@ -602,7 +603,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
             initViewLayout(ivPrincipleVoice, scale, 0);
 
             initViewLayout(ivPrincipleVoiceObstacleAvoidance, scale, 0);
-
+*/
         }
 
         initViewLine(ivRobot, ivPrincipleSteeringEngine);

@@ -75,7 +75,7 @@ public class FeaturePresenter extends BasePresenterImpl<FeatureContract.View> im
                 UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage());
                 switch (id){
                     case SAVE_COURSE_PROGRESS:
-                        mView.onSaveCourseProgress(false,"");
+                        //mView.onSaveCourseProgress(false,"");
                         break;
                 }
 

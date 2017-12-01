@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ubt.alpha1e"
           android:versionCode="1"
-          android:versionName="V1.0.0.4">
+          android:versionName="V1.0.0.5">
 
     <meta-data
         android:name="design_width"
@@ -657,6 +657,7 @@
         <activity
             android:name=".action.actioncreate.ActionTestActivity"
             android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/NoTitleThemeFullScreen">
         </activity>
 

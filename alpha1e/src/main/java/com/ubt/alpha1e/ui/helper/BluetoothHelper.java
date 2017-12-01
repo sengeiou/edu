@@ -709,6 +709,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
             byte[] timeParam = TimeTools.getCurrentDateTimeBytes();
 
 //            doSendComm(ConstValue.DV_ADJUST_TIME, timeParam);
+            this.doSendReadStateComm();
 
             UbtLog.d(TAG,"    发送 获取 product 和 dsn  命令");
             byte[] param_read = new byte[1];
