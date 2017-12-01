@@ -25,6 +25,7 @@ import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -92,6 +93,8 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     private boolean hasLostLegLeft = true;
     private boolean hasLostLegRight = true;
 
+    private boolean hasLostRobot = false;
+
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -114,7 +117,9 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                     FeatureActivity.launchActivity(MergeActivity.this,true);
                     break;
                 case SHOW_DIALOG:
+                    hasLostRobot = true;
                     ((PrincipleHelper)mHelper).playSoundAudio("{\"filename\":\"组装.mp3\",\"playcount\":1}");
+                    ((PrincipleHelper)mHelper).playFile("蹲下.hts");
                     ((PrincipleHelper)mHelper).doLostPower();
                     tvMsgShow.setText(getStringResources("ui_principle_on_engine_tips"));
                     showView(tvMsgShow, true, biggerLeftBottomAnim);
@@ -143,6 +148,13 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     @Override
     protected void initUI() {
         scale = (int) this.getResources().getDisplayMetrics().density;
+        int screenWidth = SizeUtils.getScreenWidth(this);
+        int screenHeight = SizeUtils.getScreenHeight(this);
+        UbtLog.d(TAG,"screenWidth = " + screenWidth + "screenHeight = " + screenHeight + " scale = " + scale);
+        if((screenWidth >= 1920 && scale == 2) || (screenHeight >= 1080 && scale == 2)){
+            scale = 3;
+        }
+
         containerWidth = this.getResources().getDisplayMetrics().widthPixels;
         containerHeight = this.getResources().getDisplayMetrics().heightPixels;
 
@@ -232,6 +244,10 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
             }
         }else if(event.getEvent() == PrincipleEvent.Event.TAP_HEAD){
             mHandler.sendEmptyMessage(TAP_HEAD);
+        }if(event.getEvent() == PrincipleEvent.Event.PLAY_ACTION_FINISH){
+            UbtLog.d(TAG,"--PLAY_ACTION_FINISH--");
+            hasLostRobot = true;
+            ((PrincipleHelper)mHelper).doLostPower();
         }
     }
 

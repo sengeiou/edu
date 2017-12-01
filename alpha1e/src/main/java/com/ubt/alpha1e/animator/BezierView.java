@@ -55,7 +55,7 @@ public class BezierView extends View {
     private static final int TEXT_HEIGHT = 60;  // 文本高度
     private static final int RATE = 20; // 移动速率
     private static final int HANDLER_WHAT = 100;
-    private static final int FRAME = 1000;  // 1000帧
+    private static final int FRAME = 600;  // 1000帧
     private static final String[] TANGENT_COLORS = {"#7fff00", "#7a67ee", "#ee82ee", "#ffd700", "#1c86ee", "#8b8b00"};  // 切线颜色
     private static final int STATE_READY = 0x0001;
     private static final int STATE_RUNNING = 0x0002;
@@ -65,12 +65,12 @@ public class BezierView extends View {
     private Path mBezierPath = null;    // 贝塞尔曲线路径
 
     private Paint mBezierPaint = null;  // 贝塞尔曲线画笔
-    private Paint mMovingPaint = null;  // 移动点画笔
+    //private Paint mMovingPaint = null;  // 移动点画笔
     private Paint mControlPaint = null;  // 控制点画笔
-    private Paint mTangentPaint = null;  // 切线画笔
-    private Paint mLinePaint = null;    // 固定线画笔
-    private Paint mTextPointPaint = null;    // 点画笔
-    private Paint mTextPaint = null;    // 文字画笔
+    //private Paint mTangentPaint = null;  // 切线画笔
+    //private Paint mLinePaint = null;    // 固定线画笔
+    //private Paint mTextPointPaint = null;    // 点画笔
+    //private Paint mTextPaint = null;    // 文字画笔
 
     private ArrayList<PointF> mBezierPoints = null; // 贝塞尔曲线点集
     private PointF mBezierPoint = null; // 贝塞尔曲线移动点
@@ -178,11 +178,11 @@ public class BezierView extends View {
         mBezierPaint.setPathEffect(effects);
 
         // 移动点画笔
-        mMovingPaint = new Paint();
-        //mMovingPaint.setColor(Color.BLACK);
-        mMovingPaint.setColor(Color.TRANSPARENT);
-        mMovingPaint.setAntiAlias(true);
-        mMovingPaint.setStyle(Paint.Style.FILL);
+//        mMovingPaint = new Paint();
+//        //mMovingPaint.setColor(Color.BLACK);
+//        mMovingPaint.setColor(Color.TRANSPARENT);
+//        mMovingPaint.setAntiAlias(true);
+//        mMovingPaint.setStyle(Paint.Style.FILL);
 
         // 控制点画笔
         mControlPaint = new Paint();
@@ -192,34 +192,34 @@ public class BezierView extends View {
         mControlPaint.setStyle(Paint.Style.FILL);
 
         // 切线画笔
-        mTangentPaint = new Paint();
-        //mTangentPaint.setColor(Color.parseColor(TANGENT_COLORS[0]));
-        mTangentPaint.setColor(Color.TRANSPARENT);
-        mTangentPaint.setAntiAlias(true);
-        mTangentPaint.setStrokeWidth(TANGENT_WIDTH);
-        mTangentPaint.setStyle(Paint.Style.FILL);
+//        mTangentPaint = new Paint();
+//        //mTangentPaint.setColor(Color.parseColor(TANGENT_COLORS[0]));
+//        mTangentPaint.setColor(Color.TRANSPARENT);
+//        mTangentPaint.setAntiAlias(true);
+//        mTangentPaint.setStrokeWidth(TANGENT_WIDTH);
+//        mTangentPaint.setStyle(Paint.Style.FILL);
 
         // 固定线画笔
-        mLinePaint = new Paint();
-        //mLinePaint.setColor(Color.LTGRAY);
-        mLinePaint.setColor(Color.TRANSPARENT);
-        mLinePaint.setStrokeWidth(CONTROL_WIDTH);
-        mLinePaint.setAntiAlias(true);
-        mLinePaint.setStyle(Paint.Style.FILL);
+//        mLinePaint = new Paint();
+//        //mLinePaint.setColor(Color.LTGRAY);
+//        mLinePaint.setColor(Color.TRANSPARENT);
+//        mLinePaint.setStrokeWidth(CONTROL_WIDTH);
+//        mLinePaint.setAntiAlias(true);
+//        mLinePaint.setStyle(Paint.Style.FILL);
 
         // 点画笔
-        mTextPointPaint = new Paint();
-        //mTextPointPaint.setColor(Color.BLACK);
-        mTextPointPaint.setColor(Color.TRANSPARENT);
-        mTextPointPaint.setAntiAlias(true);
-        mTextPointPaint.setTextSize(TEXT_SIZE);
+//        mTextPointPaint = new Paint();
+//        //mTextPointPaint.setColor(Color.BLACK);
+//        mTextPointPaint.setColor(Color.TRANSPARENT);
+//        mTextPointPaint.setAntiAlias(true);
+//        mTextPointPaint.setTextSize(TEXT_SIZE);
 
         // 文字画笔
-        mTextPaint = new Paint();
-        //mTextPaint.setColor(Color.GRAY);
-        mTextPaint.setColor(Color.TRANSPARENT);
-        mTextPaint.setAntiAlias(true);
-        mTextPaint.setTextSize(TEXT_SIZE);
+//        mTextPaint = new Paint();
+//        //mTextPaint.setColor(Color.GRAY);
+//        mTextPaint.setColor(Color.TRANSPARENT);
+//        mTextPaint.setAntiAlias(true);
+//        mTextPaint.setTextSize(TEXT_SIZE);
 
         mBezierPath = new Path();
 
@@ -405,7 +405,7 @@ public class BezierView extends View {
                 point = mControlPoints.get(i);
                 if (i > 0) {
                     // 控制点连线
-                    canvas.drawLine(mControlPoints.get(i - 1).x, mControlPoints.get(i - 1).y, point.x, point.y, mLinePaint);
+//                    canvas.drawLine(mControlPoints.get(i - 1).x, mControlPoints.get(i - 1).y, point.x, point.y, mLinePaint);
                 }
 
                 if(i == 0){
@@ -416,10 +416,10 @@ public class BezierView extends View {
                 //canvas.drawCircle(point.x, point.y, CONTROL_RADIUS, mControlPaint);
 
                 // 控制点文本
-                canvas.drawText("p" + i, point.x + CONTROL_RADIUS * 2, point.y + CONTROL_RADIUS * 2, mTextPointPaint);
-                // 控制点文本展示
-                canvas.drawText("p" + i + " ( " + new DecimalFormat("##0.0").format(point.x) + " , " + new DecimalFormat
-                        ("##0.0").format(point.y) + ") ", REGION_WIDTH, mHeight - (size - i) * TEXT_HEIGHT, mTextPaint);
+//                canvas.drawText("p" + i, point.x + CONTROL_RADIUS * 2, point.y + CONTROL_RADIUS * 2, mTextPointPaint);
+//                // 控制点文本展示
+//                canvas.drawText("p" + i + " ( " + new DecimalFormat("##0.0").format(point.x) + " , " + new DecimalFormat
+//                        ("##0.0").format(point.y) + ") ", REGION_WIDTH, mHeight - (size - i) * TEXT_HEIGHT, mTextPaint);
 
             }
 
@@ -432,10 +432,10 @@ public class BezierView extends View {
                     int tlen = tps.size();
                     for (int j = 0; j < tlen - 1; j++) {
                         //mTangentPaint.setColor(Color.parseColor(TANGENT_COLORS[i]));
-                        mTangentPaint.setColor(Color.TRANSPARENT);
-                        canvas.drawLine(tps.get(j).x, tps.get(j).y, tps.get(j + 1).x, tps.get(j + 1).y, mTangentPaint);
-                        canvas.drawCircle(tps.get(j).x, tps.get(j).y, CONTROL_RADIUS, mTangentPaint);
-                        canvas.drawCircle(tps.get(j + 1).x, tps.get(j + 1).y, CONTROL_RADIUS, mTangentPaint);
+//                        mTangentPaint.setColor(Color.TRANSPARENT);
+//                        canvas.drawLine(tps.get(j).x, tps.get(j).y, tps.get(j + 1).x, tps.get(j + 1).y, mTangentPaint);
+//                        canvas.drawCircle(tps.get(j).x, tps.get(j).y, CONTROL_RADIUS, mTangentPaint);
+//                        canvas.drawCircle(tps.get(j + 1).x, tps.get(j + 1).y, CONTROL_RADIUS, mTangentPaint);
                     }
                 }
             }
@@ -444,10 +444,10 @@ public class BezierView extends View {
             mBezierPath.lineTo(mBezierPoint.x, mBezierPoint.y);
             canvas.drawPath(mBezierPath, mBezierPaint);
             // Bezier曲线起始移动点
-            canvas.drawCircle(mBezierPoint.x, mBezierPoint.y, CONTROL_RADIUS, mMovingPaint);
+//            canvas.drawCircle(mBezierPoint.x, mBezierPoint.y, CONTROL_RADIUS, mMovingPaint);
             // 时间展示
-            canvas.drawText("t:" + (new DecimalFormat("##0.000").format((float) mR / FRAME)), mWidth - TEXT_HEIGHT *
-                    3, mHeight - TEXT_HEIGHT, mTextPaint);
+//            canvas.drawText("t:" + (new DecimalFormat("##0.000").format((float) mR / FRAME)), mWidth - TEXT_HEIGHT *
+//                    3, mHeight - TEXT_HEIGHT, mTextPaint);
 
             mHandler.removeMessages(HANDLER_WHAT);
             mHandler.sendEmptyMessage(HANDLER_WHAT);
@@ -459,14 +459,14 @@ public class BezierView extends View {
             for (int i = 0; i < size; i++) {
                 point = mControlPoints.get(i);
                 if (i > 0) {
-                    canvas.drawLine(mControlPoints.get(i - 1).x, mControlPoints.get(i - 1).y, point.x, point.y, mLinePaint);
+//                    canvas.drawLine(mControlPoints.get(i - 1).x, mControlPoints.get(i - 1).y, point.x, point.y, mLinePaint);
                 }
                 //初始化不需要画
                 //canvas.drawCircle(point.x, point.y, CONTROL_RADIUS, mControlPaint);
 
-                canvas.drawText("p" + i, point.x + CONTROL_RADIUS * 2, point.y + CONTROL_RADIUS * 2, mTextPointPaint);
-                canvas.drawText("p" + i + " ( " + new DecimalFormat("##0.0").format(point.x) + " , "
-                        + new DecimalFormat("##0.0").format(point.y) + ") ", REGION_WIDTH, mHeight - (size - i) * TEXT_HEIGHT, mTextPaint);
+//                canvas.drawText("p" + i, point.x + CONTROL_RADIUS * 2, point.y + CONTROL_RADIUS * 2, mTextPointPaint);
+//                canvas.drawText("p" + i + " ( " + new DecimalFormat("##0.0").format(point.x) + " , "
+//                        + new DecimalFormat("##0.0").format(point.y) + ") ", REGION_WIDTH, mHeight - (size - i) * TEXT_HEIGHT, mTextPaint);
             }
         }
     }
