@@ -24,7 +24,7 @@ public class HttpEntity {
     public static final String bindXGServer = XG_URL + "push/userToken";
 
     //http://10.10.32.52:8080/ubx/sys/register
-    public static final String BASIC_THIRD_LOGIN_URL = "http://10.10.20.71:8010/user-service-rest/v2/";
+    public static final String BASIC_THIRD_LOGIN_URL = "http://10.10.20.71:8010/user-service-rest/v2/"; //测试环境后续上线需要修改正式环境
     public static final String THRID_LOGIN_URL = BASIC_THIRD_LOGIN_URL + "user/login/third";
 
     public static final String BASIC_UBX_SYS = "http://10.10.1.14:8080/ubx/sys/"; //测试环境

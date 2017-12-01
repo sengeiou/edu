@@ -450,6 +450,52 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
+    public static final String WOSHOU = " {\n" +
+            "    \"frame\": [\n" +
+            "      {\n" +
+            "        \"-xmlRunTime\": \"500\",\n" +
+            "        \"-xmlFrameStatus\": \"1\",\n" +
+            "        \"-xmlFrameAll\": \"5\",\n" +
+            "        \"-xmldata\": \"18#12#63#87#165#101#90#60#76#110#90#90#120#104#70#90\",\n" +
+            "        \"-xmlAllRunTime\": \"500\",\n" +
+            "        \"-xmlFrameIndex\": \"1\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"-xmlRunTime\": \"500\",\n" +
+            "        \"-xmlFrameStatus\": \"2\",\n" +
+            "        \"-xmlFrameAll\": \"5\",\n" +
+            "        \"-xmldata\": \"47#12#63#87#165#101#90#60#76#110#90#90#120#104#70#90\",\n" +
+            "        \"-xmlAllRunTime\": \"500\",\n" +
+            "        \"-xmlFrameIndex\": \"2\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"-xmlRunTime\": \"500\",\n" +
+            "        \"-xmlFrameStatus\": \"2\",\n" +
+            "        \"-xmlFrameAll\": \"5\",\n" +
+            "        \"-xmldata\": \"18#12#63#87#165#101#90#60#76#110#90#90#120#104#70#90\",\n" +
+            "        \"-xmlAllRunTime\": \"500\",\n" +
+            "        \"-xmlFrameIndex\": \"3\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"-xmlRunTime\": \"500\",\n" +
+            "        \"-xmlFrameStatus\": \"2\",\n" +
+            "        \"-xmlFrameAll\": \"5\",\n" +
+            "        \"-xmldata\": \"47#12#63#87#165#101#90#60#76#110#90#90#120#104#70#90\",\n" +
+            "        \"-xmlAllRunTime\": \"500\",\n" +
+            "        \"-xmlFrameIndex\": \"4\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"-xmlRunTime\": \"1500\",\n" +
+            "        \"-xmlFrameStatus\": \"3\",\n" +
+            "        \"-xmlFrameAll\": \"5\",\n" +
+            "        \"-xmldata\": \"93#20#66#86#156#127#90#74#95#101#89#89#104#81#80#89\",\n" +
+            "        \"-xmlAllRunTime\": \"1500\",\n" +
+            "        \"-xmlFrameIndex\": \"5\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "   \n" +
+            "  }";
+
 
     public static final String DANCE1 = " {\n" +
             "    \"frame\": [\n" +
@@ -734,13 +780,13 @@ public class ActionConstant {
      * 高级动作图片ID
      */
     private static int[] advanceIconID = new int[]{R.drawable.xingzou, R.drawable.niuyao,
-            R.drawable.dianjiao, R.drawable.cewanyao, R.drawable.shoubi, R.drawable.wudao1,
+            R.drawable.dianjiao, R.drawable.cewanyao, R.drawable.shoubi,R.drawable.woshou,R.drawable.wudao1,
             R.drawable.wudao2, R.drawable.xiemu, R.drawable.zaijian};
 
     private static String[] baseActionJson = new String[]{WARRIOR, STOOP, SQUAT, LEFTHAND, RIGHTHAND, MECH_DANCE1
             , MECH_DANCE2, HUG, HAPPY, SALUTE};
 
-    private static String[] highActionJson = new String[]{WALK, TWIST, STEPPIN, BENT, ARM, DANCE1, DANCE2, CURTAIN, BYE};
+    private static String[] highActionJson = new String[]{WALK, TWIST, STEPPIN, BENT, ARM, WOSHOU,DANCE1,  DANCE2, CURTAIN, BYE};
 
 
     private static String[] songs = {"", "flexin", "jingle bells", "london bridge is falling down",
@@ -805,6 +851,7 @@ public class ActionConstant {
                 ResourceManager.getInstance(context).getStringResources("ui_advance_action_steppin"),
                 ResourceManager.getInstance(context).getStringResources("ui_advance_action_bent"),
                 ResourceManager.getInstance(context).getStringResources("ui_advance_action_arm"),
+                ResourceManager.getInstance(context).getStringResources("ui_advance_action_woshou"),
                 ResourceManager.getInstance(context).getStringResources("ui_advance_action_dance1"),
                 ResourceManager.getInstance(context).getStringResources("ui_advance_action_dance2"),
                 ResourceManager.getInstance(context).getStringResources("ui_advance_action_curtain"),
