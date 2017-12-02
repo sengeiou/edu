@@ -258,6 +258,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 return;
             }
             cartoonAction.setBackgroundResource(R.drawable.main_robot);
+
+            if (((AlphaApplication) MainActivity.this.getApplicationContext())
+                    .getCurrentBluetooth() != null) {
+                UbtLog.d(TAG, "-蓝牙已经连上--");
+
+            }
         }
     }
 

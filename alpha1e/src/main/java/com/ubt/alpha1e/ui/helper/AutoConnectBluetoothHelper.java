@@ -400,7 +400,7 @@ public class AutoConnectBluetoothHelper extends BaseHelper implements IJsonListe
     public AutoConnectBluetoothHelper(IScanUI _ui, Context context) {
         super(context);
         mAtuoBluetoothContext = context ;
-        MyLog.writeLog(TAG, "create ScanHelper");
+        MyLog.writeLog(TAG, "create AutoConnectBluetoothHelper");
         this.mUI = _ui;
 
         registerBoardCastReceiver();
@@ -645,9 +645,9 @@ public class AutoConnectBluetoothHelper extends BaseHelper implements IJsonListe
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
-//        UbtLog.d(TAG,"cmd==1===="+cmd);
+        UbtLog.d(TAG,"cmd==1===="+cmd);
         if ((mCurrentTryDevices == null
-                || mac != mCurrentTryDevices.getAddress()) && cmd != ConstValue.DV_READ_NETWORK_STATUS) {
+                || mac != mCurrentTryDevices.getAddress()) && cmd != ConstValue.DV_READ_NETWORK_STATUS && cmd !=ConstValue.DV_READ_BATTERY) {
             return;
         }
         UbtLog.d(TAG,"cmd==2===="+cmd);

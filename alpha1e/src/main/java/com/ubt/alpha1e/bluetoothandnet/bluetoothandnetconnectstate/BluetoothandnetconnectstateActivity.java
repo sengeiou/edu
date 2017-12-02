@@ -290,7 +290,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
             e.printStackTrace();
         }
         AutoScanConnectService.doEntryManalConnect(false);
-        AutoScanConnectService.doStopSelf();
+//        AutoScanConnectService.doStopSelf();
         super.onDestroy();
     }
 

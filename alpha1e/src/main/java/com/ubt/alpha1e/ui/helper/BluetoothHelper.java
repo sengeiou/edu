@@ -648,6 +648,7 @@ public class BluetoothHelper extends BaseHelper implements IJsonListener,
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
+        UbtLog.d(TAG,"cmd==1===="+cmd);
         if ((mCurrentTryDevices == null
                 || mac != mCurrentTryDevices.getAddress()) && cmd != ConstValue.DV_READ_NETWORK_STATUS) {
             return;
