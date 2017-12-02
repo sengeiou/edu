@@ -106,6 +106,7 @@
         <service android:name=".services.RecordSoftService"/>
         <service android:name=".services.AutoScanConnectService"/>
         <service android:name=".services.SyncDataService"/>
+        <service android:name="com.ubt.alpha1e.services.SendClientIdService"/>
 
         <!-- Facebook -->
         <meta-data

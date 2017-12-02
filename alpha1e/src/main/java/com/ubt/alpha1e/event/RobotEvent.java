@@ -49,7 +49,8 @@ public class RobotEvent {
         UPGRADE_PROGRESS,
         SCAN_ROBOT,
         SCAN_ROBOT_FINISH,
-        BLUETOOTH_TURN_ON
+        BLUETOOTH_TURN_ON,
+        BLUETOOTH_SEND_CLIENTID_SUCCESS
     }
 
     public int getPower() {
