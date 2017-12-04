@@ -88,6 +88,7 @@ public class PrepareActionUtil implements BaseQuickAdapter.OnItemClickListener, 
                 .setOnClickListener(this)
                 .setCancelable(true)
                 .create().show();
+        selectDataModel = null;
     }
 
     @Override

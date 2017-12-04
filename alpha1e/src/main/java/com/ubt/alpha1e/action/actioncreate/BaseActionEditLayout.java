@@ -822,10 +822,21 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public void stopMusic() {
         if (mediaPlayer != null) {
             UbtLog.d(TAG, "mediaPlayer stop");
-            tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
+//            tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
             playFinish = true;
             mHandler.removeMessages(0);
             mediaPlayer.stop();
+            ivPlay.setImageResource(R.drawable.icon_play_music);
+        }
+    }
+
+    public void replayMusic() {
+        if (mediaPlayer != null) {
+            UbtLog.d(TAG, "mediaPlayer replayMusic");
+            tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
+            playFinish = true;
+            mHandler.removeMessages(0);
+            mediaPlayer.seekTo(0);
             ivPlay.setImageResource(R.drawable.icon_play_music);
         }
     }
@@ -862,8 +873,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 break;
             case R.id.iv_reset_index:
-//                stopMusic();
-//                ((ActionsEditHelper)mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop, null);
+                replayMusic();
+                ((ActionsEditHelper)mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop, null);
                 sbVoice.setProgress(0);
                 recyclerViewFrames.smoothScrollToPosition(0);
                 recyclerViewTimes.smoothScrollToPosition(0);
@@ -1180,6 +1191,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             }
             isFinishFramePlay = false;
             if (mDir != "" && mediaPlayer != null) {
+                UbtLog.d(TAG, "current pos:" + mediaPlayer.getCurrentPosition());
                 if (mediaPlayer.getCurrentPosition() == 0) {
                     UbtLog.d(TAG, "只在音频播完状态下才可以从头开始播:" + mediaPlayer.getCurrentPosition());
                     ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_play,

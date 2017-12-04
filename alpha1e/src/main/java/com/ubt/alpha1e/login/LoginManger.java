@@ -107,7 +107,7 @@ public class LoginManger implements AuthorizeListener {
     public void loginQQ(Activity activity){
         loginType = 1;
         SPUtils.getInstance().put(Constant.SP_LOGIN_TYPE, loginType);
-//        proxy.clearToken(ELoginPlatform.QQOpen, LoginApplication.getInstance());
+        proxy.clearToken(ELoginPlatform.QQOpen, LoginApplication.getInstance());
         proxy.requestLogin(ELoginPlatform.QQOpen, PID, DSN, activity);
     }
 
