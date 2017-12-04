@@ -87,7 +87,7 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
                         }
                         mAdapter.notifyDataSetChanged();
                     }else{
-                        showToast("删除失败");
+                        showToast("删除失败 ");
                     }
                     break;
                 case UPDATE_VIEW:
@@ -292,13 +292,13 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
     @Override
     public void onReadActionsFinish(List<String> mActionsNames) {
         try {
-
-            if(mClickPosition > 0){
-                clickRemoteRole(mClickPosition,false);
-                return;
-            }
-            mCoonLoadingDia.cancel();
-            mHandler.removeMessages(TIEM_OUT);
+//            if(mClickPosition > 0){
+//                UbtLog.d(TAG,"ccy onReadActionsFinish 2");
+//                clickRemoteRole(mClickPosition,false);
+//                return;
+//            }
+//            mCoonLoadingDia.cancel();
+//            mHandler.removeMessages(TIEM_OUT);
         } catch (Exception e) {
             e.printStackTrace();
         }

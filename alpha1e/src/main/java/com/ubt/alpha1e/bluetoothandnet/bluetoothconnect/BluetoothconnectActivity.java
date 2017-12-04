@@ -21,6 +21,8 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -192,6 +194,9 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     @Override
     public void onDestroy() {
         UbtLog.d(TAG,"---onDestroy----");
+        if(mHandler != null){
+            mHandler.removeCallbacks(overTimeDo);
+        }
         EventBus.getDefault().unregister(this);
         if(mHelper != null){
             mHelper.cancelScan();
@@ -343,14 +348,25 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
             if(tv_devices_num == null){
                 return;
             }
+            if (((AlphaApplication) BluetoothconnectActivity.this.getApplicationContext())
+                    .getCurrentBluetooth() != null) {
+                UbtLog.d(TAG, "-蓝牙已经连上，则不使用自动连接--");
+                return ;
+            }
+
             tv_devices_num.setText("进行自动连接蓝牙......");
             UbtLog.d(TAG,"距离近 进行自动连接");
             mCurrentRobotInfo = receiveRobot;
             isConnecting = true;
+            if(mHandler != null){
+                mHandler.removeCallbacks(overTimeDo);
+            }
             mHelper.doCancelCoon();
             ((AlphaApplication) getApplicationContext()).cleanBluetoothConnectData();
             lst_robots_result_datas.clear();
-
+            if(mHandler != null){
+                mHandler.postDelayed(overTimeDo,30000);
+            }
             mHelper.doReCoonect(mCurrentRobotInfo);
             try {
                 rl_content_bluetooth_connect_sucess.setVisibility(View.INVISIBLE);
@@ -365,6 +381,29 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
             }
         }
     }
+
+    Runnable overTimeDo = new Runnable() {
+        @Override
+        public void run() {
+//            ToastUtils.showShort("蓝牙连接失败");
+            UbtLog.d(TAG,"蓝牙连接超时");
+            isConnecting = false;
+            if(mHelper != null){
+                mHelper.doCancelCoon();
+            }
+            try {
+                rl_content_bluetooth_connect_sucess.setVisibility(View.INVISIBLE);
+                rl_content_bluetooth_connect_fail.setVisibility(View.VISIBLE);
+                rl_content_device_list.setVisibility(View.INVISIBLE);
+                rl_content_no_device.setVisibility(View.INVISIBLE);
+                rl_content_device_researching.setVisibility(View.INVISIBLE);
+                rl_content_bluetooth_connecting.setVisibility(View.INVISIBLE);
+            }catch (Exception e){
+                e.printStackTrace();
+                return;
+            }
+        }
+    };
 
     /**
      * 更加rssi信号转换成距离
@@ -408,9 +447,15 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
                     return;
                 }
                 isConnecting = true;
+                if(mHandler != null){
+                    mHandler.removeCallbacks(overTimeDo);
+                }
                 mHelper.doCancelCoon();
                 ((AlphaApplication) getApplicationContext()).cleanBluetoothConnectData();
                 mCurrentRobotInfo = lst_robots_result_datas.get(position);
+                if(mHandler != null){
+                    mHandler.postDelayed(overTimeDo,30000);
+                }
                 mHelper.doReCoonect(mCurrentRobotInfo);
                 lst_robots_result_datas.clear();
                 try {
@@ -553,6 +598,9 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     @Override
     public void onCoonected(boolean state) {
         UbtLog.d(TAG,"网络连接状态 onCoonected =  " + state);
+        if(mHandler != null){
+            mHandler.removeCallbacks(overTimeDo);
+        }
         if (state) {
             if(isFirst){
                 try {

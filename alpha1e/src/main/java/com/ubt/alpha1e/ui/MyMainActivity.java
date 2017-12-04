@@ -418,7 +418,7 @@ public class MyMainActivity extends BaseActivity implements
     }
 
     private void startAutoScanConnectService(){
-        AutoScanConnectService.startService(MyMainActivity.this);
+//        AutoScanConnectService.startService(MyMainActivity.this);
     }
 
     @Override

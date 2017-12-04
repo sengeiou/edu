@@ -249,6 +249,8 @@ public class BlueToothClientHandler extends Thread implements
 				return;
 			}
 			mmOutStream.write(data, 0, len);
+//			Thread.sleep(10);
+//            Log.d(TAG,"ccy test :4 ");
 			mLastSendTime = SystemClock.uptimeMillis();
 		} catch (IOException e) {
 			Log.e(TAG, "write data IOException, disconnected", e);

@@ -4,10 +4,13 @@ package com.ubt.alpha1e.course.principle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -168,6 +171,13 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
     protected void initUI() {
 
         scale = (int) this.getResources().getDisplayMetrics().density;
+        int screenWidth = SizeUtils.getScreenWidth(this);
+        int screenHeight = SizeUtils.getScreenHeight(this);
+        UbtLog.d(TAG,"screenWidth = " + screenWidth + "screenHeight = " + screenHeight + " scale = " + scale);
+        if((screenWidth >= 1920 && scale == 2) || (screenHeight >= 1080 && scale == 2)){
+            scale = 3;
+        }
+
         UbtLog.d(TAG, "scale = " + scale
                 + "  width = " + this.getResources().getDisplayMetrics().widthPixels
                 + "  height = " + this.getResources().getDisplayMetrics().heightPixels
@@ -177,23 +187,23 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
         rlDialogue3.setVisibility(View.INVISIBLE);
 
         RelativeLayout.LayoutParams ivPrincipleAlphaParams = (RelativeLayout.LayoutParams) ivPrincipleAlpha.getLayoutParams();
-        ivPrincipleAlphaParams.width = SizeUtils.dip2px(getContext(), 130);
-        ivPrincipleAlphaParams.height = SizeUtils.dip2px(getContext(), 236);
+        ivPrincipleAlphaParams.width = SizeUtils.dip2px(130, scale);
+        ivPrincipleAlphaParams.height = SizeUtils.dip2px(236, scale);
         ivPrincipleAlpha.setLayoutParams(ivPrincipleAlphaParams);
 
         RelativeLayout.LayoutParams rlDialogue1Params = (RelativeLayout.LayoutParams) rlDialogue1.getLayoutParams();
-        rlDialogue1Params.width = SizeUtils.dip2px(getContext(), 146);
-        rlDialogue1Params.height = SizeUtils.dip2px(getContext(), 135);
+        rlDialogue1Params.width = SizeUtils.dip2px(146, scale);
+        rlDialogue1Params.height = SizeUtils.dip2px(135, scale);
         rlDialogue1.setLayoutParams(rlDialogue1Params);
 
         RelativeLayout.LayoutParams rlDialogue2Params = (RelativeLayout.LayoutParams) rlDialogue2.getLayoutParams();
-        rlDialogue2Params.width = SizeUtils.dip2px(getContext(), 163);
-        rlDialogue2Params.height = SizeUtils.dip2px(getContext(), 133);
+        rlDialogue2Params.width = SizeUtils.dip2px(163, scale);
+        rlDialogue2Params.height = SizeUtils.dip2px(133, scale);
         rlDialogue2.setLayoutParams(rlDialogue2Params);
 
         RelativeLayout.LayoutParams rlDialogue3Params = (RelativeLayout.LayoutParams) rlDialogue3.getLayoutParams();
-        rlDialogue3Params.width = SizeUtils.dip2px(getContext(), 121);
-        rlDialogue3Params.height = SizeUtils.dip2px(getContext(), 107);
+        rlDialogue3Params.width = SizeUtils.dip2px(121, scale);
+        rlDialogue3Params.height = SizeUtils.dip2px(107, scale);
         rlDialogue3.setLayoutParams(rlDialogue3Params);
 
         UbtLog.d(TAG, "ivPrincipleAlphaParams = " + ivPrincipleAlphaParams.width + "  " + ivPrincipleAlphaParams.height);
@@ -225,6 +235,7 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+
         mHelper = new PrincipleHelper(this);
         initUI();
     }

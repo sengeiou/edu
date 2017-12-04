@@ -18,6 +18,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,8 @@ import butterknife.OnClick;
  * version
  */
 public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCenterView, UserCenterImpPresenter> implements UserCenterContact.UserCenterView {
+    private static final String TAG = UserCenterActivity.class.getSimpleName();
+
     @BindView(R.id.tv_main_title)
     TextView mTvTitle;
     @BindView(R.id.rl_leftmenu)
@@ -72,6 +75,17 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         finish();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        UbtLog.d(TAG,"------onPause---");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        UbtLog.d(TAG,"------onDestroy---");
+    }
 
     /**
      * 初始化数据
