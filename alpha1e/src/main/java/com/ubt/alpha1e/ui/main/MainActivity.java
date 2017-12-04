@@ -241,7 +241,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         initUI();
         if(!isBulueToothConnected()){
              showDisconnectIcon();
-             looperThread.send(createMessage(APP_BLUETOOTH_CLOSE));
+            looperThread.send(createMessage(APP_LAUNCH_STATUS));
               m_Handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -250,10 +250,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
              },100);
         }else {
             MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
-            if(cartoonAction == null){
-                return;
+            if(cartoonAction != null){
+                cartoonAction.setBackgroundResource(R.drawable.main_robot);
             }
-            cartoonAction.setBackgroundResource(R.drawable.main_robot);
+
         }
     }
 
@@ -469,10 +469,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             if(!MainUiBtHelper.getInstance(getContext()).isLostCoon()){
                 UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 2");
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
-                if(cartoonAction == null){
-                    return;
-                }
-                cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                looperThread.send(createMessage(APP_BLUETOOTH_CONNECTED));
             }
         }
 
@@ -558,7 +555,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                 try {
                                     // boolean isUiThread = Looper.getMainLooper().getThread() == Thread.currentThread();
                                     //UbtLog.d(TAG,"current random show ? "+APP_CURRENT_STATUS);
-                                   if(APP_CURRENT_STATUS!=APP_LAUNCH_STATUS) {
+                                   if(APP_CURRENT_STATUS!=APP_LAUNCH_STATUS&&APP_CURRENT_STATUS!=APP_BLUETOOTH_CLOSE) {
                                        runOnUiThread(new Runnable() {
                                            @Override
                                            public void run() {
@@ -630,8 +627,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if (mChargingTimeoutTask != null){
             mChargingTimeoutTask.cancel();
             mChargingTimeoutTask= null;
+            mChargetimer.cancel();
             mChargetimer.purge();
             mChargetimer=null;
+
         }
 
     }
@@ -883,9 +882,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
              runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
-                       recoveryBatteryUi();
+                       showDisconnectIcon();
                        showBuddleText("开机来叫醒沉睡的alpha吧");
                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
+                       recoveryBatteryUi();
                        hiddenCartoonTouchView();
                        //showCartoonAction(cartoon_action_sleep);
                    }
@@ -896,11 +896,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
-                       showBuddleText("嗨，我是阿尔法");
                        if(isNetworkConnect){
                            hiddenDisconnectIcon();
                        }
                        showCartoonAction(cartoon_action_squat);
+                       showBuddleText("嗨，我是阿尔法");
                    }
                });
                break;
@@ -910,9 +910,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    public void run() {
                        showDisconnectIcon();
                        stopchargeAsynchronousTask();
+                       hiddenBuddleTextView();
                        //showCartoonAction(cartoon_action_sleep);
+                       if(cartoonAction!=null)
                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
                        recoveryBatteryUi();
+                       hiddenCartoonTouchView();
+
                    }
                });
                break;
@@ -1129,10 +1133,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
       buddleText.setVisibility(View.INVISIBLE);
   }
   private void showBuddleTextView(){
-      if(buddleText == null){
-          return;
+      if(buddleText != null){
+          buddleText.setVisibility(View.VISIBLE);
       }
-      buddleText.setVisibility(View.VISIBLE);
+
   }
 
   private String loadAnimationResources(int value ){
