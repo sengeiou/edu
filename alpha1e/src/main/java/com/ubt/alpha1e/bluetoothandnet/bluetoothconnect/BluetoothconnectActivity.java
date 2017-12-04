@@ -632,6 +632,8 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
                 e.printStackTrace();
             }
         }
+        if(BluetoothconnectActivity.this != null)
+        ((AlphaApplication) BluetoothconnectActivity.this.getApplication()).setmCurrentNetworkInfo(null);
     }
 
     @Override
