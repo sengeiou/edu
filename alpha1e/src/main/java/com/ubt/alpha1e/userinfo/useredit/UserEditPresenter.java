@@ -34,7 +34,6 @@ import java.util.List;
 import okhttp3.Call;
 
 import static android.R.attr.key;
-import static android.R.attr.value;
 
 /**
  * MVPPlugin
@@ -240,7 +239,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
     public void updateHead(String path) {
         File file = new File(path);
         BaseRequest baseRequest = new BaseRequest();
-        UbtLog.d("UpdateHead--------", "request====" + baseRequest + "  headPath===" + value);
+        UbtLog.d("UpdateHead--------", "request====" + baseRequest + "  headPath===" + path);
         OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, baseRequest, key)
                 .execute(new StringCallback() {
                     @Override

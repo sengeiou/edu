@@ -230,7 +230,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                     int currentPosition = mPresenter.getPosition(mTvUserAge.getText().toString(), ageList);
                     mPresenter.showAgeDialog(getActivity(), ageList, currentPosition);
                 } else {
-                    ToastUtils.showShort("Network  unavailable");
+                    ToastUtils.showShort("网络出错啦，请检查网络设置");
                 }
                 break;
             case R.id.tv_user_grade:
@@ -238,7 +238,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                     int currentPosition1 = mPresenter.getPosition(mTvUserGrade.getText().toString(), gradeList);
                     mPresenter.showGradeDialog(getActivity(), currentPosition1, gradeList);
                 } else {
-                    ToastUtils.showShort("Network  unavailable");
+                    ToastUtils.showShort("网络出错啦，请检查网络设置");
                 }
                 break;
             default:
