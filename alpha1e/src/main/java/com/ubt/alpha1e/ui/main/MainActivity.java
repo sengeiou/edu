@@ -2,6 +2,7 @@ package com.ubt.alpha1e.ui.main;
 
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,12 +11,14 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -39,6 +42,7 @@ import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.services.AutoScanConnectService;
+import com.ubt.alpha1e.services.SendClientIdService;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
@@ -215,6 +219,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UbtLog.d(TAG,"onCreate");
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mCurrentTouchTime=System.currentTimeMillis();
         getScreenInch();
         initUI();
@@ -225,7 +230,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         looperThread.start();
         buddleTextAsynchronousTask();
 
-//        AutoScanConnectService.startService(MainActivity.this); //add by dicy.cheng 打开自动连接
+        // 启动发送clientId服务
+        SendClientIdService.startService(MainActivity.this);
     }
 
     @Override
@@ -253,6 +259,16 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             if(cartoonAction != null){
                 cartoonAction.setBackgroundResource(R.drawable.main_robot);
             }
+            if(MainActivity.this != null && ((AlphaApplication) MainActivity.this.getApplication()).getmCurrentNetworkInfo() != null){
+                NetworkInfo networkInfo = ((AlphaApplication) MainActivity.this.getApplication()).getmCurrentNetworkInfo();
+                if(networkInfo.status){
+                    hiddenDisconnectIcon();
+                }else {
+                    showDisconnectIcon();
+                }
+            }else {
+                showDisconnectIcon();
+            }
 
         }
     }
@@ -263,6 +279,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if(mBroadcastReceiver1!=null) {
             getContext().unregisterReceiver(mBroadcastReceiver1);
         }
+        SendClientIdService.doStopSelf();
     }
 
     private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
@@ -432,9 +449,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void onEventRobot(RobotEvent event) {
         super.onEventRobot(event);
         if(event.getEvent() == RobotEvent.Event.NETWORK_STATUS) {
-//            AutoScanConnectService.doStopSelf();
             NetworkInfo networkInfo = (NetworkInfo)  event.getNetworkInfo();
             UbtLog.d(TAG,"networkInfo == " + networkInfo.status);
+            if(MainActivity.this != null){
+                ((AlphaApplication) MainActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
+            }
             isNetworkConnect=networkInfo.status;
             if(isNetworkConnect){
                 runOnUiThread(new Runnable() {
@@ -463,9 +482,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     }
                 });
             }
+
         }else if(event.getEvent()== RobotEvent.Event.CONNECT_SUCCESS){
             UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 1");
-//            AutoScanConnectService.doStopSelf();
             if(!MainUiBtHelper.getInstance(getContext()).isLostCoon()){
                 UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 2");
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
@@ -790,7 +809,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     protected void onStop() {
         AutoScanConnectService.doEntryManalConnect(true);
-        AutoScanConnectService.doStopSelf();
+//        AutoScanConnectService.doStopSelf();
         super.onStop();
     }
 

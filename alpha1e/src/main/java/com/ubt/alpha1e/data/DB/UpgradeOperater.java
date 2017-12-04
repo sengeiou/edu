@@ -262,42 +262,42 @@ public class UpgradeOperater {
         str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(6,'TurnRight.hts','右转','Turn Right',0,'');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(7,'Shoot left.hts','左脚射门','Left foot shot',1,'icon_remote_football1.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(7,'Shoot left.hts','左脚射门','Left foot shot',1,'remoter_football_leftshoot_select.xml');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(8,'Shoot right.hts','右脚射门','Right foot shot',1,'icon_remote_football4.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(8,'Shoot right.hts','右脚射门','Right foot shot',1,'remoter_football_rightshoot_select.xml');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(9,'Left slide tackle.hts','左脚铲球','Left tackle',1,'icon_remote_football5.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(9,'Left slide tackle.hts','左脚铲球','Left tackle',1,'remoter_football_lefttackle_select.xml');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(10,'Right slide tackle.hts','右脚铲球','Right tackle',1,'icon_remote_football2.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(10,'Right slide tackle.hts','右脚铲球','Right tackle',1,'remoter_football_righttackle_select.xml');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(11,'Fall forward rise.hts','前倒起身','Down up front',1,'icon_remote_football6.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(11,'Fall forward rise.hts','前倒起身','Down up front',1,'remoter_football_getupinfront_select.xml');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(12,'Fall backward rise.hts','后倒起身','Pour up',1,'icon_remote_football3.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(12,'Fall backward rise.hts','后倒起身','Pour up',1,'remoter_football_backup_select.xml');";
         db.execSQL(str_insert);
 
 
         //格斗家
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(17,'Left hits forward.hts','左手前击','Left hits forward',2,'icon_remote_boxing1.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(17,'Left hits forward.hts','左手前击','Left hits forward',2,'remoter_boxing_lefthandheadshoot_select.xml');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(18,'Right hits forward.hts','右手前击','Right hits forward',2,'icon_remote_boxing2.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(18,'Right hits forward.hts','右手前击','Right hits forward',2,'remoter_boxing_righthandheadshoot_select.xml');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(19,'Hit left.hts','左侧击','Hit left',2,'icon_remote_boxing3.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(19,'Hit left.hts','左侧击','Hit left',2,'remoter_boxing_lefthandsideshoot_select.xml');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(20,'Hit right.hts','右侧击','Hit right',2,'icon_remote_boxing4.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(20,'Hit right.hts','右侧击','Hit right',2,'remoter_boxing_righthandsideshoot_select.xml');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(21,'Fall forward rise.hts','前倒起身','Fall forward rise',2,'icon_remote_boxing5.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(21,'Fall forward rise.hts','前倒起身','Fall forward rise',2,'remoter_boxing_getupinfront_select.xml');";
         db.execSQL(str_insert);
 
-        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(22,'Fall backward rise.hts','后倒起身','Fall backward rise',2,'icon_remote_boxing6.png');";
+        str_insert = "insert into remote_action_list(action_index,action_name,action_name_ch,action_name_en,action_model_index,action_image_name) values(22,'Fall backward rise.hts','后倒起身','Fall backward rise',2,'remoter_boxing_backup_select.xml');";
         db.execSQL(str_insert);
 
 

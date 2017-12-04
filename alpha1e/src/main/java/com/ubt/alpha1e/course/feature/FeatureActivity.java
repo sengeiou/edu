@@ -28,6 +28,7 @@ import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -543,6 +544,13 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     @Override
     public int getContentViewId() {
         scale = (int) this.getResources().getDisplayMetrics().density;
+        int screenWidth = SizeUtils.getScreenWidth(this);
+        int screenHeight = SizeUtils.getScreenHeight(this);
+        UbtLog.d(TAG,"screenWidth = " + screenWidth + "screenHeight = " + screenHeight + " scale = " + scale);
+        if((screenWidth >= 1920 && scale == 2) || (screenHeight >= 1080 && scale == 2)){
+            scale = 3;
+        }
+
         if (scale == 3) {
             return R.layout.fragment_robot_feature_3;
         }else if(scale == 4){

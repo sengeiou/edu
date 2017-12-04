@@ -302,6 +302,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_retry) {//点击确定以后刷新列表并解锁下一关
                             mActionCourseModels.get(course).setActionLockType(1);
+                            mActionCourseModels.get(course).setActionCourcesScore(1);
                             mMainCoursedapter.notifyDataSetChanged();
                             dialog.dismiss();
                         }

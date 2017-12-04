@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">FactoryTest</string>
+    <string name="action_scan">开始扫描</string>
+    <string name="action_stop">停止扫描</string>
+    <string name="bt_title">蓝牙连接</string>
+    <string name="bt_connecting">蓝牙连接中</string>
+    <string name="bt_connectFail">蓝牙连接失败</string>
+    <string name="test_ok">通过</string>
+    <string name="test_fail">失败</string>
+    <string name="action_stop_record">停止录音</string>
+</resources>

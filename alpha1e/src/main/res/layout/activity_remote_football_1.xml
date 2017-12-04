@@ -25,7 +25,7 @@
                 android:layout_height="65dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/icon_remote_up" />
+                android:background="@drawable/remoter_gohead_select" />
 
             <ImageButton
                 android:id="@+id/btn_down"
@@ -33,7 +33,7 @@
                 android:layout_height="65dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:background="@drawable/icon_remote_down" />
+                android:background="@drawable/remoter_down_select" />
 
             <ImageButton
                 android:id="@+id/btn_left"
@@ -41,7 +41,7 @@
                 android:layout_height="65dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/icon_remote_left" />
+                android:background="@drawable/remoter_left_select" />
 
             <ImageButton
                 android:id="@+id/btn_right"
@@ -49,7 +49,7 @@
                 android:layout_height="65dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/icon_remote_right" />
+                android:background="@drawable/remoter_right_select" />
         </RelativeLayout>
 
         <ImageButton
@@ -57,7 +57,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerInParent="true"
-            android:background="@drawable/icon_remote_stop" />
+            android:background="@drawable/remoter_stop_select" />
 
 
         <RelativeLayout
@@ -72,14 +72,14 @@
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:layout_alignParentLeft="true"
-                android:background="@drawable/icon_remote_turnleft" />
+                android:background="@drawable/remoter_turnleft_select" />
 
             <ImageButton
                 android:id="@+id/btn_to_right"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/icon_remote_turnright" />
+                android:background="@drawable/remoter_turnright_select" />
         </RelativeLayout>
 
 

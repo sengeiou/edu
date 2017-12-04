@@ -153,6 +153,13 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
     @Override
     protected void initUI() {
         scale = (int) this.getResources().getDisplayMetrics().density;
+        int screenWidth = SizeUtils.getScreenWidth(this);
+        int screenHeight = SizeUtils.getScreenHeight(this);
+        UbtLog.d(TAG,"screenWidth = " + screenWidth + "screenHeight = " + screenHeight + " scale = " + scale);
+        if((screenWidth >= 1920 && scale == 2) || (screenHeight >= 1080 && scale == 2)){
+            scale = 3;
+        }
+
         containerWidth = this.getResources().getDisplayMetrics().widthPixels;
         containerHeight = this.getResources().getDisplayMetrics().heightPixels;
 

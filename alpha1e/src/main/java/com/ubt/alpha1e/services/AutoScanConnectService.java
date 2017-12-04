@@ -74,6 +74,11 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 				case BLUETOOTH_TURN_ON:
 				case APP_OUT_BACKGROUND:
 					UbtLog.d(TAG,"doScan = " + msg.what);
+					if (((AlphaApplication) mContext.getApplicationContext())
+							.getCurrentBluetooth() != null) {
+						UbtLog.d(TAG, "-蓝牙已经连上，停止搜索--");
+						return;
+					}
 					doScan();
 					break;
 				case CHECK_IS_BACKGROUND:
