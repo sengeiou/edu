@@ -178,7 +178,7 @@
     <string name="ui_settings_language">Language</string>
     <string name="ui_settings_language_setting">Setting language…</string>
     <string name="ui_settings_language_updating">Updating language package</string>
-    <string name="ui_settings_wifi">Download with Wi-Fi only</string>
+    <string name="ui_settings_wifi">Download with WiFi only</string>
     <string name="ui_settings_message_remind">Message Reminder</string>
     <string name="ui_settings_play_during_charging">Playing while charging</string>
     <string name="ui_settings_play_during_charging_tips">In order to protect your favorite phone, it is prohibited to use it while charging. Go to Settings if you need to open it</string>
@@ -892,7 +892,7 @@
     <string name="ui_setting_clear_cache_success">已成功清理#的空间</string>
     <string name="ui_setting_has_not_cache">暂无缓存</string>
     <string name="ui_setting_scan_code_attention">扫描关注</string>
-    <string name="ui_setting_password_massage">重置密码管理</string>
+    <string name="ui_setting_password_massage">重置管理密码</string>
     <string name="ui_setting_help_feedback">帮助反馈</string>
     <string name="ui_setting_idea_feedback">意见反馈</string>
     <string name="ui_setting_feedback_detail">问题详情</string>

@@ -161,7 +161,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
     protected void onResume() {
         setCurrentActivityLable(RemoteActivity.class.getSimpleName());
         mHelper = new RemoteHelper(this, this);
-        ((RemoteHelper) mHelper).doReadActions();
+        //((RemoteHelper) mHelper).doReadActions();
         super.onResume();
         mCoonLoadingDia = LoadingDialog.getInstance(this, this);
         initUI();
@@ -193,6 +193,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
         UbtLog.d(TAG,"RemoteHelper.mCurrentType="+RemoteHelper.mCurrentType);
         if(RemoteHelper.mCurrentType != RemoteRecordOperater.ModelType.CUSTOM){
+            //R.drawable.remoter_gohead_select
             btn_1.setBackgroundResource(((RemoteHelper) mHelper).getResId(RemoteHelper.mCurrentInfo.do_1.image_name));
             btn_2.setBackgroundResource(((RemoteHelper) mHelper).getResId(RemoteHelper.mCurrentInfo.do_2.image_name));
             btn_3.setBackgroundResource(((RemoteHelper) mHelper).getResId(RemoteHelper.mCurrentInfo.do_3.image_name));

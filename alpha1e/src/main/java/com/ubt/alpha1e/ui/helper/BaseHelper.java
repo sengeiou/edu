@@ -17,6 +17,7 @@ import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.event.LessonEvent;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.GetDataFromWeb;
 import com.ubt.alpha1e.net.http.basic.HttpAddress;
@@ -153,6 +154,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
         if (((AlphaApplication) mContext.getApplicationContext())
                 .getBlueToothManager() != null) {
+            UbtLog.d(TAG, "注册一个 RegisterHelper");
             ((AlphaApplication) mContext.getApplicationContext())
                     .getBlueToothManager().addBlueToothInteraction(this);
         }
@@ -185,6 +187,11 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                         .setCurrentBluetooth(null);
 
             }
+        }
+        if(EventBus.getDefault().hasSubscriberForEvent(RobotEvent.class)) {
+            RobotEvent disconnectEvent = new RobotEvent(RobotEvent.Event.DISCONNECT);
+            EventBus.getDefault().post(disconnectEvent);
+            UbtLog.d(TAG,"--MSG_DO_NOTE_DISCONNECT " );
         }
 
         if (mContext != null && mContext instanceof BaseActivity) {
