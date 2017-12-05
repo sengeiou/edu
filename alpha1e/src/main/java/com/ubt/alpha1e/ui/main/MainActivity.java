@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.TypedArray;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
+import com.ubt.alpha1e.animator.FrameAnimation;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
@@ -132,22 +134,23 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     int init_screen_height = 375;
     RelativeLayout.LayoutParams params;
     private AnimationDrawable frameAnimation;
+     FrameAnimation frameAnimationPro;
     private int powerThreshold[] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100};
     int index = 0;
-    private int cartoon_action_swing_right_leg = 0;
-    private int cartoon_action_swing_left_leg = 1;
-    private int cartoon_action_swing_right_hand = 2;
-    private int cartoon_action_swing_left_hand = 3;
-    private int cartoon_action_hand_stand = 4;
-    private int cartoon_action_hand_stand_reverse = 5;
-    private int cartoon_action_squat = 6;
-    private int cartoon_action_enjoy = 7;
-    private int cartoon_action_fall = 8;
-    private int cartoon_action_greeting = 9;
-    private int cartoon_action_shiver = 10;
-    private int cartoon_action_sleep = 11;
-    private int cartoon_action_smile = 12;
-    private int cartoon_aciton_squat_reverse = 13;
+    private final int cartoon_action_swing_right_leg = 0;
+    private final int cartoon_action_swing_left_leg = 1;
+    private final int cartoon_action_swing_right_hand = 2;
+    private final int cartoon_action_swing_left_hand = 3;
+    private final int cartoon_action_hand_stand = 4;
+    private final int cartoon_action_hand_stand_reverse = 5;
+    private final int cartoon_action_squat = 6;
+    private final int cartoon_action_enjoy = 7;
+    private final int cartoon_action_fall = 8;
+    private final int cartoon_action_greeting = 9;
+    private final int cartoon_action_shiver = 10;
+    private final int cartoon_action_sleep = 11;
+    private final int cartoon_action_smile = 12;
+    private final int cartoon_aciton_squat_reverse = 13;
     private int buddleTextTimeout = 5000;//5s
     private int charging_shrink_interval=500;
     private int chargeShrinkTimeout=1000;
@@ -213,6 +216,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int ROBOT_RIGHT_SHOULDER_SLEEP=4;
     private int ROBOT_HEAD_UP_SLEEP=5;
     private int ROBOT_HEAD_DOWN_SLEEP=6;
+    private int CARTOON_FRAME_INTERVAL=4;
+    boolean ANIMAITONSOLUTIONOOM=true;
+    boolean animation_running=false;
 
 
     @Override
@@ -228,7 +234,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         registerReceiver(mBroadcastReceiver1, filter1);
         looperThread = new LooperThread(this);
         looperThread.start();
-        buddleTextAsynchronousTask();
 
         // 启动发送clientId服务
         SendClientIdService.startService(MainActivity.this);
@@ -248,6 +253,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if(!isBulueToothConnected()){
              showDisconnectIcon();
             looperThread.send(createMessage(APP_LAUNCH_STATUS));
+           // looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_FIVE_STATUS));
               m_Handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -477,7 +483,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showDisconnectIcon();
                         looperThread.send(createMessage(APP_BLUETOOTH_CLOSE));
                     }
                 });
@@ -518,8 +523,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     private Handler m_Handler = new Handler();
 
-    @Override
-    public void showCartoonAction(final int value) {
+
+    public void showCartoonAction_original(final int value) {
         try {
             mCurrentTouchTime = System.currentTimeMillis();
             if (System.currentTimeMillis() - mCurrentTouchTime < noOperationTimeout) {
@@ -540,6 +545,119 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             }
         }catch(RuntimeException e){
             e.printStackTrace();
+        }
+
+    }
+    private void showCartoonAction_performance(final int value ){
+        if(animation_running){
+            UbtLog.d(TAG,"animation is execution");
+           return;
+        }
+       frameAnimationPro = new FrameAnimation(cartoonAction, getCartoonRes(value), CARTOON_FRAME_INTERVAL, false);
+        frameAnimationPro.setAnimationListener(new FrameAnimation.AnimationListener() {
+            @Override
+            public void onAnimationStart() {
+                UbtLog.d(TAG, "start");
+                animation_running=true;
+            }
+            @Override
+            public void onAnimationEnd() {
+                UbtLog.d(TAG, "end");
+                animation_running=false;
+            }
+            @Override
+            public void onAnimationRepeat() {
+                UbtLog.d(TAG, "repeat");
+                frameAnimationPro.pauseAnimation();
+            }
+        });
+    }
+    @Override
+    public void showCartoonAction(final int value ){
+        if (ANIMAITONSOLUTIONOOM) {
+            showCartoonAction_performance(value);
+        } else {
+            showCartoonAction_original(value);
+        }
+    }
+
+    public int[] getCartoonRes(int value ){
+        String actionName="";
+        TypedArray typedArray=null;
+        int[] resId={0};
+        switch (value) {
+            case cartoon_action_enjoy:
+                typedArray = getResources().obtainTypedArray(R.array.enjoy);
+                actionName="enjoy";
+                break;
+            case cartoon_action_fall:
+                typedArray = getResources().obtainTypedArray(R.array.fall);
+                actionName="fall";
+                break;
+            case cartoon_action_greeting:
+                typedArray = getResources().obtainTypedArray(R.array.greetting);
+                actionName="greetting";
+                break;
+            case cartoon_action_hand_stand:
+                typedArray = getResources().obtainTypedArray(R.array.hand_stand);
+                actionName="hand_stand";
+                break;
+            case cartoon_action_hand_stand_reverse:
+                typedArray = getResources().obtainTypedArray(R.array.hand_stand_reverse);
+                actionName="hand_stand_reverse";
+                break;
+            case cartoon_action_smile:
+                typedArray = getResources().obtainTypedArray(R.array.smile);
+                actionName="smile";
+                break;
+            case cartoon_action_squat:
+                typedArray = getResources().obtainTypedArray(R.array.squat);
+                actionName="squat";
+                break;
+            case cartoon_aciton_squat_reverse:
+                typedArray = getResources().obtainTypedArray(R.array.squat_reverse);
+                actionName="squat_reverse";
+                break;
+            case cartoon_action_shiver:
+                typedArray = getResources().obtainTypedArray(R.array.shiver);
+                actionName="shiver";
+                break;
+            case cartoon_action_swing_left_hand:
+                typedArray = getResources().obtainTypedArray(R.array.swing_lefthand);
+                actionName="left_hand";
+                break;
+            case cartoon_action_swing_left_leg:
+                typedArray = getResources().obtainTypedArray(R.array.swing_leftleg);
+                actionName="left_leg";
+                break;
+            case cartoon_action_swing_right_hand:
+                typedArray = getResources().obtainTypedArray(R.array.swing_righthand);
+                actionName="right_hand";
+                break;
+            case cartoon_action_swing_right_leg:
+                typedArray = getResources().obtainTypedArray(R.array.swing_rightleg);
+                actionName="right_leg";
+                break;
+            default:
+                break;
+        }
+        UbtLog.d(TAG, "ACTIO NAME IS " + actionName);
+        if(typedArray!=null) {
+            Cartoon_animation_last_execute = value;
+            if (value == cartoon_aciton_squat_reverse || value == cartoon_action_sleep) {
+                hiddenCartoonTouchView();
+            } else {
+                showCartoonTouchView();
+            }
+            int len = typedArray.length();
+           resId = new int[len];
+            for (int i = 0; i < len; i++) {
+                resId[i] = typedArray.getResourceId(i, -1);
+            }
+            typedArray.recycle();
+            return resId;
+        }else {
+           return resId ;
         }
 
     }
@@ -920,6 +1038,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        }
                        showCartoonAction(cartoon_action_squat);
                        showBuddleText("嗨，我是阿尔法");
+                       buddleTextAsynchronousTask();
                    }
                });
                break;
@@ -929,7 +1048,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    public void run() {
                        showDisconnectIcon();
                        stopchargeAsynchronousTask();
-                       hiddenBuddleTextView();
+                       stopBuddleTextAsynchronousTask();
+                       showBuddleText("开机来叫醒沉睡的alpha吧");
                        //showCartoonAction(cartoon_action_sleep);
                        if(cartoonAction!=null)
                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
@@ -952,10 +1072,22 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    @Override
                    public void run() {
                        showCartoonAction(cartoon_aciton_squat_reverse);
-                       lowBatteryBuddleText();
                        new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_FIVE_THRESHOLD).builder().show();
                    }
                });
+               for(int i=0;i<3;i++){
+                   runOnUiThread(new Runnable() {
+                       @Override
+                       public void run() {
+                           lowBatteryBuddleText();
+                       }
+                   });
+                   try {
+                       Thread.sleep(3000);
+                   }catch(InterruptedException e){
+                       e.printStackTrace();
+                   }
+               }
                break;
            case ROBOT_SLEEP_EVENT: //休眠执行蹲下动作
                runOnUiThread(new Runnable() {
