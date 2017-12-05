@@ -953,6 +953,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     public void onRationSetting() {
 
                     }
+
+                    @Override
+                    public void onCancelRationSetting() {
+                    }
+
                 }, PermissionUtils.PermissionEnum.STORAGE, mContext);
                 break;
             case R.id.iv_zoom_plus:

@@ -104,7 +104,7 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
                                 startBluetoothConnect();
                             }else {
                                 UbtLog.d(TAG, "bluetoothEnable true 没有授权");//ok
-                                PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION,this);
+                                PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION,this, null);
                             }
                         }else {
                             UbtLog.d(TAG, "bluetoothEnable false 提醒去打开蓝牙");//ok
@@ -126,7 +126,7 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
                             startBluetoothConnect();
                         }else {
                             UbtLog.d(TAG, "bluetoothEnable true 没有授权"); //ok
-                            PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION,this);
+                            PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION,this, null);
                         }
                     }
 

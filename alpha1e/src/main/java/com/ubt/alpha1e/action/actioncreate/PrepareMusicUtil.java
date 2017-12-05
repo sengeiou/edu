@@ -137,6 +137,11 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
                 public void onRationSetting() {
 
                 }
+
+                @Override
+                public void onCancelRationSetting() {
+                }
+
             }, PermissionUtils.PermissionEnum.MICROPHONE,mContext);
 
 
