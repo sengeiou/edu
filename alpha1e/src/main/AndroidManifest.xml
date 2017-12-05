@@ -617,12 +617,6 @@
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
-            android:name=".course.CourseActivity"
-            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
-            android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen"/>
-
-        <activity
             android:name=".course.principle.PrincipleActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
