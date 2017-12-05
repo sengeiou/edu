@@ -65,7 +65,7 @@ public class FeedbackPresenter extends BasePresenterImpl<FeedbackContract.View> 
                         if (baseResponseModel.status) {
                             mView.onFeedbackFinish(true,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_about_feedback_success"));
                         }else {
-                            mView.onFeedbackFinish(false,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_about_feedback_fail_net"));
+                            mView.onFeedbackFinish(false,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_about_feedback_fail"));
                         }
                     }
                     break;

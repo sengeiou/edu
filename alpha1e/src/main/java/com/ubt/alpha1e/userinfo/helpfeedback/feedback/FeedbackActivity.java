@@ -15,6 +15,7 @@ import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.DataCheckTools;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.custom.ClearableEditText;
+import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import butterknife.BindView;
@@ -54,6 +55,8 @@ public class FeedbackActivity extends MVPBaseActivity<FeedbackContract.View, Fee
     protected void initUI() {
         tvBaseTitleName.setText(getStringResources("ui_setting_idea_feedback"));
         ivTitleRight.setVisibility(View.VISIBLE);
+
+        mCoonLoadingDia = SLoadingDialog.getInstance(this);
     }
 
     @Override
@@ -101,8 +104,8 @@ public class FeedbackActivity extends MVPBaseActivity<FeedbackContract.View, Fee
             return;
         }
 
-        if (TextUtils.isEmpty(email) ) {
-            ToastUtils.showShort(getStringResources("ui_login_email_placeholder"));
+        if (TextUtils.isEmpty(email) && TextUtils.isEmpty(phone)) {
+            ToastUtils.showShort(getStringResources("ui_setting_contact_info_request"));
             return;
         }
 
@@ -111,16 +114,16 @@ public class FeedbackActivity extends MVPBaseActivity<FeedbackContract.View, Fee
             return;
         }
 
-        if (TextUtils.isEmpty(phone)) {
-            ToastUtils.showShort(getStringResources("ui_telephone_request"));
-            return;
-        }
-
+        mCoonLoadingDia.show();
         mPresenter.doFeedBack(content,email,phone);
     }
 
     @Override
     public void onFeedbackFinish(boolean isSuccess, String errorMsg) {
+        if(mCoonLoadingDia.isShowing()){
+            mCoonLoadingDia.cancel();
+        }
+
         if(!TextUtils.isEmpty(errorMsg)){
             ToastUtils.showShort(errorMsg);
         }

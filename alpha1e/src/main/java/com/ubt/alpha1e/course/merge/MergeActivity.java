@@ -94,6 +94,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     private boolean hasLostLegRight = true;
 
     private boolean hasLostRobot = false;
+    private boolean isGoingNext = false;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -288,6 +289,11 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                 onBackPressed();
                 break;
             case R.id.tv_next:
+                if(isGoingNext){
+                    //避免重复点击
+                    return;
+                }
+                isGoingNext = true;
                 doMergeAll();
                 mHandler.sendEmptyMessageDelayed(GO_TO_NEXT,600);
                 break;
@@ -305,6 +311,9 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
         SplitActivity.launchActivity(this,true);
     }
 
+    /**
+     * 组装全部
+     */
     private void doMergeAll(){
 
         float targetX,targetY;
@@ -340,6 +349,12 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
         }
     }
 
+    /**
+     * 显示View
+     * @param view 操作视图
+     * @param isShow 是否显示/隐藏
+     * @param anim 显示隐藏的动画
+     */
     private void showView(View view, boolean isShow, Animation anim) {
         if (view.getVisibility() == View.VISIBLE && isShow) {
             return;
@@ -363,8 +378,13 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
         }
     }
 
+    /**
+     * 属性动画移动
+     * @param view
+     * @param targetX
+     * @param targetY
+     */
     private void doAnimator(View view, float targetX, float targetY){
-        // 属性动画移动
         ObjectAnimator y = ObjectAnimator.ofFloat(view, "y", view.getY(), targetY);
         ObjectAnimator x = ObjectAnimator.ofFloat(view, "x", view.getX(), targetX);
 
@@ -389,7 +409,9 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
 
         private float startX,startY;
 
-        private float relativeTargetX,relativeTargetY;
+        private float moveViewCenterX, moveViewCenterY, targetViewCenterX, targetViewCenterY;
+
+        private View relativeTargetView;
 
         @Override
         public boolean onTouch(View view, MotionEvent event) {
@@ -400,6 +422,8 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
 
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
+                    view.bringToFront();
+
                     lastX = event.getRawX();
                     lastY = event.getRawY();
 
@@ -408,17 +432,13 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
 
                     UbtLog.d(TAG,"ivLegLeftBg.getY() = " + ivLegLeftBg.getY() + "   ivLegRightBg.getY() = " + ivLegRightBg.getY());
                     if(view.getId() == R.id.iv_hand_left){
-                        relativeTargetX = ivHandLeftBg.getX();
-                        relativeTargetY = ivHandLeftBg.getY();
+                        relativeTargetView = ivHandLeftBg;
                     }else if(view.getId() == R.id.iv_hand_right){
-                        relativeTargetX = ivHandRightBg.getX();
-                        relativeTargetY = ivHandRightBg.getY();
+                        relativeTargetView = ivHandRightBg;
                     }else if(view.getId() == R.id.iv_leg_left ){
-                        relativeTargetX = ivLegLeftBg.getX();
-                        relativeTargetY = ivLegLeftBg.getY();
+                        relativeTargetView = ivLegLeftBg;
                     }else if(view.getId() == R.id.iv_leg_right){
-                        relativeTargetX = ivLegRightBg.getX();
-                        relativeTargetY = ivLegRightBg.getY();
+                        relativeTargetView = ivLegRightBg;
                     }
 
                     return true;
@@ -454,39 +474,21 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                     lastX = event.getRawX();
                     lastY = event.getRawY();
 
-                    //当移动位置绝对值超出背景图时，变白色
-                    if(Math.abs(nextX - relativeTargetX) > view.getWidth() || Math.abs(nextY - relativeTargetY) > view.getHeight()  ){
-                        if(view.getId() == R.id.iv_hand_left){
-                            ivHandLeftBg.setBackgroundResource(R.drawable.icon_principle_leftarm_white);
-                        }else if(view.getId() == R.id.iv_hand_right){
-                            ivHandRightBg.setBackgroundResource(R.drawable.icon_principle_rightarm_white);
-                        }else if(view.getId() == R.id.iv_leg_left ){
-                            ivLegLeftBg.setBackgroundResource(R.drawable.icon_principle_leftleg_white);
-                        }else if(view.getId() == R.id.iv_leg_right){
-                            ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_white);
-                        }
-                    }else {
-                        if(view.getId() == R.id.iv_hand_left){
-                            ivHandLeftBg.setBackgroundResource(R.drawable.icon_principle_leftarm_yellow);
-                        }else if(view.getId() == R.id.iv_hand_right){
-                            ivHandRightBg.setBackgroundResource(R.drawable.icon_principle_rightarm_yellow);
-                        }else if(view.getId() == R.id.iv_leg_left ){
-                            ivLegLeftBg.setBackgroundResource(R.drawable.icon_principle_leftleg_yellow);
-                        }else if(view.getId() == R.id.iv_leg_right){
-                            ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_yellow);
-                        }
-                    }
+                    isTargetView(view, ivHandLeftBg, nextX, nextY);
+                    isTargetView(view, ivHandRightBg, nextX, nextY);
+                    isTargetView(view, ivLegLeftBg,  nextX, nextY);
+                    isTargetView(view, ivLegRightBg, nextX, nextY);
 
                 }
                 return false;
                 case MotionEvent.ACTION_UP: {
 
-                    if(Math.abs(view.getX() - relativeTargetX) > view.getWidth() || Math.abs(view.getY() - relativeTargetY) > view.getHeight()  ){
+                    if(!isTargetView(view,relativeTargetView,view.getX(),view.getY())){
                         targetX = startX;
                         targetY = startY;
                     }else {
-                        targetX = relativeTargetX;
-                        targetY = relativeTargetY;
+                        targetX = relativeTargetView.getX();
+                        targetY = relativeTargetView.getY();
                         UbtLog.d(TAG,"targetX = " + targetX + "     targetY = " + targetY);
 
                         if(view.getId() == R.id.iv_hand_left){
@@ -513,7 +515,9 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                         hideViewMsg.what = HIDE_VIEW;
                         hideViewMsg.arg1 = view.getId();
                         mHandler.sendMessageDelayed(hideViewMsg,ANIMATOR_TIME);
+
                     }
+
                     UbtLog.d(TAG,"targetX => " + targetX + "     targetY = " + targetY + "  view = " +view.getWidth() + "   = " + view.getHeight());
                     // 属性动画移动
                     ObjectAnimator y = ObjectAnimator.ofFloat(view, "y", view.getY(), targetY);
@@ -526,6 +530,8 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
 
                     lastX = event.getRawX();
                     lastY = event.getRawY();
+
+                    resetBg();
                 }
                 return false;
             }
@@ -545,6 +551,105 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
             }
             return touchable;
         }
+
+        /**
+         * 移动View的中心点，在目标View的中心的1/4位置，是叠加到另一个View上，显示变色
+         * @param moveView 移动的View
+         * @param targetView 目标View
+         * @param nextX 移动View的X坐标
+         * @param nextY 移动View的Y坐标
+         * @return
+         */
+        private boolean isTargetView(View moveView, View targetView, float nextX, float nextY){
+
+            moveViewCenterX = nextX + moveView.getWidth() / 2;
+            moveViewCenterY = nextY + moveView.getHeight() / 2;
+
+            targetViewCenterX = targetView.getX() + targetView.getWidth() / 2;
+            targetViewCenterY = targetView.getY() + targetView.getHeight() / 2;
+
+            if( targetViewCenterX - targetView.getWidth()/4 < moveViewCenterX
+                    && targetViewCenterX + targetView.getWidth()/4 > moveViewCenterX
+                    && targetViewCenterY - targetView.getHeight()/4 < moveViewCenterY
+                    && targetViewCenterY + targetView.getHeight()/4 > moveViewCenterY
+                    ){
+                if(moveView.getId() == R.id.iv_hand_left){
+                    if(targetView.getId() == R.id.iv_hand_left_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_leftarm_yellow);
+                    }else if(targetView.getId() == R.id.iv_hand_right_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_rightarm_red);
+                    }else if(targetView.getId() == R.id.iv_leg_left_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_leftleg_red);
+                    }else if(targetView.getId() == R.id.iv_leg_right_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_rightleg_red);
+                    }
+
+                }else if(moveView.getId() == R.id.iv_hand_right){
+                    if(targetView.getId() == R.id.iv_hand_left_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_leftarm_red);
+                    }else if(targetView.getId() == R.id.iv_hand_right_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_rightarm_yellow);
+                    }else if(targetView.getId() == R.id.iv_leg_left_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_leftleg_red);
+                    }else if(targetView.getId() == R.id.iv_leg_right_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_rightleg_red);
+                    }
+
+                }else if(moveView.getId() == R.id.iv_leg_left ){
+                    if(targetView.getId() == R.id.iv_hand_left_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_leftarm_red);
+                    }else if(targetView.getId() == R.id.iv_hand_right_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_rightarm_red);
+                    }else if(targetView.getId() == R.id.iv_leg_left_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_leftleg_yellow);
+                    }else if(targetView.getId() == R.id.iv_leg_right_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_rightleg_red);
+                    }
+
+                }else if(moveView.getId() == R.id.iv_leg_right){
+                    if(targetView.getId() == R.id.iv_hand_left_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_leftarm_red);
+                    }else if(targetView.getId() == R.id.iv_hand_right_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_rightarm_red);
+                    }else if(targetView.getId() == R.id.iv_leg_left_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_leftleg_red);
+                    }else if(targetView.getId() == R.id.iv_leg_right_bg){
+                        targetView.setBackgroundResource(R.drawable.icon_principle_rightleg_yellow);
+                    }
+                }
+                return true;
+            }else {
+                if(targetView.getId() == R.id.iv_hand_left_bg){
+                    ivHandLeftBg.setBackgroundResource(R.drawable.icon_principle_leftarm_white);
+                }else if(targetView.getId() == R.id.iv_hand_right_bg){
+                    ivHandRightBg.setBackgroundResource(R.drawable.icon_principle_rightarm_white);
+                }else if(targetView.getId() == R.id.iv_leg_left_bg){
+                    ivLegLeftBg.setBackgroundResource(R.drawable.icon_principle_leftleg_white);
+                }else if(targetView.getId() == R.id.iv_leg_right_bg){
+                    ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_white);
+                }
+                return false;
+            }
+        }
+
+        /**
+         *  重置还原背景原色
+         */
+        private void resetBg(){
+            if(hasLostHandLeft){
+                ivHandLeftBg.setBackgroundResource(R.drawable.icon_principle_leftarm_white);
+            }
+            if(hasLostHandRight){
+                ivHandRightBg.setBackgroundResource(R.drawable.icon_principle_rightarm_white);
+            }
+            if(hasLostLegLeft){
+                ivLegLeftBg.setBackgroundResource(R.drawable.icon_principle_leftleg_white);
+            }
+            if(hasLostLegRight){
+                ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_white);
+            }
+        }
+
     };
 
     /**
