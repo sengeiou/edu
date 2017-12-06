@@ -577,6 +577,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if (ANIMAITONSOLUTIONOOM) {
             showCartoonAction_performance(value);
         } else {
+            //Some time OOM BUG
             showCartoonAction_original(value);
         }
     }
@@ -932,7 +933,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
     private int powerStatusUpdate(byte mParam) {
-       // UbtLog.d(TAG, "POWER VALUE " + mParam);
+        //UbtLog.d(TAG, "POWER VALUE " + mParam);
         int power_index = 0;
         if (mParam < powerThreshold[powerThreshold.length / 2]) {
             for (int j = 0; j < powerThreshold.length / 2; j++) {
@@ -957,7 +958,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
             }
         }
-        //UbtLog.d(TAG, "Current power is " + power_index);
+       // UbtLog.d(TAG, "Current power is " + power_index);
         if(cartoonBodyTouchBg!=null)
         cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[power_index]));
         return power_index;
