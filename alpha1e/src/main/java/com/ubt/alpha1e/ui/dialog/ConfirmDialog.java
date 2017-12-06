@@ -171,4 +171,10 @@ public class ConfirmDialog {
         setLayout();
         dialog.show();
     }
+
+    public void dismiss() {
+        if(dialog != null){
+            dialog.dismiss();
+        }
+    }
 }

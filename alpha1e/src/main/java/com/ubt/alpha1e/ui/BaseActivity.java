@@ -3,6 +3,7 @@ package com.ubt.alpha1e.ui;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -19,12 +20,15 @@ import android.widget.Toast;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator.DataType;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ThemeInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.event.RobotEvent;
+import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IUI;
@@ -380,17 +384,16 @@ public abstract class BaseActivity extends
         /*if (mHelper != null) {
             mHelper.UnRegisterHelper();
         }*/
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                Toast.makeText(
-                        BaseActivity.this,getStringResources("ui_home_conn_lost"), Toast.LENGTH_SHORT).show();
-                MyLog.writeLog("蓝牙掉线", this.getClass().getName() + "-->onLostBtCoon");
-//                ((AlphaApplication) BaseActivity.this.getApplication()).doLostConn(BaseActivity.this);
-            }
-        });
-
+//        mHandler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                // TODO Auto-generated method stub
+//                Toast.makeText(
+//                        BaseActivity.this,getStringResources("ui_home_conn_lost"), Toast.LENGTH_SHORT).show();
+//                MyLog.writeLog("蓝牙掉线", this.getClass().getName() + "-->onLostBtCoon");
+////                ((AlphaApplication) BaseActivity.this.getApplication()).doLostConn(BaseActivity.this);
+//            }
+//        });
 
     }
 

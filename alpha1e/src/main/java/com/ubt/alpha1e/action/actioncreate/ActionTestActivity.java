@@ -183,7 +183,7 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
     @Override
     public void onDisconnect() {
         UbtLog.d("ActionTest", "onDisconnect");
-        ToastUtils.showShort("蓝牙断开");
-        finish();
+//        ToastUtils.showShort("蓝牙断开");
+//        finish();
     }
 }
