@@ -87,7 +87,7 @@ public class PermissionUtils {
             mCallback.onSuccessful();
         } else if (isFirstLocation && AndPermission.hasAlwaysDeniedPermission(mContext, Arrays.asList(permiss))) {
             mCallback.onRationSetting();
-            showRationSettingDialog(permission, context);
+            showRationSettingDialog(permission, context, mCallback);
         } else {
             AndPermission.with(mContext)
                     .requestCode(10000)
@@ -111,7 +111,7 @@ public class PermissionUtils {
     /**
      * 用户勾选过不再提醒则显示该设置对话框跳转到应用详情页
      */
-    public void showRationSettingDialog(PermissionEnum permission, Context context) {
+    public void showRationSettingDialog(PermissionEnum permission, Context context, final PermissionLocationCallback callback) {
         final SettingService settingService = AndPermission.defineSettingDialog(mContext);
         String message = "";
         switch (permission) {
@@ -143,6 +143,10 @@ public class PermissionUtils {
                 }).setNegativeButton(ResourceManager.getInstance(context).getStringResources("ui_common_cancel"), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(callback != null){
+                    callback.onCancelRationSetting();
+                }
+
 
             }
         }).show();
@@ -187,5 +191,11 @@ public class PermissionUtils {
          * 已经勾选拒绝过
          */
         void onRationSetting();
+
+        /**
+         * 取消RationSetting
+         */
+        void onCancelRationSetting();
     }
+
 }

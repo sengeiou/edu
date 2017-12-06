@@ -2,7 +2,6 @@ package com.ubt.alpha1e.course.principle;
 
 import android.content.Context;
 
-import com.ubt.alpha1e.course.CourseContract;
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
 

@@ -24,7 +24,6 @@ import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.DB.ActionsOnlineCacheOperater;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ISharedPreferensListenet;
-import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
 import com.ubt.alpha1e.services.AutoScanConnectService;
@@ -101,16 +100,6 @@ public class AlphaApplication extends LoginApplication {
     //默认当前连接对象为非1E，没有连上的时候，默认为非Alpha1E
     private boolean isAlpha1E = false;
 
-    public NetworkInfo getmCurrentNetworkInfo() {
-        return mCurrentNetworkInfo;
-    }
-
-    public void setmCurrentNetworkInfo(NetworkInfo mCurrentNetworkInfo) {
-        this.mCurrentNetworkInfo = mCurrentNetworkInfo;
-    }
-
-    private NetworkInfo mCurrentNetworkInfo = null;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -141,8 +130,6 @@ public class AlphaApplication extends LoginApplication {
 //        }, screenOffFilter);
 
     }
-
-
 
 
     public static Context getmContext() {

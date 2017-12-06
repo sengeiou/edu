@@ -2,7 +2,6 @@ package com.ubt.alpha1e.ui.main;
 
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -261,15 +259,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             }
             cartoonAction.setBackgroundResource(R.drawable.main_robot);
 
-            if(MainActivity.this != null && ((AlphaApplication) MainActivity.this.getApplication()).getmCurrentNetworkInfo() != null){
-                NetworkInfo networkInfo = ((AlphaApplication) MainActivity.this.getApplication()).getmCurrentNetworkInfo();
-                if(networkInfo.status){
-                    hiddenDisconnectIcon();
-                }else {
-                    showDisconnectIcon();
-                }
-            }else {
-                showDisconnectIcon();
+            if (((AlphaApplication) MainActivity.this.getApplicationContext())
+                    .getCurrentBluetooth() != null) {
+                UbtLog.d(TAG, "-蓝牙已经连上--");
+
             }
         }
     }
@@ -452,9 +445,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if(event.getEvent() == RobotEvent.Event.NETWORK_STATUS) {
             NetworkInfo networkInfo = (NetworkInfo)  event.getNetworkInfo();
             UbtLog.d(TAG,"networkInfo == " + networkInfo.status);
-            if(MainActivity.this != null){
-                ((AlphaApplication) MainActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
-            }
             isNetworkConnect=networkInfo.status;
             if(isNetworkConnect){
                 runOnUiThread(new Runnable() {
@@ -483,7 +473,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     }
                 });
             }
-
         }else if(event.getEvent()== RobotEvent.Event.CONNECT_SUCCESS){
             UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 1");
             if(!MainUiBtHelper.getInstance(getContext()).isLostCoon()){

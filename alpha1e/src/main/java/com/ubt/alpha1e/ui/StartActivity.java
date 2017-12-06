@@ -18,6 +18,7 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.BuildConfig;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.model.AlphaStatics;
 import com.ubt.alpha1e.data.model.UserInfo;
@@ -48,25 +49,26 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
     private UserInfo mCurrentUser = null;
     private int scale = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scale = (int) this.getResources().getDisplayMetrics().density;
         setContentView(R.layout.activity_start);
         mHelper = new StartHelper(this, this);
-        loginHelper = new LoginHelper(this);
+//        loginHelper = new LoginHelper(this);
         //读取主题信息，如果在主题动画加载完成之前读取完毕则继续检查逻辑，否则不检查
 //        ((StartHelper) mHelper).doCkeckThemeInfo();
 //        ((StartHelper) mHelper).doCkeckLanguageInfo();
-        ((StartHelper) mHelper).doReadUser();
+//        ((StartHelper) mHelper).doReadUser();
         // google play不自主升级-------------------start
 //        ((StartHelper) mHelper).doUpdateApk();
         // google play不自主升级-------------------end
         ((StartHelper) mHelper).doGetLocation();
-        ((StartHelper) mHelper).doRunGetResServices();
+//        ((StartHelper) mHelper).doRunGetResServices();
 
         //add by lihai upgadeDB
-       ((StartHelper) mHelper).UpgadeDB();
+//       ((StartHelper) mHelper).UpgadeDB();
 
         UbtLog.d(TAG,"BUILD_TYPE = " + BuildConfig.BUILD_TYPE + "   DEBUG = " +BuildConfig.DEBUG );
 //        if(!"release".equals(BuildConfig.BUILD_TYPE)){
@@ -201,7 +203,7 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
                         }
                     });
                     ((StartHelper) mHelper).doUpdateLanguage();
-                } else if (((StartHelper) mHelper).isNeedUpdateApk()) {
+
                 } else {
                     gotoNext();
                 }
@@ -269,7 +271,33 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
     @Override
     public void gotoNext() {
 
-        mHandler.sendEmptyMessage(0x111);
+        PermissionUtils.getInstance(this)
+                .request(new PermissionUtils.PermissionLocationCallback() {
+                    @Override
+                    public void onSuccessful() {
+                        //  ToastUtils.showShort("申请拍照权限成功");
+                        ((StartHelper) mHelper).UpgadeDB();
+                        mHandler.sendEmptyMessageDelayed(0x111, 1000);
+                    }
+
+                    @Override
+                    public void onFailure() {
+//                        ToastUtils.showShort("申请存储权限失败");
+                        finish();
+                    }
+
+                    @Override
+                    public void onRationSetting() {
+
+                    }
+
+                    @Override
+                    public void onCancelRationSetting() {
+                        finish();
+                    }
+                }, PermissionUtils.PermissionEnum.STORAGE,this);
+
+
 
     }
 
@@ -283,6 +311,10 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 0x111) {
+
+
+
+
                 Intent inte = new Intent();
 
         /*if (((StartHelper) mHelper).isNeedCompleteInfo()) {

@@ -16,8 +16,6 @@ import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
-import com.ubt.alpha1e.blockly.BlocklyActivity;
-import com.ubt.alpha1e.course.CourseActivity;
 import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
@@ -125,6 +123,7 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
             if (isBulueToothConnected()) {
                 String progressKey = Constant.PRINCIPLE_PROGRESS + SPUtils.getInstance().getString(Constant.SP_USER_ID);
                 int progress = SPUtils.getInstance().getInt(progressKey,0);
+                UbtLog.d("progress","progress = " + progress);
                 if(progress == 1){
                     SplitActivity.launchActivity(this,false);
                 }else if(progress == 2){

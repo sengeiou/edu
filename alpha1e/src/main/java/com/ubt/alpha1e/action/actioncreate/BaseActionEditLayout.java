@@ -12,6 +12,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -56,7 +57,6 @@ import com.ubt.alpha1e.ui.dialog.MyAlertDialog;
 import com.ubt.alpha1e.ui.fragment.SaveSuccessFragment;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
-import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.TimeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ByteHexHelper;
@@ -308,6 +308,9 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             @Override
             public void onItemClick(View view, int pos, Map<String, Object> data) {
                 UbtLog.d(TAG, "getNewPlayerState:" + ((ActionsEditHelper) mHelper).getNewPlayerState());
+                if(autoRead){
+                    return;
+                }
 
                 if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING || isOnCourse) {
                     return;
@@ -591,6 +594,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         iv_del_music = (ImageView) findViewById(R.id.iv_del_music);
         iv_del_music.setOnClickListener(this);
         initMediaPlayer();
+
+        changeSaveAndPlayState();
     }
 
 
@@ -817,10 +822,21 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public void stopMusic() {
         if (mediaPlayer != null) {
             UbtLog.d(TAG, "mediaPlayer stop");
-            tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
+//            tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
             playFinish = true;
             mHandler.removeMessages(0);
             mediaPlayer.stop();
+            ivPlay.setImageResource(R.drawable.icon_play_music);
+        }
+    }
+
+    public void replayMusic() {
+        if (mediaPlayer != null) {
+            UbtLog.d(TAG, "mediaPlayer replayMusic");
+            tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
+            playFinish = true;
+            mHandler.removeMessages(0);
+            mediaPlayer.seekTo(0);
             ivPlay.setImageResource(R.drawable.icon_play_music);
         }
     }
@@ -842,6 +858,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 break;
             case R.id.iv_del_music:
                 deleteMusic();
+                changeSaveAndPlayState();
                 break;
             case R.id.iv_music_icon:
                 if (mDir != "" && playFinish) {
@@ -856,8 +873,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 break;
             case R.id.iv_reset_index:
-//                stopMusic();
-//                ((ActionsEditHelper)mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop, null);
+                replayMusic();
+                ((ActionsEditHelper)mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop, null);
                 sbVoice.setProgress(0);
                 recyclerViewFrames.smoothScrollToPosition(0);
                 recyclerViewTimes.smoothScrollToPosition(0);
@@ -936,6 +953,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     public void onRationSetting() {
 
                     }
+
+                    @Override
+                    public void onCancelRationSetting() {
+                    }
+
                 }, PermissionUtils.PermissionEnum.STORAGE, mContext);
                 break;
             case R.id.iv_zoom_plus:
@@ -965,6 +987,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 break;
             case R.id.iv_delete:
                 doDeleteItem();
+                changeSaveAndPlayState();
                 break;
 
             default:
@@ -1173,6 +1196,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             }
             isFinishFramePlay = false;
             if (mDir != "" && mediaPlayer != null) {
+                UbtLog.d(TAG, "current pos:" + mediaPlayer.getCurrentPosition());
                 if (mediaPlayer.getCurrentPosition() == 0) {
                     UbtLog.d(TAG, "只在音频播完状态下才可以从头开始播:" + mediaPlayer.getCurrentPosition());
                     ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_play,
@@ -1421,6 +1445,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
         }
         adapter.notifyDataSetChanged();
+        changeSaveAndPlayState();
     }
 
     public static final int MSG_AUTO_READ = 1000;
@@ -1528,6 +1553,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         int songType = prepareMusicModel.getMusicType();
         UbtLog.d(TAG, "name:" + name + "songType:" + songType);
         setPlayFile(name + ".mp3", songType);
+        changeSaveAndPlayState();
     }
 
 
@@ -2060,14 +2086,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             map.put(ActionsEditHelper.MAP_FRAME, info);
             String item_name = ResourceManager.getInstance(mContext).getStringResources("ui_readback_index");
             item_name = item_name.replace("#", (list_frames.size() + 1) + "");
-            //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
-            if (musicTimes == 0) {
-//                map.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
-                map.put(ActionsEditHelper.MAP_FRAME_NAME, (currentIndex) + "");
-            } else {
-//                map.put(ActionsEditHelper.MAP_FRAME_NAME, list_frames.size()  + "");
-                map.put(ActionsEditHelper.MAP_FRAME_NAME, currentIndex + "");
-            }
+            map.put(ActionsEditHelper.MAP_FRAME_NAME, currentIndex + "");
 
             map.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
             if (autoRead) {
@@ -2129,7 +2148,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         UbtLog.d(TAG, "continue read！");
         if (autoRead) {
             mHandler.sendEmptyMessage(MSG_AUTO_READ);
+        }else{
+            changeSaveAndPlayState();
         }
+
+
     }
 
     private void handleFrameAndTime(Map<String, Object> map) {
@@ -2195,11 +2218,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private Date lastTime_play = null;
 
     private void doPlayPreviewFrames() {
-
-//        if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
-//            Toast.makeText(mContext, ResourceManager.getInstance(mContext).getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
-//            return;
-//        }
 
         // 防止过快点击-----------start
         Date curDate = new Date(System.currentTimeMillis());
@@ -2359,13 +2377,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     @Override
     public void doPlayAutoRead() {
 
-        //检测是否在充电状态和边充边玩状态是否打开
-        UbtLog.d(TAG, "mHelper.getChargingState():" + mHelper.getChargingState() + "SettingHelper" + SettingHelper.isPlayCharging(mContext));
-//        if (mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)) {
-//            UbtLog.d(TAG, "边充边玩未打开");
-//            Toast.makeText(mContext, AlphaApplication.getBaseActivity().getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
-//            return;
-//        }
 
         if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
             ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,
@@ -2395,6 +2406,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             list_frames.remove(list_frames.size() - 1);
         }
         adapter.notifyDataSetChanged();
+        changeSaveAndPlayState();
     }
 
     public void onDisConnect() {
@@ -2403,6 +2415,33 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     public interface OnSaveSucessListener {
         void startSave(Intent intent);
+    }
+
+    private void changeSaveAndPlayState(){
+        UbtLog.d(TAG, "mDir:" + mDir + "--size:" + list_frames.size());
+
+        if(TextUtils.isEmpty(mDir) && list_frames.size() == 0){
+            ivPlay.setEnabled(false);
+        }else{
+            ivPlay.setEnabled(true);
+        }
+
+        if(TextUtils.isEmpty(mDir) ){
+             if(list_frames.size()==0){
+                 ivSave.setEnabled(false);
+             }else{
+                 ivSave.setEnabled(true);
+             }
+
+        }else{
+            if(list_frames.size()>1){
+                ivSave.setEnabled(true);
+            }else{
+                ivSave.setEnabled(false);
+            }
+        }
+
+
     }
 
 

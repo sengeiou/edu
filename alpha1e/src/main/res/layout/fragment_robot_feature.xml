@@ -229,6 +229,7 @@
                 android:src="@drawable/icon_principle_steering_engine_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_steering_engine_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="18dp"
@@ -256,6 +257,7 @@
                 android:src="@drawable/icon_principle_infrared_sensor_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_infrared_sensor_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
@@ -283,6 +285,7 @@
                 android:src="@drawable/icon_principle_soundbox_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_soundbox_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
@@ -310,6 +313,7 @@
                 android:src="@drawable/icon_principle_head_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_head_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
@@ -337,6 +341,7 @@
                 android:src="@drawable/icon_principle_eye_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_eye_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
@@ -364,6 +369,7 @@
                 android:src="@drawable/icon_principle_voice_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_voice_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="18dp"
@@ -391,6 +397,7 @@
                 android:src="@drawable/icon_principle_voice_obstacle_avoidance_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_voice_obstacle_avoidance_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="18dp"
@@ -407,15 +414,17 @@
             android:layout_height="wrap_content"
             android:minWidth="215px"
             android:minHeight="59px"
-            android:text="@string/ui_create_guide_auto"
+            android:gravity="center_vertical"
+            android:text="@string/ui_principle_head_tips"
             android:paddingRight="10dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:paddingLeft="20dp"
-            android:textColor="@color/white"
+            android:textColor="#104A70"
+            android:textSize="16sp"
             android:background="@drawable/icon_message_show"
             android:layout_above="@+id/v_top"
-            android:layout_marginBottom="-20dp"
+            android:layout_marginBottom="-30dp"
             android:layout_toRightOf="@+id/iv_robot"
             android:visibility="gone"
             />
