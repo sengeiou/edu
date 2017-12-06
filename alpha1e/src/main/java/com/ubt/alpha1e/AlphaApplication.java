@@ -89,6 +89,7 @@ public class AlphaApplication extends LoginApplication {
     private static Date lastTime_tryRestart = null;
 
     private static BaseActivity baseActivity;
+    private static Activity mCurrentActivity;
     private static MyActionsHelper.Action_type action_type;
 
     public static Context mContext = null;
@@ -554,6 +555,14 @@ public class AlphaApplication extends LoginApplication {
     public void LoginOut() {
         // TODO Auto-generated method stub
         setCurrentUserInfo(null);
+    }
+
+    public void setCurrentActivity(Activity activity) {
+        this.mCurrentActivity = activity;
+    }
+
+    public static Activity getCurrentActivity() {
+        return mCurrentActivity;
     }
 
     public void setBaseActivity(BaseActivity baseActivity) {
