@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
@@ -122,6 +123,7 @@ public class MyGamegadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             remoteLogoId = R.drawable.icon_fighter;
         }else {
             holder.ivRemote.setAlpha(0.5f);
+            holder.tvRemoteName.setTextColor(Color.rgb(192, 192, 192));
         }
         holder.ivRemote.setImageResource(remoteLogoId);
 

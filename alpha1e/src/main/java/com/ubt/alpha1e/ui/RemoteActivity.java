@@ -94,15 +94,15 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(RemoteActivity.this, getStringResources("ui_remote_select_robot_synchoronize_success"),
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(RemoteActivity.this, getStringResources("ui_remote_select_robot_synchoronize_success"),
+//                            Toast.LENGTH_SHORT).show();
                     if((boolean)msg.obj){
                         RemoteItem item = RemoteRecordOperater.getItemByIndex(playIndex, RemoteHelper.mCurrentInfo);
                         ((RemoteHelper) mHelper).addActionName(item.hts_name.split("\\.")[0]);
                         ((RemoteHelper) mHelper).doAction(playIndex);
                     }else{
-                        Toast.makeText(RemoteActivity.this, getStringResources("ui_remote_select_robot_synchoronize_failed"),
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(RemoteActivity.this, getStringResources("ui_remote_select_robot_synchoronize_failed"),
+//                                Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case ACTION_FILE_NOT_EXIST:

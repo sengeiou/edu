@@ -665,24 +665,35 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private Date lastTime;
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == event.ACTION_DOWN
-                && event.getKeyCode() == event.KEYCODE_BACK) {
-            Date curDate = new Date(System.currentTimeMillis());
-            float time_difference = 1000;
-            if (lastTime != null) {
-                time_difference = curDate.getTime() - lastTime.getTime();
-            }
+//        if (event.getAction() == event.ACTION_DOWN
+//                && event.getKeyCode() == event.KEYCODE_BACK) {
+//            Date curDate = new Date(System.currentTimeMillis());
+//            float time_difference = 1000;
+//            if (lastTime != null) {
+//                time_difference = curDate.getTime() - lastTime.getTime();
+//            }
+//
+//            if (time_difference < 1000) {
+//                CommonCtrlView.closeCommonCtrlView();
+//                SkinManager.getInstance().cleanInstance();
+//                ((AlphaApplication) this.getApplication()).doExitApp(false);
+//            } else {
+//                showToast("ui_home_exit");
+//            }
+//            lastTime = curDate;
+//        }
+//        return true;
 
-            if (time_difference < 1000) {
-                CommonCtrlView.closeCommonCtrlView();
-                SkinManager.getInstance().cleanInstance();
-                ((AlphaApplication) this.getApplication()).doExitApp(false);
-            } else {
-                showToast("ui_home_exit");
-            }
-            lastTime = curDate;
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+            return true;
         }
-        return true;
+        return super.onKeyDown(keyCode, event);
+
     }
 
 
