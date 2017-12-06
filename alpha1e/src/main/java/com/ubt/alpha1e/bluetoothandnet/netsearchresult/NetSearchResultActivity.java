@@ -94,12 +94,12 @@ public class NetSearchResultActivity extends MVPBaseActivity<NetSearchResultCont
                     mAdapter.notifyDataSetChanged();
 
                     if(mWifiListItem.isEmpty()){
-                        UbtLog.d(TAG,"mWifiListItem isempty" );
+                        UbtLog.d(TAG,"mWifiListItem is empty" );
                         if(rl_content_wifi_list != null && rl_content_bluetooth_no_net != null){
                             rl_content_wifi_list.setVisibility(View.INVISIBLE);
                             rl_content_bluetooth_no_net.setVisibility(View.VISIBLE);
                         }else {
-                            UbtLog.d(TAG,"mWifiListItem isempty    null" );
+                            UbtLog.d(TAG,"mWifiListItem is empty    null" );
                         }
                     }else {
                         UbtLog.d(TAG,"mWifiListItem hava data " );

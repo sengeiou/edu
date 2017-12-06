@@ -283,6 +283,12 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                     public void onRationSetting() {
                         // ToastUtils.showShort("申请拍照权限已经被拒绝过");
                     }
+
+                    @Override
+                    public void onCancelRationSetting() {
+                    }
+
+
                 }, PermissionUtils.PermissionEnum.CAMERA,this);
 
     }

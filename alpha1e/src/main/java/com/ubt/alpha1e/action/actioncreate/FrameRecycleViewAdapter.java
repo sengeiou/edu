@@ -234,6 +234,7 @@ public class FrameRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         viewHolder.tv_frame_index.setText(index);
         viewHolder.tvTime.setText(time);
 
+        viewHolder.sbChange.setProgress(info.totle_time/10);
         viewHolder.sbChange.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

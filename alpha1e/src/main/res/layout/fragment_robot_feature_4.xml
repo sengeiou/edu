@@ -227,6 +227,7 @@
                 android:src="@drawable/icon_principle_steering_engine_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_steering_engine_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="18dp"
@@ -254,6 +255,7 @@
                 android:src="@drawable/icon_principle_infrared_sensor_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_infrared_sensor_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
@@ -281,6 +283,7 @@
                 android:src="@drawable/icon_principle_soundbox_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_soundbox_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="12dp"
@@ -308,6 +311,7 @@
                 android:src="@drawable/icon_principle_head_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_head_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
@@ -335,6 +339,7 @@
                 android:src="@drawable/icon_principle_eye_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_eye_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
@@ -362,6 +367,7 @@
                 android:src="@drawable/icon_principle_voice_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_voice_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="18dp"
@@ -389,6 +395,7 @@
                 android:src="@drawable/icon_principle_voice_obstacle_avoidance_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_voice_obstacle_avoidance_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="18dp"

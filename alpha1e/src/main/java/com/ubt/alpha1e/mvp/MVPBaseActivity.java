@@ -123,8 +123,11 @@ public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresente
         SkinManager.getInstance().addChangedListener(this);
         //((AlphaApplication) this.getApplication()).addToActivityList(this);
         // ((AlphaApplication) this.getApplication()).setBaseActivity(this);
+         ((AlphaApplication) this.getApplication()).setCurrentActivity(this);
         AppManager.getInstance().addActivity(this);
         ((AlphaApplication) this.getApplication()).addToActivityList(this);
+        //AlphaApplication.getCurrentActivity()
+
         mPresenter = getInstance(this, 1);
         mPresenter.attachView((V) this);
         initSkin();

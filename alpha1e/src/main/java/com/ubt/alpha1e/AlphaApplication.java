@@ -24,7 +24,6 @@ import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.DB.ActionsOnlineCacheOperater;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ISharedPreferensListenet;
-import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
 import com.ubt.alpha1e.services.AutoScanConnectService;
@@ -90,6 +89,7 @@ public class AlphaApplication extends LoginApplication {
     private static Date lastTime_tryRestart = null;
 
     private static BaseActivity baseActivity;
+    private static Activity mCurrentActivity;
     private static MyActionsHelper.Action_type action_type;
 
     public static Context mContext = null;
@@ -100,16 +100,6 @@ public class AlphaApplication extends LoginApplication {
 
     //默认当前连接对象为非1E，没有连上的时候，默认为非Alpha1E
     private boolean isAlpha1E = false;
-
-    public NetworkInfo getmCurrentNetworkInfo() {
-        return mCurrentNetworkInfo;
-    }
-
-    public void setmCurrentNetworkInfo(NetworkInfo mCurrentNetworkInfo) {
-        this.mCurrentNetworkInfo = mCurrentNetworkInfo;
-    }
-
-    private NetworkInfo mCurrentNetworkInfo = null;
 
     @Override
     public void onCreate() {
@@ -141,8 +131,6 @@ public class AlphaApplication extends LoginApplication {
 //        }, screenOffFilter);
 
     }
-
-
 
 
     public static Context getmContext() {
@@ -567,6 +555,14 @@ public class AlphaApplication extends LoginApplication {
     public void LoginOut() {
         // TODO Auto-generated method stub
         setCurrentUserInfo(null);
+    }
+
+    public void setCurrentActivity(Activity activity) {
+        this.mCurrentActivity = activity;
+    }
+
+    public static Activity getCurrentActivity() {
+        return mCurrentActivity;
     }
 
     public void setBaseActivity(BaseActivity baseActivity) {

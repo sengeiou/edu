@@ -771,6 +771,16 @@ public class BlocklyJsInterface {
     }
 
     /**
+     * 删除保存项目
+     * @param xml
+     */
+    @JavascriptInterface
+    public void deleteProjectXml(String xml) {
+        UbtLog.d(TAG, "deleteProjectXml:" + xml);
+        DataSupport.deleteAll(BlocklyProjectMode.class, "name = ?", xml);
+    }
+
+    /**
      * 获取保存的项目列表
      *
      * @return

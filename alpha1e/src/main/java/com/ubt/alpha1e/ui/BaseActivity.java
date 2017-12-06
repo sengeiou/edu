@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator.DataType;
 import com.ubt.alpha1e.data.FileTools;
@@ -83,8 +84,9 @@ public abstract class BaseActivity extends
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ((AlphaApplication) this.getApplication()).addToActivityList(this);
+        //((AlphaApplication) this.getApplication()).addToActivityList(this);
         ((AlphaApplication) this.getApplication()).setBaseActivity(this);
+        AppManager.getInstance().addActivity(this);
         initSkin();
         super.onCreate(savedInstanceState);
         initWindowStatusBarColor();
@@ -275,7 +277,8 @@ public abstract class BaseActivity extends
 
         //此Activity销毁后，取消Eventbus监听
         EventBus.getDefault().unregister(this);
-        ((AlphaApplication) this.getApplication()).removeActivityList(this);
+//        ((AlphaApplication) this.getApplication()).removeActivityList(this);
+        AppManager.getInstance().finishActivity(this);
         super.onDestroy();
 
     }

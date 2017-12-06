@@ -27,7 +27,6 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
-import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.event.NetworkEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.AlertDialog;
@@ -381,7 +380,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                         ed_wifi_name.setText(remoteConnectName);
                         ed_wifi_pwd.requestFocus();
                     }else {
-                        android.net.NetworkInfo mWifiInfo = getCurrentLocalConnectNetworkInfo();
+                        NetworkInfo mWifiInfo = getCurrentLocalConnectNetworkInfo();
                         if (mWifiInfo.isConnected()) {
                             UbtLog.d(TAG,"mWifiInfo.getExtraInfo() == " + mWifiInfo.getExtraInfo());
                             if(ed_wifi_name == null){
@@ -415,11 +414,11 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
      * 获取当前手机连接WIFI名称
      * @return
      */
-    private android.net.NetworkInfo getCurrentLocalConnectNetworkInfo(){
+    private NetworkInfo getCurrentLocalConnectNetworkInfo(){
 
         //当前连接WIFI对象
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        android.net.NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return mWifi;
     }
 
@@ -478,15 +477,9 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         if(connectStatus == 1){
             //联网中
         }else if(connectStatus == 2){
-//            NetworkInfo networkInfo = new NetworkInfo();
-            com.ubt.alpha1e.data.model.NetworkInfo networkInfo = new com.ubt.alpha1e.data.model.NetworkInfo();
-            networkInfo.status = true;
-            networkInfo.name = event.getConnectWifiName();
-            ((AlphaApplication) NetconnectActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
             mHandler.sendEmptyMessage(NETWORK_CONNECT_SUCCESS);
         }else if(connectStatus == 3){
             mHandler.sendEmptyMessage(NETWORK_CONNECT_FAIL);
-            ((AlphaApplication) NetconnectActivity.this.getApplication()).setmCurrentNetworkInfo(null);
         }
     }
 

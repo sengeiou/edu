@@ -227,11 +227,11 @@
                 android:src="@drawable/icon_principle_steering_engine_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_steering_engine_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="18dp"
                 android:gravity="center_vertical"
-                android:text="@string/ui_setting_principle_engine_tip"
                 android:textColor="@color/white"
                 android:textSize="12sp"/>
 
@@ -254,11 +254,11 @@
                 android:src="@drawable/icon_principle_infrared_sensor_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_infrared_sensor_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
                 android:gravity="center_vertical"
-                android:text="@string/ui_setting_principle_sensor_tip"
                 android:textColor="@color/white"
                 android:textSize="12sp"/>
 
@@ -281,11 +281,11 @@
                 android:src="@drawable/icon_principle_soundbox_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_soundbox_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="12dp"
                 android:gravity="center_vertical"
-                android:text="@string/ui_setting_principle_soundbox_tip"
                 android:textColor="@color/white"
                 android:textSize="12sp"/>
 
@@ -308,11 +308,11 @@
                 android:src="@drawable/icon_principle_head_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_head_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
                 android:gravity="center_vertical"
-                android:text="@string/ui_setting_principle_head_tip"
                 android:textColor="@color/white"
                 android:textSize="12sp"/>
 
@@ -335,11 +335,11 @@
                 android:src="@drawable/icon_principle_eye_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_eye_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="10dp"
                 android:gravity="center_vertical"
-                android:text="@string/ui_setting_principle_eye_tip"
                 android:textColor="@color/white"
                 android:textSize="12sp"/>
 
@@ -362,11 +362,11 @@
                 android:src="@drawable/icon_principle_voice_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_voice_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="18dp"
                 android:gravity="center_vertical"
-                android:text="@string/ui_setting_principle_voice_tip"
                 android:textColor="@color/white"
                 android:textSize="12sp"/>
 
@@ -389,11 +389,11 @@
                 android:src="@drawable/icon_principle_voice_obstacle_avoidance_intro"/>
 
             <TextView
+                android:id="@+id/tv_principle_voice_obstacle_avoidance_intro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="18dp"
                 android:gravity="center_vertical"
-                android:text="@string/ui_setting_principle_obstacle_tip"
                 android:textColor="@color/white"
                 android:textSize="12sp"/>
 

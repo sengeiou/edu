@@ -112,7 +112,6 @@ public class ActionsEditSaveActivity extends BaseActivity implements
 
 
         mCurrentAction = getIntent().getParcelableExtra(ActionsEditHelper.NewActionInfo);//get parcelable object
-//        UbtLog.d(TAG, "mCurrentAction=" + mCurrentAction.frameActions);
         mSchemeId = getIntent().getStringExtra(SCHEME_ID);
         mSchemeName = getIntent().getStringExtra(SCHEME_NAME);
         dubTag = getIntent().getLongExtra(DubActivity.DUB_TAG, -1);
@@ -166,14 +165,6 @@ public class ActionsEditSaveActivity extends BaseActivity implements
 
     @Override
     protected void initUI() {
-      /*  initTitle(getStringResources("ui_readback_save_title"));
-        initTitleSave(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-
-                saveNewAction();
-            }
-        }, getStringResources("ui_common_confirm"));*/
 
         ivBack = (ImageView)findViewById(R.id.iv_back) ;
         ivSave = (ImageView)findViewById(R.id.iv_save);
@@ -224,22 +215,20 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                 @Override
                 public void onClick(View v) {
                     mCurrentActionImg = null;
-                    int imageId = R.drawable.action_dance_1;
+                    int imageId = R.drawable.action_dance_1b;
                     if(actionType == 1){
-                        imageId = R.drawable.action_dance_1;
+                        imageId = R.drawable.action_dance_1b;
                     }else if(actionType == 2){
-                        imageId = R.drawable.action_story_1;
+                        imageId = R.drawable.action_story_1b;
                     }else if(actionType ==3){
-                        imageId = R.drawable.action_sport_1;
+                        imageId = R.drawable.action_sport_1b;
                     }else if(actionType ==4){
-                        imageId = R.drawable.action_er_1;
+                        imageId = R.drawable.action_er_1b;
                     }else if(actionType == 5){
-                        imageId = R.drawable.action_science_1;
+                        imageId = R.drawable.action_science_1b;
                     }
                     mCurrentActionImg = getBitmap(imageId);
-
-                    img_action_logo.setImageBitmap(null);
-                    img_action_logo.setImageBitmap(mCurrentActionImg);
+                    img_action_logo.setImageResource(imageId);
                 }
             });
 
@@ -247,23 +236,21 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                 @Override
                 public void onClick(View v) {
                     mCurrentActionImg = null;
-                    int imageId = R.drawable.action_dance_2;
+                    int imageId = R.drawable.action_dance_2b;
                     if(actionType == 1){
-                        imageId = R.drawable.action_dance_2;
+                        imageId = R.drawable.action_dance_2b;
                     }else if(actionType == 2){
-                        imageId = R.drawable.action_story_2;
+                        imageId = R.drawable.action_story_2b;
                     }else if(actionType ==3){
-                        imageId = R.drawable.action_sport_2;
+                        imageId = R.drawable.action_sport_2b;
                     }else if(actionType ==4){
-                        imageId = R.drawable.action_er_2;
+                        imageId = R.drawable.action_er_2b;
                     }else if(actionType == 5){
-                        imageId = R.drawable.action_science_2;
+                        imageId = R.drawable.action_science_2b;
                     }
 
                     mCurrentActionImg = getBitmap(imageId);
-
-                    img_action_logo.setImageBitmap(null);
-                    img_action_logo.setImageBitmap(mCurrentActionImg);
+                    img_action_logo.setImageResource(imageId);
                 }
             });
 
@@ -271,31 +258,29 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                 @Override
                 public void onClick(View v) {
                     mCurrentActionImg = null;
-                    int imageId = R.drawable.action_dance_3;
+                    int imageId = R.drawable.action_dance_3b;
                     if(actionType == 1){
-                        imageId = R.drawable.action_dance_3;
+                        imageId = R.drawable.action_dance_3b;
                     }else if(actionType == 2){
-                        imageId = R.drawable.action_story_3;
+                        imageId = R.drawable.action_story_3b;
                     }else if(actionType ==3){
-                        imageId = R.drawable.action_sport_3;
+                        imageId = R.drawable.action_sport_3b;
                     }else if(actionType ==4){
-                        imageId = R.drawable.action_er_3;
+                        imageId = R.drawable.action_er_3b;
                     }else if(actionType == 5){
-                        imageId = R.drawable.action_science_3;
+                        imageId = R.drawable.action_science_3b;
 
                     }
 
                     mCurrentActionImg = getBitmap(imageId);
-
-                    img_action_logo.setImageBitmap(null);
-                    img_action_logo.setImageBitmap(mCurrentActionImg);
+                    img_action_logo.setImageResource(imageId);
                 }
             });
         }
 
         if(mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
-            mCurrentActionImg = getBitmap(R.drawable.action_dance_1);
-            img_action_logo.setImageBitmap(mCurrentActionImg);
+            mCurrentActionImg = getBitmap(R.drawable.action_dance_1b);
+            img_action_logo.setImageResource(R.drawable.action_dance_1b);
         }
 
     }
@@ -303,7 +288,6 @@ public class ActionsEditSaveActivity extends BaseActivity implements
     private Bitmap getBitmap(int imageId){
         Bitmap bitmap = ImageTools.compressImage(getResources(),imageId, 2);
 
-        //UbtLog.d(TAG,"mCurrentActionImg =>> " + imageId + "  " + bitmap.getByteCount() + "     " + bitmap.getRowBytes() * bitmap.getHeight());
         return bitmap;
     }
 
@@ -390,36 +374,36 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                 });
 
                 if(mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
-                    int imageId = R.drawable.action_dance_1;
+                    int imageId = R.drawable.action_dance_1b;
                     if(actionType == 1){
-                        imageId = R.drawable.action_dance_1;
-                        ivDemo1.setImageResource(R.drawable.action_dance_1);
-                        ivDemo2.setImageResource(R.drawable.action_dance_2);
-                        ivDemo3.setImageResource(R.drawable.action_dance_3);
+                        imageId = R.drawable.action_dance_1b;
+                        ivDemo1.setImageResource(R.drawable.action_dance_1b);
+                        ivDemo2.setImageResource(R.drawable.action_dance_2b);
+                        ivDemo3.setImageResource(R.drawable.action_dance_3b);
                     }else if(actionType == 2){
-                        imageId = R.drawable.action_story_1;
-                        ivDemo1.setImageResource(R.drawable.action_story_1);
-                        ivDemo2.setImageResource(R.drawable.action_story_2);
-                        ivDemo3.setImageResource(R.drawable.action_story_3);
+                        imageId = R.drawable.action_story_1b;
+                        ivDemo1.setImageResource(R.drawable.action_story_1b);
+                        ivDemo2.setImageResource(R.drawable.action_story_2b);
+                        ivDemo3.setImageResource(R.drawable.action_story_3b);
                     }else if(actionType == 3){
-                        imageId = R.drawable.action_sport_1;
-                        ivDemo1.setImageResource(R.drawable.action_sport_1);
-                        ivDemo2.setImageResource(R.drawable.action_sport_2);
-                        ivDemo3.setImageResource(R.drawable.action_sport_3);
+                        imageId = R.drawable.action_sport_1b;
+                        ivDemo1.setImageResource(R.drawable.action_sport_1b);
+                        ivDemo2.setImageResource(R.drawable.action_sport_2b);
+                        ivDemo3.setImageResource(R.drawable.action_sport_3b);
                     }else if(actionType == 4){
-                        imageId = R.drawable.action_er_1;
-                        ivDemo1.setImageResource(R.drawable.action_er_1);
-                        ivDemo2.setImageResource(R.drawable.action_er_2);
-                        ivDemo3.setImageResource(R.drawable.action_er_3);
+                        imageId = R.drawable.action_er_1b;
+                        ivDemo1.setImageResource(R.drawable.action_er_1b);
+                        ivDemo2.setImageResource(R.drawable.action_er_2b);
+                        ivDemo3.setImageResource(R.drawable.action_er_3b);
                     }else if(actionType == 5){
-                        imageId = R.drawable.action_science_1;
-                        ivDemo1.setImageResource(R.drawable.action_science_1);
-                        ivDemo2.setImageResource(R.drawable.action_science_2);
-                        ivDemo3.setImageResource(R.drawable.action_science_3);
+                        imageId = R.drawable.action_science_1b;
+                        ivDemo1.setImageResource(R.drawable.action_science_1b);
+                        ivDemo2.setImageResource(R.drawable.action_science_2b);
+                        ivDemo3.setImageResource(R.drawable.action_science_3b);
                     }
 
                     mCurrentActionImg = getBitmap(imageId);
-                    img_action_logo.setImageBitmap(mCurrentActionImg);
+                    img_action_logo.setImageResource(imageId);
                 }
             }
         });

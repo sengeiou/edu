@@ -27,8 +27,7 @@
             android:layout_below="@+id/lowbattery_icon"
             android:text="@string/lowpower_indicator"
             android:textAppearance="@style/ActionsSquareTab"
-            android:visibility="visible"
-           />
+            android:visibility="visible" />
     </RelativeLayout>
 
 
