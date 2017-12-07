@@ -26,6 +26,7 @@ public class BlocklyEvent<T>{
     public static final int CALL_TAPPED_ROBOT_HEAD = 11;
     public static final int CALL_ROBOT_FALL_DOWN = 12;
     public static final int CALL_ROBOT_WALK_STOP = 13;
+    public static final int CALL_6D_GESTURE = 14;
 
 
     private int type;

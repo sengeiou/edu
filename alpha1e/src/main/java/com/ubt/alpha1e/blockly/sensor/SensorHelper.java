@@ -97,6 +97,15 @@ public class SensorHelper extends BaseHelper {
                     EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_ROBOT_WALK_STOP));
                 }
             }
+        }else if(cmd == ConstValue.DV_INTO_EDIT){
+            if(param != null){
+                UbtLog.d(TAG, "DV_INTO_EDIT:" + ByteHexHelper.bytesToHexString(param) );
+            }
+        }else if(cmd == ConstValue.DV_6D_GESTURE){
+            if(param != null){
+                UbtLog.d(TAG, "DV_6D_GESTURE:" + ByteHexHelper.bytesToHexString(param) );
+                EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_6D_GESTURE, param[0]));
+            }
         }
     }
 
@@ -218,6 +227,14 @@ public class SensorHelper extends BaseHelper {
 
     public void doStopWalk(){
         doSendComm(ConstValue.DV_STOP_WALK, null);
+    }
+
+    public void doChangeEditState(byte state){
+        byte[] params = new byte[2];
+        params[0] = state;
+        params[1] = 0;
+        UbtLog.d(TAG, "doChangeEditState params:" + ByteHexHelper.bytesToHexString(params));
+        doSendComm(ConstValue.DV_INTO_EDIT, params);
     }
 
 

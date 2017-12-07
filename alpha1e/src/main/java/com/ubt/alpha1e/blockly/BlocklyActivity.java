@@ -264,7 +264,6 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 case DO_PLAY_SOUND_EFFECT_FINISH:
                     if(mWebView != null){
                         UbtLog.d(TAG, "play sound or emoji finish!");
-//                        mWebView.loadUrl("javascript:playSoundEffectFinish()");
                         mWebView.loadUrl("javascript:continueSteps()");
                     }
                     break;
@@ -626,8 +625,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 super.onPageFinished(view, url);
                 isLoadFinish = true;
                 //dismissLoading();
-                mWebView.loadUrl("javascript:loadWebViewDisplay()");
-                if(((AlphaApplication) getApplicationContext()).isAlpha1E() && isBulueToothConnected()){
+//                mWebView.loadUrl("javascript:loadWebViewDisplay()");
+                if(isBulueToothConnected()){
                     UbtLog.d(TAG, "do start infrared!");
                     mSensorHelper.doReadInfraredSensor((byte)0x01);  //进入block如果连接蓝牙且是1E立马开始读取红外传感器数据
                     mSensorHelper.doReadGyroData((byte)0x01);
@@ -732,10 +731,6 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 UbtLog.d(TAG,"pos = " + pos + "     localSize = " + MyActionsHelper.localSize
                         + "   " + MyActionsHelper.myDownloadSize + "  " +  mActionList.size());
 
-                /*for(int i = 0 ; i<mActionList.size();i++){
-                    String actionName = mActionList.get(i);
-                    UbtLog.d(TAG,"actionNameIndex = " + i + "   actionName = " + actionName);
-                }*/
 
                 if(pos < MyActionsHelper.localSize){
                     MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.Unkown;
@@ -1118,7 +1113,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 initHelper();
                 initActionData();
 
-                if(mSensorHelper != null && ((AlphaApplication) getApplicationContext()).isAlpha1E()){
+                if(mSensorHelper != null ){
                     UbtLog.d(TAG, "do start infrared!");
                     mSensorHelper.doReadInfraredSensor((byte)0x01);
                     mSensorHelper.doReadGyroData((byte)0x01);
@@ -1245,7 +1240,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             initHelper();
             initActionData();
 
-            if(mSensorHelper != null && ((AlphaApplication) getApplicationContext()).isAlpha1E()){
+            if(mSensorHelper != null ){
                 UbtLog.d(TAG, "do start infrared!");
                 mSensorHelper.doReadInfraredSensor((byte)0x01);
                 mSensorHelper.doReadGyroData((byte)0x01);
@@ -1289,10 +1284,12 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             mSensorHelper.doReadInfraredSensor((byte)0x01);
         }else if(event.getType() == BlocklyEvent.CALL_GET_INFRARED_DISTANCE) {
             mInfraredDistance = ByteHexHelper.byteToInt((byte)event.getMessage());
+            UbtLog.d(TAG, "uploadInfraredSensorDistance 1:" + mInfraredDistance);
             if(mWebView != null && isLoadFinish){
                 mWebView.post(new Runnable() {
                     @Override
                     public void run() {
+                        UbtLog.d(TAG, "uploadInfraredSensorDistance:" + mInfraredDistance);
                         mWebView.loadUrl("javascript:uploadInfraredSensorDistance(" + mInfraredDistance + ")");
                     }
                 });
@@ -1331,19 +1328,18 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 mWebView.post(new Runnable() {
                     @Override
                     public void run() {
-//                        mWebView.loadUrl("javascript:listenRobotStopEvent()");
                         mWebView.loadUrl("javascript:robotFall()");
                     }
                 });
 
             }
         }else if(event.getType() == BlocklyEvent.CALL_TAPPED_ROBOT_HEAD) {
-            UbtLog.d(TAG, "tapped robot head and stop block run!");
+
             if(isLoadFinish && mWebView != null){
                 mWebView.post(new Runnable() {
                     @Override
                     public void run() {
-//                        mWebView.loadUrl("javascript:listenRobotStopEvent()");
+                        UbtLog.d(TAG, "tapped robot head and stop block run!");
                         mWebView.loadUrl("javascript:robotTouched()");
                     }
                 });
@@ -1355,6 +1351,15 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 @Override
                 public void run() {
                     mWebView.loadUrl("javascript:continueSteps()");
+                }
+            });
+        }else if(event.getType() == BlocklyEvent.CALL_6D_GESTURE){
+            final int gesture = ByteHexHelper.byteToInt((byte)event.getMessage());
+            mWebView.post(new Runnable() {
+                @Override
+                public void run() {
+                    UbtLog.d(TAG, "gesture:" + gesture);
+                    mWebView.loadUrl("javascript:robotPostture(" + gesture + ")");
                 }
             });
         }
@@ -1943,6 +1948,17 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             mPlayAudioName = "";
         }
     }
+
+    /**
+     * 进入或者退出课程
+     */
+    public void startOrStopRun(byte  params) {
+        if(mSensorHelper != null){
+            mSensorHelper.doChangeEditState(params);
+        }
+    }
+
+
 
     /**
      * 播放TTS语音完成
