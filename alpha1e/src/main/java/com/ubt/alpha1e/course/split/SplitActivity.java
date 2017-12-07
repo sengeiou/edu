@@ -24,7 +24,9 @@ import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -50,8 +52,11 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
     private static final int SHOW_DIALOG = 3;
     private static final int HIDE_DIALOG = 4;
     private static final int TAP_HEAD = 5;
+    private static final int SHOW_NEXT_OVER_TIME = 6;
+    private static final int BLUETOOTH_DISCONNECT = 7;
 
     private final int ANIMATOR_TIME = 500;
+    private final int OVER_TIME = 10 * 1000;//超时
 
     @BindView(R.id.tv_next)
     TextView tvNext;
@@ -93,6 +98,8 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
     private boolean hasLostLegLeft = false;
     private boolean hasLostLegRight = false;
 
+    private boolean hasPlayFileFinish = false;
+
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -120,11 +127,20 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                     showView(tvMsgShow, true, biggerLeftBottomAnim);
                     break;
                 case HIDE_DIALOG:
+                    hasPlayFileFinish = true;
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
+                    mHandler.sendEmptyMessageDelayed(SHOW_NEXT_OVER_TIME, OVER_TIME);
                     break;
                 case TAP_HEAD:
                     //拍头退出课程模式
-                    ToastUtils.showShort(getStringResources("ui_setting_principle_tap_head"));
+                    showTapHeadDialog();
+                    break;
+                case SHOW_NEXT_OVER_TIME:
+                    setViewEnable(tvNext,true,1f);
+                    break;
+                case BLUETOOTH_DISCONNECT:
+                    ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
+                    MainCourseActivity.finishByMySelf();
                     finish();
                     break;
             }
@@ -147,11 +163,15 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
             mHandler.sendEmptyMessage(HIDE_DIALOG);
         }else if(event.getEvent() == PrincipleEvent.Event.TAP_HEAD){
             mHandler.sendEmptyMessage(TAP_HEAD);
+        }else if(event.getEvent() == PrincipleEvent.Event.DISCONNECTED){
+            mHandler.sendEmptyMessage(BLUETOOTH_DISCONNECT);
         }
     }
 
     @Override
     protected void initUI() {
+        setViewEnable(tvNext, false, 0.5f);
+
         scale = (int) this.getResources().getDisplayMetrics().density;
         int screenWidth = SizeUtils.getScreenWidth(this);
         int screenHeight = SizeUtils.getScreenHeight(this);
@@ -192,7 +212,6 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                         }
                     });
                 }
-
             }
         });
         initData();
@@ -251,6 +270,36 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
         hasLostLegRight = false;
     }
 
+    private boolean hasLearnFinish(){
+        if(hasLostHandLeft && hasLostHandRight && hasLostLegLeft && hasLostLegRight){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    private void showTapHeadDialog(){
+        new ConfirmDialog(getContext()).builder()
+                .setMsg(getStringResources("ui_course_principle_exit_tip"))
+                .setCancelable(false)
+                .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((PrincipleHelper) mHelper).doInit();
+                        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                        MainCourseActivity.finishByMySelf();
+                        SplitActivity.this.finish();
+                        SplitActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+
+                    }
+                }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }).show();
+    }
+
     @Override
     protected void initControlListener() {
 
@@ -295,10 +344,33 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
     }
 
     @Override
+    protected void onDestroy() {
+        if(mHandler.hasMessages(SHOW_NEXT_OVER_TIME)){
+            mHandler.removeMessages(SHOW_NEXT_OVER_TIME);
+        }
+        if(mHandler.hasMessages(HIDE_VIEW)){
+            mHandler.removeMessages(HIDE_VIEW);
+        }
+        if(mHandler.hasMessages(GO_TO_NEXT)){
+            mHandler.removeMessages(GO_TO_NEXT);
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void onBackPressed() {
         PrincipleActivity.launchActivity(this,true);
     }
 
+
+    private void setViewEnable(View mView, boolean enable, float alpha) {
+        mView.setClickable(enable);
+        if (enable) {
+            mView.setAlpha(1f);
+        } else {
+            mView.setAlpha(alpha);
+        }
+    }
 
     private void showView(View view, boolean isShow, Animation anim) {
         if (view.getVisibility() == View.VISIBLE && isShow) {
@@ -385,7 +457,7 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
         @Override
         public boolean onTouch(View view, MotionEvent event) {
             //UbtLog.d(TAG, "event.getActionMasked() = " + event.getActionMasked());
-            if(!onTouchable(view)){
+            if(!hasPlayFileFinish || !onTouchable(view)){
                 return false;
             }
 
@@ -507,6 +579,9 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                                 ((PrincipleHelper)mHelper).doLostLeftFoot();
                                 ((PrincipleHelper)mHelper).doLostRightFoot();
                             }
+                        }
+                        if(hasLearnFinish()){
+                            setViewEnable(tvNext,true,1f);
                         }
                     }else {
                         targetX = startX;

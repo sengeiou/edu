@@ -56,6 +56,7 @@ public class PrincipleHelper extends BaseHelper {
             playSoundEvent.setStatus(param[0]);
             EventBus.getDefault().post(playSoundEvent);
         }else if(cmd == ConstValue.DV_VOICE_WAIT){
+            UbtLog.d(TAG,"DV_VOICE_WAIT = " + cmd);
             PrincipleEvent playSoundEvent = new PrincipleEvent(PrincipleEvent.Event.VOICE_WAIT);
             playSoundEvent.setStatus(param[0]);
             EventBus.getDefault().post(playSoundEvent);
@@ -244,7 +245,7 @@ public class PrincipleHelper extends BaseHelper {
     }
 
     public void doInit(){
-        String initFile = "action/default.hts";
+        String initFile = "action/初始化.hts";
         doSendComm(ConstValue.DV_PLAYACTION,BluetoothParamUtil.stringToBytes(initFile));
     }
 
