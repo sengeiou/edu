@@ -570,6 +570,7 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         //蓝牙联网---搜索结果
         <activity

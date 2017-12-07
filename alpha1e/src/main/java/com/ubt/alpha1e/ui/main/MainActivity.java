@@ -439,6 +439,16 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     //去连接蓝牙
     void gotoConnectBluetooth(){
+
+//        if(AppManager.getInstance().currentActivity() != null
+//                && (AppManager.getInstance().currentActivity() instanceof PrincipleActivity
+//                || AppManager.getInstance().currentActivity() instanceof SplitActivity
+//                || AppManager.getInstance().currentActivity() instanceof MergeActivity
+//                || AppManager.getInstance().currentActivity() instanceof FeatureActivity)){
+//            AlphaApplication.setmNeedOpenActivity(AppManager.getInstance().currentActivity().getClass().getSimpleName());
+//            AppManager.getInstance().currentActivity().finish();
+//        }
+
         boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
         Intent bluetoothConnectIntent = new Intent();
         if (isfirst) {
@@ -452,6 +462,16 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
         isBtConnect = isBulueToothConnected();
         startActivityForResult(bluetoothConnectIntent, 100);
+
+        /*if(AppManager.getInstance().currentActivity() != null
+                && (AppManager.getInstance().currentActivity() instanceof PrincipleActivity
+                || AppManager.getInstance().currentActivity() instanceof SplitActivity
+                || AppManager.getInstance().currentActivity() instanceof MergeActivity
+                || AppManager.getInstance().currentActivity() instanceof FeatureActivity)){
+            AlphaApplication.setmNeedOpenActivity(AppManager.getInstance().currentActivity().getClass().getSimpleName());
+            AppManager.getInstance().currentActivity().finish();
+        }*/
+
         this.overridePendingTransition(R.anim.activity_open_up_down, 0);
     }
 
@@ -498,11 +518,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             Activity mActivity = AppManager.getInstance().currentActivity();
                             if (!(mActivity instanceof RemoteActivity
                                     || mActivity instanceof RemoteSelActivity
-                                    || mActivity instanceof MainCourseActivity
+                                    /*|| mActivity instanceof MainCourseActivity
                                     || mActivity instanceof PrincipleActivity
                                     || mActivity instanceof SplitActivity
                                     || mActivity instanceof MergeActivity
-                                    || mActivity instanceof FeatureActivity
+                                    || mActivity instanceof FeatureActivity*/
                                     ||mActivity instanceof ActionTestActivity
                                     ||mActivity instanceof ActionCourseActivity
                                     ||mActivity instanceof CourseLevelActivity
@@ -516,10 +536,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             if(dialog != null){
                                 dialog.dismiss();
                             }
-                            if(AppManager.getInstance().currentActivity()instanceof NetconnectActivity || AppManager.getInstance().currentActivity()instanceof NetSearchResultActivity){
+                            if(AppManager.getInstance().currentActivity() instanceof NetconnectActivity || AppManager.getInstance().currentActivity()instanceof NetSearchResultActivity){
                                 AppManager.getInstance().finishActivity();
                                 return;
                             }
+
                             showBluetoothDisconnect();
                         }else {
                             UbtLog.d(TAG, "onLostBtCoon " + "  为空");

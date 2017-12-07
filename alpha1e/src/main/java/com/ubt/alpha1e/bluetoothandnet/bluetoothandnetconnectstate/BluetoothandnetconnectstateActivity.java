@@ -13,6 +13,7 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,10 +23,15 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity;
+import com.ubt.alpha1e.course.feature.FeatureActivity;
+import com.ubt.alpha1e.course.merge.MergeActivity;
+import com.ubt.alpha1e.course.principle.PrincipleActivity;
+import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -374,6 +380,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 /*Intent backIntent = new Intent();
                 backIntent.putExtra("isConnect", isBulueToothConnected());
                 setResult(101,backIntent);*/
+//                dealUI();
                 BluetoothandnetconnectstateActivity.this.finish();
                 break;
             case R.id.ig_get_bluetooth_list:
@@ -593,4 +600,29 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
     }
 
+    @Override
+    public void onBackPressed() {
+//        dealUI();
+        super.onBackPressed();
+    }
+
+    //处理相应界面
+    void dealUI(){
+        if(mHelper.isLostCoon()){
+            AppManager.getInstance().finishUseBluetoothActivity();
+        }else {
+            if(AlphaApplication.getmNeedOpenActivity() != null){
+                if(AlphaApplication.getmNeedOpenActivity().equals(PrincipleActivity.class.getSimpleName())){
+                    PrincipleActivity.launchActivity(this,false);
+                }else if(AlphaApplication.getmNeedOpenActivity().equals(SplitActivity.class.getSimpleName())){
+                    SplitActivity.launchActivity(this,false);
+                }else if(AlphaApplication.getmNeedOpenActivity().equals(MergeActivity.class.getSimpleName())){
+                    MergeActivity.launchActivity(this,false);
+                }else if(AlphaApplication.getmNeedOpenActivity().equals(FeatureActivity.class.getSimpleName())){
+                    FeatureActivity.launchActivity(this,false);
+                }
+            }
+
+        }
+    }
 }

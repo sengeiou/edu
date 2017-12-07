@@ -101,6 +101,16 @@ public class AlphaApplication extends LoginApplication {
     //默认当前连接对象为非1E，没有连上的时候，默认为非Alpha1E
     private boolean isAlpha1E = false;
 
+    public static String getmNeedOpenActivity() {
+        return mNeedOpenActivity;
+    }
+
+    public static void setmNeedOpenActivity(String activity) {
+        mNeedOpenActivity = activity;
+    }
+
+    private static String mNeedOpenActivity = null;
+
     @Override
     public void onCreate() {
         super.onCreate();
