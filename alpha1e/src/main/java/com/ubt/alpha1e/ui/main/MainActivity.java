@@ -202,7 +202,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int DV_COMMON_COMMAND_POWEROFF_ONE=0;
     private int DV_COMMON_COMMAND_POWEROFF_TWO=0;
     private int Cartoon_animation_last_execute=0;
-    private boolean  app_bluetooth_conencted_executed=false;
+   // private boolean  app_bluetooth_conencted_executed=false;
     private boolean IS_CHARGING=false;
     private String current_mac_address="";
     private String FilePath="action/avatar/";
@@ -916,9 +916,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         //mPresenter.dealMessage(event.message);
         try {
             JSONObject mMessage = new JSONObject(event.message);
-            if(!mMessage.getString("mac").equals(current_mac_address)){
-                app_bluetooth_conencted_executed=false;
-            }
+//            if(!mMessage.getString("mac").equals(current_mac_address)){
+//                app_bluetooth_conencted_executed=false;
+//            }
             String mParam=mMessage.getString("param");
             final byte[] mParams = Base64.decode(mParam, Base64.DEFAULT);
             current_mac_address=mMessage.getString("mac");
@@ -944,7 +944,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             } else if (mCmd == ConstValue.DV_LOW_BATTERY) {
               UbtLog.d(TAG, "ROBOT LOW BATTERY");
               UbtLog.d(TAG,"LOW BATTERY +"+mParams[0]);
-              lowBatteryFunction(mParams[0]);
+             // lowBatteryFunction(mParams[0]);
             } else if (mCmd == ConstValue.DV_READ_BATTERY) {
                 batteryUiShow(mParam);
             } else if(mCmd==ConstValue.DV_COMMON_COMMAND) {
@@ -1012,8 +1012,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             }
         }
        // UbtLog.d(TAG, "Current power is " + power_index);
-        if(cartoonBodyTouchBg!=null)
-        cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[power_index]));
+        if(cartoonBodyTouchBg!=null) {
+            if(mParam==LOW_BATTERY_TWENTY_THRESHOLD){
+                cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[power_index-1]));
+            }else {
+                cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[power_index]));
+            }
+        }
         return power_index;
     }
 
