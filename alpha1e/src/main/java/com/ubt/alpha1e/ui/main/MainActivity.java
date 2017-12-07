@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -1357,12 +1358,16 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
       }
   }
   private void hiddenBattryUi(){
-      charging.setVisibility(View.INVISIBLE);
-      chargingDot.setVisibility(View.INVISIBLE);
+      if(charging!=null) {
+          charging.setVisibility(View.INVISIBLE);
+          chargingDot.setVisibility(View.INVISIBLE);
+      }
   }
  private void showBattryUi(){
-     charging.setVisibility(View.VISIBLE);
-     chargingDot.setVisibility(View.VISIBLE);
+     if(charging!=null) {
+         charging.setVisibility(View.VISIBLE);
+         chargingDot.setVisibility(View.VISIBLE);
+     }
  }
 
   private void showUserPicIcon(){
@@ -1394,6 +1399,17 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
           return;
       }
       buddleText.setVisibility(View.VISIBLE);
+  }
+  private void debugClickRegion(){
+      if(cartoonHead!=null) {
+          cartoonHead.setBackgroundColor(Color.YELLOW);
+          cartoonChest.setBackgroundColor(Color.YELLOW);
+          cartoonLeftHand.setBackgroundColor(Color.YELLOW);
+          cartoonRightHand.setBackgroundColor(Color.YELLOW);
+          cartoonLeftLeg.setBackgroundColor(Color.YELLOW);
+          cartoonRightLeg.setBackgroundColor(Color.YELLOW);
+      }
+
   }
 
   private String loadAnimationResources(int value ){
