@@ -129,7 +129,9 @@ public class BlocklyJsInterface {
     public void stopRobot() {
         UbtLog.d(TAG, "stopRobot");
         ((BlocklyActivity) mBaseActivity).stopPlay();
+        ((BlocklyActivity) mBaseActivity).startOrStopRun((byte)0x02);
     }
+
 
 
     /**
@@ -139,6 +141,8 @@ public class BlocklyJsInterface {
     public void closeBlocklyWindow() {
         UbtLog.d(TAG, "closeBlocklyWindow");
         ((BlocklyActivity) mBaseActivity).finish();
+//        ((BlocklyActivity) mBaseActivity).startOrStopRun((byte)0x02);
+
     }
 
     /**
@@ -358,7 +362,7 @@ public class BlocklyJsInterface {
 
     @JavascriptInterface
     public void registerEventObservers(String params) {
-        UbtLog.d(TAG, "params=" + params);
+        UbtLog.d(TAG, "registerEventObservers params=" + params);
         try {
             JSONObject jsonObject = new JSONObject(params);
             String sensorType = jsonObject.getString("sensorType");
@@ -725,11 +729,21 @@ public class BlocklyJsInterface {
     }
 
     /**
+     *开始执行动作
+     */
+    @JavascriptInterface
+    public void startRunProgram(){
+        UbtLog.d(TAG, "-startRunProgram-");
+        ((BlocklyActivity) mBaseActivity).startOrStopRun((byte)0x01);
+    }
+
+    /**
      * 执行完程序
      */
     @JavascriptInterface
     public void finishProgramRun() {
         UbtLog.d(TAG, "-finishProgramRun-");
+        ((BlocklyActivity) mBaseActivity).startOrStopRun((byte)0x02);
 
     }
 
@@ -763,7 +777,10 @@ public class BlocklyJsInterface {
             BlocklyProjectMode projectMode = new BlocklyProjectMode();
             projectMode.setName(name);
             projectMode.setXml(xml);
-            projectMode.save();
+
+            projectMode.saveOrUpdate("name = ?", name);
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

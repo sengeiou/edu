@@ -387,5 +387,12 @@ public class ConstValue {
 	public static final int DV_COMMON_COMMAND=0x93;
 
 
+	/**
+	 * 进入动作编辑状态和退出  状态切换类型：0:未知状态，１进入动作编缉状态，２退出动作编缉状态
+	 */
+	public static final byte  DV_INTO_EDIT = (byte)0x95;
+
+
+
 
 }
