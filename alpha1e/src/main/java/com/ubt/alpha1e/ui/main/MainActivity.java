@@ -217,7 +217,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int CARTOON_FRAME_INTERVAL=4;
     boolean ANIMAITONSOLUTIONOOM=true;
     boolean animation_running=false;
-
+    private int ROBOT_CHARGING_STATUS=0x01;
+    private int ROBOT_UNCHARGE_STATUS=0x0;
+    private int ROBOT_CHARGING_ENOUGH_STATUS=0x03;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -260,15 +262,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
              },100);
         }else {
             MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
-            if(cartoonAction == null){
-                return;
-            }
-            cartoonAction.setBackgroundResource(R.drawable.main_robot);
-
-            if (((AlphaApplication) MainActivity.this.getApplicationContext())
-                    .getCurrentBluetooth() != null) {
-                UbtLog.d(TAG, "-蓝牙已经连上--");
-
+            if(cartoonAction != null) {
+               looperThread.send(createMessage(ROBOT_default_gesture));
+                if (((AlphaApplication) MainActivity.this.getApplicationContext())
+                        .getCurrentBluetooth() != null) {
+                    UbtLog.d(TAG, "-蓝牙已经连上--");
+                }
             }
         }
     }
@@ -483,10 +482,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             if(!MainUiBtHelper.getInstance(getContext()).isLostCoon()){
                 UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 2");
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
-                if(cartoonAction == null){
-                    return;
-                }
-                cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                looperThread.send(createMessage(APP_BLUETOOTH_CONNECTED));
             }
         }
 
@@ -1042,6 +1038,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        showBuddleText("嗨，我是阿尔法");
                        buddleTextAsynchronousTask();
 
+
                    }
                });
                break;
@@ -1184,13 +1181,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
       final byte[] mParams = Base64.decode(param, Base64.DEFAULT);
       for (int i = 0; i < mParams.length; i++) {
         // UbtLog.d(TAG, "index " + i + "value :" + mParams[i]);
-          if (mParams[index_two_charging] == 0x01&&mParams[index_two_charging]!=mChargeValue) {
+          if (mParams[index_two_charging] == ROBOT_CHARGING_STATUS&&mParams[index_two_charging]!=mChargeValue) {
               IS_CHARGING=true;
               UbtLog.d(TAG, " IS CHARGING ");
               looperThread.send(createMessage(ROBOT_CHARGING));
               recoveryLowBatteryFlag();
               chargeAsynchronousTask();
-          } else if(mParams[index_two_charging]==0x0&&mParams[index_two_charging]!=mChargeValue) {
+          } else if(mParams[index_two_charging]==ROBOT_UNCHARGE_STATUS&&mParams[index_two_charging]!=mChargeValue) {
               IS_CHARGING=false;
               stopchargeAsynchronousTask();
               UbtLog.d(TAG,"NOT CHARGING");
@@ -1203,6 +1200,19 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                       }
                   }
               });
+          }else if(mParams[index_two_charging]==ROBOT_CHARGING_ENOUGH_STATUS&&mParams[index_two_charging]!=mChargeValue){
+              stopchargeAsynchronousTask();
+              UbtLog.d(TAG,"BATTERY ENOUGH AND PLUG IN CHARGING");
+              runOnUiThread(new Runnable() {
+                  @Override
+                  public void run() {
+                      if(charging!=null) {
+                          charging.setBackground(getDrawableRes("charging"));
+                          chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+                      }
+                  }
+              });
+
           }
           runOnUiThread(new Runnable(){
               @Override
@@ -1265,6 +1275,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
       }
   }
 
+  private void showUserPicIcon(){
+      UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+      UbtLog.d(TAG,"user image picture"+userModel.getHeadPic());
+//      if(topIcon!=null){
+//      }
+  }
   private void hiddenDisconnectIcon(){
       if(topIcon2Disconnect!=null)
       topIcon2Disconnect.setVisibility(View.INVISIBLE);
