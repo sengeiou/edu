@@ -233,6 +233,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int ROBOT_CHARGING_STATUS=0x01;
     private int ROBOT_UNCHARGE_STATUS=0x0;
     private int ROBOT_CHARGING_ENOUGH_STATUS=0x03;
+    private int CURRENT_ACTION_NAME=0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -612,11 +613,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     }
     private void showCartoonAction_performance(final int value ){
-        if(animation_running){
+        if(animation_running&&CURRENT_ACTION_NAME==value){
             UbtLog.d(TAG,"animation is execution");
-           return;
+            return;
         }
-       frameAnimationPro = new FrameAnimation(cartoonAction, getCartoonRes(value), CARTOON_FRAME_INTERVAL, false);
+        frameAnimationPro = new FrameAnimation(cartoonAction, getCartoonRes(value), CARTOON_FRAME_INTERVAL, false);
         frameAnimationPro.setAnimationListener(new FrameAnimation.AnimationListener() {
             @Override
             public void onAnimationStart() {
@@ -634,6 +635,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 frameAnimationPro.pauseAnimation();
             }
         });
+        CURRENT_ACTION_NAME=value;
     }
     @Override
     public void showCartoonAction(final int value ){
