@@ -1099,10 +1099,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
              runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
-                       recoveryBatteryUi();
                        showBuddleText("开机来叫醒沉睡的alpha吧");
                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
                        hiddenCartoonTouchView();
+                       recoveryBatteryUi();
+                       hiddenBattryUi();
                        //showCartoonAction(cartoon_action_sleep);
                    }
                });
@@ -1118,8 +1119,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        showCartoonAction(cartoon_action_squat);
                        showBuddleText("嗨，我是阿尔法");
                        buddleTextAsynchronousTask();
-
-
+                       showBattryUi();
                    }
                });
                break;
@@ -1134,6 +1134,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        //showCartoonAction(cartoon_action_sleep);
                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
                        recoveryBatteryUi();
+                       hiddenBattryUi();
                    }
                });
                break;
@@ -1355,6 +1356,14 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
           cartoonBodyTouchBg.setBackground(getDrawableRes("main_robot_background"));
       }
   }
+  private void hiddenBattryUi(){
+      charging.setVisibility(View.INVISIBLE);
+      chargingDot.setVisibility(View.INVISIBLE);
+  }
+ private void showBattryUi(){
+     charging.setVisibility(View.VISIBLE);
+     chargingDot.setVisibility(View.VISIBLE);
+ }
 
   private void showUserPicIcon(){
       UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
