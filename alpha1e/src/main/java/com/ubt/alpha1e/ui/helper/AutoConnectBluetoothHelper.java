@@ -747,23 +747,23 @@ public class AutoConnectBluetoothHelper extends BaseHelper implements IJsonListe
             }
 
             //MyLog.writeLog(TAG, "是否需要读取软件版本is_need_update:" + is_read_state_for_update);
-            if (is_read_state_for_update && param[0] == 4) {
-                is_read_state_for_update = false;
-                MyLog.writeLog(TAG,"读取软件版本DV_READ_SOFTWARE_VERSION开始");
-
-                String currentBluetoothName = mCurrentTryDevices.getName().toLowerCase();
-                UbtLog.d(TAG, "currentBluetoothName:"+ currentBluetoothName);
-                if(currentBluetoothName.contains("Alpha1P+".toLowerCase())
-                        || currentBluetoothName.contains("Alpha1S_".toLowerCase())){
-                    hasSupportA2DP = true;
-                    UbtLog.d(TAG, "need update bluetooth");
-                    doSendComm(ConstValue.DV_READ_BLUETOOTH_VERSION, null);
-                }else{
-                    UbtLog.d(TAG, "need not update bluetooth");
-                    hasSupportA2DP = false;
-                    mHandler.sendEmptyMessage(MSG_DO_READ_SOFT_VERSION);
-                }
-            }
+//            if (is_read_state_for_update && param[0] == 4) {
+//                is_read_state_for_update = false;
+//                MyLog.writeLog(TAG,"读取软件版本DV_READ_SOFTWARE_VERSION开始");
+//
+//                String currentBluetoothName = mCurrentTryDevices.getName().toLowerCase();
+//                UbtLog.d(TAG, "currentBluetoothName:"+ currentBluetoothName);
+//                if(currentBluetoothName.contains("Alpha1P+".toLowerCase())
+//                        || currentBluetoothName.contains("Alpha1S_".toLowerCase())){
+//                    hasSupportA2DP = true;
+//                    UbtLog.d(TAG, "need update bluetooth");
+//                    doSendComm(ConstValue.DV_READ_BLUETOOTH_VERSION, null);
+//                }else{
+//                    UbtLog.d(TAG, "need not update bluetooth");
+//                    hasSupportA2DP = false;
+//                    mHandler.sendEmptyMessage(MSG_DO_READ_SOFT_VERSION);
+//                }
+//            }
 
         } else if (cmd == ConstValue.DV_READ_SOFTWARE_VERSION) {
             mCurrentLocalSoftVersion = new String(param);

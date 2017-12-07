@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.data.DB.RemoteRecordOperater;
 import com.ubt.alpha1e.data.RemoteItem;
@@ -23,6 +24,7 @@ import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.RemoteRoleInfo;
 import com.ubt.alpha1e.ui.custom.RemoteGuideView;
 import com.ubt.alpha1e.ui.dialog.BaseDiaUI;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.LoadingDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IRemoteUI;
@@ -94,15 +96,15 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(RemoteActivity.this, getStringResources("ui_remote_select_robot_synchoronize_success"),
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(RemoteActivity.this, getStringResources("ui_remote_select_robot_synchoronize_success"),
+//                            Toast.LENGTH_SHORT).show();
                     if((boolean)msg.obj){
                         RemoteItem item = RemoteRecordOperater.getItemByIndex(playIndex, RemoteHelper.mCurrentInfo);
                         ((RemoteHelper) mHelper).addActionName(item.hts_name.split("\\.")[0]);
                         ((RemoteHelper) mHelper).doAction(playIndex);
                     }else{
-                        Toast.makeText(RemoteActivity.this, getStringResources("ui_remote_select_robot_synchoronize_failed"),
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(RemoteActivity.this, getStringResources("ui_remote_select_robot_synchoronize_failed"),
+//                                Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case ACTION_FILE_NOT_EXIST:

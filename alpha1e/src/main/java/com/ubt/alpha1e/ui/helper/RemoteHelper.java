@@ -141,21 +141,27 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
             info.actionName = "Default foot";
             MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_gamepad;
             MyActionsHelper.mCurrentPlayType = MyActionsHelper.Action_type.Unkown;
-            mPlayer.doPlayAction(info);
+            if(mPlayer != null){
+                mPlayer.doPlayAction(info);
+            }
         } else {
             RemoteItem item = RemoteRecordOperater.getItemByIndex(index, mCurrentInfo);
             ActionInfo info = new ActionInfo();
             info.actionName = item.hts_name.split("\\.")[0];
             MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_gamepad;
             MyActionsHelper.mCurrentPlayType = MyActionsHelper.Action_type.Unkown;
-            mPlayer.doPlayAction(info);
+            if(mPlayer != null){
+                mPlayer.doPlayAction(info);
+            }
         }
     }
 
     public void doCustomAction(final int index,final int roleId) {
 
         MyActionsHelper.doStopMp3ForMyDownload();
-        mPlayer.doStopPlay();
+        if(mPlayer != null){
+            mPlayer.doStopPlay();
+        }
 
         if (index == -1) {
             //mPlayer.doStopPlay();
@@ -176,7 +182,9 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
                     MyActionsHelper.mCurrentPlayType = MyActionsHelper.Action_type.Unkown;
                     if(isSend){
                         MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_gamepad;
-                        mPlayer.doPlayAction(info);
+                        if(mPlayer != null){
+                            mPlayer.doPlayAction(info);
+                        }
                     }else{
                         if(index < 7){
                             List<String> list = new ArrayList();
@@ -382,7 +390,9 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
 
     public void doStopPrePlay(){
         MyActionsHelper.doStopMp3ForMyDownload();
-        mPlayer.doStopPlay();
+        if(mPlayer != null){
+            mPlayer.doStopPlay();
+        }
     }
 
     public void sendFiles(List<String> file_names) {
@@ -443,7 +453,9 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
         }
         //动作文件读取完毕
         else if ((cmd & 0xff) == (ConstValue.UV_STOPACTIONFILE & 0xff)) {
-            mPlayer.setRobotActions(mActionsNames);
+            if(mPlayer != null){
+                mPlayer.setRobotActions(mActionsNames);
+            }
             changeActionsLength();
             Message msg = new Message();
             msg.what = MSG_DO_READ_ACTIONS;

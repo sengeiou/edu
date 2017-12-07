@@ -16,6 +16,8 @@ import com.ubtechinc.log.MyLog;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 public class BlueToothManager extends Thread implements ClentCallBack,
 		BluetoothUtilCallBack {
 
@@ -133,7 +135,6 @@ public class BlueToothManager extends Thread implements ClentCallBack,
 
 	synchronized public void sendCommand(String mac, byte cmd, byte[] param,
 			int len, boolean isMonopolyRight) {
-
 		if (isMonopoly && (!isMonopolyRight)){
 			return;
 		}

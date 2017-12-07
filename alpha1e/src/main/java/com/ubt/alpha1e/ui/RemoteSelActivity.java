@@ -226,7 +226,8 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
     }
 
     private void finishActivity(){
-        List<Activity> mActivityList = ((AlphaApplication) RemoteSelActivity.this.getApplication()).getHistoryActivityList();
+        finish();
+        /*List<Activity> mActivityList = ((AlphaApplication) RemoteSelActivity.this.getApplication()).getHistoryActivityList();
         for (int i = 0; i < mActivityList.size(); i++) {
             try {
                 if(mActivityList.get(i) != null && mActivityList.get(i).toString().contains("RemoteSelActivity")){
@@ -235,7 +236,7 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     public void initRecyclerViews() {

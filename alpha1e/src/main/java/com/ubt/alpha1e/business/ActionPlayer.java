@@ -39,7 +39,7 @@ public class ActionPlayer implements BlueToothInteracter {
     private boolean mIsCycleContinuePlay = true;
     // 机器人里面的动作列表
     private static List<String> mRobotActions;
-    private String mCurrentDefaultAction = "default";
+    private String mCurrentDefaultAction = "初始化";
     // 常量
     public final static String CYCLE_ACTION_NAME = "CYCLE_ACTION_NAME";
 
@@ -363,6 +363,7 @@ public class ActionPlayer implements BlueToothInteracter {
     private void doStopSingleAction(boolean needSendComm) {
 
         if (needSendComm) {
+            UbtLog.d(TAG,"doStopSingleAction : " + ConstValue.DV_STOPPLAY);
             mBtManager.sendCommand(mBtMac, ConstValue.DV_STOPPLAY, null, 0, false);
         }
 
