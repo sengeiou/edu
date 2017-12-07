@@ -283,7 +283,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                 .getCurrentBluetooth() == null) {
             UbtLog.d(TAG,"蓝牙已经断开");
             ToastUtils.showShort("蓝牙已经断开，请重新连接蓝牙");
-//            NetconnectActivity.this.finish();
+            NetconnectActivity.this.finish();
             return;
         }
         mHandler.postDelayed(overTimeDo,60000);

@@ -4,6 +4,46 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 
+import com.ant.country.CountryActivity;
+import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
+import com.ubt.alpha1e.blockly.BlocklyActivity;
+import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
+import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
+import com.ubt.alpha1e.course.feature.FeatureActivity;
+import com.ubt.alpha1e.course.merge.MergeActivity;
+import com.ubt.alpha1e.course.principle.PrincipleActivity;
+import com.ubt.alpha1e.course.split.SplitActivity;
+import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
+import com.ubt.alpha1e.ui.AboutUsActivity;
+import com.ubt.alpha1e.ui.ActionUnpublishedActivity;
+import com.ubt.alpha1e.ui.ActionsLibPreviewWebActivity;
+import com.ubt.alpha1e.ui.ActionsPublishActivity;
+import com.ubt.alpha1e.ui.ActionsSquareDetailActivity;
+import com.ubt.alpha1e.ui.FeedBackActivity;
+import com.ubt.alpha1e.ui.FindPassWdActivity;
+import com.ubt.alpha1e.ui.LanguageActivity;
+import com.ubt.alpha1e.ui.LoginActivity;
+import com.ubt.alpha1e.ui.MediaRecordActivity;
+import com.ubt.alpha1e.ui.MessageActivity;
+import com.ubt.alpha1e.ui.MyActionsActivity;
+import com.ubt.alpha1e.ui.MyMainActivity;
+import com.ubt.alpha1e.ui.PrivateInfoActivity;
+import com.ubt.alpha1e.ui.PrivateInfoEditActivity;
+import com.ubt.alpha1e.ui.RegisterActivity;
+import com.ubt.alpha1e.ui.RegisterNextStepActivity;
+import com.ubt.alpha1e.ui.RemoteActivity;
+import com.ubt.alpha1e.ui.RemoteSelActivity;
+import com.ubt.alpha1e.ui.RobotControlActivity;
+import com.ubt.alpha1e.ui.SettingActivity;
+import com.ubt.alpha1e.ui.WebContentActivity;
+import com.ubt.alpha1e.ui.main.MainActivity;
+import com.ubt.alpha1e.utils.log.UbtLog;
+
 import java.util.Stack;
 
 /**
@@ -61,6 +101,36 @@ public class AppManager {
     public void finishActivity() {
         Activity activity = activityStack.lastElement();
         finishActivity(activity);
+    }
+
+    /**
+     * 结束正在使用的蓝牙的页面
+     */
+    public void finishUseBluetoothActivity() {
+        Activity mActivity = null;
+        for (int i = 0; i < activityStack.size(); i++) {
+            try {
+                mActivity = activityStack.get(i);
+                if (mActivity instanceof RemoteActivity
+                        || mActivity instanceof RemoteSelActivity
+                        || mActivity instanceof MainCourseActivity
+                        || mActivity instanceof PrincipleActivity
+                        || mActivity instanceof SplitActivity
+                        || mActivity instanceof MergeActivity
+                        || mActivity instanceof FeatureActivity
+                        ||mActivity instanceof ActionTestActivity
+                        ||mActivity instanceof ActionCourseActivity
+                        ||mActivity instanceof CourseLevelActivity
+                        ||mActivity instanceof CourseTwoActivity
+                        ||mActivity instanceof CourseOneActivity
+                        ) {
+                    mActivity.finish();
+                }
+                continue;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

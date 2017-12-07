@@ -391,9 +391,9 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
     @Override
     public void onLostBtCoon() {
         super.onLostBtCoon();
-        ToastUtils.showShort("蓝牙掉线！！");
-        finish();
-//关闭窗体动画显示
-        this.overridePendingTransition(0, R.anim.activity_close_down_up);
+//        ToastUtils.showShort("蓝牙掉线！！");
+//        finish();
+////关闭窗体动画显示
+//        this.overridePendingTransition(0, R.anim.activity_close_down_up);
     }
 }

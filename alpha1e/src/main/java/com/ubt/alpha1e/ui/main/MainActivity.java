@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.ui.main;
 
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.animator.FrameAnimation;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
@@ -35,14 +37,25 @@ import com.ubt.alpha1e.base.loopHandler.LooperThread;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
+import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
+import com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity;
+import com.ubt.alpha1e.course.feature.FeatureActivity;
+import com.ubt.alpha1e.course.merge.MergeActivity;
+import com.ubt.alpha1e.course.principle.PrincipleActivity;
+import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
+import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.services.AutoScanConnectService;
 import com.ubt.alpha1e.services.SendClientIdService;
+import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
@@ -337,7 +350,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     e.printStackTrace();
                 }
             }else {
-                ToastUtils.showShort("请先连接蓝牙");
+                    showBluetoothConnectDialog();
             }
                 break;
             case R.id.right_icon:
@@ -346,18 +359,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     //startActivity(new Intent(this, ActionTestActivity.class));
                     startActivity(mLaunch);
                 }else {
-                    UbtLog.d(TAG,"蓝牙没连接，请去连接蓝牙");
-                    new ConfirmDialog(this).builder()
-                            .setTitle("提示")
-                            .setMsg("请先连接蓝牙和Wi-Fi")
-                            .setCancelable(true)
-                            .setPositiveButton("去连接", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    UbtLog.d(TAG, "去连接蓝牙 ");
-                                    gotoConnectBluetooth();
-                                }
-                            }).show();
+                    showBluetoothConnectDialog();
                 }
                 break;
             case R.id.right_icon2:
@@ -365,7 +367,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     startActivity(new Intent(this, ActionTestActivity.class));
                     this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 }else{
-                    ToastUtils.showShort("请先连接蓝牙");
+                    showBluetoothConnectDialog();
                 }
                 break;
             case R.id.right_icon3:
@@ -410,7 +412,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     startActivity(new Intent(this, MainCourseActivity.class));
                     this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 } else {
-                    ToastUtils.showShort("请连接蓝牙!");
+                    showBluetoothConnectDialog();
                 }
                 break;
             default:
@@ -418,7 +420,23 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
     }
 
+    //显示蓝牙连接对话框
+    void showBluetoothConnectDialog(){
+        new ConfirmDialog(this).builder()
+                .setTitle("提示")
+                .setMsg("请先连接蓝牙和Wi-Fi")
+                .setCancelable(true)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接蓝牙 ");
+                        gotoConnectBluetooth();
+                    }
+                }).show();
+    }
 
+
+    //去连接蓝牙
     void gotoConnectBluetooth(){
         boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
         Intent bluetoothConnectIntent = new Intent();
@@ -431,7 +449,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             bluetoothConnectIntent.setClass(this, BluetoothandnetconnectstateActivity.class);
 
         }
-        //startActivity(bluetoothConnectIntent);
         isBtConnect = isBulueToothConnected();
         startActivityForResult(bluetoothConnectIntent, 100);
         this.overridePendingTransition(R.anim.activity_open_up_down, 0);
@@ -443,7 +460,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         //
         UbtLog.d(TAG,"onLostBtConn");
     }
-
+    ConfirmDialog dialog = null ;
     @Override
     public void onEventRobot(RobotEvent event) {
         super.onEventRobot(event);
@@ -474,6 +491,38 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     @Override
                     public void run() {
                         looperThread.send(createMessage(APP_BLUETOOTH_CLOSE));
+
+                        if(AppManager.getInstance().currentActivity() != null){
+                            UbtLog.d(TAG, "onLostBtCoon " + "  不为空"+ AppManager.getInstance().currentActivity());
+                            Activity mActivity = AppManager.getInstance().currentActivity();
+                            if (!(mActivity instanceof RemoteActivity
+                                    || mActivity instanceof RemoteSelActivity
+                                    || mActivity instanceof MainCourseActivity
+                                    || mActivity instanceof PrincipleActivity
+                                    || mActivity instanceof SplitActivity
+                                    || mActivity instanceof MergeActivity
+                                    || mActivity instanceof FeatureActivity
+                                    ||mActivity instanceof ActionTestActivity
+                                    ||mActivity instanceof ActionCourseActivity
+                                    ||mActivity instanceof CourseLevelActivity
+                                    ||mActivity instanceof NetconnectActivity
+                                    ||mActivity instanceof NetSearchResultActivity
+                                    ||mActivity instanceof CourseTwoActivity
+                                    ||mActivity instanceof CourseOneActivity
+                            )) {
+                                return;
+                            }
+                            if(dialog != null){
+                                dialog.dismiss();
+                            }
+                            if(AppManager.getInstance().currentActivity()instanceof NetconnectActivity || AppManager.getInstance().currentActivity()instanceof NetSearchResultActivity){
+                                AppManager.getInstance().finishActivity();
+                                return;
+                            }
+                            showBluetoothDisconnect();
+                        }else {
+                            UbtLog.d(TAG, "onLostBtCoon " + "  为空");
+                        }
                     }
                 });
             }
@@ -483,9 +532,34 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 2");
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
                 looperThread.send(createMessage(APP_BLUETOOTH_CONNECTED));
+                if(dialog != null){
+                    dialog.dismiss();
+                }
+
             }
         }
 
+    }
+
+    void showBluetoothDisconnect(){
+        dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                .setTitle("提示")
+                .setMsg("蓝牙连接断开，请重新连接")
+                .setCancelable(true)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接蓝牙 ");
+                        gotoConnectBluetooth();
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "取消 ");
+                        AppManager.getInstance().finishUseBluetoothActivity();
+                    }
+                });
+        dialog.show();
     }
 
     @Override
@@ -766,29 +840,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             showBuddleTextView();
         }
     }
-    private Date lastTime;
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (event.getAction() == event.ACTION_DOWN
-//                && event.getKeyCode() == event.KEYCODE_BACK) {
-//            Date curDate = new Date(System.currentTimeMillis());
-//            float time_difference = 1000;
-//            if (lastTime != null) {
-//                time_difference = curDate.getTime() - lastTime.getTime();
-//            }
-//
-//            if (time_difference < 1000) {
-//                CommonCtrlView.closeCommonCtrlView();
-//                SkinManager.getInstance().cleanInstance();
-//                ((AlphaApplication) this.getApplication()).doExitApp(false);
-//            } else {
-//                showToast("ui_home_exit");
-//            }
-//            lastTime = curDate;
-//        }
-//        return true;
-
-
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
