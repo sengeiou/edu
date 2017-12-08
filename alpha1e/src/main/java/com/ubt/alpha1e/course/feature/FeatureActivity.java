@@ -3,6 +3,8 @@ package com.ubt.alpha1e.course.feature;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PointF;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +26,7 @@ import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.merge.MergeActivity;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.SizeUtils;
@@ -55,6 +58,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     private static final int RECEVICE_VOICE_WAIT = 7;
     private static final int LEARN_FINISH = 8;
     private static final int TAP_HEAD = 9;
+    private static final int BLUETOOTH_DISCONNECT = 10;
 
     @BindView(R.id.tv_next)
     TextView tvNext;
@@ -129,6 +133,9 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     TextView tvPrincipleVoiceIntro;
     @BindView(R.id.tv_principle_voice_obstacle_avoidance_intro)
     TextView tvPrincipleVoiceObstacleAvoidanceIntro;
+    @BindView(R.id.iv_radiological_wave)
+    ImageView ivRadiologicalWave;
+
 
     private Animation biggerLeftBottomAnim = null;
     private Animation biggerLeftTopAnim = null;
@@ -136,6 +143,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     private Animation smallerLeftBottomAnim = null;
     private Animation smallerLeftTopAnim = null;
     private Animation smallerRightTopAnim = null;
+    private AnimationDrawable radiologicalWaveAnim = null;
 
     private int containerWidth;
     private int containerHeight;
@@ -214,52 +222,33 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                     break;
                 case PLAY_ACTION_FINISH:
                     if (playIndex == 1) {
-                        /*if(playCount == 0){
-                            if (tvMsgShow.getVisibility() == View.VISIBLE) {
-                                showView(tvMsgShow, false, smallerLeftBottomAnim);
-                            }
-                            showView(rlPrincipleSteeringEngineIntro, true, biggerLeftBottomAnim);
-                            playCount = 1;
-                            playSound("id_elephant.wav");
-                        }else if(playCount == 1){*/
                         //finish
                         playIndex = 0;
                         playCount = 0;
                         hasLearnEngine = true;
+                        stopRadiologicalWaveAnim();
                         showView(rlPrincipleSteeringEngineIntro, false, smallerLeftBottomAnim);
                         mHandler.sendEmptyMessageDelayed(LEARN_FINISH, 500);
-                        //}
+
                     } else if (playIndex == 2) {
 
                         if (playCount == 0) {
-                            /*if (tvMsgShow.getVisibility() == View.VISIBLE) {
-                                showView(tvMsgShow, false, smallerLeftBottomAnim);
-                            }
-                            showView(rlPrincipleInfraredSensorIntro, true, biggerRightTopAnim);
-                            playCount = 1;
-                            playSound("id_elephant.wav");*/
 
                         } else if (playCount == 1) {
-                            //finish
-                            /*playIndex = 0;
-                            playCount = 0;
-                            hasLearnSensor = true;
-                            showView(rlPrincipleInfraredSensorIntro, false, smallerRightTopAnim);
-                            ((PrincipleHelper)mHelper).playFile("红外2.hts");
-                            ((PrincipleHelper)mHelper).doReadInfraredSensor((byte)0);
-                            mHandler.sendEmptyMessageDelayed(LEARN_FINISH,500);*/
 
                             if (tvMsgShow.getVisibility() == View.VISIBLE) {
                                 showView(tvMsgShow, false, smallerLeftBottomAnim);
                             }
                             showView(rlPrincipleInfraredSensorIntro, true, biggerRightTopAnim);
                             ((PrincipleHelper) mHelper).playFile("红外传感.hts");
+                            startRadiologicalWaveAnim();
                             playCount = 2;
                         } else if (playCount == 2) {
                             //finish
                             playIndex = 0;
                             playCount = 0;
                             hasLearnSensor = true;
+                            stopRadiologicalWaveAnim();
                             showView(rlPrincipleInfraredSensorIntro, false, smallerRightTopAnim);
                             ((PrincipleHelper) mHelper).doReadInfraredSensor((byte) 0);
                             mHandler.sendEmptyMessageDelayed(LEARN_FINISH, 500);
@@ -271,22 +260,19 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                         playIndex = 0;
                         playCount = 0;
                         hasLearnSoundbox = true;
+                        stopRadiologicalWaveAnim();
                         showView(rlPrincipleSoundboxIntro, false, smallerRightTopAnim);
                         mHandler.sendEmptyMessageDelayed(LEARN_FINISH, 500);
                     } else if (playIndex == 4) {
                         if (playCount == 0) {
-                            /*if (tvMsgShow.getVisibility() == View.VISIBLE) {
-                                showView(tvMsgShow, false, smallerLeftBottomAnim);
-                            }
-                            showView(rlPrincipleHeadIntro, true, biggerLeftTopAnim);
-                            playCount = 1;
-                            playSound("id_elephant.wav");*/
+
                         } else if (playCount == 1) {
                             if (tvMsgShow.getVisibility() == View.VISIBLE) {
                                 showView(tvMsgShow, false, smallerLeftBottomAnim);
                             }
                             showView(rlPrincipleHeadIntro, true, biggerLeftTopAnim);
                             ((PrincipleHelper) mHelper).playFile("触摸传感.hts");
+                            startRadiologicalWaveAnim();
                             playCount = 2;
                         } else if (playCount == 2) {
                             //finish
@@ -294,6 +280,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                             playCount = 0;
                             hasLearnHead = true;
                             hasLearnHeadIng = false;
+                            stopRadiologicalWaveAnim();
                             showView(rlPrincipleHeadIntro, false, smallerLeftTopAnim);
                             mHandler.sendEmptyMessageDelayed(LEARN_FINISH, 500);
                             ((PrincipleHelper) mHelper).doReadHeadClick((byte) 0);
@@ -304,22 +291,19 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                         playIndex = 0;
                         playCount = 0;
                         hasLearnEye = true;
+                        stopRadiologicalWaveAnim();
                         showView(rlPrincipleEyeIntro, false, smallerLeftTopAnim);
                         mHandler.sendEmptyMessageDelayed(LEARN_FINISH, 500);
                     } else if (playIndex == 6) {
                         if (playCount == 0) {
-                            /*if (tvMsgShow.getVisibility() == View.VISIBLE) {
-                                showView(tvMsgShow, false, smallerLeftBottomAnim);
-                            }
-                            showView(rlPrincipleVoiceIntro, true, biggerLeftBottomAnim);
-                            playCount = 1;
-                            playSound("id_elephant.wav");*/
+
                         } else if (playCount == 1) {
                             if (tvMsgShow.getVisibility() == View.VISIBLE) {
                                 showView(tvMsgShow, false, smallerLeftBottomAnim);
                             }
                             showView(rlPrincipleVoiceIntro, true, biggerLeftBottomAnim);
                             playActionFile("麦克风.hts");
+                            startRadiologicalWaveAnim();
                             playCount = 2;
 
                         } else if (playCount == 2) {
@@ -327,6 +311,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                             playIndex = 0;
                             playCount = 0;
                             hasLearnVoice = true;
+                            stopRadiologicalWaveAnim();
                             showView(rlPrincipleVoiceIntro, false, smallerLeftBottomAnim);
                             mHandler.sendEmptyMessageDelayed(LEARN_FINISH, 500);
                         }
@@ -338,11 +323,13 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                             showView(rlPrincipleVoiceObstacleAvoidanceIntro, true, biggerLeftBottomAnim);
                             playCount = 1;
                             playActionFile("百宝袋.hts");
+                            startRadiologicalWaveAnim();
                         } else if (playCount == 1) {
                             //finish
                             playIndex = 0;
                             playCount = 0;
                             hasLearnObstacle = true;
+                            stopRadiologicalWaveAnim();
                             showView(rlPrincipleVoiceObstacleAvoidanceIntro, false, smallerLeftBottomAnim);
                             mHandler.sendEmptyMessageDelayed(LEARN_FINISH, 500);
                         }
@@ -373,7 +360,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                         if (getLearnCount() < 5) {
                             setViewEnable(tvNext, false, 0.3f);
                         } else {
-                            setViewEnable(tvNext, true, 0.3f);
+                            setViewEnable(tvNext, true, 1f);
                         }
                     }
                     break;
@@ -401,7 +388,11 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                     break;
                 case TAP_HEAD:
                     //拍头退出课程模式
-                    ToastUtils.showShort(getStringResources("ui_setting_principle_tap_head"));
+                    showTapHeadDialog();
+                    break;
+                case BLUETOOTH_DISCONNECT:
+                    ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
+                    MainCourseActivity.finishByMySelf();
                     finish();
                     break;
             }
@@ -440,7 +431,6 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         tvPrincipleEyeIntro.setText(getStringResources("ui_setting_principle_eye_tip"));
         tvPrincipleVoiceIntro.setText(getStringResources("ui_setting_principle_voice_tip"));
         tvPrincipleVoiceObstacleAvoidanceIntro.setText(getStringResources("ui_setting_principle_obstacle_tip"));
-        UbtLog.d(TAG,"initUI--");
 
         ivPrincipleSteeringEngine.setVisibility(View.INVISIBLE);
         ivPrincipleInfraredSensor.setVisibility(View.INVISIBLE);
@@ -469,6 +459,10 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
 
         biggerRightTopAnim = AnimationUtils.loadAnimation(getContext(), R.anim.scan_bigger_anim_right_top);
         smallerRightTopAnim = AnimationUtils.loadAnimation(getContext(), R.anim.scan_smaller_anim_right_top);
+
+        radiologicalWaveAnim = (AnimationDrawable)ivRadiologicalWave.getBackground();
+        radiologicalWaveAnim.setOneShot(false);
+        radiologicalWaveAnim.setVisible(true,true);
 
         UbtLog.d(TAG, "scale = " + scale
                 + "  width = " + this.getResources().getDisplayMetrics().widthPixels
@@ -500,12 +494,12 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         ((PrincipleHelper) mHelper).doInit();
         ((PrincipleHelper) mHelper).doEnterCourse((byte) 1);
         showView(bzvPrincipleSteeringEngine, 100);
-        showView(bzvPrincipleInfraredSensor, 300);
-        showView(bzvPrincipleSoundbox, 500);
-        showView(bzvPrincipleHead, 700);
-        showView(bzvPrincipleEye, 900);
-        showView(bzvPrincipleVoice, 1100);
-        showView(bzvPrincipleVoiceObstacleAvoidance, 1300);
+        showView(bzvPrincipleInfraredSensor, 400);
+        showView(bzvPrincipleSoundbox, 700);
+        showView(bzvPrincipleHead, 1000);
+        showView(bzvPrincipleEye, 1300);
+        showView(bzvPrincipleVoice, 1600);
+        showView(bzvPrincipleVoiceObstacleAvoidance, 1900);
     }
 
     private void showView(View view, int delayTime) {
@@ -539,6 +533,8 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
             if (!hasLearnHeadIng) {
                 mHandler.sendEmptyMessage(TAP_HEAD);
             }
+        }else if(event.getEvent() == PrincipleEvent.Event.DISCONNECTED){
+            mHandler.sendEmptyMessage(BLUETOOTH_DISCONNECT);
         }
     }
 
@@ -547,6 +543,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         playCount = 0;
         hasLearnHeadIng = false;
         setAllEnable(true);
+        stopRadiologicalWaveAnim();
         ((PrincipleHelper) mHelper).doInit();
     }
 
@@ -569,6 +566,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         if ((screenWidth >= 1920 && scale == 2) || (screenHeight >= 1080 && scale == 2)) {
             scale = 3;
         }
+
         if (scale == 3) {
             return R.layout.fragment_robot_feature_3;
         } else if (scale == 4) {
@@ -592,6 +590,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         if (mHandler.hasMessages(SHOW_VIEW)) {
             mHandler.removeMessages(SHOW_VIEW);
         }
+
         if (mHandler.hasMessages(ENABLE_ALL_VIEW)) {
             mHandler.removeMessages(ENABLE_ALL_VIEW);
         }
@@ -647,6 +646,62 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         bzvPrincipleEye.setCallbackListence(this);
         bzvPrincipleVoice.setCallbackListence(this);
         bzvPrincipleVoiceObstacleAvoidance.setCallbackListence(this);
+    }
+
+    private void startRadiologicalWaveAnim(){
+
+        PointF startPoints = null;
+        if(playIndex == 1){
+            startPoints = bzvPrincipleSteeringEngine.getStartPoints();
+        }else if(playIndex == 2){
+            startPoints = bzvPrincipleInfraredSensor.getStartPoints();
+        }else if(playIndex == 3){
+            startPoints = bzvPrincipleSoundbox.getStartPoints();
+        }else if(playIndex == 4){
+            startPoints = bzvPrincipleHead.getStartPoints();
+        }else if(playIndex == 5){
+            startPoints = bzvPrincipleEye.getStartPoints();
+        }else if(playIndex == 6){
+            startPoints = bzvPrincipleVoice.getStartPoints();
+        }else if(playIndex == 7){
+            startPoints = bzvPrincipleVoiceObstacleAvoidance.getStartPoints();
+        }
+        if(startPoints != null){
+            RelativeLayout.LayoutParams startPointShowParams = (RelativeLayout.LayoutParams) ivRadiologicalWave.getLayoutParams();
+            startPointShowParams.leftMargin = (int) startPoints.x - ivRadiologicalWave.getWidth()/2;
+            startPointShowParams.topMargin = (int) startPoints.y - ivRadiologicalWave.getHeight()/2;
+            UbtLog.d(TAG,"startPointShowParams.leftMargin = " + startPointShowParams.leftMargin + "/" + startPointShowParams.topMargin);
+            ivRadiologicalWave.setLayoutParams(startPointShowParams);
+            ivRadiologicalWave.setVisibility(View.VISIBLE);
+            radiologicalWaveAnim.start();
+        }
+    }
+
+    private void stopRadiologicalWaveAnim(){
+        radiologicalWaveAnim.stop();
+        ivRadiologicalWave.setVisibility(View.GONE);
+    }
+
+    private void showTapHeadDialog(){
+        new ConfirmDialog(getContext()).builder()
+                .setMsg(getStringResources("ui_course_principle_exit_tip"))
+                .setCancelable(false)
+                .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((PrincipleHelper) mHelper).doInit();
+                        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                        MainCourseActivity.finishByMySelf();
+                        FeatureActivity.this.finish();
+                        FeatureActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+
+                    }
+                }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }).show();
     }
 
     private void initViewLayout(View view, int scale, int margetTop) {
@@ -822,6 +877,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                 startPlayActionFile(ivPrincipleSteeringEngine, 1, "舵机.hts");
                 showView(rlPrincipleSteeringEngineIntro, true, biggerLeftBottomAnim);
                 setViewEnable(bzvPrincipleSteeringEngine, true, 1);
+                startRadiologicalWaveAnim();
                 ivPrincipleSteeringEngine.bringToFront();
                 break;
             case R.id.iv_principle_infrared_sensor:
@@ -841,6 +897,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                 startPlayActionFile(ivPrincipleSoundbox, 3, "扬声器.hts");
                 showView(rlPrincipleSoundboxIntro, true, biggerRightTopAnim);
                 setViewEnable(bzvPrincipleSoundbox, true, 1);
+                startRadiologicalWaveAnim();
                 ivPrincipleSoundbox.bringToFront();
                 break;
             case R.id.iv_principle_head:
@@ -860,6 +917,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                 startPlayActionFile(ivPrincipleEye, 5, "眼睛LED.hts");
                 showView(rlPrincipleEyeIntro, true, biggerLeftTopAnim);
                 setViewEnable(bzvPrincipleEye, true, 1);
+                startRadiologicalWaveAnim();
                 ivPrincipleEye.bringToFront();
                 break;
             case R.id.iv_principle_voice:
@@ -930,7 +988,6 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         setAllEnable(false);
         setViewEnable(view, true, 1);
         playActionFile(actionFile);
-
     }
 
     private void playActionFile(String acitonFile) {

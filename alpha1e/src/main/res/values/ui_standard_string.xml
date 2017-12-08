@@ -887,6 +887,7 @@
     <string name="ui_common_yes">是</string>
     <string name="ui_password_is_diff">两次密码不一致</string>
     <string name="ui_setting_contact_info_request">请填写邮箱或电话号码</string>
+    <string name="ui_course_principle_exit_tip">课程未完成，是否退出？</string>
 
 
     <!-- 不需要翻译 -->

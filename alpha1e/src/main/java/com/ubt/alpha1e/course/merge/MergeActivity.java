@@ -23,7 +23,9 @@ import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.split.SplitActivity;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -49,8 +51,11 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     private static final int SHOW_DIALOG = 3;
     private static final int HIDE_DIALOG = 4;
     private static final int TAP_HEAD = 5;
+    private static final int SHOW_NEXT_OVER_TIME = 6;
+    private static final int BLUETOOTH_DISCONNECT = 7;
 
     private final int ANIMATOR_TIME = 500;
+    private final int OVER_TIME = 10 * 1000;//超时
 
     @BindView(R.id.tv_next)
     TextView tvNext;
@@ -93,6 +98,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     private boolean hasLostLegRight = true;
 
     private boolean hasLostRobot = false;
+    private boolean hasPlaySoundAudioFinish = false;
     private boolean isGoingNext = false;
 
     private Handler mHandler = new Handler(){
@@ -117,19 +123,26 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                     FeatureActivity.launchActivity(MergeActivity.this,true);
                     break;
                 case SHOW_DIALOG:
-                    hasLostRobot = true;
                     ((PrincipleHelper)mHelper).playSoundAudio("{\"filename\":\"组装.mp3\",\"playcount\":1}");
                     ((PrincipleHelper)mHelper).playFile("蹲下.hts");
-                    ((PrincipleHelper)mHelper).doLostPower();
                     tvMsgShow.setText(getStringResources("ui_principle_on_engine_tips"));
                     showView(tvMsgShow, true, biggerLeftBottomAnim);
                     break;
                 case HIDE_DIALOG:
+                    hasPlaySoundAudioFinish = true;
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
+                    mHandler.sendEmptyMessageDelayed(SHOW_NEXT_OVER_TIME, OVER_TIME);
                     break;
                 case TAP_HEAD:
                     //拍头退出课程模式
-                    ToastUtils.showShort(getStringResources("ui_setting_principle_tap_head"));
+                    showTapHeadDialog();
+                    break;
+                case SHOW_NEXT_OVER_TIME:
+                    setViewEnable(tvNext,true,1f);
+                    break;
+                case BLUETOOTH_DISCONNECT:
+                    ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
+                    MainCourseActivity.finishByMySelf();
                     finish();
                     break;
             }
@@ -147,6 +160,8 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
 
     @Override
     protected void initUI() {
+        setViewEnable(tvNext, false, 0.5f);
+
         scale = (int) this.getResources().getDisplayMetrics().density;
         int screenWidth = SizeUtils.getScreenWidth(this);
         int screenHeight = SizeUtils.getScreenHeight(this);
@@ -248,7 +263,31 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
             UbtLog.d(TAG,"--PLAY_ACTION_FINISH--");
             hasLostRobot = true;
             ((PrincipleHelper)mHelper).doLostPower();
+        }else if(event.getEvent() == PrincipleEvent.Event.DISCONNECTED){
+            mHandler.sendEmptyMessage(BLUETOOTH_DISCONNECT);
         }
+    }
+
+    private void showTapHeadDialog(){
+        new ConfirmDialog(getContext()).builder()
+                .setMsg(getStringResources("ui_course_principle_exit_tip"))
+                .setCancelable(false)
+                .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((PrincipleHelper) mHelper).doInit();
+                        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                        MainCourseActivity.finishByMySelf();
+                        MergeActivity.this.finish();
+                        MergeActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+
+                    }
+                }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }).show();
     }
 
     @Override
@@ -283,6 +322,9 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
 
     @Override
     protected void onDestroy() {
+        if(mHandler.hasMessages(SHOW_NEXT_OVER_TIME)){
+            mHandler.removeMessages(SHOW_NEXT_OVER_TIME);
+        }
         if(mHandler.hasMessages(HIDE_VIEW)){
             mHandler.removeMessages(HIDE_VIEW);
         }
@@ -320,6 +362,23 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     @Override
     public void onBackPressed() {
         SplitActivity.launchActivity(this,true);
+    }
+
+    private boolean hasLearnFinish(){
+        if(!hasLostHandLeft && !hasLostHandRight && !hasLostLegLeft && !hasLostLegRight){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    private void setViewEnable(View mView, boolean enable, float alpha) {
+        mView.setClickable(enable);
+        if (enable) {
+            mView.setAlpha(1f);
+        } else {
+            mView.setAlpha(alpha);
+        }
     }
 
     /**
@@ -427,7 +486,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
         @Override
         public boolean onTouch(View view, MotionEvent event) {
             //UbtLog.d(TAG, "event.getActionMasked() = " + event.getActionMasked());
-            if(!onTouchable(view)){
+            if(!hasPlaySoundAudioFinish || !onTouchable(view)){
                 return false;
             }
 
@@ -523,7 +582,9 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                         }
 
                         doHideView(view);
-
+                        if(hasLearnFinish()){
+                            setViewEnable(tvNext,true,1f);
+                        }
                     }
 
                     UbtLog.d(TAG,"targetX => " + targetX + "     targetY = " + targetY + "  view = " +view.getWidth() + "   = " + view.getHeight());

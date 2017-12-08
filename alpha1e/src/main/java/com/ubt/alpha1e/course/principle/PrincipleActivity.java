@@ -23,7 +23,9 @@ import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.split.SplitActivity;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -50,7 +52,10 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
     private static final int PLAY_ACTION_NEXT = 5;
     private static final int TAP_HEAD = 6;
     private static final int GO_NEXT = 7;
+    private static final int SHOW_NEXT_OVER_TIME = 8;
+    private static final int BLUETOOTH_DISCONNECT = 9;
 
+    private final int OVER_TIME = 35 * 1000;//超时
 
     @BindView(R.id.iv_principle_alpha)
     ImageView ivPrincipleAlpha;
@@ -98,6 +103,7 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
                 case PLAY_ACTION_NEXT:
                     UbtLog.d(TAG,"mCurrentPlayProgress = " + mCurrentPlayProgress);
                     if(mCurrentPlayProgress == 0){
+                        mHandler.sendEmptyMessageDelayed(SHOW_NEXT_OVER_TIME, OVER_TIME);
                         ((PrincipleHelper)mHelper).playFile(playActionFile[0]);
                         rlDialogue1.setVisibility(View.VISIBLE);
                         rlDialogue1.startAnimation(biggerAnimation);
@@ -117,7 +123,12 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
                         startFloatAnimation(rlDialogue3,500);
                     }else {
                         mCurrentPlayProgress = 4;
-                        mHandler.sendEmptyMessage(GO_NEXT);
+                        setViewEnable(tvNext, true, 1f);
+                        doSaveCourseProgress(1,1,1);
+                        if(mHandler.hasMessages(SHOW_NEXT_OVER_TIME)){
+                            mHandler.removeMessages(SHOW_NEXT_OVER_TIME);
+                        }
+                        //mHandler.sendEmptyMessage(GO_NEXT);
                     }
                     break;
                 case GO_NEXT:
@@ -136,15 +147,20 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
                         mCurrentPlayProgress = 4;
                         mHandler.sendEmptyMessageDelayed(GO_NEXT,500);
                     }else {
-                        doSaveCourseProgress(1,1,1);
                         SplitActivity.launchActivity(PrincipleActivity.this,true);
                     }
 
                     break;
                 case TAP_HEAD:
                     //拍头退出课程模式
-                    UbtLog.d(TAG,"TAP_HEAD == " );
-                    ToastUtils.showShort(getStringResources("ui_setting_principle_tap_head"));
+                    showTapHeadDialog();
+                    break;
+                case SHOW_NEXT_OVER_TIME:
+                    setViewEnable(tvNext,true,1f);
+                    break;
+                case BLUETOOTH_DISCONNECT:
+                    ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
+                    MainCourseActivity.finishByMySelf();
                     finish();
                     break;
             }
@@ -169,6 +185,7 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
 
     @Override
     protected void initUI() {
+        setViewEnable(tvNext, false, 0.5f);
 
         scale = (int) this.getResources().getDisplayMetrics().density;
         int screenWidth = SizeUtils.getScreenWidth(this);
@@ -215,6 +232,27 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
         biggerAnimation.setDuration(500);
     }
 
+    private void showTapHeadDialog(){
+        new ConfirmDialog(getContext()).builder()
+                .setMsg(getStringResources("ui_course_principle_exit_tip"))
+                .setCancelable(false)
+                .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((PrincipleHelper) mHelper).doInit();
+                        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                        MainCourseActivity.finishByMySelf();
+                        PrincipleActivity.this.finish();
+                        PrincipleActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                    }
+                }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }).show();
+    }
+
     @Override
     protected void initControlListener() {
 
@@ -247,6 +285,8 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
             mHandler.sendEmptyMessage(PLAY_ACTION_NEXT);
         }else if(event.getEvent() == PrincipleEvent.Event.TAP_HEAD){
             mHandler.sendEmptyMessage(TAP_HEAD);
+        }else if(event.getEvent() == PrincipleEvent.Event.DISCONNECTED){
+            mHandler.sendEmptyMessage(BLUETOOTH_DISCONNECT);
         }
     }
 
@@ -261,6 +301,15 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
 
     @Override
     protected void onDestroy() {
+        if(mHandler.hasMessages(SHOW_NEXT_OVER_TIME)){
+            mHandler.removeMessages(SHOW_NEXT_OVER_TIME);
+        }
+        if(mHandler.hasMessages(START_FLOAT_ANIMATION)){
+            mHandler.removeMessages(START_FLOAT_ANIMATION);
+        }
+        if(mHandler.hasMessages(GO_NEXT)){
+            mHandler.removeMessages(GO_NEXT);
+        }
         mFloatAnimator.stopFloatAnimator();
         super.onDestroy();
     }
@@ -279,7 +328,6 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
                 break;
             case R.id.tv_next:
                 mHandler.sendEmptyMessage(GO_NEXT);
-
                 break;
         }
     }
@@ -291,6 +339,15 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
 
         this.finish();
         this.overridePendingTransition(0, R.anim.activity_close_down_up);
+    }
+
+    private void setViewEnable(View mView, boolean enable, float alpha) {
+        mView.setClickable(enable);
+        if (enable) {
+            mView.setAlpha(1f);
+        } else {
+            mView.setAlpha(alpha);
+        }
     }
 
     /**

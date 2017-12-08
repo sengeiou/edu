@@ -55,7 +55,7 @@ public class BezierView extends View {
     private static final int TEXT_HEIGHT = 60;  // 文本高度
     private static final int RATE = 20; // 移动速率
     private static final int HANDLER_WHAT = 100;
-    private static final int FRAME = 600;  // 1000帧
+    private static final int FRAME = 500;  // 1000帧
     private static final String[] TANGENT_COLORS = {"#7fff00", "#7a67ee", "#ee82ee", "#ffd700", "#1c86ee", "#8b8b00"};  // 切线颜色
     private static final int STATE_READY = 0x0001;
     private static final int STATE_RUNNING = 0x0002;
@@ -635,6 +635,18 @@ public class BezierView extends View {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 获取起点
+     * @return
+     */
+    public PointF getStartPoints(){
+        PointF startPointF = null;
+        if(mControlPoints != null && mControlPoints.size() > 0){
+            startPointF = mControlPoints.get(0);
+        }
+        return startPointF;
     }
 
     /**

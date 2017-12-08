@@ -133,6 +133,13 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
 
+        <ImageView
+            android:id="@+id/iv_radiological_wave"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/radiological_wave_anim"
+            android:visibility="invisible"
+            />
 
         <ImageView
             android:id="@+id/iv_principle_steering_engine"

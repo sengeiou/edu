@@ -49,9 +49,12 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     private List<CourseModel> mCourseModels;
     private MainCoursedapter mMainCoursedapter;
 
+    private static MainCourseActivity mainCourseInstance = null;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mainCourseInstance = this;
         initUI();
         mPresenter.getCourcesData();
     }
@@ -65,6 +68,18 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     public void finish() {
         super.finish();
         this.overridePendingTransition(0, R.anim.activity_close_down_up);
+    }
+
+    @Override
+    protected void onDestroy() {
+        mainCourseInstance = null;
+        super.onDestroy();
+    }
+
+    public static void finishByMySelf(){
+        if(mainCourseInstance != null && !mainCourseInstance.isFinishing()){
+            mainCourseInstance.finish();
+        }
     }
 
     @Override
