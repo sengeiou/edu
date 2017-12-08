@@ -364,6 +364,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         if(resultCode == RESULT_OK){
             UbtLog.d(TAG, "onActivityResult RESULT_OK!");
             if (requestCode == REQUEST_CODE){
+                dealUI();
                 BluetoothandnetconnectstateActivity.this.finish();
             }
         }
@@ -380,7 +381,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 /*Intent backIntent = new Intent();
                 backIntent.putExtra("isConnect", isBulueToothConnected());
                 setResult(101,backIntent);*/
-//                dealUI();
+                dealUI();
                 BluetoothandnetconnectstateActivity.this.finish();
                 break;
             case R.id.ig_get_bluetooth_list:
@@ -466,7 +467,6 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 break;
 
             default:
-
         }
     }
 
@@ -602,7 +602,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
     @Override
     public void onBackPressed() {
-//        dealUI();
+        dealUI();
         super.onBackPressed();
     }
 
@@ -622,7 +622,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                     FeatureActivity.launchActivity(this,false);
                 }
             }
-
         }
+        AlphaApplication.setmNeedOpenActivity(null);
     }
 }

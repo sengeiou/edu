@@ -439,38 +439,28 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     //去连接蓝牙
     void gotoConnectBluetooth(){
-
-//        if(AppManager.getInstance().currentActivity() != null
-//                && (AppManager.getInstance().currentActivity() instanceof PrincipleActivity
-//                || AppManager.getInstance().currentActivity() instanceof SplitActivity
-//                || AppManager.getInstance().currentActivity() instanceof MergeActivity
-//                || AppManager.getInstance().currentActivity() instanceof FeatureActivity)){
-//            AlphaApplication.setmNeedOpenActivity(AppManager.getInstance().currentActivity().getClass().getSimpleName());
-//            AppManager.getInstance().currentActivity().finish();
-//        }
-
         boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
         Intent bluetoothConnectIntent = new Intent();
         if (isfirst) {
             UbtLog.d(TAG, "第一次蓝牙连接");
             SPUtils.getInstance().put("firstBluetoothConnect", false);
-            bluetoothConnectIntent.setClass(this, BluetoothguidestartrobotActivity.class);
+            bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothguidestartrobotActivity.class);
         } else {
             UbtLog.d(TAG, "非第一次蓝牙连接 ");
-            bluetoothConnectIntent.setClass(this, BluetoothandnetconnectstateActivity.class);
-
+            bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothandnetconnectstateActivity.class);
         }
         isBtConnect = isBulueToothConnected();
         startActivityForResult(bluetoothConnectIntent, 100);
 
-        /*if(AppManager.getInstance().currentActivity() != null
+        if(AppManager.getInstance().currentActivity() != null
                 && (AppManager.getInstance().currentActivity() instanceof PrincipleActivity
                 || AppManager.getInstance().currentActivity() instanceof SplitActivity
                 || AppManager.getInstance().currentActivity() instanceof MergeActivity
                 || AppManager.getInstance().currentActivity() instanceof FeatureActivity)){
+            UbtLog.d(TAG, "有需要关闭的课程界面 ");
             AlphaApplication.setmNeedOpenActivity(AppManager.getInstance().currentActivity().getClass().getSimpleName());
             AppManager.getInstance().currentActivity().finish();
-        }*/
+        }
 
         this.overridePendingTransition(R.anim.activity_open_up_down, 0);
     }
@@ -518,6 +508,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             Activity mActivity = AppManager.getInstance().currentActivity();
                             if (!(mActivity instanceof RemoteActivity
                                     || mActivity instanceof RemoteSelActivity
+                                    || mActivity instanceof MainCourseActivity
+                                    || mActivity instanceof PrincipleActivity
+                                    || mActivity instanceof SplitActivity
+                                    || mActivity instanceof MergeActivity
+                                    || mActivity instanceof FeatureActivity
                                     /*|| mActivity instanceof MainCourseActivity
                                     || mActivity instanceof PrincipleActivity
                                     || mActivity instanceof SplitActivity
@@ -535,6 +530,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             }
                             if(dialog != null){
                                 dialog.dismiss();
+                                dialog = null;
                             }
                             if(AppManager.getInstance().currentActivity() instanceof NetconnectActivity || AppManager.getInstance().currentActivity()instanceof NetSearchResultActivity){
                                 AppManager.getInstance().finishActivity();
@@ -554,9 +550,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 2");
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
                 looperThread.send(createMessage(APP_BLUETOOTH_CONNECTED));
-                if(dialog != null){
-                    dialog.dismiss();
-                }
 
             }
         }
