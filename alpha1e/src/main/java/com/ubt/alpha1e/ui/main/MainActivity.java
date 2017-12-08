@@ -249,7 +249,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         registerReceiver(mBroadcastReceiver1, filter1);
         looperThread = new LooperThread(this);
         looperThread.start();
-
         // 启动发送clientId服务
         SendClientIdService.startService(MainActivity.this);
     }
@@ -1143,7 +1142,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
-                       new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_TWENTY_THRESHOLD).builder().show();
+                      // new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_TWENTY_THRESHOLD).builder().show();
                    }
                });
                break;
@@ -1152,7 +1151,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    @Override
                    public void run() {
                        showCartoonAction(cartoon_aciton_squat_reverse);
-                       new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_FIVE_THRESHOLD).builder().show();
+                      // new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_FIVE_THRESHOLD).builder().show();
                    }
                });
                for(int i=0;i<3;i++){

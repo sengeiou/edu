@@ -148,6 +148,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/ui_main_course_center"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="260dp"
         android:textColor="@color/white"
         android:textSize="12sp"
         android:gravity="center_horizontal"
