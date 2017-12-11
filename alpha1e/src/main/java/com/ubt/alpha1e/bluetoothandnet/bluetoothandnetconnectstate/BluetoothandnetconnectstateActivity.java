@@ -13,7 +13,6 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -144,8 +143,10 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
                     if(networkInfo.status){
                         ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_nomal));
+                        ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
                     }else {
                         ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
+                        ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(null);
                     }
                     break;
                 case UPDATE_AUTO_UPGRADE:
@@ -175,6 +176,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                     ed_bluetooth_name.setText("");
                     ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
                     ed_wifi_name.setText("");
+                    ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(null);
                     break;
                 default:
                     break;
@@ -326,6 +328,26 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 ed_wifi_name.requestFocus();
 
                 mHelper.readNetworkStatus();
+            if(BluetoothandnetconnectstateActivity.this != null && ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getmCurrentNetworkInfo() != null){
+
+                NetworkInfo networkInfo = ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getmCurrentNetworkInfo();
+
+                if(ed_wifi_name == null){
+                    return;
+                }
+                ed_wifi_name.setText(networkInfo.name);
+
+                if(networkInfo.status){
+                    ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_nomal));
+                }else {
+                    ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
+                }
+            }else {
+                if(ig_wifi != null)
+                    return;
+                ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
+                ed_wifi_name.setText("");
+            }
         }else {
             if(rl_content_device_list == null){
                 return;
@@ -336,6 +358,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
             ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
             ed_wifi_name.setText("");
+            ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(null);
         }
     }
 
