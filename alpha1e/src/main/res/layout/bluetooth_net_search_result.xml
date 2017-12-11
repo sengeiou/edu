@@ -16,8 +16,7 @@
             android:background="@drawable/action_close"
             android:layout_alignParentRight="true"
             android:layout_marginRight="18dp"
-            android:layout_centerVertical="true"
-            android:visibility="gone"/>
+            android:layout_centerVertical="true"/>
         <ImageButton
             android:id="@+id/ib_help"
             android:layout_width="40dp"
