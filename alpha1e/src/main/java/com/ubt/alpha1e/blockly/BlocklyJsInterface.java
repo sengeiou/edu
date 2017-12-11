@@ -129,7 +129,6 @@ public class BlocklyJsInterface {
     public void stopRobot() {
         UbtLog.d(TAG, "stopRobot");
         ((BlocklyActivity) mBaseActivity).stopPlay();
-        ((BlocklyActivity) mBaseActivity).startOrStopRun((byte)0x02);
     }
 
 

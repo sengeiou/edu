@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.SslErrorHandler;
@@ -79,10 +78,8 @@ import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.RemoteHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
-import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ByteHexHelper;
-import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
@@ -93,11 +90,10 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.Call;
 
 /**
  * @className BlocklyActivity
@@ -295,13 +291,13 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         }
 
         UbtLog.d(TAG, "UserID => " + getCurrentUserID() + "    isFromCourse = " + isFromCourse);
-//        mSyncAlertDialog = new SyncDownloadAlertDialog(BlocklyActivity.this)
-//                .builder()
-//                .setMsg(getStringResources("ui_init_blockly"))
-//                .setImageResoure(R.drawable.data_loading)
-//                .setCancelable(true,20);
-//
-//        requestUpdate();
+        mSyncAlertDialog = new SyncDownloadAlertDialog(BlocklyActivity.this)
+                .builder()
+                .setMsg(getStringResources("ui_init_blockly"))
+                .setImageResoure(R.drawable.data_loading)
+                .setCancelable(true,20);
+
+        requestUpdate();
         init();
     }
 
@@ -624,7 +620,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 isLoadFinish = true;
-                //dismissLoading();
+                dismissLoading();
 //                mWebView.loadUrl("javascript:loadWebViewDisplay()");
                 if(isBulueToothConnected()){
                     UbtLog.d(TAG, "do start infrared!");
@@ -648,6 +644,30 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
         };
         mWebView.setWebViewClient(webViewClient);
+
+   /*     mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
+                UbtLog.d(TAG, "mWebView onJsAlert");
+                return super.onJsAlert(view, url, message, result);
+            }
+            //设置响应js 的Confirm()函数
+            @Override
+            public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
+                UbtLog.d(TAG, "mWebView onJsConfirm");
+                return super.onJsConfirm(view, url, message, result);
+            }
+            //设置响应js 的Prompt()函数
+            @Override
+            public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, final JsPromptResult result) {
+                UbtLog.d(TAG, "mWebView onJsPrompt");
+                result.confirm();
+                return super.onJsPrompt(view, url, message, defaultValue, result);
+            }
+        });*/
+
+
+
 
         mBlocklyJsInterface = new BlocklyJsInterface(BlocklyActivity.this);
         mWebView.addJavascriptInterface(mBlocklyJsInterface, "blocklyObj");
@@ -1095,8 +1115,19 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     }
 
     //跳转到连接蓝牙页面
+    private Date lastTime_doPauseOrContinuePlay = null;
     public void connectBluetooth() {
         UbtLog.d(TAG, "connectBluetooth");
+        Date curDate = new Date(System.currentTimeMillis());
+        float time_difference = 2000;
+        if (lastTime_doPauseOrContinuePlay != null) {
+            time_difference = curDate.getTime()
+                    - lastTime_doPauseOrContinuePlay.getTime();
+        }
+        if (time_difference < 2000) {
+            return;
+        }
+        lastTime_doPauseOrContinuePlay = curDate;
         Intent intent = new Intent();
         intent.putExtra(com.ubt.alpha1e.base.Constant.BLUETOOTH_REQUEST, true);
         intent.setClass(BlocklyActivity.this, BluetoothconnectActivity.class);
@@ -2477,7 +2508,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
         showLoading();
 
-        String updateUrl = HttpAddress.WebBlocklyUpdateAdderss + readBlocklyLocalVersion(BlocklyActivity.this);
+/*        String updateUrl = HttpAddress.WebBlocklyUpdateAdderss + readBlocklyLocalVersion(BlocklyActivity.this);
         UbtLog.d(TAG,"updateUrl = " + updateUrl);
 
 
@@ -2511,7 +2542,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     mHandler.sendEmptyMessage(DO_NO_LAST_VERSION);
                 }
             }
-        });
+        });*/
     }
 
     /**
@@ -2588,4 +2619,14 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     public void noteWeixinNotInstalled() {
         Toast.makeText(this,getStringResources("ui_action_share_no_wechat"),Toast.LENGTH_SHORT).show();
     }
+
+
+    public void saveUserProgram(){
+
+
+
+    }
+
+
+
 }

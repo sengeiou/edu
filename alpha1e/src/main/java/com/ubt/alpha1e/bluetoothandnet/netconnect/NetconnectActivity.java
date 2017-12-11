@@ -477,9 +477,15 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         if(connectStatus == 1){
             //联网中
         }else if(connectStatus == 2){
+//            NetworkInfo networkInfo = new NetworkInfo();
+            com.ubt.alpha1e.data.model.NetworkInfo networkInfo = new com.ubt.alpha1e.data.model.NetworkInfo();
+            networkInfo.status = true;
+            networkInfo.name = event.getConnectWifiName();
+            ((AlphaApplication) NetconnectActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
             mHandler.sendEmptyMessage(NETWORK_CONNECT_SUCCESS);
         }else if(connectStatus == 3){
             mHandler.sendEmptyMessage(NETWORK_CONNECT_FAIL);
+            ((AlphaApplication) NetconnectActivity.this.getApplication()).setmCurrentNetworkInfo(null);
         }
     }
 

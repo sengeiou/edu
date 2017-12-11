@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.czt.mp3recorder.MP3Recorder;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.utils.NameLengthFilter;
@@ -283,13 +284,37 @@ public class DialogDub extends Dialog {
     }
 
 
-    public void saveRecord(String name){
-        boolean success = FileTools.renameFile(mDir + File.separator+"tep_audio_recorder.mp3", mDir + File.separator+name+ ".mp3");
-        if(success){
-            dismiss();
+    public void saveRecord(final String name){
+        if(FileTools.checkFile(mDir + File.separator+name+ ".mp3")){
+            MyAlertDialog.getInstance(
+                    context,
+                    ResourceManager.getInstance(context).getStringResources("ui_resave_tip"),
+                    ResourceManager.getInstance(context).getStringResources("ui_common_cancel"),
+                    ResourceManager.getInstance(context).getStringResources("ui_common_confirm"), new IMessageListeter() {
+
+                        @Override
+                        public void onViewAction(boolean isOk) {
+                            if (isOk) {
+                                boolean success = FileTools.renameFile(mDir + File.separator+"tep_audio_recorder.mp3", mDir + File.separator+name+ ".mp3");
+                                if(success){
+                                    dismiss();
+                                }else{
+                                    Toast.makeText(context, context.getString(R.string.ui_create_record_save_failed), Toast.LENGTH_SHORT);
+                                }
+                            } else {
+                            }
+                        }
+                    }).show();
+            return;
         }else{
-            Toast.makeText(context, context.getString(R.string.ui_create_record_save_failed), Toast.LENGTH_SHORT);
+            boolean success = FileTools.renameFile(mDir + File.separator+"tep_audio_recorder.mp3", mDir + File.separator+name+ ".mp3");
+            if(success){
+                dismiss();
+            }else{
+                Toast.makeText(context, context.getString(R.string.ui_create_record_save_failed), Toast.LENGTH_SHORT);
+            }
         }
+
     }
 
     public void deleteMP3RecordFile(String name) {
