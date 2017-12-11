@@ -154,6 +154,17 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         UbtLog.d("getCourseProgress", "e===" + e.getMessage());
+                        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+                        //本地没有记录，说明之前没用过，则根据后台返回保存本地记录
+                        if (null == record) {
+                            LocalActionRecord record1 = new LocalActionRecord();
+                            record1.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
+                            record1.setCourseLevel(1);
+                            record1.setPeriodLevel(0);
+                            record1.setUpload(true);
+                            UbtLog.d("getCourseProgress", "record1===" + record1.toString());
+                            record1.save();
+                        }
                         if (isAttachView()) {
                             mView.getLastProgressResult(false);
                         }

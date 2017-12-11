@@ -89,11 +89,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public ImageView ivRobot;
     public ImageView ivHandLeft, ivHandRight, ivLegLeft, ivLegRight;
     public RecyclerView recyclerViewFrames;
-    private List<Map<String, Object>> list_frames;
+    public List<Map<String, Object>> list_frames;
 
     private List<Map<String, Object>> list_autoFrames = new ArrayList<Map<String, Object>>();
 
-    private FrameRecycleViewAdapter adapter;
+    public FrameRecycleViewAdapter adapter;
     private LinearLayoutManager layoutManager;
     private LinearLayoutManager layoutManagerTime;
 
