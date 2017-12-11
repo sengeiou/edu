@@ -119,6 +119,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
 
     public static final int REQUEST_CODE = 500;
+    public static final int REQUEST_CODE_ENTER_NETSEARCHRESULT = 501;
 
     private List<Map<String, Object>> lst_robots_result_datas;
 
@@ -389,9 +390,10 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
             if (requestCode == REQUEST_CODE){
                 dealUI();
                 BluetoothandnetconnectstateActivity.this.finish();
+            }else if(requestCode == REQUEST_CODE_ENTER_NETSEARCHRESULT){
+                BluetoothandnetconnectstateActivity.this.finish();
             }
         }
-
     }
 
     @Override
@@ -469,7 +471,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                     i.putExtra("wifiName",ed_wifi_name.getText().toString());
                     UbtLog.d(TAG,"ed_wifi_name===="+ed_wifi_name.getText().toString());
                     i.setClass(BluetoothandnetconnectstateActivity.this,NetSearchResultActivity.class);
-                    this.startActivity(i);
+                    this.startActivityForResult(i,REQUEST_CODE_ENTER_NETSEARCHRESULT);
 
                 }else {
                     UbtLog.d(TAG,"请先连接蓝牙");
