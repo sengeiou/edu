@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.adapter.WifiInfoAdapter_list;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.helper.WifiHelper;
@@ -170,6 +171,7 @@ public class NetSearchResultActivity extends MVPBaseActivity<NetSearchResultCont
                 NetSearchResultActivity.this.finish();
                 break;
             case R.id.ib_close:
+                NetSearchResultActivity.this.setResult(RESULT_OK);
                 NetSearchResultActivity.this.finish();
                 break;
             case R.id.ib_return:

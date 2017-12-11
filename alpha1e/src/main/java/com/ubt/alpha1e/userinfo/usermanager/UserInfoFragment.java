@@ -39,7 +39,6 @@ import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditContract;
 import com.ubt.alpha1e.userinfo.useredit.UserEditPresenter;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
-import com.ubt.alpha1e.userinfo.util.TVUtils;
 import com.ubt.alpha1e.utils.NameLengthFilter;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -475,14 +474,14 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void keyBoardOpen(boolean statu) {
-        String editText = mTvUserName.getText().toString();
+        String editText = mTvUserName.getText().toString().trim();
         Log.d("string==", "editText==" + editText);
         if (!statu && !TextUtils.isEmpty(editText)) {
-            if (TVUtils.isCorrectStr(editText)) {
+//            if (TVUtils.isCorrectStr(editText)) {
                 if (!mUserModel.getNickName().equals(editText)) {
                     updateUserInfo(Constant.KEY_NICK_NAME, editText);
                 }
-            }
+//            }
         }
     }
 
@@ -523,7 +522,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void errorEditTextStr() {
-        ToastUtils.showShort("仅限汉字、字母及数字");
+//        ToastUtils.showShort("仅限汉字、字母及数字");
     }
 
     @Override

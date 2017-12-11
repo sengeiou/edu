@@ -58,6 +58,8 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 	private boolean isManualDisConnect = false;
 	private boolean isUgradeing = false;
 
+	private long lastScanTime = System.currentTimeMillis();
+
 	private Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
@@ -73,6 +75,17 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 				case OPEN_AUTO_CONNECT:
 				case BLUETOOTH_TURN_ON:
 				case APP_OUT_BACKGROUND:
+					if(instance.isManualConnectMode){
+						return;
+					}
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					if(instance.isManualConnectMode){
+						return;
+					}
 					UbtLog.d(TAG,"doScan = " + msg.what);
 					if (((AlphaApplication) mContext.getApplicationContext())
 							.getCurrentBluetooth() != null) {
