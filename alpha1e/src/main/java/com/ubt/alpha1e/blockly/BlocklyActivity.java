@@ -2619,4 +2619,14 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     public void noteWeixinNotInstalled() {
         Toast.makeText(this,getStringResources("ui_action_share_no_wechat"),Toast.LENGTH_SHORT).show();
     }
+
+
+    public void saveUserProgram(){
+
+
+
+    }
+
+
+
 }
