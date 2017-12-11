@@ -39,7 +39,6 @@ import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.userinfo.model.UserAllModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
-import com.ubt.alpha1e.userinfo.util.TVUtils;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.NameLengthFilter;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -200,12 +199,12 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                 break;
             case R.id.iv_complete_info:
 
-                if(!mTvUserName.getText().toString().equals(mUserModel.getNickName())){
-                    if(!TVUtils.isCorrectStr(mTvUserName.getText().toString())) {
-                        ToastUtils.showShort("仅限汉字、字母及数字");
-                        return;
-                    }
-                }
+//                if(!mTvUserName.getText().toString().equals(mUserModel.getNickName())){
+//                    if(!TVUtils.isCorrectStr(mTvUserName.getText().toString())) {
+//                        ToastUtils.showShort("仅限汉字、字母及数字");
+//                        return;
+//                    }
+//                }
 
                 LoadingDialog.show(UserEditActivity.this);
                 UpdateUserInfoRequest request = new UpdateUserInfoRequest();
@@ -425,7 +424,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     @Override
     public void errorEditTextStr() {
         if(!mTvUserName.getText().toString().equals(mUserModel.getNickName())){
-            ToastUtils.showShort("仅限汉字、字母及数字");
+//            ToastUtils.showShort("仅限汉字、字母及数字");
         }
 
     }

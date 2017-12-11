@@ -137,6 +137,7 @@
                         android:textColor="@color/tv_user_edit_color"
                         android:inputType="phone|number"
                         android:digits="1234567890"
+                        android:maxLength="11"
                         android:textSize="15sp"
                         android:gravity="center"
                         />

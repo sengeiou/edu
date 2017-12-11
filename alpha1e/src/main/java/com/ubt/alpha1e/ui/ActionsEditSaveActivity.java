@@ -23,6 +23,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.FileUtils;
+import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ImageTools;
@@ -38,6 +40,7 @@ import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -529,22 +532,47 @@ public class ActionsEditSaveActivity extends BaseActivity implements
             @Override
             public void onClick(View arg0) {
 
-                Intent cameraIntent = new Intent(
-                        android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                File path = new File(FileTools.image_cache);
-                if (!path.exists()) {
-                    path.mkdirs();
-                }
-                mImageUri = Uri.fromFile(new File(path, new Date().getTime()
-                        + ""));
+                PermissionUtils.getInstance(ActionsEditSaveActivity.this)
+                        .request(new PermissionUtils.PermissionLocationCallback() {
+                            @Override
+                            public void onSuccessful() {
+                                //  ToastUtils.showShort("申请拍照权限成功");
+                                Intent cameraIntent = new Intent(
+                                        android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                                File path = new File(FileTools.image_cache);
+                                if (!path.exists()) {
+                                    path.mkdirs();
+                                }
+                                mImageUri = Uri.fromFile(new File(path, new Date().getTime()
+                                        + ""));
 
-                cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                        mImageUri);
-                cameraIntent.putExtra("return-data", true);
-                startActivityForResult(cameraIntent,
-                        ActionsEditHelper.GetUserHeadRequestCodeByShoot);
+                                cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                                        mImageUri);
+                                cameraIntent.putExtra("return-data", true);
+                                startActivityForResult(cameraIntent,
+                                        ActionsEditHelper.GetUserHeadRequestCodeByShoot);
 
-                lay_head_sel.setVisibility(View.GONE);
+                                lay_head_sel.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                //ToastUtils.showShort("申请拍照权限失败");
+                            }
+
+                            @Override
+                            public void onRationSetting() {
+                                // ToastUtils.showShort("申请拍照权限已经被拒绝过");
+                            }
+
+                            @Override
+                            public void onCancelRationSetting() {
+                            }
+
+
+                        }, PermissionUtils.PermissionEnum.CAMERA,ActionsEditSaveActivity.this);
+
+
             }
         });
 
@@ -608,7 +636,8 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                                     if (isSuccess) {
                                         mCurrentActionImg = ImageTools
                                                 .ImageCrop(bitmap);
-                                        setBg();
+//                                        setBg();
+                                        setImage(mImageUri);
                                     }
                                 }
 
@@ -620,6 +649,22 @@ public class ActionsEditSaveActivity extends BaseActivity implements
 
             }
         }
+    }
+
+    private void setImage(final Uri uri){
+        mHandler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    Bitmap bitmap = FileUtils.getBitmapFormUri(ActionsEditSaveActivity.this, uri);
+                    img_action_logo.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 
     private void setBg() {

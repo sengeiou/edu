@@ -1018,4 +1018,7 @@
     <string name="ui_setting_principle_learn_next">下一课程 动作编程</string>
     <string name="ui_setting_principle_tap_head">拍头退出课程</string>
 
+
+    <string name="ui_resave_tip">当前名称文件已存在，确定覆盖当前文件吗?</string>
+
 </resources>
