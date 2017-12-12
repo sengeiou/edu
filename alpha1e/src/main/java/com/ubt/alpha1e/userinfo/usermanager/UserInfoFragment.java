@@ -168,11 +168,14 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
 
     private void initData() {
         mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
-        UbtLog.d("Usercenter", "usermode===" + mUserModel.toString());
+        UbtLog.d(TAG, "usermode===" + mUserModel.toString());
         InputFilter[] filters = {new NameLengthFilter(20)};
         mTvUserName.setFilters(filters);
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
-        mTvUserName.setText(mUserModel.getNickName());
+        String name = FileUtils.utf8ToString(mUserModel.getNickName());
+        UbtLog.d(TAG, "name===" + name);
+        mTvUserName.setText(name);
+
         mTvUserAge.setText(mUserModel.getAge());
         mTvUserGrade.setText(mUserModel.getGrade());
         if (!TextUtils.isEmpty(mUserModel.getSex())) {
@@ -380,9 +383,9 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     }
 
     @Override
-    public void updateUserModelFailed() {
+    public void updateUserModelFailed(String str) {
         LoadingDialog.dismiss(getActivity());
-        ToastUtils.showShort("update failed");
+        ToastUtils.showShort(str);
     }
 
     @Override
@@ -478,9 +481,10 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         Log.d("string==", "editText==" + editText);
         if (!statu && !TextUtils.isEmpty(editText)) {
 //            if (TVUtils.isCorrectStr(editText)) {
-                if (!mUserModel.getNickName().equals(editText)) {
-                    updateUserInfo(Constant.KEY_NICK_NAME, editText);
-                }
+            if (!mUserModel.getNickName().equals(editText)) {
+                String unicode = FileUtils.stringToUtf8(editText);
+                updateUserInfo(Constant.KEY_NICK_NAME, unicode);
+            }
 //            }
         }
     }

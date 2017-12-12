@@ -201,7 +201,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        mView.updateUserModelFailed();
+                        mView.updateUserModelFailed("用户名更新失败");
                     }
 
                     @Override
@@ -225,6 +225,12 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                             if (isAttachView()) {
                                 mView.updateUserModelSuccess(baseResponseModel.models);
                             }
+                        } else {
+                            if(baseResponseModel.info.equals("11300")){
+                                mView.updateUserModelFailed("不能输入非法字符");
+                            }else{
+                                mView.updateUserModelFailed("更新失败");
+                            }
                         }
                     }
                 });
@@ -246,7 +252,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                     public void onError(Call call, Exception e, int id) {
                         UbtLog.d("userEditHead", "e===" + e.getMessage());
                         if (isAttachView()) {
-                            mView.updateUserModelFailed();
+                            mView.updateUserModelFailed("更新失败");
                         }
                     }
 
@@ -285,7 +291,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d("getLoopData", "onError:" + e.getMessage());
-                if(mView != null){
+                if (mView != null) {
                     mView.updateLoopData(null);
                 }
 
