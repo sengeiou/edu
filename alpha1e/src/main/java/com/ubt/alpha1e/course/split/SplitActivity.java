@@ -463,6 +463,8 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
 
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
+                    view.bringToFront();
+
                     lastX = event.getRawX();
                     lastY = event.getRawY();
 
@@ -606,6 +608,7 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
 
                     lastX = event.getRawX();
                     lastY = event.getRawY();
+
                 }
                 return false;
             }

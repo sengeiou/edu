@@ -142,6 +142,7 @@ public class FeedbackSearchFragment extends MVPBaseFragment<FeedbackSearchContra
     }
 
     public void refreshSearchResult(String editStr) {
+        mAdapter.setSearchName(editStr);
         mPresenter.doSearchResult(mAllFeedbackInfoDatas, editStr);
     }
 

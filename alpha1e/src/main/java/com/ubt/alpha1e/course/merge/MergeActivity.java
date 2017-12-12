@@ -322,6 +322,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
 
     @Override
     protected void onDestroy() {
+
         if(mHandler.hasMessages(SHOW_NEXT_OVER_TIME)){
             mHandler.removeMessages(SHOW_NEXT_OVER_TIME);
         }
