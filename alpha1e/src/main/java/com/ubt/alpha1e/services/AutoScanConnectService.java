@@ -79,7 +79,7 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 						return;
 					}
 					try {
-						Thread.sleep(5000);
+						Thread.sleep(1);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

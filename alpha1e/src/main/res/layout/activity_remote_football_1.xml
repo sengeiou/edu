@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/rl_title"
         android:layout_marginTop="-12dp"
+        android:splitMotionEvents="false"
         android:background="@drawable/bg_remote_contraler">
 
         <RelativeLayout
@@ -17,6 +18,7 @@
             android:layout_width="190dp"
             android:layout_height="190dp"
             android:layout_marginLeft="50dp"
+            android:splitMotionEvents="false"
             android:layout_marginTop="25dp">
 
             <ImageButton
@@ -65,6 +67,7 @@
             android:layout_height="70dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="20dp"
+            android:splitMotionEvents="false"
             android:layout_marginLeft="50dp">
 
             <ImageButton
@@ -90,6 +93,7 @@
             android:layout_marginBottom="35dp"
             android:layout_marginTop="45dp"
             android:layout_marginRight="70dp"
+            android:splitMotionEvents="false"
             >
 
             <ImageButton
