@@ -2,6 +2,8 @@ package com.ubt.alpha1e.blockly;
 
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 
+import java.util.List;
+
 /**
  * @author admin
  * @className
@@ -13,30 +15,20 @@ import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 
 public class BlocklyProjectRequest extends BaseRequest {
 
-    private String programName;
-    private String programData;
+    private List<BlocklySaveMode> programParams;
 
-    public String getProgramName() {
-        return programName;
+    public List<BlocklySaveMode> getList() {
+        return programParams;
     }
 
-    public void setProgramName(String programName) {
-        this.programName = programName;
-    }
-
-    public String getProgramData() {
-        return programData;
-    }
-
-    public void setProgramData(String programData) {
-        this.programData = programData;
+    public void setList(List<BlocklySaveMode> programParams) {
+        this.programParams = programParams;
     }
 
     @Override
     public String toString() {
         return "BlocklyProjectRequest{" +
-                "programName='" + programName + '\'' +
-                ", programData='" + programData + '\'' +
+                "programParams=" + programParams +
                 '}';
     }
 }

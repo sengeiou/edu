@@ -779,6 +779,8 @@ public class BlocklyJsInterface {
 
             projectMode.saveOrUpdate("name = ?", name);
 
+            ((BlocklyActivity) mBaseActivity).saveUserProgram(name, xml);
+
 
         } catch (JSONException e) {
             e.printStackTrace();

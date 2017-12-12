@@ -16,7 +16,6 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.courselayout.CourseLevelLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
@@ -386,6 +385,11 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
         finish();
         //关闭窗体动画显示
         this.overridePendingTransition(0, R.anim.activity_close_down_up);
+    }
+
+    @Override
+    public void tapHead() {
+
     }
 
     @Override

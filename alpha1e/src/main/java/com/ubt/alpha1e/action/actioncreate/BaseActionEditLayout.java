@@ -89,11 +89,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public ImageView ivRobot;
     public ImageView ivHandLeft, ivHandRight, ivLegLeft, ivLegRight;
     public RecyclerView recyclerViewFrames;
-    private List<Map<String, Object>> list_frames;
+    public List<Map<String, Object>> list_frames;
 
     private List<Map<String, Object>> list_autoFrames = new ArrayList<Map<String, Object>>();
 
-    private FrameRecycleViewAdapter adapter;
+    public FrameRecycleViewAdapter adapter;
     private LinearLayoutManager layoutManager;
     private LinearLayoutManager layoutManagerTime;
 
@@ -255,6 +255,12 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public void init(Context context) {
         View.inflate(context, getLayoutId(), this);
         initUI();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               doReset();
+            }
+        }, 1000);
     }
 
     public void setUp(BaseHelper baseHelper) {
@@ -763,6 +769,12 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     public void onViewAction(boolean isOk) {
                         if (isOk) {
 //                            saveNewAction();
+                            if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
+                                ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,
+                                        getEditingPreviewActions());
+
+
+                            }
                             doReset();
                             if (mediaPlayer != null) {
                                 mediaPlayer.stop();
@@ -1857,8 +1869,9 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         ids.add(5);
         ids.add(6);
         updateAddViewEnable();
+        ((ActionsEditHelper) mHelper).doLostRightHandAndRead();
         if (!lostRightLeg && !lostLeftLeg && !lostLeftHand) {
-            ((ActionsEditHelper) mHelper).doLostRightHandAndRead();
+
             showLostDialog(0, ResourceManager.getInstance(mContext).getStringResources("ui_create_click_robot"));
         }
     }

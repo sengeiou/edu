@@ -2628,9 +2628,16 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
     public void saveUserProgram(String programName, String programData){
 
+        BlocklySaveMode saveMode = new BlocklySaveMode();
+        saveMode.setProgramName(programName);
+        saveMode.setProgramData(programData);
+        List<BlocklySaveMode> list = new ArrayList<BlocklySaveMode>();
+        list.add(saveMode);
+
+
         BlocklyProjectRequest request = new BlocklyProjectRequest();
-        request.setProgramName(programName);
-        request.setProgramData(programData);
+        request.setList(list);
+
 
         OkHttpClientUtils.getJsonByPostRequest(HttpEntity.SAVE_USER_PROGRAM, request, 0).execute(new StringCallback() {
             @Override
