@@ -282,6 +282,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                     isNeedNoteLowPowerTwenty=true;
                     isNeedNoteLowPowerFive=true;
                 }
+
             } catch (Exception e) {
                 UbtLog.e(TAG, "Exception:" + e.getMessage());
             }
