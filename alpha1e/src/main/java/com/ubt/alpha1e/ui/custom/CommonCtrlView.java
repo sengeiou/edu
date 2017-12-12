@@ -430,6 +430,11 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                     //静音先解静音
                     mHelper.doTurnVol();
                     onNoteVolState(mHelper.mCurrentVoiceState);
+                }else {
+                    if(arg0.getProgress()==0) {
+                        mHelper.doTurnVol();
+                        onNoteVolState(mHelper.mCurrentVoiceState);
+                    }
                 }
                 //修改为，移动停之后，再发送改变音量
                 mHelper.doChangeVol(arg0.getProgress());
@@ -694,7 +699,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     @Override
     public void notePlayStart(List<String> mSourceActionNameList, ActionInfo action, ActionPlayer.Play_type mCurrentPlayType) {
         UbtLog.d(TAG, "--wmma--notePlayStart callback!");
-        //btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
+        //btn_stop_m.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
+        btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
         gifImageView.setVisibility(View.VISIBLE);
         if (action != null) {
             String name = action.actionName;
@@ -710,6 +716,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     @Override
     public void notePlayPause(List<String> mSourceActionNameList, ActionPlayer.Play_type mCurrentPlayType) {
         UbtLog.d(TAG, "--wmma--notePlayPause callback!");
+       // btn_stop_m.setImageDrawable(mBaseActivity.getDrawableRes("cc_play"));
+        btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
         if (mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_download || mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_new) {
             mHelper.doPauseMp3ForMyDownload();
         }
@@ -728,7 +736,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         if (mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_download ||mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_new) {
             mHelper.doPauseMp3ForMyDownload();
         }
-        btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
+        btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
         gifImageView.setVisibility(View.VISIBLE);
     }
 

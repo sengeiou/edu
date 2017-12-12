@@ -60,7 +60,6 @@ import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
-import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.UserModel;
@@ -275,7 +274,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }else {
             MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
             if(cartoonAction != null) {
-               looperThread.send(createMessage(ROBOT_default_gesture));
+                if( APP_CURRENT_STATUS==ROBOT_SLEEP_EVENT){
+                     looperThread.send(createMessage(ROBOT_SLEEP_EVENT)) ;
+                }else {
+                    looperThread.send(createMessage(ROBOT_default_gesture));
+                }
                 if(MainActivity.this != null && ((AlphaApplication) MainActivity.this.getApplication()).getmCurrentNetworkInfo() != null){
                     NetworkInfo networkInfo = ((AlphaApplication) MainActivity.this.getApplication()).getmCurrentNetworkInfo();
                     if(networkInfo.status){
@@ -779,11 +782,18 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                 try {
                                     // boolean isUiThread = Looper.getMainLooper().getThread() == Thread.currentThread();
                                     //UbtLog.d(TAG,"current random show ? "+APP_CURRENT_STATUS);
-                                   if(APP_CURRENT_STATUS!=APP_LAUNCH_STATUS) {
+                                   if(APP_CURRENT_STATUS!=APP_LAUNCH_STATUS&&APP_CURRENT_STATUS!=APP_BLUETOOTH_CLOSE) {
                                        runOnUiThread(new Runnable() {
                                            @Override
                                            public void run() {
                                                randomBuddleText();
+                                           }
+                                       });
+                                   }else {
+                                       runOnUiThread(new Runnable() {
+                                           @Override
+                                           public void run() {
+                                               showBuddleText(getString(R.string.buddle_text_init_status));
                                            }
                                        });
                                    }
@@ -933,7 +943,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(MessageEvent event) {
-//        UbtLog.d(TAG, "RECEIVE THE MESSAGE IN MAIN THREAD" + event.message);
+//       UbtLog.d(TAG, "RECEIVE THE MESSAGE IN MAIN THREAD" + event.message);
         //mPresenter.dealMessage(event.message);
         try {
             JSONObject mMessage = new JSONObject(event.message);
@@ -947,7 +957,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             if(mCmd<0){
                 mCmd=255+mCmd;
             }
-          //  UbtLog.d(TAG,"CMD IS  "+mCmd);
+           //UbtLog.d(TAG,"CMD IS  "+mCmd);
           if(mCmd==ConstValue.DV_TAP_HEAD) {
               //looperThread.send(createMessage(ROBOT_HIT_HEAD));
           }else if(mCmd==ConstValue.DV_6D_GESTURE){
@@ -1099,7 +1109,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
              runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
-                       showBuddleText("开机来叫醒沉睡的alpha吧");
+                       showBuddleText(getString(R.string.buddle_text_init_status));
+                       buddleTextAsynchronousTask();
                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
                        hiddenCartoonTouchView();
                        recoveryBatteryUi();
@@ -1117,8 +1128,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                            hiddenDisconnectIcon();
                        }
                        showCartoonAction(cartoon_action_squat);
-                       showBuddleText("嗨，我是阿尔法");
-                       buddleTextAsynchronousTask();
+                       showBuddleText(getString(R.string.buddle_bluetoothConnection));
                        showBattryUi();
                    }
                });
@@ -1130,7 +1140,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        showDisconnectIcon();
                        stopchargeAsynchronousTask();
                        stopBuddleTextAsynchronousTask();
-                       showBuddleText("开机来叫醒沉睡的alpha吧");
+                        showBuddleText(getString(R.string.buddle_text_init_status));
                        //showCartoonAction(cartoon_action_sleep);
                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
                        recoveryBatteryUi();
