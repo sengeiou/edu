@@ -258,8 +258,8 @@ public class PrincipleHelper extends BaseHelper {
     @Override
     public void onDeviceDisConnected(String mac) {
         UbtLog.d(TAG,"--onDeviceDisConnected--" + mac );
-        PrincipleEvent event = new PrincipleEvent(PrincipleEvent.Event.DISCONNECTED);
-        EventBus.getDefault().post(event);
+        /*PrincipleEvent event = new PrincipleEvent(PrincipleEvent.Event.DISCONNECTED);
+        EventBus.getDefault().post(event);*/
         super.onDeviceDisConnected(mac);
     }
 

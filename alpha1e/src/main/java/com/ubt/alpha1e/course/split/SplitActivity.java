@@ -54,6 +54,7 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
     private static final int TAP_HEAD = 5;
     private static final int SHOW_NEXT_OVER_TIME = 6;
     private static final int BLUETOOTH_DISCONNECT = 7;
+    private static final int ANIMATOR_FINISH = 8;
 
     private final int ANIMATOR_TIME = 500;
     private final int OVER_TIME = 10 * 1000;//超时
@@ -142,6 +143,9 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                     ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
                     MainCourseActivity.finishByMySelf();
                     finish();
+                    break;
+                case ANIMATOR_FINISH:
+                    setClickable(null,false);
                     break;
             }
         }
@@ -345,6 +349,9 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
 
     @Override
     protected void onDestroy() {
+        if(mHandler.hasMessages(ANIMATOR_FINISH)){
+            mHandler.removeMessages(ANIMATOR_FINISH);
+        }
         if(mHandler.hasMessages(SHOW_NEXT_OVER_TIME)){
             mHandler.removeMessages(SHOW_NEXT_OVER_TIME);
         }
@@ -446,6 +453,28 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
         animatorSet.start();
     }
 
+    private void setClickable(View view,boolean keyDown){
+        if(keyDown){
+            if(view.getId() != R.id.iv_hand_left){
+                ivHandLeft.setEnabled(false);
+            }
+            if(view.getId() != R.id.iv_hand_right){
+                ivHandRight.setEnabled(false);
+            }
+            if(view.getId() != R.id.iv_leg_left){
+                ivLegLeft.setEnabled(false);
+            }
+            if(view.getId() != R.id.iv_leg_right){
+                ivLegRight.setEnabled(false);
+            }
+        }else {
+            ivHandLeft.setEnabled(true);
+            ivHandRight.setEnabled(true);
+            ivLegLeft.setEnabled(true);
+            ivLegRight.setEnabled(true);
+        }
+    }
+
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
 
         private float lastX, lastY;
@@ -463,6 +492,9 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
 
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
+                    setClickable(view,true);
+                    view.bringToFront();
+
                     lastX = event.getRawX();
                     lastY = event.getRawY();
 
@@ -606,6 +638,8 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
 
                     lastX = event.getRawX();
                     lastY = event.getRawY();
+
+                    mHandler.sendEmptyMessageDelayed(ANIMATOR_FINISH,ANIMATOR_TIME);
                 }
                 return false;
             }
