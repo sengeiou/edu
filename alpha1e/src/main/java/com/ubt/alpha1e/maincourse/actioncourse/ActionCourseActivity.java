@@ -60,10 +60,11 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
     private ActionCoursedapter mMainCoursedapter;
 
     private static final int REQUESTCODE = 10000;
-
+    private static ActionCourseActivity mainCourseInstance = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mainCourseInstance = this;
         initUI();
         mPresenter.getActionCourseData(this);
         LoadingDialog.show(this);
@@ -95,7 +96,17 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         mRecyleviewContent.setAdapter(mMainCoursedapter);
 
     }
+    @Override
+    protected void onDestroy() {
+        mainCourseInstance = null;
+        super.onDestroy();
+    }
 
+    public static void finishByMySelf(){
+        if(mainCourseInstance != null && !mainCourseInstance.isFinishing()){
+            mainCourseInstance.finish();
+        }
+    }
     @Override
     protected void initControlListener() {
 
@@ -118,11 +129,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         UbtLog.d(TAG, "------------------onPause-----------------");
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        UbtLog.d(TAG, "------------------onDestroy-----------------");
-    }
+
 
     /**
      * 获取关卡列表
@@ -174,22 +181,27 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 int course = record.getCourseLevel();
                 for (int i = 0; i < course; i++) {
                     mActionCourseModels.get(i).setActionLockType(1);
-                    mActionCourseModels.get(i).setActionCourcesScore(1);
+                    //mActionCourseModels.get(i).setActionCourcesScore(1);
                 }
             }
         }
 
         LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
         if (null != record) {
+            UbtLog.d(TAG, "getCourseScores==" + "course==" + record.getCourseLevel() + "   leavel==" + record.getPeriodLevel());
             int course = record.getCourseLevel();
             int level = record.getPeriodLevel();
             if (course == 1) {
                 if (level == 3) {
                     mActionCourseModels.get(1).setActionLockType(1);
+                    mActionCourseModels.get(0).setActionCourcesScore(1);
                 }
             } else if (course == 2) {
                 mActionCourseModels.get(1).setActionLockType(1);
-
+                mActionCourseModels.get(0).setActionCourcesScore(1);
+                if (level == 3) {
+                    mActionCourseModels.get(1).setActionCourcesScore(1);
+                }
             }
             if (!record.isUpload()) {
                 mPresenter.saveLastProgress(String.valueOf(record.getCourseLevel()), String.valueOf(record.getPeriodLevel()));
@@ -302,7 +314,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_retry) {//点击确定以后刷新列表并解锁下一关
                             mActionCourseModels.get(course).setActionLockType(1);
-                            mActionCourseModels.get(course).setActionCourcesScore(1);
+                            mActionCourseModels.get(course - 1).setActionCourcesScore(1);
                             mMainCoursedapter.notifyDataSetChanged();
                             dialog.dismiss();
                         }

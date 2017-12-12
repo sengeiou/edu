@@ -16,12 +16,13 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
+import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.courselayout.CourseOneLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IEditActionUI;
@@ -70,7 +71,8 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
         mHelper.RegisterHelper();
         ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
-        sendStartStudy(true);
+
+        ((ActionsEditHelper) mHelper).doEnterCourse((byte) 1);
     }
 
     Handler mHandler = new Handler() {
@@ -83,6 +85,10 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
                 mPresenter.getCourseOneData(CourseOneActivity.this);
             } else if (msg.what == 1112) {
                 mActionEdit.playComplete();
+            } else if (msg.what == 1113) {
+                if (!isFinishing()) {
+                    showTapHeadDialog();
+                }
             }
         }
     };
@@ -170,6 +176,12 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
         }
     }
 
+    /**
+     * 离开课程
+     *
+     * @param isEnter
+     */
+
     public void sendStartStudy(boolean isEnter) {
         //Enter the course enter
         byte[] papram = new byte[1];
@@ -235,7 +247,7 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
         super.onPause();
         UbtLog.d(TAG, "------------onPause___________");
         mActionEdit.onPause();
-        sendStartStudy(false);
+        ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
         isFocus = false;
         isAllIntroduc = false;
     }
@@ -355,9 +367,37 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
 
     @Override
     public void onDisconnect() {
+        ActionCourseActivity.finishByMySelf();
         finish();
-        //关闭窗体动画显示
-        this.overridePendingTransition(0, R.anim.activity_close_down_up);
+    }
+
+    /**
+     * 拍打头部
+     */
+    @Override
+    public void tapHead() {
+        mHandler.sendEmptyMessage(1113);
+    }
+
+    private void showTapHeadDialog() {
+        new ConfirmDialog(this).builder()
+                .setMsg(getStringResources("ui_course_principle_exit_tip"))
+                .setCancelable(false)
+                .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
+                        ActionCourseActivity.finishByMySelf();
+                        CourseOneActivity.this.finish();
+                        CourseOneActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+
+                    }
+                }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }).show();
     }
 
     @Override

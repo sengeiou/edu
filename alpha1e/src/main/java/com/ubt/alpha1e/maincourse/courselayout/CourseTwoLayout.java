@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
 import com.ubt.alpha1e.action.model.PrepareDataModel;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.popup.EasyPopup;
 import com.ubt.alpha1e.base.popup.HorizontalGravity;
 import com.ubt.alpha1e.base.popup.VerticalGravity;
@@ -348,6 +349,7 @@ public class CourseTwoLayout extends BaseActionEditLayout implements ActionCours
     public void onCourseConfirm(PrepareDataModel prepareDataModel) {
         UbtLog.d(TAG, "课时一完成");
         onActionConfirm(prepareDataModel);
+        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "胜利.hts");
         isSaveAction = true;
         if (courseProgressListener != null) {
             courseProgressListener.completeCurrentCourse(3);

@@ -15,12 +15,13 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
+import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.courselayout.CourseTwoLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IEditActionUI;
@@ -87,6 +88,10 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
             } else if (msg.what == 1113) {
                 sendStartStudy(false);
                 returnCardActivity();
+            } else if (msg.what == 1114) {
+                if (!isFinishing()) {
+                    showTapHeadDialog();
+                }
             }
         }
     };
@@ -269,8 +274,8 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
         UbtLog.d(TAG, "-------onPause-------");
         mActionEdit.onPause();
         sendStartStudy(false);
-        isAllIntroduc=false;
-        isFocus=false;
+        isAllIntroduc = false;
+        isFocus = false;
     }
 
     @Override
@@ -389,10 +394,37 @@ public class CourseTwoActivity extends MVPBaseActivity<CourseOneContract.View, C
     }
 
     @Override
+    public void tapHead() {
+        mHandler.sendEmptyMessage(1114);
+    }
+
+    private void showTapHeadDialog() {
+        new ConfirmDialog(this).builder()
+                .setMsg(getStringResources("ui_course_principle_exit_tip"))
+                .setCancelable(false)
+                .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
+                        ActionCourseActivity.finishByMySelf();
+                        CourseTwoActivity.this.finish();
+                        CourseTwoActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+
+                    }
+                }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }).show();
+    }
+
+    @Override
     public void onLostBtCoon() {
         super.onLostBtCoon();
+        ActionCourseActivity.finishByMySelf();
 //        ToastUtils.showShort("蓝牙掉线！！");
-//        finish();
+        finish();
 ////关闭窗体动画显示
 //        this.overridePendingTransition(0, R.anim.activity_close_down_up);
     }

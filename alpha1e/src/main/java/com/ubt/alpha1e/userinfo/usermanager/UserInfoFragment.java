@@ -222,7 +222,11 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onClickView(View view) {
         switch (view.getId()) {
             case R.id.img_head:
-                mPresenter.showImageCenterHeadDialog(getActivity());
+                if (NetUtil.isNetWorkConnected(getActivity())) {
+                    mPresenter.showImageCenterHeadDialog(getActivity());
+                } else {
+                    ToastUtils.showShort("网络出错啦，请检查网络设置");
+                }
                 break;
             case R.id.tv_user_age:
                 if (NetUtil.isNetWorkConnected(getActivity()) && ageList.size() > 0) {
@@ -489,7 +493,19 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      * @param value
      */
     public void updateUserInfo(int type, String value) {
-        mPresenter.updateUserInfo(type, value);
+        if (NetUtil.isNetWorkConnected(getActivity())) {
+            mPresenter.updateUserInfo(type, value);
+        } else {
+            ToastUtils.showShort("网络出错啦，请检查网络设置");
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    initData();
+                }
+            }, 500);
+
+        }
+
     }
 
 
