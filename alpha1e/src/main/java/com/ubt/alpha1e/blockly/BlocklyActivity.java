@@ -55,6 +55,7 @@ import com.ubt.alpha1e.event.ActionEvent;
 import com.ubt.alpha1e.event.BlocklyEvent;
 import com.ubt.alpha1e.event.LessonEvent;
 import com.ubt.alpha1e.event.RobotEvent;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.net.http.basic.FileDownloadListener;
 import com.ubt.alpha1e.net.http.basic.GetDataFromWeb;
 import com.ubt.alpha1e.net.http.basic.HttpAddress;
@@ -78,8 +79,10 @@ import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.RemoteHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ByteHexHelper;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
@@ -94,6 +97,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.Call;
 
 /**
  * @className BlocklyActivity
@@ -2619,4 +2624,35 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     public void noteWeixinNotInstalled() {
         Toast.makeText(this,getStringResources("ui_action_share_no_wechat"),Toast.LENGTH_SHORT).show();
     }
+
+
+    public void saveUserProgram(String programName, String programData){
+
+        BlocklySaveMode saveMode = new BlocklySaveMode();
+        saveMode.setProgramName(programName);
+        saveMode.setProgramData(programData);
+        List<BlocklySaveMode> list = new ArrayList<BlocklySaveMode>();
+        list.add(saveMode);
+
+
+        BlocklyProjectRequest request = new BlocklyProjectRequest();
+        request.setList(list);
+
+
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.SAVE_USER_PROGRAM, request, 0).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d(TAG, "onError e:" + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d(TAG, "onResponse:" + response);
+            }
+        });
+
+    }
+
+
+
 }

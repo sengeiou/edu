@@ -54,4 +54,25 @@ public class HttpEntity {
 
     public static final String COURSE_GET_STATU = BASIC_UBX_SYS + "getCourseStatus";
 
+    /**
+     * 保存blockly编程项目
+     */
+    public static final String SAVE_USER_PROGRAM = BASIC_UBX_SYS + "saveUserProgram";
+
+    /**
+     * 获取用户的Blockly编程项目
+     */
+    public static final String GET_USER_PROGRAM = BASIC_UBX_SYS + "listUserProgram";
+
+    /**
+     * 获取Blockly编程项目详情
+     */
+    public static final String GET_USER_PROGRAM_DETAIL = BASIC_UBX_SYS + "getUserProgram";
+
+    /**
+     * 删除Blockly编程项目
+     */
+    public static final String DEL_USER_PROGRAM = BASIC_UBX_SYS + "deleteUserProgram";
+
+
 }

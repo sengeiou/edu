@@ -28,8 +28,8 @@ import android.widget.TextView;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
-import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.animator.FrameAnimation;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
@@ -68,7 +68,6 @@ import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
-import com.zhy.changeskin.SkinManager;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -76,7 +75,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -278,9 +276,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
             if(cartoonAction != null) {
                looperThread.send(createMessage(ROBOT_default_gesture));
-                if (((AlphaApplication) MainActivity.this.getApplicationContext())
-                        .getCurrentBluetooth() != null) {
-                    UbtLog.d(TAG, "-蓝牙已经连上--");
+                if(MainActivity.this != null && ((AlphaApplication) MainActivity.this.getApplication()).getmCurrentNetworkInfo() != null){
+                    NetworkInfo networkInfo = ((AlphaApplication) MainActivity.this.getApplication()).getmCurrentNetworkInfo();
+                    if(networkInfo.status){
+                        hiddenDisconnectIcon();
+                    }else {
+                        showDisconnectIcon();
+                    }
+                }else {
+                    showDisconnectIcon();
                 }
             }
         }
@@ -478,6 +482,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if(event.getEvent() == RobotEvent.Event.NETWORK_STATUS) {
             NetworkInfo networkInfo = (NetworkInfo)  event.getNetworkInfo();
             UbtLog.d(TAG,"networkInfo == " + networkInfo.status);
+            if(MainActivity.this != null){
+                ((AlphaApplication) MainActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
+            }
             isNetworkConnect=networkInfo.status;
             if(isNetworkConnect){
                 runOnUiThread(new Runnable() {

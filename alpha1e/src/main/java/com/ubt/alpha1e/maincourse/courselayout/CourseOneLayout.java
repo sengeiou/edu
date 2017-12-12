@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.popup.EasyPopup;
 import com.ubt.alpha1e.base.popup.HorizontalGravity;
 import com.ubt.alpha1e.base.popup.VerticalGravity;
@@ -94,6 +95,8 @@ public class CourseOneLayout extends BaseActionEditLayout {
     public void setLayoutByCurrentCourse() {
         UbtLog.d(TAG, "currentCourse==" + currentCourse);
         rlContent.setVisibility(View.VISIBLE);
+        list_frames.clear();
+        adapter.notifyDataSetChanged();
         if (currentCourse == 1) {
             tvCourseContent.setText(mContents.get(0).getCourseName());
             showPop(0);
@@ -145,7 +148,7 @@ public class CourseOneLayout extends BaseActionEditLayout {
      */
     public void setAddButton() {
         setImageViewBg();
-        ivAddFrame.setEnabled(true);
+        ivAddFrame.setEnabled(false);
         ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
     }
 
@@ -256,6 +259,7 @@ public class CourseOneLayout extends BaseActionEditLayout {
             ivLeft.setEnabled(true);
             ivRight.setEnabled(false);
             mHandler.sendEmptyMessageDelayed(1113, 1000);
+            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "胜利.hts");
             if (courseProgressListener != null) {
                 courseProgressListener.completeCurrentCourse(3);
             }

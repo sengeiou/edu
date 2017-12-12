@@ -165,6 +165,19 @@ public class ActionsEditHelper extends BaseHelper implements
         doSendComm(ConstValue.CTRL_ALL_ENGINE, datas);
     }
 
+
+    /**
+     * 读取红外传感器距离
+     *
+     * @param status 01表示进入 ，00表示离开
+     */
+    public void doEnterCourse(byte status) {
+        UbtLog.d("ActionsEditHelper", "doReadInfraredSensor status:" + status);
+        byte[] params = new byte[1];
+        params[0] = status;
+        doSendComm(ConstValue.DV_ENTER_COURSE, params);
+    }
+
     @Override
     public void onSendData(String mac, byte[] datas, int nLen) {
         // TODO Auto-generated method stub
@@ -220,7 +233,7 @@ public class ActionsEditHelper extends BaseHelper implements
                 if (param[0] == 1) {
                     UbtLog.d("EditHelper", "播放完成");
                     if (mListener != null) {
-                       // mListener.playComplete();
+                        // mListener.playComplete();
                     }
                 }
             }
@@ -231,6 +244,11 @@ public class ActionsEditHelper extends BaseHelper implements
             UbtLog.d("ActionEditHelper", "动作播放完成");
             if (mListener != null) {
                 mListener.playComplete();
+            }
+        } else if (cmd == ConstValue.DV_TAP_HEAD) {
+            UbtLog.d("EditHelper", "TAP_HEAD = " + cmd);
+            if (mListener != null) {
+                mListener.tapHead();
             }
         }
     }
@@ -249,6 +267,8 @@ public class ActionsEditHelper extends BaseHelper implements
         void playComplete();
 
         void onDisconnect();
+
+        void tapHead();
     }
 
     public void doLostPower() {
