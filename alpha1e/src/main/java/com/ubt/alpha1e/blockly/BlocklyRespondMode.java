@@ -1,6 +1,8 @@
 package com.ubt.alpha1e.blockly;
 
-import org.litepal.crud.DataSupport;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
+
+import java.io.Serializable;
 
 /**
  * @author admin
@@ -11,21 +13,19 @@ import org.litepal.crud.DataSupport;
  */
 
 
-public class BlocklyProjectMode extends DataSupport {
+public class BlocklyRespondMode extends BaseResponseModel implements Serializable{
 
-    private String pid;
+    private String id;
     private String userId;
     private String programName;
     private String programData;
-    private boolean delState;
-    private boolean serverState;
 
-    public String getPid() {
-        return pid;
+    public String getId() {
+        return id;
     }
 
-    public void setPid(String pid) {
-        this.pid = pid;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserId() {
@@ -52,31 +52,14 @@ public class BlocklyProjectMode extends DataSupport {
         this.programData = programData;
     }
 
-    public boolean isDelState() {
-        return delState;
-    }
-
-    public void setDelState(boolean delState) {
-        this.delState = delState;
-    }
-
-    public boolean isServerState() {
-        return serverState;
-    }
-
-    public void setServerState(boolean serverState) {
-        this.serverState = serverState;
-    }
 
     @Override
     public String toString() {
-        return "BlocklyProjectMode{" +
-                "pid='" + pid + '\'' +
+        return "BlocklyRespondMode{" +
+                "id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
                 ", programName='" + programName + '\'' +
                 ", programData='" + programData + '\'' +
-                ", delState=" + delState +
-                ", serverState=" + serverState +
                 '}';
     }
 }
