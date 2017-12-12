@@ -325,7 +325,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                     public void onDismiss(DialogPlus dialog) {
                     }
                 })
-                .setCancelable(true)
+                .setCancelable(false)
                 .create().show();
     }
 

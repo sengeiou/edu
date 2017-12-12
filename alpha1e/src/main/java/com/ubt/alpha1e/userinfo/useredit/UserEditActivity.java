@@ -344,7 +344,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
      * 更新信息失败
      */
     @Override
-    public void updateUserModelFailed() {
+    public void updateUserModelFailed(String str) {
 
     }
 
