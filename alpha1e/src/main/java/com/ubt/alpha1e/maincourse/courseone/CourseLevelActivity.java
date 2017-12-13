@@ -105,6 +105,7 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
             flag = false;
             if (!flag) {
                 mRlInstruction.setVisibility(View.VISIBLE);
+                mPresenter.getCourseOneData(CourseLevelActivity.this);
                 if (currentCard == 1) {
                     ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑1总介.hts");
                 } else if (currentCard == 2) {
