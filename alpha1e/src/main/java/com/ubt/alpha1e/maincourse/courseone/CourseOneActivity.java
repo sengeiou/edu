@@ -260,9 +260,11 @@ public class CourseOneActivity extends MVPBaseActivity<CourseOneContract.View, C
             UbtLog.d("CourseOneActivity", "返回键");
             //如果点击的是后退键  首先判断webView是否能够后退
             //如果点击的是后退键  首先判断webView是否能够后退   返回值是boolean类型的
-            finish();
+            if (!isFinishing()) {
+                finish();
+                this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            }
             //关闭窗体动画显示
-            this.overridePendingTransition(0, R.anim.activity_close_down_up);
         }
         return super.onKeyDown(keyCode, event);
     }
