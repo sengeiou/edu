@@ -100,6 +100,8 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
 
     private boolean hasPlayFileFinish = false;
 
+    private ConfirmDialog mTapHeadDialog = null;
+
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -279,25 +281,29 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
     }
 
     private void showTapHeadDialog(){
-        new ConfirmDialog(getContext()).builder()
-                .setMsg(getStringResources("ui_course_principle_exit_tip"))
-                .setCancelable(false)
-                .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ((PrincipleHelper) mHelper).doInit();
-                        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
-                        MainCourseActivity.finishByMySelf();
-                        SplitActivity.this.finish();
-                        SplitActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+        if(mTapHeadDialog == null){
+            mTapHeadDialog = new ConfirmDialog(getContext()).builder()
+                    .setMsg(getStringResources("ui_course_principle_exit_tip"))
+                    .setCancelable(false)
+                    .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            ((PrincipleHelper) mHelper).doInit();
+                            ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                            MainCourseActivity.finishByMySelf();
+                            SplitActivity.this.finish();
+                            SplitActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                        }
+                    }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                    }
-                }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        }).show();
+                        }
+                    });
+        }
+        if(!mTapHeadDialog.isShowing()){
+            mTapHeadDialog.show();
+        }
     }
 
     @Override
