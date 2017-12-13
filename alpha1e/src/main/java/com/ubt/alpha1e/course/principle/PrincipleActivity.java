@@ -75,6 +75,8 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
 
     private static String[] playActionFile = {"原理1.hts","原理2.hts","原理3.hts"};
 
+    private ConfirmDialog mTapHeadDialog = null;
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -233,24 +235,29 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
     }
 
     private void showTapHeadDialog(){
-        new ConfirmDialog(getContext()).builder()
-                .setMsg(getStringResources("ui_course_principle_exit_tip"))
-                .setCancelable(false)
-                .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ((PrincipleHelper) mHelper).doInit();
-                        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
-                        MainCourseActivity.finishByMySelf();
-                        PrincipleActivity.this.finish();
-                        PrincipleActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
-                    }
-                }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if(mTapHeadDialog == null){
+            mTapHeadDialog = new ConfirmDialog(getContext()).builder()
+                    .setMsg(getStringResources("ui_course_principle_exit_tip"))
+                    .setCancelable(false)
+                    .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            ((PrincipleHelper) mHelper).doInit();
+                            ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                            MainCourseActivity.finishByMySelf();
+                            PrincipleActivity.this.finish();
+                            PrincipleActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                        }
+                    }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-            }
-        }).show();
+                        }
+                    });
+        }
+        if(!mTapHeadDialog.isShowing()){
+            mTapHeadDialog.show();
+        }
     }
 
     @Override
