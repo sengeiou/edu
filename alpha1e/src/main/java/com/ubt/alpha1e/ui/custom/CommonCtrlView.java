@@ -710,6 +710,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             }
             txt_action_name_m.setText(name);
             mBaseActivity.saveCurrentPlayingActionName(name);
+
         }
     }
 
