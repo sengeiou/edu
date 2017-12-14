@@ -24,7 +24,9 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResponseMode.CourseDetailScoreModule;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.maincourse.adapter.ActionCoursedapter;
@@ -33,7 +35,9 @@ import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ConstValue;
 
 import org.litepal.crud.DataSupport;
 
@@ -98,8 +102,10 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
     }
     @Override
     protected void onDestroy() {
-        mainCourseInstance = null;
         super.onDestroy();
+        mainCourseInstance = null;
+        UbtLog.d(TAG, "------------------onDestroy-----------------");
+
     }
 
     public static void finishByMySelf(){
@@ -129,6 +135,11 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         UbtLog.d(TAG, "------------------onPause-----------------");
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UbtLog.d(TAG, "------------------onResume-----------------");
+    }
 
 
     /**
@@ -263,7 +274,18 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 .setCancelable(true)
                 .create().show();
     }
+    /**
+     * 播放动作
+     *
+     * @param actionName
+     */
+    public void playAction(String actionName) {
 
+        byte[] actions = BluetoothParamUtil.stringToBytes(actionName);
+        ((AlphaApplication) this
+                .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) this.getApplicationContext())
+                .getCurrentBluetooth().getAddress(), ConstValue.DV_PLAYACTION, actions, actions.length, false);
+    }
 
     // 为了获取结果
     @Override
@@ -281,6 +303,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 showResultDialog(course, isComplete);
                 UbtLog.d(TAG, "course==" + course + "   leavel==" + leavel + "  isComplete==" + isComplete + "  socre===" + score);
                 mPresenter.saveCourseProgress(String.valueOf(course), isComplete ? "1" : "0");
+                playAction(Constant.COURSE_ACTION_PATH + "胜利.hts");
             }
         }
     }

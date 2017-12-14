@@ -318,11 +318,11 @@ public class CourseLevelLayout extends BaseActionEditLayout {
                 .enableNext()
                 .maskColor(0xAA000000)
                 // .anchor(findViewById(R.id.id_container))//如果是Activity上增加引导层，不需要设置anchor
-                .addHighLight(R.id.ll_frame, R.layout.layout_pop_course_level, new HightLightTopCallback(45), new RectLightShape())
-                .addHighLight(R.id.rl_musicz_zpne, R.layout.layout_pop_course_level, new HightLightTopCallback(100), new RectLightShape())
-                .addHighLight(R.id.ll_add_frame, R.layout.layout_pop_course_level, new HightLightTopCallback(20), new RectLightShape())
-                .addHighLight(R.id.iv_add_frame1, R.layout.layout_pop_course_level, new OnLeftPosCallback(20), new RectLightShape())
-                .addHighLight(R.id.iv_play_music, R.layout.layout_pop_course_level, new OnRightPosCallback(12), new RectLightShape())
+                .addHighLight(R.id.ll_frame, R.layout.layout_pop_course_level, new HightLightTopCallback(45), new RectLocalLightShap())
+                .addHighLight(R.id.rl_musicz_zpne, R.layout.layout_pop_course_level, new HightLightTopCallback(100), new RectLocalLightShap())
+                .addHighLight(R.id.ll_add_frame, R.layout.layout_pop_course_level, new HightLightTopCallback(20), new RectLocalLightShap())
+                .addHighLight(R.id.iv_add_frame1, R.layout.layout_pop_course_level, new OnLeftPosCallback(20), new RectLocalLightShap())
+                .addHighLight(R.id.iv_play_music, R.layout.layout_pop_course_level, new OnRightPosCallback(12), new RectLocalLightShap())
                 .setOnNextCallback(new HighLightInterface.OnNextCallback() {
                     @Override
                     public void onNext(HightLightView hightLightView, View targetView, View tipView) {

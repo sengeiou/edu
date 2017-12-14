@@ -372,6 +372,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.right_icon2:
                 if(isBulueToothConnected()){
+                    APP_CURRENT_STATUS=ROBOT_default_gesture;
                     startActivity(new Intent(this, ActionTestActivity.class));
                     this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 }else{
@@ -994,13 +995,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                   if(APP_CURRENT_STATUS==ROBOT_SLEEP_EVENT) {
                       if (actionName.contains(WakeUpActionName)) {
                           looperThread.send(createMessage(ROBOT_WAKEUP_ACTION));
+                          wakeUpHiddenBuddle();
                       }
                   }
               }catch(UnsupportedEncodingException e){
                   e.printStackTrace();
               }
-
-          } else {
+          } else if(mCmd==ConstValue.DV_VOICE_WAIT){
+             wakeUpHiddenBuddle();
+          } else{
             //  UbtLog.d(TAG, "ROBOT OTHER SITUATION" + mCmd);
           }
         } catch (JSONException e) {
@@ -1241,8 +1244,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run(){
-                        showCartoonAction(cartoon_action_squat);
-                    }
+                        if(APP_CURRENT_STATUS!=ROBOT_SLEEP_EVENT) {
+                           // showCartoonAction(cartoon_action_squat);
+                            //站立
+                            cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                        }else {
+                            //蹲下
+                            cartoonAction.setBackgroundResource(R.drawable.squat60);
+                        }
+                }
                 });
                 break;
            default:
@@ -1503,5 +1513,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
           }
           UbtLog.d(TAG, "ACTIO NAME IS " + actionName);
       return actionName;
+  }
+
+  private void wakeUpHiddenBuddle(){
+      mCurrentTouchTime=System.currentTimeMillis();
+      if(System.currentTimeMillis()-mCurrentTouchTime<noOperationTimeout) {
+          hiddenBuddleTextView();
+      }
   }
 }

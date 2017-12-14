@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
-import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.popup.EasyPopup;
 import com.ubt.alpha1e.base.popup.HorizontalGravity;
 import com.ubt.alpha1e.base.popup.VerticalGravity;
@@ -259,7 +258,7 @@ public class CourseOneLayout extends BaseActionEditLayout {
             ivLeft.setEnabled(true);
             ivRight.setEnabled(false);
             mHandler.sendEmptyMessageDelayed(1113, 1000);
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "胜利.hts");
+            //((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "胜利.hts");
             if (courseProgressListener != null) {
                 courseProgressListener.completeCurrentCourse(3);
             }

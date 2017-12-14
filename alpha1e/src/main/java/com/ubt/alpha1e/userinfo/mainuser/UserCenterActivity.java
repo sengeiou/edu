@@ -100,7 +100,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         mRecyclerView = (RecyclerView) findViewById(R.id.rl_leftmenu);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCurrentPosition = 0;
-        mTvTitle.setText(mMenuModels.get(0).getNameString());
+        //mTvTitle.setText(mMenuModels.get(0).getNameString());
         mMenuModels.get(0).setChick(true);
         mBaseQuickAdapter = new LeftAdapter(R.layout.layout_usercenter_left_item, mMenuModels);
 
@@ -108,7 +108,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 LeftMenuModel menuModel = mMenuModels.get(position);
-                mTvTitle.setText(menuModel.getNameString());
+               // mTvTitle.setText(menuModel.getNameString());
                 loadFragment(mFragmentList.get(position));
                 for (int i = 0; i < mMenuModels.size(); i++) {
                     if (mMenuModels.get(i).getNameString().equals(menuModel.getNameString())) {
