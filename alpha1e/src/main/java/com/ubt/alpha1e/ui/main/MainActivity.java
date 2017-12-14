@@ -1001,7 +1001,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
               }catch(UnsupportedEncodingException e){
                   e.printStackTrace();
               }
-
           } else if(mCmd==ConstValue.DV_VOICE_WAIT){
              wakeUpHiddenBuddle();
           } else{

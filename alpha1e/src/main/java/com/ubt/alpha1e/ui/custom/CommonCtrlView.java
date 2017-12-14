@@ -30,6 +30,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.NewActionPlayer;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
+import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionColloInfo;
 import com.ubt.alpha1e.data.model.ActionInfo;
@@ -700,7 +701,14 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     public void notePlayStart(List<String> mSourceActionNameList, ActionInfo action, ActionPlayer.Play_type mCurrentPlayType) {
         UbtLog.d(TAG, "--wmma--notePlayStart callback!");
         //btn_stop_m.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
-        btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
+        if(action!=null){
+            if(!action.actionName.contains(Constant.WakeUpActionName)){
+                btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
+            }
+            UbtLog.d(TAG, "--wmma--notePlayStart callback!" +action.actionName);
+        }else {
+            btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
+        }
         gifImageView.setVisibility(View.VISIBLE);
         if (action != null) {
             String name = action.actionName;
