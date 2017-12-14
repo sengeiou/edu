@@ -165,6 +165,9 @@ public class SendClientIdService extends Service {
 	public void onDestroy() {
 		UbtLog.d(TAG, "-onDestroy--");
 		super.onDestroy();
+		if(mContext != null){
+			mContext.unregisterReceiver(mBroadCastReceiver);
+		}
 	}
 
 

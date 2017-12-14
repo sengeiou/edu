@@ -156,6 +156,31 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
         }
     }
 
+    /**
+     * 执行步态算法（上下左右方向键）
+     * @param direction 方向
+     * @param speed 速度
+     * @param count 步数
+     */
+    public void doWalkAction(int direction, int speed, int count){
+        byte[] param = new byte[6];
+        param[0] = (byte) direction;
+        param[1] = (byte) speed;
+        param[2] = (byte) 0;
+        param[3] = (byte) 0;
+        param[4] = (byte) 0;
+        param[5] = (byte) 0;
+        doSendComm(ConstValue.DV_WALK, param);
+
+    }
+
+    public void doStopWalkAction(){
+        byte[] param = new byte[1];
+        param[0] = (byte) 0;
+        doSendComm(ConstValue.DV_STOP_WALK, param);
+    }
+
+
     public void doCustomAction(final int index,final int roleId) {
 
         MyActionsHelper.doStopMp3ForMyDownload();

@@ -351,9 +351,9 @@ public class AutoConnectBluetoothHelper extends BaseHelper {
 
             UbtLog.d(TAG,"mBtAdapter.isDiscovering() == " + mBtAdapter.isDiscovering() + "  = " + mContext);
             if (mBtAdapter.isDiscovering()) {
-                //mBtAdapter.cancelDiscovery();
+                mBtAdapter.cancelDiscovery();
                 //mUI.noteIsScaning();
-                return;
+//                return;
             }
             if (mDevicesList != null){
                 mDevicesList.clear();
