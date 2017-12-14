@@ -167,6 +167,10 @@ public class ConfirmDialog {
         }
     }
 
+    public boolean isShowing(){
+        return dialog.isShowing();
+    }
+
     public void show() {
         setLayout();
         dialog.show();

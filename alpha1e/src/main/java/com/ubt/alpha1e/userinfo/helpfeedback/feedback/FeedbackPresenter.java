@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.userinfo.helpfeedback.feedback;
 
 import com.google.gson.reflect.TypeToken;
+import com.ubt.alpha1e.base.FileUtils;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.FeedbackRequest;
 import com.ubt.alpha1e.data.model.BaseModel;
@@ -10,8 +11,12 @@ import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
+import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import okhttp3.Call;
 
@@ -28,6 +33,10 @@ public class FeedbackPresenter extends BasePresenterImpl<FeedbackContract.View> 
 
     @Override
     public void doFeedBack(String content, String email, String phone) {
+
+        content = FileUtils.stringToUtf8(content);
+
+        UbtLog.d(TAG,"content = " + content );
 
         FeedbackRequest feedbackRequest = new FeedbackRequest();
         feedbackRequest.setContent(content);
@@ -65,11 +74,10 @@ public class FeedbackPresenter extends BasePresenterImpl<FeedbackContract.View> 
                         if (baseResponseModel.status) {
                             mView.onFeedbackFinish(true,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_about_feedback_success"));
                         }else {
-                            mView.onFeedbackFinish(false,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_about_feedback_fail_net"));
+                            mView.onFeedbackFinish(false,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_register_prompt_system_error"));
                         }
                     }
                     break;
-
                 }
 
             }

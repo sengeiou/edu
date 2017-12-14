@@ -122,7 +122,8 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         mTvUserName.setFilters(filters);
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
         if(mTvUserName.getText().toString().length()==0){
-            mTvUserName.setText(mUserModel.getNickName());
+            String name = FileUtils.utf8ToString(mUserModel.getNickName());
+            mTvUserName.setText(name);
             mTvUserName.setSelection(mTvUserName.getText().length());
         }
         if(TextUtils.isEmpty(age)){
@@ -210,7 +211,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                 UpdateUserInfoRequest request = new UpdateUserInfoRequest();
                 request.setAge(age);
                 request.setGrade(grade);
-                request.setNickName(mTvUserName.getText().toString());
+                request.setNickName(FileUtils.stringToUtf8(mTvUserName.getText().toString()));
                 request.setSex(sex);
                 File file = null;
                 if(!TextUtils.isEmpty(path)){

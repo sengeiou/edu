@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
@@ -23,10 +24,14 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.czt.mp3recorder.MP3Recorder;
+import com.google.gson.reflect.TypeToken;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.RequstMode.BaseRequest;
+import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.blockly.bean.QueryResult;
 import com.ubt.alpha1e.blockly.bean.RobotSensor;
 import com.ubt.alpha1e.blockly.sensor.SensorHelper;
@@ -44,6 +49,7 @@ import com.ubt.alpha1e.data.ZipTools;
 import com.ubt.alpha1e.data.model.ActionColloInfo;
 import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.ActionRecordInfo;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.data.model.FrameActionInfo;
 import com.ubt.alpha1e.data.model.LessonInfo;
 import com.ubt.alpha1e.data.model.LessonTaskInfo;
@@ -79,14 +85,17 @@ import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.RemoteHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
+import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ByteHexHelper;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.io.IOException;
@@ -304,6 +313,14 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
         requestUpdate();
         init();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**
@@ -573,6 +590,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             if(mSensorHelper == null) {
                 mSensorHelper = new SensorHelper(this);
                 mSensorHelper.RegisterHelper();
+                UbtLog.d(TAG, "startOrStopRun start");
+                startOrStopRun((byte)0x01);
             }
         }
     }
@@ -983,6 +1002,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 mSensorHelper.doReadInfraredSensor((byte)0x00);
                 mSensorHelper.doReadGyroData((byte)0x00);
                 mSensorHelper.doReadAcceleration((byte)0x00);
+                UbtLog.d(TAG, "startOrStopRun end");
+                startOrStopRun((byte)0x02);
             }
             mSensorHelper.UnRegisterHelper();
         }
@@ -1154,6 +1175,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     mSensorHelper.doReadInfraredSensor((byte)0x01);
                     mSensorHelper.doReadGyroData((byte)0x01);
                     mSensorHelper.doReadAcceleration((byte)0x01);
+                    UbtLog.d(TAG, "startOrStopRun start");
+                    startOrStopRun((byte)0x01);
                 }
 
       /*          mWebView.post(new Runnable() {
@@ -2512,6 +2535,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     public void requestUpdate() {
 
         showLoading();
+        listUserProgram();
 
 /*        String updateUrl = HttpAddress.WebBlocklyUpdateAdderss + readBlocklyLocalVersion(BlocklyActivity.this);
         UbtLog.d(TAG,"updateUrl = " + updateUrl);
@@ -2626,7 +2650,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     }
 
 
-    public void saveUserProgram(String programName, String programData){
+    public void saveUserProgram(final String programName, final String programData){
 
         BlocklySaveMode saveMode = new BlocklySaveMode();
         saveMode.setProgramName(programName);
@@ -2643,13 +2667,137 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "onError e:" + e.getMessage());
+                ToastUtils.showShort("保存失败");
+                BlocklyProjectMode blocklyProjectMode = new BlocklyProjectMode();
+                blocklyProjectMode.setPid("" + System.currentTimeMillis());
+                blocklyProjectMode.setUserId(SPUtils.getInstance().getString(com.ubt.alpha1e.base.Constant.SP_USER_ID));
+                blocklyProjectMode.setProgramName(programName);
+                blocklyProjectMode.setProgramData(programData);
+                blocklyProjectMode.setDelState(false);
+                blocklyProjectMode.setServerState(false);
+
+                blocklyProjectMode.save();
+
+
+
             }
 
             @Override
             public void onResponse(String response, int id) {
                 UbtLog.d(TAG, "onResponse:" + response);
+                BaseResponseModel<BlocklyRespondMode> baseResponseModel = GsonImpl.get().toObject(response,
+                        new TypeToken<BaseResponseModel<List<BlocklyRespondMode>>>() {
+                        }.getType());
+
+                List<BlocklyRespondMode> blocklyRespondModeList = new ArrayList<BlocklyRespondMode>();
+
+                if (baseResponseModel.status) {
+
+                    blocklyRespondModeList = (List<BlocklyRespondMode>) baseResponseModel.models;
+
+                    UbtLog.d(TAG, "blocklyRespondMode:" + blocklyRespondModeList.toString());
+
+                    for(int i= 0; i < blocklyRespondModeList.size(); i++ ){
+                        BlocklyProjectMode blocklyProjectMode = new BlocklyProjectMode();
+                        blocklyProjectMode.setPid(blocklyRespondModeList.get(i).getId());
+                        blocklyProjectMode.setUserId(blocklyRespondModeList.get(i).getUserId());
+                        blocklyProjectMode.setProgramName(blocklyRespondModeList.get(i).getProgramName());
+                        blocklyProjectMode.setProgramData(blocklyRespondModeList.get(i).getProgramData());
+                        blocklyProjectMode.setDelState(false);
+                        blocklyProjectMode.setServerState(true);
+
+                        blocklyProjectMode.save();
+                    }
+
+
+
+                }
             }
         });
+
+    }
+
+
+    public void listUserProgram() {
+        BaseRequest baseRequest = new BaseRequest();
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.GET_USER_PROGRAM, baseRequest, 0).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.e(TAG, "onError:" + e.getMessage());
+
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d(TAG, "onResponse:" + response);
+                BaseResponseModel<BlocklyRespondMode> baseResponseModel = GsonImpl.get().toObject(response,
+                        new TypeToken<BaseResponseModel<List<BlocklyRespondMode>>>() {
+                        }.getType());
+
+                List<BlocklyRespondMode> blocklyRespondModeList = new ArrayList<BlocklyRespondMode>();
+
+                if (baseResponseModel.status) {
+
+                    blocklyRespondModeList = (List<BlocklyRespondMode>) baseResponseModel.models;
+
+                    UbtLog.d(TAG, "blocklyRespondMode:" + blocklyRespondModeList.toString());
+
+                    for(int i= 0; i < blocklyRespondModeList.size(); i++ ){
+                        BlocklyProjectMode blocklyProjectMode = new BlocklyProjectMode();
+                        blocklyProjectMode.setPid(blocklyRespondModeList.get(i).getId());
+                        blocklyProjectMode.setUserId(blocklyRespondModeList.get(i).getUserId());
+                        blocklyProjectMode.setProgramName(blocklyRespondModeList.get(i).getProgramName());
+                        blocklyProjectMode.setProgramData(blocklyRespondModeList.get(i).getProgramData());
+                        blocklyProjectMode.setDelState(false);
+                        blocklyProjectMode.setServerState(true);
+
+                        blocklyProjectMode.saveOrUpdate("pid = ?", blocklyRespondModeList.get(i).getId());
+                    }
+
+
+
+                }
+            }
+        });
+    }
+
+
+    public void deleteUserProgram( String[] programIds) {
+
+
+        List<String> ids = new ArrayList<String>();
+        for(int i =0; i < programIds.length; i++){
+            ids.add(i, programIds[i]);
+        }
+
+        BlocklyProjectDelRequest blocklyProjectDelRequest = new BlocklyProjectDelRequest();
+        blocklyProjectDelRequest.setProgramIds(ids);
+
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.DEL_USER_PROGRAM, blocklyProjectDelRequest, 0).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d(TAG, "deleteUserProgram onError:" + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d(TAG, "deleteUserProgram onResponse:" + response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if((boolean)jsonObject.get("status")){
+                        JSONArray jsonArray = jsonObject.getJSONArray("models");
+                        for(int i = 0; i<jsonArray.length(); i++){
+                            String pid = jsonArray.get(i).toString();
+                            DataSupport.deleteAll(BlocklyProjectMode.class, "pid = ?", pid);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
 
     }
 

@@ -4,12 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 
-import com.ant.country.CountryActivity;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
-import com.ubt.alpha1e.blockly.BlocklyActivity;
-import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
-import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
-import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
@@ -19,30 +14,8 @@ import com.ubt.alpha1e.maincourse.courseone.CourseLevelActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
-import com.ubt.alpha1e.ui.AboutUsActivity;
-import com.ubt.alpha1e.ui.ActionUnpublishedActivity;
-import com.ubt.alpha1e.ui.ActionsLibPreviewWebActivity;
-import com.ubt.alpha1e.ui.ActionsPublishActivity;
-import com.ubt.alpha1e.ui.ActionsSquareDetailActivity;
-import com.ubt.alpha1e.ui.FeedBackActivity;
-import com.ubt.alpha1e.ui.FindPassWdActivity;
-import com.ubt.alpha1e.ui.LanguageActivity;
-import com.ubt.alpha1e.ui.LoginActivity;
-import com.ubt.alpha1e.ui.MediaRecordActivity;
-import com.ubt.alpha1e.ui.MessageActivity;
-import com.ubt.alpha1e.ui.MyActionsActivity;
-import com.ubt.alpha1e.ui.MyMainActivity;
-import com.ubt.alpha1e.ui.PrivateInfoActivity;
-import com.ubt.alpha1e.ui.PrivateInfoEditActivity;
-import com.ubt.alpha1e.ui.RegisterActivity;
-import com.ubt.alpha1e.ui.RegisterNextStepActivity;
 import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
-import com.ubt.alpha1e.ui.RobotControlActivity;
-import com.ubt.alpha1e.ui.SettingActivity;
-import com.ubt.alpha1e.ui.WebContentActivity;
-import com.ubt.alpha1e.ui.main.MainActivity;
-import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.Stack;
 
@@ -159,13 +132,15 @@ public class AppManager {
      * 结束所有Activity
      */
     public void finishAllActivity() {
-        for (int i = 0, size = activityStack.size(); i < size; i++) {
+        for (int i = activityStack.size()-1; i >= 0; i--) {
             if (null != activityStack.get(i)) {
                 activityStack.get(i).finish();
             }
         }
         activityStack.clear();
     }
+
+
 
     /**
      * 退出应用程序
