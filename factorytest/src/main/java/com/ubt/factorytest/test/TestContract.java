@@ -29,6 +29,7 @@ public class TestContract {
         void setBTRSSI(String rssi);
         void stopRobotRecord();
         void adjustVolume(int type);
+        void startAgeing();
     }
 
     interface View extends BaseView<Presenter> {
@@ -37,5 +38,6 @@ public class TestContract {
         void btDisconnected();
         void showToast(final String msg);
         void startWifiConfig();
+        void startActionTest();
     }
 }

@@ -15,10 +15,8 @@ public class GetActionList extends BaseBTReq{
     public GetActionList(String dir) {
         try {
             parm = new byte[dir.length()+1];
-            String actions = dir.length()+dir;
             parm[0] = (byte) dir.length();
             System.arraycopy(dir.getBytes("UTF-8"), 0, parm, 1, dir.length());
-//            parm = dir.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

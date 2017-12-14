@@ -8,4 +8,20 @@
         android:orderInCategory="1"
         android:title="@string/action_stop_record"
         app:showAsAction="always|withText" />
+    <item
+        android:id="@+id/action_wifi_conf"
+        android:orderInCategory="1"
+        android:title="@string/action_wifi_conf"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/action_action_test"
+        android:orderInCategory="1"
+        android:title="@string/action_action_test"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/action_ageing_test"
+        android:orderInCategory="1"
+        android:title="@string/action_ageing_test"
+        app:showAsAction="withText" />
+
 </menu>

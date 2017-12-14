@@ -1,6 +1,7 @@
 package com.ubt.factorytest.test;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ubt.factorytest.ActionPlay.ActionFragment;
+import com.ubt.factorytest.ActionPlay.ActionPresenter;
 import com.ubt.factorytest.R;
 import com.ubt.factorytest.test.recycleview.TestItemClickAdapter;
 import com.ubt.factorytest.utils.ContextUtils;
@@ -85,10 +88,23 @@ public class TestFragment extends SupportFragment implements TestContract.View {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
-
-                if (id == R.id.action_stop_record) {
-                    mPresenter.stopRobotRecord();
+                switch (id){
+                    case R.id.action_stop_record:
+                        mPresenter.stopRobotRecord();
+                        break;
+                    case R.id.action_wifi_conf:
+                        startWifiConfig();
+                        break;
+                    case R.id.action_action_test:
+                        ActionFragment fragment = ActionFragment.newInstance();
+                        new ActionPresenter(fragment);
+                        startForResult(fragment, 100);
+                        break;
+                    case R.id.action_ageing_test:
+                        mPresenter.startAgeing();
+                        break;
                 }
+
                 return true;
             }
         });
@@ -209,6 +225,11 @@ public class TestFragment extends SupportFragment implements TestContract.View {
 
     }
 
+    @Override
+    public void startActionTest() {
+
+    }
+
     protected void initToolbarNav(Toolbar toolbar) {
         toolbar.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -222,5 +243,14 @@ public class TestFragment extends SupportFragment implements TestContract.View {
                 }
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 100){
+            mPresenter.reInitBT();
+            mPresenter.initBTListener();
+        }
     }
 }

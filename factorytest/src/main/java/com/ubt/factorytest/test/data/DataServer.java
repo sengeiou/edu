@@ -49,14 +49,14 @@ public class DataServer {
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_PIRTEST));
         dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "陀螺仪测试",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_GSENSIRTEST));
-        dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "Wifi配网",
-                R.mipmap.click_untest,TestClickEntity.TEST_ITEM_WIFITEST));
+       /* dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "Wifi配网",
+                R.mipmap.click_untest,TestClickEntity.TEST_ITEM_WIFITEST));*/
         dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "测试报告保存到文件",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_SAVETESTPROFILE));
-        dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "整机动作测试",
+        /*dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "整机动作测试",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_ACTION_TEST));
         dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "整机老化测试",
-                R.mipmap.click_untest,TestClickEntity.TEST_ITEM_AGEING_TEST));
+                R.mipmap.click_untest,TestClickEntity.TEST_ITEM_AGEING_TEST));*/
         dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "恢复出厂设置",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_ROBOTRESET));
 

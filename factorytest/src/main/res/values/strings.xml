@@ -8,4 +8,7 @@
     <string name="test_ok">通过</string>
     <string name="test_fail">失败</string>
     <string name="action_stop_record">停止录音</string>
+    <string name="action_wifi_conf">wifi配网</string>
+    <string name="action_action_test">整机动作测试</string>
+    <string name="action_ageing_test">整机老化测试</string>
 </resources>
