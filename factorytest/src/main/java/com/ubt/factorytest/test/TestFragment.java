@@ -79,7 +79,7 @@ public class TestFragment extends SupportFragment implements TestContract.View {
         Bundle data = getArguments();
         String mac = data.getString("bt_mac");
         mPresenter.saveBTMac(mac);
-        mPresenter.setBTRSSI(mac+"     "+data.getString("bt_rssi"));
+        mPresenter.setBTRSSI(data.getString("bt_rssi"));
         toolbar.inflateMenu(R.menu.menu_testfragment);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -156,9 +156,22 @@ public class TestFragment extends SupportFragment implements TestContract.View {
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                boolean isPass =  mAdapter.getItem(position).isPass();
-                mAdapter.getItem(position).setPass(!isPass);
-                adapter.notifyItemChanged(position, "123121");
+                switch(view.getId()){
+                    case R.id.btn_ok:
+                        boolean isPass =  mAdapter.getItem(position).isPass();
+                        mAdapter.getItem(position).setPass(!isPass);
+                        adapter.notifyItemChanged(position, "123121");
+                        break;
+                    case R.id.btn_vol_sub:
+                        Log.i(TAG,"btn_vol_sub！！");
+                        mPresenter.adjustVolume(TestContract.ADJUST_SUB);
+                        break;
+                    case R.id.btn_vol_add:
+                        Log.i(TAG,"btn_vol_add！！");
+                        mPresenter.adjustVolume(TestContract.ADJUST_ADD);
+                        break;
+                }
+
             }
         });
     }

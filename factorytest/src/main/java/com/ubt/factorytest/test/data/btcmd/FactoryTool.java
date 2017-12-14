@@ -21,6 +21,8 @@ import java.util.List;
 public class FactoryTool {
     private static final String TAG = "FactoryTool";
     private static FactoryTool instance;
+    private int pressCnt = 0;  //拍头计数
+    private int currentVol = 0x7F; //机器人当前音量
 
     private FactoryTool(){
 
@@ -36,6 +38,10 @@ public class FactoryTool {
         }
 
         return instance;
+    }
+
+    public void init(){
+        pressCnt = 0;
     }
 
     /**
@@ -106,21 +112,26 @@ public class FactoryTool {
      */
     public int parseBTCmd(DataServer dataServer, final byte[] cmd){
         boolean isOK = false;
-        int cmdID = 0;
+        int itemID = 0;
 
         try {
             UbtBTProtocol data = new UbtBTProtocol(cmd);
-            if(data.getCmd() == BaseBTReq.HEART_CMD){//心跳命令 不处理
+            byte btCmd = data.getCmd();
+            if(btCmd == BaseBTReq.HEART_CMD){//心跳命令 不处理
+                return -1;
+            }else if(btCmd == BaseBTReq.READ_DEV_STATUS){
+                parseDevStatus(data.getParam());
                 return -1;
             }
-            cmdID = translateBTCMDID2Item(data.getCmd());
-            isOK = updateDataResult(dataServer, data, cmdID);
+
+            itemID = translateBTCMDID2Item(btCmd);
+            isOK = updateDataResult(dataServer, data, itemID);
         } catch (InvalidPacketException e) {
             e.printStackTrace();
             return -1;
         }
         if(isOK){
-            return getPosition(dataServer, cmdID);
+            return getPosition(dataServer, itemID);
         }else{
             return -1;
         }
@@ -190,7 +201,12 @@ public class FactoryTool {
             String result = "";
             switch (itemID){
                 case TestClickEntity.TEST_ITEM_START_TIME:
-                    result = new String(data.getParam())+"秒";
+                    String time = new String(data.getParam());
+                    time = filterTime(time);
+                    result = time+"秒";
+                    if(Integer.valueOf(time) <= 30){
+                        dataServer.setDataisPass(position, true);
+                    }
                     break;
                 case TestClickEntity.TEST_ITEM_ELECTRICCHARGE:
                     byte[] power = data.getParam();
@@ -201,8 +217,11 @@ public class FactoryTool {
                     result = String.valueOf(data.getParam()[0]&0xff);
                     break;
                 case TestClickEntity.TEST_ITEM_INTERRUOTTEST:
-                    result = "触发了拍头事件";
-                    dataServer.setDataisPass(position, true);
+                    pressCnt += 1;
+                    result = "拍头次数:"+pressCnt;
+                    if(pressCnt == 3) {
+                        dataServer.setDataisPass(position, true);
+                    }
                     break;
                 case TestClickEntity.TEST_ITEM_WAKEUPTEST:
                     result = "触发了唤醒事件";
@@ -218,6 +237,9 @@ public class FactoryTool {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    break;
+                case 0x80:
+                    Log.i(TAG,"动作名："+new String(data.getParam()));
                     break;
                 default:
                     result = new String(data.getParam());
@@ -251,5 +273,36 @@ public class FactoryTool {
             position = -1;
         }
         return position;
+    }
+
+    /**
+     *解析机器人状态
+     * @param status
+     */
+    private void parseDevStatus(byte[] status){
+        if(status[0] == 0x02){
+            currentVol = status[1];
+            Log.i(TAG,"当前电量:"+currentVol);
+        }
+    }
+
+    public int getCurrentVol() {
+        return currentVol;
+    }
+
+    public void setCurrentVol(int vol) {
+         currentVol = vol;
+    }
+
+    private String filterTime(String time){
+        StringBuffer newStr = new StringBuffer();
+        for(int i = 0; i < time.length(); i++){
+            char c = time.charAt(i);
+            if(c >= 0x30  && c <= 0x39){
+                newStr.append(c);
+            }
+        }
+
+        return newStr.toString();
     }
 }

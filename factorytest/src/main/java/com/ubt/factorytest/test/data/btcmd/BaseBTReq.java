@@ -24,6 +24,10 @@ public class BaseBTReq {
     public static final byte INTO_FACTORY_TEST = (byte) 0xE2;       //进入工厂测试模式
     public static final byte SPEAKER_TEST = (byte) 0xE7;       //喇叭测试
     public static final byte MIC_TEST = (byte) 0xE6;       //MIC录音测试
+    public static final byte VOL_ADJUST = (byte) 0x0B;       //音量调节
+    public static final byte READ_DEV_STATUS = (byte) 0x0A;       //读取设备状态
+    public static final byte GET_ACTION_LIST = (byte) 0x02;       //读取设备状态
+    public static final byte PLAY_ACTION = (byte) 0x03;       //执行动作
 
 
 

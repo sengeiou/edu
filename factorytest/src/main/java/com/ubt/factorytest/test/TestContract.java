@@ -13,6 +13,9 @@ import java.util.List;
  */
 
 public class TestContract {
+    public static final int ADJUST_SUB = 0;
+    public static final int ADJUST_ADD = 1;
+
     interface Presenter extends BasePresenter {
         List<TestClickEntity> getTestInitData();
         List<TestClickEntity> getDataCache();
@@ -25,6 +28,7 @@ public class TestContract {
         void saveBTMac(String mac);
         void setBTRSSI(String rssi);
         void stopRobotRecord();
+        void adjustVolume(int type);
     }
 
     interface View extends BaseView<Presenter> {
