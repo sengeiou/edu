@@ -2,10 +2,10 @@ package com.ubt.factorytest.test.data.btcmd;
 
 import android.util.Log;
 
-import com.ubt.factorytest.bluetooth.ubtbtprotocol.InvalidPacketException;
-import com.ubt.factorytest.bluetooth.ubtbtprotocol.UbtBTProtocol;
+import com.ubt.factorytest.bluetooth.ubtbtprotocol.ProtocolPacket;
 import com.ubt.factorytest.test.data.DataServer;
 import com.ubt.factorytest.test.recycleview.TestClickEntity;
+import com.ubt.factorytest.utils.ByteHexHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -94,8 +94,8 @@ public class FactoryTool {
             case TestClickEntity.TEST_ITEM_SAVETESTPROFILE:
                 break;
             case TestClickEntity.TEST_ITEM_AGEING_TEST:
-                req = new PlayAction("action/course/motion/" + "胜利.hts");
-                //req = new PlayAction("action/my creation/" + "laohua.hts");
+               // req = new PlayAction("action/course/motion/" + "胜利.hts");
+                req = new PlayAction("action/my creation/" + "laohua.hts");
 
                 break;
 
