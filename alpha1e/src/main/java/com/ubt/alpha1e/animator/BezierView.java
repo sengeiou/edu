@@ -44,6 +44,8 @@ import java.util.Random;
  */
 public class BezierView extends View {
 
+    private static final String TAG =  BezierView.class.getSimpleName();
+
     private static final int MAX_COUNT = 7;  // 贝塞尔曲线最大阶数
     private static final int REGION_WIDTH = 30;  // 合法区域宽度
     private static final int FINGER_RECT_SIZE = 60;   // 矩形尺寸

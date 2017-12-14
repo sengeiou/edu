@@ -733,7 +733,7 @@ public class BlocklyJsInterface {
     @JavascriptInterface
     public void startRunProgram(){
         UbtLog.d(TAG, "-startRunProgram-");
-        ((BlocklyActivity) mBaseActivity).startOrStopRun((byte)0x01);
+//        ((BlocklyActivity) mBaseActivity).startOrStopRun((byte)0x01);
     }
 
     /**
@@ -742,7 +742,7 @@ public class BlocklyJsInterface {
     @JavascriptInterface
     public void finishProgramRun() {
         UbtLog.d(TAG, "-finishProgramRun-");
-        ((BlocklyActivity) mBaseActivity).startOrStopRun((byte)0x02);
+//        ((BlocklyActivity) mBaseActivity).startOrStopRun((byte)0x02);
 
     }
 
@@ -773,11 +773,11 @@ public class BlocklyJsInterface {
             String xml = jsonObject.getString("xml");
             UbtLog.d(TAG, "xml:" + xml);
 
-            BlocklyProjectMode projectMode = new BlocklyProjectMode();
+   /*         BlocklyProjectMode projectMode = new BlocklyProjectMode();
             projectMode.setName(name);
             projectMode.setXml(xml);
 
-            projectMode.saveOrUpdate("name = ?", name);
+            projectMode.saveOrUpdate("name = ?", name);*/
 
             ((BlocklyActivity) mBaseActivity).saveUserProgram(name, xml);
 
@@ -795,7 +795,9 @@ public class BlocklyJsInterface {
     @JavascriptInterface
     public void deleteProjectXml(String xml) {
         UbtLog.d(TAG, "deleteProjectXml:" + xml);
-        DataSupport.deleteAll(BlocklyProjectMode.class, "name = ?", xml);
+
+        ((BlocklyActivity) mBaseActivity).deleteUserProgram(new String[]{xml});
+
     }
 
     /**
@@ -820,9 +822,10 @@ public class BlocklyJsInterface {
             try {
                 BlocklyProjectMode projectMode = projectModeList.get(i);
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("name", projectMode.getName());
-                jsonObject.put("xml", projectMode.getXml());
-                UbtLog.d(TAG, "projectMode:" + projectMode.getXml());
+                jsonObject.put("name", projectMode.getProgramName());
+                jsonObject.put("xml", projectMode.getProgramData());
+                jsonObject.put("pid", projectMode.getPid());
+                UbtLog.d(TAG, "projectMode:" + projectMode.getProgramData());
                 jsonArray.put(i, jsonObject);
             } catch (JSONException e) {
                 e.printStackTrace();

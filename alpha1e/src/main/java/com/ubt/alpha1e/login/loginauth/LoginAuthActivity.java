@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.GetCodeRequest;
@@ -173,14 +174,14 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                 OkHttpClientUtils.getJsonByPostRequest(HttpEntity.BIND_ACCOUNT, params, 0).execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        UbtLog.e(TAG, "Exception:" + e.getMessage());
+                        UbtLog.e(TAG, "BIND_ACCOUNT Exception:" + e.getMessage());
                         LoadingDialog.dismiss(LoginAuthActivity.this);
                         ToastUtils.showShort("验证码错误");
                     }
 
                     @Override
                     public void onResponse(String response, int id) {
-                        UbtLog.d(TAG, "response:" + response);
+                        UbtLog.d(TAG, "BIND_ACCOUNT response:" + response);
                         LoadingDialog.dismiss(LoginAuthActivity.this);
                         BaseResponseModel baseResponseModel = GsonImpl.get().toObject(response, BaseResponseModel.class);
                         if (baseResponseModel.status) {
@@ -193,6 +194,8 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                             intent.setClass(LoginAuthActivity.this, UserEditActivity.class);
                             startActivity(intent);
                             finish();
+                        }else{
+                            ToastUtils.showShort("验证码错误");
                         }
 
                     }
@@ -219,10 +222,12 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            return true;//拦截事件传递,从而屏蔽back键。
+            ((AlphaApplication) this.getApplication()).doExitApp(false);
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
 
     private void setGetCodeTextEnable(boolean enable) {
 

@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import com.ant.country.CountryActivity;
 import com.tencent.ai.tvs.LoginApplication;
 import com.ubt.alpha1e.AlphaApplicationValues.Thrid_login_type;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
@@ -440,13 +441,15 @@ public class AlphaApplication extends LoginApplication {
 
         cleanBluetoothConnectData();
 
-        for (int i = 0; i < mActivityList.size(); i++) {
-            try {
-                mActivityList.get(i).finish();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        for (int i = 0; i < mActivityList.size(); i++) {
+//            try {
+//                mActivityList.get(i).finish();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+
+        AppManager.getInstance().finishAllActivity();
 
         if (isStopProcress) {
             MobclickAgent.onKillProcess(this);

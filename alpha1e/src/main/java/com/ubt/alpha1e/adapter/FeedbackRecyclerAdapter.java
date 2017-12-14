@@ -4,6 +4,10 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +53,7 @@ public class FeedbackRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     public List<FeedbackInfo> mDatas = new ArrayList<>();
     private View mView;
     private Handler mHandler = null;
+    private String searchName = "";
 
     public FeedbackRecyclerAdapter(Context mContext, List<FeedbackInfo> list, Handler handler) {
         super();
@@ -131,8 +136,13 @@ public class FeedbackRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         final FeedbackRecyclerAdapter.MyFeedbackHolder holder  = (FeedbackRecyclerAdapter.MyFeedbackHolder) myHolder;
 
-        UbtLog.d(TAG,"holder.tvFeedbackName = " + holder.tvFeedbackName);
-        holder.tvFeedbackName.setText(feedbackInfo.feedbackName);
+        UbtLog.d(TAG,"holder.tvFeedbackName => " + holder.tvFeedbackName);
+        SpannableString feedbackNameStyle = new SpannableString(feedbackInfo.feedbackName);
+        if(!TextUtils.isEmpty(searchName)){
+            int startIndex = feedbackInfo.feedbackName.indexOf(searchName);
+            feedbackNameStyle.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.T22)),startIndex,startIndex + searchName.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        holder.tvFeedbackName.setText(feedbackNameStyle);
 
         holder.ivLogo.setVisibility(View.GONE);
         holder.rlFeedbackInfo.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +152,9 @@ public class FeedbackRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
                 FeedbackDetailActivity.LaunchActivity(mContext,feedbackInfo);
             }
         });
+    }
 
-
+    public void setSearchName(String searchName){
+        this.searchName = searchName;
     }
 }

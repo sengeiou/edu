@@ -169,6 +169,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
 
     //是否正在头部学习
     private boolean hasLearnHeadIng = false;
+    private ConfirmDialog mTapHeadDialog = null;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -646,8 +647,13 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         bzvPrincipleEye.setCallbackListence(this);
         bzvPrincipleVoice.setCallbackListence(this);
         bzvPrincipleVoiceObstacleAvoidance.setCallbackListence(this);
+
+
     }
 
+    /**
+     * 播放点定位动画显示
+     */
     private void startRadiologicalWaveAnim(){
 
         PointF startPoints = null;
@@ -677,33 +683,49 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         }
     }
 
+    /**
+     * 停止播放定位动物
+     */
     private void stopRadiologicalWaveAnim(){
         radiologicalWaveAnim.stop();
         ivRadiologicalWave.setVisibility(View.GONE);
     }
 
+    /**
+     * 显示拍头弹出框
+     */
     private void showTapHeadDialog(){
-        new ConfirmDialog(getContext()).builder()
-                .setMsg(getStringResources("ui_course_principle_exit_tip"))
-                .setCancelable(false)
-                .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ((PrincipleHelper) mHelper).doInit();
-                        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
-                        MainCourseActivity.finishByMySelf();
-                        FeatureActivity.this.finish();
-                        FeatureActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+        if(mTapHeadDialog == null){
+            mTapHeadDialog = new ConfirmDialog(getContext()).builder()
+                    .setMsg(getStringResources("ui_course_principle_exit_tip"))
+                    .setCancelable(false)
+                    .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            ((PrincipleHelper) mHelper).doInit();
+                            ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                            MainCourseActivity.finishByMySelf();
+                            FeatureActivity.this.finish();
+                            FeatureActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                        }
+                    }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                    }
-                }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        }).show();
+                        }
+                    });
+        }
+        if(!mTapHeadDialog.isShowing()){
+            mTapHeadDialog.show();
+        }
     }
 
+    /**
+     * 初始化Layout布局
+     * @param view
+     * @param scale
+     * @param margetTop
+     */
     private void initViewLayout(View view, int scale, int margetTop) {
 
         params = (RelativeLayout.LayoutParams) view.getLayoutParams();
@@ -723,6 +745,11 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
 
     }
 
+    /**
+     * 初始化虚线定位点
+     * @param startView
+     * @param targetView
+     */
     private void initViewLine(View startView, View targetView) {
         UbtLog.d(TAG, "targetView = " + targetView);
         int[] startPos = getlocation(startView);
@@ -808,6 +835,11 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         }
     }
 
+    /**
+     * 获取View在屏幕的位置
+     * @param view
+     * @return
+     */
     private int[] getlocation(View view) {
         int x, y;
         int[] location = new int[2];
@@ -871,69 +903,82 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                 break;
 
             case R.id.iv_principle_steering_engine:
-                if (tvMsgShow.getVisibility() == View.VISIBLE) {
-                    showView(tvMsgShow, false, smallerLeftBottomAnim);
+                if(playIndex == 0 ){//播放完成之后才能播
+                    if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                        showView(tvMsgShow, false, smallerLeftBottomAnim);
+                    }
+                    startPlayActionFile(ivPrincipleSteeringEngine, 1, "舵机.hts");
+                    showView(rlPrincipleSteeringEngineIntro, true, biggerLeftBottomAnim);
+                    setViewEnable(bzvPrincipleSteeringEngine, true, 1);
+                    startRadiologicalWaveAnim();
+                    ivPrincipleSteeringEngine.bringToFront();
                 }
-                startPlayActionFile(ivPrincipleSteeringEngine, 1, "舵机.hts");
-                showView(rlPrincipleSteeringEngineIntro, true, biggerLeftBottomAnim);
-                setViewEnable(bzvPrincipleSteeringEngine, true, 1);
-                startRadiologicalWaveAnim();
-                ivPrincipleSteeringEngine.bringToFront();
                 break;
             case R.id.iv_principle_infrared_sensor:
-                hasReceviceSensor = false;
-                tvMsgShow.setText(getStringResources("ui_principle_sensor_tips"));
-                startPlayActionFile(ivPrincipleInfraredSensor, 2, "红外传感1.hts");
-                showView(tvMsgShow, true, biggerLeftBottomAnim);
-                setViewEnable(bzvPrincipleInfraredSensor, true, 1);
-                ((PrincipleHelper) mHelper).doReadInfraredSensor((byte) 1);
-                ivPrincipleInfraredSensor.bringToFront();
+                if(playIndex == 0 ){
+                    hasReceviceSensor = false;
+                    tvMsgShow.setText(getStringResources("ui_principle_sensor_tips"));
+                    startPlayActionFile(ivPrincipleInfraredSensor, 2, "红外传感1.hts");
+                    showView(tvMsgShow, true, biggerLeftBottomAnim);
+                    setViewEnable(bzvPrincipleInfraredSensor, true, 1);
+                    ((PrincipleHelper) mHelper).doReadInfraredSensor((byte) 1);
+                    ivPrincipleInfraredSensor.bringToFront();
+                }
                 break;
             case R.id.iv_principle_soundbox:
-
-                if (tvMsgShow.getVisibility() == View.VISIBLE) {
-                    showView(tvMsgShow, false, smallerLeftBottomAnim);
+                if(playIndex == 0 ){
+                    if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                        showView(tvMsgShow, false, smallerLeftBottomAnim);
+                    }
+                    startPlayActionFile(ivPrincipleSoundbox, 3, "扬声器.hts");
+                    showView(rlPrincipleSoundboxIntro, true, biggerRightTopAnim);
+                    setViewEnable(bzvPrincipleSoundbox, true, 1);
+                    startRadiologicalWaveAnim();
+                    ivPrincipleSoundbox.bringToFront();
                 }
-                startPlayActionFile(ivPrincipleSoundbox, 3, "扬声器.hts");
-                showView(rlPrincipleSoundboxIntro, true, biggerRightTopAnim);
-                setViewEnable(bzvPrincipleSoundbox, true, 1);
-                startRadiologicalWaveAnim();
-                ivPrincipleSoundbox.bringToFront();
                 break;
             case R.id.iv_principle_head:
-                hasLearnHeadIng = true;
-                hasReceviceHead = false;
-                tvMsgShow.setText(getStringResources("ui_principle_head_tips"));
-                startPlayActionFile(ivPrincipleHead, 4, "触摸传感1.hts");
-                showView(tvMsgShow, true, biggerLeftBottomAnim);
-                setViewEnable(bzvPrincipleHead, true, 1);
-                ((PrincipleHelper) mHelper).doReadHeadClick((byte) 1);
-                ivPrincipleHead.bringToFront();
+                if(playIndex == 0 ){
+                    hasLearnHeadIng = true;
+                    hasReceviceHead = false;
+                    tvMsgShow.setText(getStringResources("ui_principle_head_tips"));
+                    startPlayActionFile(ivPrincipleHead, 4, "触摸传感1.hts");
+                    showView(tvMsgShow, true, biggerLeftBottomAnim);
+                    setViewEnable(bzvPrincipleHead, true, 1);
+                    ((PrincipleHelper) mHelper).doReadHeadClick((byte) 1);
+                    ivPrincipleHead.bringToFront();
+                }
                 break;
             case R.id.iv_principle_eye:
-                if (tvMsgShow.getVisibility() == View.VISIBLE) {
-                    showView(tvMsgShow, false, smallerLeftBottomAnim);
+                if(playIndex == 0 ){
+                    if (tvMsgShow.getVisibility() == View.VISIBLE) {
+                        showView(tvMsgShow, false, smallerLeftBottomAnim);
+                    }
+                    startPlayActionFile(ivPrincipleEye, 5, "眼睛LED.hts");
+                    showView(rlPrincipleEyeIntro, true, biggerLeftTopAnim);
+                    setViewEnable(bzvPrincipleEye, true, 1);
+                    startRadiologicalWaveAnim();
+                    ivPrincipleEye.bringToFront();
                 }
-                startPlayActionFile(ivPrincipleEye, 5, "眼睛LED.hts");
-                showView(rlPrincipleEyeIntro, true, biggerLeftTopAnim);
-                setViewEnable(bzvPrincipleEye, true, 1);
-                startRadiologicalWaveAnim();
-                ivPrincipleEye.bringToFront();
                 break;
             case R.id.iv_principle_voice:
-                hasReceviceVoice = false;
-                tvMsgShow.setText(getStringResources("ui_principle_voice_tips"));
-                startPlayActionFile(ivPrincipleVoice, 6, "麦克1.hts");
-                showView(tvMsgShow, true, biggerLeftBottomAnim);
-                setViewEnable(bzvPrincipleVoice, true, 1);
-                ivPrincipleVoice.bringToFront();
+                if(playIndex == 0 ){
+                    hasReceviceVoice = false;
+                    tvMsgShow.setText(getStringResources("ui_principle_voice_tips"));
+                    startPlayActionFile(ivPrincipleVoice, 6, "麦克1.hts");
+                    showView(tvMsgShow, true, biggerLeftBottomAnim);
+                    setViewEnable(bzvPrincipleVoice, true, 1);
+                    ivPrincipleVoice.bringToFront();
+                }
                 break;
             case R.id.iv_principle_voice_obstacle_avoidance:
-                tvMsgShow.setText(getStringResources("ui_principle_obstacle_tips"));
-                startPlayActionFile(ivPrincipleVoiceObstacleAvoidance, 7, "百宝1.hts");
-                showView(tvMsgShow, true, biggerLeftBottomAnim);
-                setViewEnable(bzvPrincipleVoiceObstacleAvoidance, true, 1);
-                ivPrincipleVoiceObstacleAvoidance.bringToFront();
+                if(playIndex == 0 ){
+                    tvMsgShow.setText(getStringResources("ui_principle_obstacle_tips"));
+                    startPlayActionFile(ivPrincipleVoiceObstacleAvoidance, 7, "百宝1.hts");
+                    showView(tvMsgShow, true, biggerLeftBottomAnim);
+                    setViewEnable(bzvPrincipleVoiceObstacleAvoidance, true, 1);
+                    ivPrincipleVoiceObstacleAvoidance.bringToFront();
+                }
                 break;
             case R.id.tv_msg_show:
                 showView(tvMsgShow, false, smallerLeftBottomAnim);
@@ -982,6 +1027,12 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         this.finish();
     }
 
+    /**
+     * 播放动作文件
+     * @param view 点击的View
+     * @param index 点击的View的索引
+     * @param actionFile 播放的文件名
+     */
     private void startPlayActionFile(View view, int index, String actionFile) {
         playCount = 0;
         playIndex = index;
@@ -990,10 +1041,18 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         playActionFile(actionFile);
     }
 
+    /**
+     * 播放动作文件
+     * @param acitonFile 播放的文件名
+     */
     private void playActionFile(String acitonFile) {
         ((PrincipleHelper) mHelper).playFile(acitonFile);
     }
 
+    /**
+     * 设置View的透明度
+     * @param enable
+     */
     private void setAllEnable(boolean enable) {
         setViewEnable(ivPrincipleSteeringEngine, enable, 0.3f);
         setViewEnable(ivPrincipleInfraredSensor, enable, 0.3f);
@@ -1012,6 +1071,12 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         setViewEnable(bzvPrincipleVoiceObstacleAvoidance, enable, 0);
     }
 
+    /**
+     * 设置View的透明度
+     * @param mView 设置的View
+     * @param enable 是否可点击
+     * @param alpha 透明度
+     */
     private void setViewEnable(View mView, boolean enable, float alpha) {
         //mView.setEnabled(enable);
         mView.setClickable(enable);
@@ -1022,6 +1087,13 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         }
     }
 
+
+    /**
+     * 显示隐藏View
+     * @param view 操作的View
+     * @param isShow 显示或隐藏
+     * @param anim 显示或隐藏的动画
+     */
     private void showView(View view, boolean isShow, Animation anim) {
         if (view.getVisibility() == View.VISIBLE && isShow) {
             return;
@@ -1074,9 +1146,13 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         }
     }
 
+    /**
+     * 虚线动画完成回调
+     * @param view
+     */
     @Override
     public void onAnimatorEnd(View view) {
-        UbtLog.d(TAG, "onAnimatorEnd = " + view);
+        //UbtLog.d(TAG, "onAnimatorEnd = " + view);
         Message msg = new Message();
         msg.what = BEZIER_ANIMATOR_FINISH;
         msg.arg1 = view.getId();
