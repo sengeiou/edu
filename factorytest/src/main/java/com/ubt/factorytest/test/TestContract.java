@@ -36,5 +36,6 @@ public class TestContract {
         void notifyItemChanged(final int position);
         void btDisconnected();
         void showToast(final String msg);
+        void startWifiConfig();
     }
 }
