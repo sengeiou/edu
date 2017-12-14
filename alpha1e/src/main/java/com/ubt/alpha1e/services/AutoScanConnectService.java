@@ -77,24 +77,6 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 				case BLUETOOTH_TURN_ON:
 				case APP_OUT_BACKGROUND:
 					event = msg.what ;
-//					if(instance.isManualConnectMode){
-//						return;
-//					}
-//					try {
-//						Thread.sleep(1);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//					if(instance.isManualConnectMode){
-//						return;
-//					}
-//					UbtLog.d(TAG,"doScan = " + msg.what);
-//					if (((AlphaApplication) mContext.getApplicationContext())
-//							.getCurrentBluetooth() != null) {
-//						UbtLog.d(TAG, "-蓝牙已经连上，停止搜索--");
-//						return;
-//					}
-//					doScan();
 					mHandler.removeCallbacks(scanRunable);
 					if(instance.isManualConnectMode){
 						UbtLog.d(TAG, "1 instance.isManualConnectMode = true");
