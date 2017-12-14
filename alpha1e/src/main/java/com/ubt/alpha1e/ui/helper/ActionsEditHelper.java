@@ -178,6 +178,20 @@ public class ActionsEditHelper extends BaseHelper implements
         doSendComm(ConstValue.DV_ENTER_COURSE, params);
     }
 
+    /**
+     * 进入和退出动作编辑
+     *
+     */
+    public void doEnterOrExitActionEdit(byte status){
+        byte[] params = new byte[2];
+        params[0] = status;
+        params[1] = 0;
+        UbtLog.d("ActionsEditHelper", "doEnterOrExitActionEdit status:" + ByteHexHelper.bytesToHexString(params));
+        doSendComm(ConstValue.DV_INTO_EDIT, params);
+    }
+
+
+
     @Override
     public void onSendData(String mac, byte[] datas, int nLen) {
         // TODO Auto-generated method stub
@@ -249,6 +263,10 @@ public class ActionsEditHelper extends BaseHelper implements
             UbtLog.d("EditHelper", "TAP_HEAD = " + cmd);
             if (mListener != null) {
                 mListener.tapHead();
+            }
+        }else if(cmd == ConstValue.DV_INTO_EDIT){
+            if(param != null){
+                UbtLog.d("", "进入或退出动作编辑param:" + ByteHexHelper.bytesToHexString(param));
             }
         }
     }

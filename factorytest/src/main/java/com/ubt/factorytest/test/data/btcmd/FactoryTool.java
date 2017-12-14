@@ -2,10 +2,10 @@ package com.ubt.factorytest.test.data.btcmd;
 
 import android.util.Log;
 
-import com.ubt.factorytest.bluetooth.ubtbtprotocol.InvalidPacketException;
-import com.ubt.factorytest.bluetooth.ubtbtprotocol.UbtBTProtocol;
+import com.ubt.factorytest.bluetooth.ubtbtprotocol.ProtocolPacket;
 import com.ubt.factorytest.test.data.DataServer;
 import com.ubt.factorytest.test.recycleview.TestClickEntity;
+import com.ubt.factorytest.utils.ByteHexHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,6 +93,12 @@ public class FactoryTool {
                 break;
             case TestClickEntity.TEST_ITEM_SAVETESTPROFILE:
                 break;
+            case TestClickEntity.TEST_ITEM_AGEING_TEST:
+               // req = new PlayAction("action/course/motion/" + "胜利.hts");
+                req = new PlayAction("action/my creation/" + "laohua.hts");
+
+                break;
+
             default:
                 break;
         }
@@ -115,18 +121,27 @@ public class FactoryTool {
         int itemID = 0;
 
         try {
-            UbtBTProtocol data = new UbtBTProtocol(cmd);
-            byte btCmd = data.getCmd();
+            ProtocolPacket data = new ProtocolPacket();
+//            UbtBTProtocol data = new UbtBTProtocol(cmd);
+            formatBTData(data, cmd);
+            byte btCmd = data.getmCmd();
+            Log.i(TAG,"btCmd："+ ByteHexHelper.byteToHexString(btCmd));
+            if(btCmd == (byte) 0x80){
+                Log.i(TAG,"动作名："+new String(data.getmParam()));
+            }
             if(btCmd == BaseBTReq.HEART_CMD){//心跳命令 不处理
                 return -1;
             }else if(btCmd == BaseBTReq.READ_DEV_STATUS){
-                parseDevStatus(data.getParam());
+                parseDevStatus(data.getmParam());
                 return -1;
+            }else if(btCmd == BaseBTReq.DV_ACTION_FINISH){
+                Log.d("DV_ACTION_FINISH","播放动作结束");
             }
 
             itemID = translateBTCMDID2Item(btCmd);
             isOK = updateDataResult(dataServer, data, itemID);
-        } catch (InvalidPacketException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
             return -1;
         }
@@ -177,7 +192,9 @@ public class FactoryTool {
             case BaseBTReq.WAKEUP_UP:
                 itemID = TestClickEntity.TEST_ITEM_WAKEUPTEST;
                 break;
-
+            case BaseBTReq.DV_ACTION_FINISH:
+                itemID = TestClickEntity.TEST_ITEM_AGEING_TEST;
+                break;
             default:
                 Log.e(TAG,"translateBTCMDID2Item 未找到itemID  cmdID="+cmdID);
                 break;
@@ -194,14 +211,14 @@ public class FactoryTool {
      * @param itemID
      * @return
      */
-    private boolean updateDataResult(DataServer dataServer, UbtBTProtocol data, int itemID){
+    private boolean updateDataResult(DataServer dataServer, ProtocolPacket data, int itemID){
         int position;
         position = getPosition(dataServer, itemID);
         if(position >= 0) {
             String result = "";
             switch (itemID){
                 case TestClickEntity.TEST_ITEM_START_TIME:
-                    String time = new String(data.getParam());
+                    String time = new String(data.getmParam());
                     time = filterTime(time);
                     result = time+"秒";
                     if(Integer.valueOf(time) <= 30){
@@ -209,12 +226,12 @@ public class FactoryTool {
                     }
                     break;
                 case TestClickEntity.TEST_ITEM_ELECTRICCHARGE:
-                    byte[] power = data.getParam();
+                    byte[] power = data.getmParam();
                     result = power[3]+"";   //电量只需要第三位，电量值
                     break;
                 case TestClickEntity.TEST_ITEM_PIRTEST:
                     //红外距离是INT类型
-                    result = String.valueOf(data.getParam()[0]&0xff);
+                    result = String.valueOf(data.getmParam()[0]&0xff);
                     break;
                 case TestClickEntity.TEST_ITEM_INTERRUOTTEST:
                     pressCnt += 1;
@@ -229,7 +246,7 @@ public class FactoryTool {
                     break;
                 case TestClickEntity.TEST_ITEM_GSENSIRTEST:
                     try {
-                        JSONObject jsonObject = new JSONObject(new String(data.getParam()));
+                        JSONObject jsonObject = new JSONObject(new String(data.getmParam()));
                         JSONObject jsonResult = new JSONObject();
                         jsonResult.put("front", jsonObject.getString("front"));
                         jsonResult.put("left", jsonObject.getString("left"));
@@ -238,11 +255,8 @@ public class FactoryTool {
                         e.printStackTrace();
                     }
                     break;
-                case 0x80:
-                    Log.i(TAG,"动作名："+new String(data.getParam()));
-                    break;
                 default:
-                    result = new String(data.getParam());
+                    result = new String(data.getmParam());
                     break;
             }
             dataServer.setDataResult(position, result);
@@ -304,5 +318,14 @@ public class FactoryTool {
         }
 
         return newStr.toString();
+    }
+
+    private void formatBTData(ProtocolPacket pack, byte[] data){
+        for (int i = 0; i < data.length; i++) {
+            if (pack.setData_(data[i])) {
+                // 一帧数据接收完成
+                pack.setmParamLen(pack.getmParam().length);
+            }
+        }
     }
 }

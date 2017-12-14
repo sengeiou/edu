@@ -204,6 +204,11 @@ public class TestFragment extends SupportFragment implements TestContract.View {
         mHandler.sendMessage(hmsg);
     }
 
+    @Override
+    public void startWifiConfig() {
+
+    }
+
     protected void initToolbarNav(Toolbar toolbar) {
         toolbar.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

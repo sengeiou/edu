@@ -28,7 +28,10 @@ public class BaseBTReq {
     public static final byte READ_DEV_STATUS = (byte) 0x0A;       //读取设备状态
     public static final byte GET_ACTION_LIST = (byte) 0x02;       //读取设备状态
     public static final byte PLAY_ACTION = (byte) 0x03;       //执行动作
-
+    /**
+     * 动作结束主动上报
+     */
+    public static final byte DV_ACTION_FINISH = (byte) 0x31;
 
 
     private UbtBTProtocol btcmd;

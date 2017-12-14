@@ -39,7 +39,10 @@ public class SensorHelper extends BaseHelper {
         if(cmd == ConstValue.DV_READ_INFRARED_DISTANCE){
             if(param != null){
                 UbtLog.d(TAG, "param[0]=" + param[0]); //param[0] 表示机器人与障碍物的距离
-                EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_GET_INFRARED_DISTANCE, param[0]));
+                if(param[0] != -1){
+                    EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_GET_INFRARED_DISTANCE, param[0]));
+                }
+
             }
         }else if(cmd == ConstValue.DV_READ_ROBOT_FALL_DOWN){
             if(param != null){

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
@@ -16,6 +17,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -31,7 +33,6 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.blockly.bean.QueryResult;
 import com.ubt.alpha1e.blockly.bean.RobotSensor;
 import com.ubt.alpha1e.blockly.sensor.SensorHelper;
@@ -101,6 +102,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -287,6 +289,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UbtLog.d(TAG, "onCreate");
         setContentView(R.layout.activity_blockly);
         mWebView = (WebView) findViewById(R.id.blockly_webView);
         rlBlank = (RelativeLayout) findViewById(R.id.rl_blank);
@@ -318,7 +321,11 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            finish();
+            if(mWebView != null){
+                UbtLog.d(TAG, "上报返回按键事件给前端");
+                mWebView.loadUrl("javascript:phoneClickBack()");
+                return true;
+            }
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -494,6 +501,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     @Override
     protected void onResume() {
         UbtLog.d(TAG, "onResume isFromCourse = " + isFromCourse );
+        UbtLog.d(TAG, "vivo onResume");
         setCurrentActivityLable(BlocklyActivity.class.getSimpleName());
         super.onResume();
 
@@ -608,6 +616,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         mWebView.getSettings().setAllowContentAccess(true);
         mWebView.getSettings().setDatabaseEnabled(true);
         mWebView.getSettings().setDomStorageEnabled(true);
+        new HeightVisibleChangeListener(mWebView);
 
         WebViewClient webViewClient = new WebViewClient() {
             @Override
@@ -649,8 +658,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 if(isBulueToothConnected()){
                     UbtLog.d(TAG, "do start infrared!");
                     mSensorHelper.doReadInfraredSensor((byte)0x01);  //进入block如果连接蓝牙且是1E立马开始读取红外传感器数据
-                    mSensorHelper.doReadGyroData((byte)0x01);
-                    mSensorHelper.doReadAcceleration((byte)0x01);
+//                    mSensorHelper.doReadGyroData((byte)0x01);
+//                    mSensorHelper.doReadAcceleration((byte)0x01);
                 }
 
                 if(isBulueToothConnected()){
@@ -955,6 +964,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     @Override
     protected void onPause() {
         super.onPause();
+        UbtLog.d(TAG, "vivo onPause");
         if(mMyActionsHelper != null){
             mMyActionsHelper.UnRegisterHelper();
             mMyActionsHelper.unRegisterListeners(this);
@@ -965,6 +975,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     @Override
     protected void onStop() {
         super.onStop();
+        UbtLog.d(TAG, "vivo onStop");
     }
 
     @Override
@@ -982,6 +993,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     protected void onDestroy() {
         super.onDestroy();
         UbtLog.d(TAG, "onDestroy");
+        UbtLog.d(TAG, "vivo onDestroy");
         if(mMyActionsHelper != null){
             mMyActionsHelper.getDataType = MyActionsHelper.Action_type.Unkown;
         }
@@ -1000,8 +1012,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             //退出界面停止红外数据上报
             if(isBulueToothConnected()){
                 mSensorHelper.doReadInfraredSensor((byte)0x00);
-                mSensorHelper.doReadGyroData((byte)0x00);
-                mSensorHelper.doReadAcceleration((byte)0x00);
+//                mSensorHelper.doReadGyroData((byte)0x00);
+//                mSensorHelper.doReadAcceleration((byte)0x00);
                 UbtLog.d(TAG, "startOrStopRun end");
                 startOrStopRun((byte)0x02);
             }
@@ -1059,41 +1071,6 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
         }else{
 
-            /*if(isFromCourse && mLessonInfo != null && mSendCourseActionCount < 2){
-                List<String> needSyncFile = mCourseHelper.getNeedSyncAction(mLessonInfo, names, mLessonTaskInfoList);
-                if(needSyncFile.size() > 0){
-                    String fileDir = FileTools.course_task_cache + File.separator + mLessonInfo.courseId + "_" + mLessonInfo.lessonId;
-                    UbtLog.d(TAG,"isFromCourse = " + isFromCourse + " mSendCourseActionCount = " + mSendCourseActionCount + "   needSyncFile = " + needSyncFile);
-                    mSendCourseActionCount++;
-                    mMyActionsHelper.getDataType = MyActionsHelper.Action_type.MY_COURSE;
-                    ((RemoteHelper)mHelper).sendCourseFiles(fileDir, needSyncFile);
-                    return;
-                }
-            }
-
-            //获取机器人内置动作后，主动调用js方法通知蓝牙状态变化，让js重新请求获取内置动作。
-            UbtLog.d(TAG, "names.size():" + names.size());
-            if (names.size() > 0) {
-//                mActionList.clear();
-                mActionList = names;
-                UbtLog.d(TAG, "read finish:" + mActionList.toString() + "read actions:" + names.size());
-                mWebView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        UbtLog.d(TAG, "checkBlueConnectState 1 ");
-                        mWebView.loadUrl("javascript:checkBlueConnectState()");
-                    }
-                });
-            }
-
-            if(isLoadFinish){
-                if(isFromCourse){
-                    mHandler.sendEmptyMessage(DO_SHOW_LESSON_TASK);
-                }
-                UbtLog.d(TAG,"dismissLoading-2");
-                dismissLoading();
-            }
-            isLoadActionFinish = true;*/
         }
 
 
@@ -1145,12 +1122,12 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     public void connectBluetooth() {
         UbtLog.d(TAG, "connectBluetooth");
         Date curDate = new Date(System.currentTimeMillis());
-        float time_difference = 2000;
+        float time_difference = 1000;
         if (lastTime_doPauseOrContinuePlay != null) {
             time_difference = curDate.getTime()
                     - lastTime_doPauseOrContinuePlay.getTime();
         }
-        if (time_difference < 2000) {
+        if (time_difference < 1000) {
             return;
         }
         lastTime_doPauseOrContinuePlay = curDate;
@@ -1173,8 +1150,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 if(mSensorHelper != null ){
                     UbtLog.d(TAG, "do start infrared!");
                     mSensorHelper.doReadInfraredSensor((byte)0x01);
-                    mSensorHelper.doReadGyroData((byte)0x01);
-                    mSensorHelper.doReadAcceleration((byte)0x01);
+//                    mSensorHelper.doReadGyroData((byte)0x01);
+//                    mSensorHelper.doReadAcceleration((byte)0x01);
                     UbtLog.d(TAG, "startOrStopRun start");
                     startOrStopRun((byte)0x01);
                 }
@@ -1302,8 +1279,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             if(mSensorHelper != null ){
                 UbtLog.d(TAG, "do start infrared!");
                 mSensorHelper.doReadInfraredSensor((byte)0x01);
-                mSensorHelper.doReadGyroData((byte)0x01);
-                mSensorHelper.doReadAcceleration((byte)0x01);
+//                mSensorHelper.doReadGyroData((byte)0x01);
+//                mSensorHelper.doReadAcceleration((byte)0x01);
             }
 
 
@@ -2650,7 +2627,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     }
 
 
-    public void saveUserProgram(final String programName, final String programData){
+    public void saveUserProgram(final String pid, final String programName, final String programData){
 
         BlocklySaveMode saveMode = new BlocklySaveMode();
         saveMode.setProgramName(programName);
@@ -2667,16 +2644,16 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "onError e:" + e.getMessage());
-                ToastUtils.showShort("保存失败");
+//                ToastUtils.showShort("保存失败");
                 BlocklyProjectMode blocklyProjectMode = new BlocklyProjectMode();
-                blocklyProjectMode.setPid("" + System.currentTimeMillis());
+                blocklyProjectMode.setPid(pid);
                 blocklyProjectMode.setUserId(SPUtils.getInstance().getString(com.ubt.alpha1e.base.Constant.SP_USER_ID));
                 blocklyProjectMode.setProgramName(programName);
                 blocklyProjectMode.setProgramData(programData);
                 blocklyProjectMode.setDelState(false);
                 blocklyProjectMode.setServerState(false);
 
-                blocklyProjectMode.save();
+                blocklyProjectMode.saveOrUpdate("pid = ?", pid);
 
 
 
@@ -2798,6 +2775,54 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             }
         });
 
+
+    }
+
+
+
+    public static class HeightVisibleChangeListener implements ViewTreeObserver.OnGlobalLayoutListener {
+
+        private WebView webview;
+        public HeightVisibleChangeListener(WebView webView){
+            this.webview = webView;
+            webview.getViewTreeObserver().addOnGlobalLayoutListener(this);
+        }
+
+        int lastHeight;
+        int lastVisibleHeight;
+
+        @Override
+        public void onGlobalLayout() {
+            Rect visible = new Rect();
+            Rect size = new Rect();
+            webview.getWindowVisibleDisplayFrame(visible);
+            webview.getHitRect(size);
+
+            int height = size.bottom-size.top;
+            int visibleHeight = visible.bottom - visible.top;
+
+            if(height == lastHeight && lastVisibleHeight == visibleHeight) return;
+
+            lastHeight = height;
+            lastVisibleHeight = visibleHeight;
+            int moveHeight = height - visibleHeight;
+            UbtLog.d(TAG, "height:" + height + "__visibleHeight:" + visibleHeight  + "_moveHeight:" + moveHeight
+                     + "屏幕占比:" + moveHeight/height);
+            String ratio = cop(moveHeight, height);
+            UbtLog.d(TAG, "ratio:" +ratio);
+            webview.loadUrl("javascript:phoneKeyborad(" + ratio + ")");
+        }
+
+        private String cop(int num1, int num2){
+            NumberFormat numberFormat = NumberFormat.getInstance();
+
+            // 设置精确到小数点后2位
+
+            numberFormat.setMaximumFractionDigits(2);
+
+            String result = numberFormat.format((float) num1 / (float) num2 );
+            return  result;
+        }
 
     }
 

@@ -9,6 +9,8 @@ import java.io.UnsupportedEncodingException;
  */
 
 public class PlayAction extends BaseBTReq{
+
+    public static final byte START_PIR = 0x01;
     byte    cmd = PLAY_ACTION;
     byte[] parm = {0x00};
 

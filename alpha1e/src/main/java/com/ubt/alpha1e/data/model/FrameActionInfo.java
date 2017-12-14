@@ -44,7 +44,8 @@ public class FrameActionInfo {
 
     public static FrameActionInfo getDefaultFrame() {
         FrameActionInfo def_frame = new FrameActionInfo();
-        def_frame.eng_angles = "90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90";
+//        def_frame.eng_angles = "90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90";
+        def_frame.eng_angles = "93#20#66#86#156#127#90#74#95#104#89#89#104#81#76#90";
         def_frame.eng_time = 1000;
         def_frame.totle_time = 1000;
         return def_frame;
