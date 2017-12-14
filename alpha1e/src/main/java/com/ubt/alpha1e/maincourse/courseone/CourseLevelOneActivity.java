@@ -17,7 +17,7 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.FileTools;
-import com.ubt.alpha1e.maincourse.courselayout.CourseLevelLayout;
+import com.ubt.alpha1e.maincourse.courselayout.CourseLevelOneLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -37,15 +37,14 @@ import java.util.List;
  * 邮箱 784787081@qq.com
  */
 
-public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseLevelLayout.CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
+public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseLevelOneLayout.CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
 
-    private static final String TAG = CourseLevelActivity.class.getSimpleName();
+    private static final String TAG = CourseLevelOneActivity.class.getSimpleName();
     BaseHelper mHelper;
-    CourseLevelLayout mActionEdit;
+    CourseLevelOneLayout mActionEdit;
     RelativeLayout mRlInstruction;
     private TextView mTextView;
 
-    private int currentCard;//第几个关卡
 
     /**
      * 当前课时
@@ -67,10 +66,7 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //当前第几个关卡
-        currentCard = getIntent().getIntExtra("currentCard", 1);
-
-        mHelper = new ActionsEditHelper(CourseLevelActivity.this, this);
+        mHelper = new ActionsEditHelper(CourseLevelOneActivity.this, this);
         mHelper.RegisterHelper();
         ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
@@ -84,7 +80,7 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
             if (msg.what == 1111) {
                 isAllIntroduc = true;
                 mRlInstruction.setVisibility(View.GONE);
-                mPresenter.getCourseOneData(CourseLevelActivity.this);
+                mPresenter.getCourseOneData(CourseLevelOneActivity.this);
             } else if (msg.what == 1112) {
                 mActionEdit.playComplete();
             }
@@ -105,19 +101,11 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
             flag = false;
             if (!flag) {
                 mRlInstruction.setVisibility(View.VISIBLE);
-                mPresenter.getCourseOneData(CourseLevelActivity.this);
-                if (currentCard == 1) {
-                    ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑1总介.hts");
-                } else if (currentCard == 2) {
-                    ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑2总介.hts");
-                }
+                ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑1总介.hts");
             } else {
                 isAllIntroduc = true;
-                if (currentCard == 1) {
-                    mPresenter.getCourseOneData(CourseLevelActivity.this);
-                } else if (currentCard == 2) {
-                    mPresenter.getCourseTwoData(CourseLevelActivity.this);
-                }
+                mPresenter.getCourseOneData(CourseLevelOneActivity.this);
+
             }
         }
     }
@@ -130,14 +118,10 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
 
     @Override
     protected void initUI() {
-        mActionEdit = (CourseLevelLayout) findViewById(R.id.action_edit);
+        mActionEdit = (CourseLevelOneLayout) findViewById(R.id.action_edit);
         mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
         mTextView = (TextView) findViewById(R.id.tv_all_introduc);
-        if (currentCard == 1) {
-            mTextView.setText(ResourceManager.getInstance(this).getStringResources("action_course_card1_1_all"));
-        } else if (currentCard == 2) {
-            mTextView.setText(ResourceManager.getInstance(this).getStringResources("action_course_card2_1_all"));
-        }
+        mTextView.setText(ResourceManager.getInstance(this).getStringResources("action_course_card1_1_all"));
         mActionEdit.setUp(mHelper);
 
     }
@@ -156,7 +140,7 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
             UbtLog.d(TAG, "record===" + record.toString());
             int course = record.getCourseLevel();
             int recordlevel = record.getPeriodLevel();
-            if (course == currentCard) {
+            if (course == 1) {
                 if (recordlevel == 0) {
                     level = 1;
                 } else if (recordlevel == 1) {
@@ -169,7 +153,7 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
             }
 
         }
-        mActionEdit.setData(list, currentCard,level, this);
+        mActionEdit.setData(level, this);
     }
 
     /**
@@ -212,14 +196,14 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
             UbtLog.d(TAG, "保存进度到数据库2" + record.toString());
             int course = record.getCourseLevel();
             int level = record.getPeriodLevel();
-            if (course == currentCard && level < current) {
+            if (course == 1 && level < current) {
                 UbtLog.d(TAG, "保存进度到数据库3" + "保存成功");
                 ContentValues values = new ContentValues();
-                values.put("CourseLevel", currentCard);
+                values.put("CourseLevel", 1);
                 values.put("periodLevel", current);
                 values.put("isUpload", false);
                 DataSupport.updateAll(LocalActionRecord.class, values);
-                mPresenter.saveLastProgress(String.valueOf(currentCard), String.valueOf(current));
+                mPresenter.saveLastProgress(String.valueOf(1), String.valueOf(current));
             }
         }
     }
@@ -248,7 +232,7 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
      */
     public void returnCardActivity() {
         Intent intent = new Intent();
-        intent.putExtra("course", currentCard);//第几关
+        intent.putExtra("course", 1);//第几关
         intent.putExtra("leavel", currentCourse);//第几个课时
         intent.putExtra("isComplete", true);
         intent.putExtra("score", currentCourse == list.size() ? 1 : 0);

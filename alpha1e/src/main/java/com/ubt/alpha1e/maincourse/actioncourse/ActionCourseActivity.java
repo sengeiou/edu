@@ -30,8 +30,7 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResponseMode.CourseDetailScoreModule;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.maincourse.adapter.ActionCoursedapter;
-import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -65,6 +64,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
 
     private static final int REQUESTCODE = 10000;
     private static ActionCourseActivity mainCourseInstance = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +100,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         mRecyleviewContent.setAdapter(mMainCoursedapter);
 
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -108,11 +109,12 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
 
     }
 
-    public static void finishByMySelf(){
-        if(mainCourseInstance != null && !mainCourseInstance.isFinishing()){
+    public static void finishByMySelf() {
+        if (mainCourseInstance != null && !mainCourseInstance.isFinishing()) {
             mainCourseInstance.finish();
         }
     }
+
     @Override
     protected void initControlListener() {
 
@@ -253,14 +255,14 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_pos) {
                             int n = position + 1;
-//                            Intent intent = new Intent(ActionCourseActivity.this, CourseLevelActivity.class);
-//                            intent.putExtra("currentCard", n);
-//                            startActivityForResult(intent, REQUESTCODE);
                             if (position == 0) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseOneActivity.class), REQUESTCODE);
-                            } else if (position == 1) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseTwoActivity.class), REQUESTCODE);
+                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class), REQUESTCODE);
                             }
+//                            if (position == 0) {
+//                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseOneActivity.class), REQUESTCODE);
+//                            } else if (position == 1) {
+//                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseTwoActivity.class), REQUESTCODE);
+//                            }
                             ActionCourseActivity.this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                             dialog.dismiss();
                         }
@@ -274,6 +276,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 .setCancelable(true)
                 .create().show();
     }
+
     /**
      * 播放动作
      *

@@ -221,66 +221,12 @@
         >
 
 
-        <RelativeLayout
-            android:id="@+id/rl_zoom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right|center_vertical"
-            android:paddingTop="20dp"
-
-            >
-
-            <ImageView
-                android:id="@+id/iv_zoom_plus"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/actions_zoom_plus_selector"
-                />
-
-            <TextView
-                android:id="@+id/tv_zoom_plus"
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/iv_zoom_plus"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp"
-                />
-
-
-            <ImageView
-                android:id="@+id/iv_zoom_minus"
-                android:layout_width="30dp"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/tv_zoom_plus"
-                android:src="@drawable/actions_zoom_minus_selector"
-                />
-
-            <TextView
-                android:id="@+id/tv_zoom_minus"
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/iv_zoom_minus"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp"
-                />
-
-            <ImageView
-                android:id="@+id/iv_cancel_update"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_toRightOf="@+id/tv_zoom_minus"
-                android:src="@drawable/ic_cancel"
-                android:visibility="invisible"
-                />
-
-        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/ll_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_zoom"
-            android:layout_marginTop="10dp"
+             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             >
 
@@ -288,6 +234,7 @@
                 android:id="@+id/rl_play_music"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
+                android:layout_below="@+id/rl_zoom"
                 android:gravity="center_vertical"
                 >
 
@@ -312,11 +259,65 @@
 
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/rl_zoom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right|center_vertical"
+                android:paddingTop="20dp"
+
+                >
+
+                <ImageView
+                    android:id="@+id/iv_zoom_plus"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/actions_zoom_plus_selector"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_zoom_plus"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/iv_zoom_plus"
+                    android:paddingRight="10dp"
+                    android:paddingTop="10dp"
+                    />
+
+
+                <ImageView
+                    android:id="@+id/iv_zoom_minus"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/tv_zoom_plus"
+                    android:src="@drawable/actions_zoom_minus_selector"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_zoom_minus"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/iv_zoom_minus"
+                    android:paddingRight="10dp"
+                    android:paddingTop="10dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_cancel_update"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_toRightOf="@+id/tv_zoom_minus"
+                    android:src="@drawable/ic_cancel"
+                    android:visibility="invisible"
+                    />
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/ll_frame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/rl_zoom"
                 android:layout_toLeftOf="@+id/iv_add_frame"
                 android:layout_toRightOf="@+id/rl_play_music"
                 android:gravity="center_vertical"
@@ -436,6 +437,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+
                 android:src="@drawable/actions_edit_add_selector"
                 />
             <ImageView

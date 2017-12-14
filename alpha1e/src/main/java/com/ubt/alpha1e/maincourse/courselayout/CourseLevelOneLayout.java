@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,7 +27,8 @@ import java.util.List;
 
 import zhy.com.highlight.HighLight;
 import zhy.com.highlight.interfaces.HighLightInterface;
-import zhy.com.highlight.position.OnLeftPosCallback;
+import zhy.com.highlight.position.HightLightTopCallback;
+import zhy.com.highlight.position.OnLeftLocalPosCallback;
 import zhy.com.highlight.position.OnRightPosCallback;
 import zhy.com.highlight.shape.RectLightShape;
 import zhy.com.highlight.view.HightLightView;
@@ -43,8 +43,8 @@ import zhy.com.highlight.view.HightLightView;
  * version
  */
 
-public class CourseLevelLayout extends BaseActionEditLayout {
-    private String TAG = CourseLevelLayout.class.getSimpleName();
+public class CourseLevelOneLayout extends BaseActionEditLayout {
+    private String TAG = CourseLevelOneLayout.class.getSimpleName();
     private ImageView ivLeft;
     private ImageView ivRight;
     private TextView tvCourseContent;
@@ -55,7 +55,9 @@ public class CourseLevelLayout extends BaseActionEditLayout {
      * 第一关卡所有课时列表
      */
     private List<ActionCourseOneContent> mContents = new ArrayList<>();
-    private int currentCard = 1;//当前关卡
+
+
+    private List<CourseOne1Content> mOne1ContentList = new ArrayList<>();
 
     CourseProgressListener courseProgressListener;
     /**
@@ -68,15 +70,15 @@ public class CourseLevelLayout extends BaseActionEditLayout {
 
     private HighLight mHightLight;
 
-    public CourseLevelLayout(Context context) {
+    public CourseLevelOneLayout(Context context) {
         super(context);
     }
 
-    public CourseLevelLayout(Context context, @Nullable AttributeSet attrs) {
+    public CourseLevelOneLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CourseLevelLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CourseLevelOneLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -88,13 +90,12 @@ public class CourseLevelLayout extends BaseActionEditLayout {
     /**
      * 设置课程数据
      *
-     * @param list                   课程列表
      * @param currentCourse          当前第几个课时
      * @param courseProgressListener 回调监听
      */
-    public void setData(List<ActionCourseOneContent> list, int currentCard, int currentCourse, CourseProgressListener courseProgressListener) {
-        this.mContents = list;
-        this.currentCard = currentCard;
+    public void setData(int currentCourse, CourseProgressListener courseProgressListener) {
+        mOne1ContentList.clear();
+        mOne1ContentList.addAll(ActionCourseDataManager.getCardOneList(mContext));
         this.currentCourse = currentCourse;
         this.courseProgressListener = courseProgressListener;
         setLayoutByCurrentCourse();
@@ -108,9 +109,8 @@ public class CourseLevelLayout extends BaseActionEditLayout {
     public void setLayoutByCurrentCourse() {
         UbtLog.d(TAG, "currentCourse==" + currentCourse);
         rlContent.setVisibility(View.VISIBLE);
-
         if (currentCourse == 1) {
-            tvCourseContent.setText(mContents.get(0).getCourseName());
+            tvCourseContent.setText("认识时间轴");
             ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
             //showPop(0);
@@ -118,12 +118,12 @@ public class CourseLevelLayout extends BaseActionEditLayout {
         } else if (currentCourse == 2) {
             ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
-            tvCourseContent.setText(mContents.get(1).getCourseName());
+            tvCourseContent.setText("熟悉动作添加");
             showPop1();
         } else if (currentCourse == 3) {
             ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
-            tvCourseContent.setText(mContents.get(2).getCourseName());
+            tvCourseContent.setText("了解音乐库");
             showPop2();
         }
 
@@ -241,7 +241,7 @@ public class CourseLevelLayout extends BaseActionEditLayout {
 
 
     public void playComplete() {
-        UbtLog.d("EditHelper", "播放完成");
+        UbtLog.d(TAG , "播放完成");
         if (((Activity) mContext).isFinishing()) {
             return;
         }
@@ -251,10 +251,10 @@ public class CourseLevelLayout extends BaseActionEditLayout {
         if (currentCourse == 1) {
             ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
-            if (currentIndex <= mContents.get(0).getList().size()) {
-                // showPop(currentIndex);
-                clickKnown();
+            if (currentIndex < mOne1ContentList.size()) {
+                 clickKnown();
             } else {
+                clickKnown();
                 if (courseProgressListener != null) {
                     courseProgressListener.completeCurrentCourse(1);
                 }
@@ -300,11 +300,7 @@ public class CourseLevelLayout extends BaseActionEditLayout {
      * 第一课时界面显示
      */
     private void showCourseOne() {
-        if (currentCard == 1) {
-            showOneCardContent();
-        } else if (currentCard == 2) {
-
-        }
+        showOneCardContent();
     }
 
 
@@ -318,28 +314,28 @@ public class CourseLevelLayout extends BaseActionEditLayout {
                 .enableNext()
                 .maskColor(0xAA000000)
                 // .anchor(findViewById(R.id.id_container))//如果是Activity上增加引导层，不需要设置anchor
-                .addHighLight(R.id.ll_frame, R.layout.layout_pop_course_level, new HightLightTopCallback(45), new RectLocalLightShap())
-                .addHighLight(R.id.rl_musicz_zpne, R.layout.layout_pop_course_level, new HightLightTopCallback(100), new RectLocalLightShap())
-                .addHighLight(R.id.ll_add_frame, R.layout.layout_pop_course_level, new HightLightTopCallback(20), new RectLocalLightShap())
-                .addHighLight(R.id.iv_add_frame1, R.layout.layout_pop_course_level, new OnLeftPosCallback(20), new RectLocalLightShap())
-                .addHighLight(R.id.iv_play_music, R.layout.layout_pop_course_level, new OnRightPosCallback(12), new RectLocalLightShap())
+                .addHighLight(R.id.ll_frame, R.layout.layout_pop_course_right_level, new HightLightTopCallback(100), new RectLightShape())
+                .addHighLight(R.id.rl_musicz_zpne, R.layout.layout_pop_course_right_level, new HightLightTopCallback(100), new RectLightShape())
+                .addHighLight(R.id.ll_add_frame, R.layout.layout_pop_course_right_level, new HightLightTopCallback(100), new RectLightShape())
+                .addHighLight(R.id.iv_add_frame1, R.layout.layout_pop_course_left_level, new OnLeftLocalPosCallback(30), new RectLightShape())
+                .addHighLight(R.id.iv_play_music, R.layout.layout_pop_course_right_level, new OnRightPosCallback(30), new RectLightShape())
                 .setOnNextCallback(new HighLightInterface.OnNextCallback() {
                     @Override
                     public void onNext(HightLightView hightLightView, View targetView, View tipView) {
                         tv = tipView.findViewById(R.id.tv_content);
-                        if (currentIndex < mContents.get(0).getList().size()) {
-                            tv.setText(mContents.get(0).getList().get(currentIndex).getContent());
-                            CourseOne1Content oneContent = mContents.get(currentCourse - 1).getList().get(currentIndex);
+                        if (currentIndex < mOne1ContentList.size()) {
+                            CourseOne1Content oneContent = mOne1ContentList.get(currentIndex);
+                            tv.setText(oneContent.getTitle());
                             ((ActionsEditHelper) mHelper).playAction(oneContent.getActionPath());
-                            UbtLog.d(TAG, " onNext====" + oneContent.getContent());
-                            UbtLog.d(TAG, " onNext====od====" + targetView.getId());
+                            UbtLog.d(TAG, " onNext====" + oneContent.getTitle());
+                            UbtLog.d(TAG, " oneContent====" + oneContent.toString());
                             currentIndex++;
                         }
-                        UbtLog.d(TAG, "当前的是那个View  onNext====" + currentIndex + "  size===" + mContents.get(0).getList().size());
+                        UbtLog.d(TAG, "当前的是那个View  onNext====" + currentIndex + "  size===" + mOne1ContentList.size());
                     }
                 });
         mHightLight.show();
-        CourseOne1Content oneContent = mContents.get(currentCourse - 1).getList().get(0);
+        CourseOne1Content oneContent = mOne1ContentList.get(0);
         ((ActionsEditHelper) mHelper).playAction(oneContent.getActionPath());
     }
 
@@ -368,41 +364,6 @@ public class CourseLevelLayout extends BaseActionEditLayout {
     EasyPopup mCirclePop = null;
 
 
-    /**
-     * 第一课时
-     *
-     * @param index
-     */
-    private void showPop(int index) {
-        if (index == 3) {
-            setAddButton();
-        } else if (index == 4) {
-            setPlayButton();
-        }
-        View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one, null);
-        TextView textView = contentView.findViewById(R.id.tv_content);
-        UbtLog.d(TAG, mContents.get(currentCourse - 1).getList().toString());
-        CourseOne1Content oneContent = mContents.get(currentCourse - 1).getList().get(index);
-        textView.setText(oneContent.getContent());
-        textView.setBackgroundResource(oneContent.getDirection() == 0 ? R.drawable.bubble_left : R.drawable.bubble_right);
-        View archView = findViewById(oneContent.getId());
-        mCirclePop = new EasyPopup(mContext)
-                .setContentView(contentView)
-                //是否允许点击PopupWindow之外的地方消失
-                .setFocusAndOutsideEnable(false)
-                .createPopup()
-                .setOnDismissListener(new PopupWindow.OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        currentIndex++;
-                    }
-                });
-
-        mCirclePop.showAtAnchorView(archView, oneContent.getVertGravity(), oneContent.getHorizGravity(), oneContent.getX(), oneContent.getY());
-        // ((ActionsEditHelper) mHelper).playCourse(oneContent.getVoiceName());
-        ((ActionsEditHelper) mHelper).playAction(oneContent.getActionPath());
-        UbtLog.d("EditHelper", oneContent.getActionPath());
-    }
 
     /**
      * 第二课时
@@ -505,5 +466,6 @@ public class CourseLevelLayout extends BaseActionEditLayout {
 
         void finishActivity();
     }
+
 
 }

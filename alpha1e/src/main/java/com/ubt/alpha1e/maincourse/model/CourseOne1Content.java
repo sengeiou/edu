@@ -13,7 +13,7 @@ public class CourseOne1Content {
 
     private int index;
     private String content;
-
+    private String title;
     /**
      * 控件ID
      */
@@ -115,11 +115,20 @@ public class CourseOne1Content {
         this.voiceName = voiceName;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Override
     public String toString() {
         return "CourseOne1Content{" +
                 "index=" + index +
                 ", content='" + content + '\'' +
+                ", title='" + title + '\'' +
                 ", id=" + id +
                 ", voiceName='" + voiceName + '\'' +
                 ", actionPath='" + actionPath + '\'' +
