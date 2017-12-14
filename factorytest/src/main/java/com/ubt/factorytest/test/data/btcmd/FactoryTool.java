@@ -2,10 +2,10 @@ package com.ubt.factorytest.test.data.btcmd;
 
 import android.util.Log;
 
-import com.ubt.factorytest.bluetooth.ubtbtprotocol.ProtocolPacket;
+import com.ubt.factorytest.bluetooth.ubtbtprotocol.InvalidPacketException;
+import com.ubt.factorytest.bluetooth.ubtbtprotocol.UbtBTProtocol;
 import com.ubt.factorytest.test.data.DataServer;
 import com.ubt.factorytest.test.recycleview.TestClickEntity;
-import com.ubt.factorytest.utils.ByteHexHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,6 +93,12 @@ public class FactoryTool {
                 break;
             case TestClickEntity.TEST_ITEM_SAVETESTPROFILE:
                 break;
+            case TestClickEntity.TEST_ITEM_AGEING_TEST:
+                req = new PlayAction("action/course/motion/" + "胜利.hts");
+                //req = new PlayAction("action/my creation/" + "laohua.hts");
+
+                break;
+
             default:
                 break;
         }
@@ -128,6 +134,8 @@ public class FactoryTool {
             }else if(btCmd == BaseBTReq.READ_DEV_STATUS){
                 parseDevStatus(data.getmParam());
                 return -1;
+            }else if(btCmd == BaseBTReq.DV_ACTION_FINISH){
+                Log.d("DV_ACTION_FINISH","播放动作结束");
             }
 
             itemID = translateBTCMDID2Item(btCmd);
@@ -184,7 +192,9 @@ public class FactoryTool {
             case BaseBTReq.WAKEUP_UP:
                 itemID = TestClickEntity.TEST_ITEM_WAKEUPTEST;
                 break;
-
+            case BaseBTReq.DV_ACTION_FINISH:
+                itemID = TestClickEntity.TEST_ITEM_AGEING_TEST;
+                break;
             default:
                 Log.e(TAG,"translateBTCMDID2Item 未找到itemID  cmdID="+cmdID);
                 break;

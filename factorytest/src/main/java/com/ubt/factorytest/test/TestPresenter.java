@@ -174,6 +174,13 @@ public class TestPresenter implements TestContract.Presenter {
         }else if(itemID == TestClickEntity.TEST_ITEM_WIFITEST){
             mView.startWifiConfig();
         }else {
+        }else if(itemID==TestClickEntity.TEST_ITEM_AGEING_TEST){
+            byte[] cmd = FactoryTool.getInstance().getReqBytes(item);
+            if (cmd != null) {
+                mBluetoothController.write(cmd);
+            }
+        }
+        else {
             byte[] cmd = FactoryTool.getInstance().getReqBytes(item);
             if (cmd != null) {
                 mBluetoothController.write(cmd);
