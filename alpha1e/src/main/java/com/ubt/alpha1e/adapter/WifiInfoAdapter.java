@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.ui.dialog.WifiSelectAlertDialog;
 
 import java.util.ArrayList;
