@@ -38,6 +38,7 @@ import com.ubt.factorytest.test.data.btcmd.BaseBTReq;
 import com.ubt.factorytest.test.data.btcmd.ConnectWifi;
 import com.ubt.factorytest.test.data.btcmd.FactoryTool;
 import com.ubt.factorytest.utils.ByteHexHelper;
+import com.ubt.factorytest.utils.SpUtils;
 import com.ubt.factorytest.utils.ToastUtils;
 
 import butterknife.BindView;
@@ -107,6 +108,7 @@ public class NetconnectFragment extends SupportFragment implements View.OnClickL
 
     private String wifiName = "";
     private String wifiIP = "";
+    SpUtils spUtils = null;
 
     public static NetconnectFragment newInstance() {
 
@@ -124,6 +126,7 @@ public class NetconnectFragment extends SupportFragment implements View.OnClickL
         unbinder = ButterKnife.bind(this, view);
         initUI();
         initBT();
+        spUtils = new SpUtils(NetconnectFragment.this.getActivity());
         factoryListener = new IFactoryListener() {
             @Override
             public void onProtocolPacket(ProtocolPacket packet) {
@@ -137,7 +140,11 @@ public class NetconnectFragment extends SupportFragment implements View.OnClickL
                             Log.i(TAG, "WIFI 连接中");
                         } else if (state[0] == 2) {
                             Log.i(TAG, "WIFI 连接成功");
+                            if(ed_wifi_name == null){
+                                return;
+                            }
                             mHandler.sendEmptyMessage(NETWORK_CONNECT_SUCCESS);
+                            spUtils.putWifiPwd(ed_wifi_name.getText().toString(),ed_wifi_pwd.getText().toString());
                         } else if (state[0] == 3) {
                             Log.i(TAG, "WIFI 连接失败");
                             mHandler.sendEmptyMessage(NETWORK_CONNECT_FAIL);
@@ -604,6 +611,7 @@ public class NetconnectFragment extends SupportFragment implements View.OnClickL
             return;
         }
         ed_wifi_name.setText(result);
+        ed_wifi_pwd.setText(spUtils.getWifiPwd(result));
         ed_wifi_pwd.requestFocus();
     }
 }
