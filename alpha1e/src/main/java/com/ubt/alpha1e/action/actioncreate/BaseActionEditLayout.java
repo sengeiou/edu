@@ -1135,6 +1135,16 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         }
         UbtLog.d(TAG, "doDeleteItem selectPos:" + selectPos + "list:" + list_frames.size() + "currentIndex:" + currentIndex);
         list_frames.remove(mCurrentEditItem);
+        if(TextUtils.isEmpty(mDir) ){
+          if(list_frames.size() == 0){
+              currentIndex = 1;
+          }
+
+        }else{
+            if(list_frames.size() == 1){
+                currentIndex = 1;
+            }
+        }
         adapter.notifyDataSetChanged();
         adapter.setDefSelect(-1);
         goneEditFrameLayout();
