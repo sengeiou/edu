@@ -7,7 +7,10 @@ import android.util.Log;
 import com.ubt.factorytest.bluetooth.bluetoothLib.BluetoothController;
 import com.ubt.factorytest.bluetooth.bluetoothLib.base.BluetoothListenerAdapter;
 import com.ubt.factorytest.bluetooth.bluetoothLib.base.BluetoothState;
+import com.ubt.factorytest.bluetooth.ubtbtprotocol.ProtocolPacket;
 import com.ubt.factorytest.test.data.DataServer;
+import com.ubt.factorytest.test.data.IFactoryListener;
+import com.ubt.factorytest.test.data.btcmd.BaseBTReq;
 import com.ubt.factorytest.test.data.btcmd.FactoryTool;
 import com.ubt.factorytest.test.data.btcmd.GsensirTest;
 import com.ubt.factorytest.test.data.btcmd.HeartBeat;
@@ -72,10 +75,21 @@ public class TestPresenter implements TestContract.Presenter {
         @Override
         public void onReadData(BluetoothDevice device, byte[] data) {
             Log.d(TAG, "zz TestPresenter onReadData data:" + ByteHexHelper.bytesToHexString(data));
-            int itemID = FactoryTool.getInstance().parseBTCmd(mDataServer, data);
-            if(itemID >= 0){
+            FactoryTool.getInstance().parseBTCmd(data, new IFactoryListener() {
+                @Override
+                public void onProtocolPacket(ProtocolPacket packet) {
+                    if(packet.getmCmd() == BaseBTReq.HEART_CMD){
+                        return;
+                    }
+                    int pos = FactoryTool.getInstance().getItemPositon(mDataServer,packet);
+                    if(pos >= 0){
+                        mView.notifyItemChanged(pos);
+                    }
+                }
+            });
+           /* if(itemID >= 0){
                 mView.notifyItemChanged(itemID);
-            }
+            }*/
         }
 
         @Override
@@ -169,10 +183,6 @@ public class TestPresenter implements TestContract.Presenter {
                 mView.showToast("保存测试文件失败!!!!");
             }
 
-        }else if(itemID == TestClickEntity.TEST_ITEM_ACTION_TEST){
-            mView.startActionTest();
-        }else if(itemID == TestClickEntity.TEST_ITEM_WIFITEST){
-            mView.startWifiConfig();
         }else {
             byte[] cmd = FactoryTool.getInstance().getReqBytes(item);
             if (cmd != null) {
@@ -194,6 +204,8 @@ public class TestPresenter implements TestContract.Presenter {
                 entity.setTestResult(mBTMac+"     "+rssi);
                 if(Integer.valueOf(rssi) >= -65){
                     entity.setPass(true);
+                }else{
+                    entity.setPass(false);
                 }
             }
         }

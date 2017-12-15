@@ -6,7 +6,6 @@ import com.ubt.factorytest.bluetooth.ubtbtprotocol.ProtocolPacket;
 import com.ubt.factorytest.test.data.DataServer;
 import com.ubt.factorytest.test.data.IFactoryListener;
 import com.ubt.factorytest.test.recycleview.TestClickEntity;
-import com.ubt.factorytest.utils.ByteHexHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +45,7 @@ public class FactoryTool {
         pressCnt = 0;
     }
 
-    public void setFactoryListener(IFactoryListener factoryListener){
+    private void setFactoryListener(IFactoryListener factoryListener){
         listener = factoryListener;
     }
     /**
@@ -117,39 +116,48 @@ public class FactoryTool {
 
     /**
      * 解析接收到的蓝牙命令
-     * @param dataServer
      * @param cmd
-     * @return 返回RecyclerView中需要更新参数的ITEMID
+     * @factoryListener 数据包解析回调
      */
-    public int parseBTCmd(DataServer dataServer, final byte[] cmd){
+    public void  parseBTCmd(final byte[] cmd, IFactoryListener factoryListener){
+        formatBTData(cmd, factoryListener);
+    }
+
+    /*public void parseBTCmd(final byte[] cmd){
         boolean isOK = false;
         int itemID = 0;
-
         try {
             ProtocolPacket data = new ProtocolPacket();
-//            UbtBTProtocol data = new UbtBTProtocol(cmd);
-            formatBTData(data, cmd);
+            formatBTData(cmd, null);
             byte btCmd = data.getmCmd();
             Log.i(TAG,"btCmd："+ ByteHexHelper.byteToHexString(btCmd));
-            if(btCmd == (byte) 0x80){
-                if(listener != null){
-                    listener.onActionList(new String(data.getmParam()));
-                }
-                return -1;
-            }else if(btCmd == BaseBTReq.HEART_CMD){//心跳命令 不处理
-                return -1;
-            }else if(btCmd == BaseBTReq.READ_DEV_STATUS){
-                parseDevStatus(data.getmParam());
-                return -1;
-            }else if(btCmd == BaseBTReq.DV_ACTION_FINISH){
-                Log.d("DV_ACTION_FINISH","播放动作结束");
+            switch (btCmd){
+                case (byte)0x80: //获取到动作
+                    if(listener != null){
+                        listener.onActionList(new String(data.getmParam()));
+                    }
+                    break;
+                case BaseBTReq.CONNECT_WIFI:
+                    if(listener != null){
+                        listener.onWifiConnectState(ByteHexHelper.bytesToHexString(data.getmParam()).trim());
+                    }
+                    break;
+                case BaseBTReq.HEART_CMD:
+                    break;
+                case BaseBTReq.READ_DEV_STATUS:
+                    parseDevStatus(data.getmParam());
+                    break;
+                case BaseBTReq.DV_ACTION_FINISH:
+                    Log.d("DV_ACTION_FINISH","播放动作结束");
+                    break;
+                default:
+                    if(dataServer == null){
+                        return -1;
+                    }
+                    itemID = translateBTCMDID2Item(btCmd);
+                    isOK = updateDataResult(dataServer, data, itemID);
+                    break;
             }
-            if(dataServer == null){
-                return -1;
-            }
-            itemID = translateBTCMDID2Item(btCmd);
-            isOK = updateDataResult(dataServer, data, itemID);
-
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
@@ -159,9 +167,22 @@ public class FactoryTool {
         }else{
             return -1;
         }
+    }*/
 
+    public int getItemPositon(DataServer dataServer, ProtocolPacket packet){
+        boolean isOK;
+        int itemID;
+        int pos;
+
+        itemID = translateBTCMDID2Item(packet.getmCmd());
+        isOK = updateDataResult(dataServer, packet, itemID);
+        if(isOK){
+            pos = getPosition(dataServer, itemID);
+        }else{
+            pos = -1;
+        }
+        return pos;
     }
-
     /**
      * 转换蓝牙命令ID到RecyclerView itemID 需要检测返回值的项，才需要转换ID
      * @param cmdID
@@ -304,7 +325,7 @@ public class FactoryTool {
      *解析机器人状态
      * @param status
      */
-    private void parseDevStatus(byte[] status){
+    public void parseDevStatus(byte[] status){
         if(status[0] == 0x02){
             currentVol = status[1];
             Log.i(TAG,"当前电量:"+currentVol);
@@ -331,11 +352,15 @@ public class FactoryTool {
         return newStr.toString();
     }
 
-    private void formatBTData(ProtocolPacket pack, byte[] data){
+    private void formatBTData(byte[] data, IFactoryListener factoryListener){
+        ProtocolPacket pack = new ProtocolPacket();
         for (int i = 0; i < data.length; i++) {
             if (pack.setData_(data[i])) {
                 // 一帧数据接收完成
                 pack.setmParamLen(pack.getmParam().length);
+                if(factoryListener != null){ //package返回本地接口
+                    factoryListener.onProtocolPacket(pack);
+                }
             }
         }
     }
