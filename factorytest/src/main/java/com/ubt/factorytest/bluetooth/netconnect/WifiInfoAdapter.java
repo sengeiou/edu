@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.adapter;
+package com.ubt.factorytest.bluetooth.netconnect;
 
 import android.content.Context;
 import android.net.wifi.ScanResult;
@@ -14,7 +14,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ubt.alpha1e.ui.dialog.WifiSelectAlertDialog;
+
+import com.ubt.factorytest.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class WifiInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        final WifiInfoAdapter.MyWifiHolder myHolder  = (WifiInfoAdapter.MyWifiHolder) holder;
+        final MyWifiHolder myHolder  = (MyWifiHolder) holder;
         final ScanResult wifiInfo = mDatas.get(position);
 
         myHolder.tvWifiName.setText(wifiInfo.SSID);

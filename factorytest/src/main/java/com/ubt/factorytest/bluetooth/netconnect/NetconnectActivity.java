@@ -1,45 +1,31 @@
-package com.ubt.alpha1e.bluetoothandnet.netconnect;
+package com.ubt.factorytest.bluetooth.netconnect;
 
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.factorytest.R;
 
-import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.ToastUtils;
-import com.ubt.alpha1e.base.loading.LoadingDialog;
-import com.ubt.alpha1e.event.NetworkEvent;
-import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.ui.dialog.AlertDialog;
-import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
-import com.ubt.alpha1e.ui.dialog.WifiSelectAlertDialog;
-import com.ubt.alpha1e.ui.helper.NetworkHelper;
-import com.ubt.alpha1e.ui.main.MainActivity;
-import com.ubt.alpha1e.utils.log.UbtLog;
-
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import butterknife.BindView;
 
 
 /**
@@ -50,43 +36,43 @@ import butterknife.BindView;
  * @modified:
  */
 
-public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View, NetconnectPresenter> implements NetconnectContract.View , View.OnClickListener{
+public class NetconnectActivity extends Activity implements View.OnClickListener{
 
 
     String TAG = "NetconnectActivity";
 
-    @BindView(R.id.ib_close)
+//    @BindView(R.id.ib_close)
     ImageButton ib_close;
-
-    @BindView(R.id.ib_return)
+//
+//    @BindView(R.id.ib_return)
     ImageButton ib_return;
-
-    @BindView(R.id.ig_wifi)
-    ImageView ig_wifi;
-
-    @BindView(R.id.ed_wifi_name)
+//
+//    @BindView(R.id.ig_wifi)
+//    ImageView ig_wifi;
+//
+//    @BindView(R.id.ed_wifi_name)
     EditText ed_wifi_name;
-
-    @BindView(R.id.ig_get_wifi_name)
+//
+//    @BindView(R.id.ig_get_wifi_name)
     ImageView ig_get_wifi_name;
-
-    @BindView(R.id.ig_wifi_pwd)
-    ImageView ig_wifi_pwd;
-
-    @BindView(R.id.ed_wifi_pwd)
+//
+//    @BindView(R.id.ig_wifi_pwd)
+//    ImageView ig_wifi_pwd;
+//
+//    @BindView(R.id.ed_wifi_pwd)
     EditText ed_wifi_pwd;
-
-    @BindView(R.id.ig_see_wifi_pwd)
+//
+//    @BindView(R.id.ig_see_wifi_pwd)
     ImageView ig_see_wifi_pwd;
-
-    @BindView(R.id.btn_send_wifi_pwd)
+//
+//    @BindView(R.id.btn_send_wifi_pwd)
     Button btn_send_wifi_pwd;
-
-    @BindView(R.id.rl_net_list)
+//
+//    @BindView(R.id.rl_net_list)
     RelativeLayout rl_net_list;
-
-    @BindView(R.id.net_device_list)
-    RecyclerView net_device_list;
+//
+//    @BindView(R.id.net_device_list)
+//    RecyclerView net_device_list;
 
     //定义类常量
     private static final int NETWORK_CONNECT_SUCCESS = 1; //连接成功
@@ -96,36 +82,43 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
     private static final int UPDATE_WIFI_NAME = 5;    //更新网络连接名称
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.net_connect);
+
         initUI();
-        mHelper = new NetworkHelper(NetconnectActivity.this);
     }
 
     boolean isFirst = false ;
-    @Override
+
     protected void initUI() {
+        ib_close = (ImageButton)this.findViewById(R.id.ib_close );
+        ib_return= (ImageButton)this.findViewById(R.id.ib_return );
+        btn_send_wifi_pwd = (Button)this.findViewById(R.id.btn_send_wifi_pwd );
+        ig_see_wifi_pwd = (ImageView)this.findViewById(R.id.ig_see_wifi_pwd );
+        ig_get_wifi_name = (ImageView)this.findViewById(R.id.ig_get_wifi_name );
+        rl_net_list= (RelativeLayout)this.findViewById(R.id.rl_net_list);
+        ed_wifi_name = (EditText)this.findViewById(R.id.ed_wifi_name );
+        ed_wifi_pwd= (EditText)this.findViewById(R.id.ed_wifi_pwd );
         ib_close.setOnClickListener(this);
-        ib_return.setOnClickListener(this);
         btn_send_wifi_pwd.setOnClickListener(this);
         ig_see_wifi_pwd.setOnClickListener(this);
         ig_get_wifi_name.setOnClickListener(this);
 
         rl_net_list.setVisibility(View.INVISIBLE);
-
-        Intent i = getIntent();
-        String name = i.getStringExtra("wifiName");
-        UbtLog.d(TAG,"name ==="+wifiName);
-        if(name == null){
-            isFirst = true ;
+//
+//        Intent i = getIntent();
+//        String name = i.getStringExtra("wifiName");
+//        if(name == null){
+//            isFirst = true ;
             ib_return.setVisibility(View.INVISIBLE);
-            initData();
-        }else {
-            isFirst = false ;
-            wifiName = name ;
-            ed_wifi_name.setText(wifiName);
-            ed_wifi_pwd.requestFocus();
-        }
+////            initData();
+//        }else {
+//            isFirst = false ;
+//            wifiName = name ;
+//            ed_wifi_name.setText(wifiName);
+//            ed_wifi_pwd.requestFocus();
+//        }
         ed_wifi_name.addTextChangedListener(mTextWatcher);
         ed_wifi_pwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -133,40 +126,26 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                 ed_wifi_pwd.setSelection(ed_wifi_pwd.getText().length());
             }
         });
+        EventBus.getDefault().register(this);
     }
 
-    @Override
-    protected void initControlListener() {
-
-    }
-
-    @Override
-    protected void initBoardCastListener() {
-
-    }
-
-    @Override
-    public int getContentViewId() {
-        return R.layout.activity_netconnect;
-    }
 
     int seePWD = 0; //1 看密码  0 隐藏
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_close:
-                Intent intent = new Intent();
-                intent.setClass(NetconnectActivity.this,MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent();
+//                intent.setClass(NetconnectActivity.this,MainActivity.class);
+//                startActivity(intent);
                 NetconnectActivity.this.finish();
                 break;
             case R.id.ib_return:
                 NetconnectActivity.this.finish();
                 break;
             case R.id.ig_get_wifi_name:
-                UbtLog.d(TAG,"ig_get_wifi_name click");
+                Log.d(TAG," ccy ig_get_wifi_name CLICK" );
                 if(!isOPen(this)){
-                    UbtLog.d(TAG,"请先打开位置信息");
                     new ConfirmDialog(this).builder()
                             .setTitle("提示")
                             .setMsg("请在手机的设置中把“位置服务”打开")
@@ -174,7 +153,6 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                             .setPositiveButton("确定", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    UbtLog.d(TAG, "位置信息确定 ");
                                 }
                             }).show();
                     return;
@@ -183,7 +161,6 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                 break;
             case R.id.ig_see_wifi_pwd:
                 if(TextUtils.isEmpty(ed_wifi_pwd.getText().toString())){
-                    UbtLog.d(TAG,"密码为null 不可点击切换!!!");
                     return;
                 }
                 if(ig_see_wifi_pwd == null){
@@ -235,15 +212,15 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         if(TextUtils.isEmpty(ed_wifi_name.getText().toString())){
             new AlertDialog(NetconnectActivity.this)
                     .builder()
-                    .setTitle(getStringResources("ui_network_prompt"))
-                    .setMsg(getStringResources("ui_netwok_robot_need_network"))
+                    .setTitle("联网提示")
+                    .setMsg("机器人需联网才能执行该操作哦")
                     .setCancelable(false)
-                    .setPositiveButton(getStringResources("ui_network_go_connect_net"), new View.OnClickListener() {
+                    .setPositiveButton("去联网", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             gotoSelectWifi();
                         }
-                    }).setNegativeButton(getStringResources("ui_common_cancel"), new View.OnClickListener() {
+                    }).setNegativeButton("取消", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -256,15 +233,15 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         if(TextUtils.isEmpty(ed_wifi_pwd.getText().toString())){
             new AlertDialog(NetconnectActivity.this)
                     .builder()
-                    .setTitle(getStringResources("ui_network_no_password_tips"))
-                    .setMsg(getStringResources("ui_network_un_pass_tip"))
+                    .setTitle("无密码提示")
+                    .setMsg("您未输入Wi-Fi密码，确定继续连接么？")
                     .setCancelable(false)
-                    .setPositiveButton(getStringResources("ui_common_confirm"), new View.OnClickListener() {
+                    .setPositiveButton("确定", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             startNetwork();
                         }
-                    }).setNegativeButton(getStringResources("ui_common_cancel"), new View.OnClickListener() {
+                    }).setNegativeButton("取消", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -279,24 +256,25 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
      * 开始联网
      */
     private void startNetwork(){
-
-        if (((AlphaApplication) this.getApplicationContext())
-                .getCurrentBluetooth() == null) {
-            UbtLog.d(TAG,"蓝牙已经断开");
-            ToastUtils.showShort("蓝牙已经断开，请重新连接蓝牙");
-            NetconnectActivity.this.finish();
-            return;
-        }
+        Log.d(TAG," ccy startNetwork " );
+//        if (((AlphaApplication) this.getApplicationContext())
+//                .getCurrentBluetooth() == null) {
+////            UbtLog.d(TAG,"蓝牙已经断开");
+////            ToastUtils.showShort("蓝牙已经断开，请重新连接蓝牙");
+//            NetconnectActivity.this.finish();
+//            return;
+//        }
         mHandler.postDelayed(overTimeDo,60000);
         LoadingDialog.show(this,"联网中...");
-        ((NetworkHelper)mHelper).doConnectNetwork(ed_wifi_name.getText().toString(), ed_wifi_pwd.getText().toString());
+//        ((NetworkHelper)mHelper).doConnectNetwork(ed_wifi_name.getText().toString(), ed_wifi_pwd.getText().toString());
     }
 
     Runnable overTimeDo = new Runnable() {
         @Override
         public void run() {
             LoadingDialog.dismiss(NetconnectActivity.this);
-            ToastUtils.showShort("机器人wifi连接失败");
+//            ToastUtils.showShort("机器人wifi连接失败");
+            Toast.makeText(NetconnectActivity.this,"机器人wifi连接失败",Toast.LENGTH_SHORT);
         }
     };
 
@@ -312,9 +290,9 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
 
         @Override
         public void afterTextChanged(Editable editable) {
-            UbtLog.d(TAG,"afterTextChanged 改变");
-
-            setNetworkButtonState();
+//            UbtLog.d(TAG,"afterTextChanged 改变");
+//
+//            setNetworkButtonState();
         }
 
         @Override
@@ -328,18 +306,18 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
      * 文本内容改变，按钮处理逻辑
      * 内容为空时，不可点击，非空时，可以点击
      */
-    private void setNetworkButtonState(){
-        if(ed_wifi_name == null){
-            return;
-        }
-        if(ed_wifi_name.getText().toString().trim().length() > 0){
-            UbtLog.d(TAG,"afterTextChanged ENBLE");
-            btn_send_wifi_pwd.setEnabled(true);
-        }else{
-            UbtLog.d(TAG,"afterTextChanged DISABLE");
-            btn_send_wifi_pwd.setEnabled(false);
-        }
-    }
+//    private void setNetworkButtonState(){
+//        if(ed_wifi_name == null){
+//            return;
+//        }
+//        if(ed_wifi_name.getText().toString().trim().length() > 0){
+//            UbtLog.d(TAG,"afterTextChanged ENBLE");
+//            btn_send_wifi_pwd.setEnabled(true);
+//        }else{
+//            UbtLog.d(TAG,"afterTextChanged DISABLE");
+//            btn_send_wifi_pwd.setEnabled(false);
+//        }
+//    }
 
     private Handler mHandler = new Handler() {
         @Override
@@ -350,53 +328,53 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                     mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY,200);
 
                     break;
-                case NETWORK_CONNECT_FAIL:
-                    UbtLog.d(TAG,"网络连接失败！  1 " );
-                    mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_FAIL_DIALOG_DISPLAY,200);
-                    break;
-                case NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY:
-                    displayDialog();
-                    UbtLog.d(TAG,"网络连接成功 wifiName: " +wifiName  );
-
-                    Intent intent = new Intent();
-                    //把返回数据存入Intent
-                    intent.putExtra("wifiName", ed_wifi_name.getText().toString());
-                    intent.putExtra("isConnectSucces","yes");
-                    //设置返回数据
-                    NetconnectActivity.this.setResult(RESULT_OK, intent);
-                    //关闭Activity
-                    NetconnectActivity.this.finish();
-                    break;
-                case NETWORK_CONNECT_FAIL_DIALOG_DISPLAY:
-                    displayDialog();
-                    ToastUtils.showCustomShortWithGravity(R.layout.bluetooth_wifi_connect_fail,
-                            Gravity.CENTER, 0 , 0);
-                    break;
-                case UPDATE_WIFI_NAME:
-                    String remoteConnectName = (String) msg.obj;
-                    if(!TextUtils.isEmpty(remoteConnectName)){
-                        if(ed_wifi_name == null){
-                            return;
-                        }
-                        ed_wifi_name.setText(remoteConnectName);
-                        ed_wifi_pwd.requestFocus();
-                    }else {
-                        NetworkInfo mWifiInfo = getCurrentLocalConnectNetworkInfo();
-                        if (mWifiInfo.isConnected()) {
-                            UbtLog.d(TAG,"mWifiInfo.getExtraInfo() == " + mWifiInfo.getExtraInfo());
-                            if(ed_wifi_name == null){
-                                return;
-                            }
-                            ed_wifi_name.setText(mWifiInfo.getExtraInfo().replaceAll("\"",""));
-                            ed_wifi_pwd.requestFocus();
-                        }else {
-                            if(ed_wifi_name == null){
-                                return;
-                            }
-                            ed_wifi_name.setText("");
-                        }
-                    }
-                    break;
+//                case NETWORK_CONNECT_FAIL:
+//                    UbtLog.d(TAG,"网络连接失败！  1 " );
+//                    mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_FAIL_DIALOG_DISPLAY,200);
+//                    break;
+//                case NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY:
+//                    displayDialog();
+//                    UbtLog.d(TAG,"网络连接成功 wifiName: " +wifiName  );
+//
+//                    Intent intent = new Intent();
+//                    //把返回数据存入Intent
+//                    intent.putExtra("wifiName", ed_wifi_name.getText().toString());
+//                    intent.putExtra("isConnectSucces","yes");
+//                    //设置返回数据
+//                    NetconnectActivity.this.setResult(RESULT_OK, intent);
+//                    //关闭Activity
+//                    NetconnectActivity.this.finish();
+//                    break;
+//                case NETWORK_CONNECT_FAIL_DIALOG_DISPLAY:
+//                    displayDialog();
+//                    ToastUtils.showCustomShortWithGravity(R.layout.bluetooth_wifi_connect_fail,
+//                            Gravity.CENTER, 0 , 0);
+//                    break;
+//                case UPDATE_WIFI_NAME:
+//                    String remoteConnectName = (String) msg.obj;
+//                    if(!TextUtils.isEmpty(remoteConnectName)){
+//                        if(ed_wifi_name == null){
+//                            return;
+//                        }
+//                        ed_wifi_name.setText(remoteConnectName);
+//                        ed_wifi_pwd.requestFocus();
+//                    }else {
+//                        NetworkInfo mWifiInfo = getCurrentLocalConnectNetworkInfo();
+//                        if (mWifiInfo.isConnected()) {
+//                            UbtLog.d(TAG,"mWifiInfo.getExtraInfo() == " + mWifiInfo.getExtraInfo());
+//                            if(ed_wifi_name == null){
+//                                return;
+//                            }
+//                            ed_wifi_name.setText(mWifiInfo.getExtraInfo().replaceAll("\"",""));
+//                            ed_wifi_pwd.requestFocus();
+//                        }else {
+//                            if(ed_wifi_name == null){
+//                                return;
+//                            }
+//                            ed_wifi_name.setText("");
+//                        }
+//                    }
+//                    break;
                 default:
                     break;
             }
@@ -406,45 +384,45 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
     /**
      * 消失对话框
      */
-    private void displayDialog(){
-        mHandler.removeCallbacks(overTimeDo);
-        LoadingDialog.dismiss(NetconnectActivity.this);
-    }
+//    private void displayDialog(){
+//        mHandler.removeCallbacks(overTimeDo);
+//        LoadingDialog.dismiss(NetconnectActivity.this);
+//    }
 
     /**
      * 获取当前手机连接WIFI名称
      * @return
      */
-    private NetworkInfo getCurrentLocalConnectNetworkInfo(){
-
-        //当前连接WIFI对象
-        ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        return mWifi;
-    }
+//    private NetworkInfo getCurrentLocalConnectNetworkInfo(){
+//
+//        //当前连接WIFI对象
+//        ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+//        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+//        return mWifi;
+//    }
 
     /**
      * 更新网络连接名称
      * @param event
      */
     private void updateNetworkConnectName(NetworkEvent event){
-        UbtLog.d(TAG,"event.getConnectWifiName() = " + event.getConnectWifiName());
+       // UbtLog.d(TAG,"event.getConnectWifiName() = " + event.getConnectWifiName());
         Message msg = new Message();
         msg.what = UPDATE_WIFI_NAME;
         msg.obj = event.getConnectWifiName();
         mHandler.sendMessage(msg);
     }
-
-    /**
-     * 初始化数据
-     */
-    private void initData(){
-        Message msg = new Message();
-        msg.what = UPDATE_WIFI_NAME;
-        msg.obj = "";
-        mHandler.sendMessage(msg);
-    }
-
+//
+//    /**
+//     * 初始化数据
+//     */
+//    private void initData(){
+//        Message msg = new Message();
+//        msg.what = UPDATE_WIFI_NAME;
+//        msg.obj = "";
+//        mHandler.sendMessage(msg);
+//    }
+//
     String wifiName = "";
     /**
      * 监听Eventbus消息方法
@@ -455,7 +433,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         if(event.getEvent() == NetworkEvent.Event.CHANGE_SELECT_WIFI){
 
             wifiName = event.getSelectWifiName();
-            UbtLog.d(TAG,"选择的wifi ："+wifiName);
+            Log.d(TAG,"ccy 选择的wifi ："+wifiName);
             if(ed_wifi_name == null){
                 return;
             }
@@ -474,19 +452,19 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
      */
     private void updateNetworkConnectStatus(NetworkEvent event){
         int connectStatus = event.getConnectStatus();
-        UbtLog.d(TAG,"connectStatus === " + connectStatus);
+        //UbtLog.d(TAG,"connectStatus === " + connectStatus);
         if(connectStatus == 1){
             //联网中
         }else if(connectStatus == 2){
 //            NetworkInfo networkInfo = new NetworkInfo();
-            com.ubt.alpha1e.data.model.NetworkInfo networkInfo = new com.ubt.alpha1e.data.model.NetworkInfo();
-            networkInfo.status = true;
-            networkInfo.name = event.getConnectWifiName();
-            ((AlphaApplication) NetconnectActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
+//            com.ubt.alpha1e.data.model.NetworkInfo networkInfo = new com.ubt.alpha1e.data.model.NetworkInfo();
+//            networkInfo.status = true;
+//            networkInfo.name = event.getConnectWifiName();
+
             mHandler.sendEmptyMessage(NETWORK_CONNECT_SUCCESS);
         }else if(connectStatus == 3){
             mHandler.sendEmptyMessage(NETWORK_CONNECT_FAIL);
-            ((AlphaApplication) NetconnectActivity.this.getApplication()).setmCurrentNetworkInfo(null);
+
         }
     }
 
@@ -499,7 +477,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                 .builder()
                 .setTitle("可用网络列表")
                 .setCancelable(true)
-                .setNegativeButton(getStringResources("ui_common_cancel"), new View.OnClickListener() {
+                .setNegativeButton("取消", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -509,26 +487,26 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
 
     @Override
     protected void onDestroy() {
-        LoadingDialog.dismiss(this);
+//        LoadingDialog.dismiss(this);
         super.onDestroy();
-        if(mHelper != null){
-            //读取更新当前机器人网络状态
-//            ((NetworkHelper)mHelper).readNetworkStatus();
-        }
-        mHandler.removeMessages(NETWORK_CONNECT_SUCCESS);
-        mHandler.removeMessages(NETWORK_CONNECT_FAIL);
-        mHandler.removeMessages(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY);
-        mHandler.removeMessages(UPDATE_WIFI_NAME);
-        mHandler.removeCallbacks(overTimeDo);
+//        if(mHelper != null){
+//            //读取更新当前机器人网络状态
+////            ((NetworkHelper)mHelper).readNetworkStatus();
+//        }
+//        mHandler.removeMessages(NETWORK_CONNECT_SUCCESS);
+//        mHandler.removeMessages(NETWORK_CONNECT_FAIL);
+//        mHandler.removeMessages(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY);
+//        mHandler.removeMessages(UPDATE_WIFI_NAME);
+//        mHandler.removeCallbacks(overTimeDo);
     }
 
     @Override
     public void finish() {
         super.finish();
 
-        if(isFirst){
-            //关闭窗体动画显示
-            this.overridePendingTransition(0,R.anim.activity_close_down_up);
-        }
+//        if(isFirst){
+//            //关闭窗体动画显示
+//            this.overridePendingTransition(0,R.anim.activity_close_down_up);
+//        }
     }
 }

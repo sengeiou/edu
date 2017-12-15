@@ -1,6 +1,7 @@
 package com.ubt.factorytest.test;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ubt.factorytest.R;
+import com.ubt.factorytest.bluetooth.netconnect.NetconnectActivity;
 import com.ubt.factorytest.test.recycleview.TestItemClickAdapter;
 import com.ubt.factorytest.utils.ContextUtils;
 
@@ -207,6 +209,8 @@ public class TestFragment extends SupportFragment implements TestContract.View {
     @Override
     public void startWifiConfig() {
 
+        Intent wifiConnect = new Intent(getActivity(), NetconnectActivity.class);
+        startActivity(wifiConnect);
     }
 
     protected void initToolbarNav(Toolbar toolbar) {
