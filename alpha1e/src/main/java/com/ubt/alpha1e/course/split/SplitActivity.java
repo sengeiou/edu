@@ -19,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
@@ -56,7 +58,7 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
     private static final int BLUETOOTH_DISCONNECT = 7;
 
     private final int ANIMATOR_TIME = 500;
-    private final int OVER_TIME = 10 * 1000;//超时
+    private final int OVER_TIME = (25+10) * 1000;//(25S音频+ 10S操作) 超时
 
     @BindView(R.id.tv_next)
     TextView tvNext;
@@ -124,6 +126,7 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                     MergeActivity.launchActivity(SplitActivity.this,true);
                     break;
                 case SHOW_DIALOG:
+                    mHandler.sendEmptyMessageDelayed(SHOW_NEXT_OVER_TIME, OVER_TIME);
                     ((PrincipleHelper)mHelper).playFile("拆卸.hts");
                     tvMsgShow.setText(getStringResources("ui_principle_lost_engine_tips"));
                     showView(tvMsgShow, true, biggerLeftBottomAnim);
@@ -131,7 +134,6 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                 case HIDE_DIALOG:
                     hasPlayFileFinish = true;
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
-                    mHandler.sendEmptyMessageDelayed(SHOW_NEXT_OVER_TIME, OVER_TIME);
                     break;
                 case TAP_HEAD:
                     //拍头退出课程模式
@@ -365,7 +367,14 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
 
     @Override
     public void onBackPressed() {
-        PrincipleActivity.launchActivity(this,true);
+        if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 0 ){
+            ((PrincipleHelper) mHelper).doInit();
+            ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+            this.finish();
+            this.overridePendingTransition(0, R.anim.activity_close_down_up);
+        }else {
+            PrincipleActivity.launchActivity(this,true);
+        }
     }
 
 
@@ -460,6 +469,11 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
 
         private float startX,startY;
 
+        private boolean hasInitViewStartXy = false;
+
+        private float mHandLeftStartX,mHandLeftStartY,mHandRightStartX,mHandRightStartY,
+                mLegLeftStartX,mLegLeftStartY,mLegRightStartX,mLegRightStartY;
+
         @Override
         public boolean onTouch(View view, MotionEvent event) {
             //UbtLog.d(TAG, "event.getActionMasked() = " + event.getActionMasked());
@@ -469,28 +483,34 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
 
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
+                    initViewXy();
                     view.bringToFront();
 
                     lastX = event.getRawX();
                     lastY = event.getRawY();
 
-                    startX = view.getX();
-                    startY = view.getY();
-
                     if(view.getId() == R.id.iv_hand_left){
+                        startX = mHandLeftStartX;
+                        startY = mHandLeftStartY;
                         ivHandLeftBg.setBackgroundResource(R.drawable.icon_principle_leftarm_yellow);
                         ivHandLeftBg.setVisibility(View.VISIBLE);
                     }else if(view.getId() == R.id.iv_hand_right){
+                        startX = mHandRightStartX;
+                        startY = mHandRightStartY;
                         ivHandRightBg.setBackgroundResource(R.drawable.icon_principle_rightarm_yellow);
                         ivHandRightBg.setVisibility(View.VISIBLE);
                     }else if(view.getId() == R.id.iv_leg_left){
+                        startX = mLegLeftStartX;
+                        startY = mLegLeftStartY;
                         ivLegLeftBg.setBackgroundResource(R.drawable.icon_principle_leftleg_yellow);
                         ivLegLeftBg.setVisibility(View.VISIBLE);
                     }else if(view.getId() == R.id.iv_leg_right){
+                        startX = mLegRightStartX;
+                        startY = mLegRightStartY;
                         ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_yellow);
                         ivLegRightBg.setVisibility(View.VISIBLE);
                     }
-                    UbtLog.d(TAG,"targetX = " + targetX + " targetY = " + targetY + " width = " + ivHandLeftBg.getWidth() + " height = " + ivHandLeftBg.getHeight()+ "   view = " + view.getX()+"/"+view.getY());
+                    //UbtLog.d(TAG,"targetX = " + targetX + " targetY = " + targetY + " width = " + ivHandLeftBg.getWidth() + " height = " + ivHandLeftBg.getHeight()+ "   view = " + view.getX()+"/"+view.getY());
                     return true;
                 case MotionEvent.ACTION_MOVE: {
                     //  不要直接用getX和getY,这两个获取的数据已经是经过处理的,容易出现图片抖动的情况
@@ -601,7 +621,7 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                         mHandler.sendMessageDelayed(hideViewMsg,ANIMATOR_TIME);
                     }
 
-                    UbtLog.d(TAG,"targetX = " + targetX + " targetY = " + targetY + " width = " + ivHandLeftBg.getWidth() + " height = " + ivHandLeftBg.getHeight()+ "   view = " + view);
+                    //UbtLog.d(TAG,"targetX = " + targetX + " targetY = " + targetY + " width = " + ivHandLeftBg.getWidth() + " height = " + ivHandLeftBg.getHeight()+ "   view = " + view);
 
                     // 属性动画移动
                     ObjectAnimator y = ObjectAnimator.ofFloat(view, "y", view.getY(), targetY);
@@ -633,6 +653,24 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                 touchable = false;
             }
             return touchable;
+        }
+
+        /**
+         * 初始化视图的XY坐标
+         */
+        private void initViewXy(){
+            if(!hasInitViewStartXy){
+                mHandLeftStartX = ivHandLeft.getX();
+                mHandLeftStartY = ivHandLeft.getY();
+                mHandRightStartX = ivHandRight.getX();
+                mHandRightStartY = ivHandRight.getY();
+
+                mLegLeftStartX = ivLegLeft.getX();
+                mLegLeftStartY = ivLegLeft.getY();
+                mLegRightStartX = ivLegRight.getX();
+                mLegRightStartY = ivLegRight.getY();
+                hasInitViewStartXy = true;
+            }
         }
     };
 

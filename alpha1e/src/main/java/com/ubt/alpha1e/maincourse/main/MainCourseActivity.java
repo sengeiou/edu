@@ -140,12 +140,16 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
                 int progress = SPUtils.getInstance().getInt(progressKey,0);
                 UbtLog.d("progress","progress = " + progress);
                 if(progress == 1){
+                    SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
                     SplitActivity.launchActivity(this,false);
                 }else if(progress == 2){
+                    SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
                     MergeActivity.launchActivity(this,false);
                 }else if(progress == 3){
+                    SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
                     FeatureActivity.launchActivity(this,false);
                 }else {
+                    SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, 0);
                     PrincipleActivity.launchActivity(this,false);
                 }
 

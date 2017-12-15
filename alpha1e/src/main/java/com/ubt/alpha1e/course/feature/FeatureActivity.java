@@ -26,6 +26,7 @@ import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.merge.MergeActivity;
+import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
@@ -1023,8 +1024,15 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
 
     @Override
     public void onBackPressed() {
-        MergeActivity.launchActivity(this, true);
-        this.finish();
+        if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 2 ){
+            ((PrincipleHelper) mHelper).doInit();
+            ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+            this.finish();
+            this.overridePendingTransition(0, R.anim.activity_close_down_up);
+        }else {
+            MergeActivity.launchActivity(this, true);
+            this.finish();
+        }
     }
 
     /**
