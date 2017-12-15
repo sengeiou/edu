@@ -20,6 +20,7 @@ import com.ubt.factorytest.ActionPlay.recycleview.ActionListAdapter;
 import com.ubt.factorytest.R;
 import com.ubt.factorytest.bluetooth.recycleview.BTAdapter;
 import com.ubt.factorytest.utils.ContextUtils;
+import com.ubt.factorytest.utils.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -131,5 +132,10 @@ public class ActionFragment extends SupportFragment implements ActionContract.Vi
         if(mHandler != null) {
             mHandler.sendEmptyMessage(MSG_DATA_CHANGE);
         }
+    }
+
+    @Override
+    public void btDisconnected() {
+        ToastUtils.showShort("");
     }
 }

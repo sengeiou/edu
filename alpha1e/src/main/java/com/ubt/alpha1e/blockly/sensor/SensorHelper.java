@@ -240,6 +240,13 @@ public class SensorHelper extends BaseHelper {
         doSendComm(ConstValue.DV_INTO_EDIT, params);
     }
 
+    /**
+     * 主动读取一次6D状态
+     */
+    public void doRead6DState(){
+        doSendComm(ConstValue.DV_6D_GESTURE, null);
+    }
+
 
 
 

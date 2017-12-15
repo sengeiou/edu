@@ -1228,11 +1228,14 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
             ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_pause_or_continue,
                     getEditingActions());
+            UbtLog.d(TAG, "doPlayCurrentFrames 1");
 
 
         } else if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PAUSING) {
+            setEnable(false);
             ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_pause_or_continue,
                     getEditingActions());
+            UbtLog.d(TAG, "doPlayCurrentFrames 2");
         } else {
             setEnable(false);
             if (musicTimes != 0) {

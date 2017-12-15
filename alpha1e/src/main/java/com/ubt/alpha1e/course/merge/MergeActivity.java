@@ -18,10 +18,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
+import com.ubt.alpha1e.course.principle.PrincipleActivity;
 import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -55,7 +58,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     private static final int BLUETOOTH_DISCONNECT = 7;
 
     private final int ANIMATOR_TIME = 500;
-    private final int OVER_TIME = 10 * 1000;//超时
+    private final int OVER_TIME = (15 + 10) * 1000;//(15S音频+ 10S操作)超时
 
     @BindView(R.id.tv_next)
     TextView tvNext;
@@ -100,6 +103,9 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     private boolean hasLostRobot = false;
     private boolean hasPlaySoundAudioFinish = false;
     private boolean isGoingNext = false;
+
+
+
     private ConfirmDialog mTapHeadDialog = null;
 
     private Handler mHandler = new Handler(){
@@ -124,6 +130,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                     FeatureActivity.launchActivity(MergeActivity.this,true);
                     break;
                 case SHOW_DIALOG:
+                    mHandler.sendEmptyMessageDelayed(SHOW_NEXT_OVER_TIME, OVER_TIME);
                     ((PrincipleHelper)mHelper).playSoundAudio("{\"filename\":\"组装.mp3\",\"playcount\":1}");
                     ((PrincipleHelper)mHelper).playFile("蹲下.hts");
                     tvMsgShow.setText(getStringResources("ui_principle_on_engine_tips"));
@@ -132,7 +139,6 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                 case HIDE_DIALOG:
                     hasPlaySoundAudioFinish = true;
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
-                    mHandler.sendEmptyMessageDelayed(SHOW_NEXT_OVER_TIME, OVER_TIME);
                     break;
                 case TAP_HEAD:
                     //拍头退出课程模式
@@ -198,6 +204,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                             if (!hasInitRobot && ivRobot.getHeight() > 0) {
                                 hasInitRobot = true;
                                 initRobot();
+
                             }
                         }
                     });
@@ -250,6 +257,8 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
         hasLostLegLeft = true;
         hasLostLegRight = true;
     }
+
+
 
     @Subscribe
     public void onEventPrinciple(PrincipleEvent event) {
@@ -367,7 +376,14 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
 
     @Override
     public void onBackPressed() {
-        SplitActivity.launchActivity(this,true);
+        if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 1 ){
+            ((PrincipleHelper) mHelper).doInit();
+            ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+            this.finish();
+            this.overridePendingTransition(0, R.anim.activity_close_down_up);
+        }else {
+            SplitActivity.launchActivity(this,true);
+        }
     }
 
     private boolean hasLearnFinish(){
@@ -489,6 +505,11 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
 
         private View relativeTargetView;
 
+        private boolean hasInitViewStartXy = false;
+
+        private float mHandLeftStartX,mHandLeftStartY,mHandRightStartX,mHandRightStartY,
+                mLegLeftStartX,mLegLeftStartY,mLegRightStartX,mLegRightStartY;
+
         @Override
         public boolean onTouch(View view, MotionEvent event) {
             //UbtLog.d(TAG, "event.getActionMasked() = " + event.getActionMasked());
@@ -498,22 +519,27 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
 
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
+                    initViewXy();
                     view.bringToFront();
 
                     lastX = event.getRawX();
                     lastY = event.getRawY();
 
-                    startX = view.getX();
-                    startY = view.getY();
-
-                    UbtLog.d(TAG,"ivLegLeftBg.getY() = " + ivLegLeftBg.getY() + "   ivLegRightBg.getY() = " + ivLegRightBg.getY());
                     if(view.getId() == R.id.iv_hand_left){
+                        startX = mHandLeftStartX;
+                        startY = mHandLeftStartY;
                         relativeTargetView = ivHandLeftBg;
                     }else if(view.getId() == R.id.iv_hand_right){
+                        startX = mHandRightStartX;
+                        startY = mHandRightStartY;
                         relativeTargetView = ivHandRightBg;
                     }else if(view.getId() == R.id.iv_leg_left ){
+                        startX = mLegLeftStartX;
+                        startY = mLegLeftStartY;
                         relativeTargetView = ivLegLeftBg;
                     }else if(view.getId() == R.id.iv_leg_right){
+                        startX = mLegRightStartX;
+                        startY = mLegRightStartY;
                         relativeTargetView = ivLegRightBg;
                     }
 
@@ -722,6 +748,24 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
             }
             if(hasLostLegRight){
                 ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_white);
+            }
+        }
+
+        /**
+         * 初始化视图的XY坐标
+         */
+        private void initViewXy(){
+            if(!hasInitViewStartXy){
+                mHandLeftStartX = ivHandLeft.getX();
+                mHandLeftStartY = ivHandLeft.getY();
+                mHandRightStartX = ivHandRight.getX();
+                mHandRightStartY = ivHandRight.getY();
+
+                mLegLeftStartX = ivLegLeft.getX();
+                mLegLeftStartY = ivLegLeft.getY();
+                mLegRightStartX = ivLegRight.getX();
+                mLegRightStartY = ivLegRight.getY();
+                hasInitViewStartXy = true;
             }
         }
 

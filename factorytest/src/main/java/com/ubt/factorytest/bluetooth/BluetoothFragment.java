@@ -242,7 +242,7 @@ public class BluetoothFragment extends SupportFragment implements BluetoothContr
     public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
         super.onFragmentResult(requestCode, resultCode, data);
         Log.d(TAG,"onFragmentResult  requestCode="+requestCode);
-        if(requestCode == requestCode){
+        if(requestCode == 100){
             if(mToolbar != null) {
                 mToolbar.setTitle(R.string.bt_title);
             }
