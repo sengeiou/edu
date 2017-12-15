@@ -236,6 +236,11 @@ public class TestPresenter implements TestContract.Presenter,IFactoryListener {
         mBluetoothController.write(new GetWifiStatus().toByteArray());
     }
 
+    @Override
+    public void stopFactoryTest() {
+        mBluetoothController.write(new IntoFactoryTest(IntoFactoryTest.STOP_TEST).toByteArray());
+    }
+
     private void startHeart(){
         mHeartTime.schedule(new TimerTask() {
             @Override
