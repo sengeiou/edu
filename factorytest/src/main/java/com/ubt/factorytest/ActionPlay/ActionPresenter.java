@@ -7,6 +7,7 @@ import com.ubt.factorytest.ActionPlay.recycleview.ActionBean;
 import com.ubt.factorytest.bluetooth.bluetoothLib.BluetoothController;
 import com.ubt.factorytest.bluetooth.bluetoothLib.base.BluetoothListenerAdapter;
 import com.ubt.factorytest.bluetooth.bluetoothLib.base.BluetoothState;
+import com.ubt.factorytest.bluetooth.ubtbtprotocol.ProtocolPacket;
 import com.ubt.factorytest.test.data.DataServer;
 import com.ubt.factorytest.test.data.IFactoryListener;
 import com.ubt.factorytest.test.data.btcmd.FactoryTool;
@@ -38,7 +39,6 @@ public class ActionPresenter implements ActionContract.Presenter, IFactoryListen
 //        mDataServer = dataServer;
         initBT();
         mView.setPresenter(this);
-        FactoryTool.getInstance().setFactoryListener(this);
         mBluetoothController.write(new GetActionList("action").toByteArray());
     }
 
@@ -57,7 +57,7 @@ public class ActionPresenter implements ActionContract.Presenter, IFactoryListen
         @Override
         public void onReadData(BluetoothDevice device, byte[] data) {
             Log.d(TAG, "zz ActionPresenter onReadData data:" + ByteHexHelper.bytesToHexString(data));
-            FactoryTool.getInstance().parseBTCmd(mDataServer, data);
+            FactoryTool.getInstance().parseBTCmd(data,ActionPresenter.this);
         }
 
 
@@ -71,7 +71,7 @@ public class ActionPresenter implements ActionContract.Presenter, IFactoryListen
                     break;
                 case BluetoothState.STATE_DISCONNECTED:
                     if(btState == BluetoothState.STATE_CONNECTED) {
-//                        mView.btDisconnected();
+                        mView.btDisconnected();
                     }
                     break;
                 default:
@@ -84,9 +84,13 @@ public class ActionPresenter implements ActionContract.Presenter, IFactoryListen
     };
 
     @Override
-    public void onActionList(String actionName) {
-        mActionList.add(new ActionBean(ActionBean.ACTION_ITEM_VIEW, actionName));
-        mView.notifyDataSetChanged();
+    public void onProtocolPacket(ProtocolPacket packet) {
+        switch (packet.getmCmd()){
+            case (byte)0x80:
+                mActionList.add(new ActionBean(ActionBean.ACTION_ITEM_VIEW, new String(packet.getmParam())));
+                mView.notifyDataSetChanged();
+                break;
+        }
     }
 
     @Override

@@ -10,7 +10,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
-        versionName "1.0.0.2"
+        versionName "1.0.0.3"
 
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -57,5 +57,4 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.kyleduo.switchbutton:library:1.4.4'
-    compile project(path: ':alpha1e')
 }

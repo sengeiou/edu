@@ -1,7 +1,6 @@
 package com.ubt.factorytest.test;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -22,7 +21,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ubt.factorytest.ActionPlay.ActionFragment;
 import com.ubt.factorytest.ActionPlay.ActionPresenter;
 import com.ubt.factorytest.R;
-import com.ubt.factorytest.bluetooth.netconnect.NetconnectActivity;
+import com.ubt.factorytest.bluetooth.netconnect.NetconnectFragment;
+import com.ubt.factorytest.bluetooth.netconnect.WifiStatusFragment;
 import com.ubt.factorytest.test.recycleview.TestItemClickAdapter;
 import com.ubt.factorytest.utils.ContextUtils;
 
@@ -44,6 +44,10 @@ public class TestFragment extends SupportFragment implements TestContract.View {
     private static final int MSG_DATA_CHANGE = 2;
     private static final int MSG_ITEM_CHANGE = 3;
 
+    private static final int REQ_FRAGMENT_ACTION = 100;
+    private static final int REQ_FRAGMENT_WIFICFG = 101;
+    private static final int REQ_FRAGMENT_WIFISTATUS = 102;
+
     @BindView(R.id.rv_test)
     RecyclerView mRecyclerView;
     @BindView(R.id.toolbar)
@@ -58,6 +62,8 @@ public class TestFragment extends SupportFragment implements TestContract.View {
 
     private Handler mHandler;
 
+    String wifiName = "";
+    String wifiIP = "";
 
     public static TestFragment newInstance(String mac, String rssi) {
 
@@ -99,10 +105,14 @@ public class TestFragment extends SupportFragment implements TestContract.View {
                     case R.id.action_action_test:
                         ActionFragment fragment = ActionFragment.newInstance();
                         new ActionPresenter(fragment);
-                        startForResult(fragment, 100);
+                        startForResult(fragment, REQ_FRAGMENT_ACTION);
                         break;
                     case R.id.action_ageing_test:
                         mPresenter.startAgeing();
+                        break;
+                    case R.id.action_wifi_status:
+                        WifiStatusFragment wfragment = WifiStatusFragment.newInstance(wifiName, wifiIP);
+                        startForResult(wfragment, REQ_FRAGMENT_WIFISTATUS);
                         break;
                 }
 
@@ -223,9 +233,7 @@ public class TestFragment extends SupportFragment implements TestContract.View {
 
     @Override
     public void startWifiConfig() {
-
-        Intent wifiConnect = new Intent(getActivity(), NetconnectActivity.class);
-        startActivity(wifiConnect);
+        startForResult(NetconnectFragment.newInstance(),REQ_FRAGMENT_WIFICFG);
     }
 
     @Override
@@ -249,11 +257,16 @@ public class TestFragment extends SupportFragment implements TestContract.View {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 100){
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
             mPresenter.reInitBT();
             mPresenter.initBTListener();
-        }
+            if(requestCode == 101 && resultCode == RESULT_OK){
+                if(data != null){
+                    wifiName = data.getString("wifiName");
+                    wifiIP = data.getString("wifiIP");
+                    Log.i(TAG,"wifiName:"+wifiName+"    wifiIP:"+wifiIP);
+                }
+            }
     }
 }
