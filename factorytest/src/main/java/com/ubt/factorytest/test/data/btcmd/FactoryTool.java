@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.ubt.factorytest.bluetooth.ubtbtprotocol.ProtocolPacket;
 import com.ubt.factorytest.test.data.DataServer;
+import com.ubt.factorytest.test.data.IFactoryListener;
 import com.ubt.factorytest.test.recycleview.TestClickEntity;
 import com.ubt.factorytest.utils.ByteHexHelper;
 
@@ -23,6 +24,7 @@ public class FactoryTool {
     private static FactoryTool instance;
     private int pressCnt = 0;  //拍头计数
     private int currentVol = 0x7F; //机器人当前音量
+    private IFactoryListener listener;
 
     private FactoryTool(){
 
@@ -44,6 +46,9 @@ public class FactoryTool {
         pressCnt = 0;
     }
 
+    public void setFactoryListener(IFactoryListener factoryListener){
+        listener = factoryListener;
+    }
     /**
      * 获取请求命令的命令数组 所有请求命令需要添加测试数据
      * @param item
@@ -95,7 +100,7 @@ public class FactoryTool {
                 break;
             case TestClickEntity.TEST_ITEM_AGEING_TEST:
                // req = new PlayAction("action/course/motion/" + "胜利.hts");
-                req = new PlayAction("action/my creation/" + "laohua.hts");
+                req = new PlayAction("action/my creation/" + "Action-老化测试动作简版.hts");
 
                 break;
 
@@ -127,9 +132,11 @@ public class FactoryTool {
             byte btCmd = data.getmCmd();
             Log.i(TAG,"btCmd："+ ByteHexHelper.byteToHexString(btCmd));
             if(btCmd == (byte) 0x80){
-                Log.i(TAG,"动作名："+new String(data.getmParam()));
-            }
-            if(btCmd == BaseBTReq.HEART_CMD){//心跳命令 不处理
+                if(listener != null){
+                    listener.onActionList(new String(data.getmParam()));
+                }
+                return -1;
+            }else if(btCmd == BaseBTReq.HEART_CMD){//心跳命令 不处理
                 return -1;
             }else if(btCmd == BaseBTReq.READ_DEV_STATUS){
                 parseDevStatus(data.getmParam());
@@ -137,7 +144,9 @@ public class FactoryTool {
             }else if(btCmd == BaseBTReq.DV_ACTION_FINISH){
                 Log.d("DV_ACTION_FINISH","播放动作结束");
             }
-
+            if(dataServer == null){
+                return -1;
+            }
             itemID = translateBTCMDID2Item(btCmd);
             isOK = updateDataResult(dataServer, data, itemID);
 
@@ -221,8 +230,8 @@ public class FactoryTool {
                     String time = new String(data.getmParam());
                     time = filterTime(time);
                     result = time+"秒";
-                    if(Integer.valueOf(time) <= 30){
-                        dataServer.setDataisPass(position, true);
+                    if(Integer.valueOf(time) > 30){
+                        dataServer.setDataisPass(position, false);
                     }
                     break;
                 case TestClickEntity.TEST_ITEM_ELECTRICCHARGE:
@@ -236,7 +245,9 @@ public class FactoryTool {
                 case TestClickEntity.TEST_ITEM_INTERRUOTTEST:
                     pressCnt += 1;
                     result = "拍头次数:"+pressCnt;
-                    if(pressCnt == 3) {
+                    if(pressCnt < 3) {
+                        dataServer.setDataisPass(position, false);
+                    }else if(pressCnt == 3){
                         dataServer.setDataisPass(position, true);
                     }
                     break;

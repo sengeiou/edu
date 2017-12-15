@@ -43,7 +43,7 @@ public class TestClickEntity implements MultiItemEntity {
     public int Type;
     private String testItem;  //布局类型
     private String testResult;
-    private boolean isPass;
+    private boolean isPass = true;
     private int imgID;
     private int testID;
 

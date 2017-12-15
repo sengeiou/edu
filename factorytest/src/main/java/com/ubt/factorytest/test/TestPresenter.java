@@ -9,12 +9,12 @@ import com.ubt.factorytest.bluetooth.bluetoothLib.base.BluetoothListenerAdapter;
 import com.ubt.factorytest.bluetooth.bluetoothLib.base.BluetoothState;
 import com.ubt.factorytest.test.data.DataServer;
 import com.ubt.factorytest.test.data.btcmd.FactoryTool;
-import com.ubt.factorytest.test.data.btcmd.GetActionList;
 import com.ubt.factorytest.test.data.btcmd.GsensirTest;
 import com.ubt.factorytest.test.data.btcmd.HeartBeat;
 import com.ubt.factorytest.test.data.btcmd.IntoFactoryTest;
 import com.ubt.factorytest.test.data.btcmd.MicTestReq;
 import com.ubt.factorytest.test.data.btcmd.PirTest;
+import com.ubt.factorytest.test.data.btcmd.PlayAction;
 import com.ubt.factorytest.test.data.btcmd.ReadDevStatus;
 import com.ubt.factorytest.test.data.btcmd.VolumeAdjust;
 import com.ubt.factorytest.test.recycleview.TestClickEntity;
@@ -170,16 +170,10 @@ public class TestPresenter implements TestContract.Presenter {
             }
 
         }else if(itemID == TestClickEntity.TEST_ITEM_ACTION_TEST){
-            mBluetoothController.write(new GetActionList("action").toByteArray());
+            mView.startActionTest();
         }else if(itemID == TestClickEntity.TEST_ITEM_WIFITEST){
             mView.startWifiConfig();
-        }else if(itemID==TestClickEntity.TEST_ITEM_AGEING_TEST){
-            byte[] cmd = FactoryTool.getInstance().getReqBytes(item);
-            if (cmd != null) {
-                mBluetoothController.write(cmd);
-            }
-        }
-        else {
+        }else {
             byte[] cmd = FactoryTool.getInstance().getReqBytes(item);
             if (cmd != null) {
                 mBluetoothController.write(cmd);
@@ -228,6 +222,11 @@ public class TestPresenter implements TestContract.Presenter {
         }
         FactoryTool.getInstance().setCurrentVol(curVol);
         mBluetoothController.write(new VolumeAdjust((byte)curVol).toByteArray());
+    }
+
+    @Override
+    public void startAgeing() {
+        mBluetoothController.write(new PlayAction("action/my creation/" + "Action-老化测试动作简版.hts").toByteArray());
     }
 
     private void startHeart(){
