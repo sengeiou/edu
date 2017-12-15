@@ -43,7 +43,7 @@ public class DataServer {
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_INTERRUOTTEST));
         dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_SPEAKER, "喇叭测试",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_SPEAKERTEST));
-        dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "录音测试",
+        dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_MIC, "录音测试",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_RECORD_TEST));
         dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "红外测试",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_PIRTEST));
