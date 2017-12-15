@@ -5,18 +5,28 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.OnDismissListener;
+import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
 import com.ubt.alpha1e.base.popup.EasyPopup;
 import com.ubt.alpha1e.base.popup.HorizontalGravity;
 import com.ubt.alpha1e.base.popup.VerticalGravity;
+import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
@@ -96,6 +106,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
     public void setData(int currentCourse, CourseProgressListener courseProgressListener) {
         mOne1ContentList.clear();
         mOne1ContentList.addAll(ActionCourseDataManager.getCardOneList(mContext));
+
         this.currentCourse = currentCourse;
         this.courseProgressListener = courseProgressListener;
         setLayoutByCurrentCourse();
@@ -241,7 +252,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
 
 
     public void playComplete() {
-        UbtLog.d(TAG , "播放完成");
+        UbtLog.d(TAG, "播放完成");
         if (((Activity) mContext).isFinishing()) {
             return;
         }
@@ -252,9 +263,9 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
             ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
             if (currentIndex < mOne1ContentList.size()) {
-                 clickKnown();
+                // clickKnown();
             } else {
-                clickKnown();
+                // clickKnown();
                 if (courseProgressListener != null) {
                     courseProgressListener.completeCurrentCourse(1);
                 }
@@ -277,8 +288,6 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 courseProgressListener.completeCurrentCourse(3);
             }
         }
-
-
     }
 
 
@@ -348,11 +357,16 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
      * </p>
      */
     public void clickKnown() {
+        UbtLog.d(TAG, "currindex==" + currentIndex);
         if (mHightLight.isShowing() && mHightLight.isNext())//如果开启next模式
         {
             mHightLight.next();
         } else {
             remove(null);
+            UbtLog.d(TAG, "=====remove=========");
+        }
+        if (currentIndex == 5) {
+            showNextDialog(2);
         }
     }
 
@@ -361,8 +375,49 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         mHightLight.remove();
     }
 
-    EasyPopup mCirclePop = null;
 
+    private void showNextDialog(int currentCourse) {
+        UbtLog.d(TAG, "进入第二课时，弹出对话框");
+        View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_action_course_content, null);
+        TextView title = contentView.findViewById(R.id.tv_card_name);
+        title.setText("第一关 基本概念");
+
+        Button button = contentView.findViewById(R.id.btn_pos);
+        button.setText("下一节");
+
+        RecyclerView mrecyle = contentView.findViewById(R.id.recyleview_content);
+        mrecyle.setLayoutManager(new LinearLayoutManager(mContext));
+
+        CourseItemAdapter itemAdapter = new CourseItemAdapter(R.layout.layout_action_course_dialog, ActionCourseDataManager.getCourseActionModel(1, currentCourse));
+        mrecyle.setAdapter(itemAdapter);
+
+        ViewHolder viewHolder = new ViewHolder(contentView);
+        WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        int width = (int) ((display.getWidth()) * 0.6); //设置宽度
+
+        DialogPlus.newDialog(mContext)
+                .setContentHolder(viewHolder)
+                .setGravity(Gravity.CENTER)
+                .setContentWidth(width)
+                .setContentBackgroundResource(R.drawable.action_dialog_filter_rect)
+                .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+
+                    }
+                })
+                .setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogPlus dialog) {
+                    }
+                })
+                .setCancelable(true)
+                .create().show();
+    }
+
+
+    EasyPopup mCirclePop = null;
 
 
     /**

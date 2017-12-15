@@ -7,6 +7,7 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.popup.HorizontalGravity;
 import com.ubt.alpha1e.base.popup.VerticalGravity;
+import com.ubt.alpha1e.maincourse.model.CourseActionModel;
 import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
 
 import java.util.ArrayList;
@@ -101,4 +102,36 @@ public class ActionCourseDataManager {
         one1ContentList.add(one1Content6);
         return one1ContentList;
     }
+
+    /**
+     * 关卡一课时
+     *
+     * @return
+     */
+    public static List<CourseActionModel> getCourseActionModel(int card, int currentCourse) {
+        List<CourseActionModel> list = new ArrayList<>();
+        if (card == 1) {
+
+            CourseActionModel model1 = new CourseActionModel("1.认识时间轴", 0);
+            CourseActionModel model2 = new CourseActionModel("2.熟悉动作添加", 0);
+            CourseActionModel model3 = new CourseActionModel("3.了解音乐库", 0);
+            if (currentCourse == 1) {
+                model1.setStatu(2);
+            } else if (currentCourse == 2) {
+                model1.setStatu(1);
+                model2.setStatu(2);
+            } else if (currentCourse == 3) {
+                model1.setStatu(1);
+                model2.setStatu(1);
+                model3.setStatu(2);
+            }
+            list.add(model1);
+            list.add(model2);
+            list.add(model3);
+        } else if (card == 2) {
+
+        }
+        return list;
+    }
+
 }
