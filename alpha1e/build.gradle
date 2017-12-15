@@ -9,8 +9,8 @@ android {
         applicationId "com.ubt.alpha1e"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode 1
-        flavorDimensions "versionCode"
+        //versionCode 1
+        // flavorDimensions "versionCode"
         multiDexEnabled true
 
         ndk {
