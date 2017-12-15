@@ -11,8 +11,17 @@ package com.ubt.alpha1e.blockly;
 
 public class BlocklySaveMode {
 
+    private String programId;
     private String programName;
     private String programData;
+
+    public String getProgramId() {
+        return programId;
+    }
+
+    public void setProgramId(String programId) {
+        this.programId = programId;
+    }
 
     public String getProgramName() {
         return programName;
@@ -33,7 +42,8 @@ public class BlocklySaveMode {
     @Override
     public String toString() {
         return "BlocklySaveMode{" +
-                "programName='" + programName + '\'' +
+                "programId='" + programId + '\'' +
+                ", programName='" + programName + '\'' +
                 ", programData='" + programData + '\'' +
                 '}';
     }

@@ -600,6 +600,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 mSensorHelper.RegisterHelper();
                 UbtLog.d(TAG, "startOrStopRun start");
                 startOrStopRun((byte)0x01);
+                mSensorHelper.doRead6DState();
             }
         }
     }
@@ -660,6 +661,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     mSensorHelper.doReadInfraredSensor((byte)0x01);  //进入block如果连接蓝牙且是1E立马开始读取红外传感器数据
 //                    mSensorHelper.doReadGyroData((byte)0x01);
 //                    mSensorHelper.doReadAcceleration((byte)0x01);
+                    mSensorHelper.doRead6DState();
                 }
 
                 if(isBulueToothConnected()){
@@ -1154,6 +1156,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 //                    mSensorHelper.doReadAcceleration((byte)0x01);
                     UbtLog.d(TAG, "startOrStopRun start");
                     startOrStopRun((byte)0x01);
+                    mSensorHelper.doRead6DState();
                 }
 
       /*          mWebView.post(new Runnable() {
@@ -1281,6 +1284,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 mSensorHelper.doReadInfraredSensor((byte)0x01);
 //                mSensorHelper.doReadGyroData((byte)0x01);
 //                mSensorHelper.doReadAcceleration((byte)0x01);
+                mSensorHelper.doRead6DState();
             }
 
 
@@ -2643,8 +2647,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         OkHttpClientUtils.getJsonByPostRequest(HttpEntity.SAVE_USER_PROGRAM, request, 0).execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                UbtLog.d(TAG, "onError e:" + e.getMessage());
-//                ToastUtils.showShort("保存失败");
+                UbtLog.d(TAG, "saveUserProgram onError e:" + e.getMessage());
                 BlocklyProjectMode blocklyProjectMode = new BlocklyProjectMode();
                 blocklyProjectMode.setPid(pid);
                 blocklyProjectMode.setUserId(SPUtils.getInstance().getString(com.ubt.alpha1e.base.Constant.SP_USER_ID));
@@ -2661,7 +2664,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
             @Override
             public void onResponse(String response, int id) {
-                UbtLog.d(TAG, "onResponse:" + response);
+                UbtLog.d(TAG, "saveUserProgram onResponse:" + response);
                 BaseResponseModel<BlocklyRespondMode> baseResponseModel = GsonImpl.get().toObject(response,
                         new TypeToken<BaseResponseModel<List<BlocklyRespondMode>>>() {
                         }.getType());
@@ -2700,13 +2703,122 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         OkHttpClientUtils.getJsonByPostRequest(HttpEntity.GET_USER_PROGRAM, baseRequest, 0).execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                UbtLog.e(TAG, "onError:" + e.getMessage());
+                UbtLog.e(TAG, "listUserProgram onError:" + e.getMessage());
 
             }
 
             @Override
             public void onResponse(String response, int id) {
-                UbtLog.d(TAG, "onResponse:" + response);
+                UbtLog.d(TAG, "listUserProgram onResponse:" + response);
+                BaseResponseModel<BlocklyRespondMode> baseResponseModel = GsonImpl.get().toObject(response,
+                        new TypeToken<BaseResponseModel<List<BlocklyRespondMode>>>() {
+                        }.getType());
+
+                List<BlocklyRespondMode> blocklyRespondModeList = new ArrayList<BlocklyRespondMode>();
+
+                if (baseResponseModel.status) {
+
+                    blocklyRespondModeList = (List<BlocklyRespondMode>) baseResponseModel.models;
+
+                    UbtLog.d(TAG, "listUserProgram blocklyRespondMode:" + blocklyRespondModeList.toString());
+
+                    for(int i= 0; i < blocklyRespondModeList.size(); i++ ){
+                        BlocklyProjectMode blocklyProjectMode = new BlocklyProjectMode();
+                        blocklyProjectMode.setPid(blocklyRespondModeList.get(i).getId());
+                        blocklyProjectMode.setUserId(blocklyRespondModeList.get(i).getUserId());
+                        blocklyProjectMode.setProgramName(blocklyRespondModeList.get(i).getProgramName());
+                        blocklyProjectMode.setProgramData(blocklyRespondModeList.get(i).getProgramData());
+                        blocklyProjectMode.setDelState(false);
+                        blocklyProjectMode.setServerState(true);
+
+                        blocklyProjectMode.saveOrUpdate("pid = ?", blocklyRespondModeList.get(i).getId());
+                    }
+
+
+
+                }
+            }
+        });
+    }
+
+
+    public void deleteUserProgram(final String[] programIds) {
+
+
+        List<String> ids = new ArrayList<String>();
+        for(int i =0; i < programIds.length; i++){
+            ids.add(i, programIds[i]);
+        }
+
+        BlocklyProjectDelRequest blocklyProjectDelRequest = new BlocklyProjectDelRequest();
+        blocklyProjectDelRequest.setProgramIds(ids);
+
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.DEL_USER_PROGRAM, blocklyProjectDelRequest, 0).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d(TAG, "deleteUserProgram onError:" + e.getMessage());
+                for(int i = 0; i<programIds.length; i++){
+
+                    DataSupport.deleteAll(BlocklyProjectMode.class, "pid = ?", programIds[i]);
+                }
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d(TAG, "deleteUserProgram onResponse:" + response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if((boolean)jsonObject.get("status")){
+                        JSONArray jsonArray = jsonObject.getJSONArray("models");
+                        for(int i = 0; i<jsonArray.length(); i++){
+                            String pid = jsonArray.get(i).toString();
+                            DataSupport.deleteAll(BlocklyProjectMode.class, "pid = ?", pid);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+
+    }
+
+
+    public void updateUserProgram(final String pid, final String programName, final String programData) {
+        BlocklySaveMode saveMode = new BlocklySaveMode();
+        saveMode.setProgramId(pid);
+        saveMode.setProgramName(programName);
+        saveMode.setProgramData(programData);
+        List<BlocklySaveMode> list = new ArrayList<BlocklySaveMode>();
+        list.add(saveMode);
+
+
+        BlocklyProjectRequest request = new BlocklyProjectRequest();
+        request.setList(list);
+
+
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USER_PROGRAM, request, 0).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d(TAG, "updateUserProgram onError e:" + e.getMessage());
+
+                BlocklyProjectMode blocklyProjectMode = new BlocklyProjectMode();
+                blocklyProjectMode.setPid(pid);
+                blocklyProjectMode.setUserId(SPUtils.getInstance().getString(com.ubt.alpha1e.base.Constant.SP_USER_ID));
+                blocklyProjectMode.setProgramName(programName);
+                blocklyProjectMode.setProgramData(programData);
+                blocklyProjectMode.setDelState(false);
+                blocklyProjectMode.setServerState(false);
+
+                blocklyProjectMode.saveOrUpdate("pid = ?", pid);
+
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d(TAG, "updateUserProgram onResponse:" + response);
                 BaseResponseModel<BlocklyRespondMode> baseResponseModel = GsonImpl.get().toObject(response,
                         new TypeToken<BaseResponseModel<List<BlocklyRespondMode>>>() {
                         }.getType());
@@ -2729,49 +2841,12 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                         blocklyProjectMode.setServerState(true);
 
                         blocklyProjectMode.saveOrUpdate("pid = ?", blocklyRespondModeList.get(i).getId());
+//                        blocklyProjectMode.updateAll("pid = ?", blocklyRespondModeList.get(i).getId());
                     }
 
 
 
                 }
-            }
-        });
-    }
-
-
-    public void deleteUserProgram( String[] programIds) {
-
-
-        List<String> ids = new ArrayList<String>();
-        for(int i =0; i < programIds.length; i++){
-            ids.add(i, programIds[i]);
-        }
-
-        BlocklyProjectDelRequest blocklyProjectDelRequest = new BlocklyProjectDelRequest();
-        blocklyProjectDelRequest.setProgramIds(ids);
-
-        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.DEL_USER_PROGRAM, blocklyProjectDelRequest, 0).execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                UbtLog.d(TAG, "deleteUserProgram onError:" + e.getMessage());
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                UbtLog.d(TAG, "deleteUserProgram onResponse:" + response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if((boolean)jsonObject.get("status")){
-                        JSONArray jsonArray = jsonObject.getJSONArray("models");
-                        for(int i = 0; i<jsonArray.length(); i++){
-                            String pid = jsonArray.get(i).toString();
-                            DataSupport.deleteAll(BlocklyProjectMode.class, "pid = ?", pid);
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
             }
         });
 
