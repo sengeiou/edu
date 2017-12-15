@@ -12,6 +12,7 @@ import com.ubt.factorytest.test.data.DataServer;
 import com.ubt.factorytest.test.data.IFactoryListener;
 import com.ubt.factorytest.test.data.btcmd.BaseBTReq;
 import com.ubt.factorytest.test.data.btcmd.FactoryTool;
+import com.ubt.factorytest.test.data.btcmd.GetWifiStatus;
 import com.ubt.factorytest.test.data.btcmd.GsensirTest;
 import com.ubt.factorytest.test.data.btcmd.HeartBeat;
 import com.ubt.factorytest.test.data.btcmd.IntoFactoryTest;
@@ -25,6 +26,9 @@ import com.ubt.factorytest.utils.ByteHexHelper;
 import com.ubt.factorytest.utils.ContextUtils;
 import com.ubt.factorytest.utils.FileUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.List;
 import java.util.Timer;
@@ -37,7 +41,7 @@ import java.util.TimerTask;
  * @描述:
  */
 
-public class TestPresenter implements TestContract.Presenter {
+public class TestPresenter implements TestContract.Presenter,IFactoryListener {
     private static final String TAG = "BTTestPresenter";
     private TestContract.View mView;
     private DataServer mDataServer;
@@ -75,21 +79,7 @@ public class TestPresenter implements TestContract.Presenter {
         @Override
         public void onReadData(BluetoothDevice device, byte[] data) {
             Log.d(TAG, "zz TestPresenter onReadData data:" + ByteHexHelper.bytesToHexString(data));
-            FactoryTool.getInstance().parseBTCmd(data, new IFactoryListener() {
-                @Override
-                public void onProtocolPacket(ProtocolPacket packet) {
-                    if(packet.getmCmd() == BaseBTReq.HEART_CMD){
-                        return;
-                    }
-                    int pos = FactoryTool.getInstance().getItemPositon(mDataServer,packet);
-                    if(pos >= 0){
-                        mView.notifyItemChanged(pos);
-                    }
-                }
-            });
-           /* if(itemID >= 0){
-                mView.notifyItemChanged(itemID);
-            }*/
+            FactoryTool.getInstance().parseBTCmd(data, TestPresenter.this);
         }
 
         @Override
@@ -241,6 +231,11 @@ public class TestPresenter implements TestContract.Presenter {
         mBluetoothController.write(new PlayAction("action/my creation/" + "Action-老化测试动作简版.hts").toByteArray());
     }
 
+    @Override
+    public void getWifiStatus() {
+        mBluetoothController.write(new GetWifiStatus().toByteArray());
+    }
+
     private void startHeart(){
         mHeartTime.schedule(new TimerTask() {
             @Override
@@ -281,5 +276,27 @@ public class TestPresenter implements TestContract.Presenter {
             }
         }
 
+    }
+
+    @Override
+    public void onProtocolPacket(ProtocolPacket packet) {
+        byte cmd = packet.getmCmd();
+        if(cmd == BaseBTReq.HEART_CMD){
+            return;
+        }else if(cmd == BaseBTReq.WIFI_STATUS){
+            try {
+                JSONObject jsonObject = new JSONObject(new String(packet.getmParam()));
+                String name = jsonObject.getString("name");
+                String ip = jsonObject.getString("ip");
+                mView.setWifiStatus(name, ip);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+        int pos = FactoryTool.getInstance().getItemPositon(mDataServer,packet);
+        if(pos >= 0){
+            mView.notifyItemChanged(pos);
+        }
     }
 }

@@ -241,6 +241,12 @@ public class TestFragment extends SupportFragment implements TestContract.View {
 
     }
 
+    @Override
+    public void setWifiStatus(String wifiName, String ip) {
+        this.wifiName = wifiName;
+        this.wifiIP = ip;
+    }
+
     protected void initToolbarNav(Toolbar toolbar) {
         toolbar.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -266,6 +272,7 @@ public class TestFragment extends SupportFragment implements TestContract.View {
                     wifiName = data.getString("wifiName");
                     wifiIP = data.getString("wifiIP");
                     Log.i(TAG,"wifiName:"+wifiName+"    wifiIP:"+wifiIP);
+                    mPresenter.getWifiStatus();
                 }
             }
     }
