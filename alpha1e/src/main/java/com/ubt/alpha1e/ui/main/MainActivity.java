@@ -187,6 +187,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private final byte ROBOT_fall =0x0b;
     private final byte ROBOT_CHARGING=0x0c;
     private final byte ROBOT_default_gesture =0x0d;
+    private final byte ROBOT_sleep_gesture=0x0e;
     private final int LOW_BATTERY_TWENTY_THRESHOLD=20;
     private final int LOW_BATTERY_FIVE_THRESHOLD=5;
     private  boolean ENTER_LOW_BATTERY_FIVE=false;
@@ -275,7 +276,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
             if(cartoonAction != null) {
                 if( APP_CURRENT_STATUS==ROBOT_SLEEP_EVENT){
-                     looperThread.send(createMessage(ROBOT_SLEEP_EVENT)) ;
+                     looperThread.send(createMessage(ROBOT_sleep_gesture)) ;
                 }else {
                     looperThread.send(createMessage(ROBOT_default_gesture));
                 }
@@ -1237,6 +1238,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     @Override
                           public void run(){
                             cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                    }
+                });
+            case ROBOT_sleep_gesture:
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run(){
+                        cartoonAction.setBackgroundResource(R.drawable.squat60);
                     }
                 });
                 break;
