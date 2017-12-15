@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.ubt.alpha1e.AlphaApplication;
+
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;

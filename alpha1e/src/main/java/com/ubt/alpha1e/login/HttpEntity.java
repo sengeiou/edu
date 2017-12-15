@@ -74,5 +74,10 @@ public class HttpEntity {
      */
     public static final String DEL_USER_PROGRAM = BASIC_UBX_SYS + "deleteUserProgram";
 
+    /**
+     * 修改blockly编程项目
+     */
+    public static final String UPDATE_USER_PROGRAM = BASIC_UBX_SYS + "updateUserProgram";
+
 
 }

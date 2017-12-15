@@ -140,8 +140,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private int current = 0;
 
 
-    public String[] init = {"90", "90", "90", "90", "90", "90", "90", "60", "76", "110", "90", "90",
-            "120", "104", "70", "90"};
+//    public String[] init = {"90", "90", "90", "90", "90", "90", "90", "60", "76", "110", "90", "90",
+//            "120", "104", "70", "90"};
+    public String [] init = {"93", "20", "66", "86", "156", "127", "90", "74", "95", "104", "89", "89",
+                "104", "81", "76", "90"};
     public boolean lostLeftHand = false;
     private boolean lostRightHand = false;
     private boolean lostLeftLeg = false;
@@ -258,6 +260,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x03);
                doReset();
             }
         }, 1000);
@@ -745,17 +748,34 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
         if (musicTimes == 0) {
             if (list_frames.size() < 1) {
+                doReset();
+                if (mediaPlayer != null) {
+                    mediaPlayer.stop();
+                    playFinish = true;
+                }
+                ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x04);
                 ((Activity) mContext).finish();
                 return false;
             }
         } else {
             if (list_frames.size() < 2) {
+                doReset();
+                if (mediaPlayer != null) {
+                    mediaPlayer.stop();
+                    playFinish = true;
+                }
+                ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x04);
                 ((Activity) mContext).finish();
                 return false;
             }
         }
 
         if (isSaveSuccess) {
+            ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x04);
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+                playFinish = true;
+            }
             ((Activity) mContext).finish();
             return true;
         }
@@ -780,6 +800,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                                 mediaPlayer.stop();
                                 playFinish = true;
                             }
+                            ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x04);
                             ((Activity) mContext).finish();
                         } else {
                         }
@@ -885,11 +906,15 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                 break;
             case R.id.iv_reset_index:
+                if (mediaPlayer != null && mediaPlayer.isPlaying() && !mDir.equals("")) {
+                    pause();
+                }
                 replayMusic();
                 ((ActionsEditHelper)mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop, null);
                 sbVoice.setProgress(0);
                 recyclerViewFrames.smoothScrollToPosition(0);
                 recyclerViewTimes.smoothScrollToPosition(0);
+                setEnable(true);
                 break;
             case R.id.iv_auto_read:
                 if (ids.size() <= 0) {
@@ -979,8 +1004,9 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 ivZoomMins();
                 break;
             case R.id.lay_frame_data_edit:
-                rlEditFrame.setVisibility(View.GONE);
-                adapter.setDefSelect(-1);
+//                rlEditFrame.setVisibility(View.GONE);
+                doCancelChange();
+//                adapter.setDefSelect(-1);
                 break;
             case R.id.iv_preview:
                 doPreviewItem();
@@ -1097,12 +1123,24 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
      * 删除动作帧
      */
     private void doDeleteItem() {
+        if(TextUtils.isEmpty(mDir) ){
+            if(selectPos == list_frames.size()-1){
+                currentIndex--;
+            }
+
+        }else{
+            if(selectPos == list_frames.size()-2){
+                currentIndex--;
+            }
+        }
+        UbtLog.d(TAG, "doDeleteItem selectPos:" + selectPos + "list:" + list_frames.size() + "currentIndex:" + currentIndex);
         list_frames.remove(mCurrentEditItem);
         adapter.notifyDataSetChanged();
         adapter.setDefSelect(-1);
         goneEditFrameLayout();
         ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
         ivCancelChange.setVisibility(View.INVISIBLE);
+        UbtLog.d(TAG, "doDeleteItem currentIndex:" + currentIndex);
     }
 
 
@@ -1999,6 +2037,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public void setButtonEnable(boolean enable) {
         ivReset.setEnabled(enable);
         ivAutoRead.setEnabled(enable);
+        UbtLog.d(TAG, "ivSave setButtonEnable");
         ivSave.setEnabled(enable);
         ivActionLib.setEnabled(enable);
         ivActionLibMore.setEnabled(enable);
@@ -2010,7 +2049,25 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public void setEnable(boolean enable) {
         ivReset.setEnabled(enable);
         ivAutoRead.setEnabled(enable);
-        ivSave.setEnabled(enable);
+        if(enable){
+            if(TextUtils.isEmpty(mDir) ){
+                if(list_frames.size()==0){
+                    ivSave.setEnabled(false);
+                }else{
+                    ivSave.setEnabled(true);
+                }
+
+            }else{
+                if(list_frames.size()>1){
+                    ivSave.setEnabled(true);
+                }else{
+                    ivSave.setEnabled(false);
+                }
+            }
+        }else{
+            ivSave.setEnabled(enable);
+        }
+
         ivActionLib.setEnabled(enable);
         ivActionLibMore.setEnabled(enable);
         ivActionBgm.setEnabled(enable);
@@ -2040,7 +2097,12 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 i = 0;
                 addFrame();
             } else {
-                ((ActionsEditHelper) mHelper).doLostOnePower(ids.get(i));
+                if(i<=ids.size()){ //偶现i的值大于ids.size 加此判断
+                    ((ActionsEditHelper) mHelper).doLostOnePower(ids.get(i));
+                }else{
+                    UbtLog.e(TAG, "i>ids.size:"  + i + "  ids.size==" + ids.size() );
+                }
+
             }
 
         } else {
@@ -2389,7 +2451,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     @Override
     public void doPlayAutoRead() {
-
+        UbtLog.d(TAG, "doPlayAutoRead");
 
         if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
             ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,

@@ -769,6 +769,7 @@ public class BlocklyJsInterface {
         UbtLog.d(TAG, "saveProject:" + saveString);
         try {
             JSONObject jsonObject = new JSONObject(saveString);
+            String pid = jsonObject.getString("pid");
             String name = jsonObject.getString("name");
             String xml = jsonObject.getString("xml");
             UbtLog.d(TAG, "xml:" + xml);
@@ -779,7 +780,7 @@ public class BlocklyJsInterface {
 
             projectMode.saveOrUpdate("name = ?", name);*/
 
-            ((BlocklyActivity) mBaseActivity).saveUserProgram(name, xml);
+            ((BlocklyActivity) mBaseActivity).saveUserProgram(pid,name, xml);
 
 
         } catch (JSONException e) {

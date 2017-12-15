@@ -1,6 +1,7 @@
 package com.ubt.factorytest.test;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,7 +19,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ubt.factorytest.ActionPlay.ActionFragment;
+import com.ubt.factorytest.ActionPlay.ActionPresenter;
 import com.ubt.factorytest.R;
+import com.ubt.factorytest.bluetooth.netconnect.NetconnectActivity;
 import com.ubt.factorytest.test.recycleview.TestItemClickAdapter;
 import com.ubt.factorytest.utils.ContextUtils;
 
@@ -79,16 +83,29 @@ public class TestFragment extends SupportFragment implements TestContract.View {
         Bundle data = getArguments();
         String mac = data.getString("bt_mac");
         mPresenter.saveBTMac(mac);
-        mPresenter.setBTRSSI(mac+"     "+data.getString("bt_rssi"));
+        mPresenter.setBTRSSI(data.getString("bt_rssi"));
         toolbar.inflateMenu(R.menu.menu_testfragment);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
-
-                if (id == R.id.action_stop_record) {
-                    mPresenter.stopRobotRecord();
+                switch (id){
+                    case R.id.action_stop_record:
+                        mPresenter.stopRobotRecord();
+                        break;
+                    case R.id.action_wifi_conf:
+                        startWifiConfig();
+                        break;
+                    case R.id.action_action_test:
+                        ActionFragment fragment = ActionFragment.newInstance();
+                        new ActionPresenter(fragment);
+                        startForResult(fragment, 100);
+                        break;
+                    case R.id.action_ageing_test:
+                        mPresenter.startAgeing();
+                        break;
                 }
+
                 return true;
             }
         });
@@ -156,9 +173,22 @@ public class TestFragment extends SupportFragment implements TestContract.View {
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                boolean isPass =  mAdapter.getItem(position).isPass();
-                mAdapter.getItem(position).setPass(!isPass);
-                adapter.notifyItemChanged(position, "123121");
+                switch(view.getId()){
+                    case R.id.btn_ok:
+                        boolean isPass =  mAdapter.getItem(position).isPass();
+                        mAdapter.getItem(position).setPass(!isPass);
+                        adapter.notifyItemChanged(position, "123121");
+                        break;
+                    case R.id.btn_vol_sub:
+                        Log.i(TAG,"btn_vol_sub！！");
+                        mPresenter.adjustVolume(TestContract.ADJUST_SUB);
+                        break;
+                    case R.id.btn_vol_add:
+                        Log.i(TAG,"btn_vol_add！！");
+                        mPresenter.adjustVolume(TestContract.ADJUST_ADD);
+                        break;
+                }
+
             }
         });
     }
@@ -191,6 +221,18 @@ public class TestFragment extends SupportFragment implements TestContract.View {
         mHandler.sendMessage(hmsg);
     }
 
+    @Override
+    public void startWifiConfig() {
+
+        Intent wifiConnect = new Intent(getActivity(), NetconnectActivity.class);
+        startActivity(wifiConnect);
+    }
+
+    @Override
+    public void startActionTest() {
+
+    }
+
     protected void initToolbarNav(Toolbar toolbar) {
         toolbar.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -204,5 +246,14 @@ public class TestFragment extends SupportFragment implements TestContract.View {
                 }
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 100){
+            mPresenter.reInitBT();
+            mPresenter.initBTListener();
+        }
     }
 }
