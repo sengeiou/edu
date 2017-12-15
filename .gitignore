@@ -1,5 +1,6 @@
 build/*
 alpha1e/build/*
+alpha1e/build.gradle
 alpha1e/jni/local/*
 alpha1e/*.apk
 ChangeSkin/build/*
@@ -16,3 +17,5 @@ alpha1e-android-app.iml
 .gradle/*
 *.iml
 *.properties
+build.gradle
+gradle.properties

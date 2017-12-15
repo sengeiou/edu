@@ -30,6 +30,7 @@ public class Constant {
     public static final String PRINCIPLE_PROGRESS = "sp_principle_progress_";
     public static final String SP_SHOW_REMOTE_PUBLISH = "sp_show_remote_publish";
     public static final String SP_AUTO_UPGRADE = "sp_auto_upgrade";
+    public static final String PRINCIPLE_ENTER_PROGRESS = "sp_principle_enter_progress";
 
     /**
      * 首次申请权限

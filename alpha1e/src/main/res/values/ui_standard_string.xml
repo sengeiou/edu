@@ -214,7 +214,7 @@
     <string name="ui_about_help">帮助</string>
     <string name="ui_about_feedback_input_too_long">输入过长</string>
     <string name="ui_about_feedback">意见反馈</string>
-    <string name="ui_about_url">http://www.ubtrobot.com</string>
+    <string name="ui_about_url">www.ubtrobot.com</string>
     <string name="ui_about_copyright">Copyright © 2016 UBTECH. All Rights Reserved.</string>
     <string name="ui_about_update_already_latest">App已经是最新版本</string>
     <string name="ui_about_update_message">AppStore有新版本，是否去升级？</string>
@@ -873,6 +873,8 @@
     <string name="ui_setting_password_modify_fail">修改密码失败</string>
     <string name="ui_setting_common_next">下一步</string>
     <string name="ui_setting_empty_search_result">无搜索结果</string>
+    <string name="ui_contact_website">前往：</string>
+    <string name="ui_setting_save_website">存储二维码</string>
 
     <string name="ui_setting_password_verify_fail">验证码检验失败</string>
     <string name="ui_setting_verify_code_send_success">验证码已发送到手机</string>
@@ -896,6 +898,7 @@
     <string name="ui_setting_cust_phone_value">400-6666-700</string>
     <string name="ui_setting_cust_email_value">ucare@ubtrobot.com</string>
     <string name="ui_setting_cust_public_name">优必选科技</string>
+    <string name="ui_setting_cust_public_number">关注优必选科技微信公众号</string>
 
     <!---==============================初级动作========================-->
     <string name="ui_basic_action_warrior">出招</string>
@@ -968,6 +971,7 @@
     <string name="ui_common_save_success">保存成功</string>
     <string name="ui_common_save_fail">保存失败</string>
     <string name="ui_common_save_to_dcim">长按保存到相册</string>
+
 
 
     <!--动作编辑课程 -->
