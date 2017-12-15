@@ -586,6 +586,7 @@ public class NetconnectFragment extends SupportFragment implements View.OnClickL
                         displayDialog();
                         ToastUtils.showShort("蓝牙断开!!!");
                         pop();
+                        pop();
                     }
                     break;
                 default:
