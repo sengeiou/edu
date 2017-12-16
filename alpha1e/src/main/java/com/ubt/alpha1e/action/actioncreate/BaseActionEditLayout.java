@@ -111,7 +111,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private boolean isSaveSuccess = false;
     private SaveSuccessFragment saveSuccessFragment;
 
-    private boolean autoRead = false;
+    public boolean autoRead = false;
 
 
     //action edit frame view
@@ -146,7 +146,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private boolean lostRightHand = false;
     private boolean lostLeftLeg = false;
     public boolean lostRightLeg = false;
-    private boolean needAdd = false;
+    public boolean needAdd = false;
     private List<Integer> ids = new ArrayList<Integer>();
     private int readCount = -1;
     private String autoAng = "";
@@ -230,6 +230,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public BaseHelper mHelper;
 
     public boolean isOnCourse;//是否正在课程页面
+    public boolean isCourseReading;//课程里面正在读取机器人角度变化
 
     public BaseActionEditLayout(Context context) {
         super(context);
@@ -258,7 +259,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-               doReset();
+                doReset();
             }
         }, 1000);
     }
@@ -314,7 +315,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             @Override
             public void onItemClick(View view, int pos, Map<String, Object> data) {
                 UbtLog.d(TAG, "getNewPlayerState:" + ((ActionsEditHelper) mHelper).getNewPlayerState());
-                if(autoRead){
+                if (autoRead) {
                     return;
                 }
 
@@ -886,7 +887,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 break;
             case R.id.iv_reset_index:
                 replayMusic();
-                ((ActionsEditHelper)mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop, null);
+                ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop, null);
                 sbVoice.setProgress(0);
                 recyclerViewFrames.smoothScrollToPosition(0);
                 recyclerViewTimes.smoothScrollToPosition(0);
@@ -1150,7 +1151,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             return;
         }
 
-
         if (mediaPlayer != null && mediaPlayer.isPlaying() && !mDir.equals("")) {
             ivPlay.setImageResource(R.drawable.icon_play_music);
             pause();
@@ -1184,7 +1184,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
         UbtLog.d(TAG, "state:" + ((ActionsEditHelper) mHelper).getNewPlayerState());
         resetState();
-        if(list_frames.size() == 0){
+        if (list_frames.size() == 0) {
             return;
         }
         if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
@@ -1428,7 +1428,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
      */
     @Override
     public void onActionConfirm(PrepareDataModel prepareDataModel) {
-        if(prepareDataModel == null){
+        if (prepareDataModel == null) {
             return;
         }
         List<ActionDataModel> list = prepareDataModel.getList();
@@ -1558,7 +1558,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
      */
     @Override
     public void onMusicConfirm(PrepareMusicModel prepareMusicModel) {
-        if(prepareMusicModel == null){
+        if (prepareMusicModel == null) {
             return;
         }
         String name = prepareMusicModel.getMusicName();
@@ -1955,7 +1955,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public void doReset() {
         UbtLog.d(TAG, "doReset");
 
-
         String angles = "93#20#66#86#156#127#90#74#95#104#89#89#104#81#76#90";
 
 //        String angles = "90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90";
@@ -2033,7 +2032,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     private int i = 0;
 
-    private void readEngOneByOne() {
+    public void readEngOneByOne() {
         if (ids.size() > 0) {
             UbtLog.d(TAG, "readEngOneByOne:" + i + "  ids.size==" + ids.size());
             if (i == ids.size()) {
@@ -2112,7 +2111,11 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     UbtLog.d(TAG, "autoAng:" + autoAng + "angles:" + angles);
                     if (autoAng.equals("")) {
                         autoAng = angles;
-                        list_autoFrames.add(map);
+                        //课程关卡判断
+                        if (!isCourseReading) {
+                            UbtLog.d(TAG, "isCourseReading:第一步");
+                            list_autoFrames.add(map);
+                        }
                     } else {
                         String[] auto = autoAng.split("#");
                         String[] ang = angles.split("#");
@@ -2131,6 +2134,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                             mHandler.sendEmptyMessage(MSG_AUTO_READ);
                             return;
                         } else {
+                            if (isCourseReading) {
+                                onReacHandData();
+                                return;
+                            }
                             list_autoFrames.add(map);
                         }
                     }
@@ -2138,13 +2145,20 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 }
 
             }
-
+            if (isCourseReading) {
+                if (autoRead) {
+                    mHandler.sendEmptyMessage(MSG_AUTO_READ);
+                }
+                return;
+            }
             UbtLog.d(TAG, "list_frames add");
             if (musicTimes == 0) {
+                UbtLog.d(TAG, "isCourseReading:第二步");
                 list_frames.add(map);
                 currentIndex++;
             } else {
                 // 添加位置和最后补全的时间计算
+                UbtLog.d(TAG, "isCourseReading:第三步");
                 handleFrameAndTime(map);
             }
 
@@ -2161,10 +2175,17 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         UbtLog.d(TAG, "continue read！");
         if (autoRead) {
             mHandler.sendEmptyMessage(MSG_AUTO_READ);
-        }else{
+        } else {
             changeSaveAndPlayState();
         }
 
+
+    }
+
+    /**
+     * 机器人角度发生变化
+     */
+    public void onReacHandData() {
 
     }
 
@@ -2390,7 +2411,6 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     @Override
     public void doPlayAutoRead() {
 
-
         if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
             ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,
                     getEditingPreviewActions());
@@ -2430,26 +2450,26 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         void startSave(Intent intent);
     }
 
-    private void changeSaveAndPlayState(){
+    private void changeSaveAndPlayState() {
         UbtLog.d(TAG, "mDir:" + mDir + "--size:" + list_frames.size());
 
-        if(TextUtils.isEmpty(mDir) && list_frames.size() == 0){
+        if (TextUtils.isEmpty(mDir) && list_frames.size() == 0) {
             ivPlay.setEnabled(false);
-        }else{
+        } else {
             ivPlay.setEnabled(true);
         }
 
-        if(TextUtils.isEmpty(mDir) ){
-             if(list_frames.size()==0){
-                 ivSave.setEnabled(false);
-             }else{
-                 ivSave.setEnabled(true);
-             }
-
-        }else{
-            if(list_frames.size()>1){
+        if (TextUtils.isEmpty(mDir)) {
+            if (list_frames.size() == 0) {
+                ivSave.setEnabled(false);
+            } else {
                 ivSave.setEnabled(true);
-            }else{
+            }
+
+        } else {
+            if (list_frames.size() > 1) {
+                ivSave.setEnabled(true);
+            } else {
                 ivSave.setEnabled(false);
             }
         }

@@ -2,12 +2,14 @@ package com.ubt.alpha1e.maincourse.courselayout;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,18 +21,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
-import com.ubt.alpha1e.base.popup.EasyPopup;
-import com.ubt.alpha1e.base.popup.HorizontalGravity;
-import com.ubt.alpha1e.base.popup.VerticalGravity;
+import com.ubt.alpha1e.action.model.ActionConstant;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
-import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
+import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,12 +62,17 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
     private ImageView ivRight;
     private TextView tvCourseContent;
     private RelativeLayout rlContent;
-
-
+    private ImageView ivLeftArrow;
+    private ImageView ivRightArrow;
+    AnimationDrawable animation1;
+    AnimationDrawable animation2;
+    AnimationDrawable animation3;
+    private RelativeLayout rlActionCenter;
+    private ImageView ivCenterAction;
     /**
-     * 第一关卡所有课时列表
+     * 高亮对话框的TextView显示
      */
-    private List<ActionCourseOneContent> mContents = new ArrayList<>();
+    TextView tv;
 
 
     private List<CourseOne1Content> mOne1ContentList = new ArrayList<>();
@@ -75,9 +83,12 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
      */
     private int currentCourse = 1;
 
-
+    /**
+     * 课时一
+     */
     private int currentIndex = 0;
 
+    private int secondIndex = 0;
     private HighLight mHightLight;
 
     public CourseLevelOneLayout(Context context) {
@@ -98,16 +109,33 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
     }
 
     /**
-     * 设置课程数据
+     * 设置课程数据,开始播放数据
      *
-     * @param currentCourse          当前第几个课时
      * @param courseProgressListener 回调监听
      */
-    public void setData(int currentCourse, CourseProgressListener courseProgressListener) {
+    public void setData(CourseProgressListener courseProgressListener) {
         mOne1ContentList.clear();
         mOne1ContentList.addAll(ActionCourseDataManager.getCardOneList(mContext));
+        int level = 1;// 当前第几个课时
+        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+        if (null != record) {
+            UbtLog.d(TAG, "record===" + record.toString());
+            int course = record.getCourseLevel();
+            int recordlevel = record.getPeriodLevel();
+            if (course == 1) {
+                if (recordlevel == 0) {
+                    level = 1;
+                } else if (recordlevel == 1) {
+                    level = 2;
+                } else if (recordlevel == 2) {
+                    level = 3;
+                } else if (recordlevel == 3) {
+                    level = 1;
+                }
+            }
 
-        this.currentCourse = currentCourse;
+        }
+        this.currentCourse = level;
         this.courseProgressListener = courseProgressListener;
         setLayoutByCurrentCourse();
         isSaveAction = true;
@@ -119,27 +147,33 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
      */
     public void setLayoutByCurrentCourse() {
         UbtLog.d(TAG, "currentCourse==" + currentCourse);
-        rlContent.setVisibility(View.VISIBLE);
+        // rlContent.setVisibility(View.VISIBLE);
         if (currentCourse == 1) {
             tvCourseContent.setText("认识时间轴");
             ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
-            //showPop(0);
             showCourseOne();
         } else if (currentCourse == 2) {
             ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
             tvCourseContent.setText("熟悉动作添加");
-            showPop1();
+            // TODO Auto-generated method stub
+            showLeftArrow(true);
+            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
+            secondIndex = 1;
         } else if (currentCourse == 3) {
             ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
             tvCourseContent.setText("了解音乐库");
-            showPop2();
         }
 
     }
 
+    /**
+     * 初始化数据
+     *
+     * @param context
+     */
     @Override
     public void init(Context context) {
         super.init(context);
@@ -153,9 +187,18 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         ivAddFrame.setEnabled(false);
         ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
         setImageViewBg();
+        ivLeftArrow = findViewById(R.id.iv_left_arrow);
+        initLeftArrow();
+        ivRightArrow = findViewById(R.id.iv_add_frame_arrow);
+
+        rlActionCenter = findViewById(R.id.rl_action_animal);
+        ivCenterAction = findViewById(R.id.iv_center_action);
+
     }
 
-
+    /**
+     * 设置按钮不可点击
+     */
     public void setImageViewBg() {
         ivReset.setEnabled(false);
         ivAutoRead.setEnabled(false);
@@ -187,6 +230,24 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         ivPlay.setEnabled(true);
     }
 
+    /**
+     * 初始化箭头图片宽高
+     */
+    private void initLeftArrow() {
+        // 获取屏幕密度（方法2）
+        DisplayMetrics dm = new DisplayMetrics();
+        dm = getResources().getDisplayMetrics();
+        float density = dm.density;
+        UbtLog.d(TAG, "density:" + density);
+        if (AlphaApplication.isPad()) {
+            UbtLog.d(TAG, "Pad Robot 1");
+        } else {
+            ivLeftArrow.setLayoutParams(ActionConstant.getIvRobotParams(density, ivLeftArrow));
+            UbtLog.d(TAG, "ivLeftArrow:" + ivLeftArrow.getWidth() + "/" + ivLeftArrow.getHeight());
+
+        }
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -209,6 +270,9 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                     courseProgressListener.finishActivity();
                 }
                 break;
+            case R.id.iv_hand_left:
+                lostLeft();
+                break;
             case R.id.iv_add_frame:
                 addFrameOnClick();
                 ivLeft.setEnabled(false);
@@ -217,6 +281,9 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 lostLeftHand = false;
                 lostRightLeg = false;
                 ivHandLeft.setSelected(false);
+                isCourseReading = false;
+                showNextDialog(3);
+                showRightArrow(false);
                 if (courseProgressListener != null) {
                     courseProgressListener.completeCurrentCourse(2);
                 }
@@ -238,14 +305,13 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
             } else if (msg.what == 1113) {
                 ivLeft.setEnabled(true);
                 ivRight.setEnabled(false);
+            } else if (msg.what == MSG_AUTO_READ) {
+                needAdd = true;
+                UbtLog.d(TAG, "adddddd:" + autoRead);
 
-            } else if (msg.what == 1115) {
-                if (null != mCirclePop) {
-                    mCirclePop.dismiss();
+                if (autoRead) {
+                    readEngOneByOne();
                 }
-                ivAddFrame.setEnabled(true);
-                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
-                showAddPop();
             }
         }
     };
@@ -256,9 +322,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         if (((Activity) mContext).isFinishing()) {
             return;
         }
-        if (null != mCirclePop) {
-            mCirclePop.dismiss();
-        }
+
         if (currentCourse == 1) {
             ivLeft.setEnabled(false);
             ivRight.setEnabled(false);
@@ -270,16 +334,17 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                     courseProgressListener.completeCurrentCourse(1);
                 }
                 setImageViewBg();
-                currentIndex = 0;
                 mHandler.sendEmptyMessageDelayed(1111, 500);
             }
         } else if (currentCourse == 2) {
             UbtLog.d(TAG, "playComplete==" + 2);
-            if (courseProgressListener != null) {
-                courseProgressListener.completeCurrentCourse(2);
+            if (secondIndex == 1) {
+                lostRightLeg = true;
+                lostLeft();
+                showLeftArrow(false);
+                startEditLeftHand();
             }
-            ivLeft.setEnabled(true);
-            ivRight.setEnabled(false);
+
         } else if (currentCourse == 3) {
             ivLeft.setEnabled(true);
             ivRight.setEnabled(false);
@@ -290,6 +355,81 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         }
     }
 
+    /**
+     * 第二关卡摆动机器人手臂
+     */
+    public void startEditLeftHand() {
+        rlActionCenter.setVisibility(View.VISIBLE);
+        ivCenterAction.setImageResource(R.drawable.animal_action_center);
+        animation2 = (AnimationDrawable) ivCenterAction.getDrawable();
+        animation2.start();
+        // ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
+        autoRead = true;
+        mHandler.sendEmptyMessage(MSG_AUTO_READ);
+        isCourseReading = true;
+        ivAddFrame.setEnabled(false);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
+    }
+
+
+    @Override
+    public void onReacHandData() {
+        super.onReacHandData();
+        UbtLog.d(TAG, "机器人角度变化了呢！！");
+        autoRead = false;
+        ((ActionsEditHelper) mHelper).stopAction();
+        mHandler.removeMessages(MSG_AUTO_READ);
+        setButtonEnable(false);
+        ivAddFrame.setEnabled(true);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
+        ivLeft.setEnabled(true);
+        ivRight.setEnabled(false);
+        rlActionCenter.setVisibility(View.GONE);
+        if (null != animation2) {
+            animation2.stop();
+        }
+
+        showRightArrow(true);
+    }
+
+    /**
+     * 左边箭头动效
+     *
+     * @param flag true 播放 false 结束
+     */
+    private void showLeftArrow(boolean flag) {
+        if (flag) {
+            ivLeftArrow.setVisibility(View.VISIBLE);
+            ivLeftArrow.setImageResource(R.drawable.animal_right_arrow);
+            animation1 = (AnimationDrawable) ivLeftArrow.getDrawable();
+            animation1.start();
+        } else {
+            ivLeftArrow.setVisibility(View.GONE);
+            if (null != animation1) {
+                animation1.stop();
+            }
+        }
+    }
+
+
+    /**
+     * 左边箭头动效
+     *
+     * @param flag true 播放 false 结束
+     */
+    private void showRightArrow(boolean flag) {
+        if (flag) {
+            ivRightArrow.setVisibility(View.VISIBLE);
+            ivRightArrow.setImageResource(R.drawable.animal_right_arrow);
+            animation3 = (AnimationDrawable) ivRightArrow.getDrawable();
+            animation3.start();
+        } else {
+            ivRightArrow.setVisibility(View.GONE);
+            if (null != animation3) {
+                animation3.stop();
+            }
+        }
+    }
 
     /**
      * Activity执行onPause方法
@@ -299,9 +439,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         mHandler.removeMessages(1112);
         mHandler.removeMessages(1113);
         mHandler.removeMessages(1115);
-        if (null != mCirclePop) {
-            mCirclePop.dismiss();
-        }
+
     }
 
 
@@ -323,7 +461,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 .enableNext()
                 .maskColor(0xAA000000)
                 // .anchor(findViewById(R.id.id_container))//如果是Activity上增加引导层，不需要设置anchor
-                .addHighLight(R.id.ll_frame, R.layout.layout_pop_course_right_level, new HightLightTopCallback(100), new RectLightShape())
+                .addHighLight(R.id.ll_add, R.layout.layout_pop_course_right_level, new HightLightTopCallback(100), new RectLightShape())
                 .addHighLight(R.id.rl_musicz_zpne, R.layout.layout_pop_course_right_level, new HightLightTopCallback(100), new RectLightShape())
                 .addHighLight(R.id.ll_add_frame, R.layout.layout_pop_course_right_level, new HightLightTopCallback(100), new RectLightShape())
                 .addHighLight(R.id.iv_add_frame1, R.layout.layout_pop_course_left_level, new OnLeftLocalPosCallback(30), new RectLightShape())
@@ -348,7 +486,6 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         ((ActionsEditHelper) mHelper).playAction(oneContent.getActionPath());
     }
 
-    TextView tv;
 
     /**
      * 响应所有R.id.iv_known的控件的点击事件
@@ -366,7 +503,11 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
             UbtLog.d(TAG, "=====remove=========");
         }
         if (currentIndex == 5) {
+            ((ActionsEditHelper) mHelper).stopAction();
             showNextDialog(2);
+            if (courseProgressListener != null) {
+                courseProgressListener.completeCurrentCourse(1);
+            }
         }
     }
 
@@ -376,7 +517,12 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
     }
 
 
-    private void showNextDialog(int currentCourse) {
+    /**
+     * 下一课时对话框
+     *
+     * @param current 跳转课程
+     */
+    private void showNextDialog(int current) {
         UbtLog.d(TAG, "进入第二课时，弹出对话框");
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_action_course_content, null);
         TextView title = contentView.findViewById(R.id.tv_card_name);
@@ -388,7 +534,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         RecyclerView mrecyle = contentView.findViewById(R.id.recyleview_content);
         mrecyle.setLayoutManager(new LinearLayoutManager(mContext));
 
-        CourseItemAdapter itemAdapter = new CourseItemAdapter(R.layout.layout_action_course_dialog, ActionCourseDataManager.getCourseActionModel(1, currentCourse));
+        CourseItemAdapter itemAdapter = new CourseItemAdapter(R.layout.layout_action_course_dialog, ActionCourseDataManager.getCourseActionModel(1, current));
         mrecyle.setAdapter(itemAdapter);
 
         ViewHolder viewHolder = new ViewHolder(contentView);
@@ -404,115 +550,17 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
+                        if (view.getId() == R.id.btn_pos) {
+                            currentIndex = 0;
+                            currentCourse = 2;
+                            setLayoutByCurrentCourse();
+                        }
+                        dialog.dismiss();
+                    }
+                })
 
-                    }
-                })
-                .setOnDismissListener(new OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogPlus dialog) {
-                    }
-                })
-                .setCancelable(true)
+                .setCancelable(false)
                 .create().show();
-    }
-
-
-    EasyPopup mCirclePop = null;
-
-
-    /**
-     * 第二课时
-     */
-    private void showPop1() {
-        showAddLeftPop();
-        lostRightLeg = true;
-        lostLeft();
-        mHandler.sendEmptyMessageDelayed(1115, 3000);
-
-
-    }
-
-
-    /**
-     * 左手臂弹框
-     */
-    private void showAddLeftPop() {
-        View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one1, null);
-        TextView textView = contentView.findViewById(R.id.tv_content);
-        textView.setText("点击机器人的关节部分机器人掉电，掰动机器人的关节至理想的动作");
-        textView.setBackgroundResource(R.drawable.bubble_right);
-        mCirclePop = new EasyPopup(mContext)
-                .setContentView(contentView)
-                //是否允许点击PopupWindow之外的地方消失
-                .setFocusAndOutsideEnable(false)
-                .createPopup()
-
-        ;
-
-        mCirclePop.showAtAnchorView(findViewById(R.id.iv_hand_left), VerticalGravity.CENTER, HorizontalGravity.LEFT, 0, 0);
-
-
-    }
-
-
-    /**
-     * 添加按钮
-     */
-    private void showAddPop() {
-        UbtLog.d(TAG, "showAddPop");
-        View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one, null);
-        TextView textView = contentView.findViewById(R.id.tv_content);
-
-        textView.setText("点击时间轴的添加按钮 完成动作添加");
-        textView.setBackgroundResource(R.drawable.bubble_right);
-        mCirclePop = new EasyPopup(mContext)
-                .setContentView(contentView)
-                //是否允许点击PopupWindow之外的地方消失
-                .setFocusAndOutsideEnable(false)
-                .createPopup()
-        ;
-
-        mCirclePop.showAtAnchorView(ivAddFrame, VerticalGravity.CENTER, HorizontalGravity.LEFT, 20, 0);
-
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mCirclePop.dismiss();
-            }
-        }, 2000);
-    }
-
-
-    public void dismiss() {
-        if (null != mCirclePop) {
-            mCirclePop.dismiss();
-        }
-    }
-
-    /**
-     * 播放第三课时
-     */
-    private void showPop2() {
-        setImageViewBg();
-        ivActionBgm.setEnabled(true);
-        View contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_pop_course_one, null);
-        TextView textView = contentView.findViewById(R.id.tv_content);
-        UbtLog.d(TAG, mContents.get(currentCourse - 1).getList().toString());
-        CourseOne1Content oneContent = mContents.get(currentCourse - 1).getList().get(0);
-        textView.setText(oneContent.getContent());
-        textView.setBackgroundResource(oneContent.getDirection() == 0 ? R.drawable.bubble_left : R.drawable.bubble_right);
-        View archView = findViewById(oneContent.getId());
-        mCirclePop = new EasyPopup(mContext)
-                .setContentView(contentView)
-                //是否允许点击PopupWindow之外的地方消失
-                .setFocusAndOutsideEnable(false)
-//                .setBackgroundDimEnable(true)
-//                .setDimValue(0.4f)
-                .createPopup();
-
-        mCirclePop.showAtAnchorView(archView, oneContent.getVertGravity(), oneContent.getHorizGravity(), oneContent.getX(), oneContent.getY());
-        ((ActionsEditHelper) mHelper).playAction(oneContent.getActionPath());
-        UbtLog.d("EditHelper", oneContent.getVoiceName());
     }
 
 

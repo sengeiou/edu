@@ -304,6 +304,14 @@ public class ActionsEditHelper extends BaseHelper implements
                 .getCurrentBluetooth().getAddress(), ConstValue.DV_PLAYACTION, actions, actions.length, false);
     }
 
+    /**
+     * 结束动作
+     */
+    public void stopAction() {
+        ((AlphaApplication) mContext
+                .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) mContext.getApplicationContext())
+                .getCurrentBluetooth().getAddress(), ConstValue.DV_STOPPLAY, null, 0, false);
+    }
 
     public void doLostLeftHandAndRead() {
         doLostOnePower(1);
