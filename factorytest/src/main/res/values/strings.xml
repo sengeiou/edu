@@ -15,6 +15,7 @@
     <string name="action_action_test">整机动作测试</string>
     <string name="action_ageing_test">整机老化测试</string>
     <string name="action_wifi_status">wifi状态</string>
+    <string name="action_extran_test">扩展测试</string>
 
     <string name="wifi_name">wifiName:</string>
     <string name="wifi_ip">wifiIP:</string>

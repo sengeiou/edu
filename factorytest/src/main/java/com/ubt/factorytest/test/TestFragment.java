@@ -96,9 +96,9 @@ public class TestFragment extends SupportFragment implements TestContract.View {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
                 switch (id){
-                    case R.id.action_stop_record:
+                    /*case R.id.action_stop_record:
                         mPresenter.stopRobotRecord();
-                        break;
+                        break;*/
                     case R.id.action_wifi_conf:
                         startWifiConfig();
                         break;
@@ -196,6 +196,9 @@ public class TestFragment extends SupportFragment implements TestContract.View {
                     case R.id.btn_vol_add:
                         Log.i(TAG,"btn_vol_add！！");
                         mPresenter.adjustVolume(TestContract.ADJUST_ADD);
+                        break;
+                    case R.id.btn_mic_stop:
+                        mPresenter.stopRobotRecord();
                         break;
                 }
 

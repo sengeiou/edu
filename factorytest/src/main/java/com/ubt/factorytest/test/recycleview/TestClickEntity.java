@@ -13,6 +13,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 public class TestClickEntity implements MultiItemEntity {
     public static final int CLICK_ITEM_VIEW = 1;
     public static final int CLICK_ITEM_SPEAKER = 2;
+    public static final int CLICK_ITEM_MIC = 3;
 
     /**测试命令项*/
     public static final int TEST_ITEM_START_TIME = 1;

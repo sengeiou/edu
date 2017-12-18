@@ -111,25 +111,16 @@
         android:layout_toRightOf="@id/tv1"
         />
 
-    <Button
-        android:id="@+id/btn_vol_sub"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="音量-"
-        android:layout_toRightOf="@id/tv_item"
-        android:layout_alignBottom="@id/tv_item"
-        android:layout_marginLeft="@dimen/dp_4"
-        android:background="@drawable/touch_bg"
-        />
 
     <Button
-        android:id="@+id/btn_vol_add"
+        android:id="@+id/btn_mic_stop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="音量+"
-        android:layout_toRightOf="@id/btn_vol_sub"
+        android:background="@drawable/touch_bg"
+        android:text="停止录音"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
         android:layout_alignBottom="@id/tv_item"
         android:layout_marginLeft="@dimen/dp_4"
-        android:background="@drawable/touch_bg"
         />
 </RelativeLayout>

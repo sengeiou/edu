@@ -31,6 +31,7 @@ public class TestContract {
         void adjustVolume(int type);
         void startAgeing();
         void getWifiStatus();
+        void stopFactoryTest();
     }
 
     interface View extends BaseView<Presenter> {

@@ -174,6 +174,7 @@ public class BluetoothFragment extends SupportFragment implements BluetoothContr
 
     private void startStopScan() {
         if (!mPresenter.isBTScaning()) {
+            Log.i(TAG,"开始扫描蓝牙");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                 int permission = ActivityCompat.checkSelfPermission(
                         mContext, Manifest.permission.ACCESS_COARSE_LOCATION);
@@ -192,6 +193,7 @@ public class BluetoothFragment extends SupportFragment implements BluetoothContr
             notifyDataSetChanged();
             mPresenter.bStartBTScan();
         } else {
+            Log.i(TAG,"停止扫描蓝牙");
             mPresenter.bCancelBTScan();
         }
     }
