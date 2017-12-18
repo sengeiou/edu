@@ -864,7 +864,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     }
 
     public void replayMusic() {
-        if (mediaPlayer != null) {
+        if (mediaPlayer != null && !mDir.equals("")) {
             UbtLog.d(TAG, "mediaPlayer replayMusic");
             tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
             playFinish = true;

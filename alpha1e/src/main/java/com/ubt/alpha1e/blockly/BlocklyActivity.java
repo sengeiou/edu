@@ -2761,6 +2761,14 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
                     DataSupport.deleteAll(BlocklyProjectMode.class, "pid = ?", programIds[i]);
                 }
+                if(mWebView != null){
+                    mWebView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mWebView.loadUrl("javascript:projectIsOver()");
+                        }
+                    });
+                }
             }
 
             @Override
@@ -2773,6 +2781,14 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                         for(int i = 0; i<jsonArray.length(); i++){
                             String pid = jsonArray.get(i).toString();
                             DataSupport.deleteAll(BlocklyProjectMode.class, "pid = ?", pid);
+                        }
+                        if(mWebView != null){
+                            mWebView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mWebView.loadUrl("javascript:projectIsOver()");
+                                }
+                            });
                         }
                     }
                 } catch (JSONException e) {

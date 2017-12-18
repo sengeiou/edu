@@ -206,7 +206,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
         params[0] = 0;
         doSendComm(ConstValue.DV_READSTATUS, params);
 
-        //定时读电量
+        //定时读电量(10S读一次)
         if (read_battery_timer == null) {
             read_battery_timer = new Timer();
             read_battery_timer.schedule(new TimerTask() {
@@ -220,7 +220,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                     param[0] = 4;
                     doSendComm(ConstValue.DV_READ_BATTERY, param);
                 }
-            }, 0, 2000);
+            }, 0, 10*1000);
         }
     }
 
