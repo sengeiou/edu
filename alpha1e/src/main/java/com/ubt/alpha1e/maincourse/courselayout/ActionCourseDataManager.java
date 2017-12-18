@@ -104,34 +104,40 @@ public class ActionCourseDataManager {
     }
 
     /**
-     * 关卡一课时
+     * 关卡课时及状态
      *
      * @return
      */
     public static List<CourseActionModel> getCourseActionModel(int card, int currentCourse) {
         List<CourseActionModel> list = new ArrayList<>();
+        CourseActionModel model1 = null;
+        CourseActionModel model2 = null;
+        CourseActionModel model3 = null;
         if (card == 1) {
-
-            CourseActionModel model1 = new CourseActionModel("1.认识时间轴", 0);
-            CourseActionModel model2 = new CourseActionModel("2.熟悉动作添加", 0);
-            CourseActionModel model3 = new CourseActionModel("3.了解音乐库", 0);
-            if (currentCourse == 1) {
-                model1.setStatu(2);
-            } else if (currentCourse == 2) {
-                model1.setStatu(1);
-                model2.setStatu(2);
-            } else if (currentCourse == 3) {
-                model1.setStatu(1);
-                model2.setStatu(1);
-                model3.setStatu(2);
-            }
-            list.add(model1);
-            list.add(model2);
-            list.add(model3);
+            model1 = new CourseActionModel("1.认识时间轴", 0);
+            model2 = new CourseActionModel("2.熟悉动作添加", 0);
+            model3 = new CourseActionModel("3.了解音乐库", 0);
         } else if (card == 2) {
-
+            model1 = new CourseActionModel("1.了解动作模板", 0);
+            model2 = new CourseActionModel("2.模板讲解(添加基础动作)", 0);
+            model3 = new CourseActionModel("3.添加指定动作(添加高级动作)", 0);
         }
+        if (currentCourse == 1) {
+            model1.setStatu(2);
+        } else if (currentCourse == 2) {
+            model1.setStatu(1);
+            model2.setStatu(2);
+        } else if (currentCourse == 3) {
+            model1.setStatu(1);
+            model2.setStatu(1);
+            model3.setStatu(2);
+        }
+        list.add(model1);
+        list.add(model2);
+        list.add(model3);
+
         return list;
     }
+
 
 }

@@ -233,7 +233,7 @@ public class ActionsEditHelper extends BaseHelper implements
                 if (param[0] == 1) {
                     UbtLog.d("EditHelper", "播放完成");
                     if (mListener != null) {
-                        // mListener.playComplete();
+                        mListener.playComplete();
                     }
                 }
             }
@@ -311,6 +311,25 @@ public class ActionsEditHelper extends BaseHelper implements
         ((AlphaApplication) mContext
                 .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) mContext.getApplicationContext())
                 .getCurrentBluetooth().getAddress(), ConstValue.DV_STOPPLAY, null, 0, false);
+    }
+
+    /**
+     * 播放音效
+     *
+     * @param params
+     */
+
+    public void playSoundAudio(String params) {
+        UbtLog.d("playSoundAudio", "params = " + params);
+        doSendComm(ConstValue.DV_SET_PLAY_SOUND, BluetoothParamUtil.stringToBytes(params));
+    }
+
+    /**
+     * 停止音效
+     */
+
+    public void stopSoundAudio() {
+        doSendComm(ConstValue.DV_SET_STOP_VOICE, null);
     }
 
     public void doLostLeftHandAndRead() {

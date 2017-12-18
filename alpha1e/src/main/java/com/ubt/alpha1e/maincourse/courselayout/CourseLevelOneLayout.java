@@ -42,7 +42,7 @@ import zhy.com.highlight.HighLight;
 import zhy.com.highlight.interfaces.HighLightInterface;
 import zhy.com.highlight.position.HightLightTopCallback;
 import zhy.com.highlight.position.OnLeftLocalPosCallback;
-import zhy.com.highlight.position.OnRightPosCallback;
+import zhy.com.highlight.position.OnRightLocalPosCallback;
 import zhy.com.highlight.shape.RectLightShape;
 import zhy.com.highlight.view.HightLightView;
 
@@ -58,10 +58,6 @@ import zhy.com.highlight.view.HightLightView;
 
 public class CourseLevelOneLayout extends BaseActionEditLayout {
     private String TAG = CourseLevelOneLayout.class.getSimpleName();
-    private ImageView ivLeft;
-    private ImageView ivRight;
-    private TextView tvCourseContent;
-    private RelativeLayout rlContent;
     private ImageView ivLeftArrow;
     private ImageView ivRightArrow;
     AnimationDrawable animation1;
@@ -87,7 +83,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
      * 课时一
      */
     private int currentIndex = 0;
-
+    //课时3顺序
     private int secondIndex = 0;
     private HighLight mHightLight;
 
@@ -146,25 +142,19 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
      * 根据当前课时显示界面
      */
     public void setLayoutByCurrentCourse() {
+        setImageViewBg();
         UbtLog.d(TAG, "currentCourse==" + currentCourse);
-        // rlContent.setVisibility(View.VISIBLE);
         if (currentCourse == 1) {
-            tvCourseContent.setText("认识时间轴");
-            ivLeft.setEnabled(false);
-            ivRight.setEnabled(false);
+
             showCourseOne();
         } else if (currentCourse == 2) {
-            ivLeft.setEnabled(false);
-            ivRight.setEnabled(false);
-            tvCourseContent.setText("熟悉动作添加");
-            // TODO Auto-generated method stub
             showLeftArrow(true);
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
+            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"动作添加.mp3\",\"playcount\":1}");
             secondIndex = 1;
         } else if (currentCourse == 3) {
-            ivLeft.setEnabled(false);
-            ivRight.setEnabled(false);
-            tvCourseContent.setText("了解音乐库");
+            list_frames.clear();
+            adapter.notifyDataSetChanged();//清除列表数据
+            showMusicLight();
         }
 
     }
@@ -178,16 +168,11 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
     public void init(Context context) {
         super.init(context);
         isOnCourse = true;
-        ivLeft = (ImageView) findViewById(R.id.iv_left);
-        ivRight = (ImageView) findViewById(R.id.iv_right);
-        tvCourseContent = (TextView) findViewById(R.id.tv_course_index);
-        rlContent = findViewById(R.id.rl_course_content);
-        ivLeft.setOnClickListener(this);
-        ivRight.setOnClickListener(this);
         ivAddFrame.setEnabled(false);
         ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
         setImageViewBg();
         ivLeftArrow = findViewById(R.id.iv_left_arrow);
+        ivLeftArrow.setOnClickListener(this);
         initLeftArrow();
         ivRightArrow = findViewById(R.id.iv_add_frame_arrow);
 
@@ -215,7 +200,6 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
      * 设置添加按钮高亮
      */
     public void setAddButton() {
-        setImageViewBg();
         ivAddFrame.setEnabled(true);
         ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
     }
@@ -224,10 +208,16 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
      * 设置播放按钮高亮
      */
     public void setPlayButton() {
-        setImageViewBg();
-        ivAddFrame.setEnabled(false);
-        ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
         ivPlay.setEnabled(true);
+    }
+
+    /**
+     * 设置添加按钮高亮
+     */
+    public void setActionMusicButton() {
+        setImageViewBg();
+        ivActionBgm.setEnabled(true);
+        ivActionBgm.setImageResource(R.drawable.ic_add_music);
     }
 
     /**
@@ -244,49 +234,42 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         } else {
             ivLeftArrow.setLayoutParams(ActionConstant.getIvRobotParams(density, ivLeftArrow));
             UbtLog.d(TAG, "ivLeftArrow:" + ivLeftArrow.getWidth() + "/" + ivLeftArrow.getHeight());
-
         }
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_left:
-                currentCourse--;
-                setLayoutByCurrentCourse();
-                break;
-            case R.id.iv_right:
-                if (currentCourse == 1) {
-                    currentCourse++;
-                } else if (currentCourse == 2) {
-                    currentCourse++;
-                }
-                setLayoutByCurrentCourse();
-                break;
-
-            case R.id.iv_back:
+            case R.id.iv_back://返回按钮
                 if (null != courseProgressListener) {
                     courseProgressListener.finishActivity();
                 }
                 break;
             case R.id.iv_hand_left:
+                ((ActionsEditHelper) mHelper).stopSoundAudio();
+                lostRightLeg = true;
                 lostLeft();
+                startEditLeftHand();
+                showLeftArrow(false);
                 break;
-            case R.id.iv_add_frame:
+            case R.id.iv_add_frame://课时二添加动作按钮完成课时二
                 addFrameOnClick();
-                ivLeft.setEnabled(false);
-                ivRight.setEnabled(false);
-                mHandler.sendEmptyMessageDelayed(1112, 2000);
                 lostLeftHand = false;
                 lostRightLeg = false;
                 ivHandLeft.setSelected(false);
                 isCourseReading = false;
-                showNextDialog(3);
                 showRightArrow(false);
                 if (courseProgressListener != null) {
                     courseProgressListener.completeCurrentCourse(2);
                 }
+                ((ActionsEditHelper) mHelper).stopSoundAudio();
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        showNextDialog(3);
+                    }
+                }, 1000);
+
                 break;
             default:
         }
@@ -296,19 +279,9 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what == 1111) {
-                ivLeft.setEnabled(false);
-                ivRight.setEnabled(true);
-            } else if (msg.what == 1112) {
-                ivLeft.setEnabled(true);
-                ivRight.setEnabled(true);
-            } else if (msg.what == 1113) {
-                ivLeft.setEnabled(true);
-                ivRight.setEnabled(false);
-            } else if (msg.what == MSG_AUTO_READ) {
+            if (msg.what == MSG_AUTO_READ) {
                 needAdd = true;
                 UbtLog.d(TAG, "adddddd:" + autoRead);
-
                 if (autoRead) {
                     readEngOneByOne();
                 }
@@ -324,18 +297,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         }
 
         if (currentCourse == 1) {
-            ivLeft.setEnabled(false);
-            ivRight.setEnabled(false);
-            if (currentIndex < mOne1ContentList.size()) {
-                // clickKnown();
-            } else {
-                // clickKnown();
-                if (courseProgressListener != null) {
-                    courseProgressListener.completeCurrentCourse(1);
-                }
-                setImageViewBg();
-                mHandler.sendEmptyMessageDelayed(1111, 500);
-            }
+
         } else if (currentCourse == 2) {
             UbtLog.d(TAG, "playComplete==" + 2);
             if (secondIndex == 1) {
@@ -345,13 +307,6 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 startEditLeftHand();
             }
 
-        } else if (currentCourse == 3) {
-            ivLeft.setEnabled(true);
-            ivRight.setEnabled(false);
-            mHandler.sendEmptyMessageDelayed(1113, 1000);
-            if (courseProgressListener != null) {
-                courseProgressListener.completeCurrentCourse(3);
-            }
         }
     }
 
@@ -359,16 +314,17 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
      * 第二关卡摆动机器人手臂
      */
     public void startEditLeftHand() {
+        secondIndex = 2;
         rlActionCenter.setVisibility(View.VISIBLE);
         ivCenterAction.setImageResource(R.drawable.animal_action_center);
         animation2 = (AnimationDrawable) ivCenterAction.getDrawable();
         animation2.start();
-        // ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
         autoRead = true;
         mHandler.sendEmptyMessage(MSG_AUTO_READ);
         isCourseReading = true;
         ivAddFrame.setEnabled(false);
         ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
+        ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"动作添加1.mp3\",\"playcount\":1}");
     }
 
 
@@ -377,19 +333,23 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         super.onReacHandData();
         UbtLog.d(TAG, "机器人角度变化了呢！！");
         autoRead = false;
-        ((ActionsEditHelper) mHelper).stopAction();
+        ((ActionsEditHelper) mHelper).stopSoundAudio();
         mHandler.removeMessages(MSG_AUTO_READ);
         setButtonEnable(false);
         ivAddFrame.setEnabled(true);
         ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
-        ivLeft.setEnabled(true);
-        ivRight.setEnabled(false);
         rlActionCenter.setVisibility(View.GONE);
         if (null != animation2) {
             animation2.stop();
         }
-
         showRightArrow(true);
+        secondIndex = 3;
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"动作添加2.mp3\",\"playcount\":1}");
+            }
+        }, 1000);
     }
 
     /**
@@ -413,7 +373,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
 
 
     /**
-     * 左边箭头动效
+     * 右边箭头动效
      *
      * @param flag true 播放 false 结束
      */
@@ -455,6 +415,8 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
      * 第一个关卡第一个课时
      */
     private void showOneCardContent() {
+        setAddButton();
+        setPlayButton();
         mHightLight = new HighLight(mContext)//
                 .autoRemove(false)//设置背景点击高亮布局自动移除为false 默认为true
                 .intercept(true)//设置拦截属性为false 高亮布局不影响后面布局
@@ -465,10 +427,10 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 .addHighLight(R.id.rl_musicz_zpne, R.layout.layout_pop_course_right_level, new HightLightTopCallback(100), new RectLightShape())
                 .addHighLight(R.id.ll_add_frame, R.layout.layout_pop_course_right_level, new HightLightTopCallback(100), new RectLightShape())
                 .addHighLight(R.id.iv_add_frame1, R.layout.layout_pop_course_left_level, new OnLeftLocalPosCallback(30), new RectLightShape())
-                .addHighLight(R.id.iv_play_music, R.layout.layout_pop_course_right_level, new OnRightPosCallback(30), new RectLightShape())
+                .addHighLight(R.id.iv_play_music, R.layout.layout_pop_course_right_level, new OnRightLocalPosCallback(30), new RectLightShape())
                 .setOnNextCallback(new HighLightInterface.OnNextCallback() {
                     @Override
-                    public void onNext(HightLightView hightLightView, View targetView, View tipView) {
+                    public void onNext(HightLightView hightLightView, View targetView, View tipView) {//动态设置文字
                         tv = tipView.findViewById(R.id.tv_content);
                         if (currentIndex < mOne1ContentList.size()) {
                             CourseOne1Content oneContent = mOne1ContentList.get(currentIndex);
@@ -486,6 +448,35 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         ((ActionsEditHelper) mHelper).playAction(oneContent.getActionPath());
     }
 
+    /**
+     * 音乐库介绍
+     */
+    private void showMusicLight() {
+        setActionMusicButton();
+        mHightLight = new HighLight(mContext)//
+                .autoRemove(false)//设置背景点击高亮布局自动移除为false 默认为true
+                .intercept(true)//设置拦截属性为false 高亮布局不影响后面布局
+                .enableNext()
+                .maskColor(0xAA000000)
+                // .anchor(findViewById(R.id.id_container))//如果是Activity上增加引导层，不需要设置anchor
+                .addHighLight(R.id.iv_action_bgm, R.layout.layout_pop_course_right_level, new OnRightLocalPosCallback(30), new RectLightShape())
+                .setOnShowCallback(new HighLightInterface.OnShowCallback() {
+                    @Override
+                    public void onShow(HightLightView hightLightView) {
+                        HighLight.ViewPosInfo viewPosInfo = hightLightView.getCurentViewPosInfo();
+                        if (null != viewPosInfo) {
+                            int layoutId = viewPosInfo.layoutId;
+                            View tipView = hightLightView.findViewById(layoutId);
+                            tv = tipView.findViewById(R.id.tv_content);
+                            tv.setText("音乐库");
+                            UbtLog.d(TAG, "======onShow====showMusicLight1");
+                        }
+                    }
+                });
+
+        mHightLight.show();
+        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "音乐库.hts");
+    }
 
     /**
      * 响应所有R.id.iv_known的控件的点击事件
@@ -502,12 +493,25 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
             remove(null);
             UbtLog.d(TAG, "=====remove=========");
         }
-        if (currentIndex == 5) {
-            ((ActionsEditHelper) mHelper).stopAction();
-            showNextDialog(2);
-            if (courseProgressListener != null) {
-                courseProgressListener.completeCurrentCourse(1);
+        if (currentCourse == 1) {
+            if (currentIndex == 5) {
+                ((ActionsEditHelper) mHelper).stopAction();
+                doReset();
+                showNextDialog(2);
+                if (courseProgressListener != null) {
+                    courseProgressListener.completeCurrentCourse(1);
+                }
             }
+        } else if (currentCourse == 3) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (courseProgressListener != null) {
+                        courseProgressListener.completeCurrentCourse(3);
+                    }
+                }
+            }, 2000);
+
         }
     }
 
@@ -523,6 +527,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
      * @param current 跳转课程
      */
     private void showNextDialog(int current) {
+        currentCourse = current;
         UbtLog.d(TAG, "进入第二课时，弹出对话框");
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_action_course_content, null);
         TextView title = contentView.findViewById(R.id.tv_card_name);
@@ -552,13 +557,11 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_pos) {
                             currentIndex = 0;
-                            currentCourse = 2;
                             setLayoutByCurrentCourse();
                         }
                         dialog.dismiss();
                     }
                 })
-
                 .setCancelable(false)
                 .create().show();
     }

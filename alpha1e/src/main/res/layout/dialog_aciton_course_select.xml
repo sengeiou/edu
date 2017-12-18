@@ -67,23 +67,37 @@
             android:textColor="@color/tv_user_edit_color"
             android:textSize="16sp"
             android:visibility="gone"
+
             />
 
-
-        <TextView
-            android:id="@+id/tv_confirm"
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="50dp"
-            android:background="@drawable/btn_alert_bg"
-            android:gravity="center"
-            android:onClick="false"
-            android:padding="10dp"
-            android:text="@string/ui_common_confirm"
-            android:textColor="@color/tv_user_edit_color"
-            android:textSize="16sp"
-            />
+            android:layout_height="wrap_content"
+            >
 
+            <TextView
+                android:id="@+id/tv_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_alert_bg"
+                android:gravity="center"
+                android:onClick="false"
+                android:padding="10dp"
+                android:text="@string/ui_common_confirm"
+                android:textColor="@color/tv_user_edit_color"
+                android:textSize="16sp"
+                />
+
+            <ImageView
+                android:id="@+id/iv_add_action_arrow"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_alignBottom="@+id/tv_confirm"
+                android:layout_alignEnd="@+id/tv_confirm"
+                android:src="@drawable/zuojiantou_4"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
 
     </LinearLayout>
 

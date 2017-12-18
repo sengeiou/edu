@@ -674,7 +674,11 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
-
+        <activity
+            android:name=".maincourse.courseone.CourseLevelTwoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".action.actioncreate.SaveSuccessActivity"
             android:screenOrientation="landscape"

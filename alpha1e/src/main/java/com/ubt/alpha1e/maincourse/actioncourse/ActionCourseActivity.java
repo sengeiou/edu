@@ -31,6 +31,7 @@ import com.ubt.alpha1e.base.ResponseMode.CourseDetailScoreModule;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.maincourse.adapter.ActionCoursedapter;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -257,6 +258,8 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                             int n = position + 1;
                             if (position == 0) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class), REQUESTCODE);
+                            }else if (position==1){
+                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class), REQUESTCODE);
                             }
 //                            if (position == 0) {
 //                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseOneActivity.class), REQUESTCODE);
