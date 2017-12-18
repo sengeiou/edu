@@ -301,6 +301,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             getContext().unregisterReceiver(mBroadcastReceiver1);
         }
         SendClientIdService.doStopSelf();
+        AutoScanConnectService.doStopSelf();
     }
 
     private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
@@ -481,6 +482,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG,"onLostBtConn");
     }
     ConfirmDialog dialog = null ;
+    long lastTime = System.currentTimeMillis();
+
     @Override
     public void onEventRobot(RobotEvent event) {
         super.onEventRobot(event);
@@ -496,6 +499,19 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     @Override
                     public void run() {
                         hiddenDisconnectIcon();
+                        if(System.currentTimeMillis() - lastTime > 2000){
+                            lastTime = System.currentTimeMillis();
+//                            new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+//                                    .setTitle("提示")
+//                                    .setMsg("请去绑定机器人")
+//                                    .setCancelable(true)
+//                                    .setPositiveButton("去绑定", new View.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(View view) {
+//                                            UbtLog.d(TAG, "去连接蓝牙 ");
+//                                        }
+//                                    }).show();
+                        }
                     }
                 });
             }else {
@@ -1015,7 +1031,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     protected void onStop() {
-        AutoScanConnectService.doEntryManalConnect(true);
+//        AutoScanConnectService.doEntryManalConnect(true);
 //        AutoScanConnectService.doStopSelf();
         super.onStop();
     }
