@@ -154,15 +154,15 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         setContentView(layoutId);
         mButtons = new ArrayList<>();
 
-        String dd = "/home/root/UBTFT/action/controller/Backward.hts";
-        String dd1 = "action/controller/Backward.hts";
-        UbtLog.d(TAG,"=====" + dd.contains(dd1));
+
+        mHelper = new RemoteHelper(this, this);
+        startOrStopRun((byte)0x05);
     }
 
     @Override
     protected void onResume() {
         setCurrentActivityLable(RemoteActivity.class.getSimpleName());
-        mHelper = new RemoteHelper(this, this);
+//        mHelper = new RemoteHelper(this, this);
         //((RemoteHelper) mHelper).doReadActions();
         super.onResume();
         mCoonLoadingDia = LoadingDialog.getInstance(this, this);
@@ -173,6 +173,16 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         }*/
 
     }
+
+    /**
+     * 进入或者退出遥控器
+     */
+    public void startOrStopRun(byte  params) {
+        if ((RemoteHelper)mHelper != null) {
+            ((RemoteHelper) mHelper).doRemoterState(params);
+        }
+    }
+
 
     @Override
     protected void onStop() {
@@ -485,6 +495,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         if(handler.hasMessages(EXEC_STOP_ACTION)){
             handler.removeMessages(EXEC_STOP_ACTION);
         }
+        startOrStopRun((byte)0x06);
         super.onDestroy();
     }
     @Override
