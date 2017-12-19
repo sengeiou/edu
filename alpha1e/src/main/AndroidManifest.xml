@@ -453,6 +453,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleTheme"/>
         <activity
+            android:name="com.ubt.alpha1e.userinfo.myrobot.MyRobotActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
             android:name=".blockly.BlocklyActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"

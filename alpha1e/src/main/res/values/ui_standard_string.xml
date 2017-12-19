@@ -180,6 +180,7 @@
     <string name="ui_settings_language_updating">正在更新语言包...</string>
     <string name="ui_settings_wifi">仅WIFI下载</string>
     <string name="ui_settings_message_remind">通知</string>
+    <string name="ui_settings_message_myrobot">我的机器人</string>
     <string name="ui_settings_play_during_charging">边充边玩</string>
     <string name="ui_settings_play_during_charging_tips">为保护您的爱机，充电状态下使用机器已被禁止，如需打开请前往设置</string>
     <string name="ui_settings_logout">退出账号</string>
@@ -971,7 +972,9 @@
     <string name="ui_common_save_success">保存成功</string>
     <string name="ui_common_save_fail">保存失败</string>
     <string name="ui_common_save_to_dcim">长按保存到相册</string>
-
+    <string name="ui_habits_parent_management_center">家长管理中心</string>
+    <string name="ui_habits_workdays">工作日</string>
+    <string name="ui_habits_holidays">假期</string>
 
 
     <!--动作编辑课程 -->
