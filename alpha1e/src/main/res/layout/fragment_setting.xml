@@ -124,6 +124,29 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_message_myrobot"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@color/B6"
+                >
+
+                <TextView
+                    style="@style/text_left_style"
+                    android:text="@string/ui_settings_message_myrobot"
+                    />
+
+                <TextView
+                    style="@style/text_right_style"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/A11"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:background="@color/B6"

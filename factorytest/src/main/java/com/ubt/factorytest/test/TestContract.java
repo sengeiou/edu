@@ -30,6 +30,8 @@ public class TestContract {
         void stopRobotRecord();
         void adjustVolume(int type);
         void startAgeing();
+        void getWifiStatus();
+        void stopFactoryTest();
     }
 
     interface View extends BaseView<Presenter> {
@@ -39,5 +41,6 @@ public class TestContract {
         void showToast(final String msg);
         void startWifiConfig();
         void startActionTest();
+        void setWifiStatus(String wifiName, String ip);
     }
 }

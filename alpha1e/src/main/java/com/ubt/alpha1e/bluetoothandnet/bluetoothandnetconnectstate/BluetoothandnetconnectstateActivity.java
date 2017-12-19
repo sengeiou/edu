@@ -42,6 +42,7 @@ import com.ubt.alpha1e.ui.helper.BluetoothHelper;
 import com.ubt.alpha1e.ui.helper.BluetoothStateHelper;
 import com.ubt.alpha1e.ui.helper.IScanUI;
 import com.ubt.alpha1e.ui.helper.ScanHelper;
+import com.ubt.alpha1e.ui.main.MainUiBtHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.yanzhenjie.permission.Permission;
 
@@ -136,8 +137,14 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                     ed_wifi_name.setText(networkInfo.name);
 
                     if(networkInfo.status){
-                        ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_nomal));
-                        ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
+                        if(!MainUiBtHelper.getInstance(getContext()).isLostCoon()){
+                            UbtLog.d(TAG,"bluetoothandnetstate CONNECT_SUCCESS 2");
+                            ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_nomal));
+                            ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
+                        }else {
+                            ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
+                            ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(null);
+                        }
                     }else {
                         ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
                         ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(null);
@@ -165,7 +172,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lst_robots_result_datas = new ArrayList<>();
-        AutoScanConnectService.doEntryManalConnect(true);
+//        AutoScanConnectService.doEntryManalConnect(true);
         mBluetoothStateHelper = BluetoothStateHelper.getInstance(getContext());
         initUI();
     }
@@ -202,10 +209,31 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     @Subscribe
     public void onEventRobot(RobotEvent event) {
         super.onEventRobot(event);
+        UbtLog.d(TAG,"bluetoothandnetstate onEventRobot state:"+event.getEvent());
         if(event.getEvent() == RobotEvent.Event.NETWORK_STATUS){
             updateNetworkStatus(event);
         }else if(event.getEvent() == RobotEvent.Event.DISCONNECT){
             onBluetoothDisconnect(event);
+        }else if(event.getEvent()== RobotEvent.Event.CONNECT_SUCCESS){
+            UbtLog.d(TAG,"bluetoothandnetstate CONNECT_SUCCESS 1");
+            if(!MainUiBtHelper.getInstance(getContext()).isLostCoon()){
+                UbtLog.d(TAG,"bluetoothandnetstate CONNECT_SUCCESS 2");
+                if(ig_bluetooth == null){
+                    return;
+                }
+                ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_connect_sucess));
+                BluetoothDevice b = (BluetoothDevice)((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getCurrentBluetooth();
+                String name = b.getName();
+                String macAddr = b.getAddress();
+                UbtLog.d(TAG,"当前连接设备："+name +" mac地址："+macAddr);
+                if(ed_bluetooth_name == null){
+                    return;
+                }
+                ed_bluetooth_name.setText(name);
+                ed_wifi_name.requestFocus();
+
+                BluetoothStateHelper.getInstance(getContext()).readNetworkStatus();
+            }
         }
     }
 
@@ -244,7 +272,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         } catch (Exception e) {
             e.printStackTrace();
         }
-        AutoScanConnectService.doEntryManalConnect(false);
+//        AutoScanConnectService.doEntryManalConnect(false);
         super.onDestroy();
     }
 

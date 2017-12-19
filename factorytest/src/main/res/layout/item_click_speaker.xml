@@ -119,6 +119,7 @@
         android:layout_toRightOf="@id/tv_item"
         android:layout_alignBottom="@id/tv_item"
         android:layout_marginLeft="@dimen/dp_4"
+        android:background="@drawable/touch_bg"
         />
 
     <Button
@@ -129,5 +130,6 @@
         android:layout_toRightOf="@id/btn_vol_sub"
         android:layout_alignBottom="@id/tv_item"
         android:layout_marginLeft="@dimen/dp_4"
+        android:background="@drawable/touch_bg"
         />
 </RelativeLayout>

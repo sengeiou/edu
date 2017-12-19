@@ -174,6 +174,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     @Override
     protected void onResume() {
         initControlListener();
+        AutoScanConnectService.doEntryManalConnect(true);
         super.onResume();
     }
 
@@ -189,6 +190,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
             UbtLog.d(TAG, "--onPause--mHelper UnRegisterHelper! " + mHelper.getClass().getSimpleName());
             mHelper.UnRegisterHelper();
         }
+        AutoScanConnectService.doEntryManalConnect(false);
     }
 
     @Override

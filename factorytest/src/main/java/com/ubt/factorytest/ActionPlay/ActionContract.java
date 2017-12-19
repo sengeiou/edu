@@ -21,6 +21,6 @@ public class ActionContract {
 
     interface View extends BaseView<ActionContract.Presenter> {
         void notifyDataSetChanged();
-
+        void btDisconnected();
     }
 }

@@ -107,7 +107,10 @@ public class SensorHelper extends BaseHelper {
         }else if(cmd == ConstValue.DV_6D_GESTURE){
             if(param != null){
                 UbtLog.d(TAG, "DV_6D_GESTURE:" + ByteHexHelper.bytesToHexString(param) );
-                EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_6D_GESTURE, param[0]));
+                if(param[0] != -1){
+                    EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_6D_GESTURE, param[0]));
+                }
+
             }
         }
     }
@@ -238,6 +241,13 @@ public class SensorHelper extends BaseHelper {
         params[1] = 0;
         UbtLog.d(TAG, "doChangeEditState params:" + ByteHexHelper.bytesToHexString(params));
         doSendComm(ConstValue.DV_INTO_EDIT, params);
+    }
+
+    /**
+     * 主动读取一次6D状态
+     */
+    public void doRead6DState(){
+        doSendComm(ConstValue.DV_6D_GESTURE, null);
     }
 
 

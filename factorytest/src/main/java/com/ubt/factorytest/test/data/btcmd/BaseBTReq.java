@@ -28,6 +28,8 @@ public class BaseBTReq {
     public static final byte READ_DEV_STATUS = (byte) 0x0A;       //读取设备状态
     public static final byte GET_ACTION_LIST = (byte) 0x02;       //读取设备状态
     public static final byte PLAY_ACTION = (byte) 0x03;       //执行动作
+    public static final byte CONNECT_WIFI = (byte) 0x39;       //连接WIFI
+    public static final byte WIFI_STATUS = (byte) 0x40;       //WIFI状态
     /**
      * 动作结束主动上报
      */

@@ -864,7 +864,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     }
 
     public void replayMusic() {
-        if (mediaPlayer != null) {
+        if (mediaPlayer != null && !mDir.equals("")) {
             UbtLog.d(TAG, "mediaPlayer replayMusic");
             tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
             playFinish = true;
@@ -1135,6 +1135,16 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         }
         UbtLog.d(TAG, "doDeleteItem selectPos:" + selectPos + "list:" + list_frames.size() + "currentIndex:" + currentIndex);
         list_frames.remove(mCurrentEditItem);
+        if(TextUtils.isEmpty(mDir) ){
+          if(list_frames.size() == 0){
+              currentIndex = 1;
+          }
+
+        }else{
+            if(list_frames.size() == 1){
+                currentIndex = 1;
+            }
+        }
         adapter.notifyDataSetChanged();
         adapter.setDefSelect(-1);
         goneEditFrameLayout();
@@ -1228,11 +1238,14 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
             ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_pause_or_continue,
                     getEditingActions());
+            UbtLog.d(TAG, "doPlayCurrentFrames 1");
 
 
         } else if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PAUSING) {
+            setEnable(false);
             ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_pause_or_continue,
                     getEditingActions());
+            UbtLog.d(TAG, "doPlayCurrentFrames 2");
         } else {
             setEnable(false);
             if (musicTimes != 0) {

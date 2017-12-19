@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.wifi.ScanResult;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,10 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.ubt.factorytest.R;
-
-import org.greenrobot.eventbus.EventBus;
+import com.ubt.factorytest.bluetooth.netconnect.IInterface.IResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +67,9 @@ public class WifiSelectAlertDialog {
     private boolean mShowPosBtn = false;
     private boolean mShowNegBtn = false;
 
-    private Handler mHandler = new Handler() {
+    private IResult iResultListener;
+
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -81,8 +82,11 @@ public class WifiSelectAlertDialog {
                     Log.d(TAG,"ccy mScanResult = " + mScanResult.SSID );
                     //将选择WIFI名称传输回上一页面
                     NetworkEvent mWifiEvent = new NetworkEvent(NetworkEvent.Event.CHANGE_SELECT_WIFI);
-                    mWifiEvent.setSelectWifiName(mScanResult.SSID);
-                    EventBus.getDefault().post(mWifiEvent);
+                    if(iResultListener != null){
+                        iResultListener.onResult(mScanResult.SSID);
+                    }
+                    /*mWifiEvent.setSelectWifiName(mScanResult.SSID);
+                    EventBus.getDefault().post(mWifiEvent);*/
                     mDialog.dismiss();
                     break;
                 case WifiHelper.REFRESH_WIFI_DATA:
@@ -116,6 +120,10 @@ public class WifiSelectAlertDialog {
         mWifiHelper = new WifiHelper(context,mHandler);
     }
 
+    public WifiSelectAlertDialog setResultListener(IResult iResult){
+        iResultListener = iResult;
+        return this;
+    }
     public WifiSelectAlertDialog builder() {
         // 获取Dialog布局
         View view = LayoutInflater.from(mContext).inflate(

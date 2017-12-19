@@ -11,6 +11,7 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         //versionCode 1
         // flavorDimensions "versionCode"
+
         multiDexEnabled true
 
         ndk {
@@ -139,9 +140,12 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.8.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    compile 'com.jakewharton:butterknife:8.8.1'
     compile 'com.orhanobut:dialogplus:1.11@aar'
     compile 'com.weigan:loopView:0.1.2'
     compile 'com.android.support:support-v4:26.+'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     compile 'com.jakewharton:butterknife:8.8.1'
