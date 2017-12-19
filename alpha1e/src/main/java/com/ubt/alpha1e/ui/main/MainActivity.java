@@ -50,6 +50,7 @@ import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
@@ -531,6 +532,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                     ||mActivity instanceof ActionTestActivity
                                     ||mActivity instanceof ActionCourseActivity
                                     ||mActivity instanceof CourseLevelOneActivity
+                                    ||mActivity instanceof CourseLevelTwoActivity
                                     ||mActivity instanceof NetconnectActivity
                                     ||mActivity instanceof NetSearchResultActivity
                                     ||mActivity instanceof CourseTwoActivity

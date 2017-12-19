@@ -117,18 +117,23 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
             tvConfirm.setEnabled(true);
             isShow = false;
             actionAdapter.notifyDataSetChanged();
-            if (mType == 1 || mType == 2) {
+
                 if (null != mDialogListener) {
                     mDialogListener.playCourseAction(selectDataModel,mType);
                 }
-                ivConfirmArrow.setVisibility(View.VISIBLE);
-                ivConfirmArrow.setImageResource(R.drawable.animal_left_arrow);
-                animation2 = (AnimationDrawable) ivConfirmArrow.getDrawable();
-                animation2.start();
-            }
+
         }
 
+    }
 
+    /**
+     * 显示添加动画
+     */
+    public void showAddAnimal(){
+        ivConfirmArrow.setVisibility(View.VISIBLE);
+        ivConfirmArrow.setImageResource(R.drawable.animal_left_arrow);
+        animation2 = (AnimationDrawable) ivConfirmArrow.getDrawable();
+        animation2.start();
     }
 
     @Override

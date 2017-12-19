@@ -258,7 +258,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                             int n = position + 1;
                             if (position == 0) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class), REQUESTCODE);
-                            }else if (position==1){
+                            } else if (position == 1) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class), REQUESTCODE);
                             }
 //                            if (position == 0) {
@@ -293,6 +293,18 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 .getCurrentBluetooth().getAddress(), ConstValue.DV_PLAYACTION, actions, actions.length, false);
     }
 
+    /**
+     * 播放动作
+     */
+    public void exitCourse() {
+        UbtLog.d(TAG, "退出课程:" + 0);
+        byte[] params = new byte[1];
+        params[0] = 0;
+        ((AlphaApplication) this
+                .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) this.getApplicationContext())
+                .getCurrentBluetooth().getAddress(), ConstValue.DV_ENTER_COURSE, params, params.length, false);
+    }
+
     // 为了获取结果
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -310,6 +322,12 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 UbtLog.d(TAG, "course==" + course + "   leavel==" + leavel + "  isComplete==" + isComplete + "  socre===" + score);
                 mPresenter.saveCourseProgress(String.valueOf(course), isComplete ? "1" : "0");
                 playAction(Constant.COURSE_ACTION_PATH + "胜利.hts");
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        exitCourse();
+                    }
+                }, 4000);
             }
         }
     }

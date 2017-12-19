@@ -2,16 +2,24 @@ package com.ubt.alpha1e.maincourse.courseone;
 
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
@@ -165,9 +173,7 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
 
     @Override
     public void finishActivity() {
-        finish();
-        //关闭窗体动画显示
-        this.overridePendingTransition(0, R.anim.activity_close_down_up);
+        showExitDialog();
     }
 
     /**
@@ -198,9 +204,7 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             UbtLog.d("CourseOneActivity", "返回键");
-            finish();
-            //关闭窗体动画显示
-            this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            showExitDialog();
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -209,10 +213,47 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
     protected void onDestroy() {
         super.onDestroy();
         UbtLog.d(TAG, "------------onDestroy------------");
-        ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
+        // ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
         mActionEdit.onPause();
         isAllIntroduc = false;
     }
+
+
+    private void showExitDialog() {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.view_comfirmdialog, null);
+        TextView title = contentView.findViewById(R.id.txt_msg);
+        title.setText("成功就在眼前，放弃闯关吗？");
+        Button button = contentView.findViewById(R.id.btn_pos);
+        button.setText("放弃闯关");
+        Button button1 = contentView.findViewById(R.id.btn_neg);
+        button1.setText("继续闯关");
+        ViewHolder viewHolder = new ViewHolder(contentView);
+        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        int width = (int) ((display.getWidth()) * 0.6); //设置宽度
+        DialogPlus.newDialog(this)
+                .setContentHolder(viewHolder)
+                .setGravity(Gravity.CENTER)
+                .setContentWidth(width)
+                // .setContentBackgroundResource(R.drawable.action_dialog_filter_rect)
+                .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        if (view.getId() == R.id.btn_pos) {
+                            ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
+                            finish();
+                            //关闭窗体动画显示
+                            CourseLevelOneActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                        } else if (view.getId() == R.id.btn_pos) {
+
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .create().show();
+    }
+
 
     @Override
     protected void initControlListener() {

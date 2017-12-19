@@ -608,6 +608,7 @@
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".maincourse.main.MainCourseActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity

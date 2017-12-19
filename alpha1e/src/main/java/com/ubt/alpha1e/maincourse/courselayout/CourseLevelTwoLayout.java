@@ -67,6 +67,8 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
     private int secondIndex = 0;
     private int threeIndex = 0;
 
+    private boolean isPlayAction;
+
     private HighLight mHightLight;
 
     public CourseLevelTwoLayout(Context context) {
@@ -137,7 +139,7 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             ivActionLib.setEnabled(false);
             ivActionLibMore.setEnabled(true);
             showLeftArrow1(true);
-            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务描述.mp3\",\"playcount\":1}");
+            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务描述2.mp3\",\"playcount\":1}");
             threeIndex = 1;
         }
 
@@ -247,6 +249,7 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             mActionCourseTwoUtil = new ActionCourseTwoUtil(mContext);
         }
         if (currentCourse == 2) {
+            secondIndex = 0;
             showLeftArrow(false);
             mHandler.postDelayed(new Runnable() {
                 @Override
@@ -256,9 +259,15 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             }, 1000);
             mActionCourseTwoUtil.showActionDialog(1, this);
         } else if (currentCourse == 3) {
+            threeIndex = 0;
             showLeftArrow1(false);
             mActionCourseTwoUtil.showActionDialog(2, this);
-            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引5.mp3\",\"playcount\":1}");
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引5.mp3\",\"playcount\":1}");
+                }
+            }, 1000);
         }
     }
 
@@ -276,13 +285,21 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
                     public void run() {
                         ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引1.mp3\",\"playcount\":1}");
                     }
-                }, 1000);
+                }, 500);
             }
         } else if (currentCourse == 3) {
             if (threeIndex == 1) {
                 threeIndex = 2;
-                ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引4 .mp3\",\"playcount\":1}");
+                ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引4.mp3\",\"playcount\":1}");
             }
+        }
+        UbtLog.d(TAG, "isPlayAction==" + isPlayAction);
+        if (isPlayAction) {
+            if (null != mActionCourseTwoUtil) {
+                mActionCourseTwoUtil.showAddAnimal();
+            }
+            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引6.mp3\",\"playcount\":1}");
+            isPlayAction = false;
         }
     }
 
@@ -440,7 +457,7 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
 
     @Override
     public void playCourseAction(PrepareDataModel prepareDataModel, int type) {
-        ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务描述.mp3\",\"playcount\":1}");
+        isPlayAction = true;
         playAction(prepareDataModel);
         UbtLog.d(TAG, "playCourseAction===" + currentCourse);
 
