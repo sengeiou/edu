@@ -7,12 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsActivity;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
+import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -77,6 +80,16 @@ public class Test1Fragment extends MVPBaseFragment<BehaviorHabitsContract.View, 
 
     @Override
     public void showBehaviourList(List<HabitsEvent> modelList) {
+        Toast.makeText(mContext,  modelList.get(0).getEventId()+  modelList.get(0).getEventName() + modelList.get(0).getEventTime(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showBehaviourEventContent(HabitsEventDetail content) {
+
+    }
+
+    @Override
+    public void showBehaviourPlayContent(List<PlayContent> playList) {
 
     }
 
@@ -85,6 +98,10 @@ public class Test1Fragment extends MVPBaseFragment<BehaviorHabitsContract.View, 
         switch (view.getId()) {
             case R.id.tv_text_do:
                 mPresenter.doTest();
+                mPresenter.getBehaviourList("1","5");
+                mPresenter.getBehaviourEvent("12345");
+                mPresenter.getBehaviourPlayContent("1","6");
+                mPresenter.setBehaviourEvent("1234",1);
                 break;
             case R.id.rl_test:
                 ((BehaviorHabitsActivity) getActivity()).switchMode(2);

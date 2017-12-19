@@ -329,7 +329,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3,
             R.id.right_icon4, R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
-            R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg,R.id.bottom_icon})
+            R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg,R.id.bottom_icon,R.id.habit_alert})
     protected void switchActivity(View view) {
         UbtLog.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
@@ -427,6 +427,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 } else {
                     showBluetoothConnectDialog();
                 }
+                break;
+            case R.id.habit_alert:
+                BehaviorHabitsActivity.LaunchActivity(this);
                 break;
             default:
                 break;

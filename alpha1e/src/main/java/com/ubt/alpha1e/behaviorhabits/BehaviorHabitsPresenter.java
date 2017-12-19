@@ -2,7 +2,12 @@ package com.ubt.alpha1e.behaviorhabits;
 
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
+import com.ubt.alpha1e.base.RequstMode.BehaviourControlRequest;
+import com.ubt.alpha1e.base.RequstMode.BehaviourEventRequest;
+import com.ubt.alpha1e.base.RequstMode.BehaviourListRequest;
+import com.ubt.alpha1e.base.RequstMode.BehaviourSaveUpdateRequest;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
+import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
 import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
@@ -25,8 +30,18 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
 
     private static final String TAG = BehaviorHabitsPresenter.class.getSimpleName();
 
-    private static final int GET_BEHAVIOURLIST_LIST = 1;
-    private static final int GET_BEHAVIOURLIST_SCORE = 2;
+    private static final int GET_BEHAVIOURLIST_CMD = 1;
+    private static final int GET_BEHAVIOUREVENT_CMD=2;
+    private static final int GET_BEHAVIOURPLAYCONTENT_CMD=3;
+    private static final int GET_BEHAVIOURCONTROL_CMD=4;
+    private static final int GET_BEHAVIOURSAVEUPDATE_CMD=5;
+    String url = "http://10.10.1.54:11808/mockjs/72/habit/item/getTotalScore?token=fdgadf&type=agdf";
+    private String getTemplatePath="/behaviour/template/get";
+    private String getEventPath="/behaviour/event/get";
+    private String SaveModifyEventPath="/behaviour/event/update";
+    private String ControlEventPath="/behaviour/template/update";
+    private String getPlayContentPath="/behaviour/template/getEventContent";
+    private boolean mock=true;
 
     @Override
     public void doTest() {
@@ -34,15 +49,49 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
     }
 
     @Override
-    public void getBehaviourList(int sex, int grade) {
-
-        String url = "";
-        BaseRequest baseRequest = null;
-        doRequestFromWeb(url, baseRequest, GET_BEHAVIOURLIST_LIST);
+    public void dealayAlertTime(int count) {
 
     }
 
+    @Override
+    public void getBehaviourList(String sex, String grade) {
+        BehaviourListRequest mBehaviourListRequest = new BehaviourListRequest();
+        mBehaviourListRequest.setSex(sex);
+        mBehaviourListRequest.setGrade(grade);
+        doRequestFromWeb(url+getTemplatePath, mBehaviourListRequest, GET_BEHAVIOURLIST_CMD);
+    }
 
+    @Override
+    public void getBehaviourEvent(String eventId) {
+        BehaviourEventRequest mBehaviourEventRequest=new BehaviourEventRequest();
+        mBehaviourEventRequest.setEventId(eventId);
+        doRequestFromWeb(url+getEventPath, mBehaviourEventRequest, GET_BEHAVIOUREVENT_CMD);
+    }
+
+    @Override
+    public void getBehaviourPlayContent(String sex, String grade) {
+        BehaviourListRequest mBehaviourListRequest = new BehaviourListRequest();
+        mBehaviourListRequest.setSex(sex);
+        mBehaviourListRequest.setGrade(grade);
+        doRequestFromWeb(url+getPlayContentPath, mBehaviourListRequest, GET_BEHAVIOURPLAYCONTENT_CMD);
+    }
+
+    @Override
+    public void setBehaviourEvent(String eventId, int status) {
+        BehaviourControlRequest mBehaviourControlRequest=new BehaviourControlRequest();
+        mBehaviourControlRequest.setEventId(eventId);
+        mBehaviourControlRequest.setOperateType(new Integer(status).toString());
+        doRequestFromWeb(url+ControlEventPath, mBehaviourControlRequest,GET_BEHAVIOURCONTROL_CMD);
+    }
+
+    @Override
+    public void saveBehaviourEvent(HabitsEventDetail content) {
+        BehaviourSaveUpdateRequest mBehaviourSaveUpdateRequest=new BehaviourSaveUpdateRequest();
+        mBehaviourSaveUpdateRequest.setEventId(content.getEventId());
+        mBehaviourSaveUpdateRequest.setEventTime(content.getEventTime());
+        mBehaviourSaveUpdateRequest.setContentIds(content.getContentIds());
+        doRequestFromWeb(url+SaveModifyEventPath, mBehaviourSaveUpdateRequest,GET_BEHAVIOURSAVEUPDATE_CMD);
+    }
 
 
     /**
@@ -55,10 +104,16 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage());
                 switch (id){
-                    case GET_BEHAVIOURLIST_LIST:
+                    case GET_BEHAVIOURLIST_CMD:
                         mView.showBehaviourList(null);
                         break;
-                    case GET_BEHAVIOURLIST_SCORE:
+                    case GET_BEHAVIOUREVENT_CMD:
+                        break;
+                    case GET_BEHAVIOURCONTROL_CMD:
+                        break;
+                    case GET_BEHAVIOURSAVEUPDATE_CMD:
+                        break;
+                    default:
                         break;
                 }
             }
@@ -69,14 +124,34 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                 BaseResponseModel<BaseModel> baseResponseModel = GsonImpl.get().toObject(response,new TypeToken<BaseResponseModel<BaseModel>>() {}.getType());
 
                 switch (id){
-                    case GET_BEHAVIOURLIST_LIST:
+                    case GET_BEHAVIOURLIST_CMD:
                     {
-                        List<HabitsEvent> modelList = new ArrayList<>();
-                        mView.showBehaviourList(modelList);
+                        if(mock){
+                            List<HabitsEvent> modelList = new ArrayList<>();
+                            HabitsEvent mHabitsEvent=new HabitsEvent();
+                            mHabitsEvent.setEventId("46");
+                            mHabitsEvent.setEventName("早餐");
+                            mHabitsEvent.setEventTime("07:30");
+                            HabitsEvent mHabitsEvent1=new HabitsEvent();
+                            mHabitsEvent1.setEventId("46");
+                            mHabitsEvent1.setEventName("午餐");
+                            mHabitsEvent1.setEventTime("07:30");
+                            modelList.add(mHabitsEvent);
+                            modelList.add(mHabitsEvent1);
+                            mView.showBehaviourList(modelList);
+                        }else {
+                            List<HabitsEvent> modelList = new ArrayList<>();
+                            mView.showBehaviourList(modelList);
+                        }
                     }
                     break;
-
-                    case GET_BEHAVIOURLIST_SCORE:
+                    case GET_BEHAVIOUREVENT_CMD:
+                        break;
+                    case GET_BEHAVIOURCONTROL_CMD:
+                        break;
+                    case GET_BEHAVIOURSAVEUPDATE_CMD:
+                        break;
+                    default:
                         break;
                 }
             }
