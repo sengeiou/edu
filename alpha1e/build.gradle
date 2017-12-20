@@ -141,6 +141,7 @@ dependencies {
     compile 'com.orhanobut:dialogplus:1.11@aar'
     compile 'com.weigan:loopView:0.1.2'
     compile 'com.android.support:support-v4:26.+'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'

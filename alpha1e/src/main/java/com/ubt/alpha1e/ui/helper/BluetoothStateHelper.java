@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
@@ -43,6 +44,14 @@ public class BluetoothStateHelper extends BaseHelper {
         return mMainUiHelper;
 
     }
+
+    public void doCancelCoon() {
+
+        ((AlphaApplication) mContext.getApplicationContext()).getBlueToothManager().releaseAllConnected();
+        ((AlphaApplication) mContext.getApplicationContext()).setCurrentBluetooth(null);
+
+    }
+
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
