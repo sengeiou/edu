@@ -17,11 +17,12 @@ public class BehaviorHabitsContract {
     public interface View extends BaseView {
         void onTest(boolean isSuccess);
         //显示行为列表以及分数
-        void showBehaviourList(List<HabitsEvent> modelList);
+        void showBehaviourList(boolean status,List<HabitsEvent> modelList,String errorMsg);
         //显示编辑的EventID具体内容
-        void showBehaviourEventContent(HabitsEventDetail content);
+        void showBehaviourEventContent(boolean status,HabitsEventDetail content,String errorMsg);
         //显示行为习惯播放内容
-        void showBehaviourPlayContent(List<PlayContent> playList);
+        void showBehaviourPlayContent(boolean status,List<PlayContent> playList,String errorMsg);
+        void showNetworkRequestError();
     }
 
     public interface  Presenter extends BasePresenter<View> {

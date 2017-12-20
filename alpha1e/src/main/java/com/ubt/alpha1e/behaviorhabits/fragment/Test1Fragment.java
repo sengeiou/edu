@@ -79,19 +79,25 @@ public class Test1Fragment extends MVPBaseFragment<BehaviorHabitsContract.View, 
     }
 
     @Override
-    public void showBehaviourList(List<HabitsEvent> modelList) {
-        Toast.makeText(mContext,  modelList.get(0).getEventId()+  modelList.get(0).getEventName() + modelList.get(0).getEventTime(), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showBehaviourEventContent(HabitsEventDetail content) {
+    public void showBehaviourList(boolean status, List<HabitsEvent> modelList, String errorMsg) {
 
     }
 
     @Override
-    public void showBehaviourPlayContent(List<PlayContent> playList) {
+    public void showBehaviourEventContent(boolean status, HabitsEventDetail content, String errorMsg) {
 
     }
+
+    @Override
+    public void showBehaviourPlayContent(boolean status, List<PlayContent> playList, String errorMsg) {
+
+    }
+
+    @Override
+    public void showNetworkRequestError() {
+
+    }
+
 
     @OnClick({R.id.tv_text_do, R.id.rl_test})
     public void onViewClicked(View view) {

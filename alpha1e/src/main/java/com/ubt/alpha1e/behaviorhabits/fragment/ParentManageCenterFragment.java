@@ -207,20 +207,24 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
     }
 
     @Override
-    public void showBehaviourList(List<HabitsEvent> modelList) {
+    public void showBehaviourList(boolean status, List<HabitsEvent> modelList, String errorMsg) {
 
     }
 
     @Override
-    public void showBehaviourEventContent(HabitsEventDetail content) {
+    public void showBehaviourEventContent(boolean status, HabitsEventDetail content, String errorMsg) {
 
     }
 
     @Override
-    public void showBehaviourPlayContent(List<PlayContent> playList) {
+    public void showBehaviourPlayContent(boolean status, List<PlayContent> playList, String errorMsg) {
 
     }
 
+    @Override
+    public void showNetworkRequestError() {
+
+    }
 
     @OnClick({R.id.ll_base_back, R.id.iv_title_right, R.id.rl_workdays, R.id.rl_holidays})
     public void onViewClicked(View view) {
@@ -229,6 +233,10 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
                 getActivity().finish();
                 break;
             case R.id.iv_title_right:
+                mPresenter.getBehaviourList("1","5");
+                mPresenter.getBehaviourEvent("12345");
+                mPresenter.getBehaviourPlayContent("1","6");
+                mPresenter.setBehaviourEvent("1234",1);
                 break;
             case R.id.rl_workdays:
                 switchMode();

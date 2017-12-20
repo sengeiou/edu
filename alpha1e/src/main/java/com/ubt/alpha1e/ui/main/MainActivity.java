@@ -431,7 +431,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
                 break;
             case R.id.habit_alert:
-                //BehaviorHabitsActivity.LaunchActivity(this);
+                BehaviorHabitsActivity.LaunchActivity(this);
                 break;
             default:
                 break;

@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.behaviorhabits;
 
 import com.google.gson.reflect.TypeToken;
+import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.BehaviourControlRequest;
 import com.ubt.alpha1e.base.RequstMode.BehaviourEventRequest;
@@ -52,7 +53,6 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
     public void dealayAlertTime(int count) {
 
     }
-
     @Override
     public void getBehaviourList(String sex, String grade) {
         BehaviourListRequest mBehaviourListRequest = new BehaviourListRequest();
@@ -105,7 +105,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                 UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage());
                 switch (id){
                     case GET_BEHAVIOURLIST_CMD:
-                        mView.showBehaviourList(null);
+                        mView.showBehaviourList(false,null,mView.getContext().getResources().getString(R.string.network_request_error));
                         break;
                     case GET_BEHAVIOUREVENT_CMD:
                         break;
@@ -138,10 +138,10 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                             mHabitsEvent1.setEventTime("07:30");
                             modelList.add(mHabitsEvent);
                             modelList.add(mHabitsEvent1);
-                            mView.showBehaviourList(modelList);
+                            mView.showBehaviourList(true,modelList,mView.getContext().getResources().getString(R.string.network_request_success));
                         }else {
                             List<HabitsEvent> modelList = new ArrayList<>();
-                            mView.showBehaviourList(modelList);
+                            mView.showBehaviourList(true,modelList,mView.getContext().getResources().getString(R.string.network_request_success));
                         }
                     }
                     break;

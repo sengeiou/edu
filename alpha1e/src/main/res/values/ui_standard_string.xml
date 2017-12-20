@@ -846,6 +846,10 @@
     <string name="lowpower_indicator">电量低于</string>
     <string name="buddle_text_init_status">开机来叫醒沉睡的Alpha吧</string>
     <string name="buddle_bluetoothConnection">嗨，我是阿尔法</string>
+    <!--behaviour habit-->
+    <string name="network_request_error">网络请求失败</string>
+    <string name="network_request_success">网络请求成功</string>
+
 
     <string name="ui_setting_clear_cache">清除缓存数据</string>
     <string name="ui_setting_use_memory_title">Alpha1E已用空间</string>
