@@ -5,12 +5,9 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
         applicationId "com.ubt.alpha1e"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        //versionCode 1
-        // flavorDimensions "versionCode"
 
         multiDexEnabled true
 
@@ -46,7 +43,7 @@ android {
 
         debug {
             minifyEnabled false
- //            shrinkResources false
+            //            shrinkResources false
             shrinkResources false
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
