@@ -8,10 +8,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.ToastUtils;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 /**
@@ -35,6 +39,9 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     @BindView(R.id.recyclerview_dynamic)
     RecyclerView mRecyclerviewDynamic;
     DynamicActionAdapter mDynamicActionAdapter;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout mRefreshLayout;
+    Unbinder unbinder;
     private List<DynamicActionModel> mDynamicActionModels = new ArrayList<>();
     private View emptyView;
 
@@ -161,5 +168,19 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             default:
                 break;
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

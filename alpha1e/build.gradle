@@ -164,5 +164,6 @@ dependencies {
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     compile 'com.yanzhenjie:permission:1.1.2'
     compile 'org.litepal.android:core:1.6.0'
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-4'
     compile 'com.isanwenyu.highlight:highlight:1.8.0'
 }
