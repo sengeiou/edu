@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context="com.ubt.alpha1e.action.actioncreate.ActionTestActivity">
 
-    <com.ubt.alpha1e.maincourse.courselayout.CourseLevelLayout
+    <com.ubt.alpha1e.maincourse.courselayout.CourseLevelTwoLayout
         android:id="@+id/action_edit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

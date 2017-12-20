@@ -2,30 +2,38 @@ package com.ubt.alpha1e.maincourse.courseone;
 
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
-import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.FileTools;
-import com.ubt.alpha1e.maincourse.courselayout.CourseLevelLayout;
+import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
+import com.ubt.alpha1e.maincourse.courselayout.CourseLevelTwoLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IEditActionUI;
 import com.ubt.alpha1e.utils.log.UbtLog;
-import com.ubtechinc.base.ConstValue;
 
 import org.litepal.crud.DataSupport;
 
@@ -37,27 +45,21 @@ import java.util.List;
  * 邮箱 784787081@qq.com
  */
 
-public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseLevelLayout.CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
+public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseLevelTwoLayout.CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
 
-    private static final String TAG = CourseLevelActivity.class.getSimpleName();
+    private static final String TAG = CourseLevelTwoActivity.class.getSimpleName();
     BaseHelper mHelper;
-    CourseLevelLayout mActionEdit;
+    CourseLevelTwoLayout mActionEdit;
     RelativeLayout mRlInstruction;
     private TextView mTextView;
 
-    private int currentCard;//第几个关卡
 
     /**
      * 当前课时
      */
     private int currentCourse;
 
-    /**
-     * 当前第几个
-     */
-    private int currentIndex;
 
-    List<ActionCourseOneContent> list;
     /**
      * 是否从总介绍播放
      */
@@ -67,14 +69,14 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //当前第几个关卡
-        currentCard = getIntent().getIntExtra("currentCard", 1);
-
-        mHelper = new ActionsEditHelper(CourseLevelActivity.this, this);
+        mHelper = new ActionsEditHelper(CourseLevelTwoActivity.this, this);
         mHelper.RegisterHelper();
         ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
-        sendStartStudy(true);
+        ((ActionsEditHelper) mHelper).doEnterCourse((byte) 1);
+
+        mRlInstruction.setVisibility(View.VISIBLE);
+        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑2总介.hts");
     }
 
     Handler mHandler = new Handler() {
@@ -84,43 +86,13 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
             if (msg.what == 1111) {
                 isAllIntroduc = true;
                 mRlInstruction.setVisibility(View.GONE);
-                mPresenter.getCourseOneData(CourseLevelActivity.this);
+                mActionEdit.setData(CourseLevelTwoActivity.this);
             } else if (msg.what == 1112) {
                 mActionEdit.playComplete();
             }
         }
     };
 
-
-    private boolean isFocus;
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        // TODO Auto-generated method stub
-        super.onWindowFocusChanged(hasFocus);
-        UbtLog.d(TAG, "onWindowFocusChanged");
-        if (hasFocus && !isFocus) {
-            isFocus = true;
-            boolean flag = SPUtils.getInstance().getBoolean(Constant.SP_ACTION_COURSE_CARD_ONE);
-            flag = false;
-            if (!flag) {
-                mRlInstruction.setVisibility(View.VISIBLE);
-                mPresenter.getCourseOneData(CourseLevelActivity.this);
-                if (currentCard == 1) {
-                    ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑1总介.hts");
-                } else if (currentCard == 2) {
-                    ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑2总介.hts");
-                }
-            } else {
-                isAllIntroduc = true;
-                if (currentCard == 1) {
-                    mPresenter.getCourseOneData(CourseLevelActivity.this);
-                } else if (currentCard == 2) {
-                    mPresenter.getCourseTwoData(CourseLevelActivity.this);
-                }
-            }
-        }
-    }
 
     @Override
     protected void onResume() {
@@ -130,14 +102,10 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
 
     @Override
     protected void initUI() {
-        mActionEdit = (CourseLevelLayout) findViewById(R.id.action_edit);
+        mActionEdit = (CourseLevelTwoLayout) findViewById(R.id.action_edit);
         mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
         mTextView = (TextView) findViewById(R.id.tv_all_introduc);
-        if (currentCard == 1) {
-            mTextView.setText(ResourceManager.getInstance(this).getStringResources("action_course_card1_1_all"));
-        } else if (currentCard == 2) {
-            mTextView.setText(ResourceManager.getInstance(this).getStringResources("action_course_card2_1_all"));
-        }
+        mTextView.setText(ResourceManager.getInstance(this).getStringResources("action_course_card2_1_all"));
         mActionEdit.setUp(mHelper);
 
     }
@@ -149,27 +117,7 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
      */
     @Override
     public void getCourseOneData(List<ActionCourseOneContent> list) {
-        this.list = list;
-        int level = 1;
-        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
-        if (null != record) {
-            UbtLog.d(TAG, "record===" + record.toString());
-            int course = record.getCourseLevel();
-            int recordlevel = record.getPeriodLevel();
-            if (course == currentCard) {
-                if (recordlevel == 0) {
-                    level = 1;
-                } else if (recordlevel == 1) {
-                    level = 2;
-                } else if (recordlevel == 2) {
-                    level = 3;
-                } else if (recordlevel == 3) {
-                    level = 1;
-                }
-            }
 
-        }
-        mActionEdit.setData(list, currentCard,level, this);
     }
 
     /**
@@ -186,20 +134,6 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
         }
     }
 
-    public void sendStartStudy(boolean isEnter) {
-        //Enter the course enter
-        byte[] papram = new byte[1];
-        if (isEnter) {
-            papram[0] = 0x01;
-            mHelper.doSendComm(ConstValue.DV_ENTER_COURSE, papram);
-        }//Exit the course enter
-        else {
-            papram[0] = 0x00;
-            mHelper.doSendComm(ConstValue.DV_ENTER_COURSE, papram);
-        }
-
-    }
-
     /**
      * 保存进度到数据库
      *
@@ -212,14 +146,24 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
             UbtLog.d(TAG, "保存进度到数据库2" + record.toString());
             int course = record.getCourseLevel();
             int level = record.getPeriodLevel();
-            if (course == currentCard && level < current) {
+            if (course < 2) {
                 UbtLog.d(TAG, "保存进度到数据库3" + "保存成功");
                 ContentValues values = new ContentValues();
-                values.put("CourseLevel", currentCard);
+                values.put("CourseLevel", 2);
                 values.put("periodLevel", current);
                 values.put("isUpload", false);
                 DataSupport.updateAll(LocalActionRecord.class, values);
-                mPresenter.saveLastProgress(String.valueOf(currentCard), String.valueOf(current));
+                mPresenter.saveLastProgress("2", String.valueOf(current));
+            } else if (course == 2) {
+                if (level < current) {
+                    UbtLog.d(TAG, "保存进度到数据库3" + "保存成功");
+                    ContentValues values = new ContentValues();
+                    values.put("CourseLevel", 2);
+                    values.put("periodLevel", current);
+                    values.put("isUpload", false);
+                    DataSupport.updateAll(LocalActionRecord.class, values);
+                    mPresenter.saveLastProgress("2", String.valueOf(current));
+                }
             }
         }
     }
@@ -238,9 +182,7 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
 
     @Override
     public void finishActivity() {
-        finish();
-        //关闭窗体动画显示
-        this.overridePendingTransition(0, R.anim.activity_close_down_up);
+        showExitDialog();
     }
 
     /**
@@ -248,10 +190,10 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
      */
     public void returnCardActivity() {
         Intent intent = new Intent();
-        intent.putExtra("course", currentCard);//第几关
+        intent.putExtra("course", 2);//第几关
         intent.putExtra("leavel", currentCourse);//第几个课时
         intent.putExtra("isComplete", true);
-        intent.putExtra("score", currentCourse == list.size() ? 1 : 0);
+        intent.putExtra("score", 1);
         setResult(1, intent);
         finish();
         //关闭窗体动画显示
@@ -262,10 +204,7 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
     protected void onPause() {
         super.onPause();
         UbtLog.d(TAG, "------------onPause___________");
-        mActionEdit.onPause();
-        sendStartStudy(false);
-        isFocus = false;
-        isAllIntroduc = false;
+
     }
 
 
@@ -274,11 +213,7 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             UbtLog.d("CourseOneActivity", "返回键");
-            //如果点击的是后退键  首先判断webView是否能够后退
-            //如果点击的是后退键  首先判断webView是否能够后退   返回值是boolean类型的
-            finish();
-            //关闭窗体动画显示
-            this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            showExitDialog();
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -286,8 +221,45 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mActionEdit.dismiss();
         UbtLog.d(TAG, "------------onDestroy------------");
+        //((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
+        mActionEdit.onPause();
+        isAllIntroduc = false;
+    }
+
+    private void showExitDialog() {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.view_comfirmdialog, null);
+        TextView title = contentView.findViewById(R.id.txt_msg);
+        title.setText("成功就在眼前，放弃闯关吗？");
+        Button button = contentView.findViewById(R.id.btn_pos);
+        button.setText("放弃闯关");
+        Button button1 = contentView.findViewById(R.id.btn_neg);
+        button1.setText("继续闯关");
+        ViewHolder viewHolder = new ViewHolder(contentView);
+        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        Display display = windowManager.getDefaultDisplay();
+        int width = (int) ((display.getWidth()) * 0.6); //设置宽度
+        DialogPlus.newDialog(this)
+                .setContentHolder(viewHolder)
+                .setGravity(Gravity.CENTER)
+                .setContentWidth(width)
+                //.setContentBackgroundResource(R.drawable.action_dialog_filter_rect)
+                .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        if (view.getId() == R.id.btn_pos) {
+                            ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
+                            finish();
+                            //关闭窗体动画显示
+                            CourseLevelTwoActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                        } else if (view.getId() == R.id.btn_pos) {
+
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .create().show();
     }
 
     @Override
@@ -302,7 +274,7 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
 
     @Override
     public int getContentViewId() {
-        return R.layout.activity_action_course_level;
+        return R.layout.activity_action_course_level_two;
     }
 
     @Override
@@ -390,7 +362,33 @@ public class CourseLevelActivity extends MVPBaseActivity<CourseOneContract.View,
 
     @Override
     public void tapHead() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                showTapHeadDialog();
+            }
+        });
+    }
 
+    private void showTapHeadDialog() {
+        new ConfirmDialog(this).builder()
+                .setMsg(getStringResources("ui_course_principle_exit_tip"))
+                .setCancelable(false)
+                .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
+                        ActionCourseActivity.finishByMySelf();
+                        CourseLevelTwoActivity.this.finish();
+                        CourseLevelTwoActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+
+                    }
+                }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }).show();
     }
 
     @Override

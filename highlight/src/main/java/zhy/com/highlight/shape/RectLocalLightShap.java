@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.maincourse.courselayout;
+package zhy.com.highlight.shape;
 
 import android.graphics.Bitmap;
 import android.graphics.BlurMaskFilter;
@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 
 import zhy.com.highlight.HighLight;
-import zhy.com.highlight.shape.BaseLightShape;
 
 /**
  * @author：liuhai

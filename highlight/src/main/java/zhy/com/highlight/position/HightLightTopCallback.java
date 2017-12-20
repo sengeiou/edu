@@ -1,9 +1,8 @@
-package com.ubt.alpha1e.maincourse.courselayout;
+package zhy.com.highlight.position;
 
 import android.graphics.RectF;
 
 import zhy.com.highlight.HighLight;
-import zhy.com.highlight.position.OnBaseCallback;
 
 /**
  * @author：liuhai
