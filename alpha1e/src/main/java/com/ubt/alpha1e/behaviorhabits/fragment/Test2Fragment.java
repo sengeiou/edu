@@ -12,6 +12,8 @@ import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsActivity;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
+import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -74,6 +76,16 @@ public class Test2Fragment extends MVPBaseFragment<BehaviorHabitsContract.View, 
 
     @Override
     public void showBehaviourList(List<HabitsEvent> modelList) {
+
+    }
+
+    @Override
+    public void showBehaviourEventContent(HabitsEventDetail content) {
+
+    }
+
+    @Override
+    public void showBehaviourPlayContent(List<PlayContent> playList) {
 
     }
 

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.behaviorhabits.fragment.ParentManageCenterFragment;
 import com.ubt.alpha1e.behaviorhabits.fragment.Test1Fragment;
 import com.ubt.alpha1e.behaviorhabits.fragment.Test2Fragment;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -32,10 +33,10 @@ public class BehaviorHabitsActivity extends MVPBaseActivity<BehaviorHabitsContra
 
     private static final String TAG = BehaviorHabitsActivity.class.getSimpleName();
 
-    private final static int FRAGMENT_1 = 1;
-    private final static int FRAGMENT_2 = 2;
-    @BindView(R.id.ll_base_back)
-    LinearLayout llBaseBack;
+    private final static int FRAGMENT_PARENT_MANAGE_CENTER = 1;
+    private final static int FRAGMENT_1 = 11;
+    private final static int FRAGMENT_2 = 22;
+
     @BindView(R.id.rl_content)
     RelativeLayout rlContent;
 
@@ -55,11 +56,11 @@ public class BehaviorHabitsActivity extends MVPBaseActivity<BehaviorHabitsContra
         mFragmentManager = this.getFragmentManager();
 
         mFragmentTransaction = this.mFragmentManager.beginTransaction();
-        Test1Fragment test1Fragment = new Test1Fragment();
-        mFragmentTransaction.add(R.id.rl_content, test1Fragment);
+        ParentManageCenterFragment parentManageCenterFragment = new ParentManageCenterFragment();
+        mFragmentTransaction.add(R.id.rl_content, parentManageCenterFragment);
         mFragmentTransaction.commit();
-        mCurrentFragment = test1Fragment;
-        mFragmentCache.put(FRAGMENT_1, test1Fragment);
+        mCurrentFragment = parentManageCenterFragment;
+        mFragmentCache.put(FRAGMENT_PARENT_MANAGE_CENTER, parentManageCenterFragment);
 
     }
 
@@ -86,17 +87,13 @@ public class BehaviorHabitsActivity extends MVPBaseActivity<BehaviorHabitsContra
         initUI();
     }
 
-    @OnClick(R.id.ll_base_back)
-    public void onViewClicked() {
-    }
-
     public void switchMode(int fragment) {
         if (fragment == 1) {
 
-            Fragment f = mFragmentCache.containsKey(FRAGMENT_1) ? mFragmentCache.get(FRAGMENT_1)
-                    : new Test1Fragment();
-            if (!mFragmentCache.containsKey(FRAGMENT_1)) {
-                mFragmentCache.put(FRAGMENT_1, f);
+            Fragment f = mFragmentCache.containsKey(FRAGMENT_PARENT_MANAGE_CENTER) ? mFragmentCache.get(FRAGMENT_PARENT_MANAGE_CENTER)
+                    : new ParentManageCenterFragment();
+            if (!mFragmentCache.containsKey(FRAGMENT_PARENT_MANAGE_CENTER)) {
+                mFragmentCache.put(FRAGMENT_PARENT_MANAGE_CENTER, f);
             }
             loadFragment(f);
 
