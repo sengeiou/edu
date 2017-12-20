@@ -2,7 +2,6 @@ package com.ubt.alpha1e.userinfo.dynamicaction;
 
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -28,11 +27,9 @@ public class DynamicActionAdapter extends BaseQuickAdapter<DynamicActionModel, B
 
     @Override
     protected void convert(BaseViewHolder helper, DynamicActionModel item) {
-        helper.addOnClickListener(R.id.iv_delete_action);
-        helper.addOnClickListener(R.id.iv_play_action);
+        helper.addOnClickListener(R.id.rl_play_action);
         helper.setText(R.id.tv_dynamic_name, item.getActionName());
-        ImageView ivDelete = helper.getView(R.id.iv_play_action);
-        ivDelete.setImageResource(item.getActionStatu() == 0 ? R.drawable.ic_setting_play_p : R.drawable.ic_setting_pause_p);
+         
 
     }
 }
