@@ -21,7 +21,9 @@ import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.adapter.HabitsEventRecyclerAdapter;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
+import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventInfo;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -206,6 +208,16 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
 
     @Override
     public void showBehaviourList(List<HabitsEvent> modelList) {
+
+    }
+
+    @Override
+    public void showBehaviourEventContent(HabitsEventDetail content) {
+
+    }
+
+    @Override
+    public void showBehaviourPlayContent(List<PlayContent> playList) {
 
     }
 
