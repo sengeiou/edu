@@ -180,6 +180,7 @@
     <string name="ui_settings_language_updating">正在更新语言包...</string>
     <string name="ui_settings_wifi">仅WIFI下载</string>
     <string name="ui_settings_message_remind">通知</string>
+    <string name="ui_settings_message_myrobot">我的机器人</string>
     <string name="ui_settings_play_during_charging">边充边玩</string>
     <string name="ui_settings_play_during_charging_tips">为保护您的爱机，充电状态下使用机器已被禁止，如需打开请前往设置</string>
     <string name="ui_settings_logout">退出账号</string>
@@ -214,7 +215,7 @@
     <string name="ui_about_help">帮助</string>
     <string name="ui_about_feedback_input_too_long">输入过长</string>
     <string name="ui_about_feedback">意见反馈</string>
-    <string name="ui_about_url">http://www.ubtrobot.com</string>
+    <string name="ui_about_url">www.ubtrobot.com</string>
     <string name="ui_about_copyright">Copyright © 2016 UBTECH. All Rights Reserved.</string>
     <string name="ui_about_update_already_latest">App已经是最新版本</string>
     <string name="ui_about_update_message">AppStore有新版本，是否去升级？</string>
@@ -873,6 +874,8 @@
     <string name="ui_setting_password_modify_fail">修改密码失败</string>
     <string name="ui_setting_common_next">下一步</string>
     <string name="ui_setting_empty_search_result">无搜索结果</string>
+    <string name="ui_contact_website">前往：</string>
+    <string name="ui_setting_save_website">存储二维码</string>
 
     <string name="ui_setting_password_verify_fail">验证码检验失败</string>
     <string name="ui_setting_verify_code_send_success">验证码已发送到手机</string>
@@ -896,6 +899,7 @@
     <string name="ui_setting_cust_phone_value">400-6666-700</string>
     <string name="ui_setting_cust_email_value">ucare@ubtrobot.com</string>
     <string name="ui_setting_cust_public_name">优必选科技</string>
+    <string name="ui_setting_cust_public_number">关注优必选科技微信公众号</string>
 
     <!---==============================初级动作========================-->
     <string name="ui_basic_action_warrior">出招</string>
@@ -970,11 +974,12 @@
     <string name="ui_common_save_to_dcim">长按保存到相册</string>
 
 
+
     <!--动作编辑课程 -->
-    <string name="action_course_card1_1">1.认识时间轴</string>
-    <string name="action_course_card1_2">2.熟悉动作添加</string>
-    <string name="action_course_card1_3">3.了解音乐库</string>
-    <string name="action_course_card1_1_all">阿尔法的动作很酷吧，这些动作是怎样创建出来的呢？让我们先来了解一下动作编辑器吧。</string>
+    <string name="action_course_card1_1">1.了解时间轴</string>
+    <string name="action_course_card1_2">2.了解添加键</string>
+    <string name="action_course_card1_3">3.了解播放键</string>
+    <string name="action_course_card1_1_all">阿尔法的动作是怎样创建出来的呢？让我们先来了解一下动作编辑器吧。</string>
     <string name="action_course_card1_1_1"> 时间轴: 这是时间轴，它就像一个奇妙的盒子，上面装着音乐，下面装着动作，添加的动作会按先后顺序显示在轴上。右侧的“+ 、-”图标：点击这里，可以让时间轴变大变小，这样才能看清上面的动作，更好地编辑它们。</string>
     <string name="action_course_card1_1_2">点击这里，可以让时间轴变大变小，这样才能看清上面的动作，更好地编辑它们。</string>
     <string name="action_course_card1_1_3">音乐轴: 在这里，可以给阿尔法的动作配上音乐，让它随着音乐节拍跳舞、做动作。仔细听清音乐节拍，使用标记工具，可以帮你将动作安放在恰当的节拍上。</string>
@@ -985,9 +990,9 @@
     <string name="action_course_card1_3_1">这是音乐库，里面有很多好听又欢快的音乐，进入这里，可以把这些音乐添加到时间轴上，让阿尔法的动作有音乐相伴，更生动有趣啦。</string>
 
 
-    <string name="action_course_card2_1">1.了解动作模板</string>
-    <string name="action_course_card2_2">2.模板讲解(添加基础动作)</string>
-    <string name="action_course_card2_3">3.添加指定动作(添加高级动作)</string>
+    <string name="action_course_card2_1">1.了解动作库</string>
+    <string name="action_course_card2_2">2.初级动作库</string>
+    <string name="action_course_card2_3">3.高级动作库</string>
 
     <string name="action_course_card2_1_all">阿尔法有自己的动作库，这可是一个大宝库哟。分为基础动作和高级动作，用来添加到时间轴上。</string>
     <string name="action_course_card2_2_1">这里是基础动作库，里面的动作简单又快速，还可以将这些动作添加到时间轴上</string>

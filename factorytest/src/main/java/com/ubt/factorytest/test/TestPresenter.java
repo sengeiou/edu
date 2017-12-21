@@ -7,17 +7,27 @@ import android.util.Log;
 import com.ubt.factorytest.bluetooth.bluetoothLib.BluetoothController;
 import com.ubt.factorytest.bluetooth.bluetoothLib.base.BluetoothListenerAdapter;
 import com.ubt.factorytest.bluetooth.bluetoothLib.base.BluetoothState;
+import com.ubt.factorytest.bluetooth.ubtbtprotocol.ProtocolPacket;
 import com.ubt.factorytest.test.data.DataServer;
+import com.ubt.factorytest.test.data.IFactoryListener;
+import com.ubt.factorytest.test.data.btcmd.BaseBTReq;
 import com.ubt.factorytest.test.data.btcmd.FactoryTool;
+import com.ubt.factorytest.test.data.btcmd.GetWifiStatus;
 import com.ubt.factorytest.test.data.btcmd.GsensirTest;
 import com.ubt.factorytest.test.data.btcmd.HeartBeat;
 import com.ubt.factorytest.test.data.btcmd.IntoFactoryTest;
 import com.ubt.factorytest.test.data.btcmd.MicTestReq;
 import com.ubt.factorytest.test.data.btcmd.PirTest;
+import com.ubt.factorytest.test.data.btcmd.PlayAction;
+import com.ubt.factorytest.test.data.btcmd.ReadDevStatus;
+import com.ubt.factorytest.test.data.btcmd.VolumeAdjust;
 import com.ubt.factorytest.test.recycleview.TestClickEntity;
 import com.ubt.factorytest.utils.ByteHexHelper;
 import com.ubt.factorytest.utils.ContextUtils;
 import com.ubt.factorytest.utils.FileUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.List;
@@ -31,7 +41,7 @@ import java.util.TimerTask;
  * @描述:
  */
 
-public class TestPresenter implements TestContract.Presenter {
+public class TestPresenter implements TestContract.Presenter,IFactoryListener {
     private static final String TAG = "BTTestPresenter";
     private TestContract.View mView;
     private DataServer mDataServer;
@@ -44,6 +54,7 @@ public class TestPresenter implements TestContract.Presenter {
     private boolean isGSensirTesting = false;
 
     public TestPresenter(TestContract.View view, DataServer dataServer) {
+        FactoryTool.getInstance().init();
         mView = view;
         mDataServer = dataServer;
         initBT();
@@ -60,6 +71,7 @@ public class TestPresenter implements TestContract.Presenter {
         mHeartBeat = new HeartBeat().toByteArray();
         startHeart();
         mBluetoothController.write(new IntoFactoryTest(IntoFactoryTest.START_TEST).toByteArray());
+        mBluetoothController.write(new ReadDevStatus().toByteArray());
     }
 
     private BluetoothListenerAdapter mBTListener = new BluetoothListenerAdapter() {
@@ -67,10 +79,7 @@ public class TestPresenter implements TestContract.Presenter {
         @Override
         public void onReadData(BluetoothDevice device, byte[] data) {
             Log.d(TAG, "zz TestPresenter onReadData data:" + ByteHexHelper.bytesToHexString(data));
-            int itemID = FactoryTool.getInstance().parseBTCmd(mDataServer, data);
-            if(itemID >= 0){
-                mView.notifyItemChanged(itemID);
-            }
+            FactoryTool.getInstance().parseBTCmd(data, TestPresenter.this);
         }
 
         @Override
@@ -153,7 +162,8 @@ public class TestPresenter implements TestContract.Presenter {
     @Override
     public void startTest(TestClickEntity item) {
         stopPIRorGsensir(item);
-        if(item.getTestID() == TestClickEntity.TEST_ITEM_SAVETESTPROFILE){
+        int itemID = item.getTestID();
+        if(itemID == TestClickEntity.TEST_ITEM_SAVETESTPROFILE){
             File filePath = FileUtils.getDiskCacheDir(ContextUtils.getContext());
             boolean isSaveOk = FileUtils.writeStringToFile(mDataServer.getDataCache().toString(),
                     filePath.getPath(),mBTMac+".txt",false);
@@ -181,7 +191,12 @@ public class TestPresenter implements TestContract.Presenter {
         List<TestClickEntity> data = getDataCache();
         for(TestClickEntity entity:data){
             if(entity.getTestID() == TestClickEntity.TEST_ITEM_BTSENSITIVITY){
-                entity.setTestResult(rssi);
+                entity.setTestResult(mBTMac+"     "+rssi);
+                if(Integer.valueOf(rssi) >= -65){
+                    entity.setPass(true);
+                }else{
+                    entity.setPass(false);
+                }
             }
         }
     }
@@ -189,6 +204,41 @@ public class TestPresenter implements TestContract.Presenter {
     @Override
     public void stopRobotRecord() {
         mBluetoothController.write(new MicTestReq(MicTestReq.STOP_RECORDER).toByteArray());
+    }
+
+    @Override
+    public void adjustVolume(int type) {
+        int curVol = FactoryTool.getInstance().getCurrentVol();
+        if(type == TestContract.ADJUST_SUB){
+            if(curVol <= 10){
+                curVol = 0;
+            }else{
+                curVol -= 10;
+            }
+        }else {
+            if(curVol >= 90){
+                curVol = 100;
+            }else{
+                curVol += 10;
+            }
+        }
+        FactoryTool.getInstance().setCurrentVol(curVol);
+        mBluetoothController.write(new VolumeAdjust((byte)curVol).toByteArray());
+    }
+
+    @Override
+    public void startAgeing() {
+        mBluetoothController.write(new PlayAction("action/my creation/" + "Action-老化测试动作简版.hts").toByteArray());
+    }
+
+    @Override
+    public void getWifiStatus() {
+        mBluetoothController.write(new GetWifiStatus().toByteArray());
+    }
+
+    @Override
+    public void stopFactoryTest() {
+        mBluetoothController.write(new IntoFactoryTest(IntoFactoryTest.STOP_TEST).toByteArray());
     }
 
     private void startHeart(){
@@ -231,5 +281,27 @@ public class TestPresenter implements TestContract.Presenter {
             }
         }
 
+    }
+
+    @Override
+    public void onProtocolPacket(ProtocolPacket packet) {
+        byte cmd = packet.getmCmd();
+        if(cmd == BaseBTReq.HEART_CMD){
+            return;
+        }else if(cmd == BaseBTReq.WIFI_STATUS){
+            try {
+                JSONObject jsonObject = new JSONObject(new String(packet.getmParam()));
+                String name = jsonObject.getString("name");
+                String ip = jsonObject.getString("ip");
+                mView.setWifiStatus(name, ip);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
+        int pos = FactoryTool.getInstance().getItemPositon(mDataServer,packet);
+        if(pos >= 0){
+            mView.notifyItemChanged(pos);
+        }
     }
 }

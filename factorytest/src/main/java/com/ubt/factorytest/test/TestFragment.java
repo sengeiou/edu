@@ -18,7 +18,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ubt.factorytest.ActionPlay.ActionFragment;
+import com.ubt.factorytest.ActionPlay.ActionPresenter;
 import com.ubt.factorytest.R;
+import com.ubt.factorytest.bluetooth.netconnect.NetconnectFragment;
+import com.ubt.factorytest.bluetooth.netconnect.WifiStatusFragment;
 import com.ubt.factorytest.test.recycleview.TestItemClickAdapter;
 import com.ubt.factorytest.utils.ContextUtils;
 
@@ -40,6 +44,10 @@ public class TestFragment extends SupportFragment implements TestContract.View {
     private static final int MSG_DATA_CHANGE = 2;
     private static final int MSG_ITEM_CHANGE = 3;
 
+    private static final int REQ_FRAGMENT_ACTION = 100;
+    private static final int REQ_FRAGMENT_WIFICFG = 101;
+    private static final int REQ_FRAGMENT_WIFISTATUS = 102;
+
     @BindView(R.id.rv_test)
     RecyclerView mRecyclerView;
     @BindView(R.id.toolbar)
@@ -54,6 +62,8 @@ public class TestFragment extends SupportFragment implements TestContract.View {
 
     private Handler mHandler;
 
+    String wifiName = "";
+    String wifiIP = "";
 
     public static TestFragment newInstance(String mac, String rssi) {
 
@@ -79,16 +89,33 @@ public class TestFragment extends SupportFragment implements TestContract.View {
         Bundle data = getArguments();
         String mac = data.getString("bt_mac");
         mPresenter.saveBTMac(mac);
-        mPresenter.setBTRSSI(mac+"     "+data.getString("bt_rssi"));
+        mPresenter.setBTRSSI(data.getString("bt_rssi"));
         toolbar.inflateMenu(R.menu.menu_testfragment);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
-
-                if (id == R.id.action_stop_record) {
-                    mPresenter.stopRobotRecord();
+                switch (id){
+                    /*case R.id.action_stop_record:
+                        mPresenter.stopRobotRecord();
+                        break;*/
+                    case R.id.action_wifi_conf:
+                        startWifiConfig();
+                        break;
+                    case R.id.action_action_test:
+                        ActionFragment fragment = ActionFragment.newInstance();
+                        new ActionPresenter(fragment);
+                        startForResult(fragment, REQ_FRAGMENT_ACTION);
+                        break;
+                    case R.id.action_ageing_test:
+                        mPresenter.startAgeing();
+                        break;
+                    case R.id.action_wifi_status:
+                        WifiStatusFragment wfragment = WifiStatusFragment.newInstance(wifiName, wifiIP);
+                        startForResult(wfragment, REQ_FRAGMENT_WIFISTATUS);
+                        break;
                 }
+
                 return true;
             }
         });
@@ -156,9 +183,25 @@ public class TestFragment extends SupportFragment implements TestContract.View {
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                boolean isPass =  mAdapter.getItem(position).isPass();
-                mAdapter.getItem(position).setPass(!isPass);
-                adapter.notifyItemChanged(position, "123121");
+                switch(view.getId()){
+                    case R.id.btn_ok:
+                        boolean isPass =  mAdapter.getItem(position).isPass();
+                        mAdapter.getItem(position).setPass(!isPass);
+                        adapter.notifyItemChanged(position, "123121");
+                        break;
+                    case R.id.btn_vol_sub:
+                        Log.i(TAG,"btn_vol_sub！！");
+                        mPresenter.adjustVolume(TestContract.ADJUST_SUB);
+                        break;
+                    case R.id.btn_vol_add:
+                        Log.i(TAG,"btn_vol_add！！");
+                        mPresenter.adjustVolume(TestContract.ADJUST_ADD);
+                        break;
+                    case R.id.btn_mic_stop:
+                        mPresenter.stopRobotRecord();
+                        break;
+                }
+
             }
         });
     }
@@ -191,6 +234,22 @@ public class TestFragment extends SupportFragment implements TestContract.View {
         mHandler.sendMessage(hmsg);
     }
 
+    @Override
+    public void startWifiConfig() {
+        startForResult(NetconnectFragment.newInstance(),REQ_FRAGMENT_WIFICFG);
+    }
+
+    @Override
+    public void startActionTest() {
+
+    }
+
+    @Override
+    public void setWifiStatus(String wifiName, String ip) {
+        this.wifiName = wifiName;
+        this.wifiIP = ip;
+    }
+
     protected void initToolbarNav(Toolbar toolbar) {
         toolbar.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -204,5 +263,20 @@ public class TestFragment extends SupportFragment implements TestContract.View {
                 }
             }
         });
+    }
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+            mPresenter.reInitBT();
+            mPresenter.initBTListener();
+            if(requestCode == 101 && resultCode == RESULT_OK){
+                if(data != null){
+                    wifiName = data.getString("wifiName");
+                    wifiIP = data.getString("wifiIP");
+                    Log.i(TAG,"wifiName:"+wifiName+"    wifiIP:"+wifiIP);
+                    mPresenter.getWifiStatus();
+                }
+            }
     }
 }

@@ -5,13 +5,12 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
-
     defaultConfig {
         applicationId "com.ubt.factorytest"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
-        versionName "1.0.0.1"
+        versionName "1.0.0.4"
 
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

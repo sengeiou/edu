@@ -154,15 +154,15 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         setContentView(layoutId);
         mButtons = new ArrayList<>();
 
-        String dd = "/home/root/UBTFT/action/controller/Backward.hts";
-        String dd1 = "action/controller/Backward.hts";
-        UbtLog.d(TAG,"=====" + dd.contains(dd1));
+
+        mHelper = new RemoteHelper(this, this);
+        startOrStopRun((byte)0x05);
     }
 
     @Override
     protected void onResume() {
         setCurrentActivityLable(RemoteActivity.class.getSimpleName());
-        mHelper = new RemoteHelper(this, this);
+//        mHelper = new RemoteHelper(this, this);
         //((RemoteHelper) mHelper).doReadActions();
         super.onResume();
         mCoonLoadingDia = LoadingDialog.getInstance(this, this);
@@ -173,6 +173,16 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         }*/
 
     }
+
+    /**
+     * 进入或者退出遥控器
+     */
+    public void startOrStopRun(byte  params) {
+        if ((RemoteHelper)mHelper != null) {
+            ((RemoteHelper) mHelper).doRemoterState(params);
+        }
+    }
+
 
     @Override
     protected void onStop() {
@@ -280,24 +290,97 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
             if(event.getAction() == MotionEvent.ACTION_DOWN){
 
-                longClickItem = view;
-                execActions(longClickItem);
-                keepExec = true;
+//                if(view.getId() == R.id.btn_up
+//                        || view.getId() == R.id.btn_down
+//                        || view.getId() == R.id.btn_left
+//                        || view.getId() == R.id.btn_right){
+//
+//                    if(view.getId() == R.id.btn_up){
+//                        ((RemoteHelper) mHelper).doWalkAction(0,1,0);
+//                    } else if(view.getId() == R.id.btn_left){
+//                        ((RemoteHelper) mHelper).doWalkAction(2,1,0);
+//                    } else if(view.getId() == R.id.btn_right){
+//                        ((RemoteHelper) mHelper).doWalkAction(3,1,0);
+//                    } else if(view.getId() == R.id.btn_down){
+//                        ((RemoteHelper) mHelper).doWalkAction(1,1,0);
+//                    }
+//                }else {
+                    longClickItem = view;
+                    execActions(longClickItem);
+                    keepExec = true;
+//
+//                }
             }else if(event.getAction() == MotionEvent.ACTION_UP){
-                keepExec = false;
-                longClickItem = null;
+
                 //松开stop
-                handler.sendEmptyMessageDelayed(EXEC_STOP_ACTION,200);
+//                if(view.getId() == R.id.btn_up
+//                        || view.getId() == R.id.btn_down
+//                        || view.getId() == R.id.btn_left
+//                        || view.getId() == R.id.btn_right){
+//
+//                    ((RemoteHelper) mHelper).doStopWalkAction();
+//                }else {
+//
+                    keepExec = false;
+                    longClickItem = null;
+                    handler.sendEmptyMessageDelayed(EXEC_STOP_ACTION,200);
+//                }
+                lastClickTime = System.currentTimeMillis();
             }
             return false;
         }
     };
 
+//             if(event.getAction() == MotionEvent.ACTION_DOWN){
+//        handler.removeCallbacks(stopRunnable);
+//        if(System.currentTimeMillis()-lastClickTime < 800){
+//            UbtLog.d(TAG,"800ms才能点击");
+//            longClickItem = view;
+//            handler.postDelayed(actiondownRunnable,800);
+//        }else {
+//            longClickItem = view;
+//            execActions(longClickItem);
+//            keepExec = true;
+//        }
+//    }else if(event.getAction() == MotionEvent.ACTION_UP){
+//        handler.removeCallbacks(actiondownRunnable);
+//        handler.removeCallbacks(stopRunnable);
+//        keepExec = false;
+////                longClickItem = null;
+//        //松开stop
+////                handler.sendEmptyMessageDelayed(EXEC_STOP_ACTION,200);
+//        handler.postDelayed(stopRunnable,200);
+//        lastClickTime = System.currentTimeMillis();
+//    }
+//            return false;
+
+//    Runnable actiondownRunnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            execActions(longClickItem);
+//            keepExec = true;
+//        }
+//    };
+//
+//    Runnable stopRunnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            ((RemoteHelper) mHelper).doAction(-1);
+//        }
+//    };
+
+    long lastClickTime = System.currentTimeMillis();
     private View.OnClickListener controlListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View arg0) {
             // TODO Auto-generated method stub
+//            arg0.setClickable(false);
+            if(System.currentTimeMillis()-lastClickTime < 800){
+                UbtLog.d(TAG,"800ms才能点击");
+                return;
+            }
+            lastClickTime = System.currentTimeMillis();
             execActions(arg0);
         }
     };
@@ -311,6 +394,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
                 break;
             }
         }
+
         if(RemoteHelper.mCurrentType != RemoteRecordOperater.ModelType.CUSTOM){
             UbtLog.d(TAG,"lihai------playIndex:" + playIndex);
             ((RemoteHelper) mHelper).doAction(playIndex);
@@ -411,6 +495,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         if(handler.hasMessages(EXEC_STOP_ACTION)){
             handler.removeMessages(EXEC_STOP_ACTION);
         }
+        startOrStopRun((byte)0x06);
         super.onDestroy();
     }
     @Override

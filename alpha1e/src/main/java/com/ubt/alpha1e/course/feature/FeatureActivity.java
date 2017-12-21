@@ -26,6 +26,7 @@ import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.merge.MergeActivity;
+import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
@@ -59,6 +60,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     private static final int LEARN_FINISH = 8;
     private static final int TAP_HEAD = 9;
     private static final int BLUETOOTH_DISCONNECT = 10;
+    private static final int OVER_TIME_FINISH = 11;
 
     @BindView(R.id.tv_next)
     TextView tvNext;
@@ -171,6 +173,9 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     private boolean hasLearnHeadIng = false;
     private ConfirmDialog mTapHeadDialog = null;
 
+    private boolean isClickable = true;
+    private final int OVER_TIME = 15 * 1000;//(15S音频等播放时间)超时
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -224,6 +229,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                 case PLAY_ACTION_FINISH:
                     if (playIndex == 1) {
                         //finish
+                        isClickable = true;
                         playIndex = 0;
                         playCount = 0;
                         hasLearnEngine = true;
@@ -248,6 +254,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                             //finish
                             playIndex = 0;
                             playCount = 0;
+                            isClickable = true;
                             hasLearnSensor = true;
                             stopRadiologicalWaveAnim();
                             showView(rlPrincipleInfraredSensorIntro, false, smallerRightTopAnim);
@@ -260,6 +267,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                         //finish
                         playIndex = 0;
                         playCount = 0;
+                        isClickable = true;
                         hasLearnSoundbox = true;
                         stopRadiologicalWaveAnim();
                         showView(rlPrincipleSoundboxIntro, false, smallerRightTopAnim);
@@ -279,6 +287,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                             //finish
                             playIndex = 0;
                             playCount = 0;
+                            isClickable = true;
                             hasLearnHead = true;
                             hasLearnHeadIng = false;
                             stopRadiologicalWaveAnim();
@@ -291,6 +300,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                         //finish
                         playIndex = 0;
                         playCount = 0;
+                        isClickable = true;
                         hasLearnEye = true;
                         stopRadiologicalWaveAnim();
                         showView(rlPrincipleEyeIntro, false, smallerLeftTopAnim);
@@ -311,6 +321,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                             //finish
                             playIndex = 0;
                             playCount = 0;
+                            isClickable = true;
                             hasLearnVoice = true;
                             stopRadiologicalWaveAnim();
                             showView(rlPrincipleVoiceIntro, false, smallerLeftBottomAnim);
@@ -329,6 +340,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                             //finish
                             playIndex = 0;
                             playCount = 0;
+                            isClickable = true;
                             hasLearnObstacle = true;
                             stopRadiologicalWaveAnim();
                             showView(rlPrincipleVoiceObstacleAvoidanceIntro, false, smallerLeftBottomAnim);
@@ -395,6 +407,9 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                     ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
                     MainCourseActivity.finishByMySelf();
                     finish();
+                    break;
+                case OVER_TIME_FINISH:
+                    isClickable = true;
                     break;
             }
 
@@ -516,6 +531,11 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         if (event.getEvent() == PrincipleEvent.Event.PLAY_ACTION_FINISH) {
 
             mHandler.sendEmptyMessage(PLAY_ACTION_FINISH);
+
+            if(mHandler.hasMessages(OVER_TIME_FINISH)){
+                mHandler.removeMessages(OVER_TIME_FINISH);
+                isClickable = true;
+            }
         } else if (event.getEvent() == PrincipleEvent.Event.CALL_GET_INFRARED_DISTANCE) {
             int infraredDistance = event.getInfraredDistance();
             UbtLog.d(TAG, "infraredDistance = " + infraredDistance);
@@ -588,6 +608,11 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
 
     @Override
     protected void onDestroy() {
+
+        if(mHandler.hasMessages(OVER_TIME_FINISH)){
+            mHandler.removeMessages(OVER_TIME_FINISH);
+        }
+
         if (mHandler.hasMessages(SHOW_VIEW)) {
             mHandler.removeMessages(SHOW_VIEW);
         }
@@ -981,36 +1006,52 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                 }
                 break;
             case R.id.tv_msg_show:
-                showView(tvMsgShow, false, smallerLeftBottomAnim);
-                reset();
+                if(isClickable){
+                    showView(tvMsgShow, false, smallerLeftBottomAnim);
+                    reset();
+                }
                 break;
             case R.id.rl_principle_steering_engine_intro:
-                showView(rlPrincipleSteeringEngineIntro, false, smallerLeftBottomAnim);
-                reset();
+                if(isClickable){
+                    showView(rlPrincipleSteeringEngineIntro, false, smallerLeftBottomAnim);
+                    reset();
+                }
                 break;
             case R.id.rl_principle_infrared_sensor_intro:
-                showView(rlPrincipleInfraredSensorIntro, false, smallerRightTopAnim);
-                reset();
+                if(isClickable){
+                    showView(rlPrincipleInfraredSensorIntro, false, smallerRightTopAnim);
+                    reset();
+                }
                 break;
             case R.id.rl_principle_soundbox_intro:
-                showView(rlPrincipleSoundboxIntro, false, smallerRightTopAnim);
-                reset();
+                if(isClickable){
+                    showView(rlPrincipleSoundboxIntro, false, smallerRightTopAnim);
+                    reset();
+                }
                 break;
             case R.id.rl_principle_head_intro:
-                showView(rlPrincipleHeadIntro, false, smallerLeftTopAnim);
-                reset();
+                if(isClickable){
+                    showView(rlPrincipleHeadIntro, false, smallerLeftTopAnim);
+                    reset();
+                }
                 break;
             case R.id.rl_principle_eye_intro:
-                showView(rlPrincipleEyeIntro, false, smallerLeftTopAnim);
-                reset();
+                if(isClickable){
+                    showView(rlPrincipleEyeIntro, false, smallerLeftTopAnim);
+                    reset();
+                }
                 break;
             case R.id.rl_principle_voice_intro:
-                showView(rlPrincipleVoiceIntro, false, smallerLeftBottomAnim);
-                reset();
+                if(isClickable){
+                    showView(rlPrincipleVoiceIntro, false, smallerLeftBottomAnim);
+                    reset();
+                }
                 break;
             case R.id.rl_principle_voice_obstacle_avoidance_intro:
-                showView(rlPrincipleVoiceObstacleAvoidanceIntro, false, smallerLeftBottomAnim);
-                reset();
+                if(isClickable){
+                    showView(rlPrincipleVoiceObstacleAvoidanceIntro, false, smallerLeftBottomAnim);
+                    reset();
+                }
                 break;
 
         }
@@ -1023,8 +1064,15 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
 
     @Override
     public void onBackPressed() {
-        MergeActivity.launchActivity(this, true);
-        this.finish();
+        if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 2 ){
+            ((PrincipleHelper) mHelper).doInit();
+            ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+            this.finish();
+            this.overridePendingTransition(0, R.anim.activity_close_down_up);
+        }else {
+            MergeActivity.launchActivity(this, true);
+            this.finish();
+        }
     }
 
     /**
@@ -1039,6 +1087,8 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         setAllEnable(false);
         setViewEnable(view, true, 1);
         playActionFile(actionFile);
+
+
     }
 
     /**
@@ -1047,6 +1097,12 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
      */
     private void playActionFile(String acitonFile) {
         ((PrincipleHelper) mHelper).playFile(acitonFile);
+        if(mHandler.hasMessages(OVER_TIME_FINISH)){
+            mHandler.removeMessages(OVER_TIME_FINISH);
+        }
+
+        isClickable = false;
+        mHandler.sendEmptyMessageDelayed(OVER_TIME_FINISH, OVER_TIME);
     }
 
     /**

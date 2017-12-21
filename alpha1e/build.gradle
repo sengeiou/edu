@@ -5,9 +5,12 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
+        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
         applicationId "com.ubt.alpha1e"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
+        //versionCode 1
+        // flavorDimensions "versionCode"
 
         multiDexEnabled true
 
@@ -162,4 +165,6 @@ dependencies {
     compile 'com.yanzhenjie:permission:1.1.2'
     compile 'org.litepal.android:core:1.6.0'
      compile project(':highlight')
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-4'
+
 }

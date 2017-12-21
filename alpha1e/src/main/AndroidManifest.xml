@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ubt.alpha1e"
           android:versionCode="1"
-          android:versionName="V1.0.0.7">
+          android:versionName="V1.0.0.9">
 
     <meta-data
         android:name="design_width"
@@ -137,7 +137,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen">
+            android:theme="@style/NoTitleThemeFullScreenuser">
         </activity>
         <activity
             android:name=".ui.StartInitSkinActivity"
@@ -453,11 +453,16 @@
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleTheme"/>
         <activity
+            android:name="com.ubt.alpha1e.userinfo.myrobot.MyRobotActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
             android:name=".blockly.BlocklyActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen"
-            android:windowSoftInputMode="adjustPan"/>
+            android:theme="@style/NoTitleThemeForBlock"
+            android:windowSoftInputMode="adjustPan"
+           />
         <activity
             android:name=".blockly.BlocklyCourseActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
@@ -539,6 +544,12 @@
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.helpfeedback.feedbackdetail.FeedbackDetailActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".webcontent.WebContentActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
@@ -640,6 +651,13 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".behaviorhabits.BehaviorHabitsActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
 
         <!-- APP实现的Receiver，用于接收消息和结果反馈 -->
         <receiver android:name=".xingepush.XGMessageRecevicer">

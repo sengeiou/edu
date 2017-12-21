@@ -8,10 +8,15 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.ToastUtils;
@@ -22,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 /**
@@ -35,6 +42,9 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     @BindView(R.id.recyclerview_dynamic)
     RecyclerView mRecyclerviewDynamic;
     DynamicActionAdapter mDynamicActionAdapter;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout mRefreshLayout;
+    Unbinder unbinder;
     private List<DynamicActionModel> mDynamicActionModels = new ArrayList<>();
     private View emptyView;
 
@@ -98,6 +108,53 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
 
             }
         });
+
+        mRefreshLayout.setEnableAutoLoadmore(true);//开启自动加载功能（非必须）
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(final RefreshLayout refreshlayout) {
+                refreshlayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDynamicActionAdapter.setNewData(getData());
+                        mRefreshLayout.finishRefresh();
+                        refreshlayout.resetNoMoreData();
+                    }
+                }, 1000);
+            }
+        });
+        mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(final RefreshLayout refreshlayout) {
+                refreshlayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDynamicActionAdapter.addData(getData());
+                        if (mDynamicActionAdapter.getItemCount() > 20) {
+                            ToastUtils.showShort("数据全部加载完毕");
+                            mRefreshLayout.finishLoadmoreWithNoMoreData();//将不会再次触发加载更多事件
+                        } else {
+                            mRefreshLayout.finishLoadmore();
+                        }
+                    }
+                }, 1000);
+            }
+        });
+
+        //触发自动刷新
+        mRefreshLayout.autoRefresh();
+    }
+
+    private List<DynamicActionModel> getData() {
+        List<DynamicActionModel> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            DynamicActionModel dynamicActionModel = new DynamicActionModel();
+            dynamicActionModel.setActionId(i);
+            dynamicActionModel.setActionName("动作舞蹈" + i);
+            dynamicActionModel.setActionTime(3000);
+            list.add(dynamicActionModel);
+        }
+        return list;
     }
 
     @Override
@@ -161,5 +218,19 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             default:
                 break;
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

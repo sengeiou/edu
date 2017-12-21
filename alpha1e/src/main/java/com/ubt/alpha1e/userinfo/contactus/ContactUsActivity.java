@@ -3,7 +3,11 @@ package com.ubt.alpha1e.userinfo.contactus;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -11,7 +15,11 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.alertview.OnItemClickListener;
+import com.ubt.alpha1e.ui.dialog.alertview.SheetAlertView;
 import com.ubt.alpha1e.userinfo.photoshow.PhotoShowActivity;
+import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.alpha1e.webcontent.WebContentActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +33,8 @@ import butterknife.OnClick;
 
 public class ContactUsActivity extends MVPBaseActivity<ContactUsContract.View, ContactUsPresenter> implements ContactUsContract.View {
 
+    private static final String TAG = ContactUsActivity.class.getSimpleName();
+
     @BindView(R.id.ll_base_back)
     LinearLayout llBaseBack;
     @BindView(R.id.tv_base_title_name)
@@ -35,6 +45,10 @@ public class ContactUsActivity extends MVPBaseActivity<ContactUsContract.View, C
     RelativeLayout rlCustEmail;
     @BindView(R.id.rl_cust_website)
     RelativeLayout rlCustWebsite;
+
+    private static final int CALL_PHONE = 1;
+    private static final int SEND_EMAIL = 2;
+    private static final int WEBSITE_UBT = 3;
 
     public static void LaunchActivity(Context context) {
         Intent intent = new Intent(context, ContactUsActivity.class);
@@ -77,15 +91,98 @@ public class ContactUsActivity extends MVPBaseActivity<ContactUsContract.View, C
                 ContactUsActivity.this.finish();
                 break;
             case R.id.rl_cust_phone:
+                {
+
+                    String menuStr = getStringResources("ui_contact_phone_tel") + getStringResources("ui_setting_cust_phone_value");
+                    SpannableString menuStyle = new SpannableString(menuStr);
+                    int startIndex = getStringResources("ui_contact_phone_tel").length();
+                    menuStyle.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.T24)),startIndex,menuStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    alertDialog(CALL_PHONE, menuStyle);
+                }
                 break;
             case R.id.rl_cust_email:
+                {
+                    String menuStr = getStringResources("ui_contact_email_send") + getStringResources("ui_setting_cust_email_value");
+                    SpannableString menuStyle = new SpannableString(menuStr);
+                    int startIndex = getStringResources("ui_contact_email_send").length();
+                    menuStyle.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.T24)),startIndex,menuStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    alertDialog(SEND_EMAIL,menuStyle);
+                }
                 break;
             case R.id.rl_cust_website:
+                {
+                    String menuStr = getStringResources("ui_contact_website") + getStringResources("ui_about_url");
+                    SpannableString menuStyle = new SpannableString(menuStr);
+                    int startIndex = getStringResources("ui_contact_website").length();
+                    menuStyle.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.T24)),startIndex,menuStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    alertDialog(WEBSITE_UBT,menuStyle);
+                }
                 break;
             case R.id.iv_ubt_wechat:
                 PhotoShowActivity.LaunchActivity(getContext());
                 break;
         }
+    }
+
+    public void alertDialog(final int operationType,SpannableString menuStr){
+
+        new SheetAlertView(null, null, null,
+                new SpannableString[]{menuStr,new SpannableString(getStringResources("ui_common_cancel"))},
+                null,
+                ContactUsActivity.this, SheetAlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int position){
+                UbtLog.d(TAG,"position = " + position);
+                switch (position)
+                {
+                    case 0:
+                        if(operationType == CALL_PHONE){
+                            callPhone();
+                        }else if(operationType == SEND_EMAIL){
+                            sendEmail();
+                        }else {
+                            gotoWebsiteUbt();
+                        }
+                        break;
+                    case 2:
+                        break;
+                }
+            }
+        }).show();
+    }
+
+    /**
+     * 拨打电话
+     */
+    private void callPhone(){
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        Uri data = Uri.parse("tel:" + ContactUsActivity.this.getStringResources("ui_setting_cust_phone_value"));
+        intent.setData(data);
+        startActivity(intent);
+    }
+
+    /**
+     * 发邮件
+     */
+    private void sendEmail(){
+        Intent i = new Intent(Intent.ACTION_SEND);
+        // i.setType("text/plain"); //模拟器请使用这行
+        i.setType("message/rfc822"); // 真机上使用这行
+        i.putExtra(Intent.EXTRA_EMAIL,new String[] { ContactUsActivity.this.getStringResources("ui_setting_cust_email_value") });
+        i.putExtra(Intent.EXTRA_SUBJECT, getStringResources("ui_contact_advice"));
+        i.putExtra(Intent.EXTRA_TEXT, getStringResources("ui_contact_advice_hope"));
+        startActivity(Intent.createChooser(i,getStringResources("ui_contact_select_email_app")));
+    }
+
+    /**
+     * 打开官网
+     */
+    private void gotoWebsiteUbt(){
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getStringResources("ui_about_url")));
+        intent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
+        getContext().startActivity(intent);
+
+        //WebContentActivity.launchActivity(this, getStringResources("ui_about_url"),"");
     }
 
 }

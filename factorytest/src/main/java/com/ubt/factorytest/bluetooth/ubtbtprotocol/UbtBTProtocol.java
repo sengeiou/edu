@@ -61,11 +61,13 @@ public class UbtBTProtocol {
      * @throws InvalidPacketException
      */
     public UbtBTProtocol(byte[] in) throws InvalidPacketException {
-        if (checkBytes(in)){
-            parseData(in);
-            return;
+        if (getBytes(in) != null) {
+            if (checkBytes(in)) {
+                parseData(in);
+                return;
+            }
+            throw new InvalidPacketException("蓝牙数据包错误");
         }
-        throw new InvalidPacketException("蓝牙数据包错误");
     }
 
     public UbtBTProtocol(byte cmd, byte[] param){
@@ -176,6 +178,27 @@ public class UbtBTProtocol {
         return checkSum;
     }
 
+    private byte[] getBytes(byte[] in){
+        byte[] data = null;
+        if(in.length <= 0){
+            return null;
+        }
+        try {
+            if (in[2] == (in.length - 1)) {
+                data = in;
+            } else if (in[2] < (in.length - 1)) {
+                int inLen = in[2];
+                data = new byte[inLen+1];
+                System.arraycopy(in, 0, data, 0, inLen + 1);
+                in[inLen] = 0;
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return data;
+    }
 
     @Override
     public String toString() {

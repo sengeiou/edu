@@ -2,9 +2,9 @@ package com.ubt.factorytest.test.data.btcmd;
 
 import android.util.Log;
 
-import com.ubt.factorytest.bluetooth.ubtbtprotocol.InvalidPacketException;
-import com.ubt.factorytest.bluetooth.ubtbtprotocol.UbtBTProtocol;
+import com.ubt.factorytest.bluetooth.ubtbtprotocol.ProtocolPacket;
 import com.ubt.factorytest.test.data.DataServer;
+import com.ubt.factorytest.test.data.IFactoryListener;
 import com.ubt.factorytest.test.recycleview.TestClickEntity;
 
 import org.json.JSONException;
@@ -21,6 +21,9 @@ import java.util.List;
 public class FactoryTool {
     private static final String TAG = "FactoryTool";
     private static FactoryTool instance;
+    private int pressCnt = 0;  //拍头计数
+    private int currentVol = 0x7F; //机器人当前音量
+    private IFactoryListener listener;
 
     private FactoryTool(){
 
@@ -38,6 +41,13 @@ public class FactoryTool {
         return instance;
     }
 
+    public void init(){
+        pressCnt = 0;
+    }
+
+    private void setFactoryListener(IFactoryListener factoryListener){
+        listener = factoryListener;
+    }
     /**
      * 获取请求命令的命令数组 所有请求命令需要添加测试数据
      * @param item
@@ -87,6 +97,12 @@ public class FactoryTool {
                 break;
             case TestClickEntity.TEST_ITEM_SAVETESTPROFILE:
                 break;
+            case TestClickEntity.TEST_ITEM_AGEING_TEST:
+               // req = new PlayAction("action/course/motion/" + "胜利.hts");
+                req = new PlayAction("action/my creation/" + "Action-老化测试动作简版.hts");
+
+                break;
+
             default:
                 break;
         }
@@ -100,33 +116,73 @@ public class FactoryTool {
 
     /**
      * 解析接收到的蓝牙命令
-     * @param dataServer
      * @param cmd
-     * @return 返回RecyclerView中需要更新参数的ITEMID
+     * @factoryListener 数据包解析回调
      */
-    public int parseBTCmd(DataServer dataServer, final byte[] cmd){
-        boolean isOK = false;
-        int cmdID = 0;
+    public void  parseBTCmd(final byte[] cmd, IFactoryListener factoryListener){
+        formatBTData(cmd, factoryListener);
+    }
 
+    /*public void parseBTCmd(final byte[] cmd){
+        boolean isOK = false;
+        int itemID = 0;
         try {
-            UbtBTProtocol data = new UbtBTProtocol(cmd);
-            if(data.getCmd() == BaseBTReq.HEART_CMD){//心跳命令 不处理
-                return -1;
+            ProtocolPacket data = new ProtocolPacket();
+            formatBTData(cmd, null);
+            byte btCmd = data.getmCmd();
+            Log.i(TAG,"btCmd："+ ByteHexHelper.byteToHexString(btCmd));
+            switch (btCmd){
+                case (byte)0x80: //获取到动作
+                    if(listener != null){
+                        listener.onActionList(new String(data.getmParam()));
+                    }
+                    break;
+                case BaseBTReq.CONNECT_WIFI:
+                    if(listener != null){
+                        listener.onWifiConnectState(ByteHexHelper.bytesToHexString(data.getmParam()).trim());
+                    }
+                    break;
+                case BaseBTReq.HEART_CMD:
+                    break;
+                case BaseBTReq.READ_DEV_STATUS:
+                    parseDevStatus(data.getmParam());
+                    break;
+                case BaseBTReq.DV_ACTION_FINISH:
+                    Log.d("DV_ACTION_FINISH","播放动作结束");
+                    break;
+                default:
+                    if(dataServer == null){
+                        return -1;
+                    }
+                    itemID = translateBTCMDID2Item(btCmd);
+                    isOK = updateDataResult(dataServer, data, itemID);
+                    break;
             }
-            cmdID = translateBTCMDID2Item(data.getCmd());
-            isOK = updateDataResult(dataServer, data, cmdID);
-        } catch (InvalidPacketException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return -1;
         }
         if(isOK){
-            return getPosition(dataServer, cmdID);
+            return getPosition(dataServer, itemID);
         }else{
             return -1;
         }
+    }*/
 
+    public int getItemPositon(DataServer dataServer, ProtocolPacket packet){
+        boolean isOK;
+        int itemID;
+        int pos;
+
+        itemID = translateBTCMDID2Item(packet.getmCmd());
+        isOK = updateDataResult(dataServer, packet, itemID);
+        if(isOK){
+            pos = getPosition(dataServer, itemID);
+        }else{
+            pos = -1;
+        }
+        return pos;
     }
-
     /**
      * 转换蓝牙命令ID到RecyclerView itemID 需要检测返回值的项，才需要转换ID
      * @param cmdID
@@ -166,7 +222,9 @@ public class FactoryTool {
             case BaseBTReq.WAKEUP_UP:
                 itemID = TestClickEntity.TEST_ITEM_WAKEUPTEST;
                 break;
-
+            case BaseBTReq.DV_ACTION_FINISH:
+                itemID = TestClickEntity.TEST_ITEM_AGEING_TEST;
+                break;
             default:
                 Log.e(TAG,"translateBTCMDID2Item 未找到itemID  cmdID="+cmdID);
                 break;
@@ -183,26 +241,36 @@ public class FactoryTool {
      * @param itemID
      * @return
      */
-    private boolean updateDataResult(DataServer dataServer, UbtBTProtocol data, int itemID){
+    private boolean updateDataResult(DataServer dataServer, ProtocolPacket data, int itemID){
         int position;
         position = getPosition(dataServer, itemID);
         if(position >= 0) {
             String result = "";
             switch (itemID){
                 case TestClickEntity.TEST_ITEM_START_TIME:
-                    result = new String(data.getParam())+"秒";
+                    String time = new String(data.getmParam());
+                    time = filterTime(time);
+                    result = time+"秒";
+                    if(Integer.valueOf(time) > 30){
+                        dataServer.setDataisPass(position, false);
+                    }
                     break;
                 case TestClickEntity.TEST_ITEM_ELECTRICCHARGE:
-                    byte[] power = data.getParam();
+                    byte[] power = data.getmParam();
                     result = power[3]+"";   //电量只需要第三位，电量值
                     break;
                 case TestClickEntity.TEST_ITEM_PIRTEST:
                     //红外距离是INT类型
-                    result = String.valueOf(data.getParam()[0]&0xff);
+                    result = String.valueOf(data.getmParam()[0]&0xff);
                     break;
                 case TestClickEntity.TEST_ITEM_INTERRUOTTEST:
-                    result = "触发了拍头事件";
-                    dataServer.setDataisPass(position, true);
+                    pressCnt += 1;
+                    result = "拍头次数:"+pressCnt;
+                    if(pressCnt < 3) {
+                        dataServer.setDataisPass(position, false);
+                    }else if(pressCnt == 3){
+                        dataServer.setDataisPass(position, true);
+                    }
                     break;
                 case TestClickEntity.TEST_ITEM_WAKEUPTEST:
                     result = "触发了唤醒事件";
@@ -210,7 +278,7 @@ public class FactoryTool {
                     break;
                 case TestClickEntity.TEST_ITEM_GSENSIRTEST:
                     try {
-                        JSONObject jsonObject = new JSONObject(new String(data.getParam()));
+                        JSONObject jsonObject = new JSONObject(new String(data.getmParam()));
                         JSONObject jsonResult = new JSONObject();
                         jsonResult.put("front", jsonObject.getString("front"));
                         jsonResult.put("left", jsonObject.getString("left"));
@@ -220,7 +288,7 @@ public class FactoryTool {
                     }
                     break;
                 default:
-                    result = new String(data.getParam());
+                    result = new String(data.getmParam());
                     break;
             }
             dataServer.setDataResult(position, result);
@@ -251,5 +319,49 @@ public class FactoryTool {
             position = -1;
         }
         return position;
+    }
+
+    /**
+     *解析机器人状态
+     * @param status
+     */
+    public void parseDevStatus(byte[] status){
+        if(status[0] == 0x02){
+            currentVol = status[1];
+            Log.i(TAG,"当前电量:"+currentVol);
+        }
+    }
+
+    public int getCurrentVol() {
+        return currentVol;
+    }
+
+    public void setCurrentVol(int vol) {
+         currentVol = vol;
+    }
+
+    private String filterTime(String time){
+        StringBuffer newStr = new StringBuffer();
+        for(int i = 0; i < time.length(); i++){
+            char c = time.charAt(i);
+            if(c >= 0x30  && c <= 0x39){
+                newStr.append(c);
+            }
+        }
+
+        return newStr.toString();
+    }
+
+    private void formatBTData(byte[] data, IFactoryListener factoryListener){
+        ProtocolPacket pack = new ProtocolPacket();
+        for (int i = 0; i < data.length; i++) {
+            if (pack.setData_(data[i])) {
+                // 一帧数据接收完成
+                pack.setmParamLen(pack.getmParam().length);
+                if(factoryListener != null){ //package返回本地接口
+                    factoryListener.onProtocolPacket(pack);
+                }
+            }
+        }
     }
 }

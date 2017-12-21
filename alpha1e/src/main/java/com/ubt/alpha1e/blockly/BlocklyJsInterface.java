@@ -769,17 +769,26 @@ public class BlocklyJsInterface {
         UbtLog.d(TAG, "saveProject:" + saveString);
         try {
             JSONObject jsonObject = new JSONObject(saveString);
+            String pid = jsonObject.getString("pid");
             String name = jsonObject.getString("name");
             String xml = jsonObject.getString("xml");
-            UbtLog.d(TAG, "xml:" + xml);
+            UbtLog.d(TAG, "pid:" + pid + "_xml:" + xml);
 
-   /*         BlocklyProjectMode projectMode = new BlocklyProjectMode();
-            projectMode.setName(name);
-            projectMode.setXml(xml);
+//            BlocklyProjectMode projectMode = new BlocklyProjectMode();
+//            projectMode.setPid(pid);
+//            projectMode.setProgramName(name);
+//            projectMode.setProgramData(xml);
 
-            projectMode.saveOrUpdate("name = ?", name);*/
+            List<BlocklyProjectMode> projectModeList =  DataSupport.where("pid = ?", pid).find(BlocklyProjectMode.class);
+            if(projectModeList.size()>0){
+                ((BlocklyActivity) mBaseActivity).updateUserProgram(pid,name, xml);
+            }else{
+                ((BlocklyActivity) mBaseActivity).saveUserProgram(pid,name, xml);
+            }
 
-            ((BlocklyActivity) mBaseActivity).saveUserProgram(name, xml);
+//            projectMode.saveOrUpdate("pid = ?", pid);
+
+
 
 
         } catch (JSONException e) {

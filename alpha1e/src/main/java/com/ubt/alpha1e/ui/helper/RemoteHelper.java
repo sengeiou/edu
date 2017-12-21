@@ -30,6 +30,7 @@ import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ByteHexHelper;
 import com.ubtechinc.base.ConstValue;
 import com.ubtechinc.file.FileUploader;
 
@@ -156,6 +157,31 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
         }
     }
 
+    /**
+     * 执行步态算法（上下左右方向键）
+     * @param direction 方向
+     * @param speed 速度
+     * @param count 步数
+     */
+    public void doWalkAction(int direction, int speed, int count){
+        byte[] param = new byte[6];
+        param[0] = (byte) direction;
+        param[1] = (byte) speed;
+        param[2] = (byte) 0;
+        param[3] = (byte) 0;
+        param[4] = (byte) 0;
+        param[5] = (byte) 0;
+        doSendComm(ConstValue.DV_WALK, param);
+
+    }
+
+    public void doStopWalkAction(){
+        byte[] param = new byte[1];
+        param[0] = (byte) 0;
+        doSendComm(ConstValue.DV_STOP_WALK, param);
+    }
+
+
     public void doCustomAction(final int index,final int roleId) {
 
         MyActionsHelper.doStopMp3ForMyDownload();
@@ -266,6 +292,14 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
                             .getCurrentBluetooth().getAddress());
         }
         mPlayer.addListener(mUI);
+    }
+
+    public void doRemoterState(byte state){
+        byte[] params = new byte[2];
+        params[0] = state;
+        params[1] = 0;
+        UbtLog.d(TAG, "doChangeEditState params:" + ByteHexHelper.bytesToHexString(params));
+        doSendComm(ConstValue.DV_INTO_EDIT, params);
     }
 
     @Override
@@ -474,6 +508,10 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
                 else {
 
                 }
+            }
+        }else if(cmd == ConstValue.DV_INTO_EDIT){
+            if(param != null){
+                UbtLog.d(TAG, "DV_INTO_EDIT:" + ByteHexHelper.bytesToHexString(param)  + "   = " + mUI);
             }
         }
     }

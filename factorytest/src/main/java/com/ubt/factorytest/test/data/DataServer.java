@@ -41,19 +41,23 @@ public class DataServer {
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_WAKEUPTEST));
         dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "打断测试",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_INTERRUOTTEST));
-        dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "喇叭测试",
+        dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_SPEAKER, "喇叭测试",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_SPEAKERTEST));
-        dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "录音测试",
+        dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_MIC, "录音测试",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_RECORD_TEST));
         dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "红外测试",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_PIRTEST));
         dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "陀螺仪测试",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_GSENSIRTEST));
-        dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "Wifi吞吐量",
-                R.mipmap.click_untest,TestClickEntity.TEST_ITEM_WIFITEST));
+       /* dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "Wifi配网",
+                R.mipmap.click_untest,TestClickEntity.TEST_ITEM_WIFITEST));*/
         dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "测试报告保存到文件",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_SAVETESTPROFILE));
-        dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "机器人复位",
+        /*dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "整机动作测试",
+                R.mipmap.click_untest,TestClickEntity.TEST_ITEM_ACTION_TEST));
+        dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "整机老化测试",
+                R.mipmap.click_untest,TestClickEntity.TEST_ITEM_AGEING_TEST));*/
+        dataCache.add(new TestClickEntity(TestClickEntity.CLICK_ITEM_VIEW, "恢复出厂设置",
                 R.mipmap.click_untest,TestClickEntity.TEST_ITEM_ROBOTRESET));
 
 

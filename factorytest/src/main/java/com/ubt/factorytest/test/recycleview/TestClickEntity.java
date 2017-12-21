@@ -12,6 +12,8 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 public class TestClickEntity implements MultiItemEntity {
     public static final int CLICK_ITEM_VIEW = 1;
+    public static final int CLICK_ITEM_SPEAKER = 2;
+    public static final int CLICK_ITEM_MIC = 3;
 
     /**测试命令项*/
     public static final int TEST_ITEM_START_TIME = 1;
@@ -29,18 +31,20 @@ public class TestClickEntity implements MultiItemEntity {
     public static final int TEST_ITEM_ROBOTRESET = 13;
     public static final int TEST_ITEM_SAVETESTPROFILE = 14;
     public static final int TEST_ITEM_RECORD_TEST = 15;
+    public static final int TEST_ITEM_ACTION_TEST = 16;
+    public static final int TEST_ITEM_AGEING_TEST = 17;
 
 
     @IntDef(value = {TEST_ITEM_START_TIME, TEST_ITEM_SOFT_VERSION,TEST_ITEM_HARDWARE_VER,TEST_ITEM_ELECTRICCHARGE,
             TEST_ITEM_LEDTEST, TEST_ITEM_BTSENSITIVITY, TEST_ITEM_WAKEUPTEST,TEST_ITEM_INTERRUOTTEST,TEST_ITEM_SPEAKERTEST,
             TEST_ITEM_PIRTEST,TEST_ITEM_GSENSIRTEST,TEST_ITEM_WIFITEST,TEST_ITEM_ROBOTRESET,TEST_ITEM_SAVETESTPROFILE,
-            TEST_ITEM_RECORD_TEST})
+            TEST_ITEM_RECORD_TEST, TEST_ITEM_ACTION_TEST, TEST_ITEM_AGEING_TEST})
     public @interface TestCMD{}
 
     public int Type;
     private String testItem;  //布局类型
     private String testResult;
-    private boolean isPass;
+    private boolean isPass = true;
     private int imgID;
     private int testID;
 
