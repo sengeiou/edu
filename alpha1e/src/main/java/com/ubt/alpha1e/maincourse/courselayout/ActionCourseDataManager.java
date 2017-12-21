@@ -73,33 +73,48 @@ public class ActionCourseDataManager {
         one1Content4.setHorizGravity(HorizontalGravity.RIGHT);
         one1ContentList.add(one1Content4);
 
+
         CourseOne1Content one1Content5 = new CourseOne1Content();
         one1Content5.setIndex(4);
         one1Content5.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_5"));
         one1Content5.setId(R.id.iv_add_frame);
         one1Content5.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
         one1Content5.setActionPath(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
-        one1Content5.setTitle("添加按钮");
+        one1Content5.setTitle("缩放时间轴");
         one1Content5.setDirection(1);
         one1Content5.setX(20);
         one1Content5.setY(0);
         one1Content5.setVertGravity(VerticalGravity.CENTER);
         one1Content5.setHorizGravity(HorizontalGravity.LEFT);
         one1ContentList.add(one1Content5);
-
-        CourseOne1Content one1Content6 = new CourseOne1Content();
-        one1Content6.setIndex(5);
-        one1Content6.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_6"));
-        one1Content6.setId(R.id.iv_play_music);
-        one1Content6.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
-        one1Content6.setActionPath(Constant.COURSE_ACTION_PATH + "播放按钮.hts");
-        one1Content6.setTitle("播放按钮");
-        one1Content6.setDirection(0);
-        one1Content6.setX(-20);
-        one1Content6.setY(0);
-        one1Content6.setVertGravity(VerticalGravity.CENTER);
-        one1Content6.setHorizGravity(HorizontalGravity.RIGHT);
-        one1ContentList.add(one1Content6);
+//
+//        CourseOne1Content one1Content5 = new CourseOne1Content();
+//        one1Content5.setIndex(4);
+//        one1Content5.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_5"));
+//        one1Content5.setId(R.id.iv_add_frame);
+//        one1Content5.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
+//        one1Content5.setActionPath(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
+//        one1Content5.setTitle("添加按钮");
+//        one1Content5.setDirection(1);
+//        one1Content5.setX(20);
+//        one1Content5.setY(0);
+//        one1Content5.setVertGravity(VerticalGravity.CENTER);
+//        one1Content5.setHorizGravity(HorizontalGravity.LEFT);
+//        one1ContentList.add(one1Content5);
+//
+//        CourseOne1Content one1Content6 = new CourseOne1Content();
+//        one1Content6.setIndex(5);
+//        one1Content6.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_6"));
+//        one1Content6.setId(R.id.iv_play_music);
+//        one1Content6.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
+//        one1Content6.setActionPath(Constant.COURSE_ACTION_PATH + "播放按钮.hts");
+//        one1Content6.setTitle("播放按钮");
+//        one1Content6.setDirection(0);
+//        one1Content6.setX(-20);
+//        one1Content6.setY(0);
+//        one1Content6.setVertGravity(VerticalGravity.CENTER);
+//        one1Content6.setHorizGravity(HorizontalGravity.RIGHT);
+//        one1ContentList.add(one1Content6);
         return one1ContentList;
     }
 
@@ -115,8 +130,8 @@ public class ActionCourseDataManager {
         CourseActionModel model3 = null;
         if (card == 1) {
             model1 = new CourseActionModel("1.认识时间轴", 0);
-            model2 = new CourseActionModel("2.熟悉动作添加", 0);
-            model3 = new CourseActionModel("3.了解音乐库", 0);
+            model2 = new CourseActionModel("2.了解添加键", 0);
+            model3 = new CourseActionModel("3.了解播放键", 0);
         } else if (card == 2) {
             model1 = new CourseActionModel("1.了解动作模板", 0);
             model2 = new CourseActionModel("2.模板讲解(添加基础动作)", 0);

@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
@@ -75,8 +74,9 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
         initUI();
         ((ActionsEditHelper) mHelper).doEnterCourse((byte) 1);
 
-        mRlInstruction.setVisibility(View.VISIBLE);
-        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑2总介.hts");
+        mRlInstruction.setVisibility(View.GONE);
+        mActionEdit.setData(this);
+//        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑2总介.hts");
     }
 
     Handler mHandler = new Handler() {
@@ -346,11 +346,12 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     public void playComplete() {
         UbtLog.d("EditHelper", "播放完成");
-        if (isAllIntroduc) {
-            mHandler.sendEmptyMessageDelayed(1112, 2000);
-        } else {
-            mHandler.sendEmptyMessageDelayed(1111, 2000);
-        }
+        mHandler.sendEmptyMessageDelayed(1112, 2000);
+//        if (isAllIntroduc) {
+//            mHandler.sendEmptyMessageDelayed(1112, 2000);
+//        } else {
+//            mHandler.sendEmptyMessageDelayed(1111, 2000);
+//        }
     }
 
     @Override

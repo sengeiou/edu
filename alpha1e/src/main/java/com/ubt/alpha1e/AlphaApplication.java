@@ -58,6 +58,7 @@ import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.update.EngineUpdateManager;
+import com.ubt.alpha1e.userinfo.dynamicaction.DownLoadActionManager;
 import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
 import com.ubt.alpha1e.utils.crash.CrashHandler;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -345,7 +346,7 @@ public class AlphaApplication extends LoginApplication {
         }
         ActionPlayer.StopCycleThread(true);
         ActionsDownLoadManager.resetData();
-
+        DownLoadActionManager.getInstance(this).resetData();
         // 蓝牙断线
         if (mBlueManager != null) {
             mBlueManager.releaseAllConnected();

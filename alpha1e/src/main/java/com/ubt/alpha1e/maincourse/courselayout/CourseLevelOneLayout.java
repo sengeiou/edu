@@ -148,13 +148,15 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
 
             showCourseOne();
         } else if (currentCourse == 2) {
-            showLeftArrow(true);
-            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"动作添加.mp3\",\"playcount\":1}");
-            secondIndex = 1;
+            showAddLight();
+
+//            showLeftArrow(true);
+//            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"动作添加.mp3\",\"playcount\":1}");
+//            secondIndex = 1;
         } else if (currentCourse == 3) {
-            list_frames.clear();
-            adapter.notifyDataSetChanged();//清除列表数据
-            showMusicLight();
+//            list_frames.clear();
+//            adapter.notifyDataSetChanged();//清除列表数据
+            showPlayLight();
         }
 
     }
@@ -426,11 +428,11 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 .addHighLight(R.id.ll_add, R.layout.layout_pop_course_right_level, new HightLightTopCallback(100), new RectLightShape())
                 .addHighLight(R.id.rl_musicz_zpne, R.layout.layout_pop_course_right_level, new HightLightTopCallback(100), new RectLightShape())
                 .addHighLight(R.id.ll_add_frame, R.layout.layout_pop_course_right_level, new HightLightTopCallback(100), new RectLightShape())
-                .addHighLight(R.id.iv_add_frame1, R.layout.layout_pop_course_left_level, new OnLeftLocalPosCallback(30), new RectLightShape())
-                .addHighLight(R.id.iv_play_music, R.layout.layout_pop_course_right_level, new OnRightLocalPosCallback(30), new RectLightShape())
+                .addHighLight(R.id.rl_zoom1, R.layout.layout_pop_course_left_level, new OnLeftLocalPosCallback(30), new RectLightShape())
                 .setOnNextCallback(new HighLightInterface.OnNextCallback() {
                     @Override
                     public void onNext(HightLightView hightLightView, View targetView, View tipView) {//动态设置文字
+                        UbtLog.d(TAG, "当前的是那个View  onNext====" + currentIndex + "  size===" + mOne1ContentList.size());
                         tv = tipView.findViewById(R.id.tv_content);
                         if (currentIndex < mOne1ContentList.size()) {
                             CourseOne1Content oneContent = mOne1ContentList.get(currentIndex);
@@ -459,7 +461,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 .enableNext()
                 .maskColor(0xAA000000)
                 // .anchor(findViewById(R.id.id_container))//如果是Activity上增加引导层，不需要设置anchor
-                .addHighLight(R.id.iv_action_bgm, R.layout.layout_pop_course_right_level, new OnRightLocalPosCallback(30), new RectLightShape())
+                .addHighLight(R.id.iv_action_bgm, R.layout.layout_pop_course_right_level, new OnLeftLocalPosCallback(30), new RectLightShape())
                 .setOnShowCallback(new HighLightInterface.OnShowCallback() {
                     @Override
                     public void onShow(HightLightView hightLightView) {
@@ -468,14 +470,76 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                             int layoutId = viewPosInfo.layoutId;
                             View tipView = hightLightView.findViewById(layoutId);
                             tv = tipView.findViewById(R.id.tv_content);
-                            tv.setText("音乐库");
+                            tv.setText("添加按钮");
                             UbtLog.d(TAG, "======onShow====showMusicLight1");
                         }
                     }
                 });
 
         mHightLight.show();
-        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "音乐库.hts");
+        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
+    }
+
+
+    /**
+     * 添加按钮介绍
+     */
+    private void showAddLight() {
+        setAddButton();
+        mHightLight = new HighLight(mContext)//
+                .autoRemove(false)//设置背景点击高亮布局自动移除为false 默认为true
+                .intercept(true)//设置拦截属性为false 高亮布局不影响后面布局
+                .enableNext()
+                .maskColor(0xAA000000)
+                // .anchor(findViewById(R.id.id_container))//如果是Activity上增加引导层，不需要设置anchor
+                .addHighLight(R.id.iv_add_frame, R.layout.layout_pop_course_left_level, new OnLeftLocalPosCallback(30), new RectLightShape())
+                .setOnShowCallback(new HighLightInterface.OnShowCallback() {
+                    @Override
+                    public void onShow(HightLightView hightLightView) {
+                        HighLight.ViewPosInfo viewPosInfo = hightLightView.getCurentViewPosInfo();
+                        if (null != viewPosInfo) {
+                            int layoutId = viewPosInfo.layoutId;
+                            View tipView = hightLightView.findViewById(layoutId);
+                            tv = tipView.findViewById(R.id.tv_content);
+                            tv.setText("添加按钮");
+                            UbtLog.d(TAG, "======onShow====showMusicLight1");
+                        }
+                    }
+                });
+
+        mHightLight.show();
+        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
+    }
+
+
+    /**
+     * 播放按钮介绍
+     */
+    private void showPlayLight() {
+        setPlayButton();
+        mHightLight = new HighLight(mContext)//
+                .autoRemove(false)//设置背景点击高亮布局自动移除为false 默认为true
+                .intercept(true)//设置拦截属性为false 高亮布局不影响后面布局
+                .enableNext()
+                .maskColor(0xAA000000)
+                // .anchor(findViewById(R.id.id_container))//如果是Activity上增加引导层，不需要设置anchor
+                .addHighLight(R.id.iv_play_music, R.layout.layout_pop_course_right_level, new OnRightLocalPosCallback(30), new RectLightShape())
+                .setOnShowCallback(new HighLightInterface.OnShowCallback() {
+                    @Override
+                    public void onShow(HightLightView hightLightView) {
+                        HighLight.ViewPosInfo viewPosInfo = hightLightView.getCurentViewPosInfo();
+                        if (null != viewPosInfo) {
+                            int layoutId = viewPosInfo.layoutId;
+                            View tipView = hightLightView.findViewById(layoutId);
+                            tv = tipView.findViewById(R.id.tv_content);
+                            tv.setText("播放按钮");
+                            UbtLog.d(TAG, "======onShow====showMusicLight1");
+                        }
+                    }
+                });
+
+        mHightLight.show();
+        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
     }
 
     /**
@@ -494,7 +558,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
             UbtLog.d(TAG, "=====remove=========");
         }
         if (currentCourse == 1) {
-            if (currentIndex == 5) {
+            if (currentIndex == 4) {
                 ((ActionsEditHelper) mHelper).stopAction();
                 doReset();
                 showNextDialog(2);
@@ -502,7 +566,16 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                     courseProgressListener.completeCurrentCourse(1);
                 }
             }
+        } else if (currentCourse == 2) {
+            ((ActionsEditHelper) mHelper).stopAction();
+            doReset();
+            showNextDialog(3);
+            if (courseProgressListener != null) {
+                courseProgressListener.completeCurrentCourse(2);
+            }
         } else if (currentCourse == 3) {
+            ((ActionsEditHelper) mHelper).stopAction();
+            doReset();
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -510,7 +583,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                         courseProgressListener.completeCurrentCourse(3);
                     }
                 }
-            }, 2000);
+            }, 1000);
 
         }
     }
