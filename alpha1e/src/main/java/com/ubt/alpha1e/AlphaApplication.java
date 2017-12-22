@@ -123,6 +123,8 @@ public class AlphaApplication extends LoginApplication {
 
     private static String mNeedOpenActivity = null;
 
+    public static String currentRobotSN = "";
+
     @Override
     public void onCreate() {
         super.onCreate();
