@@ -2,6 +2,7 @@ package com.ubt.alpha1e.userinfo.dynamicaction;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,6 +21,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
 
@@ -36,7 +38,7 @@ import butterknife.Unbinder;
  * 邮箱 784787081@qq.com
  */
 
-public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract.View, DynamicActionPresenter> implements DynamicActionContract.View, BaseQuickAdapter.OnItemChildClickListener {
+public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract.View, DynamicActionPresenter> implements DynamicActionContract.View, BaseQuickAdapter.OnItemChildClickListener, BaseQuickAdapter.OnItemClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     @BindView(R.id.recyclerview_dynamic)
@@ -85,6 +87,8 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mPresenter.getDynamicData(0);
+        DownLoadActionManager.getInstance(getActivity()).getRobotAction();
+
     }
 
     @Override
@@ -96,6 +100,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     protected void initUI() {
         mDynamicActionAdapter = new DynamicActionAdapter(R.layout.layout_dynamic_action_item, mDynamicActionModels);
         mDynamicActionAdapter.setOnItemChildClickListener(this);
+        mDynamicActionAdapter.setOnItemClickListener(this);
         mRecyclerviewDynamic.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mRecyclerviewDynamic.setAdapter(mDynamicActionAdapter);
         emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_empty, null);
@@ -149,8 +154,8 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         List<DynamicActionModel> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             DynamicActionModel dynamicActionModel = new DynamicActionModel();
-            dynamicActionModel.setActionId(i);
-            dynamicActionModel.setActionName("动作舞蹈" + i);
+            dynamicActionModel.setActionId(14456);
+            dynamicActionModel.setActionName("蚂蚁与鸽子");
             dynamicActionModel.setActionTime(3000);
             list.add(dynamicActionModel);
         }
@@ -195,30 +200,39 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         switch (view.getId()) {
-            case R.id.iv_delete_action:
-                ToastUtils.showShort("删除" + position);
-                break;
-
-            case R.id.iv_play_action:
+            case R.id.rl_play_action:
                 ToastUtils.showShort("播放" + position);
-                DynamicActionModel dynamicActionModel = mDynamicActionAdapter.getItem(position);
-                for (DynamicActionModel actionModel : mDynamicActionModels) {
-                    if (actionModel.getActionId() == dynamicActionModel.getActionId()) {
-                        if (actionModel.getActionStatu() == 1) {
-                            actionModel.setActionStatu(0);
-                        } else {
-                            actionModel.setActionStatu(1);
-                        }
-                    } else {
-                        actionModel.setActionStatu(0);
-                    }
-                }
-                mDynamicActionAdapter.notifyDataSetChanged();
+                playAction(position);
                 break;
             default:
                 break;
         }
     }
+
+
+    private void playAction(int position) {
+        DynamicActionModel dynamicActionModel = mDynamicActionAdapter.getItem(position);
+
+        ActionInfo actionInfo = new ActionInfo();
+        actionInfo.actionId = dynamicActionModel.getActionId();
+        actionInfo.actionName = dynamicActionModel.getActionName();
+        actionInfo.actionPath = "https://services.ubtrobot.com/action/16/3/蚂蚁与鸽子.zip";
+        DownLoadActionManager.getInstance(getActivity()).getRobotAction();
+        //DownLoadActionManager.getInstance(getActivity()).dealAction(actionInfo);
+//        for (DynamicActionModel actionModel : mDynamicActionModels) {
+//            if (actionModel.getActionId() == dynamicActionModel.getActionId()) {
+//                if (actionModel.getActionStatu() == 1) {
+//                    actionModel.setActionStatu(0);
+//                } else {
+//                    actionModel.setActionStatu(1);
+//                }
+//            } else {
+//                actionModel.setActionStatu(0);
+//            }
+//        }
+//        mDynamicActionAdapter.notifyDataSetChanged();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -232,5 +246,10 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        startActivity(new Intent(getActivity(), ActionDetailActivity.class));
     }
 }

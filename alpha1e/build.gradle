@@ -46,7 +46,7 @@ android {
 
         debug {
             minifyEnabled false
- //            shrinkResources false
+            //            shrinkResources false
             shrinkResources false
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -136,6 +136,18 @@ dependencies {
     compile rootProject.ext.supportDependencies.supportAppcompat
     compile rootProject.ext.supportDependencies.supportdesign
     compile rootProject.ext.supportDependencies.supportRecyleView
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //信鸽稳定版 相关依赖
+    //wup包
+    //    compile 'com.tencent.wup:wup:1.0.0.E-alpha'
+    //            {
+    //                exclude ''
+    //            }
+    //mid包
+    compile(name: 'tvsloginlib', ext: 'aar')
+    compile project(':highlight')
+
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.facebook.android:facebook-android-sdk:4.8.0'
     compile 'org.greenrobot:eventbus:3.0.0'
@@ -144,27 +156,16 @@ dependencies {
     compile 'com.orhanobut:dialogplus:1.11@aar'
     compile 'com.weigan:loopView:0.1.2'
     compile 'com.android.support:support-v4:26.+'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    compile 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    //信鸽稳定版 相关依赖
     compile 'com.tencent.xinge:xinge:3.1.81-alpha'
-    //wup包
-    //    compile 'com.tencent.wup:wup:1.0.0.E-alpha'
-    //            {
-    //                exclude ''
-    //            }
-    //mid包
     compile 'com.tencent.mid:mid:3.72.4-alpha'
-    compile(name: 'tvsloginlib', ext: 'aar')
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     compile 'com.yanzhenjie:permission:1.1.2'
     compile 'org.litepal.android:core:1.6.0'
-     compile project(':highlight')
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-4'
-
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 }

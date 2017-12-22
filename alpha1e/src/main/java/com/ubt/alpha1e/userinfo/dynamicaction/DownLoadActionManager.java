@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.business.ActionsDownLoadManagerListener;
+import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.DownloadProgressInfo;
 import com.ubt.alpha1e.event.ActionEvent;
@@ -17,6 +18,7 @@ import com.ubtechinc.base.PublicInterface;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,11 @@ public class DownLoadActionManager {
         action_init, action_playing, action_pause, action_finish
     }
 
+    public enum Action_type {
+        Story_type, Dance_type, Base_type, Custom_type, My_download, My_new, My_download_local, My_new_local, My_gamepad, All, Unkown, MY_WALK, MY_COURSE
+    }
+
+    public static Action_type getDataType = Action_type.Unkown;
     // 所有监听者
     private List<ActionsDownLoadManagerListener> mDownListenerLists;
 
@@ -120,6 +127,22 @@ public class DownLoadActionManager {
 
             } else if (cmd == ConstValue.DV_READ_NETWORK_STATUS) {
 
+            } else if ((cmd & 0xff) == (ConstValue.DV_DO_CHECK_ACTION_FILE_EXIST & 0xff)) {
+                UbtLog.d(TAG, "播放文件是否存在：" + param[0]);
+                downRobotAction(playingInfo);
+                //   doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(FileTools.actions_download_robot_path + "/" + playingInfo.actionName + ".hts"));
+                UbtLog.d(TAG, "播放文件：" + FileTools.actions_download_robot_path + "/" + playingInfo.actionName + ".hts");
+            } else if ((cmd & 0xff) == (ConstValue.UV_GETACTIONFILE & 0xff)) {
+                if (getDataType == Action_type.MY_WALK) {
+                    return;
+                }
+
+                String name = BluetoothParamUtil.bytesToString(param);
+                UbtLog.d(TAG, "获取文件：" + name);
+
+
+            } else if ((cmd & 0xff) == (ConstValue.UV_STOPACTIONFILE & 0xff)) {
+                UbtLog.d(TAG, "获取文件结束");
             }
         }
 
@@ -167,15 +190,35 @@ public class DownLoadActionManager {
 
 
     /**
+     * 获取机器人列表
+     */
+    public void getRobotAction() {
+        try {
+            doSendComm(ConstValue.DV_GETACTIONFILE, (new String(FileTools.actions_download_robot_path)).getBytes("GBK"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
      * 总的处理接口，首先判断文件是否下载过，
      */
     public void dealAction(ActionInfo actionInfo) {
         playingInfo = actionInfo;
 
-        if(isCompletedActionById(actionInfo.actionId)){//本地下载过，直接播放
+        if (isCompletedActionById(actionInfo.actionId)) {//本地下载过，直接播放
+            doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(actionInfo.actionName));
+        } else {
+            String actionName = actionInfo.actionName + ".hts";
+            UbtLog.d(TAG, "checkActionFileExist = " + actionName);
+            try {
+                doSendComm(ConstValue.DV_DO_CHECK_ACTION_FILE_EXIST, actionName.getBytes("GBK"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
 
-        }else {
-
+            //downRobotAction(actionInfo);
         }
     }
 

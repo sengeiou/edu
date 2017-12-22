@@ -20,8 +20,8 @@ public class DynamicActionPresenter extends BasePresenterImpl<DynamicActionContr
             List<DynamicActionModel> list = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 DynamicActionModel dynamicActionModel = new DynamicActionModel();
-                dynamicActionModel.setActionId(i);
-                dynamicActionModel.setActionName("动作舞蹈" + i);
+                dynamicActionModel.setActionId(14456);
+                dynamicActionModel.setActionName("蚂蚁与鸽子");
                 dynamicActionModel.setActionTime(3000);
                 list.add(dynamicActionModel);
             }
