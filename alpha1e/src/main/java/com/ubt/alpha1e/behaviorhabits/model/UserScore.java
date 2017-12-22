@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.behaviorhabits.model;
 
+import com.baoyz.pg.Parcelable;
 import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.utils.GsonImpl;
 
@@ -8,25 +9,21 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-/**
- * Created by Administrator on 2017/12/18.
- */
+@Parcelable
+public class UserScore<T> extends BaseModel {
 
-public class HabitsEvent extends BaseModel{
+    public String userId;
+    public String totalScore;
+    public String percent;
+    public T details;
 
-    public String eventId;
-    public String eventName;
-    public String eventTime;
-    public String status;
-    public String score;
-
-    public HabitsEvent thiz;
+    public UserScore thiz;
 
     @Override
-    public HabitsEvent getThiz(String json) {
+    public UserScore getThiz(String json) {
 
         try {
-            thiz = mMapper.readValue(json, HabitsEvent.class);
+            thiz = mMapper.readValue(json, UserScore.class);
             return thiz;
         } catch (Exception e) {
             thiz = null;
@@ -34,12 +31,12 @@ public class HabitsEvent extends BaseModel{
         }
     }
 
-    public static ArrayList<HabitsEvent> getModelList(String json) {
-        ArrayList<HabitsEvent> result = new ArrayList<HabitsEvent>();
+    public static ArrayList<UserScore> getModelList(String json) {
+        ArrayList<UserScore> result = new ArrayList<UserScore>();
         try {
             JSONArray j_list = new JSONArray(json);
             for (int i = 0; i < j_list.length(); i++) {
-                result.add(new HabitsEvent().getThiz(j_list.get(i).toString()));
+                result.add(new UserScore().getThiz(j_list.get(i).toString()));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -47,7 +44,7 @@ public class HabitsEvent extends BaseModel{
         return result;
     }
 
-    public static String getModeslStr(ArrayList<HabitsEvent> infos) {
+    public static String getModeslStr(ArrayList<UserScore> infos) {
 
         try {
             return mMapper.writeValueAsString(infos);
@@ -70,12 +67,10 @@ public class HabitsEvent extends BaseModel{
 
     @Override
     public String toString() {
-        return "HabitsEvent{" +
-                "eventId=" + eventId +
-                ", eventName='" + eventName + '\'' +
-                ", eventTime='" + eventTime + '\'' +
-                ", status='" + status + '\'' +
-                ", score='" + score + '\'' +
+        return "UserScore{" +
+                "userId=" + userId +
+                ", totalScore='" + totalScore + '\'' +
+                ", percent='" + percent + '\'' +
                 '}';
     }
 }

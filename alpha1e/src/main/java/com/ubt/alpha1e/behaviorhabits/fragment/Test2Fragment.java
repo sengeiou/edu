@@ -11,9 +11,11 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsActivity;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
+import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
+import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -75,14 +77,16 @@ public class Test2Fragment extends MVPBaseFragment<BehaviorHabitsContract.View, 
     }
 
     @Override
-    public void showBehaviourList(boolean status, List<HabitsEvent> modelList, String errorMsg) {
+    public void showBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
 
     }
 
     @Override
-    public void showBehaviourEventContent(boolean status, HabitsEventDetail content, String errorMsg) {
+    public void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg) {
 
     }
+
+
 
     @Override
     public void showBehaviourPlayContent(boolean status, List<PlayContent> playList, String errorMsg) {

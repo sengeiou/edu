@@ -7,8 +7,10 @@ import com.ubt.alpha1e.base.RequstMode.BehaviourControlRequest;
 import com.ubt.alpha1e.base.RequstMode.BehaviourEventRequest;
 import com.ubt.alpha1e.base.RequstMode.BehaviourListRequest;
 import com.ubt.alpha1e.base.RequstMode.BehaviourSaveUpdateRequest;
+import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
+import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
@@ -36,13 +38,12 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
     private static final int GET_BEHAVIOURPLAYCONTENT_CMD=3;
     private static final int GET_BEHAVIOURCONTROL_CMD=4;
     private static final int GET_BEHAVIOURSAVEUPDATE_CMD=5;
-    String url = "http://10.10.1.54:11808/mockjs/72/habit/item/getTotalScore?token=fdgadf&type=agdf";
-    private String getTemplatePath="/behaviour/template/get";
-    private String getEventPath="/behaviour/event/get";
-    private String SaveModifyEventPath="/behaviour/event/update";
+    String url = "http://10.10.1.14:8090";
+    private String getTemplatePath="/alpha1e/event/getEventList";
+    private String getEventPath="/alpha1e/event/getUserEvent";
+    private String SaveModifyEventPath="/alpha1e/event/updateUserEvent";
     private String ControlEventPath="/behaviour/template/update";
     private String getPlayContentPath="/behaviour/template/getEventContent";
-    private boolean mock=true;
 
     @Override
     public void doTest() {
@@ -105,13 +106,14 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                 UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage());
                 switch (id){
                     case GET_BEHAVIOURLIST_CMD:
-                        mView.showBehaviourList(false,null,mView.getContext().getResources().getString(R.string.network_request_error));
+                        mView.showBehaviourList(false,null,"network error");
                         break;
                     case GET_BEHAVIOUREVENT_CMD:
                         break;
                     case GET_BEHAVIOURCONTROL_CMD:
                         break;
                     case GET_BEHAVIOURSAVEUPDATE_CMD:
+
                         break;
                     default:
                         break;
@@ -121,35 +123,26 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
             @Override
             public void onResponse(String response, int id) {
                 UbtLog.d(TAG,"response = " + response);
-                BaseResponseModel<BaseModel> baseResponseModel = GsonImpl.get().toObject(response,new TypeToken<BaseResponseModel<BaseModel>>() {}.getType());
-
-                switch (id){
+                switch (id) {
                     case GET_BEHAVIOURLIST_CMD:
-                    {
-                        if(mock){
-                            List<HabitsEvent> modelList = new ArrayList<>();
-                            HabitsEvent mHabitsEvent=new HabitsEvent();
-                            mHabitsEvent.setEventId("46");
-                            mHabitsEvent.setEventName("早餐");
-                            mHabitsEvent.setEventTime("07:30");
-                            HabitsEvent mHabitsEvent1=new HabitsEvent();
-                            mHabitsEvent1.setEventId("46");
-                            mHabitsEvent1.setEventName("午餐");
-                            mHabitsEvent1.setEventTime("07:30");
-                            modelList.add(mHabitsEvent);
-                            modelList.add(mHabitsEvent1);
-                            mView.showBehaviourList(true,modelList,mView.getContext().getResources().getString(R.string.network_request_success));
-                        }else {
-                            List<HabitsEvent> modelList = new ArrayList<>();
-                            mView.showBehaviourList(true,modelList,mView.getContext().getResources().getString(R.string.network_request_success));
-                        }
-                    }
-                    break;
+                        BaseResponseModel<UserScore<List<HabitsEvent>>> baseResponseModel = GsonImpl.get().toObject(response,
+                                new TypeToken<BaseResponseModel<UserScore<List<HabitsEvent>>>>() {
+                                }.getType());//加上type转换，避免泛型擦除
+                        UbtLog.d(TAG, "baseResponseModel = " + baseResponseModel.models);
+                        UbtLog.d(TAG, "baseResponseModel percent = " + ((UserScore) baseResponseModel.models).percent);
+                        UbtLog.d(TAG, "baseResponseModel details = " + ((List<HabitsEvent>) (((UserScore) baseResponseModel.models).details)));
+                        mView.showBehaviourList(true,((UserScore) baseResponseModel.models),"success");
+                        break;
                     case GET_BEHAVIOUREVENT_CMD:
+                        BaseResponseModel<EventDetail>baseResponseModel1=GsonImpl.get().toObject(response,new TypeToken<BaseResponseModel<EventDetail>>(){
+                        }.getType());
+                        UbtLog.d(TAG, "GET_BEHAVIOUREVENT_CMD baseResponseModel = " + baseResponseModel1.models.contentIds.get(2));
+                        mView.showBehaviourEventContent(true,(EventDetail)baseResponseModel1.models,"success");
                         break;
                     case GET_BEHAVIOURCONTROL_CMD:
                         break;
                     case GET_BEHAVIOURSAVEUPDATE_CMD:
+
                         break;
                     default:
                         break;

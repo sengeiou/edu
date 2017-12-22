@@ -1,8 +1,10 @@
 package com.ubt.alpha1e.behaviorhabits;
 
+import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
+import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
 
@@ -17,9 +19,9 @@ public class BehaviorHabitsContract {
     public interface View extends BaseView {
         void onTest(boolean isSuccess);
         //显示行为列表以及分数
-        void showBehaviourList(boolean status,List<HabitsEvent> modelList,String errorMsg);
+        void showBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg);
         //显示编辑的EventID具体内容
-        void showBehaviourEventContent(boolean status,HabitsEventDetail content,String errorMsg);
+        void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg);
         //显示行为习惯播放内容
         void showBehaviourPlayContent(boolean status,List<PlayContent> playList,String errorMsg);
         void showNetworkRequestError();

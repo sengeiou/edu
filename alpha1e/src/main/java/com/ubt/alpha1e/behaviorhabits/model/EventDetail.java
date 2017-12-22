@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.behaviorhabits.model;
 
+import com.baoyz.pg.Parcelable;
 import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.utils.GsonImpl;
 
@@ -9,24 +10,28 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 /**
- * Created by Administrator on 2017/12/18.
+ * @作者：ubt
+ * @日期: 2017/12/22 16:47
+ * @描述:
  */
 
-public class HabitsEvent extends BaseModel{
-
+@Parcelable
+public class EventDetail extends BaseModel{
+    public String userId;
     public String eventId;
     public String eventName;
     public String eventTime;
+    public String remindFirst;
+    public String remindSecond;
     public String status;
-    public String score;
-
-    public HabitsEvent thiz;
-
+    public String type;
+    public ArrayList contentIds;
+    public EventDetail thiz;
     @Override
-    public HabitsEvent getThiz(String json) {
+    public EventDetail getThiz(String json) {
 
         try {
-            thiz = mMapper.readValue(json, HabitsEvent.class);
+            thiz = mMapper.readValue(json, EventDetail.class);
             return thiz;
         } catch (Exception e) {
             thiz = null;
@@ -34,12 +39,12 @@ public class HabitsEvent extends BaseModel{
         }
     }
 
-    public static ArrayList<HabitsEvent> getModelList(String json) {
-        ArrayList<HabitsEvent> result = new ArrayList<HabitsEvent>();
+    public static ArrayList<EventDetail> getModelList(String json) {
+        ArrayList<EventDetail> result = new ArrayList<EventDetail>();
         try {
             JSONArray j_list = new JSONArray(json);
             for (int i = 0; i < j_list.length(); i++) {
-                result.add(new HabitsEvent().getThiz(j_list.get(i).toString()));
+                result.add(new EventDetail().getThiz(j_list.get(i).toString()));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -47,7 +52,7 @@ public class HabitsEvent extends BaseModel{
         return result;
     }
 
-    public static String getModeslStr(ArrayList<HabitsEvent> infos) {
+    public static String getModeslStr(ArrayList<EventDetail> infos) {
 
         try {
             return mMapper.writeValueAsString(infos);
@@ -70,12 +75,16 @@ public class HabitsEvent extends BaseModel{
 
     @Override
     public String toString() {
-        return "HabitsEvent{" +
-                "eventId=" + eventId +
+        return "EventDetail{" +
+                "userId="+userId+ '\''+
+                "eventId=" + eventId + '\''+
                 ", eventName='" + eventName + '\'' +
                 ", eventTime='" + eventTime + '\'' +
+                ", remindFirst='" + remindFirst + '\'' +
+                ", remindSecond='" + remindSecond + '\'' +
                 ", status='" + status + '\'' +
-                ", score='" + score + '\'' +
+                ", contentIds='" + contentIds + '\'' +
+                ", type='" + type + '\'' +
                 '}';
     }
 }
