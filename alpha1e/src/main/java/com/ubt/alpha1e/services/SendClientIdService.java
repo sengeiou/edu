@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
@@ -12,9 +14,16 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Parcelable;
 import android.provider.Settings;
+import android.view.View;
 
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.event.RobotEvent;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.UnbindConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
 import com.ubt.alpha1e.ui.helper.SendClientIdHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -29,6 +38,7 @@ public class SendClientIdService extends Service {
 
 	private static final String TAG = "SendClientIdService";
 	private static final int SCAN_TO_CONNECT = 3;
+	private static final int CONNECT_WIFI = 4;
 
 	private static SendClientIdService instance = null;
 
@@ -45,6 +55,130 @@ public class SendClientIdService extends Service {
 			switch (msg.what){
 				case SCAN_TO_CONNECT:
 
+					break;
+				case CONNECT_WIFI:
+					UbtLog.d(TAG, "-CONNECT_WIFI-");
+//					new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+//							.setTitle("请将账户与机器人绑定以开通功能")
+//							.setMsg("1、“行为习惯养成”功能 \n2、控制机器人版本升级")
+//							.setCancelable(true)
+//							.setPositiveButton("一键绑定", new View.OnClickListener() {
+//								@Override
+//								public void onClick(View view) {
+//									UbtLog.d(TAG, "一键绑定 ");
+//								}
+//							})
+//							.setNegativeButton("暂不", new View.OnClickListener() {
+//								@Override
+//								public void onClick(View view) {
+//									UbtLog.d(TAG, "暂不 ");
+//								}
+//							}).show();
+
+//					new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+//							.setTitle("提示")
+//							.setMsg("该机器人已被其他账号绑定部分功能不可用！")
+//							.setCancelable(true)
+//							.setPositiveButton("我知道了", new View.OnClickListener() {
+//								@Override
+//								public void onClick(View view) {
+//									UbtLog.d(TAG, "我知道了 ");
+//								}
+//							})
+//							.show();
+
+//							new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+//							.setTitle("你的账户连接了一台新机器人")
+//							.setMsg("是否要解绑之前的机器人，绑定当前机器人")
+//							.setCancelable(true)
+//							.setPositiveButton("更换绑定", new View.OnClickListener() {
+//								@Override
+//								public void onClick(View view) {
+//									UbtLog.d(TAG, "更换绑定 ");
+//								}
+//							})
+//							.setNegativeButton("暂不", new View.OnClickListener() {
+//								@Override
+//								public void onClick(View view) {
+//									UbtLog.d(TAG, "暂不 ");
+//								}
+//							}).show();
+
+//					new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+//							.setTitle("提示")
+//							.setMsg("如要使用此功能，需先绑定机器人")
+//							.setCancelable(true)
+//							.setPositiveButton("一键绑定", new View.OnClickListener() {
+//								@Override
+//								public void onClick(View view) {
+//									UbtLog.d(TAG, "一键绑定 ");
+//								}
+//							})
+//							.setNegativeButton("暂不", new View.OnClickListener() {
+//								@Override
+//								public void onClick(View view) {
+//									UbtLog.d(TAG, "暂不 ");
+//								}
+//							}).show();
+
+//					Drawable img_ok;
+//					Resources res1 = getResources();
+//					img_ok = res1.getDrawable(R.drawable.ic_bind_success);
+//					new RobotBindDialog(AppManager.getInstance().currentActivity()).builder()
+//							.setTitle("绑定成功！")
+//							.setMsg("可到“个人中心-设置-我的机器人”查看状态。")
+//							.setCancelable(true)
+//							.setPositiveButton("我知道了", new View.OnClickListener() {
+//								@Override
+//								public void onClick(View view) {
+//									UbtLog.d(TAG, "我知道了 ");
+//								}
+//							})
+//							.setTitlePicture(img_ok)
+//					        .setNoTitleLayout()
+//							.show();
+
+//					Drawable img_off;
+//					Resources res2 = getResources();
+//					img_off = res2.getDrawable(R.drawable.ic_bind_fail);
+//					new RobotBindDialog(AppManager.getInstance().currentActivity()).builder()
+//							.setTitle("绑定失败！")
+//							.setCancelable(true)
+//							.setPositiveButton("重试", new View.OnClickListener() {
+//								@Override
+//								public void onClick(View view) {
+//									UbtLog.d(TAG, "重试 ");
+//								}
+//							})
+//							.setNegativeButton("取消", new View.OnClickListener() {
+//								@Override
+//								public void onClick(View view) {
+//									UbtLog.d(TAG, "取消 ");
+//								}
+//							})
+//							.setTitlePicture(img_off)
+//							.setNoTitleLayout()
+//							.show();
+
+
+					new UnbindConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+							.setTitle("解绑机器人后，将无法使用：")
+							.setUnbindMsg("1、“行为习惯养成”功能\n" +
+									"2、控制机器人邦本升级\n"+"  确定要解绑么？")
+							.setCancelable(true)
+							.setPositiveButton("解绑", new View.OnClickListener() {
+								@Override
+								public void onClick(View view) {
+									UbtLog.d(TAG, "解绑 ");
+								}
+							})
+							.setNegativeButton("取消", new View.OnClickListener() {
+								@Override
+								public void onClick(View view) {
+									UbtLog.d(TAG, "取消 ");
+								}
+							})
+							.show();
 					break;
 
 				default:
@@ -103,6 +237,16 @@ public class SendClientIdService extends Service {
 		if(event.getEvent() == RobotEvent.Event.BLUETOOTH_SEND_CLIENTID_SUCCESS){
 			UbtLog.d(TAG, "-发送clientId成功-");
 			isSendClientId = true ;
+			sendClientIdHelper.sendCmdReadSN();
+		}else if(event.getEvent() == RobotEvent.Event.BLUETOOTH_GET_ROBOT_SN_SUCCESSS){
+			UbtLog.d(TAG, "-获取到sn成功-");
+			if(SendClientIdService.this != null && ((AlphaApplication) SendClientIdService.this.getApplication()).getmCurrentNetworkInfo() != null){
+				com.ubt.alpha1e.data.model.NetworkInfo networkInfo = ((AlphaApplication) SendClientIdService.this.getApplication()).getmCurrentNetworkInfo();
+				UbtLog.d(TAG,"机器人网络为：  "+ networkInfo.name);
+				mHandler.sendEmptyMessage(CONNECT_WIFI);
+			}else {
+				UbtLog.d(TAG,"机器人网络为null  ");
+			}
 		}
 
 	}

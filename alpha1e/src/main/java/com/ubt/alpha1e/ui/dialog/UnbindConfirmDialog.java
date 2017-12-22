@@ -2,23 +2,22 @@ package com.ubt.alpha1e.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.text.Html;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 
 /**
- * Created by liuqiang on 10/23/15.
+ * Created by dicy.cheng on 10/23/15.
  */
-public class ConfirmDialog {
+public class UnbindConfirmDialog {
     private Context context;
     private Dialog dialog;
     private LinearLayout lLayout_bg;
@@ -32,13 +31,13 @@ public class ConfirmDialog {
     private boolean showPosBtn = false;
     private boolean showNegBtn = false;
 
-    public ConfirmDialog(Context context) {
+    public UnbindConfirmDialog(Context context) {
         this.context = context;
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         display = windowManager.getDefaultDisplay();
     }
 
-    public ConfirmDialog builder() {
+    public UnbindConfirmDialog builder() {
         // 获取Dialog布局
         View view = LayoutInflater.from(context).inflate(R.layout.view_comfirmdialog, null);
 
@@ -64,7 +63,7 @@ public class ConfirmDialog {
         return this;
     }
 
-    public ConfirmDialog setTitle(String title) {
+    public UnbindConfirmDialog setTitle(String title) {
         showTitle = true;
         if ("".equals(title)) {
             txt_title.setText("标题");
@@ -74,7 +73,7 @@ public class ConfirmDialog {
         return this;
     }
 
-    public ConfirmDialog setMsg(String msg) {
+    public UnbindConfirmDialog setMsg(String msg) {
         showMsg = true;
         if ("".equals(msg)) {
             txt_msg.setText("内容");
@@ -84,13 +83,24 @@ public class ConfirmDialog {
         return this;
     }
 
-    public ConfirmDialog setCancelable(boolean cancel) {
+    public UnbindConfirmDialog setUnbindMsg(String msg) {
+        showMsg = true;
+        if ("".equals(msg)) {
+            txt_msg.setText("内容");
+        } else {
+            txt_msg.setText(Html.fromHtml("1、“行为习惯养成”功能<br>" +
+                    "2、控制机器人邦本升级<br><font color='#ff0000'>  确定要解绑么？</font>"));
+        }
+        return this;
+    }
+
+    public UnbindConfirmDialog setCancelable(boolean cancel) {
         dialog.setCancelable(cancel);
         return this;
     }
 
-    public ConfirmDialog setPositiveButton(String text,
-                                           final View.OnClickListener listener) {
+    public UnbindConfirmDialog setPositiveButton(String text,
+                                                 final View.OnClickListener listener) {
         showPosBtn = true;
         if ("".equals(text)) {
             btn_pos.setText("确定");
@@ -107,7 +117,7 @@ public class ConfirmDialog {
         return this;
     }
 
-    public ConfirmDialog setNegativeButton(String text, final View.OnClickListener listener) {
+    public UnbindConfirmDialog setNegativeButton(String text, final View.OnClickListener listener) {
         showNegBtn = true;
         if ("".equals(text)) {
             btn_neg.setText("取消");

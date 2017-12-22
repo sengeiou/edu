@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lLayout_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:minWidth="300dp"
+        android:minHeight="150dp"
+        android:background="@drawable/alert_backgroud">
+
+        <LinearLayout
+            android:id="@+id/ll_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:paddingTop="10dp"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/txt_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="80dp"
+                android:gravity="center"
+                android:textColor="@color/T1"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/txt_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:textColor="@color/T21"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/ll_msg"
+            android:layout_marginBottom="20dp">
+
+            <Button
+                android:id="@+id/btn_neg"
+                android:layout_width="wrap_content"
+                android:minWidth="120dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_alert_bg"
+                android:gravity="center"
+                android:textColor="@color/T21"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn_pos"
+                android:layout_width="wrap_content"
+                android:minWidth="120dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/btn_alert_bg"
+                android:gravity="center"
+                android:textColor="@color/T21"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

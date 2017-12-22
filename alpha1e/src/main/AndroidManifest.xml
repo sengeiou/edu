@@ -13,7 +13,7 @@
           package="com.ubt.alpha1e"
           android:versionCode="1"
           android:versionName="V1.0.0.10">
-    
+
     <meta-data
         android:name="design_width"
         android:value="1920"></meta-data>
