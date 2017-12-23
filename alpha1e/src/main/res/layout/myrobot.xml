@@ -270,6 +270,9 @@
                     android:gravity="center"
                     android:textSize="13sp"
                     android:textColor="#A1BBC9"
+                    android:lineSpacingExtra="1dp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:textColorHint="#3B6176"/>
                 <TextView
                     android:id="@+id/tv_updtate_state"
@@ -340,7 +343,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="61dp"
             android:textSize="15sp"
-            android:text="一键绑定"
+            android:text="解除绑定"
             android:textColor="@color/white"
             android:layout_marginBottom="45dp"
             android:background="@drawable/btn_bind"/>

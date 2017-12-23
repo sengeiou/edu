@@ -461,26 +461,5 @@ public class SendClientIdService extends Service {
 					.show();
 	}
 
-	//解绑机器人后，将无法使用
-	public void adviceUnBind(){
-			new UnbindConfirmDialog(AppManager.getInstance().currentActivity()).builder()
-			.setTitle("解绑机器人后，将无法使用：")
-			.setUnbindMsg("1、“行为习惯养成”功能\n" +
-					"2、控制机器人邦本升级\n"+"  确定要解绑么？")
-			.setCancelable(true)
-			.setPositiveButton("解绑", new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					UbtLog.d(TAG, "解绑 ");
-				}
-			})
-			.setNegativeButton("取消", new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					UbtLog.d(TAG, "取消 ");
-				}
-			})
-			.show();
-	}
 
 }
