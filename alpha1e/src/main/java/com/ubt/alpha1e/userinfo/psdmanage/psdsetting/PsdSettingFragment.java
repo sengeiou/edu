@@ -54,6 +54,11 @@ public class PsdSettingFragment extends MVPBaseFragment<PsdSettingContract.View,
         }
     };
 
+    public static PsdSettingFragment newInstance(){
+        PsdSettingFragment psdSettingFragment = new PsdSettingFragment();
+        return psdSettingFragment;
+    }
+
     public PsdSettingFragment() {
 
     }

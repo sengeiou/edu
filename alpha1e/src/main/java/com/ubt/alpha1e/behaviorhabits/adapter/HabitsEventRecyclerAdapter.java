@@ -30,13 +30,15 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     private Context mContext;
     public List<HabitsEventInfo> mDatas = new ArrayList<>();
     private View mView;
+    private boolean isSinpleShow;
     private Handler mHandler = null;
 
-    public HabitsEventRecyclerAdapter(Context mContext, List<HabitsEventInfo> list, Handler handler) {
+    public HabitsEventRecyclerAdapter(Context mContext, List<HabitsEventInfo> list, boolean isSinpleShow, Handler handler) {
         super();
         this.mContext = mContext;
         this.mDatas = list;
         this.mHandler = handler;
+        this.isSinpleShow = isSinpleShow;
     }
 
     public void setData(List<HabitsEventInfo>  data) {
@@ -48,9 +50,11 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
         MyHabitsEventHolder myHolder  = (MyHabitsEventHolder) holder;
         HabitsEventInfo habitsEventInfo = mDatas.get(position);
-        if("1".equals(habitsEventInfo.eventSwitch)){
+
+        if("1".equals(habitsEventInfo.eventSwitch) || isSinpleShow){
             myHolder.ivEventSwitch.setBackgroundResource(R.drawable.icon_habits_switch_open);
             myHolder.ivEventLogo.setBackgroundResource(R.drawable.icon_habits_awake_highlight);
+
         }else {
             myHolder.ivEventSwitch.setBackgroundResource(R.drawable.icon_habits_switch_close);
             myHolder.ivEventLogo.setBackgroundResource(R.drawable.icon_habits_awake_grey);
@@ -59,25 +63,38 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         myHolder.tvEventTime.setText(habitsEventInfo.eventTime);
         myHolder.tvEventName.setText(habitsEventInfo.eventName);
 
-        myHolder.ivEventSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Message msg = new Message();
-                msg.what = ParentManageCenterFragment.CLICK_SWITCH_EVENT;
-                msg.arg1 = position;
-                mHandler.sendMessage(msg);
-            }
-        });
+        if(isSinpleShow){
+            myHolder.ivEventSwitch.setVisibility(View.GONE);
+            myHolder.tvRight.setVisibility(View.GONE);
 
-        myHolder.rlHibitsEventInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Message msg = new Message();
-                msg.what = ParentManageCenterFragment.SHOW_EVENT_INFO;
-                msg.arg1 = position;
-                mHandler.sendMessage(msg);
-            }
-        });
+            myHolder.rlRight.setVisibility(View.VISIBLE);
+            myHolder.ivStar1.setBackgroundResource(R.drawable.icon_habits_star_highlight);
+            myHolder.ivStar2.setBackgroundResource(R.drawable.icon_habits_star_grey);
+            myHolder.tvScore.setText("5分");
+
+        }else {
+            myHolder.ivEventSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Message msg = new Message();
+                    msg.what = ParentManageCenterFragment.CLICK_SWITCH_EVENT;
+                    msg.arg1 = position;
+                    mHandler.sendMessage(msg);
+                }
+            });
+
+            myHolder.rlHibitsEventInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Message msg = new Message();
+                    msg.what = ParentManageCenterFragment.SHOW_EVENT_INFO;
+                    msg.arg1 = position;
+                    mHandler.sendMessage(msg);
+                }
+            });
+        }
+
+
     }
 
     @Override
@@ -97,20 +114,24 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     public static class MyHabitsEventHolder extends RecyclerView.ViewHolder
     {
 
-        public RelativeLayout rlHibitsEventInfo;
-        public ImageView ivEventSwitch,ivEventLogo,ivRight;
-        public TextView tvEventTime,tvEventName;
+        public RelativeLayout rlHibitsEventInfo,rlRight;
+        public ImageView ivEventSwitch,ivEventLogo,ivStar1,ivStar2;
+        public TextView tvEventTime,tvEventName,tvScore,tvRight;
 
         public MyHabitsEventHolder(View view)
         {
             super(view);
 
             rlHibitsEventInfo  = (RelativeLayout) view.findViewById(R.id.rl_hibits_event_info);
+            rlRight  = (RelativeLayout) view.findViewById(R.id.rl_right);
             ivEventSwitch = (ImageView) view.findViewById(R.id.iv_event_switch);
             ivEventLogo = (ImageView) view.findViewById(R.id.iv_event_logo);
-            ivRight = (ImageView) view.findViewById(R.id.iv_right);
+            ivStar1 = (ImageView) view.findViewById(R.id.iv_star_1);
+            ivStar2 = (ImageView) view.findViewById(R.id.iv_star_2);
             tvEventTime = (TextView) view.findViewById(R.id.tv_event_time);
             tvEventName = (TextView) view.findViewById(R.id.tv_event_name);
+            tvScore = (TextView) view.findViewById(R.id.tv_score);
+            tvRight = (TextView) view.findViewById(R.id.tv_right);
         }
     }
 

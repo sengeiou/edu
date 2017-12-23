@@ -56,6 +56,11 @@ public class HotQuestionFragment extends MVPBaseFragment<HotQuestionContract.Vie
         }
     };
 
+    public static HotQuestionFragment newInstance(){
+        HotQuestionFragment hotQuestionFragment = new HotQuestionFragment();
+        return hotQuestionFragment;
+    }
+
     public HotQuestionFragment() {
 
     }

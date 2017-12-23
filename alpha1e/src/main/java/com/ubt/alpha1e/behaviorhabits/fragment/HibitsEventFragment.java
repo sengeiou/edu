@@ -13,26 +13,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baoyz.pg.PG;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.ToastUtils;
-import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsActivity;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.adapter.HabitsEventRecyclerAdapter;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
-import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventInfo;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
-import com.ubt.alpha1e.mvp.MVPBaseFragment;
-import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.data.Constant;
+import com.ubt.alpha1e.mvp.MVPBaseFragment;
+import com.ubt.alpha1e.ui.custom.CircleBar;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.InputPasswordDialog;
+import com.ubt.alpha1e.utils.log.UbtLog;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,12 +47,11 @@ import butterknife.Unbinder;
  * 邮箱 784787081@qq.com
  */
 
-public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsContract.View, BehaviorHabitsPresenter> implements BehaviorHabitsContract.View {
+public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.View, BehaviorHabitsPresenter> implements BehaviorHabitsContract.View {
 
-    private static final String TAG = ParentManageCenterFragment.class.getSimpleName();
+    private static final String TAG = HibitsEventFragment.class.getSimpleName();
 
-    public static final int CLICK_SWITCH_EVENT = 1;
-    public static final int SHOW_EVENT_INFO = 2;
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     Unbinder unbinder;
     @BindView(R.id.ll_base_back)
@@ -61,64 +62,42 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
     ImageView ivTitleRight;
     @BindView(R.id.rv_habits_event)
     RecyclerView rvHabitsEvent;
-
-    @BindView(R.id.iv_workdays)
-    ImageView ivWorkdays;
-    @BindView(R.id.tv_workdays)
-    TextView tvWorkdays;
-    @BindView(R.id.rl_workdays)
-    RelativeLayout rlWorkdays;
-    @BindView(R.id.iv_workdays_select)
-    ImageView ivWorkdaysSelect;
-    @BindView(R.id.iv_holidays)
-    ImageView ivHolidays;
-    @BindView(R.id.tv_holidays)
-    TextView tvHolidays;
-    @BindView(R.id.iv_holidays_select)
-    ImageView ivHolidaysSelect;
+    @BindView(R.id.tv_today)
+    TextView tvToday;
+    @BindView(R.id.cb_score)
+    CircleBar cbScore;
+    @BindView(R.id.tv_ratio)
+    TextView tvRatio;
+    @BindView(R.id.tv_score)
+    TextView tvScore;
 
     public HabitsEventRecyclerAdapter mAdapter;
     private List<HabitsEventInfo> mHabitsEventInfoDatas = null;
-    private boolean isWorkdayMode = true;
 
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
-                case CLICK_SWITCH_EVENT:
-                    //切换开关
-                    HabitsEventInfo habitsEventInfo = mHabitsEventInfoDatas.get(msg.arg1);
-                    if("1".equals(habitsEventInfo.eventSwitch)){
-                        habitsEventInfo.eventSwitch = "0";
-                    }else {
-                        habitsEventInfo.eventSwitch = "1";
-                    }
-                    mAdapter.notifyItemChanged(msg.arg1);
-                    break;
-                case SHOW_EVENT_INFO:
-                    //显示详情
-                    UbtLog.d(TAG,"--SHOW_EVENT_INFO--");
 
-                    startForResult(HibitsEventEditFragment.newInstance(mHabitsEventInfoDatas.get(msg.arg1)), Constant.HIBITS_EVENT_EDIT_REQUEST_CODE);
-
-                    break;
-            }
         }
     };
 
-    public static ParentManageCenterFragment newInstance() {
-        ParentManageCenterFragment manageCenterFragment = new ParentManageCenterFragment();
-        Bundle bundle = new Bundle();
-        manageCenterFragment.setArguments(bundle);
-        return manageCenterFragment;
+    public static HibitsEventFragment newInstance() {
+        HibitsEventFragment hibitsEventFragment = new HibitsEventFragment();
+        return hibitsEventFragment;
     }
 
     @Override
     protected void initUI() {
-        tvBaseTitleName.setText(getStringRes("ui_habits_parent_management_center"));
-        ivTitleRight.setBackgroundResource(R.drawable.icon_habits_statistics);
+        UbtLog.d(TAG, "--initUI--");
+        tvBaseTitleName.setText(getStringRes("ui_habits_alert_event"));
+        ivTitleRight.setBackgroundResource(R.drawable.icon_habits_parentscentral);
         ivTitleRight.setVisibility(View.VISIBLE);
+
+        tvToday.setText(sdf.format(new Date()));
+        tvRatio.setText(getStringRes("ui_habits_has_finish") + "25%");
+        tvScore.setText("30");
+        cbScore.setSweepAngle(25f);
 
         mHabitsEventInfoDatas = new ArrayList<>();
 
@@ -184,7 +163,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
             }
         });
 
-        mAdapter = new HabitsEventRecyclerAdapter(getContext(), mHabitsEventInfoDatas,false, mHandler);
+        mAdapter = new HabitsEventRecyclerAdapter(getContext(), mHabitsEventInfoDatas, true, mHandler);
         rvHabitsEvent.setAdapter(mAdapter);
     }
 
@@ -195,7 +174,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
 
     @Override
     public int getContentViewId() {
-        return R.layout.fragment_parent_manage_center;
+        return R.layout.fragment_hibits_event;
     }
 
     @Override
@@ -220,9 +199,9 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
     @Override
     public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
         super.onFragmentResult(requestCode, resultCode, data);
-        UbtLog.d(TAG,"requestCode = " + requestCode);
-        if(requestCode == Constant.HIBITS_EVENT_EDIT_REQUEST_CODE && resultCode == Constant.HIBITS_EVENT_EDIT_RESPONSE_CODE ){
-            UbtLog.d(TAG,"resultCode = " + resultCode + "   " + data.getParcelable(Constant.HABITS_EVENT_INFO_KEY));
+        UbtLog.d(TAG, "requestCode = " + requestCode);
+        if (requestCode == Constant.HIBITS_EVENT_EDIT_REQUEST_CODE && resultCode == Constant.HIBITS_EVENT_EDIT_RESPONSE_CODE) {
+            UbtLog.d(TAG, "resultCode = " + resultCode + "   " + data.getParcelable(Constant.HABITS_EVENT_INFO_KEY));
         }
 
     }
@@ -258,48 +237,39 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
     }
 
 
-    @OnClick({R.id.ll_base_back, R.id.iv_title_right, R.id.rl_workdays, R.id.rl_holidays})
+    @OnClick({R.id.ll_base_back, R.id.iv_title_right})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_back:
-                pop();
+                getActivity().finish();
                 break;
             case R.id.iv_title_right:
-                mPresenter.getBehaviourList("1","5");
-                mPresenter.getBehaviourEvent("12345");
-                mPresenter.getBehaviourPlayContent("1","6");
-                mPresenter.setBehaviourEvent("1234",1);
-                break;
-            case R.id.rl_workdays:
-                switchMode();
-                break;
-            case R.id.rl_holidays:
-                switchMode();
+                enterParentManageCenter();
                 break;
         }
     }
 
-    private void switchMode(){
-        if(isWorkdayMode){
-            isWorkdayMode = false;
-            ivWorkdays.setBackgroundResource(R.drawable.icon_habits_workdays_unselected);
-            tvWorkdays.setTextColor(getResources().getColor(R.color.T26));
-            ivWorkdaysSelect.setVisibility(View.INVISIBLE);
+    /**
+     * 进入家长管理中心
+     */
+    private void enterParentManageCenter() {
 
-            ivHolidays.setBackgroundResource(R.drawable.icon_habits_holidays_selected);
-            tvHolidays.setTextColor(getResources().getColor(R.color.T25));
-            ivHolidaysSelect.setVisibility(View.VISIBLE);
+        new InputPasswordDialog(getContext()).builder()
+                .setMsg(getStringRes("ui_habits_password_input_tip"))
+                .setCancelable(true)
+                .setPassword("123456")
+                .setCallbackListener(new InputPasswordDialog.IInputPasswordListener() {
+                    @Override
+                    public void onCorrectPassword() {
+                        startForResult(ParentManageCenterFragment.newInstance(), 0);
+                    }
 
-        }else {
-            isWorkdayMode = true;
-            ivWorkdays.setBackgroundResource(R.drawable.icon_habits_workdays_selected);
-            tvWorkdays.setTextColor(getResources().getColor(R.color.T25));
-            ivWorkdaysSelect.setVisibility(View.VISIBLE);
+                    @Override
+                    public void onFindPassword() {
 
-            ivHolidays.setBackgroundResource(R.drawable.icon_habits_holidays_unselected);
-            tvHolidays.setTextColor(getResources().getColor(R.color.T26));
-            ivHolidaysSelect.setVisibility(View.INVISIBLE);
-        }
+                    }
+                })
+                .show();
 
     }
 

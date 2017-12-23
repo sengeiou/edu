@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -492,9 +493,15 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     }
 
     @Override
-    public void onBackPressed() {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() ==KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            onBack();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void onBack() {
         dealUI();
-        super.onBackPressed();
     }
 
     //处理相应界面

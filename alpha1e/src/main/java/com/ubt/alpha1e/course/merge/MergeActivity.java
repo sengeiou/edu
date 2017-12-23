@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -354,7 +355,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
-                onBackPressed();
+                onBack();
                 break;
             case R.id.tv_next:
                 if(isGoingNext){
@@ -375,7 +376,17 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     }
 
     @Override
-    public void onBackPressed() {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() ==KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            onBack();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 返回
+     */
+    public void onBack() {
         if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 1 ){
             ((PrincipleHelper) mHelper).doInit();
             ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);

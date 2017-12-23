@@ -1,5 +1,7 @@
 package com.ubt.alpha1e.behaviorhabits;
 
+import android.content.Context;
+
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
@@ -25,6 +27,9 @@ public class BehaviorHabitsContract {
         //显示行为习惯播放内容
         void showBehaviourPlayContent(boolean status,List<PlayContent> playList,String errorMsg);
         void showNetworkRequestError();
+
+        //提醒对话框点击
+        void onAlertSelectItem(int index,String language,int alertType);
     }
 
     public interface  Presenter extends BasePresenter<View> {
@@ -41,5 +46,8 @@ public class BehaviorHabitsContract {
         void setBehaviourEvent(String eventId, int status);
         //保存编辑的行为习惯
         void saveBehaviourEvent(HabitsEventDetail content);
+
+        //显示提醒时间对话框
+        void showAlertDialog(Context context, int currentPosition, List<String> alertList, int alertType);
     }
 }

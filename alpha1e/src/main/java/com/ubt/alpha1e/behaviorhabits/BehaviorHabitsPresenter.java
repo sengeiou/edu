@@ -1,6 +1,15 @@
 package com.ubt.alpha1e.behaviorhabits;
 
+import android.content.Context;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+
 import com.google.gson.reflect.TypeToken;
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.OnClickListener;
+import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.BehaviourControlRequest;
@@ -17,6 +26,7 @@ import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.weigan.loopview.LoopView;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
@@ -94,6 +104,39 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
         doRequestFromWeb(url+SaveModifyEventPath, mBehaviourSaveUpdateRequest,GET_BEHAVIOURSAVEUPDATE_CMD);
     }
 
+    @Override
+    public void showAlertDialog(Context context, int currentPosition, final List<String> alertList, final int alertType) {
+        View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_useredit_wheel, null);
+        ViewHolder viewHolder = new ViewHolder(contentView);
+        final LoopView loopView = (LoopView) contentView.findViewById(R.id.loopView);
+        TextView textView = contentView.findViewById(R.id.tv_wheel_name);
+        textView.setVisibility(View.GONE);
+        DialogPlus.newDialog(context)
+                .setContentHolder(viewHolder)
+                .setGravity(Gravity.BOTTOM)
+                .setCancelable(true)
+                .setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(DialogPlus dialog, View view) {
+                        if (view.getId() == R.id.btn_sure) {
+                            if (isAttachView()) {
+                                mView.onAlertSelectItem(loopView.getSelectedItem(),alertList.get(loopView.getSelectedItem()),alertType);
+                            }
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .create().show();
+        // 设置原始数据
+        loopView.setItems(alertList);
+        loopView.setInitPosition(0);
+        UbtLog.d("currentPosition","currentPosition => " + currentPosition);
+        if(currentPosition < 0){
+            loopView.setCurrentPosition(0);
+        }else {
+            loopView.setCurrentPosition(currentPosition);
+        }
+    }
 
     /**
      * 请求网络操作

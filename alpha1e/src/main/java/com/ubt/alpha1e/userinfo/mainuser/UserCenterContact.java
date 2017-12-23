@@ -1,8 +1,9 @@
 package com.ubt.alpha1e.userinfo.mainuser;
 
 
-import android.app.Fragment;
+//import android.app.Fragment;
 import android.content.Context;
+import android.support.v4.app.Fragment;
 
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
