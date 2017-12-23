@@ -59,7 +59,9 @@ public final class SPUtils {
     }
 
     private SPUtils(final String spName) {
-        sp = AlphaApplication.getmContext().getSharedPreferences(spName, Context.MODE_PRIVATE);
+        if(AlphaApplication.getmContext()!=null) {
+            sp = AlphaApplication.getmContext().getSharedPreferences(spName, Context.MODE_PRIVATE);
+        }
     }
 
     /**

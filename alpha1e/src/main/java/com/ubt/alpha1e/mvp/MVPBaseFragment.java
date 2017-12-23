@@ -1,11 +1,12 @@
 package com.ubt.alpha1e.mvp;
 
 
-import android.app.Fragment;
+//import android.app.Fragment;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,14 @@ import java.lang.reflect.ParameterizedType;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * MVPPlugin
  * 邮箱 784787081@qq.com
  */
 
-public abstract class MVPBaseFragment<V extends BaseView, T extends BasePresenterImpl<V>> extends Fragment implements BaseView {
+public abstract class MVPBaseFragment<V extends BaseView, T extends BasePresenterImpl<V>> extends SupportFragment implements BaseView {
     public T mPresenter;
     protected View mRootView;
     private Unbinder mUnbinder;

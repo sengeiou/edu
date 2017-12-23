@@ -1,8 +1,12 @@
 package com.ubt.alpha1e.behaviorhabits;
 
+import android.content.Context;
+
+import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
+import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
 
@@ -17,11 +21,15 @@ public class BehaviorHabitsContract {
     public interface View extends BaseView {
         void onTest(boolean isSuccess);
         //显示行为列表以及分数
-        void showBehaviourList(List<HabitsEvent> modelList);
+        void showBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg);
         //显示编辑的EventID具体内容
-        void showBehaviourEventContent(HabitsEventDetail content);
+        void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg);
         //显示行为习惯播放内容
-        void showBehaviourPlayContent(List<PlayContent> playList);
+        void showBehaviourPlayContent(boolean status,List<PlayContent> playList,String errorMsg);
+        void showNetworkRequestError();
+
+        //提醒对话框点击
+        void onAlertSelectItem(int index,String language,int alertType);
     }
 
     public interface  Presenter extends BasePresenter<View> {
@@ -38,5 +46,8 @@ public class BehaviorHabitsContract {
         void setBehaviourEvent(String eventId, int status);
         //保存编辑的行为习惯
         void saveBehaviourEvent(HabitsEventDetail content);
+
+        //显示提醒时间对话框
+        void showAlertDialog(Context context, int currentPosition, List<String> alertList, int alertType);
     }
 }

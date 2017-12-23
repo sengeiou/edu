@@ -1,12 +1,15 @@
 package com.ubt.alpha1e.userinfo.mainuser;
 
-import android.app.Fragment;
+/*import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.FragmentTransaction;*/
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -92,7 +95,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
      */
     @Override
     protected void initUI() {
-        mFragmentManager = this.getFragmentManager();
+        mFragmentManager = this.getSupportFragmentManager();
         mFragmentTransaction = this.mFragmentManager.beginTransaction();
         mFragmentTransaction.add(R.id.fl_main_content, mFragmentList.get(0));
         mFragmentTransaction.commit();
@@ -131,7 +134,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
      * @param targetFragment 加载的Fragment
      */
     private void loadFragment(Fragment targetFragment) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         // UbtLog.d(TAG,"targetFragment.isAdded()->>>"+(!targetFragment.isAdded()));
         if (!targetFragment.isAdded()) {
             mCurrentFragment.onStop();
