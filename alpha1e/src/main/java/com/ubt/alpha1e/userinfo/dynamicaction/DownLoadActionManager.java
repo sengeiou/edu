@@ -8,15 +8,12 @@ import com.ubt.alpha1e.business.ActionsDownLoadManagerListener;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.DownloadProgressInfo;
-import com.ubt.alpha1e.event.ActionEvent;
 import com.ubt.alpha1e.net.http.basic.FileDownloadListener;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
 import com.ubtechinc.base.PublicInterface;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -42,6 +39,14 @@ public class DownLoadActionManager {
     private List<ActionInfo> downLoadCompleteList;
     private ActionInfo playingInfo;
     PlayState mPlayState = PlayState.action_init;
+
+    GetRobotActionListener mActionListener;
+    private List<String> robotActionList = new ArrayList<>();
+
+    public static int STATU_INIT = 1;//初始化
+    public static int STATU_DOWNLOADING = 2;//正在下载
+    public static int STATU_PLAYING = 3;//正在播放
+    public static int STATU_PLAY_FINISH = 4;//播放结束
 
     public static enum PlayState {
         action_init, action_playing, action_pause, action_finish
@@ -99,8 +104,6 @@ public class DownLoadActionManager {
                     FileDownloadListener.State state;
                     if (downloadProgressInfo.status == 3) {
                         state = FileDownloadListener.State.connect_fail;
-
-
                     } else if (downloadProgressInfo.status == 2) {
                         state = FileDownloadListener.State.success;
                         UbtLog.d(TAG, "机器人下载成功：hts_file_name = " + actionInfo.hts_file_name);
@@ -114,13 +117,9 @@ public class DownLoadActionManager {
                     }
 
                     UbtLog.d(TAG, "机器人下载结束, actionName : " + actionInfo.actionName + " state : " + state + "  ");
-                    if (mDownListenerLists != null) {
-                        ActionEvent actionEvent = new ActionEvent(ActionEvent.Event.ROBOT_ACTION_DOWNLOAD);
-                        actionEvent.setActionInfo(actionInfo);
-                        actionEvent.setDownloadProgressInfo(downloadProgressInfo);
-                        EventBus.getDefault().post(actionEvent);
+                    if (mActionListener != null) {
+                        mActionListener.getDownLoadProgress(actionInfo, downloadProgressInfo);
                     }
-
                     mRobotDownList.remove(actionInfo);
                 }
 
@@ -139,10 +138,23 @@ public class DownLoadActionManager {
 
                 String name = BluetoothParamUtil.bytesToString(param);
                 UbtLog.d(TAG, "获取文件：" + name);
+                robotActionList.add(name);
 
 
             } else if ((cmd & 0xff) == (ConstValue.UV_STOPACTIONFILE & 0xff)) {
                 UbtLog.d(TAG, "获取文件结束");
+                if (null != mActionListener) {
+                    mActionListener.getRobotActionLists(robotActionList);
+                }
+            } else if (cmd == ConstValue.DV_ACTION_FINISH) {
+                String finishPlayActionName = BluetoothParamUtil.bytesToString(param);
+                UbtLog.d(TAG, "finishPlayActionName = " + finishPlayActionName);
+
+                if (!TextUtils.isEmpty(finishPlayActionName) && finishPlayActionName.contains("初始化")) {
+                    //return;
+                } else {
+
+                }
             }
         }
 
@@ -192,7 +204,9 @@ public class DownLoadActionManager {
     /**
      * 获取机器人列表
      */
-    public void getRobotAction() {
+    public void getRobotAction(GetRobotActionListener listener) {
+        this.mActionListener = listener;
+        robotActionList.clear();
         try {
             doSendComm(ConstValue.DV_GETACTIONFILE, (new String(FileTools.actions_download_robot_path)).getBytes("GBK"));
         } catch (UnsupportedEncodingException e) {
@@ -203,22 +217,27 @@ public class DownLoadActionManager {
 
     /**
      * 总的处理接口，首先判断文件是否下载过，
+     *
+     * @param isDownload
+     * @param actionInfo
+     * @return 返回状态
      */
-    public void dealAction(ActionInfo actionInfo) {
+    public int dealAction(boolean isDownload, ActionInfo actionInfo) {
         playingInfo = actionInfo;
-
+        if (isRobotDownloading(actionInfo.actionId)) {
+            return STATU_INIT;
+        }
         if (isCompletedActionById(actionInfo.actionId)) {//本地下载过，直接播放
             doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(actionInfo.actionName));
+            return STATU_PLAYING;
         } else {
-            String actionName = actionInfo.actionName + ".hts";
-            UbtLog.d(TAG, "checkActionFileExist = " + actionName);
-            try {
-                doSendComm(ConstValue.DV_DO_CHECK_ACTION_FILE_EXIST, actionName.getBytes("GBK"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            if (isDownload) {
+                doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(actionInfo.actionName));
+                return STATU_PLAYING;
+            } else {
+                downRobotAction(actionInfo);
+                return STATU_DOWNLOADING;
             }
-
-            //downRobotAction(actionInfo);
         }
     }
 
@@ -229,9 +248,6 @@ public class DownLoadActionManager {
      * @param actionInfo
      */
     public void downRobotAction(ActionInfo actionInfo) {
-        if (isRobotDownloading(actionInfo.actionId)) {
-            return;
-        }
 
         ActionInfo c_info = getRobotDownloadActionById(actionInfo.actionId);
         if (c_info == null) {
@@ -317,6 +333,14 @@ public class DownLoadActionManager {
             }
         }
         return result;
+    }
+
+    public interface GetRobotActionListener {
+        void getRobotActionLists(List<String> list);
+
+        void getDownLoadProgress(ActionInfo info, DownloadProgressInfo progressInfo);
+
+        void playActionFinish(String actionName);
     }
 
 }

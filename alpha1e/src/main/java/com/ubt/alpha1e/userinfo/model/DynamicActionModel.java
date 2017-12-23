@@ -10,11 +10,15 @@ package com.ubt.alpha1e.userinfo.model;
  */
 
 public class DynamicActionModel {
-    private int ActionId;
+    private long ActionId;
     private String ActionName;
     private int ActionTime;
     private String ActionType;
-    private int ActionStatu;//状态 播放1 暂停0
+    private String downloadUrl;
+    private long createTime;
+    private boolean isDownload;
+    private double downloadProgress;
+    private int ActionStatu;//状态 播放1 暂停0 下载2
 
     public String getActionName() {
         return ActionName;
@@ -49,12 +53,45 @@ public class DynamicActionModel {
         ActionStatu = actionStatu;
     }
 
-    public int getActionId() {
+    public long getActionId() {
         return ActionId;
     }
 
-    public void setActionId(int actionId) {
+    public void setActionId(long actionId) {
         ActionId = actionId;
+    }
+
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
+    public boolean isDownload() {
+        return isDownload;
+    }
+
+    public void setDownload(boolean download) {
+        isDownload = download;
+    }
+
+
+    public double getDownloadProgress() {
+        return downloadProgress;
+    }
+
+    public void setDownloadProgress(double downloadProgress) {
+        this.downloadProgress = downloadProgress;
     }
 
     @Override
@@ -64,6 +101,10 @@ public class DynamicActionModel {
                 ", ActionName='" + ActionName + '\'' +
                 ", ActionTime=" + ActionTime +
                 ", ActionType='" + ActionType + '\'' +
+                ", downloadUrl='" + downloadUrl + '\'' +
+                ", createTime=" + createTime +
+                ", isDownload=" + isDownload +
+                ", downloadProgress=" + downloadProgress +
                 ", ActionStatu=" + ActionStatu +
                 '}';
     }

@@ -78,7 +78,7 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
     }
 
     @Override
-    public void setDynamicData(List<DynamicActionModel> list) {
+    public void setDynamicData(boolean statu,int type,List<DynamicActionModel> list) {
 
     }
 }
