@@ -44,4 +44,5 @@ public class Constant {
 
     public static final String FEEDBACK_INFO_KEY = "FEEDBACK_INFO_KEY";
 
+    public static final String WakeUpActionName="初始化";
 }

@@ -4,6 +4,19 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 
+import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
+import com.ubt.alpha1e.course.feature.FeatureActivity;
+import com.ubt.alpha1e.course.merge.MergeActivity;
+import com.ubt.alpha1e.course.principle.PrincipleActivity;
+import com.ubt.alpha1e.course.split.SplitActivity;
+import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
+import com.ubt.alpha1e.ui.RemoteActivity;
+import com.ubt.alpha1e.ui.RemoteSelActivity;
+
 import java.util.Stack;
 
 /**
@@ -64,6 +77,36 @@ public class AppManager {
     }
 
     /**
+     * 结束正在使用的蓝牙的页面
+     */
+    public void finishUseBluetoothActivity() {
+        Activity mActivity = null;
+        for (int i = 0; i < activityStack.size(); i++) {
+            try {
+                mActivity = activityStack.get(i);
+                if (mActivity instanceof RemoteActivity
+                        || mActivity instanceof RemoteSelActivity
+                        || mActivity instanceof MainCourseActivity
+                        || mActivity instanceof PrincipleActivity
+                        || mActivity instanceof SplitActivity
+                        || mActivity instanceof MergeActivity
+                        || mActivity instanceof FeatureActivity
+                        ||mActivity instanceof ActionTestActivity
+                        ||mActivity instanceof ActionCourseActivity
+                        ||mActivity instanceof CourseLevelActivity
+                        ||mActivity instanceof CourseTwoActivity
+                        ||mActivity instanceof CourseOneActivity
+                        ) {
+                    mActivity.finish();
+                }
+                continue;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
      * 结束指定的Activity
      */
     public void finishActivity(Activity activity) {
@@ -89,13 +132,15 @@ public class AppManager {
      * 结束所有Activity
      */
     public void finishAllActivity() {
-        for (int i = 0, size = activityStack.size(); i < size; i++) {
+        for (int i = activityStack.size()-1; i >= 0; i--) {
             if (null != activityStack.get(i)) {
                 activityStack.get(i).finish();
             }
         }
         activityStack.clear();
     }
+
+
 
     /**
      * 退出应用程序

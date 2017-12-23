@@ -8,26 +8,18 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.adapter.WifiInfoAdapter;
 import com.ubt.alpha1e.adapter.WifiInfoAdapter_list;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
-import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
-import com.ubt.alpha1e.event.NetworkEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.ui.dialog.WifiSelectAlertDialog;
 import com.ubt.alpha1e.ui.helper.WifiHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,12 +95,12 @@ public class NetSearchResultActivity extends MVPBaseActivity<NetSearchResultCont
                     mAdapter.notifyDataSetChanged();
 
                     if(mWifiListItem.isEmpty()){
-                        UbtLog.d(TAG,"mWifiListItem isempty" );
+                        UbtLog.d(TAG,"mWifiListItem is empty" );
                         if(rl_content_wifi_list != null && rl_content_bluetooth_no_net != null){
                             rl_content_wifi_list.setVisibility(View.INVISIBLE);
                             rl_content_bluetooth_no_net.setVisibility(View.VISIBLE);
                         }else {
-                            UbtLog.d(TAG,"mWifiListItem isempty    null" );
+                            UbtLog.d(TAG,"mWifiListItem is empty    null" );
                         }
                     }else {
                         UbtLog.d(TAG,"mWifiListItem hava data " );
@@ -179,6 +171,7 @@ public class NetSearchResultActivity extends MVPBaseActivity<NetSearchResultCont
                 NetSearchResultActivity.this.finish();
                 break;
             case R.id.ib_close:
+                NetSearchResultActivity.this.setResult(RESULT_OK);
                 NetSearchResultActivity.this.finish();
                 break;
             case R.id.ib_return:

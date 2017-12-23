@@ -33,7 +33,7 @@ public class PermissionUtils {
     private static volatile PermissionUtils instance;
 
     public enum PermissionEnum {
-        LOACTION, CAMERA, STORAGE
+        LOACTION, CAMERA, STORAGE, MICROPHONE
     }
 
     private PermissionUtils(Context context) {
@@ -54,7 +54,7 @@ public class PermissionUtils {
      *
      * @param callback 回调结果
      */
-    public void request(PermissionLocationCallback callback, PermissionEnum permission) {
+    public void request(PermissionLocationCallback callback, PermissionEnum permission, Context context) {
         this.mCallback = callback;
         String sp_key = "";
         String[] permiss = null;
@@ -71,6 +71,10 @@ public class PermissionUtils {
                 sp_key = Constant.SP_PERMISSION_STORAGE;
                 permiss = Permission.STORAGE;
                 break;
+            case MICROPHONE:
+                sp_key = Constant.SP_PERMISSION_MICROPHONE;
+                permiss = Permission.MICROPHONE;
+                break;
             default:
                 break;
         }
@@ -83,7 +87,7 @@ public class PermissionUtils {
             mCallback.onSuccessful();
         } else if (isFirstLocation && AndPermission.hasAlwaysDeniedPermission(mContext, Arrays.asList(permiss))) {
             mCallback.onRationSetting();
-            showRationSettingDialog(permission);
+            showRationSettingDialog(permission, context, mCallback);
         } else {
             AndPermission.with(mContext)
                     .requestCode(10000)
@@ -107,7 +111,7 @@ public class PermissionUtils {
     /**
      * 用户勾选过不再提醒则显示该设置对话框跳转到应用详情页
      */
-    public void showRationSettingDialog(PermissionEnum permission) {
+    public void showRationSettingDialog(PermissionEnum permission, Context context, final PermissionLocationCallback callback) {
         final SettingService settingService = AndPermission.defineSettingDialog(mContext);
         String message = "";
         switch (permission) {
@@ -120,22 +124,29 @@ public class PermissionUtils {
             case STORAGE:
                 message = ResourceManager.getInstance(mContext).getStringResources("dialog_permission_storage_setting");
                 break;
+            case MICROPHONE:
+                message = ResourceManager.getInstance(mContext).getStringResources("dialog_permission_microphone_setting");
+                break;
             default:
                 break;
         }
         UbtLog.d("psermission", "message==" + message);
-        
-        new ConfirmDialog(mContext).builder()
+
+        new ConfirmDialog(context).builder()
                 .setMsg(message)
                 .setCancelable(true)
-                .setPositiveButton(ResourceManager.getInstance(mContext).getStringResources("dialog_go_setting"), new View.OnClickListener() {
+                .setPositiveButton(ResourceManager.getInstance(context).getStringResources("dialog_go_setting"), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         settingService.execute();
                     }
-                }).setNegativeButton(ResourceManager.getInstance(mContext).getStringResources("ui_common_cancel"), new View.OnClickListener() {
+                }).setNegativeButton(ResourceManager.getInstance(context).getStringResources("ui_common_cancel"), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(callback != null){
+                    callback.onCancelRationSetting();
+                }
+
 
             }
         }).show();
@@ -180,5 +191,11 @@ public class PermissionUtils {
          * 已经勾选拒绝过
          */
         void onRationSetting();
+
+        /**
+         * 取消RationSetting
+         */
+        void onCancelRationSetting();
     }
+
 }

@@ -3,6 +3,7 @@ package com.ubt.alpha1e.mvp;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -24,15 +25,19 @@ import android.widget.Toast;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
+import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ThemeInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.event.RobotEvent;
-import com.ubt.alpha1e.ui.custom.CommonCtrlView;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.LowPowerDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IUI;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.umeng.analytics.MobclickAgent;
@@ -69,10 +74,10 @@ import static com.ubt.alpha1e.ui.custom.CommonCtrlView.KEY_CURRENT_PLAYING_ACTIO
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ * 邮箱 784787081@qq.com
  */
 
-public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenterImpl<V>> extends AppCompatActivity implements ISkinChangedListener, LayoutInflaterFactory, IUI,BaseView {
+public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresenterImpl<V>> extends AppCompatActivity implements ISkinChangedListener, LayoutInflaterFactory, IUI, BaseView {
 
     private String mCurrentSetLanguage = "";
 
@@ -98,7 +103,7 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
 
     private String currentActivityLable;
 
-    //    public CommonCtrlView commonCtrlView;
+    //    public ControlCenterActivity commonCtrlView;
     private resetFloatViewListener resetFloatViewListener;
 
     static final Class<?>[] sConstructorSignature = new Class[]{
@@ -112,18 +117,23 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
 
     public T mPresenter;
     Unbinder mUnbinder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         LayoutInflaterCompat.setFactory(layoutInflater, this);
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
-        mUnbinder= ButterKnife.bind(this);
+        mUnbinder = ButterKnife.bind(this);
         SkinManager.getInstance().addChangedListener(this);
         //((AlphaApplication) this.getApplication()).addToActivityList(this);
         // ((AlphaApplication) this.getApplication()).setBaseActivity(this);
+         ((AlphaApplication) this.getApplication()).setCurrentActivity(this);
         AppManager.getInstance().addActivity(this);
-        mPresenter= getInstance(this,1);
+        ((AlphaApplication) this.getApplication()).addToActivityList(this);
+        //AlphaApplication.getCurrentActivity()
+
+        mPresenter = getInstance(this, 1);
         mPresenter.attachView((V) this);
         initSkin();
         initWindowStatusBarColor();
@@ -153,7 +163,7 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
 
     public abstract int getContentViewId();
 
-    public  <T> T getInstance(Object o, int i) {
+    public <T> T getInstance(Object o, int i) {
         try {
             return ((Class<T>) ((ParameterizedType) (o.getClass()
                     .getGenericSuperclass())).getActualTypeArguments()[i])
@@ -315,22 +325,16 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
 
     public void initSkin() {
 
-//        boolean fromNotice = false;
-//        //从系统通知栏进入
-//        if(this instanceof ActionsLibPreviewWebActivity
-//                || this instanceof WebContentActivity){
-//            fromNotice = getIntent().getExtras().getBoolean(ActionsLibPreviewWebActivity.FROM_NOTICE,false);
-//        }
-//
-//        if(this instanceof StartInitSkinActivity || fromNotice){
-//            initSkinPath();
-//        }else {
-//            if(SkinManager.getInstance().getSkinContext() == null){
-//                UbtLog.e(TAG,"getSkinContext = null" );
-//                //有时候报错的时候，没有crash到，没有重启，语言包context为空，调用语言包错误，
-//                initSkinPath();
-//            }
-//        }
+
+        if(this instanceof MainActivity ){
+            initSkinPath();
+        }else {
+            if(SkinManager.getInstance().getSkinContext() == null){
+                UbtLog.e(TAG,"getSkinContext = null" );
+                //有时候报错的时候，没有crash到，没有重启，语言包context为空，调用语言包错误，
+                initSkinPath();
+            }
+        }
     }
 
     private void initSkinPath() {
@@ -402,6 +406,7 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
         //此Activity销毁后，取消Eventbus监听
         EventBus.getDefault().unregister(this);
         AppManager.getInstance().finishActivity(this);
+        ((AlphaApplication) this.getApplication()).removeActivityList(this);
         super.onDestroy();
         mUnbinder.unbind();//解除绑定，官方文档只对fragment做了解绑
         SkinManager.getInstance().removeChangedListener(this);
@@ -423,6 +428,7 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
         }
 
         UbtLog.d(TAG, "--wmma--onResume!");
+
 
 //        if (((AlphaApplication) this.getApplicationContext())
 //                .getCurrentBluetooth() != null) {
@@ -456,12 +462,12 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
 
     @Subscribe
     public void onEventRobot(RobotEvent event) {
-        if (event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS) {
-            UbtLog.d(TAG, "--CONNECT_SUCCESS--");
-            if (!stopFloatService()) {
-                CommonCtrlView.getInstace(this);
-            }
-        }
+//        if (event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS) {
+//            UbtLog.d(TAG, "--CONNECT_SUCCESS--");
+//            if (!stopFloatService()) {
+//                ControlCenterActivity.getInstace(this);
+//            }
+//        }
     }
 
     public void doCheckLanguage() {
@@ -506,16 +512,17 @@ public abstract class MVPBaseActivity<V extends BaseView,T extends BasePresenter
         /*if (mHelper != null) {
             mHelper.UnRegisterHelper();
         }*/
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                Toast.makeText(
-                        MVPBaseActivity.this, getStringResources("ui_home_conn_lost"), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        mHandler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                // TODO Auto-generated method stub
+//                Toast.makeText(
+//                        MVPBaseActivity.this, getStringResources("ui_home_conn_lost"), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
         MyLog.writeLog("蓝牙掉线", this.getClass().getName() + "-->onLostBtCoon");
-        ((AlphaApplication) this.getApplication()).doLostConn(this);
+        //((AlphaApplication) this.getApplication()).doLostConn(this);
 
     }
 

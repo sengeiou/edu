@@ -30,6 +30,7 @@ import com.ubt.alpha1e.base.NetUtil;
 import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.custom.ShapedImageView;
 import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
@@ -38,7 +39,6 @@ import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditContract;
 import com.ubt.alpha1e.userinfo.useredit.UserEditPresenter;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
-import com.ubt.alpha1e.userinfo.util.TVUtils;
 import com.ubt.alpha1e.utils.NameLengthFilter;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -61,6 +61,8 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, UserEditPresenter> implements UserEditContract.View, AndroidAdjustResizeBugFix.OnKeyChangerListeler, MyTextWatcher.WatcherListener {
+    private static final String TAG = UserInfoFragment.class.getSimpleName();
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     //    @BindView(R.id.scrollview_user)
@@ -132,7 +134,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         assistActivity = new AndroidAdjustResizeBugFix(getActivity());
         assistActivity.setOnKeyChangerListeler(this);
         mPresenter.getLoopData();
-
+        // LoadingDialog.show(getActivity());
     }
 
 
@@ -161,15 +163,19 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         super.onActivityCreated(savedInstanceState);
         UbtLog.d("UserInfoFragment", "onActivityCreated");
         initData();
+        Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().into(mImgHead);
     }
 
     private void initData() {
         mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
-        UbtLog.d("Usercenter", "usermode===" + mUserModel.toString());
-        InputFilter[] filters = { new NameLengthFilter(20) };
+        UbtLog.d(TAG, "usermode===" + mUserModel.toString());
+        InputFilter[] filters = {new NameLengthFilter(20)};
         mTvUserName.setFilters(filters);
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
-        mTvUserName.setText(mUserModel.getNickName());
+        String name = FileUtils.utf8ToString(mUserModel.getNickName());
+        UbtLog.d(TAG, "name===" + name);
+        mTvUserName.setText(name);
+
         mTvUserAge.setText(mUserModel.getAge());
         mTvUserGrade.setText(mUserModel.getGrade());
         if (!TextUtils.isEmpty(mUserModel.getSex())) {
@@ -179,7 +185,6 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 mFemale.setChecked(true);
             }
         }
-        Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().into(mImgHead);
     }
 
     @Override
@@ -220,14 +225,18 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onClickView(View view) {
         switch (view.getId()) {
             case R.id.img_head:
-                mPresenter.showImageCenterHeadDialog(getActivity());
+                if (NetUtil.isNetWorkConnected(getActivity())) {
+                    mPresenter.showImageCenterHeadDialog(getActivity());
+                } else {
+                    ToastUtils.showShort("网络出错啦，请检查网络设置");
+                }
                 break;
             case R.id.tv_user_age:
                 if (NetUtil.isNetWorkConnected(getActivity()) && ageList.size() > 0) {
                     int currentPosition = mPresenter.getPosition(mTvUserAge.getText().toString(), ageList);
                     mPresenter.showAgeDialog(getActivity(), ageList, currentPosition);
                 } else {
-                    ToastUtils.showShort("Network  unavailable");
+                    ToastUtils.showShort("网络出错啦，请检查网络设置");
                 }
                 break;
             case R.id.tv_user_grade:
@@ -235,7 +244,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                     int currentPosition1 = mPresenter.getPosition(mTvUserGrade.getText().toString(), gradeList);
                     mPresenter.showGradeDialog(getActivity(), currentPosition1, gradeList);
                 } else {
-                    ToastUtils.showShort("Network  unavailable");
+                    ToastUtils.showShort("网络出错啦，请检查网络设置");
                 }
                 break;
             default:
@@ -312,7 +321,12 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                     public void onRationSetting() {
                         // ToastUtils.showShort("申请拍照权限已经被拒绝过");
                     }
-                }, PermissionUtils.PermissionEnum.CAMERA);
+
+                    @Override
+                    public void onCancelRationSetting() {
+                    }
+
+                }, PermissionUtils.PermissionEnum.CAMERA, getActivity());
 
     }
 
@@ -365,15 +379,18 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     @Override
     public void updateUserModelSuccess(UserModel userModel) {
         this.mUserModel = userModel;
+        LoadingDialog.dismiss(getActivity());
     }
 
     @Override
-    public void updateUserModelFailed() {
-        ToastUtils.showShort("update failed");
+    public void updateUserModelFailed(String str) {
+        LoadingDialog.dismiss(getActivity());
+        ToastUtils.showShort(str);
     }
 
     @Override
     public void updateLoopData(UserAllModel userAllModel) {
+        LoadingDialog.dismiss(getActivity());
         if (null != userAllModel) {
             if (null != userAllModel.getAgeList() && userAllModel.getAgeList().size() > 0) {
                 ageList = userAllModel.getAgeList();
@@ -381,6 +398,20 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
             if (null != userAllModel.getGradeList() && userAllModel.getGradeList().size() > 0) {
                 gradeList = userAllModel.getGradeList();
             }
+//            String headPic = userAllModel.getHeadPic();
+//            UbtLog.d(TAG, "headpic===" + headPic);
+//            UserModel model = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+//            if (null != model) {
+//                model.setHeadPic(headPic);
+//                model.setGrade(userAllModel.getGrade());
+//                model.setSex(userAllModel.getSex());
+//                model.setNickName(userAllModel.getNickName());
+//                model.setPhone(userAllModel.getPhone());
+//                model.setAge(userAllModel.getAge());
+//                SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, model);
+//                initData();
+//                Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().into(mImgHead);
+//            }
         } else {
 
         }
@@ -397,7 +428,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-
+        UbtLog.d("ThreadName", "threadName==" + Thread.currentThread().getName());
         if (requestCode == GetUserHeadRequestCodeByFile
                 || requestCode == GetUserHeadRequestCodeByShoot) {
             if (resultCode == RESULT_OK) {
@@ -418,7 +449,9 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                     Bitmap bitmap = FileUtils.getBitmapFormUri(getActivity(), mImageUri);
                     mImgHead.setImageBitmap(bitmap);
                     headPath = FileUtils.SaveImage(getActivity(), "head", bitmap);
+                    UbtLog.d("ThreadName", "threadName==" + Thread.currentThread().getName());
                     mPresenter.updateHead(headPath);
+                    LoadingDialog.show(getActivity());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -444,14 +477,15 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void keyBoardOpen(boolean statu) {
-        String editText = mTvUserName.getText().toString();
+        String editText = mTvUserName.getText().toString().trim();
         Log.d("string==", "editText==" + editText);
         if (!statu && !TextUtils.isEmpty(editText)) {
-            if (TVUtils.isCorrectStr(editText)) {
-                if (!mUserModel.getNickName().equals(editText)) {
-                    updateUserInfo(Constant.KEY_NICK_NAME, editText);
-                }
+//            if (TVUtils.isCorrectStr(editText)) {
+            if (!mUserModel.getNickName().equals(editText)) {
+                String unicode = FileUtils.stringToUtf8(editText);
+                updateUserInfo(Constant.KEY_NICK_NAME, unicode);
             }
+//            }
         }
     }
 
@@ -463,7 +497,19 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      * @param value
      */
     public void updateUserInfo(int type, String value) {
-        mPresenter.updateUserInfo(type, value);
+        if (NetUtil.isNetWorkConnected(getActivity())) {
+            mPresenter.updateUserInfo(type, value);
+        } else {
+            ToastUtils.showShort("网络出错啦，请检查网络设置");
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    initData();
+                }
+            }, 500);
+
+        }
+
     }
 
 
@@ -480,7 +526,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
      */
     @Override
     public void errorEditTextStr() {
-        ToastUtils.showShort("仅限汉字、字母及数字");
+//        ToastUtils.showShort("仅限汉字、字母及数字");
     }
 
     @Override

@@ -34,7 +34,6 @@ import java.util.List;
 import okhttp3.Call;
 
 import static android.R.attr.key;
-import static android.R.attr.value;
 
 /**
  * MVPPlugin
@@ -57,9 +56,9 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
-                        if (view.getId() == R.id.rl_take_photo||view.getId()==R.id.tv_take_photo) {
+                        if (view.getId() == R.id.rl_take_photo || view.getId() == R.id.tv_take_photo) {
                             mView.takeImageFromShoot();
-                        } else if (view.getId() == R.id.rl_take_ablum||view.getId()==R.id.tv_take_ablum) {
+                        } else if (view.getId() == R.id.rl_take_ablum || view.getId() == R.id.tv_take_ablum) {
                             mView.takeImageFromAblum();
                         }
                         dialog.dismiss();
@@ -142,7 +141,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
         View contentView = LayoutInflater.from(activity).inflate(R.layout.dialog_useredit_wheel, null);
         ViewHolder viewHolder = new ViewHolder(contentView);
         final LoopView loopView = (LoopView) contentView.findViewById(R.id.loopView);
-       
+
         DialogPlus.newDialog(activity)
                 .setContentHolder(viewHolder)
                 .setGravity(Gravity.BOTTOM)
@@ -202,7 +201,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        mView.updateUserModelFailed();
+                        mView.updateUserModelFailed("用户名更新失败");
                     }
 
                     @Override
@@ -212,9 +211,25 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                                 }.getType());
                         UbtLog.d("userEdit", "baseResponseModel==" + baseResponseModel.status + "  " + "info" + baseResponseModel.info + baseResponseModel.models);
                         if (baseResponseModel.status) {
-                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
+                            if (null != baseResponseModel.models) {
+                                UserModel model = baseResponseModel.models;
+                                UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+                                userModel.setAge(model.getAge());
+                                userModel.setSex(model.getSex());
+                                userModel.setPhone(model.getPhone());
+                                userModel.setHeadPic(model.getHeadPic());
+                                userModel.setGrade(model.getGrade());
+                                userModel.setNickName(model.getNickName());
+                                SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
+                            }
                             if (isAttachView()) {
                                 mView.updateUserModelSuccess(baseResponseModel.models);
+                            }
+                        } else {
+                            if(baseResponseModel.info.equals("11300")){
+                                mView.updateUserModelFailed("不能输入非法字符");
+                            }else{
+                                mView.updateUserModelFailed("更新失败");
                             }
                         }
                     }
@@ -230,14 +245,14 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
     public void updateHead(String path) {
         File file = new File(path);
         BaseRequest baseRequest = new BaseRequest();
-        UbtLog.d("UpdateHead--------", "request====" + baseRequest + "  headPath===" + value);
+        UbtLog.d("UpdateHead--------", "request====" + baseRequest + "  headPath===" + path);
         OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, baseRequest, key)
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         UbtLog.d("userEditHead", "e===" + e.getMessage());
                         if (isAttachView()) {
-                            mView.updateUserModelFailed();
+                            mView.updateUserModelFailed("更新失败");
                         }
                     }
 
@@ -248,7 +263,17 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                                 }.getType());
                         UbtLog.d("userEditHead", "baseResponseModel==" + baseResponseModel.status + "  " + baseResponseModel.models);
                         if (baseResponseModel.status) {
-                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
+                            if (null != baseResponseModel.models) {
+                                UserModel model = baseResponseModel.models;
+                                UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+                                userModel.setAge(model.getAge());
+                                userModel.setSex(model.getSex());
+                                userModel.setPhone(model.getPhone());
+                                userModel.setHeadPic(model.getHeadPic());
+                                userModel.setGrade(model.getGrade());
+                                userModel.setNickName(model.getNickName());
+                                SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
+                            }
                             if (isAttachView()) {
                                 mView.updateUserModelSuccess(baseResponseModel.models);
                             }
@@ -266,7 +291,10 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d("getLoopData", "onError:" + e.getMessage());
-                mView.updateLoopData(null);
+                if (mView != null) {
+                    mView.updateLoopData(null);
+                }
+
             }
 
             @Override

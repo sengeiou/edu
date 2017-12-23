@@ -1,0 +1,60 @@
+<?xml version="1.0"
+encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="roundedimageview">
+        <attr name="border_thickness" format="dimension" />
+        <attr name="border_inside_color" format="color" />
+        <attr name="border_outside_color" format="color"></attr>
+    </declare-styleable>
+
+    <declare-styleable name="ConvenientBanner">
+        <attr name="canLoop" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="RefreshView">
+        <attr name="type" format="enum">
+            <enum name="sun" value="0" />
+        </attr>
+    </declare-styleable>
+
+    <!--//CropImageView-->
+    <declare-styleable name="civ_CropImageView">
+        <attr name="civ_crop">
+            <enum name="topLeft" value="0"/>
+            <enum name="centerLeft" value="1"/>
+            <enum name="bottomLeft" value="2"/>
+            <enum name="topRight" value="3"/>
+            <enum name="centerRight" value="4"/>
+            <enum name="bottomRight" value="5"/>
+            <enum name="centerTop" value="6"/>
+            <enum name="centerBottom" value="7"/>
+        </attr>
+    </declare-styleable>
+
+    <!--//ShapedImageView-->
+        <declare-styleable name="ShapedImageView">
+            <attr name="shape_mode" format="enum">
+                <enum name="round_rect" value="1" />
+                <enum name="circle" value="2" />
+            </attr>
+            <attr name="round_radius" format="dimension" />
+
+            <attr name="stroke_width" format="dimension" />
+            <attr name="stroke_color" format="color|reference" />
+        </declare-styleable>
+
+    <declare-styleable name="ExpandableTextView">
+        <attr name="maxCollapsedLines" format="integer"/>
+        <attr name="animDuration" format="integer"/>
+        <attr name="animAlphaStart" format="float"/>
+        <attr name="expandDrawable" format="reference"/>
+        <attr name="collapseDrawable" format="reference"/>
+        <attr name="expandString" format="reference"/>
+        <attr name="collapseString" format="reference"/>
+    </declare-styleable>
+    <declare-styleable name="MKLoader">
+        <attr name="mk_color" format="color"/>
+
+    </declare-styleable>
+</resources>

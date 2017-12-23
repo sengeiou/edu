@@ -25,7 +25,7 @@ public class UserEditContract {
         void ageSelectItem(int type, String age);
 
         void updateUserModelSuccess(UserModel userModel);
-        void updateUserModelFailed();
+        void updateUserModelFailed(String str);
 
         void updateLoopData(UserAllModel userAllModel);
     }

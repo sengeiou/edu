@@ -5,11 +5,8 @@ import android.graphics.Bitmap;
 
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.event.NetworkEvent;
-import com.ubt.alpha1e.ui.BaseActivity;
-
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
-
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
 

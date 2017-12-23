@@ -38,6 +38,7 @@ public class OkHttpClientUtils {
      * @return
      */
     public static RequestCall getJsonByPostRequest(String url, String params, int id) {
+        UbtLog.d("RequestCall", "url===" + url + "request==" + params.toString());
         return OkHttpUtils.postString()
                 .url(url)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))

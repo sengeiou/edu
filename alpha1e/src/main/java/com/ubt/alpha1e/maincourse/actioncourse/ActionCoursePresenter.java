@@ -1,0 +1,329 @@
+package com.ubt.alpha1e.maincourse.actioncourse;
+
+import android.content.ContentValues;
+import android.content.Context;
+
+import com.google.gson.reflect.TypeToken;
+import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.RequstMode.SaveCourseProQuest;
+import com.ubt.alpha1e.base.RequstMode.SaveCourseStatuRequest;
+import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.base.ResponseMode.CourseDetailScoreModule;
+import com.ubt.alpha1e.base.ResponseMode.CourseLastProgressModule;
+import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
+import com.ubt.alpha1e.login.HttpEntity;
+import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
+import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
+import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
+import com.ubt.alpha1e.utils.log.UbtLog;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.litepal.crud.DataSupport;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Call;
+
+/**
+ * MVPPlugin
+ * 邮箱 784787081@qq.com
+ */
+
+public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContract.View> implements ActionCourseContract.Presenter {
+
+    @Override
+    public void getActionCourseData(Context context) {
+        List<ActionCourseModel> list = new ArrayList<>();
+        ActionCourseModel courseModel1 = new ActionCourseModel();
+        courseModel1.setActionCourcesName("第一关");
+        courseModel1.setTitle("第一关 基本概念");
+        courseModel1.setActionLockType(1);
+        courseModel1.setDrawableId(R.drawable.ic_action_level1);
+        List<String> card1 = new ArrayList<>();
+        card1.add(ResourceManager.getInstance(context).getStringResources("action_course_card1_1"));
+        card1.add(ResourceManager.getInstance(context).getStringResources("action_course_card1_2"));
+        card1.add(ResourceManager.getInstance(context).getStringResources("action_course_card1_3"));
+        courseModel1.setList(card1);
+        list.add(courseModel1);
+
+        ActionCourseModel courseModel2 = new ActionCourseModel();
+        courseModel2.setActionCourcesName("第二关");
+        courseModel2.setTitle("第二关 创定指定动作");
+        courseModel2.setDrawableId(R.drawable.ic_action_level2);
+        courseModel2.setActionLockType(0);
+
+        List<String> card2 = new ArrayList<>();
+        card2.add(ResourceManager.getInstance(context).getStringResources("action_course_card2_1"));
+        card2.add(ResourceManager.getInstance(context).getStringResources("action_course_card2_2"));
+        card2.add(ResourceManager.getInstance(context).getStringResources("action_course_card2_3"));
+        courseModel2.setList(card2);
+        list.add(courseModel2);
+
+        ActionCourseModel courseModel3 = new ActionCourseModel();
+        courseModel3.setActionCourcesName("第三关");
+        courseModel3.setTitle("第三关 创定指定动作");
+        courseModel3.setDrawableId(R.drawable.ic_action_level3);
+        courseModel3.setActionLockType(0);
+        list.add(courseModel3);
+
+        ActionCourseModel courseModel4 = new ActionCourseModel();
+        courseModel4.setActionCourcesName("第四关");
+        courseModel4.setTitle("第四关 创定指定动作");
+        courseModel4.setDrawableId(R.drawable.ic_action_level4);
+        courseModel4.setActionLockType(0);
+        list.add(courseModel4);
+
+        ActionCourseModel courseModel5 = new ActionCourseModel();
+        courseModel5.setActionCourcesName("第五关");
+        courseModel5.setTitle("第五关 创定指定动作");
+        courseModel5.setDrawableId(R.drawable.ic_action_level5);
+        courseModel5.setActionLockType(0);
+        list.add(courseModel5);
+
+        ActionCourseModel courseModel6 = new ActionCourseModel();
+        courseModel6.setActionCourcesName("第六关");
+        courseModel6.setTitle("第五关 创定指定动作");
+        courseModel6.setDrawableId(R.drawable.ic_action_level6);
+        courseModel6.setActionLockType(0);
+        list.add(courseModel6);
+
+        ActionCourseModel courseModel7 = new ActionCourseModel();
+        courseModel7.setActionCourcesName("第七关");
+        courseModel7.setTitle("第五关 创定指定动作");
+        courseModel7.setDrawableId(R.drawable.ic_action_level7);
+        courseModel7.setActionLockType(0);
+        list.add(courseModel7);
+
+        ActionCourseModel courseModel8 = new ActionCourseModel();
+        courseModel8.setActionCourcesName("第八关");
+        courseModel8.setTitle("第五关 创定指定动作");
+        courseModel8.setDrawableId(R.drawable.ic_action_level8);
+        courseModel8.setActionLockType(0);
+        list.add(courseModel8);
+
+        ActionCourseModel courseModel9 = new ActionCourseModel();
+        courseModel9.setActionCourcesName("第九关");
+        courseModel9.setTitle("第五关 创定指定动作");
+        courseModel9.setDrawableId(R.drawable.ic_action_level9);
+        courseModel9.setActionLockType(0);
+        list.add(courseModel9);
+
+        ActionCourseModel courseModel10 = new ActionCourseModel();
+        courseModel10.setActionCourcesName("第十关");
+        courseModel10.setTitle("第五关 创定指定动作");
+        courseModel10.setDrawableId(R.drawable.ic_action_level10);
+        courseModel10.setActionLockType(0);
+        list.add(courseModel10);
+
+        ActionCourseModel courseModel11 = new ActionCourseModel();
+        courseModel11.setActionCourcesName("第十一关");
+        courseModel11.setTitle("第五关 创定指定动作");
+        courseModel11.setDrawableId(R.drawable.ic_action_level11);
+        courseModel11.setActionLockType(0);
+        list.add(courseModel11);
+
+        ActionCourseModel courseModel12 = new ActionCourseModel();
+        courseModel12.setActionCourcesName("第十二关");
+        courseModel12.setTitle("第五关 创定指定动作");
+        courseModel12.setDrawableId(R.drawable.ic_action_level12);
+        courseModel12.setActionLockType(0);
+        list.add(courseModel12);
+
+        ActionCourseModel courseModel13 = new ActionCourseModel();
+        list.add(courseModel13);
+
+        if (isAttachView()) {
+            mView.setActionCourseData(list);
+        }
+    }
+
+
+    /**
+     * 获取最新进度
+     */
+    public void getCourseProgress() {
+        SaveCourseProQuest proQequest = new SaveCourseProQuest();
+        proQequest.setType(2);
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_GET_PROGRESS, proQequest, 100)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        UbtLog.d("getCourseProgress", "e===" + e.getMessage());
+                        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+                        //本地没有记录，说明之前没用过，则根据后台返回保存本地记录
+                        if (null == record) {
+                            LocalActionRecord record1 = new LocalActionRecord();
+                            record1.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
+                            record1.setCourseLevel(1);
+                            record1.setPeriodLevel(0);
+                            record1.setUpload(true);
+                            UbtLog.d("getCourseProgress", "record1===" + record1.toString());
+                            record1.save();
+                        }
+                        if (isAttachView()) {
+                            mView.getLastProgressResult(false);
+                        }
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        UbtLog.d("getCourseProgress", "response===" + response);
+                        BaseResponseModel<CourseLastProgressModule> baseResponseModel = GsonImpl.get().toObject(response,
+                                new TypeToken<BaseResponseModel<CourseLastProgressModule>>() {
+                                }.getType());
+                        UbtLog.d("getCourseProgress", "baseResponseModel==" + baseResponseModel.status + "  " + "info  " + baseResponseModel.info + baseResponseModel.models);
+                        if (baseResponseModel.status) {
+                            CourseLastProgressModule courseLastProgressModule = baseResponseModel.models;
+                            LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+                            //本地没有记录，说明之前没用过，则根据后台返回保存本地记录
+                            if (null == record) {
+                                LocalActionRecord record1 = new LocalActionRecord();
+                                if (null != courseLastProgressModule) {
+                                    record1.setUserId(courseLastProgressModule.getUserId());
+                                    record1.setCourseLevel(Integer.parseInt(courseLastProgressModule.getCourseOne()));
+                                    record1.setPeriodLevel(Integer.parseInt(courseLastProgressModule.getCourseTwo()));
+                                    record1.setUpload(true);
+                                } else {
+                                    record1.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
+                                    record1.setCourseLevel(1);
+                                    record1.setPeriodLevel(0);
+                                    record1.setUpload(true);
+                                }
+                                UbtLog.d("getCourseProgress", "record1===" + record1.toString());
+
+                                record1.save();
+                            } else {
+                                //本地有记录，证明需要更新本地数据，或者上传记录
+                                int course = record.getCourseLevel();
+                                int level = record.getPeriodLevel();
+                                if (null != courseLastProgressModule) {
+                                    if (Integer.parseInt(courseLastProgressModule.getCourseOne()) > course) {
+                                        ContentValues values = new ContentValues();
+                                        values.put("CourseLevel", Integer.parseInt(courseLastProgressModule.getCourseOne()));
+                                        values.put("periodLevel", Integer.parseInt(courseLastProgressModule.getCourseTwo()));
+                                        values.put("isUpload", true);
+                                        DataSupport.updateAll(LocalActionRecord.class, values);
+                                    } else if (Integer.parseInt(courseLastProgressModule.getCourseOne()) == course) {
+                                        if (Integer.parseInt(courseLastProgressModule.getCourseTwo()) > level) {
+                                            ContentValues values = new ContentValues();
+                                            values.put("CourseLevel", Integer.parseInt(courseLastProgressModule.getCourseOne()));
+                                            values.put("periodLevel", Integer.parseInt(courseLastProgressModule.getCourseTwo()));
+                                            values.put("isUpload", true);
+                                            DataSupport.updateAll(LocalActionRecord.class, values);
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (isAttachView()) {
+                                mView.getLastProgressResult(true);
+                            }
+                        } else {
+                            if (isAttachView()) {
+                                mView.getLastProgressResult(false);
+                            }
+                        }
+                    }
+                });
+
+    }
+
+
+    /**
+     * 获取所有上传关卡的分数获取
+     */
+    public void getLastProgress() {
+        SaveCourseStatuRequest statuRequest = new SaveCourseStatuRequest();
+        statuRequest.setType(2);
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_GET_STATU, statuRequest, 100)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        UbtLog.d("ActionCourseActivity", "e===" + e.getMessage());
+                        if (isAttachView()) {
+                            mView.getCourseScores(null);
+                        }
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        UbtLog.d("ActionCourseActivity", "response===" + response);
+
+                        BaseResponseModel<List<CourseDetailScoreModule>> baseResponseModel = GsonImpl.get().toObject(response,
+                                new TypeToken<BaseResponseModel<List<CourseDetailScoreModule>>>() {
+                                }.getType());
+                        UbtLog.d("ActionCourseActivity", "baseResponseModel==" + baseResponseModel.status + "  " + "info  " + baseResponseModel.info + baseResponseModel.models);
+                        if (baseResponseModel.status) {
+                            if (isAttachView()) {
+                                mView.getCourseScores(baseResponseModel.models);
+                            }
+                        } else {
+                            if (isAttachView()) {
+                                mView.getCourseScores(null);
+                            }
+                        }
+                    }
+                });
+
+    }
+
+    /**
+     * 保存课程最新进度
+     */
+    public void saveLastProgress(String progressOne, String courseTwo) {
+        SaveCourseProQuest proQequest = new SaveCourseProQuest();
+        proQequest.setCourseOne("1");
+        proQequest.setProgressOne(progressOne);
+        proQequest.setCourseTwo(courseTwo);
+        proQequest.setProgressTwo("1");
+        proQequest.setType(2);
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_SAVE_PROGRESS, proQequest, 100)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        UbtLog.d("saveLastProgress", "e===" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        UbtLog.d("saveLastProgress", "response===" + response);
+                        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+                        if (null != record) {
+                            ContentValues values = new ContentValues();
+                            values.put("isUpload", true);
+                            DataSupport.updateAll(LocalActionRecord.class, values);
+                        }
+                    }
+                });
+
+    }
+
+
+    /**
+     * 保存每个关卡的分数
+     */
+    public void saveCourseProgress(String course, String statu) {
+        SaveCourseStatuRequest statuRequest = new SaveCourseStatuRequest();
+        statuRequest.setType(2);
+        statuRequest.setCourse(course);
+        statuRequest.setStatus(statu);
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_SAVE_STATU, statuRequest, 100)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        UbtLog.d("saveCourseProgress", "e===" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        UbtLog.d("saveCourseProgress", "response===" + response);
+                    }
+                });
+
+    }
+}

@@ -20,7 +20,8 @@
             android:id="@+id/img_action_logo"
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:background="@drawable/mynew_publish_add_pic" />
+
+            android:scaleType="fitXY"/>
 
         <RelativeLayout
             android:layout_width="fill_parent"

@@ -39,7 +39,10 @@ public class SensorHelper extends BaseHelper {
         if(cmd == ConstValue.DV_READ_INFRARED_DISTANCE){
             if(param != null){
                 UbtLog.d(TAG, "param[0]=" + param[0]); //param[0] 表示机器人与障碍物的距离
-                EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_GET_INFRARED_DISTANCE, param[0]));
+                if(param[0] != -1){
+                    EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_GET_INFRARED_DISTANCE, param[0]));
+                }
+
             }
         }else if(cmd == ConstValue.DV_READ_ROBOT_FALL_DOWN){
             if(param != null){
@@ -88,6 +91,27 @@ public class SensorHelper extends BaseHelper {
         }else if(cmd == ConstValue.DV_TAP_HEAD) {
             UbtLog.d(TAG, "robot tapped head: " + BluetoothParamUtil.bytesToString(param));
             EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_TAPPED_ROBOT_HEAD));
+        }else if(cmd == ConstValue.DV_WALK){
+            UbtLog.d(TAG, "机器人回复步态行走");
+            if(param != null){
+                UbtLog.d(TAG, "emoji:" + ByteHexHelper.bytesToHexString(param) + "param[0]:" + param[0]);
+                if(param[0] == 0 || param[0] == 3){
+                    //表情播放完成后通知js，js端音效和表情完成是同一个方法
+                    EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_ROBOT_WALK_STOP));
+                }
+            }
+        }else if(cmd == ConstValue.DV_INTO_EDIT){
+            if(param != null){
+                UbtLog.d(TAG, "DV_INTO_EDIT:" + ByteHexHelper.bytesToHexString(param) );
+            }
+        }else if(cmd == ConstValue.DV_6D_GESTURE){
+            if(param != null){
+                UbtLog.d(TAG, "DV_6D_GESTURE:" + ByteHexHelper.bytesToHexString(param) );
+                if(param[0] != -1){
+                    EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_6D_GESTURE, param[0]));
+                }
+
+            }
         }
     }
 
@@ -186,6 +210,44 @@ public class SensorHelper extends BaseHelper {
     public void requestPort(String params) {
         UbtLog.d(TAG, "params:" + params);
         doSendComm(ConstValue.REQUEST_WIFI_PORT, BluetoothParamUtil.stringToBytes(params));
+    }
+
+    /**
+     *
+     * @param direct 方向：前后左右
+     * @param speed  速度：快，中，慢
+     * @param step   步数0-100,占4个参数
+     */
+
+    public void doWalk(byte direct, byte speed, byte[] step){
+        UbtLog.d(TAG, "doWalk params:" + direct + "--" + speed + "--" + step);
+        byte[] params = new byte[6];
+        params[0] = direct;
+        params[1] = speed;
+        params[2] = step[3];
+        params[3] = step[2];
+        params[4] = step[1];
+        params[5] = step[0];
+        doSendComm(ConstValue.DV_WALK, params);
+    }
+
+    public void doStopWalk(){
+        doSendComm(ConstValue.DV_STOP_WALK, null);
+    }
+
+    public void doChangeEditState(byte state){
+        byte[] params = new byte[2];
+        params[0] = state;
+        params[1] = 0;
+        UbtLog.d(TAG, "doChangeEditState params:" + ByteHexHelper.bytesToHexString(params));
+        doSendComm(ConstValue.DV_INTO_EDIT, params);
+    }
+
+    /**
+     * 主动读取一次6D状态
+     */
+    public void doRead6DState(){
+        doSendComm(ConstValue.DV_6D_GESTURE, null);
     }
 
 

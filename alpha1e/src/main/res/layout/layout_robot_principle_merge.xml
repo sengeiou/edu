@@ -2,104 +2,142 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_robot"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/iv_robot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:src="@drawable/icon_principle_body"
-        android:layout_centerHorizontal="true"/>
-
-    <ImageView
-        android:id="@+id/iv_hand_left_bg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="-2dp"
-        android:layout_toLeftOf="@+id/iv_robot"
-        android:src="@drawable/icon_principle_leftarm_white"
-        android:layout_marginTop="103dp" />
-
-    <ImageView
-        android:id="@+id/iv_hand_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/iv_hand_left_bg"
-        android:src="@drawable/icon_principle_leftarm"
-        />
-
-    <ImageView
-        android:id="@+id/iv_hand_right_bg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="-2dp"
-        android:layout_toRightOf="@+id/iv_robot"
-        android:layout_marginTop="103dp"
-        android:src="@drawable/icon_principle_rightarm_white"
-        />
-
-    <ImageView
-        android:id="@+id/iv_hand_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_toRightOf="@+id/iv_hand_right_bg"
-        android:layout_centerVertical="true"
-        android:src="@drawable/icon_principle_rightarm"
-        />
+    android:layout_height="match_parent"
+    android:splitMotionEvents="false">
 
     <View
         android:id="@+id/v_empty"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="invisible"
+        android:layout_marginTop="-20dp"
+        android:layout_centerInParent="true"
+        />
+
+    <View
+        android:id="@+id/v_top"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        android:layout_above="@+id/iv_robot"
+        />
+
+    <ImageView
+        android:id="@+id/iv_robot"
+        android:layout_width="140px"
+        android:layout_height="256px"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/iv_robot"
+        android:layout_above="@+id/v_empty"
+        android:src="@drawable/icon_principle_body"
+        />
+
+    <ImageView
+        android:id="@+id/iv_hand_left_bg"
+        android:layout_width="82px"
+        android:layout_height="224px"
+        android:layout_marginRight="-2dp"
+        android:layout_centerHorizontal="true"
+        android:layout_toLeftOf="@+id/iv_robot"
+        android:layout_below="@+id/v_top"
+        android:layout_marginTop="110px"
+        android:background="@drawable/icon_principle_leftarm_white"
+        android:visibility="visible"
+        />
+
+    <ImageView
+        android:id="@+id/iv_hand_right_bg"
+        android:layout_width="82px"
+        android:layout_height="224px"
+        android:layout_marginLeft="-2dp"
+        android:layout_toRightOf="@+id/iv_robot"
+        android:layout_below="@+id/v_top"
+        android:layout_marginTop="110px"
+        android:background="@drawable/icon_principle_rightarm_white"
+        android:visibility="visible"
         />
 
     <ImageView
         android:id="@+id/iv_leg_left_bg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-12dp"
-        android:layout_marginRight="-0dp"
+        android:layout_width="114px"
+        android:layout_height="322px"
+        android:layout_marginTop="-36px"
         android:layout_below="@+id/iv_robot"
         android:layout_toLeftOf="@+id/v_empty"
-        android:src="@drawable/icon_principle_leftleg_white"
+        android:background="@drawable/icon_principle_leftleg_white"
+        android:visibility="visible"
+        />
+
+    <ImageView
+        android:id="@+id/iv_leg_right_bg"
+        android:layout_width="114px"
+        android:layout_height="322px"
+        android:layout_marginTop="-36px"
+        android:layout_below="@+id/iv_robot"
+        android:layout_toRightOf="@+id/v_empty"
+        android:background="@drawable/icon_principle_rightleg_white"
+        android:visibility="visible"
+        />
+
+    <ImageView
+        android:id="@+id/iv_hand_left"
+        android:layout_width="82px"
+        android:layout_height="224px"
+        android:layout_marginRight="30dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/iv_hand_left_bg"
+        android:src="@drawable/icon_principle_leftarm"
+        />
+
+
+    <ImageView
+        android:id="@+id/iv_hand_right"
+        android:layout_width="82px"
+        android:layout_height="224px"
+        android:layout_marginLeft="30dp"
+        android:layout_toRightOf="@+id/iv_hand_right_bg"
+        android:layout_centerVertical="true"
+        android:src="@drawable/icon_principle_rightarm"
         />
 
     <ImageView
         android:id="@+id/iv_leg_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="114px"
+        android:layout_height="322px"
         android:layout_marginRight="30dp"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/iv_hand_left"
         android:src="@drawable/icon_principle_leftleg"
         />
 
-    <ImageView
-        android:id="@+id/iv_leg_right_bg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-12dp"
-        android:layout_marginLeft="-0dp"
-        android:layout_below="@+id/iv_robot"
-        android:layout_toRightOf="@+id/v_empty"
-        android:src="@drawable/icon_principle_rightleg_white"
-        />
 
     <ImageView
         android:id="@+id/iv_leg_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="114px"
+        android:layout_height="322px"
         android:layout_centerVertical="true"
         android:layout_marginLeft="30dp"
         android:layout_toRightOf="@+id/iv_hand_right"
         android:src="@drawable/icon_principle_rightleg"
         />
 
+    <TextView
+        android:id="@+id/tv_msg_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="215px"
+        android:minHeight="59px"
+        android:gravity="center_vertical"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:textColor="#104A70"
+        android:textSize="12sp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/icon_message_show"
+        android:layout_above="@+id/v_top"
+        android:layout_marginBottom="-30dp"
+        android:layout_toRightOf="@+id/iv_robot"
+        android:visibility="gone"
+        />
 </RelativeLayout>

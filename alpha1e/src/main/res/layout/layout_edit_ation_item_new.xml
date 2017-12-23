@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:background="@drawable/bg_edit"
+    android:background="@drawable/img_zhezhao"
     android:visibility="gone"
     >
 
@@ -16,7 +16,7 @@
         android:layout_marginBottom="120dp"
         android:orientation="horizontal"
         android:gravity="left|center"
-        android:paddingLeft="65dp"
+        android:paddingLeft="90dp"
        >
 
 
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/icon_preview_nor" />
+                android:src="@drawable/ic_preview" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
                 android:layout_below="@+id/iv_preview"
                 android:layout_centerHorizontal="true"
                 android:text="@string/ui_readback_preview"
-                android:textColor="@color/sec_txt_main"
+                android:textColor="@color/btn_get_code_color"
                 android:textSize="16dp" />
 
 
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon_edit_nor" />
+                android:src="@drawable/ic_revise" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
                 android:layout_below="@+id/iv_change"
                 android:layout_centerHorizontal="true"
                 android:text="@string/ui_readback_alter"
-                android:textColor="@color/sec_txt_main"
+                android:textColor="@color/btn_get_code_color"
                 android:textSize="16dp" />
 
         </RelativeLayout>
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon_copy_nor" />
+                android:src="@drawable/ic_copy" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -98,7 +98,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/iv_copy"
                 android:text="@string/ui_readback_copy"
-                android:textColor="@color/sec_txt_main"
+                android:textColor="@color/btn_get_code_color"
                 android:textSize="16dp" />
 
         </RelativeLayout>
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon_cut_nor" />
+                android:src="@drawable/ic_cut" />
 
             <TextView
                 android:id="@+id/tv_cut"
@@ -125,7 +125,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/iv_cut"
                 android:text="@string/ui_create_menu_cut"
-                android:textColor="@color/sec_txt_main"
+                android:textColor="@color/btn_get_code_color"
                 android:textSize="16dp" />
 
         </RelativeLayout>
@@ -143,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon_paste_dis" />
+                android:src="@drawable/ic_paste_disable" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -151,7 +151,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/iv_paste"
                 android:text="@string/ui_readback_paste"
-                android:textColor="@color/sec_txt_main"
+                android:textColor="@color/btn_get_code_color"
                 android:textSize="16dp" />
 
 
@@ -170,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon_delete_nor" />
+                android:src="@drawable/ic_delete" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -178,7 +178,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/iv_delete"
                 android:text="@string/ui_common_delete"
-                android:textColor="@color/sec_txt_main"
+                android:textColor="@color/btn_get_code_color"
                 android:textSize="16dp" />
 
         </RelativeLayout>

@@ -23,6 +23,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.FileUtils;
+import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ImageTools;
@@ -38,6 +40,7 @@ import com.ubt.alpha1e.ui.helper.PrivateInfoHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,6 +54,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
     private static final String TAG = "ActionsEditSaveActivity";
 
     private NewActionInfo mCurrentAction;
+
 
     private ImageView img_action_logo;
     private RelativeLayout lay_head_sel;
@@ -93,6 +97,9 @@ public class ActionsEditSaveActivity extends BaseActivity implements
     private String musicDir = "";
     public static String MUSIC_DIR = "music_dir";
 
+    private ImageView ivBack;
+    private ImageView ivSave;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,13 +113,8 @@ public class ActionsEditSaveActivity extends BaseActivity implements
             setContentView(R.layout.activity_actions_edit_save);
         }
 
-//        setContentView(R.layout.activity_actions_edit_save);
 
-//            mCurrentAction = new NewActionInfo().getThiz(this.getIntent()
-//                .getExtras().get(ActionsEditHelper.NewActionInfo)
-//                .toString());
         mCurrentAction = getIntent().getParcelableExtra(ActionsEditHelper.NewActionInfo);//get parcelable object
-//        UbtLog.d(TAG, "mCurrentAction=" + mCurrentAction.frameActions);
         mSchemeId = getIntent().getStringExtra(SCHEME_ID);
         mSchemeName = getIntent().getStringExtra(SCHEME_NAME);
         dubTag = getIntent().getLongExtra(DubActivity.DUB_TAG, -1);
@@ -166,14 +168,24 @@ public class ActionsEditSaveActivity extends BaseActivity implements
 
     @Override
     protected void initUI() {
-        initTitle(getStringResources("ui_readback_save_title"));
-        initTitleSave(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
 
+        ivBack = (ImageView)findViewById(R.id.iv_back) ;
+        ivSave = (ImageView)findViewById(R.id.iv_save);
+
+        ivBack.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        ivSave.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 saveNewAction();
             }
-        }, getStringResources("ui_common_confirm"));
+        });
+
 
         mGridView = (GridView)findViewById(R.id.grid_actions_type);
         txt_actions_type_des = (TextView)findViewById(R.id.txt_action_type_des);
@@ -206,22 +218,20 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                 @Override
                 public void onClick(View v) {
                     mCurrentActionImg = null;
-                    int imageId = R.drawable.action_dance_1;
+                    int imageId = R.drawable.action_dance_1b;
                     if(actionType == 1){
-                        imageId = R.drawable.action_dance_1;
+                        imageId = R.drawable.action_dance_1b;
                     }else if(actionType == 2){
-                        imageId = R.drawable.action_story_1;
+                        imageId = R.drawable.action_story_1b;
                     }else if(actionType ==3){
-                        imageId = R.drawable.action_sport_1;
+                        imageId = R.drawable.action_sport_1b;
                     }else if(actionType ==4){
-                        imageId = R.drawable.action_er_1;
+                        imageId = R.drawable.action_er_1b;
                     }else if(actionType == 5){
-                        imageId = R.drawable.action_science_1;
+                        imageId = R.drawable.action_science_1b;
                     }
                     mCurrentActionImg = getBitmap(imageId);
-
-                    img_action_logo.setImageBitmap(null);
-                    img_action_logo.setImageBitmap(mCurrentActionImg);
+                    img_action_logo.setImageResource(imageId);
                 }
             });
 
@@ -229,23 +239,21 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                 @Override
                 public void onClick(View v) {
                     mCurrentActionImg = null;
-                    int imageId = R.drawable.action_dance_2;
+                    int imageId = R.drawable.action_dance_2b;
                     if(actionType == 1){
-                        imageId = R.drawable.action_dance_2;
+                        imageId = R.drawable.action_dance_2b;
                     }else if(actionType == 2){
-                        imageId = R.drawable.action_story_2;
+                        imageId = R.drawable.action_story_2b;
                     }else if(actionType ==3){
-                        imageId = R.drawable.action_sport_2;
+                        imageId = R.drawable.action_sport_2b;
                     }else if(actionType ==4){
-                        imageId = R.drawable.action_er_2;
+                        imageId = R.drawable.action_er_2b;
                     }else if(actionType == 5){
-                        imageId = R.drawable.action_science_2;
+                        imageId = R.drawable.action_science_2b;
                     }
 
                     mCurrentActionImg = getBitmap(imageId);
-
-                    img_action_logo.setImageBitmap(null);
-                    img_action_logo.setImageBitmap(mCurrentActionImg);
+                    img_action_logo.setImageResource(imageId);
                 }
             });
 
@@ -253,31 +261,29 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                 @Override
                 public void onClick(View v) {
                     mCurrentActionImg = null;
-                    int imageId = R.drawable.action_dance_3;
+                    int imageId = R.drawable.action_dance_3b;
                     if(actionType == 1){
-                        imageId = R.drawable.action_dance_3;
+                        imageId = R.drawable.action_dance_3b;
                     }else if(actionType == 2){
-                        imageId = R.drawable.action_story_3;
+                        imageId = R.drawable.action_story_3b;
                     }else if(actionType ==3){
-                        imageId = R.drawable.action_sport_3;
+                        imageId = R.drawable.action_sport_3b;
                     }else if(actionType ==4){
-                        imageId = R.drawable.action_er_3;
+                        imageId = R.drawable.action_er_3b;
                     }else if(actionType == 5){
-                        imageId = R.drawable.action_science_3;
+                        imageId = R.drawable.action_science_3b;
 
                     }
 
                     mCurrentActionImg = getBitmap(imageId);
-
-                    img_action_logo.setImageBitmap(null);
-                    img_action_logo.setImageBitmap(mCurrentActionImg);
+                    img_action_logo.setImageResource(imageId);
                 }
             });
         }
 
         if(mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
-            mCurrentActionImg = getBitmap(R.drawable.action_dance_1);
-            img_action_logo.setImageBitmap(mCurrentActionImg);
+            mCurrentActionImg = getBitmap(R.drawable.action_dance_1b);
+            img_action_logo.setImageResource(R.drawable.action_dance_1b);
         }
 
     }
@@ -285,7 +291,6 @@ public class ActionsEditSaveActivity extends BaseActivity implements
     private Bitmap getBitmap(int imageId){
         Bitmap bitmap = ImageTools.compressImage(getResources(),imageId, 2);
 
-        //UbtLog.d(TAG,"mCurrentActionImg =>> " + imageId + "  " + bitmap.getByteCount() + "     " + bitmap.getRowBytes() * bitmap.getHeight());
         return bitmap;
     }
 
@@ -372,36 +377,36 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                 });
 
                 if(mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
-                    int imageId = R.drawable.action_dance_1;
+                    int imageId = R.drawable.action_dance_1b;
                     if(actionType == 1){
-                        imageId = R.drawable.action_dance_1;
-                        ivDemo1.setImageResource(R.drawable.action_dance_1);
-                        ivDemo2.setImageResource(R.drawable.action_dance_2);
-                        ivDemo3.setImageResource(R.drawable.action_dance_3);
+                        imageId = R.drawable.action_dance_1b;
+                        ivDemo1.setImageResource(R.drawable.action_dance_1b);
+                        ivDemo2.setImageResource(R.drawable.action_dance_2b);
+                        ivDemo3.setImageResource(R.drawable.action_dance_3b);
                     }else if(actionType == 2){
-                        imageId = R.drawable.action_story_1;
-                        ivDemo1.setImageResource(R.drawable.action_story_1);
-                        ivDemo2.setImageResource(R.drawable.action_story_2);
-                        ivDemo3.setImageResource(R.drawable.action_story_3);
+                        imageId = R.drawable.action_story_1b;
+                        ivDemo1.setImageResource(R.drawable.action_story_1b);
+                        ivDemo2.setImageResource(R.drawable.action_story_2b);
+                        ivDemo3.setImageResource(R.drawable.action_story_3b);
                     }else if(actionType == 3){
-                        imageId = R.drawable.action_sport_1;
-                        ivDemo1.setImageResource(R.drawable.action_sport_1);
-                        ivDemo2.setImageResource(R.drawable.action_sport_2);
-                        ivDemo3.setImageResource(R.drawable.action_sport_3);
+                        imageId = R.drawable.action_sport_1b;
+                        ivDemo1.setImageResource(R.drawable.action_sport_1b);
+                        ivDemo2.setImageResource(R.drawable.action_sport_2b);
+                        ivDemo3.setImageResource(R.drawable.action_sport_3b);
                     }else if(actionType == 4){
-                        imageId = R.drawable.action_er_1;
-                        ivDemo1.setImageResource(R.drawable.action_er_1);
-                        ivDemo2.setImageResource(R.drawable.action_er_2);
-                        ivDemo3.setImageResource(R.drawable.action_er_3);
+                        imageId = R.drawable.action_er_1b;
+                        ivDemo1.setImageResource(R.drawable.action_er_1b);
+                        ivDemo2.setImageResource(R.drawable.action_er_2b);
+                        ivDemo3.setImageResource(R.drawable.action_er_3b);
                     }else if(actionType == 5){
-                        imageId = R.drawable.action_science_1;
-                        ivDemo1.setImageResource(R.drawable.action_science_1);
-                        ivDemo2.setImageResource(R.drawable.action_science_2);
-                        ivDemo3.setImageResource(R.drawable.action_science_3);
+                        imageId = R.drawable.action_science_1b;
+                        ivDemo1.setImageResource(R.drawable.action_science_1b);
+                        ivDemo2.setImageResource(R.drawable.action_science_2b);
+                        ivDemo3.setImageResource(R.drawable.action_science_3b);
                     }
 
                     mCurrentActionImg = getBitmap(imageId);
-                    img_action_logo.setImageBitmap(mCurrentActionImg);
+                    img_action_logo.setImageResource(imageId);
                 }
             }
         });
@@ -527,22 +532,47 @@ public class ActionsEditSaveActivity extends BaseActivity implements
             @Override
             public void onClick(View arg0) {
 
-                Intent cameraIntent = new Intent(
-                        android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                File path = new File(FileTools.image_cache);
-                if (!path.exists()) {
-                    path.mkdirs();
-                }
-                mImageUri = Uri.fromFile(new File(path, new Date().getTime()
-                        + ""));
+                PermissionUtils.getInstance(ActionsEditSaveActivity.this)
+                        .request(new PermissionUtils.PermissionLocationCallback() {
+                            @Override
+                            public void onSuccessful() {
+                                //  ToastUtils.showShort("申请拍照权限成功");
+                                Intent cameraIntent = new Intent(
+                                        android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                                File path = new File(FileTools.image_cache);
+                                if (!path.exists()) {
+                                    path.mkdirs();
+                                }
+                                mImageUri = Uri.fromFile(new File(path, new Date().getTime()
+                                        + ""));
 
-                cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                        mImageUri);
-                cameraIntent.putExtra("return-data", true);
-                startActivityForResult(cameraIntent,
-                        ActionsEditHelper.GetUserHeadRequestCodeByShoot);
+                                cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                                        mImageUri);
+                                cameraIntent.putExtra("return-data", true);
+                                startActivityForResult(cameraIntent,
+                                        ActionsEditHelper.GetUserHeadRequestCodeByShoot);
 
-                lay_head_sel.setVisibility(View.GONE);
+                                lay_head_sel.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                //ToastUtils.showShort("申请拍照权限失败");
+                            }
+
+                            @Override
+                            public void onRationSetting() {
+                                // ToastUtils.showShort("申请拍照权限已经被拒绝过");
+                            }
+
+                            @Override
+                            public void onCancelRationSetting() {
+                            }
+
+
+                        }, PermissionUtils.PermissionEnum.CAMERA,ActionsEditSaveActivity.this);
+
+
             }
         });
 
@@ -606,7 +636,8 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                                     if (isSuccess) {
                                         mCurrentActionImg = ImageTools
                                                 .ImageCrop(bitmap);
-                                        setBg();
+//                                        setBg();
+                                        setImage(mImageUri);
                                     }
                                 }
 
@@ -618,6 +649,22 @@ public class ActionsEditSaveActivity extends BaseActivity implements
 
             }
         }
+    }
+
+    private void setImage(final Uri uri){
+        mHandler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    Bitmap bitmap = FileUtils.getBitmapFormUri(ActionsEditSaveActivity.this, uri);
+                    img_action_logo.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 
     private void setBg() {
@@ -662,6 +709,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
 
     @Override
     public void onChangeActionFinish() {
+        UbtLog.d(TAG, "wmma onChangeActionFinish");
         boolean state = ((ActionsEditHelper)mHelper).getActionSaveState();
 //
         edt_name.post(new Runnable() {

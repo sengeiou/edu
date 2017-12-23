@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
@@ -14,10 +13,9 @@ import android.widget.ImageButton;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.PermissionUtils;
-import com.ubt.alpha1e.base.ToastUtils;
-import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.services.AutoScanConnectService;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.yanzhenjie.permission.Permission;
@@ -105,7 +103,7 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
                                 startBluetoothConnect();
                             }else {
                                 UbtLog.d(TAG, "bluetoothEnable true 没有授权");//ok
-                                PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION);
+                                PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION,this, null);
                             }
                         }else {
                             UbtLog.d(TAG, "bluetoothEnable false 提醒去打开蓝牙");//ok
@@ -127,12 +125,12 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
                             startBluetoothConnect();
                         }else {
                             UbtLog.d(TAG, "bluetoothEnable true 没有授权"); //ok
-                            PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION);
+                            PermissionUtils.getInstance(this).showRationSettingDialog(PermissionUtils.PermissionEnum.LOACTION,this, null);
                         }
                     }
 
                 }else {
-                    ToastUtils.showShort("请确认站立，并选择");
+//                    ToastUtils.showShort("请确认站立，并选择");
                 }
                 break;
             default:
@@ -147,6 +145,11 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
         this.startActivity(intent);
         this.overridePendingTransition(R.anim.activity_open_up_down,0);
         BluetoothguidestartrobotActivity.this.finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

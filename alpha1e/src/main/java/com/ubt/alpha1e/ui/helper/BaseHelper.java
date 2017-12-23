@@ -2,9 +2,11 @@ package com.ubt.alpha1e.ui.helper;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
@@ -15,11 +17,14 @@ import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.event.LessonEvent;
+import com.ubt.alpha1e.event.RobotEvent;
+import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.GetDataFromWeb;
 import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.dialog.AlertDialog;
+import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
 import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -32,7 +37,6 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONString;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -51,6 +55,8 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     private static Timer read_battery_timer = null;
     private static Date lastTime_doReadState = null;
     private static boolean isNeedNoteLowPower = true;
+    private static boolean isNeedNoteLowPowerTwenty=true;
+    private static boolean isNeedNoteLowPowerFive=true;
     protected static long readUserHeadImgRequest = 1111001;
     public static boolean hasHandshakeBseven = false;
     public static boolean hasSupportA2DP = false;
@@ -64,6 +70,8 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     public static boolean mLightState = true;
 
     public static String mCourseAccessToken = "";
+    private int LOW_BATTERY_TWENTY=20;
+    private int LOW_BATTERY_FIVE=5;
 
 
     private static boolean isCharging = false; //用来判断机器人当前是否在充电中,false 表示没有充电中,true表示充电中.
@@ -71,13 +79,13 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
         mBaseActivity = _baseActivity;
     }*/
 
-    public void setBaseActivity(BaseActivity _baseActivity){
+    public void setBaseActivity(BaseActivity _baseActivity) {
         mBaseActivity = _baseActivity;
     }
 
     public BaseHelper(Context context) {
         mContext = context;
-        if(context instanceof BaseActivity){
+        if (context instanceof BaseActivity) {
             mBaseActivity = (BaseActivity) context;
         }
     }
@@ -97,7 +105,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 param == null ? 0 : param.length, false);
     }
 
-    protected void doSendComm(byte cmd, byte[] param) {
+    public void doSendComm(byte cmd, byte[] param) {
         // MyLog.writeLog("
         // �����", ByteHexHelper.byteToHexString(cmd) + "");
         doSendComm(cmd, param, false);
@@ -105,11 +113,16 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
     protected void doSendComm(byte cmd, byte[] param, boolean isMonopolyRight) {
         if (isLostCoon()) {
-            UbtLog.e(TAG,"----onLostBtCoon---" + cmd + "    mContext = " + mContext);
-            if(mContext != null && mContext instanceof BaseActivity){
-                ((BaseActivity)mContext).onLostBtCoon();
-            }else {
+            UbtLog.e(TAG, "----onLostBtCoon---" + cmd + "    mContext = " + mContext);
+            if (mContext != null && mContext instanceof BaseActivity) {
+                ((BaseActivity) mContext).onLostBtCoon();
+            } else if (mContext != null && mContext instanceof MVPBaseActivity) {
+//                ((MVPBaseActivity) mContext).onLostBtCoon();
+                UbtLog.e(TAG, "----onLostBtCoon---" + cmd + "    mContext =MVPBaseActivity ");
+                ((AlphaApplication) mContext.getApplicationContext()).doLostConn(AlphaApplication.getBaseActivity());
+            } else {
                 //自动连接等
+                UbtLog.e(TAG, "----onLostBtCoon---" + cmd + "    mContext = else");
                 ((AlphaApplication) mContext.getApplicationContext()).doLostConn(AlphaApplication.getBaseActivity());
             }
             return;
@@ -141,6 +154,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
         if (((AlphaApplication) mContext.getApplicationContext())
                 .getBlueToothManager() != null) {
+            UbtLog.d(TAG, "注册一个 RegisterHelper");
             ((AlphaApplication) mContext.getApplicationContext())
                     .getBlueToothManager().addBlueToothInteraction(this);
         }
@@ -149,9 +163,9 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     @Override
     public void onDeviceDisConnected(String mac) {
 
-        UbtLog.d(TAG,"--onDeviceDisConnected--" + this);
+        UbtLog.d(TAG, "--onDeviceDisConnected--" + this);
         try {
-            if(read_battery_timer != null){
+            if (read_battery_timer != null) {
                 read_battery_timer.cancel();
             }
         } catch (Exception e) {
@@ -174,9 +188,14 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
             }
         }
+        if(EventBus.getDefault().hasSubscriberForEvent(RobotEvent.class)) {
+            RobotEvent disconnectEvent = new RobotEvent(RobotEvent.Event.DISCONNECT);
+            EventBus.getDefault().post(disconnectEvent);
+            UbtLog.d(TAG,"--MSG_DO_NOTE_DISCONNECT " );
+        }
 
         if (mContext != null && mContext instanceof BaseActivity) {
-            ((BaseActivity)mContext).onLostBtCoon();
+            ((BaseActivity) mContext).onLostBtCoon();
         }
     }
 
@@ -187,13 +206,13 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
         params[0] = 0;
         doSendComm(ConstValue.DV_READSTATUS, params);
 
-        //定时读电量
+        //定时读电量(10S读一次)
         if (read_battery_timer == null) {
             read_battery_timer = new Timer();
             read_battery_timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if (isLostCoon()){
+                    if (isLostCoon()) {
                         return;
                     }
 
@@ -201,24 +220,24 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                     param[0] = 4;
                     doSendComm(ConstValue.DV_READ_BATTERY, param);
                 }
-            }, 0, 2000);
+            }, 0, 10*1000);
         }
     }
 
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
-        JSONObject mData=new JSONObject();
-        try {
+
+         JSONObject mData=new JSONObject();
+         try {
             mData.put("mac", mac);
             mData.put("cmd", cmd);
-            mData.put("param",param.toString());
+            mData.put("param", Base64.encodeToString(param,Base64.DEFAULT));
             mData.put("len", len);
             EventBus.getDefault().post(new MainActivity.MessageEvent(mData.toString()));
-        }catch(JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         if (cmd == ConstValue.DV_READ_BATTERY) {
-            // ��ֹ�ظ���Ӧ-------------------start
             Date curDate = new Date(System.currentTimeMillis());
             float time_difference = 500;
             if (lastTime_doReadState != null) {
@@ -233,10 +252,10 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
             try {
                 //根据机器人上报的状态来判断当前是否在充电中，0x01表示充电中， 0x00表示未在充电。
                 byte charge = param[2];
-                if(charge == 0x01){
+                if (charge == 0x01) {
                     //UbtLog.d("BaseHelper", "charging" + "   power = " + param[3]);
                     setChargingState(true);
-                }else{
+                } else {
                     //UbtLog.d("BaseHelper", "not charging" + "   power = " + param[3]);
                     setChargingState(false);
                 }
@@ -244,14 +263,30 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 int power = param[3];
                 if (power <= 10 && isNeedNoteLowPower) {
                     isNeedNoteLowPower = false;
-                    AlphaApplication.getBaseActivity().onNoteLowPower();
+                   // AlphaApplication.getBaseActivity().onNoteLowPower();
                 } else if (power > 10) {
                     isNeedNoteLowPower = true;
                 }
+                if(param[2]==0){
+                    if(power>5&&power<=20&&isNeedNoteLowPowerTwenty){
+                        UbtLog.d(TAG,"LESS 20 SHOW DIALOG");
+                        AlphaApplication.getBaseActivity().onNoteLowPower(LOW_BATTERY_TWENTY);
+                        isNeedNoteLowPowerTwenty=false;
+                    }
+                    if(power<=5&&isNeedNoteLowPowerFive){
+                        UbtLog.d(TAG,"LESS 5 SHOW DIALOG");
+                        AlphaApplication.getBaseActivity().onNoteLowPower(LOW_BATTERY_FIVE);
+                        isNeedNoteLowPowerFive=false;
+                    }
+                }else {
+                    isNeedNoteLowPowerTwenty=true;
+                    isNeedNoteLowPowerFive=true;
+                }
+
             } catch (Exception e) {
                 UbtLog.e(TAG, "Exception:" + e.getMessage());
             }
-        }else if (cmd == ConstValue.DV_READSTATUS) {
+        } else if (cmd == ConstValue.DV_READSTATUS) {
             // 声音状态
             if (param[0] == 0) {
                 // 静音
@@ -285,7 +320,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 if (param[1] == 0) {
                     // 灭
                     mLightState = false;
-                }else {
+                } else {
                     // 亮
                     mLightState = true;
                 }
@@ -301,9 +336,9 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                     hasSdcard = true;
                 }
             }
-        } else if(cmd  == ConstValue.DV_DO_UPGRADE_STATUS){
-                final int upgradeStatus = param[0];
-                UbtLog.d(TAG,"收到升级指令 :: " + upgradeStatus);
+        } else if (cmd == ConstValue.DV_DO_UPGRADE_STATUS) {
+            final int upgradeStatus = param[0];
+            UbtLog.d(TAG, "收到升级指令 :: " + upgradeStatus);
 
                 /*mBaseActivity.runOnUiThread(new Runnable() {
                     @Override
@@ -315,15 +350,17 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                         }
                     }
                 });*/
-        } else if(cmd == ConstValue.DV_READ_NETWORK_STATUS){
+        } else if (cmd == ConstValue.DV_READ_NETWORK_STATUS) {
             String networkInfoJson = BluetoothParamUtil.bytesToString(param);
-            UbtLog.d(TAG,"cmd = " + cmd + "    networkInfoJson = " + networkInfoJson);
+            UbtLog.d(TAG, "base cmd = " + cmd + "    networkInfoJson = " + networkInfoJson);
 
-            NetworkInfo networkInfo = GsonImpl.get().toObject(networkInfoJson,NetworkInfo.class);
-            if(networkInfo.status){
+            NetworkInfo networkInfo = GsonImpl.get().toObject(networkInfoJson, NetworkInfo.class);
+            if (networkInfo.status) {
                 hasConnectNetwork = true;
-            }else {
+                UbtLog.d(TAG, "base 网络已经连接" );
+            } else {
                 hasConnectNetwork = false;
+                UbtLog.d(TAG, "base 网络没有连接" );
             }
         }
 
@@ -389,7 +426,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     }
 
 
-    public void doClickedMessage(){
+    public void doClickedMessage() {
         BasicSharedPreferencesOperator.getInstance(mContext,
                 BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(
                 BasicSharedPreferencesOperator.MESSAGE_CLICKED_RECORD,
@@ -397,19 +434,19 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 null, -1);
     }
 
-    public boolean clickedMessage(){
+    public boolean clickedMessage() {
         return BasicSharedPreferencesOperator.getInstance(mContext,
                 BasicSharedPreferencesOperator.DataType.USER_USE_RECORD)
                 .doReadSync(BasicSharedPreferencesOperator.MESSAGE_CLICKED_RECORD).equals(BasicSharedPreferencesOperator.MESSAGE_CLICKED_RECORD);
     }
 
-    public String getRecordMessageId(){
+    public String getRecordMessageId() {
         return BasicSharedPreferencesOperator.getInstance(mContext,
                 BasicSharedPreferencesOperator.DataType.USER_USE_RECORD)
                 .doReadSync(BasicSharedPreferencesOperator.MESSAGE_ID);
     }
 
-    public void setMessageIdRecord(String messageId){
+    public void setMessageIdRecord(String messageId) {
         BasicSharedPreferencesOperator.getInstance(mContext,
                 BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(
                 BasicSharedPreferencesOperator.MESSAGE_ID,
@@ -430,7 +467,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
         return true;
     }
 
-    public void setFirstUsedSetting(){
+    public void setFirstUsedSetting() {
         BasicSharedPreferencesOperator.getInstance(mContext,
                 BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(
                 BasicSharedPreferencesOperator.IS_FIRST_USE_SETTINGS,
@@ -438,18 +475,18 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 null, -1);
     }
 
-    public boolean isFirstPlayAction(){
+    public boolean isFirstPlayAction() {
         String value = BasicSharedPreferencesOperator.getInstance(mContext,
                 BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doReadSync(
                 BasicSharedPreferencesOperator.IS_FIRST_PLAY_ACTION);
-        if (value.equals(BasicSharedPreferencesOperator.IS_FIRST_PLAY_ACTION)){
+        if (value.equals(BasicSharedPreferencesOperator.IS_FIRST_PLAY_ACTION)) {
             return false;
-        } else{
+        } else {
             return true;
         }
     }
 
-    public void setIsFirstPlayAction(){
+    public void setIsFirstPlayAction() {
         BasicSharedPreferencesOperator.getInstance(mContext,
                 BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(
                 BasicSharedPreferencesOperator.IS_FIRST_PLAY_ACTION,
@@ -459,7 +496,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     /**
      * 显示首次播放提示
      */
-    public void showFirstPlayTip(){
+    public void showFirstPlayTip() {
         new AlertDialog(AlphaApplication.getBaseActivity())
                 .builder()
                 .setMsg(AlphaApplication.getBaseActivity().getStringResources("ui_first_play_tips"))
@@ -473,56 +510,56 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     }
 
 
-    public void initCourseAccessToken(){
+    public void initCourseAccessToken() {
 
-        if(!TextUtils.isEmpty(mCourseAccessToken)){
+        if (!TextUtils.isEmpty(mCourseAccessToken)) {
             return;
         }
 
-        UserInfo userInfo = ((AlphaApplication)mContext.getApplicationContext()).getCurrentUserInfo();
-        if(userInfo == null){
+        UserInfo userInfo = ((AlphaApplication) mContext.getApplicationContext()).getCurrentUserInfo();
+        if (userInfo == null) {
             return;
         }
 
         String url = "";
         String param = "";
 
-        if(userInfo.userRelationType > 0 ){//第三方登录
+        if (userInfo.userRelationType > 0) {//第三方登录
 
             url = HttpAddress.getRequestUrl(HttpAddress.Request_type.thrid_login);
-            param = HttpAddress.getParamsForPost(new String[]{userInfo.userRelationId,userInfo.userRelationType+""},
+            param = HttpAddress.getParamsForPost(new String[]{userInfo.userRelationId, userInfo.userRelationType + ""},
                     HttpAddress.Request_type.thrid_login, this.mBaseActivity);
 
-        }else {
-            if(TextUtils.isEmpty(userInfo.userPassword)){
+        } else {
+            if (TextUtils.isEmpty(userInfo.userPassword)) {
                 return;
             }
 
-            UbtLog.d(TAG,"userInfo userPhone = " + userInfo.userPhone + "	userEmail = " + userInfo.userEmail + "	userPassword = " + userInfo.userPassword + "   convertMD5 = " + Md5.convertMD5(userInfo.userPassword));
+            UbtLog.d(TAG, "userInfo userPhone = " + userInfo.userPhone + "	userEmail = " + userInfo.userEmail + "	userPassword = " + userInfo.userPassword + "   convertMD5 = " + Md5.convertMD5(userInfo.userPassword));
 
             url = HttpAddress.getRequestUrl(HttpAddress.Request_type.login);
 
-            if(!TextUtils.isEmpty(userInfo.userPhone)){
+            if (!TextUtils.isEmpty(userInfo.userPhone)) {
                 param = HttpAddress.getParamsForPost(new String[]{userInfo.userPhone, Md5.convertMD5(userInfo.userPassword)},
                         HttpAddress.Request_type.login, this.mBaseActivity);
 
-            }else {
+            } else {
                 param = HttpAddress.getParamsForPost(new String[]{userInfo.userEmail, Md5.convertMD5(userInfo.userPassword)},
                         HttpAddress.Request_type.login, this.mBaseActivity);
             }
         }
 
-        UbtLog.d(TAG,"url = " + url);
-        UbtLog.d(TAG,"param = " + param);
+        UbtLog.d(TAG, "url = " + url);
+        UbtLog.d(TAG, "param = " + param);
 
         OkHttpClientUtils
-                .getJsonByPostRequest(url,param,-1)
+                .getJsonByPostRequest(url, param, -1)
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        UbtLog.d(TAG,"initCourseAccessToken exception : " + e.getMessage() + "   mContext = " + mContext );
+                        UbtLog.d(TAG, "initCourseAccessToken exception : " + e.getMessage() + "   mContext = " + mContext);
                         //mHandler.sendEmptyMessage(DO_GET_COURSE_TOKEN_FAIL);
-                        if(mContext instanceof BlocklyCourseActivity) {
+                        if (mContext instanceof BlocklyCourseActivity) {
                             LessonEvent lessonEvent = new LessonEvent(LessonEvent.Event.DO_GET_COURSE_ACCESS_TOKEN_FAIL);
                             EventBus.getDefault().post(lessonEvent);
                         }
@@ -530,20 +567,20 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
                     @Override
                     public void onResponse(String response, int id) {
-                        BaseResponseModel<List<UserInfo>> baseResponseModel = GsonImpl.get().toObject(response,new TypeToken<BaseResponseModel<List<UserInfo>>>(){}.getType());
+                        BaseResponseModel<List<UserInfo>> baseResponseModel = GsonImpl.get().toObject(response, new TypeToken<BaseResponseModel<List<UserInfo>>>() {
+                        }.getType());
 
-                        UbtLog.d(TAG,"initCourseAccessToken response " + response + "   mContext = " + mContext);
-                        if(baseResponseModel.status)
-                        {
+                        UbtLog.d(TAG, "initCourseAccessToken response " + response + "   mContext = " + mContext);
+                        if (baseResponseModel.status) {
                             UserInfo current_uer = baseResponseModel.models.get(0);
 
                             mCourseAccessToken = current_uer.accessToken;
-                            if(mContext instanceof BlocklyCourseActivity) {
+                            if (mContext instanceof BlocklyCourseActivity) {
                                 LessonEvent lessonEvent = new LessonEvent(LessonEvent.Event.DO_GET_COURSE_ACCESS_TOKEN_SUCCESS);
                                 EventBus.getDefault().post(lessonEvent);
                             }
-                        }else {
-                            if(mContext instanceof BlocklyCourseActivity) {
+                        } else {
+                            if (mContext instanceof BlocklyCourseActivity) {
                                 LessonEvent lessonEvent = new LessonEvent(LessonEvent.Event.DO_GET_COURSE_ACCESS_TOKEN_FAIL);
                                 EventBus.getDefault().post(lessonEvent);
                             }

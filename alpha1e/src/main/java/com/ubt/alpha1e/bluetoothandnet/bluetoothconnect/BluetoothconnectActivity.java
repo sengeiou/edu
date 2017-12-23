@@ -20,6 +20,10 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
+import com.ubt.alpha1e.bluetoothandnet.BluetoothHelp;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -125,6 +129,8 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
 
     private boolean isConnecting = false;
     boolean isFirst = false ; //是否是首次打开
+    private boolean fromBlockRequest = false; //从Blockly跳转到蓝牙连接
+
 
     public Timer timer = new Timer();
 
@@ -141,6 +147,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
         }else {
             ib_return.setVisibility(View.VISIBLE);
         }
+        fromBlockRequest = getIntent().getBooleanExtra(Constant.BLUETOOTH_REQUEST, false);
         AutoScanConnectService.doEntryManalConnect(true);
         mHelper = new BluetoothHelper(BluetoothconnectActivity.this, BluetoothconnectActivity.this);
 
@@ -168,6 +175,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     @Override
     protected void onResume() {
         initControlListener();
+        AutoScanConnectService.doEntryManalConnect(true);
         super.onResume();
     }
 
@@ -183,11 +191,15 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
             UbtLog.d(TAG, "--onPause--mHelper UnRegisterHelper! " + mHelper.getClass().getSimpleName());
             mHelper.UnRegisterHelper();
         }
+        AutoScanConnectService.doEntryManalConnect(false);
     }
 
     @Override
     public void onDestroy() {
         UbtLog.d(TAG,"---onDestroy----");
+        if(mHandler != null){
+            mHandler.removeCallbacks(overTimeDo);
+        }
         EventBus.getDefault().unregister(this);
         if(mHelper != null){
             mHelper.cancelScan();
@@ -267,7 +279,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
            UbtLog.d(TAG,"搜索到蓝牙地址 ："+bluetoothDevice.getAddress());
         }
 
-        if(!(bluetoothDevice.getName().toLowerCase().contains("alpha"))){
+        if(!(bluetoothDevice.getName().toLowerCase().contains("alpha1e"))){
             return;
         }
 
@@ -322,22 +334,42 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
 
 
             }
+            if(tv_devices_num == null){
+                return;
+            }
             tv_devices_num.setText("发现 "+lst_robots_result_datas.size()+" 台机器人");
 
             mdevicesAdapter.notifyDataSetChanged();
         }else{
+            if(tv_devices_num == null){
+                return;
+            }
             tv_devices_num.setText("正在搜索机器人......");
         }
 
         if(!isConnecting && getDistance(rssi) < 0.8 ){
-            tv_devices_num.setText("进行自动连接蓝牙......");
+            if(tv_devices_num == null){
+                return;
+            }
+            if (((AlphaApplication) BluetoothconnectActivity.this.getApplicationContext())
+                    .getCurrentBluetooth() != null) {
+                UbtLog.d(TAG, "-蓝牙已经连上，则不使用自动连接--");
+                return ;
+            }
 
+            tv_devices_num.setText("进行自动连接蓝牙......");
+            UbtLog.d(TAG,"距离近 进行自动连接");
             mCurrentRobotInfo = receiveRobot;
             isConnecting = true;
+            if(mHandler != null){
+                mHandler.removeCallbacks(overTimeDo);
+            }
             mHelper.doCancelCoon();
             ((AlphaApplication) getApplicationContext()).cleanBluetoothConnectData();
             lst_robots_result_datas.clear();
-
+            if(mHandler != null){
+                mHandler.postDelayed(overTimeDo,30000);
+            }
             mHelper.doReCoonect(mCurrentRobotInfo);
             try {
                 rl_content_bluetooth_connect_sucess.setVisibility(View.INVISIBLE);
@@ -352,6 +384,29 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
             }
         }
     }
+
+    Runnable overTimeDo = new Runnable() {
+        @Override
+        public void run() {
+//            ToastUtils.showShort("蓝牙连接失败");
+            UbtLog.d(TAG,"蓝牙连接超时");
+            isConnecting = false;
+            if(mHelper != null){
+                mHelper.doCancelCoon();
+            }
+            try {
+                rl_content_bluetooth_connect_sucess.setVisibility(View.INVISIBLE);
+                rl_content_bluetooth_connect_fail.setVisibility(View.VISIBLE);
+                rl_content_device_list.setVisibility(View.INVISIBLE);
+                rl_content_no_device.setVisibility(View.INVISIBLE);
+                rl_content_device_researching.setVisibility(View.INVISIBLE);
+                rl_content_bluetooth_connecting.setVisibility(View.INVISIBLE);
+            }catch (Exception e){
+                e.printStackTrace();
+                return;
+            }
+        }
+    };
 
     /**
      * 更加rssi信号转换成距离
@@ -395,9 +450,15 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
                     return;
                 }
                 isConnecting = true;
+                if(mHandler != null){
+                    mHandler.removeCallbacks(overTimeDo);
+                }
                 mHelper.doCancelCoon();
                 ((AlphaApplication) getApplicationContext()).cleanBluetoothConnectData();
                 mCurrentRobotInfo = lst_robots_result_datas.get(position);
+                if(mHandler != null){
+                    mHandler.postDelayed(overTimeDo,30000);
+                }
                 mHelper.doReCoonect(mCurrentRobotInfo);
                 lst_robots_result_datas.clear();
                 try {
@@ -431,6 +492,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_close:
+                BluetoothconnectActivity.this.setResult(RESULT_OK);
                 BluetoothconnectActivity.this.finish();
                 break;
             case R.id.ib_return:
@@ -438,6 +500,8 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
                 break;
             case R.id.ib_help:
                 UbtLog.d(TAG,"ib_help click");
+                Intent help = new Intent(BluetoothconnectActivity.this, BluetoothHelp.class);
+                startActivity(help);
                 break;
             case R.id.rl_search:
 
@@ -465,6 +529,9 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
         isConnecting = false;
         isSearchDevice = true ;
         lst_robots_result_datas.clear();
+        if(tv_devices_num == null){
+            return;
+        }
         tv_devices_num.setText("正在搜索机器人......");
         buletooth_device_list.setAdapter(mdevicesAdapter);
 
@@ -536,6 +603,9 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     @Override
     public void onCoonected(boolean state) {
         UbtLog.d(TAG,"网络连接状态 onCoonected =  " + state);
+        if(mHandler != null){
+            mHandler.removeCallbacks(overTimeDo);
+        }
         if (state) {
             if(isFirst){
                 try {
@@ -549,8 +619,12 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
                     e.printStackTrace();
                 }
             }else {
+                if(fromBlockRequest){
+                    setResult(RESULT_OK);
+                }
                  BluetoothconnectActivity.this.finish();
             }
+
         }else {
             try {
                 rl_content_bluetooth_connect_sucess.setVisibility(View.INVISIBLE);

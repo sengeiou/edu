@@ -14,14 +14,15 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.base.popup.EasyPopup;
+import com.ubt.alpha1e.base.popup.HorizontalGravity;
+import com.ubt.alpha1e.base.popup.VerticalGravity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.userinfo.model.NoticeModel;
-import com.zyyoona7.lib.EasyPopup;
-import com.zyyoona7.lib.HorizontalGravity;
-import com.zyyoona7.lib.VerticalGravity;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -100,7 +101,18 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         mNoticeAdapter.bindToRecyclerView(mRecyclerviewNotice);
         mNoticeAdapter.setOnItemLongClickListener(this);
         emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_empty, null);
-        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(ResourceManager.getInstance(getActivity()).getStringResources("empty_no_noticedata"));
+        String emptyMsg = "";
+        if (mParam1.equals("1")) {
+            emptyMsg = "你目前没有任何成就";
+        } else if (mParam1.equals("2")) {
+            emptyMsg = "你目前没有任何消息";
+        } else if (mParam1.equals("3")) {
+            emptyMsg = "你目前没有任何动态";
+        } else if (mParam1.equals("5")) {
+            emptyMsg = "你目前没有任何下载";
+        }
+        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(emptyMsg);
+
         ((ImageView) emptyView.findViewById(R.id.iv_no_data)).setImageResource(R.drawable.ic_setting_push_deafult);
         emptyView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,37 +157,50 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     }
 
     EasyPopup mCirclePop = null;
+    public static final int MIN_CLICK_DELAY_TIME = 1000;
+    private long lastClickTime = 0;
+
 
     @Override
     public boolean onItemLongClick(final BaseQuickAdapter adapter, final View view, final int position) {
-        adapter.getViewByPosition(position, R.id.rl_root).setBackgroundTintList(getActivity().getResources().getColorStateList(R.color.background_delete_coor));
-        if (null != mCirclePop) {
-            mCirclePop.dismiss();
-        } else {
-            mCirclePop = new EasyPopup(getActivity())
-                    .setContentView(R.layout.dialog_item_delete)
-                    .setWidth(420)
-                    .setHeight(200)
-                    //是否允许点击PopupWindow之外的地方消失
-                    .setFocusAndOutsideEnable(true)
-                    .createPopup()
-                    .setOnDismissListener(new PopupWindow.OnDismissListener() {
-                        @Override
-                        public void onDismiss() {
-                            mNoticeAdapter.notifyDataSetChanged();
-                        }
-                    });
-        }
 
-        mCirclePop.showAtAnchorView(view, VerticalGravity.CENTER, HorizontalGravity.ALIGN_RIGHT, -80, 0);
-        TextView tvDelete = mCirclePop.getView(R.id.tv_delete);
-        tvDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mNoticeModels.remove(position);
+        long currentTime = Calendar.getInstance().getTimeInMillis();
+        if (currentTime - lastClickTime > MIN_CLICK_DELAY_TIME) {
+            lastClickTime = currentTime;
+            UbtLog.d("onItemLongClick","执行长按事件");
+            adapter.getViewByPosition(position, R.id.rl_root).setBackgroundColor(getActivity().getResources().getColor(R.color.background_delete_coor));
+            UbtLog.d("onItemLongClick", "position==========" + position);
+            if (null != mCirclePop) {
                 mCirclePop.dismiss();
+                UbtLog.d("onItemLongClick", "position====dismiss======" + position);
+            } else {
+                mCirclePop = new EasyPopup(getActivity())
+                        .setContentView(R.layout.dialog_item_delete)
+                        .setWidth(420)
+                        .setHeight(200)
+                        //是否允许点击PopupWindow之外的地方消失
+                        .setFocusAndOutsideEnable(true)
+                        .createPopup()
+                        .setOnDismissListener(new PopupWindow.OnDismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                mNoticeAdapter.notifyDataSetChanged();
+                            }
+                        });
             }
-        });
+
+            mCirclePop.showAtAnchorView(view, VerticalGravity.CENTER, HorizontalGravity.ALIGN_RIGHT, -80, 0);
+            TextView tvDelete = mCirclePop.getView(R.id.tv_delete);
+            tvDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mNoticeModels.remove(position);
+                    mCirclePop.dismiss();
+                }
+            });
+        }else{
+            UbtLog.d("onItemLongClick","没有执行长按事件");
+        }
         return false;
     }
 }

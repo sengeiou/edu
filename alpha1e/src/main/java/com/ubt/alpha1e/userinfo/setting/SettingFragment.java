@@ -16,12 +16,14 @@ import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.login.LoginActivity;
+import com.ubt.alpha1e.ui.dialog.AlertDialog;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.LoadingDialog;
 import com.ubt.alpha1e.userinfo.aboutus.AboutUsActivity;
 import com.ubt.alpha1e.userinfo.cleancache.CleanCacheActivity;
 import com.ubt.alpha1e.userinfo.contactus.ContactUsActivity;
 import com.ubt.alpha1e.userinfo.helpfeedback.HelpFeedbackActivity;
+import com.ubt.alpha1e.userinfo.myrobot.MyRobotActivity;
 import com.ubt.alpha1e.userinfo.psdmanage.PsdManageActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.changeskin.SkinManager;
@@ -57,10 +59,14 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
     ImageButton btnWifiDownload;
     @BindView(R.id.btn_message_note)
     ImageButton btnMessageNote;
+    @BindView(R.id.btn_auto_upgrade)
+    ImageButton btnAutoUpgrade;
     @BindView(R.id.rl_about)
     RelativeLayout rlAbout;
     @BindView(R.id.rl_contact_us)
     RelativeLayout rlContactUs;
+    @BindView(R.id.rl_message_myrobot)
+    RelativeLayout rlMessageMyrobot;
 
 
     Unbinder unbinder;
@@ -138,6 +144,12 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
 
         mCoonLoadingDia = LoadingDialog.getInstance(getContext());
 
+        if (mPresenter.isAutoUpgrade()) {
+            btnAutoUpgrade.setBackgroundResource(R.drawable.menu_setting_select);
+        } else {
+            btnAutoUpgrade.setBackgroundResource(R.drawable.menu_setting_unselect);
+        }
+
         if (mPresenter.isOnlyWifiDownload(getContext())) {
             btnWifiDownload.setBackgroundResource(R.drawable.menu_setting_select);
         } else {
@@ -181,7 +193,7 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
         unbinder.unbind();
     }
 
-    @OnClick({R.id.rl_clear_cache, R.id.rl_password_massage, R.id.btn_wifi_download, R.id.btn_message_note, R.id.rl_language, R.id.rl_help_feedback, R.id.rl_about, R.id.rl_contact_us, R.id.rl_logout})
+    @OnClick({R.id.rl_clear_cache, R.id.rl_password_massage, R.id.btn_wifi_download, R.id.btn_message_note,R.id.btn_auto_upgrade, R.id.rl_language, R.id.rl_help_feedback, R.id.rl_about, R.id.rl_contact_us, R.id.rl_logout ,R.id.rl_message_myrobot})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_clear_cache:
@@ -208,6 +220,16 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
                     mPresenter.doSetMessageNote(getContext(), true);
                 }
                 break;
+            case R.id.btn_auto_upgrade:
+                if (mPresenter.isAutoUpgrade()) {
+                    btnAutoUpgrade.setBackgroundResource(R.drawable.menu_setting_unselect);
+                    mPresenter.doSetAutoUpgrade(false);
+                } else {
+                    btnAutoUpgrade.setBackgroundResource(R.drawable.menu_setting_select);
+                    mPresenter.doSetAutoUpgrade(true);
+                }
+                break;
+
             case R.id.rl_language:
                 mPresenter.showLanguageDialog(getContext(), mCurrentLanguageIndex, mLanguageTitleList);
                 break;
@@ -240,8 +262,9 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
 
                     }
                 }).show();
-
-
+            case R.id.rl_message_myrobot:
+                UbtLog.d(TAG, "--rl_message_myrobot");
+//                MyRobotActivity.LaunchActivity(getContext());
                 break;
         }
     }

@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_principle">
 
     <ImageView
         android:id="@+id/iv_back"
@@ -108,9 +109,9 @@
         android:paddingLeft="10dp"
         android:gravity="center"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/tv_center_color"
         android:text="@string/ui_setting_common_next"
-        android:background="@drawable/bg_button"
+        android:background="@drawable/btn_next"
         />
 
 </RelativeLayout>

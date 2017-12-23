@@ -11,10 +11,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.google.gson.reflect.TypeToken;
-import com.tencent.ai.tvs.AuthorizeListener;
 import com.tencent.ai.tvs.LoginProxy;
-import com.tencent.ai.tvs.env.ELoginEnv;
-import com.tencent.ai.tvs.env.ELoginPlatform;
+import com.tencent.ai.tvs.info.LoginInfoManager;
 import com.tencent.ai.tvs.info.QQOpenInfoManager;
 import com.tencent.ai.tvs.info.WxInfoManager;
 import com.tencent.connect.common.Constants;
@@ -42,15 +40,13 @@ import org.json.JSONObject;
 
 import okhttp3.Call;
 
-import static com.ubt.alpha1e.base.Constant.SP_CLIENT_ID;
-
 
 /**
  * MVPPlugin
  * 邮箱 784787081@qq.com
  */
 
-public class LoginActivity extends BaseActivity implements AuthorizeListener {
+public class LoginActivity extends BaseActivity implements LoginManger.OnLoginListener {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
@@ -64,9 +60,9 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     RelativeLayout rlQQLgoin;
     RelativeLayout rlWXLogin;
 
-    private int loginType = 0; //默认 0 QQ， 1 WX;
+//    private int loginType = 0; //默认 0 QQ， 1 WX;
 
-    public static final String PID = "b0851325-3056-4853-921b-dcba21b491a3:8c901ad100ad44d98b6276adeb861058";
+    public static final String PID = "95518e46-af79-494e-b2fa-a6db6409ae6b:77022ec0a7614dbcb33c7ab73d4e2ceb";
     public static final String DSN = "123456";
 
     public static void LaunchActivity(Context context) {
@@ -89,7 +85,11 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     }
 
     private void initTVS() {
-        proxy = LoginProxy.getInstance(appidWx, appidQQOpen);
+
+        LoginManger.getInstance().init(this, this);
+
+
+ /*       proxy = LoginProxy.getInstance(appidWx, appidQQOpen);
         proxy.setOwnActivity(this);
         proxy.setAuthorizeListener(this);
         proxy.setLoginEnv(ELoginEnv.FORMAL);
@@ -104,7 +104,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
         if (proxy.isTokenExist(ELoginPlatform.QQOpen, this)) {
             proxy.requestTokenVerify(ELoginPlatform.QQOpen, PID, DSN);
         }
-
+*/
 
     }
 
@@ -118,21 +118,22 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
         rlQQLgoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loginType = 0;
-                proxy.requestLogin(ELoginPlatform.QQOpen, PID, DSN, LoginActivity.this);
+//                loginType = 0;
+//                proxy.clearToken(ELoginPlatform.QQOpen, LoginActivity.this);
+//                proxy.requestLogin(ELoginPlatform.QQOpen, PID, DSN, LoginActivity.this);
+                LoginManger.getInstance().loginQQ(LoginActivity.this);
             }
         });
 
         rlWXLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loginType = 1;
-                proxy.clearToken(ELoginPlatform.WX, LoginActivity.this);
-                proxy.requestLogin(ELoginPlatform.WX, PID, DSN, LoginActivity.this);
+//                loginType = 1;
+//                proxy.clearToken(ELoginPlatform.WX, LoginActivity.this);
+//                proxy.requestLogin(ELoginPlatform.WX, PID, DSN, LoginActivity.this);
+                LoginManger.getInstance().loginWX(LoginActivity.this);
             }
         });
-
-
     }
 
     @Override
@@ -142,14 +143,22 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
 
     @Override
-    public void onSuccess(int i) {
-        Log.e(TAG, "login onSuccess" + i);
+    public void onSuccess(int i, LoginInfoManager loginInfoManager) {
+        Log.e(TAG, "login onSuccess" + i + "--loginInfoManager:" + loginInfoManager.toString() + "--openID:" + loginInfoManager.openID);
+
+        String accessToken = loginInfoManager.accessToken;
+        String openID = loginInfoManager.openID;
+        doThirdLogin(accessToken, openID);
 
 
-        if(i==AuthorizeListener.WX_TVSIDRECV_TYPE){  //和机器人联调的
+/*        if(i==AuthorizeListener.WX_TVSIDRECV_TYPE){  //和机器人联调的
             UbtLog.d(TAG, "sss wx:"+ proxy.getClientId(ELoginPlatform.WX));
-            UbtLog.d(TAG, "sss qq:"+ proxy.getClientId(ELoginPlatform.QQOpen));
             SPUtils.getInstance().put(SP_CLIENT_ID, proxy.getClientId(ELoginPlatform.WX));
+        }
+
+        if(i== AuthorizeListener.QQOPEN_TVSIDRECV_TYPE){
+            UbtLog.d(TAG, "sss qq:"+ proxy.getClientId(ELoginPlatform.QQOpen));
+            SPUtils.getInstance().put(SP_CLIENT_ID, proxy.getClientId(ELoginPlatform.QQOpen));
         }
 
 
@@ -173,7 +182,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
 
         }
 
-        Log.e(TAG, "accessToken:" + accessToken + "--openID:" + openID + "--appID:" + appID);
+        Log.e(TAG, "accessToken:" + accessToken + "--openID:" + openID + "--appID:" + appID);*/
 
     }
 
@@ -192,7 +201,8 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_LOGIN) {
             if (resultCode == -1) {
-                proxy.handleQQOpenIntent(requestCode, resultCode, data);
+//                proxy.handleQQOpenIntent(requestCode, resultCode, data);
+                LoginManger.getInstance().handleQQOpenIntent(requestCode, resultCode, data);
             }
         }
     }
@@ -201,7 +211,7 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            ((AlphaApplication) this.getApplication()).doExitApp(true);
+            ((AlphaApplication) this.getApplication()).doExitApp(false);
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -210,8 +220,9 @@ public class LoginActivity extends BaseActivity implements AuthorizeListener {
     private void doThirdLogin(String accessToken, String openID) {
 
         String params = "";
+        UbtLog.d(TAG, "loginType:" + SPUtils.getInstance().getInt(Constant.SP_LOGIN_TYPE));
 
-        if (loginType == 0) {
+        if (SPUtils.getInstance().getInt(Constant.SP_LOGIN_TYPE) == 1) {
             params = "{"
                     + "\"accessToken\":" + "\"" + accessToken + "\""
                     + ",\n\"appId\":" + "\"" + appidQQOpen + "\""

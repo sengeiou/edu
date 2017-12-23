@@ -4,7 +4,7 @@
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="4dp" />
-            <solid android:color="#94c2f7" />
+            <solid android:color="@color/action_dilog_title" />
         </shape>
     </item>
     <!-- 主体背景颜色值 -->
@@ -14,7 +14,7 @@
         android:right="1dp"
         android:top="1dp">
         <shape>
-            <solid android:color="#94c2f7" />
+            <solid android:color="@color/action_dilog_title" />
             <corners android:radius="4dp" />
             <padding
                 android:bottom="1dp"

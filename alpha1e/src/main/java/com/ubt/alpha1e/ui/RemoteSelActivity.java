@@ -3,6 +3,7 @@ package com.ubt.alpha1e.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,10 +12,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.adapter.MyGamegadRecyclerAdapter;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.business.ActionPlayer.Play_type;
 import com.ubt.alpha1e.business.EndlessRecyclerOnScrollListener;
 import com.ubt.alpha1e.data.DB.RemoteRecordOperater;
@@ -36,9 +41,8 @@ import java.util.List;
 
 public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDiaUI {
 
-    private static final String TAG = "RemoteSelActivity";
-    //private RelativeLayout lay_item_football;
-    //private RelativeLayout lay_item_fighter;
+    private static final String TAG = RemoteSelActivity.class.getSimpleName();
+
     public RecyclerView recyclerview_my_roles;
     public LinearLayoutManager mLayoutManager;
     public MyGamegadRecyclerAdapter mAdapter;
@@ -64,13 +68,10 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
                     mAllRemoteRoleDatas.clear();
                     List<RemoteRoleInfo> roleInfos = (List<RemoteRoleInfo>)msg.obj;
                     roleInfos = dealrRoleInfos(roleInfos);
-                    addHeadData();
 
                     if(roleInfos != null && roleInfos.size() > 0){
                         mAllRemoteRoleDatas.addAll(roleInfos);
                     }
-                    roleInfo = new RemoteRoleInfo();
-                    mAllRemoteRoleDatas.add(roleInfo);
                     mAdapter.notifyDataSetChanged();
                     break;
                 case DELETE_REMOTE_ROLE:
@@ -86,7 +87,7 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
                         }
                         mAdapter.notifyDataSetChanged();
                     }else{
-                        showToast("删除失败");
+                        showToast("删除失败 ");
                     }
                     break;
                 case UPDATE_VIEW:
@@ -100,7 +101,8 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
                 case CLICK_REMOTE_ROLE:
                     if(BaseHelper.hasSdcard){
                         mClickPosition = msg.arg1;
-                        if(mClickPosition == 1 || mClickPosition == 2){
+                        clickRemoteRole(msg.arg1,true);
+                        /*if(mClickPosition == 1 || mClickPosition == 2){
                             List<String> mActionsNames = ((RemoteHelper) mHelper).getActionsNamesList();
                             UbtLog.d(TAG,"mActionsNames.size():" + mActionsNames.size());
 
@@ -113,7 +115,7 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
                             }
                         }else{
                             clickRemoteRole(msg.arg1,true);
-                        }
+                        }*/
                     }else {
                         RemoteSelActivity.this.showToast("ui_remote_synchoronize_no_sd");
                     }
@@ -134,7 +136,7 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
 
         setContentView(R.layout.activity_remote_sel);
         mHelper = new RemoteHelper(this, this);
-        mAllRemoteRoleDatas = new ArrayList<RemoteRoleInfo>();
+        mAllRemoteRoleDatas = new ArrayList<>();
         initUI();
         initControlListener();
 
@@ -146,6 +148,7 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
         setCurrentActivityLable(RemoteSelActivity.class.getSimpleName());
         super.onResume();
 
+        ((RemoteHelper) mHelper).dd();
         ((RemoteHelper) mHelper).doReadAllRemoteRole();
 
         mClickPosition = -1;
@@ -169,9 +172,34 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
 
     @Override
     protected void initUI() {
-        initTitle(getStringResources("ui_home_remote"));
-        //lay_item_football = (RelativeLayout) findViewById(R.id.lay_item_football);
-        //lay_item_fighter = (RelativeLayout) findViewById(R.id.lay_item_fighter);
+        //initTitle(getStringResources("ui_home_remote"));
+        View backView = findViewById(R.id.ll_base_back);
+        ImageView ivTitleRight = (ImageView)findViewById(R.id.iv_title_right);
+        ImageView ivClosePublish = (ImageView)findViewById(R.id.iv_close_publish);
+        TextView ivTitleName = (TextView) findViewById(R.id.tv_base_title_name);
+
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishActivity();
+            }
+        });
+
+        ivClosePublish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SPUtils.getInstance().put(Constant.SP_SHOW_REMOTE_PUBLISH,false);
+                findViewById(R.id.rl_head_tip).setVisibility(View.GONE);
+            }
+        });
+
+        ivTitleName.setText(getStringResources("ui_home_remote"));
+        ivTitleName.setTextColor(getResources().getColor(R.color.white));
+        ivTitleRight.setVisibility(View.INVISIBLE);
+//        ivTitleRight.setBackgroundResource(R.drawable.icon_remote_add);
+        if(SPUtils.getInstance().getBoolean(Constant.SP_SHOW_REMOTE_PUBLISH,true)){
+            findViewById(R.id.rl_head_tip).setVisibility(View.VISIBLE);
+        }
 
         initRecyclerViews();
     }
@@ -185,7 +213,7 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
                 finishActivity();
             }
         };
-        super.setTitleBack(backListener);
+        //super.setTitleBack(backListener);
     }
 
     @Override
@@ -198,7 +226,8 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
     }
 
     private void finishActivity(){
-        List<Activity> mActivityList = ((AlphaApplication) RemoteSelActivity.this.getApplication()).getHistoryActivityList();
+        finish();
+        /*List<Activity> mActivityList = ((AlphaApplication) RemoteSelActivity.this.getApplication()).getHistoryActivityList();
         for (int i = 0; i < mActivityList.size(); i++) {
             try {
                 if(mActivityList.get(i) != null && mActivityList.get(i).toString().contains("RemoteSelActivity")){
@@ -207,30 +236,29 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     public void initRecyclerViews() {
 
         recyclerview_my_roles = (RecyclerView) findViewById(R.id.recyclerview_my_roles);
-        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerview_my_roles.setLayoutManager(mLayoutManager);
         RecyclerView.ItemAnimator animator = recyclerview_my_roles.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
-//        recyclerview_my_roles.getItemAnimator().setSupportsChangeAnimations(false);
+        recyclerview_my_roles.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                outRect.right = 30;
+                outRect.left = 30;
+            }
+        });
         mAdapter = new MyGamegadRecyclerAdapter(this,mAllRemoteRoleDatas,mHelper,mHandler);
         recyclerview_my_roles.setAdapter(mAdapter);
         recyclerview_my_roles.addOnScrollListener(mOnScrollListener);
-    }
-
-    /**
-     * 添加头显示
-     */
-    private void addHeadData(){
-        RemoteRoleInfo roleInfo = new RemoteRoleInfo();
-        mAllRemoteRoleDatas.add(roleInfo);
     }
 
     /**
@@ -265,13 +293,13 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
     @Override
     public void onReadActionsFinish(List<String> mActionsNames) {
         try {
-
-            if(mClickPosition > 0){
-                clickRemoteRole(mClickPosition,false);
-                return;
-            }
-            mCoonLoadingDia.cancel();
-            mHandler.removeMessages(TIEM_OUT);
+//            if(mClickPosition > 0){
+//                UbtLog.d(TAG,"ccy onReadActionsFinish 2");
+//                clickRemoteRole(mClickPosition,false);
+//                return;
+//            }
+//            mCoonLoadingDia.cancel();
+//            mHandler.removeMessages(TIEM_OUT);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -285,46 +313,49 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //RemoteSelActivity.this.showToast("ui_remote_synchoronize_no_sd");
-            //this.finish();
         }
     }
 
     @Override
     protected void initControlListener() {
 
-        /*lay_item_football.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((RemoteHelper) mHelper).sendFiles(RemoteRecordOperater.ModelType.FOOTBALL_PLAYER);
-                ((LoadingDialog) mCoonLoadingDia).showMessage(RemoteSelActivity.this.getStringResources("ui_remote_initializing"));
-            }
-        });
-
-        lay_item_fighter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((RemoteHelper) mHelper).sendFiles(RemoteRecordOperater.ModelType.FIGHTER);
-                ((LoadingDialog) mCoonLoadingDia).showMessage(RemoteSelActivity.this.getStringResources("ui_remote_initializing"));
-            }
-        });*/
-
     }
 
     private void clickRemoteRole(int position,boolean showLoading){
-        if(position == 1){// football
+        if(position == 0){// football
             ((RemoteHelper) mHelper).doStopPrePlay();
-            ((RemoteHelper) mHelper).sendFiles(RemoteRecordOperater.ModelType.FOOTBALL_PLAYER);
+
+            RemoteHelper.mCurrentType = RemoteRecordOperater.ModelType.FOOTBALL_PLAYER;
+            RemoteHelper.mCurrentInfo = RemoteRecordOperater.getInstance(this, FileTools.db_log_cache, FileTools.db_log_name)
+                    .getRemoteInfoByModel(RemoteHelper.mCurrentType, false,mAllRemoteRoleDatas.get(position).roleid+"");
+            UbtLog.d(TAG,"RemoteHelper.mCurrentInfo->"+RemoteHelper.mCurrentInfo);
+
+            Intent intent = new Intent();
+            intent.setClass(this, RemoteActivity.class);
+            intent.putExtra(RemoteHelper.REMOTE_ROLE_INFO_PARAM,mAllRemoteRoleDatas.get(position));
+            this.startActivity(intent);
+            /*((RemoteHelper) mHelper).sendFiles(RemoteRecordOperater.ModelType.FOOTBALL_PLAYER);
             if(showLoading){
                 ((LoadingDialog) mCoonLoadingDia).showMessage(RemoteSelActivity.this.getStringResources("ui_remote_initializing"));
-            }
-        }else if(position == 2){// FIGHTER
+            }*/
+        }else if(position == 1){// FIGHTER
             ((RemoteHelper) mHelper).doStopPrePlay();
-            ((RemoteHelper) mHelper).sendFiles(RemoteRecordOperater.ModelType.FIGHTER);
+
+            RemoteHelper.mCurrentType = RemoteRecordOperater.ModelType.FIGHTER;
+            RemoteHelper.mCurrentInfo = RemoteRecordOperater.getInstance(this, FileTools.db_log_cache, FileTools.db_log_name)
+                    .getRemoteInfoByModel(RemoteHelper.mCurrentType, false,mAllRemoteRoleDatas.get(position).roleid+"");
+            UbtLog.d(TAG,"RemoteHelper.mCurrentInfo->"+RemoteHelper.mCurrentInfo);
+
+            Intent intent = new Intent();
+            intent.setClass(this, RemoteActivity.class);
+            intent.putExtra(RemoteHelper.REMOTE_ROLE_INFO_PARAM,mAllRemoteRoleDatas.get(position));
+            this.startActivity(intent);
+
+            /*((RemoteHelper) mHelper).sendFiles(RemoteRecordOperater.ModelType.FIGHTER);
             if(showLoading){
                 ((LoadingDialog) mCoonLoadingDia).showMessage(RemoteSelActivity.this.getStringResources("ui_remote_initializing"));
-            }
-        }else if(position == 3){//dancer
+            }*/
+        }else if(position == 2){//dancer
             //((RemoteHelper) mHelper).sendFiles(RemoteRecordOperater.ModelType.FIGHTER);
             //((LoadingDialog) mCoonLoadingDia).showMessage(RemoteSelActivity.this.getStringResources("ui_remote_initializing"));
         }else {

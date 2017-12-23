@@ -16,6 +16,8 @@ import com.ubtechinc.log.MyLog;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 public class BlueToothManager extends Thread implements ClentCallBack,
 		BluetoothUtilCallBack {
 
@@ -105,7 +107,7 @@ public class BlueToothManager extends Thread implements ClentCallBack,
 
 	// 释放所有连接
 	synchronized public void releaseAllConnected() {
-		Log.d("buletoothManager","mListClient size   :"+mListClient.size() );
+		Log.d("buletoothManager","mListClient size   :"+mListClient.size() + "	mRun = " + mRun );
 		for (BlueToothClientHandler s : mListClient) {
 			s.releaseConnection();
 		}
@@ -133,7 +135,6 @@ public class BlueToothManager extends Thread implements ClentCallBack,
 
 	synchronized public void sendCommand(String mac, byte cmd, byte[] param,
 			int len, boolean isMonopolyRight) {
-
 		if (isMonopoly && (!isMonopolyRight)){
 			return;
 		}
@@ -207,7 +208,7 @@ public class BlueToothManager extends Thread implements ClentCallBack,
 			}
 
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(2500);
 			} catch (InterruptedException e) {
 				mRun = false;
 				break;

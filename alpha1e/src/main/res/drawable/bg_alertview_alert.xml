@@ -7,6 +7,6 @@
         android:endColor="@color/bgColor_alertview_alert"
         android:startColor="@color/bgColor_alertview_alert_start" />
 
-    <corners android:radius="@dimen/radius_alertview"/>
+    <corners android:radius="1px"/>
 
 </shape>

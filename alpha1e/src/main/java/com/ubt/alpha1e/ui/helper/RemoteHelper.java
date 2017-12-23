@@ -30,6 +30,7 @@ import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ByteHexHelper;
 import com.ubtechinc.base.ConstValue;
 import com.ubtechinc.file.FileUploader;
 
@@ -136,26 +137,57 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
         //ActionsHelper.doStopMp3ForMyDownload();
 
         if (index == -1) {
-            mPlayer.doStopPlay();
+            //mPlayer.doStopPlay();
             ActionInfo info = new ActionInfo();
-            info.actionName = "Default foot1";
+            info.actionName = "Default foot";
             MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_gamepad;
             MyActionsHelper.mCurrentPlayType = MyActionsHelper.Action_type.Unkown;
-            mPlayer.doPlayAction(info);
+            if(mPlayer != null){
+                mPlayer.doPlayAction(info);
+            }
         } else {
             RemoteItem item = RemoteRecordOperater.getItemByIndex(index, mCurrentInfo);
             ActionInfo info = new ActionInfo();
             info.actionName = item.hts_name.split("\\.")[0];
             MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_gamepad;
             MyActionsHelper.mCurrentPlayType = MyActionsHelper.Action_type.Unkown;
-            mPlayer.doPlayAction(info);
+            if(mPlayer != null){
+                mPlayer.doPlayAction(info);
+            }
         }
     }
+
+    /**
+     * 执行步态算法（上下左右方向键）
+     * @param direction 方向
+     * @param speed 速度
+     * @param count 步数
+     */
+    public void doWalkAction(int direction, int speed, int count){
+        byte[] param = new byte[6];
+        param[0] = (byte) direction;
+        param[1] = (byte) speed;
+        param[2] = (byte) 0;
+        param[3] = (byte) 0;
+        param[4] = (byte) 0;
+        param[5] = (byte) 0;
+        doSendComm(ConstValue.DV_WALK, param);
+
+    }
+
+    public void doStopWalkAction(){
+        byte[] param = new byte[1];
+        param[0] = (byte) 0;
+        doSendComm(ConstValue.DV_STOP_WALK, param);
+    }
+
 
     public void doCustomAction(final int index,final int roleId) {
 
         MyActionsHelper.doStopMp3ForMyDownload();
-        mPlayer.doStopPlay();
+        if(mPlayer != null){
+            mPlayer.doStopPlay();
+        }
 
         if (index == -1) {
             //mPlayer.doStopPlay();
@@ -176,7 +208,9 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
                     MyActionsHelper.mCurrentPlayType = MyActionsHelper.Action_type.Unkown;
                     if(isSend){
                         MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_gamepad;
-                        mPlayer.doPlayAction(info);
+                        if(mPlayer != null){
+                            mPlayer.doPlayAction(info);
+                        }
                     }else{
                         if(index < 7){
                             List<String> list = new ArrayList();
@@ -258,6 +292,14 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
                             .getCurrentBluetooth().getAddress());
         }
         mPlayer.addListener(mUI);
+    }
+
+    public void doRemoterState(byte state){
+        byte[] params = new byte[2];
+        params[0] = state;
+        params[1] = 0;
+        UbtLog.d(TAG, "doChangeEditState params:" + ByteHexHelper.bytesToHexString(params));
+        doSendComm(ConstValue.DV_INTO_EDIT, params);
     }
 
     @Override
@@ -362,13 +404,14 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
                         continue;
                     }
                     boolean isSend = false;
-                    for (int j = 0; j < mActionsNames.size(); j++) {
+                    //1E 不需发送文件
+                    /*for (int j = 0; j < mActionsNames.size(); j++) {
                         String file_name = item.hts_name.substring(0, item.hts_name.lastIndexOf("."));
                         if (file_name.equalsIgnoreCase(mActionsNames.get(j))) {
                             isSend = true;
                             break;
                         }
-                    }
+                    }*/
                     if (!isSend) {
                         unSyncFileNames.add(item.hts_name);
                     }
@@ -381,7 +424,9 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
 
     public void doStopPrePlay(){
         MyActionsHelper.doStopMp3ForMyDownload();
-        mPlayer.doStopPlay();
+        if(mPlayer != null){
+            mPlayer.doStopPlay();
+        }
     }
 
     public void sendFiles(List<String> file_names) {
@@ -437,11 +482,14 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
         //逐个动作表文件名
         if ((cmd & 0xff) == (ConstValue.UV_GETACTIONFILE & 0xff)) {
                 String names = BluetoothParamUtil.bytesToString(param);
+                UbtLog.d(TAG,"names = " + names);
                 mActionsNames.add(names);
         }
         //动作文件读取完毕
         else if ((cmd & 0xff) == (ConstValue.UV_STOPACTIONFILE & 0xff)) {
-            mPlayer.setRobotActions(mActionsNames);
+            if(mPlayer != null){
+                mPlayer.setRobotActions(mActionsNames);
+            }
             changeActionsLength();
             Message msg = new Message();
             msg.what = MSG_DO_READ_ACTIONS;
@@ -460,6 +508,10 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
                 else {
 
                 }
+            }
+        }else if(cmd == ConstValue.DV_INTO_EDIT){
+            if(param != null){
+                UbtLog.d(TAG, "DV_INTO_EDIT:" + ByteHexHelper.bytesToHexString(param)  + "   = " + mUI);
             }
         }
     }
@@ -508,6 +560,12 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
                 mHandler.sendMessage(msg);
             }
         });
+    }
+
+    public void dd(){
+        byte[] params = new byte[1];
+        params[0] = (byte)1;
+        doSendComm(ConstValue.SET_PALYING_CHARGING, params);
     }
 
     public void doDelRemoteRole(final RemoteRoleInfo roleInfo){

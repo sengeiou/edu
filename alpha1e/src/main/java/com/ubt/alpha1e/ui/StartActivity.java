@@ -15,8 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.BuildConfig;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.model.AlphaStatics;
 import com.ubt.alpha1e.data.model.UserInfo;
@@ -47,25 +49,54 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
     private UserInfo mCurrentUser = null;
     private int scale = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         scale = (int) this.getResources().getDisplayMetrics().density;
         setContentView(R.layout.activity_start);
         mHelper = new StartHelper(this, this);
-        loginHelper = new LoginHelper(this);
+//        loginHelper = new LoginHelper(this);
         //读取主题信息，如果在主题动画加载完成之前读取完毕则继续检查逻辑，否则不检查
 //        ((StartHelper) mHelper).doCkeckThemeInfo();
 //        ((StartHelper) mHelper).doCkeckLanguageInfo();
-        ((StartHelper) mHelper).doReadUser();
+//        ((StartHelper) mHelper).doReadUser();
         // google play不自主升级-------------------start
 //        ((StartHelper) mHelper).doUpdateApk();
         // google play不自主升级-------------------end
-        ((StartHelper) mHelper).doGetLocation();
-        ((StartHelper) mHelper).doRunGetResServices();
+        //((StartHelper) mHelper).doGetLocation();
+//        ((StartHelper) mHelper).doRunGetResServices();
 
         //add by lihai upgadeDB
-       // ((StartHelper) mHelper).UpgadeDB();
+//       ((StartHelper) mHelper).UpgadeDB();
+
+        UbtLog.d(TAG,"BUILD_TYPE = " + BuildConfig.BUILD_TYPE + "   DEBUG = " +BuildConfig.DEBUG );
+//        if(!"release".equals(BuildConfig.BUILD_TYPE)){
+//            UbtLog.d(TAG,"BUILD_TYPE == " + BuildConfig.BUILD_TYPE + "   DEBUG = " +BuildConfig.DEBUG );
+//            //String userStr = "{userId='751092', nickName='为爱奋斗', sex='1', grade='幼儿园中班及以下', age='5', headPic='http://q.qlogo.cn/qqapp/1106515940/2C8C4C2F028186E077E92AD322462565/100 ', phone='13670062587'}";
+//            String userStr="{userId='748872', nickName='刘海', sex='1', grade='小学四年级', age='9', headPic='http://q.qlogo.cn/qqapp/1106515940/AB8F9F9F67B93213C91B21D02C18C0B4/100', phone='15999550702'}";
+//            String userId = "748872";
+//            String userImage = "http://q.qlogo.cn/qqapp/1106515940/2C8C4C2F028186E077E92AD322462565/100";
+//            String nickName = "为爱奋斗";
+//            String loginToken = "9a1948ecc7314f74960c05bc8f7127ff748872";
+//            UserModel u = GsonImpl.get().toObject(userStr,UserModel.class);
+//
+//            SPUtils.getInstance().put(Constant.SP_USER_ID, userId);
+//            SPUtils.getInstance().put(Constant.SP_USER_IMAGE, userImage);
+//            SPUtils.getInstance().put(Constant.SP_USER_NICKNAME, nickName);
+//            SPUtils.getInstance().put(Constant.SP_LOGIN_TOKEN, loginToken);
+//            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, u);
+//        }else {
+//            UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+//
+//            UbtLog.d(TAG,"userModel 1= " + userModel);
+//            UbtLog.d(TAG,"userModel 2= " + SPUtils.getInstance().getString(Constant.SP_USER_INFO));
+//            UbtLog.d(TAG,"userModel 3= " + SPUtils.getInstance().getString(Constant.SP_USER_ID));
+//            UbtLog.d(TAG,"userModel 4= " + SPUtils.getInstance().getString(Constant.SP_USER_IMAGE));
+//            UbtLog.d(TAG,"userModel 5= " + SPUtils.getInstance().getString(Constant.SP_USER_NICKNAME));
+//            UbtLog.d(TAG,"userModel 6= " + SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN));
+//        }
+
 
         initUI();
 
@@ -172,7 +203,7 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
                         }
                     });
                     ((StartHelper) mHelper).doUpdateLanguage();
-                } else if (((StartHelper) mHelper).isNeedUpdateApk()) {
+
                 } else {
                     gotoNext();
                 }
@@ -240,7 +271,33 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
     @Override
     public void gotoNext() {
 
-        mHandler.sendEmptyMessage(0x111);
+        PermissionUtils.getInstance(this)
+                .request(new PermissionUtils.PermissionLocationCallback() {
+                    @Override
+                    public void onSuccessful() {
+                        //  ToastUtils.showShort("申请拍照权限成功");
+                        ((StartHelper) mHelper).UpgadeDB();
+                        mHandler.sendEmptyMessageDelayed(0x111, 1000);
+                    }
+
+                    @Override
+                    public void onFailure() {
+//                        ToastUtils.showShort("申请存储权限失败");
+                        finish();
+                    }
+
+                    @Override
+                    public void onRationSetting() {
+
+                    }
+
+                    @Override
+                    public void onCancelRationSetting() {
+                        finish();
+                    }
+                }, PermissionUtils.PermissionEnum.STORAGE,this);
+
+
 
     }
 
@@ -254,6 +311,10 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 0x111) {
+
+
+
+
                 Intent inte = new Intent();
 
         /*if (((StartHelper) mHelper).isNeedCompleteInfo()) {

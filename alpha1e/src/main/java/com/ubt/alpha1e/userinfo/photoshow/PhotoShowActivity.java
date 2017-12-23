@@ -4,17 +4,20 @@ package com.ubt.alpha1e.userinfo.photoshow;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.alertview.OnItemClickListener;
+import com.ubt.alpha1e.ui.dialog.alertview.SheetAlertView;
+import com.ubt.alpha1e.userinfo.contactus.ContactUsActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
-
-import java.security.Permission;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,28 +44,58 @@ public class PhotoShowActivity extends MVPBaseActivity<PhotoShowContract.View, P
 
     @Override
     protected void initUI() {
-        ivUbtWechat.setOnLongClickListener(new View.OnLongClickListener() {
+
+    }
+
+    private void showSaveAlert(SpannableString menuStr){
+        new SheetAlertView(null, null, null,
+                new SpannableString[]{menuStr,new SpannableString(getStringResources("ui_common_cancel"))},
+                null,
+                PhotoShowActivity.this, SheetAlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int position){
+                UbtLog.d(TAG,"position = " + position);
+                switch (position)
+                {
+                    case 0:
+                        doSavePhoto();
+                        break;
+                    case 1:
+                        finishActivity();
+                        break;
+                }
+            }
+        }).show();
+    }
+
+    private void doSavePhoto(){
+        PermissionUtils.getInstance(PhotoShowActivity.this).request(new PermissionUtils.PermissionLocationCallback() {
             @Override
-            public boolean onLongClick(View v) {
-                UbtLog.d(TAG,"doSavePhoto");
-                PermissionUtils.getInstance(PhotoShowActivity.this).request(new PermissionUtils.PermissionLocationCallback() {
-                    @Override
-                    public void onSuccessful() {
-                        mPresenter.doSavePhoto();
-                    }
+            public void onSuccessful() {
+                mPresenter.doSavePhoto();
+            }
 
-                    @Override
-                    public void onFailure() {
+            @Override
+            public void onFailure() {
 
-                    }
+            }
 
-                    @Override
-                    public void onRationSetting() {
+            @Override
+            public void onRationSetting() {
 
-                    }
-                }, PermissionUtils.PermissionEnum.STORAGE);
+            }
 
-                return false;
+            @Override
+            public void onCancelRationSetting() {
+            }
+
+        }, PermissionUtils.PermissionEnum.STORAGE,PhotoShowActivity.this);
+    }
+
+    private void finishActivity(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                PhotoShowActivity.this.finish();
             }
         });
     }
@@ -90,11 +123,16 @@ public class PhotoShowActivity extends MVPBaseActivity<PhotoShowContract.View, P
         initUI();
     }
 
-    @OnClick({R.id.iv_back})
+    @OnClick({R.id.iv_back, R.id.iv_ubt_wechat})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 PhotoShowActivity.this.finish();
+                break;
+            case R.id.iv_ubt_wechat:
+                {
+                    showSaveAlert(new SpannableString(getStringResources("ui_setting_save_website")));
+                }
                 break;
         }
     }
@@ -102,5 +140,8 @@ public class PhotoShowActivity extends MVPBaseActivity<PhotoShowContract.View, P
     @Override
     public void onSavePhoto(boolean isSuccess,String msg) {
         ToastUtils.showShort(msg);
+        if(isSuccess){
+            finishActivity();
+        }
     }
 }

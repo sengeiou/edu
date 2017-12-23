@@ -13,12 +13,17 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.blockly.BlocklyProjectMode;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.ISharedPreferensListenet;
+import com.ubt.alpha1e.login.LoginManger;
+import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -95,6 +100,16 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
     }
 
     @Override
+    public void doSetAutoUpgrade(boolean isAutoUpgrade) {
+        SPUtils.getInstance().put(Constant.SP_AUTO_UPGRADE,isAutoUpgrade);
+    }
+
+    @Override
+    public boolean isAutoUpgrade() {
+        return SPUtils.getInstance().getBoolean(Constant.SP_AUTO_UPGRADE,true);
+    }
+
+    @Override
     public void showLanguageDialog(Context context, int currentPosition, final List<String> languageList) {
         View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_useredit_wheel, null);
         ViewHolder viewHolder = new ViewHolder(contentView);
@@ -158,6 +173,7 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
                 }, -1);
     }
 
+
     @Override
     public void doLogout() {
         SPUtils.getInstance().remove(Constant.SP_USER_INFO);
@@ -165,6 +181,10 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
         SPUtils.getInstance().remove(Constant.SP_USER_IMAGE);
         SPUtils.getInstance().remove(Constant.SP_USER_NICKNAME);
         SPUtils.getInstance().remove(Constant.SP_LOGIN_TOKEN);
+        DataSupport.deleteAll(LocalActionRecord.class);
+        DataSupport.deleteAll(BlocklyProjectMode.class);
+        LoginManger.getInstance().loginOut();
+
     }
 
     public int getLanguageCurrentIndex() {

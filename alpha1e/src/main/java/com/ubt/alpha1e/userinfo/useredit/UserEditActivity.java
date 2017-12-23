@@ -39,7 +39,6 @@ import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.userinfo.model.UserAllModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
-import com.ubt.alpha1e.userinfo.util.TVUtils;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.NameLengthFilter;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -123,7 +122,8 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
         mTvUserName.setFilters(filters);
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
         if(mTvUserName.getText().toString().length()==0){
-            mTvUserName.setText(mUserModel.getNickName());
+            String name = FileUtils.utf8ToString(mUserModel.getNickName());
+            mTvUserName.setText(name);
             mTvUserName.setSelection(mTvUserName.getText().length());
         }
         if(TextUtils.isEmpty(age)){
@@ -145,7 +145,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     }
 
     private void checkSaveEnable(){
-        if(mTvUserName.getText().length()>0 && !mTvUserAge.getText().toString().equals("未填写")
+        if(mTvUserName.getText().toString().trim().length()>0 && !mTvUserName.getText().toString().trim().equals("") && !mTvUserAge.getText().toString().equals("未填写")
                 && !mTvUserGrade.getText().toString().equals("未填写")){
             ivSave.setEnabled(true);
         }else{
@@ -185,26 +185,33 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                 mPresenter.showImageHeadDialog(UserEditActivity.this);
                 break;
             case R.id.tv_user_age:
+                if(ageList.size()==0){
+                    ToastUtils.showShort("网络异常");
+                    return;
+                }
                 mPresenter.showAgeDialog(UserEditActivity.this, ageList, mPresenter.getPosition(age,ageList));
                 break;
             case R.id.tv_user_grade:
-
+                if(gradeList.size()==0){
+                    ToastUtils.showShort("网络异常");
+                    return;
+                }
                 mPresenter.showGradeDialog(UserEditActivity.this, mPresenter.getPosition(grade,gradeList), gradeList);
                 break;
             case R.id.iv_complete_info:
 
-                if(!mTvUserName.getText().toString().equals(mUserModel.getNickName())){
-                    if(!TVUtils.isCorrectStr(mTvUserName.getText().toString())) {
-                        ToastUtils.showShort("仅限汉字、字母及数字");
-                        return;
-                    }
-                }
+//                if(!mTvUserName.getText().toString().equals(mUserModel.getNickName())){
+//                    if(!TVUtils.isCorrectStr(mTvUserName.getText().toString())) {
+//                        ToastUtils.showShort("仅限汉字、字母及数字");
+//                        return;
+//                    }
+//                }
 
                 LoadingDialog.show(UserEditActivity.this);
                 UpdateUserInfoRequest request = new UpdateUserInfoRequest();
                 request.setAge(age);
                 request.setGrade(grade);
-                request.setNickName(mTvUserName.getText().toString());
+                request.setNickName(FileUtils.stringToUtf8(mTvUserName.getText().toString()));
                 request.setSex(sex);
                 File file = null;
                 if(!TextUtils.isEmpty(path)){
@@ -276,7 +283,13 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                     public void onRationSetting() {
                         // ToastUtils.showShort("申请拍照权限已经被拒绝过");
                     }
-                }, PermissionUtils.PermissionEnum.CAMERA);
+
+                    @Override
+                    public void onCancelRationSetting() {
+                    }
+
+
+                }, PermissionUtils.PermissionEnum.CAMERA,this);
 
     }
 
@@ -332,7 +345,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
      * 更新信息失败
      */
     @Override
-    public void updateUserModelFailed() {
+    public void updateUserModelFailed(String str) {
 
     }
 
@@ -412,7 +425,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     @Override
     public void errorEditTextStr() {
         if(!mTvUserName.getText().toString().equals(mUserModel.getNickName())){
-            ToastUtils.showShort("仅限汉字、字母及数字");
+//            ToastUtils.showShort("仅限汉字、字母及数字");
         }
 
     }

@@ -53,7 +53,7 @@ public class ConfirmDialog {
         btn_pos.setVisibility(View.GONE);
 
         // 定义Dialog布局和参数
-        dialog = new Dialog(context, R.style.AlertDialogStyle);
+        dialog = new Dialog(context, R.style.NewAlertDialogStyle);
         dialog.setContentView(view);
 
         // 调整dialog背景大小
@@ -167,8 +167,18 @@ public class ConfirmDialog {
         }
     }
 
+    public boolean isShowing(){
+        return dialog.isShowing();
+    }
+
     public void show() {
         setLayout();
         dialog.show();
+    }
+
+    public void dismiss() {
+        if(dialog != null){
+            dialog.dismiss();
+        }
     }
 }

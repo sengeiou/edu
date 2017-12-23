@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.ui.helper;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +15,7 @@ import com.ubt.alpha1e.data.BasicSharedPreferencesOperator.DataType;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.NewActionInfo;
 import com.ubt.alpha1e.ui.BaseActivity;
+import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ByteHexHelper;
 import com.ubtechinc.base.ConstValue;
@@ -23,6 +25,7 @@ import java.util.List;
 
 public class ActionsEditHelper extends BaseHelper implements
         NewActionsManagerListener {
+
 
     public enum StartType {
         edit_type, new_type
@@ -51,7 +54,7 @@ public class ActionsEditHelper extends BaseHelper implements
     public static final int GetThumbnailRequestCodeByVideo = 1008;
 
     private NewActionPlayer mNewPlayer;
-    private  NewActionsManager mNewActionsManager;
+    private NewActionsManager mNewActionsManager;
     private IEditActionUI mUI;
     private Handler mHandler = new Handler() {
 
@@ -60,26 +63,27 @@ public class ActionsEditHelper extends BaseHelper implements
                 mUI.onReadEng((byte[]) msg.obj);
             }
             if (msg.what == msg_on_change_action_finish) {
+                UbtLog.d("hand", "wmma msg_on_change_action_finish:" + mUI.getClass());
+
                 mUI.onChangeActionFinish();
             }
         }
     };
 
+    @Override
     public void UnRegisterHelper() {
         super.UnRegisterHelper();
         mNewActionsManager.removeListener(this);
 
     }
 
-    public boolean getActionSaveState()
-    {
-        return  mNewActionsManager.isSaveSuccess;
+    public boolean getActionSaveState() {
+        return mNewActionsManager.isSaveSuccess;
     }
 
-    public NewActionInfo getNewActionInfo()
-    {
+    public NewActionInfo getNewActionInfo() {
 
-        return  mNewActionsManager.mChangeNewActionInfo;
+        return mNewActionsManager.mChangeNewActionInfo;
     }
 
     @Override
@@ -94,12 +98,12 @@ public class ActionsEditHelper extends BaseHelper implements
         try {  //以下会报空错误，先try catch
             if (mNewPlayer == null) {
                 mNewPlayer = NewActionPlayer
-                        .getPlayer(((AlphaApplication) mBaseActivity
+                        .getPlayer(((AlphaApplication) mContext
                                 .getApplicationContext()).getCurrentBluetooth()
                                 .getAddress());
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             UbtLog.d("ActionsEditHelper", "e:" + e.getMessage());
         }
 
@@ -110,6 +114,30 @@ public class ActionsEditHelper extends BaseHelper implements
         mNewActionsManager.addListener(this);
 
     }
+
+    public ActionsEditHelper(Context context, IEditActionUI _ui) {
+        super(context);
+        mUI = _ui;
+        try {  //以下会报空错误，先try catch
+            if (mNewPlayer == null) {
+                mNewPlayer = NewActionPlayer
+                        .getPlayer(((AlphaApplication) context
+                                .getApplicationContext()).getCurrentBluetooth()
+                                .getAddress());
+            }
+
+        } catch (Exception e) {
+            UbtLog.d("ActionsEditHelper", "e:" + e.getMessage());
+        }
+
+        if (mNewPlayer != null) {
+            mNewPlayer.addListener(mUI);
+        }
+        mNewActionsManager = NewActionsManager.getInstance(context);
+        mNewActionsManager.addListener(this);
+
+    }
+
 
     public ActionsEditHelper(BaseActivity _baseActivity, IEditActionUI _ui, long tag) {
         super(_baseActivity);
@@ -128,7 +156,6 @@ public class ActionsEditHelper extends BaseHelper implements
     }
 
 
-
     public void doReadAllEng() {
         doSendComm(ConstValue.READ_ALL_ENGINE, null);
     }
@@ -137,6 +164,33 @@ public class ActionsEditHelper extends BaseHelper implements
     public void doCtrlAllEng(byte[] datas) {
         doSendComm(ConstValue.CTRL_ALL_ENGINE, datas);
     }
+
+
+    /**
+     * 读取红外传感器距离
+     *
+     * @param status 01表示进入 ，00表示离开
+     */
+    public void doEnterCourse(byte status) {
+        UbtLog.d("ActionsEditHelper", "doReadInfraredSensor status:" + status);
+        byte[] params = new byte[1];
+        params[0] = status;
+        doSendComm(ConstValue.DV_ENTER_COURSE, params);
+    }
+
+    /**
+     * 进入和退出动作编辑
+     *
+     */
+    public void doEnterOrExitActionEdit(byte status){
+        byte[] params = new byte[2];
+        params[0] = status;
+        params[1] = 0;
+        UbtLog.d("ActionsEditHelper", "doEnterOrExitActionEdit status:" + ByteHexHelper.bytesToHexString(params));
+        doSendComm(ConstValue.DV_INTO_EDIT, params);
+    }
+
+
 
     @Override
     public void onSendData(String mac, byte[] datas, int nLen) {
@@ -163,21 +217,76 @@ public class ActionsEditHelper extends BaseHelper implements
     }
 
     @Override
+    public void onDeviceDisConnected(String mac) {
+        super.onDeviceDisConnected(mac);
+        UbtLog.d("ActionsEditHelper", "--onDeviceDisConnected--" + this);
+        if (mListener != null) {
+            mListener.onDisconnect();
+        }
+    }
+
+    @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
+        // UbtLog.d("EditHelper", "cmd==" + cmd + "  params==" + ByteHexHelper.bytesToHexString(param));
         if (cmd == ConstValue.READ_ALL_ENGINE) {
             UbtLog.d("onReceiveData", ByteHexHelper.bytesToHexString(param));
             Message msg = new Message();
             msg.what = msg_on_read_all_eng;
             msg.obj = param;
             mHandler.sendMessage(msg);
-        }else if(cmd == ConstValue.CTRL_ONE_ENGINE){
+        } else if (cmd == ConstValue.CTRL_ONE_ENGINE) {
             UbtLog.d("onReceiveData", ByteHexHelper.bytesToHexString(param));
             Message msg = new Message();
             msg.what = msg_on_read_all_eng;
             msg.obj = param;
             mHandler.sendMessage(msg);
+        } else if (cmd == ConstValue.DV_SET_PLAY_SOUND) {
+            if (param != null) {
+                UbtLog.d("EditHelper", "sound:" + ByteHexHelper.bytesToHexString(param) + "param[0]:" + param[0]);
+                if (param[0] == 1) {
+                    UbtLog.d("EditHelper", "播放完成");
+                    if (mListener != null) {
+                        // mListener.playComplete();
+                    }
+                }
+            }
+        } else if (cmd == 0xE1) {
+            UbtLog.d("EditHelper", "退出课程");
+        } else if (cmd == ConstValue.DV_ACTION_FINISH)// 动作播放完毕
+        {
+            UbtLog.d("ActionEditHelper", "动作播放完成");
+            if (mListener != null) {
+                mListener.playComplete();
+            }
+        } else if (cmd == ConstValue.DV_TAP_HEAD) {
+            UbtLog.d("EditHelper", "TAP_HEAD = " + cmd);
+            if (mListener != null) {
+                mListener.tapHead();
+            }
+        }else if(cmd == ConstValue.DV_INTO_EDIT){
+            if(param != null){
+                UbtLog.d("", "进入或退出动作编辑param:" + ByteHexHelper.bytesToHexString(param));
+            }
         }
+    }
+
+    PlayCompleteListener mListener;
+
+    public PlayCompleteListener getListener() {
+        return mListener;
+    }
+
+    public void setListener(PlayCompleteListener listener) {
+        mListener = listener;
+    }
+
+    public interface PlayCompleteListener {
+        void playComplete();
+
+        void onDisconnect();
+
+        void tapHead();
     }
 
     public void doLostPower() {
@@ -190,7 +299,31 @@ public class ActionsEditHelper extends BaseHelper implements
         doSendComm(ConstValue.CTRL_ONE_ENGINE, params);
     }
 
-    public void doLostLeftHandAndRead(){
+    /**
+     * 课程播放
+     *
+     * @param str
+     */
+    public void playCourse(String str) {
+
+        doSendComm(ConstValue.DV_SET_PLAY_SOUND, BluetoothParamUtil.stringToBytes(str));
+    }
+
+    /**
+     * 播放动作
+     *
+     * @param actionName
+     */
+    public void playAction(String actionName) {
+
+        byte[] actions = BluetoothParamUtil.stringToBytes(actionName);
+        ((AlphaApplication) mContext
+                .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) mContext.getApplicationContext())
+                .getCurrentBluetooth().getAddress(), ConstValue.DV_PLAYACTION, actions, actions.length, false);
+    }
+
+
+    public void doLostLeftHandAndRead() {
         doLostOnePower(1);
         doLostOnePower(2);
         doLostOnePower(3);
@@ -230,13 +363,14 @@ public class ActionsEditHelper extends BaseHelper implements
 
     public void doActionCommand(Command_type comm_type, NewActionInfo action) {
 
-        if (!mBaseActivity.checkCoon()) {
+        if (((AlphaApplication) mContext.getApplicationContext())
+                .getCurrentBluetooth() == null) {
             return;
         }
 
         if (comm_type == Command_type.Do_play) {
 
-            mNewPlayer.PlayAction(action, mBaseActivity);
+            mNewPlayer.PlayAction(action, mContext);
 
         } else if (comm_type == Command_type.Do_pause_or_continue) {
             if (mNewPlayer.getState() != PlayerState.STOPING) {
@@ -257,7 +391,7 @@ public class ActionsEditHelper extends BaseHelper implements
     public void saveMyNewAction(NewActionInfo mCurrentAction,
                                 Bitmap mCurrentActionImg, String musicDir) {
         if (mCurrentActionImg != null) {
-            mCurrentAction.actionHeadUrl = FileTools.actions_new_cache+ File.separator+"Images/"+System.currentTimeMillis()+".jpg";
+            mCurrentAction.actionHeadUrl = FileTools.actions_new_cache + File.separator + "Images/" + System.currentTimeMillis() + ".jpg";
             FileTools.writeImage(mCurrentActionImg,
                     mCurrentAction.actionHeadUrl, true);
         } else {
@@ -269,16 +403,16 @@ public class ActionsEditHelper extends BaseHelper implements
             mCurrentAction.editerId = getCurrentUser().userId + "";
         }
         if (mCurrentAction.actionId == -1) {
-            mNewActionsManager.doSave(mCurrentAction,musicDir);
+            mNewActionsManager.doSave(mCurrentAction, musicDir);
         } else {
             mNewActionsManager.doUpdate(mCurrentAction);
         }
     }
 
     public void saveMyNewAction(NewActionInfo mCurrentAction,
-                                Bitmap mCurrentActionImg , long dubTag, int type) {
+                                Bitmap mCurrentActionImg, long dubTag, int type) {
         if (mCurrentActionImg != null) {
-            mCurrentAction.actionHeadUrl = FileTools.actions_new_cache+ File.separator+"Images/"+System.currentTimeMillis()+".jpg";
+            mCurrentAction.actionHeadUrl = FileTools.actions_new_cache + File.separator + "Images/" + System.currentTimeMillis() + ".jpg";
             FileTools.writeImage(mCurrentActionImg, mCurrentAction.actionHeadUrl, true);
         } else {
             mCurrentAction.actionHeadUrl = "";
@@ -301,13 +435,14 @@ public class ActionsEditHelper extends BaseHelper implements
     @Override
     public void onChangeNewActionsFinish() {
         // TODO Auto-generated method stub
+        UbtLog.d("achelper", "wmma msg_on_change_action_finish");
         Message msg = new Message();
         msg.what = msg_on_change_action_finish;
         mHandler.sendMessage(msg);
     }
 
     public void changeFirstUseEditState() {
-        BasicSharedPreferencesOperator.getInstance(mBaseActivity,
+        BasicSharedPreferencesOperator.getInstance(mContext,
                 DataType.USER_USE_RECORD).doWrite(
                 BasicSharedPreferencesOperator.IS_FIRST_USE_EDIT_ACTION,
                 BasicSharedPreferencesOperator.IS_FIRST_USE_EDIT_ACTION_FALSE,
@@ -316,7 +451,7 @@ public class ActionsEditHelper extends BaseHelper implements
 
     public boolean isFirstEditMain() {
         if (BasicSharedPreferencesOperator
-                .getInstance(mBaseActivity, DataType.USER_USE_RECORD)
+                .getInstance(mContext, DataType.USER_USE_RECORD)
                 .doReadSync(
                         BasicSharedPreferencesOperator.IS_FIRST_USE_EDIT_ACTION)
                 .equals(BasicSharedPreferencesOperator.IS_FIRST_USE_EDIT_ACTION_FALSE))
@@ -329,9 +464,10 @@ public class ActionsEditHelper extends BaseHelper implements
                 mUI);
     }
 
-    /**复位动作**/
-    public void doDefaultActions()
-    {
+    /**
+     * 复位动作
+     **/
+    public void doDefaultActions() {
         byte[] param = new byte[1];
         param[0] = 0;
         doSendComm(ConstValue.DV_SET_ACTION_DEFAULT, param);

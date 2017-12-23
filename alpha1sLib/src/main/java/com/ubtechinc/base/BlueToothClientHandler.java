@@ -113,7 +113,7 @@ public class BlueToothClientHandler extends Thread implements
 	 * @return
 	 */
 	public boolean tryToReleaseConnection() {
-		boolean bTimeOut = SystemClock.uptimeMillis() - mLastRcvTime > 6000;
+		boolean bTimeOut = SystemClock.uptimeMillis() - mLastRcvTime > 10000;
 		if (mRun == false || this.isAlive() == false || bTimeOut){
 			Log.e(TAG,"tryToReleaseConnection  mRun:"+mRun + "		isAlive():" + this.isAlive() + "	bTimeOut:" + bTimeOut);
 			MyLog.writeLog(TAG,"tryToReleaseConnection  mRun:"+mRun + "		isAlive():" + this.isAlive() + "	bTimeOut:" + bTimeOut);
@@ -163,7 +163,6 @@ public class BlueToothClientHandler extends Thread implements
 						&& !ByteHexHelper.bytesToHexString(pTemp).startsWith("fb bf 06 08")){
 					Log.d(TAG,"receive : " + ByteHexHelper.bytesToHexString(pTemp) + "	bytes = " + bytes);
 				}
-
 				for (int i = 0; i < bytes; i++) {
 					if (mPacketRead.setData_(buffer[i])) {
 						// 一帧数据接收完成
@@ -219,7 +218,6 @@ public class BlueToothClientHandler extends Thread implements
 				Log.d(TAG,"send : "+ByteHexHelper.bytesToHexString(data));
 			}
 
-
 			if(mUpgrage){
 				return;
 			}
@@ -249,6 +247,8 @@ public class BlueToothClientHandler extends Thread implements
 				return;
 			}
 			mmOutStream.write(data, 0, len);
+//			Thread.sleep(10);
+//            Log.d(TAG,"ccy test :4 ");
 			mLastSendTime = SystemClock.uptimeMillis();
 		} catch (IOException e) {
 			Log.e(TAG, "write data IOException, disconnected", e);
