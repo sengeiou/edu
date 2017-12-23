@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -325,7 +326,7 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
-                onBackPressed();
+                onBack();
                 break;
             case R.id.rl_dialogue_2:
                 break;
@@ -340,7 +341,18 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
     }
 
     @Override
-    public void onBackPressed() {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() ==KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            onBack();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 返回
+     */
+    public void onBack() {
+        UbtLog.d(TAG,"onBack = ");
         ((PrincipleHelper)mHelper).doInit();
         ((PrincipleHelper)mHelper).doEnterCourse((byte)0);
 

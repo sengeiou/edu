@@ -89,6 +89,7 @@
     <color name="A14">#FFB936</color>
     <color name="A15">#C8D8DF</color>
     <color name="A16">#CFDDE3</color>
+    <color name="A20">#2BAFE2</color>
 
     <!--Text colors-->
 
@@ -119,6 +120,9 @@
     <color name="T25">#2CAFE2</color>
     <color name="T26">#839AA5</color>
     <color name="T27">#434D51</color>
+    <color name="T28">#9F9FA3</color>
+    <color name="T29">#44A62E</color>
+    <color name="T30">#E4F2F7</color>
     <color name="DT5">#3498DB</color>
     <color name="LT1">#2c3e50</color>
     <color name="LT2">#2c3e50</color>

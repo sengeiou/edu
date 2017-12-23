@@ -16,17 +16,22 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baoyz.pg.PG;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsActivity;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.adapter.HabitsEventRecyclerAdapter;
+import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventInfo;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
+import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.utils.log.UbtLog;
-
+import com.ubt.alpha1e.data.Constant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,10 +98,21 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
                     break;
                 case SHOW_EVENT_INFO:
                     //显示详情
+                    UbtLog.d(TAG,"--SHOW_EVENT_INFO--");
+
+                    startForResult(HibitsEventEditFragment.newInstance(mHabitsEventInfoDatas.get(msg.arg1)), Constant.HIBITS_EVENT_EDIT_REQUEST_CODE);
+
                     break;
             }
         }
     };
+
+    public static ParentManageCenterFragment newInstance() {
+        ParentManageCenterFragment manageCenterFragment = new ParentManageCenterFragment();
+        Bundle bundle = new Bundle();
+        manageCenterFragment.setArguments(bundle);
+        return manageCenterFragment;
+    }
 
     @Override
     protected void initUI() {
@@ -168,7 +184,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
             }
         });
 
-        mAdapter = new HabitsEventRecyclerAdapter(getContext(), mHabitsEventInfoDatas, mHandler);
+        mAdapter = new HabitsEventRecyclerAdapter(getContext(), mHabitsEventInfoDatas,false, mHandler);
         rvHabitsEvent.setAdapter(mAdapter);
     }
 
@@ -202,22 +218,42 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
     }
 
     @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+        UbtLog.d(TAG,"requestCode = " + requestCode);
+        if(requestCode == Constant.HIBITS_EVENT_EDIT_REQUEST_CODE && resultCode == Constant.HIBITS_EVENT_EDIT_RESPONSE_CODE ){
+            UbtLog.d(TAG,"resultCode = " + resultCode + "   " + data.getParcelable(Constant.HABITS_EVENT_INFO_KEY));
+        }
+
+    }
+
+    @Override
     public void onTest(boolean isSuccess) {
         UbtLog.d("Test1Fragment", "isSuccess = " + isSuccess);
     }
 
     @Override
-    public void showBehaviourList(List<HabitsEvent> modelList) {
+    public void showBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
 
     }
 
     @Override
-    public void showBehaviourEventContent(HabitsEventDetail content) {
+    public void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg) {
 
     }
 
     @Override
-    public void showBehaviourPlayContent(List<PlayContent> playList) {
+    public void showBehaviourPlayContent(boolean status, List<PlayContent> playList, String errorMsg) {
+
+    }
+
+    @Override
+    public void showNetworkRequestError() {
+
+    }
+
+    @Override
+    public void onAlertSelectItem(int index, String language, int alertType) {
 
     }
 
@@ -226,9 +262,13 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_back:
-                getActivity().finish();
+                pop();
                 break;
             case R.id.iv_title_right:
+                mPresenter.getBehaviourList("1","5");
+                mPresenter.getBehaviourEvent("12345");
+                mPresenter.getBehaviourPlayContent("1","6");
+                mPresenter.setBehaviourEvent("1234",1);
                 break;
             case R.id.rl_workdays:
                 switchMode();
