@@ -94,7 +94,9 @@ public class DownLoadActionManager {
                     UbtLog.d(TAG, "actionInfo : null ");
                     return;
                 }
-
+                if (mActionListener != null) {
+                    mActionListener.getDownLoadProgress(actionInfo, downloadProgressInfo);
+                }
                 if (downloadProgressInfo.status == 1) {
                     //下载中
                     UbtLog.d(TAG, "机器人下载进度, actionName : " + actionInfo.actionName + " " + downloadProgressInfo.progress);
@@ -117,9 +119,7 @@ public class DownLoadActionManager {
                     }
 
                     UbtLog.d(TAG, "机器人下载结束, actionName : " + actionInfo.actionName + " state : " + state + "  ");
-                    if (mActionListener != null) {
-                        mActionListener.getDownLoadProgress(actionInfo, downloadProgressInfo);
-                    }
+
                     mRobotDownList.remove(actionInfo);
                 }
 
@@ -149,10 +149,15 @@ public class DownLoadActionManager {
             } else if (cmd == ConstValue.DV_ACTION_FINISH) {
                 String finishPlayActionName = BluetoothParamUtil.bytesToString(param);
                 UbtLog.d(TAG, "finishPlayActionName = " + finishPlayActionName);
-
+                if (finishPlayActionName.contains(playingInfo.actionName)) {
+                    playingInfo = null;
+                }
                 if (!TextUtils.isEmpty(finishPlayActionName) && finishPlayActionName.contains("初始化")) {
                     //return;
                 } else {
+                    if (null != mActionListener) {
+                        mActionListener.playActionFinish(finishPlayActionName);
+                    }
 
                 }
             }
@@ -174,6 +179,10 @@ public class DownLoadActionManager {
             UbtLog.d(TAG, "onDeviceDisConnected...");
             mRobotDownList.clear();
             downLoadCompleteList.clear();
+            playingInfo = null;
+            if (null != mActionListener) {
+                mActionListener.onBlutheDisconnected();
+            }
         }
     };
 
@@ -202,7 +211,7 @@ public class DownLoadActionManager {
 
 
     /**
-     * 获取机器人列表
+     * 获取机器人动作列表
      */
     public void getRobotAction(GetRobotActionListener listener) {
         this.mActionListener = listener;
@@ -223,15 +232,16 @@ public class DownLoadActionManager {
      * @return 返回状态
      */
     public int dealAction(boolean isDownload, ActionInfo actionInfo) {
-        playingInfo = actionInfo;
         if (isRobotDownloading(actionInfo.actionId)) {
             return STATU_INIT;
         }
         if (isCompletedActionById(actionInfo.actionId)) {//本地下载过，直接播放
+            playingInfo = actionInfo;
             doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(actionInfo.actionName));
             return STATU_PLAYING;
         } else {
             if (isDownload) {
+                playingInfo = actionInfo;
                 doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(actionInfo.actionName));
                 return STATU_PLAYING;
             } else {
@@ -239,6 +249,17 @@ public class DownLoadActionManager {
                 return STATU_DOWNLOADING;
             }
         }
+    }
+
+
+    /**
+     * 播放动作文件
+     *
+     * @param actionInfo
+     */
+    public void playAction(ActionInfo actionInfo) {
+        playingInfo = actionInfo;
+        doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(actionInfo.actionName));
     }
 
 
@@ -284,6 +305,23 @@ public class DownLoadActionManager {
         }
     }
 
+    /**
+     * 获取正在播放的动作
+     *
+     * @return
+     */
+    public ActionInfo getPlayingInfo() {
+        return playingInfo;
+    }
+
+    /**
+     * 结束动作
+     */
+    public void stopAction() {
+        ((AlphaApplication) mContext
+                .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) mContext.getApplicationContext())
+                .getCurrentBluetooth().getAddress(), ConstValue.DV_STOPPLAY, null, 0, false);
+    }
 
     /**
      * 根据id获取ActionInfo
@@ -319,6 +357,15 @@ public class DownLoadActionManager {
 
 
     /**
+     * 获取本地下载列表
+     *
+     * @return
+     */
+    public List<ActionInfo> getRobotDownList() {
+        return mRobotDownList;
+    }
+
+    /**
      * 根据id获取ActionInfo
      *
      * @param id
@@ -341,6 +388,8 @@ public class DownLoadActionManager {
         void getDownLoadProgress(ActionInfo info, DownloadProgressInfo progressInfo);
 
         void playActionFinish(String actionName);
+
+        void onBlutheDisconnected();
     }
 
 }

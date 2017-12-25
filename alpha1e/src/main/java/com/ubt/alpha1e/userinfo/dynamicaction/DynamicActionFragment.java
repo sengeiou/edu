@@ -23,6 +23,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.model.ActionInfo;
@@ -111,6 +112,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         mDynamicActionAdapter = new DynamicActionAdapter(R.layout.layout_dynamic_action_item, mDynamicActionModels);
         mDynamicActionAdapter.setOnItemChildClickListener(this);
         mDynamicActionAdapter.setOnItemClickListener(this);
+        mDynamicActionAdapter.setHasStableIds(true);
         mRecyclerviewDynamic.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mRecyclerviewDynamic.setAdapter(mDynamicActionAdapter);
         emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_empty, null);
@@ -240,7 +242,6 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         switch (view.getId()) {
             case R.id.rl_play_action:
-                ToastUtils.showShort("播放" + position);
                 playAction(position);
                 break;
             default:
@@ -255,22 +256,36 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
      */
     private void playAction(int position) {
         DynamicActionModel dynamicActionModel = mDynamicActionModels.get(position);
-
-        ActionInfo actionInfo = new ActionInfo();
-        actionInfo.actionId = dynamicActionModel.getActionId();
-        actionInfo.actionName = dynamicActionModel.getActionName();
-        actionInfo.actionPath = "https://services.ubtrobot.com/action/16/3/蚂蚁与鸽子.zip";
-        boolean isDownloading = DownLoadActionManager.getInstance(getActivity()).isRobotDownloading(dynamicActionModel.getActionId());
-        if (!isDownloading) {
-            int statu = DownLoadActionManager.getInstance(getActivity()).dealAction(dynamicActionModel.isDownload(), actionInfo);
-            if (statu == DownLoadActionManager.STATU_DOWNLOADING) {//正在下载
-                mDynamicActionModels.get(position).setActionStatu(2);
-            } else if (statu == DownLoadActionManager.STATU_PLAYING) {//正在播放
+        int actionStatu = dynamicActionModel.getActionStatu();
+        UbtLog.d(TAG, "actionName==" + dynamicActionModel.getActionName() + "  actionStatu===" + dynamicActionModel.getActionStatu());
+        if (actionStatu == 0) {
+            if (dynamicActionModel.isDownload()) {//已经下载
+                ActionInfo actionInfo = new ActionInfo();
+                actionInfo.actionId = dynamicActionModel.getActionId();
+                actionInfo.actionName = Constant.COURSE_ACTION_PATH + dynamicActionModel.getActionName() + ".hts";
+                for (int i = 0; i < mDynamicActionModels.size(); i++) {
+                    if (mDynamicActionModels.get(i).getActionStatu() == 1) {
+                        UbtLog.d(TAG, "actionName==" + mDynamicActionModels.get(i));
+                        mDynamicActionModels.get(i).setActionStatu(0);
+                    }
+                }
                 mDynamicActionModels.get(position).setActionStatu(1);
+                DownLoadActionManager.getInstance(getActivity()).playAction(actionInfo);
+            } else {//没有下载，需要下载
+                ActionInfo actionInfo = new ActionInfo();
+                actionInfo.actionId = dynamicActionModel.getActionId();
+                actionInfo.actionName = dynamicActionModel.getActionName();
+                actionInfo.actionPath = "https://services.ubtrobot.com/action/16/3/蚂蚁与鸽子.zip";
+                DownLoadActionManager.getInstance(getActivity()).downRobotAction(actionInfo);
+                mDynamicActionModels.get(position).setActionStatu(2);
             }
-            mDynamicActionAdapter.notifyItemChanged(position);
-        }
+        } else if (actionStatu == 1) {//正在播放
+            DownLoadActionManager.getInstance(getActivity()).stopAction();
+            mDynamicActionModels.get(position).setActionStatu(0);
+        } else if (actionStatu == 2) {//正在下载
 
+        }
+        mDynamicActionAdapter.notifyDataSetChanged();
 
     }
 
@@ -335,8 +350,8 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            List<String> list = (List<String>) msg.obj;
-            if (msg.what == 1111) {
+            if (msg.what == 1111) {//获取机器人动作列表
+                List<String> list = (List<String>) msg.obj;
                 for (int i = 0; i < mDynamicActionModels.size(); i++) {
                     for (String str : list) {
                         if (mDynamicActionModels.get(i).getActionName().equals(str)) {
@@ -345,25 +360,58 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
                         }
                     }
                 }
+                List<ActionInfo> list1 = DownLoadActionManager.getInstance(getActivity()).getRobotDownList();
+                if (null != list1 && list1.size() > 0) {
+                    for (int i = 0; i < mDynamicActionModels.size(); i++) {
+                        for (ActionInfo actionInfo : list1) {
+                            if (mDynamicActionModels.get(i).getActionId() == actionInfo.actionId) {
+                                mDynamicActionModels.get(i).setActionStatu(2);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                ActionInfo actionInfo = DownLoadActionManager.getInstance(getActivity()).getPlayingInfo();
+                if (null != actionInfo) {
+                    for (int i = 0; i < mDynamicActionModels.size(); i++) {
+                        if (mDynamicActionModels.get(i).getActionId() == actionInfo.actionId) {
+                            mDynamicActionModels.get(i).setActionStatu(1);
+                            break;
+
+                        }
+                    }
+                }
+
                 finishRefresh();
             } else if (msg.what == 1112) {//动作播放结束
                 String actionName = (String) msg.obj;
                 for (int i = 0; i < mDynamicActionModels.size(); i++) {
-                    if (mDynamicActionModels.get(i).getActionName().equals(actionName)) {
+                    if (actionName.contains(mDynamicActionModels.get(i).getActionName())) {
                         mDynamicActionModels.get(i).setActionStatu(0);
                         break;
                     }
                 }
                 mDynamicActionAdapter.notifyDataSetChanged();
-            }else if (msg.what==1113){
+            } else if (msg.what == 1113) {
                 DownloadProgressInfo downloadProgressInfo = (DownloadProgressInfo) msg.obj;
                 long actionId = downloadProgressInfo.actionId;
-                int position = mPresenter.getPositionById(actionId,mDynamicActionModels);
-                if (downloadProgressInfo.status==1){
-
+                int position = mPresenter.getPositionById(actionId, mDynamicActionModels);
+                if (downloadProgressInfo.status == 1) {//正在下载
+                    String progress = downloadProgressInfo.progress;
+                    UbtLog.d(TAG, "progress=====" + progress);
+                    mDynamicActionModels.get(position).setActionStatu(2);
+                    mDynamicActionModels.get(position).setDownloadProgress(Double.parseDouble(progress));
+                } else if (downloadProgressInfo.status == 2) {//下载成功
+                    mDynamicActionModels.get(position).setActionStatu(0);
+                } else if (downloadProgressInfo.status == 3) {//机器人未联网
+                    ToastUtils.showShort("机器人未联网");
+                    mDynamicActionModels.get(position).setActionStatu(0);
+                } else {//下载失败
+                    ToastUtils.showShort("下载失败");
+                    mDynamicActionModels.get(position).setActionStatu(0);
                 }
-
-
+                mDynamicActionAdapter.notifyDataSetChanged();
             }
         }
     };
@@ -391,6 +439,16 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         mHandler.sendMessage(message);
     }
 
+    /**
+     * 蓝牙掉线
+     */
+    @Override
+    public void onBlutheDisconnected() {
+        for (int i = 0; i < mDynamicActionModels.size(); i++) {
+            mDynamicActionModels.get(i).setActionStatu(0);
+        }
+        mDynamicActionAdapter.notifyDataSetChanged();
+    }
 
 
 }

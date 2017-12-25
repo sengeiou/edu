@@ -11,14 +11,39 @@ package com.ubt.alpha1e.userinfo.model;
 
 public class DynamicActionModel {
     private long ActionId;
+    /**
+     * 动作名称
+     */
     private String ActionName;
+    /**
+     * 动作时长
+     */
     private int ActionTime;
+    /**
+     * 动作详情
+     */
+    private String actionDetail;
+    /**
+     * 动作类型
+     */
     private String ActionType;
-    private String downloadUrl;
+    private String downloadUrl;//下载地址
+    /**
+     * 动作创建时间
+     */
     private long createTime;
+    /**
+     * 动作是否下载
+     */
     private boolean isDownload;
+    /**
+     * 下载进度
+     */
     private double downloadProgress;
-    private int ActionStatu;//状态 播放1 暂停0 下载2
+    /**
+     * 动作状态
+     */
+    private int ActionStatu;//状态 播放1 停止0 下载2
 
     public String getActionName() {
         return ActionName;
