@@ -27,7 +27,6 @@ import com.ubt.alpha1e.behaviorhabits.drag.DragRecyclerView;
 import com.ubt.alpha1e.behaviorhabits.drag.HoldTouchHelper;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.SampleEntity;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
@@ -311,7 +310,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     }
 
     @Override
-    public void showBehaviourPlayContent(boolean status, List<PlayContent> playList, String errorMsg) {
+    public void showBehaviourPlayContent(boolean status, List<PlayContentInfo> playList, String errorMsg) {
 
     }
 

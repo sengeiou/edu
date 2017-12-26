@@ -23,7 +23,7 @@ import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.adapter.HabitsEventRecyclerAdapter;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
@@ -210,7 +210,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     }
 
     @Override
-    public void showBehaviourPlayContent(boolean status, List<PlayContent> playList, String errorMsg) {
+    public void showBehaviourPlayContent(boolean status, List<PlayContentInfo> playList, String errorMsg) {
 
     }
 

@@ -20,7 +20,6 @@ import com.ubt.alpha1e.base.RequstMode.BehaviourSaveUpdateRequest;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.model.BaseModel;
@@ -203,9 +202,9 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                         mView.showBehaviourList(true,((UserScore) baseResponseModel.models),"success");
                         break;
                     case GET_BEHAVIOUREVENT_CMD:
-                        BaseResponseModel<EventDetail<List<PlayContent>>>baseResponseModel1=GsonImpl.get().toObject(response,new TypeToken<BaseResponseModel<EventDetail<List<PlayContent>>>>(){
+                        BaseResponseModel<EventDetail<List<PlayContentInfo>>>baseResponseModel1=GsonImpl.get().toObject(response,new TypeToken<BaseResponseModel<EventDetail<List<PlayContentInfo>>>>(){
                         }.getType());
-                        UbtLog.d(TAG, "GET_BEHAVIOUREVENT_CMD baseResponseModel = " + baseResponseModel1.models.contents.get(0).getContentName());
+                        UbtLog.d(TAG, "GET_BEHAVIOUREVENT_CMD baseResponseModel = " + baseResponseModel1.models.contents.get(0).contentName);
                         mView.showBehaviourEventContent(true,(EventDetail)baseResponseModel1.models,"success");
                         break;
                     case GET_BEHAVIOURCONTROL_CMD:
@@ -218,6 +217,9 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                         BaseResponseModel<UserScore<List<HabitsEvent>>> baseResponseModel2 = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<UserScore<List<HabitsEvent>>>>() {
                                 }.getType());//加上type转换，避免泛型擦除
+                        if(baseResponseModel2.status){
+
+                        }
                         UbtLog.d(TAG, "parent baseResponseModel = " + baseResponseModel2.models);
                         UbtLog.d(TAG, "parent baseResponseModel percent = " + ((UserScore) baseResponseModel2.models).percent);
                         UbtLog.d(TAG, "parent baseResponseModel details = " + ((List<HabitsEvent>) (((UserScore) baseResponseModel2.models).details)));

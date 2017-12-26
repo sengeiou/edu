@@ -26,7 +26,7 @@ import com.ubt.alpha1e.behaviorhabits.adapter.HabitsEventRecyclerAdapter;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -79,8 +79,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
 
     public HabitsEventRecyclerAdapter mAdapter;
     private List<HabitsEvent> mHabitsEventInfoDatas = null;
-    private boolean isWorkdayMode = true;
-
+    private boolean isWorkdayMode = false;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -204,8 +203,12 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
 
     @Override
     public void showBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
-        if(status){
 
+    }
+
+    @Override
+    public void showParentBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
+        if(status){
             Message msg = new Message();
             msg.what = UPDATE_UI_DATA;
             msg.obj = userScore;
@@ -216,17 +219,12 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
     }
 
     @Override
-    public void showParentBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
-
-    }
-
-    @Override
     public void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg) {
 
     }
 
     @Override
-    public void showBehaviourPlayContent(boolean status, List<PlayContent> playList, String errorMsg) {
+    public void showBehaviourPlayContent(boolean status, List<PlayContentInfo> playList, String errorMsg) {
 
     }
 
@@ -272,7 +270,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
             ivHolidays.setBackgroundResource(R.drawable.icon_habits_holidays_selected);
             tvHolidays.setTextColor(getResources().getColor(R.color.T25));
             ivHolidaysSelect.setVisibility(View.VISIBLE);
-            mPresenter.getBehaviourList("1","1");
+            mPresenter.getParentBehaviourList("1","1","1");
         }else {
             isWorkdayMode = true;
             ivWorkdays.setBackgroundResource(R.drawable.icon_habits_workdays_selected);
@@ -283,7 +281,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
             tvHolidays.setTextColor(getResources().getColor(R.color.T26));
             ivHolidaysSelect.setVisibility(View.INVISIBLE);
 
-            mPresenter.getBehaviourList("1","1");
+            mPresenter.getParentBehaviourList("1","1","2");
         }
 
     }

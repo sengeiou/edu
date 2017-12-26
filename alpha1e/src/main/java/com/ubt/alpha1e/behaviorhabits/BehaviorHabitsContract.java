@@ -5,7 +5,7 @@ import android.content.Context;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
@@ -27,7 +27,7 @@ public class BehaviorHabitsContract {
         //显示编辑的EventID具体内容
         void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg);
         //显示行为习惯播放内容
-        void showBehaviourPlayContent(boolean status,List<PlayContent> playList,String errorMsg);
+        void showBehaviourPlayContent(boolean status, List<PlayContentInfo> playList, String errorMsg);
         void showNetworkRequestError();
         //提醒对话框点击
         void onAlertSelectItem(int index,String language,int alertType);
