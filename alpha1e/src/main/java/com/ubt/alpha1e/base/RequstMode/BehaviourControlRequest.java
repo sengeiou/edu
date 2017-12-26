@@ -18,14 +18,14 @@ public class BehaviourControlRequest extends BaseRequest {
 
     String eventId;
 
-    public String getOperateType() {
-        return operateType;
+    public String getType() {
+        return type;
     }
 
-    public void setOperateType(String operateType) {
-        this.operateType = operateType;
+    public void setType(String operateType) {
+        this.type = operateType;
     }
 
-    String operateType;
+    String type;
 
 }

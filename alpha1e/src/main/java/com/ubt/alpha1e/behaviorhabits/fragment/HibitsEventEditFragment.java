@@ -294,6 +294,11 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     }
 
     @Override
+    public void showParentBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
+
+    }
+
+    @Override
     public void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg) {
         if(status){
             Message msg = new Message();

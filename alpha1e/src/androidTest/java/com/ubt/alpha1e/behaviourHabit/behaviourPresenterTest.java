@@ -43,6 +43,11 @@ public class behaviourPresenterTest {
             }
 
             @Override
+            public void showParentBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
+
+            }
+
+            @Override
             public void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg) {
                  Log.d("TEST","showBehaviourEventContent "+content.contents);
             }
@@ -82,6 +87,7 @@ public class behaviourPresenterTest {
     @Test
     public void testDealayAlertTime() throws Exception {
        // mPresenter.dealayAlertTime(5);
+        mPresenter.delayBehaviourEventAlert("12","5");
     }
 
     @Test
@@ -96,12 +102,12 @@ public class behaviourPresenterTest {
 
     @Test
     public void testGetBehaviourPlayContent() throws Exception {
-        //mPresenter.getBehaviourPlayContent("1", "1");
+        mPresenter.getParentBehaviourList("1","1","1");
     }
 
     @Test
     public void testSetBehaviourEvent() throws Exception {
-        //mPresenter.setBehaviourEvent("34334",1);
+        mPresenter.enableBehaviourEvent("12",1);
     }
 
     @Test
