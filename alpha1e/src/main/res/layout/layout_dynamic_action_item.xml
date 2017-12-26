@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_margin="15dp"
@@ -41,8 +42,8 @@
 
         <RelativeLayout
             android:id="@+id/rl_play_action"
-            android:layout_width="50dp"
-            android:layout_height="25dp"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/btn_play"
             >
@@ -63,6 +64,18 @@
                 android:textColor="@color/tv_blue_color"
                 android:textSize="12sp"
                 android:visibility="gone"/>
+
+            <ProgressBar
+                android:id="@+id/progress_download"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"
+                android:progressDrawable="@drawable/circle_progress_bar"
+                tools:max="100"
+                tools:progress="0"/>
+
+
         </RelativeLayout>
 
 

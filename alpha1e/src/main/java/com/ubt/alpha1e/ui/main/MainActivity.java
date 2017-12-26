@@ -243,6 +243,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mCurrentTouchTime=System.currentTimeMillis();
         getScreenInch();
         initUI();
+        mPresenter.getXGInfo();
         mHelper=MainUiBtHelper.getInstance(getContext());
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mBroadcastReceiver1, filter1);

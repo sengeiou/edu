@@ -1,5 +1,7 @@
 package com.ubt.alpha1e.userinfo.model;
 
+import java.io.Serializable;
+
 /**
  * @author：liuhai
  * @date：2017/11/3 14:45
@@ -9,7 +11,7 @@ package com.ubt.alpha1e.userinfo.model;
  * version
  */
 
-public class DynamicActionModel {
+public class DynamicActionModel implements Serializable {
     private long ActionId;
     /**
      * 动作名称
@@ -31,7 +33,7 @@ public class DynamicActionModel {
     /**
      * 动作创建时间
      */
-    private long createTime;
+    private String createTime;
     /**
      * 动作是否下载
      */
@@ -94,11 +96,11 @@ public class DynamicActionModel {
         this.downloadUrl = downloadUrl;
     }
 
-    public long getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

@@ -1,14 +1,18 @@
 package com.ubt.alpha1e.userinfo.dynamicaction;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.business.ActionsDownLoadManagerListener;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.DownloadProgressInfo;
 import com.ubt.alpha1e.net.http.basic.FileDownloadListener;
+import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -17,7 +21,10 @@ import com.ubtechinc.base.PublicInterface;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * @author：liuhai
@@ -35,14 +42,17 @@ public class DownLoadActionManager {
     private static Context mContext;
 
     // 所有正在下载的任务
-    private List<ActionInfo> mRobotDownList;
-    private List<ActionInfo> downLoadCompleteList;
-    private ActionInfo playingInfo;
+    private List<DynamicActionModel> mRobotDownList;
+    private List<DynamicActionModel> downLoadCompleteList;
+    private DynamicActionModel playingInfo;
     PlayState mPlayState = PlayState.action_init;
 
-    GetRobotActionListener mActionListener;
-    private List<String> robotActionList = new ArrayList<>();
+    private BlockingQueue<ActionInfo> mQueue;
 
+    private List<DownLoadActionListener> mDownLoadActionListeners;
+
+    private List<String> robotActionList = new ArrayList<>();
+    Handler mhandler;
     public static int STATU_INIT = 1;//初始化
     public static int STATU_DOWNLOADING = 2;//正在下载
     public static int STATU_PLAYING = 3;//正在播放
@@ -63,7 +73,20 @@ public class DownLoadActionManager {
     private DownLoadActionManager() {
         mRobotDownList = new ArrayList<>();
         downLoadCompleteList = new ArrayList<>();
+        mDownLoadActionListeners = new ArrayList<>();
+        mQueue = new LinkedBlockingDeque<ActionInfo>();
+        mhandler = new Handler(Looper.getMainLooper());
         addBluetoothListener();
+    }
+
+    private void printAll() {
+        ActionInfo value;
+        Iterator iter = mQueue.iterator();
+        while (iter.hasNext()) {
+            value = (ActionInfo) iter.next();
+            UbtLog.d(TAG, "ActionInfo====" + value.toString());
+        }
+
     }
 
     public static DownLoadActionManager getInstance(Context context) {
@@ -81,86 +104,87 @@ public class DownLoadActionManager {
     private PublicInterface.BlueToothInteracter mBluetoothListener = new PublicInterface.BlueToothInteracter() {
 
         @Override
-        public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
-
-            if (cmd == ConstValue.DV_DO_DOWNLOAD_ACTION) {
-                String downloadProgressJson = BluetoothParamUtil.bytesToString(param);
-
-                DownloadProgressInfo downloadProgressInfo = GsonImpl.get().toObject(downloadProgressJson, DownloadProgressInfo.class);
-                ActionInfo actionInfo = getRobotDownloadActionById(downloadProgressInfo.actionId);
-
-                UbtLog.d(TAG, "downloadProgressJson : " + downloadProgressJson);
-                if (actionInfo == null) {
-                    UbtLog.d(TAG, "actionInfo : null ");
-                    return;
-                }
-                if (mActionListener != null) {
-                    mActionListener.getDownLoadProgress(actionInfo, downloadProgressInfo);
-                }
-                if (downloadProgressInfo.status == 1) {
-                    //下载中
-                    UbtLog.d(TAG, "机器人下载进度, actionName : " + actionInfo.actionName + " " + downloadProgressInfo.progress);
-                } else {
-                    //2 下载成功 3 未联网 0 下载失败
-                    //UbtLog.d(TAG,"actionInfo : " + actionInfo );
-                    FileDownloadListener.State state;
-                    if (downloadProgressInfo.status == 3) {
-                        state = FileDownloadListener.State.connect_fail;
-                    } else if (downloadProgressInfo.status == 2) {
-                        state = FileDownloadListener.State.success;
-                        UbtLog.d(TAG, "机器人下载成功：hts_file_name = " + actionInfo.hts_file_name);
-                        //机器人下载成功，加入缓存
-                        if (null != downLoadCompleteList && !TextUtils.isEmpty(actionInfo.hts_file_name)) {
-                            UbtLog.d(TAG, "机器人下载成功：hts_file_name = " + actionInfo.hts_file_name);
-                            downLoadCompleteList.add(actionInfo);
+        public void onReceiveData(String mac, final byte cmd, final byte[] param, int len) {
+            mhandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (cmd == ConstValue.DV_DO_DOWNLOAD_ACTION) {
+                        String downloadProgressJson = BluetoothParamUtil.bytesToString(param);
+                        UbtLog.d(TAG, "downloadProgressJson : " + downloadProgressJson);
+                        DownloadProgressInfo downloadProgressInfo = GsonImpl.get().toObject(downloadProgressJson, DownloadProgressInfo.class);
+                        DynamicActionModel actionInfo = getRobotDownloadActionById(downloadProgressInfo.actionId);
+                        if (actionInfo == null) {
+                            UbtLog.d(TAG, "actionInfo : null ");
+                            return;
                         }
-                    } else {
-                        state = FileDownloadListener.State.fail;
+                        for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
+                            if (mActionListener != null) {
+                                mActionListener.getDownLoadProgress(actionInfo, downloadProgressInfo);
+                            }
+                        }
+                        if (downloadProgressInfo.status == 1) {
+                            //下载中
+                            UbtLog.d(TAG, "机器人下载进度, actionName : " + actionInfo.getActionName() + " " + downloadProgressInfo.progress);
+                        } else {
+                            //2 下载成功 3 未联网 0 下载失败
+                            //UbtLog.d(TAG,"actionInfo : " + actionInfo );
+                            FileDownloadListener.State state;
+                            if (downloadProgressInfo.status == 3) {
+                                state = FileDownloadListener.State.connect_fail;
+                            } else if (downloadProgressInfo.status == 2) {
+                                state = FileDownloadListener.State.success;
+                                UbtLog.d(TAG, "机器人下载成功：hts_file_name = " + actionInfo.getActionName());
+                                //机器人下载成功，加入缓存
+                                if (null != downLoadCompleteList && !TextUtils.isEmpty(actionInfo.getActionName())) {
+                                    UbtLog.d(TAG, "机器人下载成功：hts_file_name = " + actionInfo.getActionName());
+                                    downLoadCompleteList.add(actionInfo);
+                                }
+                            } else {
+                                state = FileDownloadListener.State.fail;
+                            }
+                            UbtLog.d(TAG, "机器人下载结束, actionName : " + actionInfo.getActionName() + " state : " + state + "  ");
+                            mRobotDownList.remove(actionInfo);
+                        }
+
+
+                    } else if (cmd == ConstValue.DV_READ_NETWORK_STATUS) {
+
+                    } else if ((cmd & 0xff) == (ConstValue.DV_DO_CHECK_ACTION_FILE_EXIST & 0xff)) {
+                        UbtLog.d(TAG, "播放文件是否存在：" + param[0]);
+                        downRobotAction(playingInfo);
+                        UbtLog.d(TAG, "播放文件：" + FileTools.actions_download_robot_path + "/" + playingInfo.getActionName() + ".hts");
+                    } else if ((cmd & 0xff) == (ConstValue.UV_GETACTIONFILE & 0xff)) {
+                        if (getDataType == Action_type.MY_WALK) {
+                            return;
+                        }
+                        String name = BluetoothParamUtil.bytesToString(param);
+                        UbtLog.d(TAG, "获取文件：" + name);
+                        robotActionList.add(name);
+                    } else if ((cmd & 0xff) == (ConstValue.UV_STOPACTIONFILE & 0xff)) {
+                        UbtLog.d(TAG, "获取文件结束");
+                        for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
+                            if (null != mActionListener) {
+                                mActionListener.getRobotActionLists(robotActionList);
+                            }
+                        }
+                    } else if (cmd == ConstValue.DV_ACTION_FINISH) {
+                        String finishPlayActionName = BluetoothParamUtil.bytesToString(param);
+                        UbtLog.d(TAG, "finishPlayActionName = " + finishPlayActionName);
+                        if (finishPlayActionName.contains(playingInfo.getActionName())) {
+                            playingInfo = null;
+                        }
+                        if (!TextUtils.isEmpty(finishPlayActionName) && finishPlayActionName.contains("初始化")) {
+                        } else {
+                            for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
+                                if (null != mActionListener) {
+                                    mActionListener.playActionFinish(finishPlayActionName);
+                                }
+                            }
+                        }
                     }
-
-                    UbtLog.d(TAG, "机器人下载结束, actionName : " + actionInfo.actionName + " state : " + state + "  ");
-
-                    mRobotDownList.remove(actionInfo);
                 }
+            });
 
-
-            } else if (cmd == ConstValue.DV_READ_NETWORK_STATUS) {
-
-            } else if ((cmd & 0xff) == (ConstValue.DV_DO_CHECK_ACTION_FILE_EXIST & 0xff)) {
-                UbtLog.d(TAG, "播放文件是否存在：" + param[0]);
-                downRobotAction(playingInfo);
-                //   doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(FileTools.actions_download_robot_path + "/" + playingInfo.actionName + ".hts"));
-                UbtLog.d(TAG, "播放文件：" + FileTools.actions_download_robot_path + "/" + playingInfo.actionName + ".hts");
-            } else if ((cmd & 0xff) == (ConstValue.UV_GETACTIONFILE & 0xff)) {
-                if (getDataType == Action_type.MY_WALK) {
-                    return;
-                }
-
-                String name = BluetoothParamUtil.bytesToString(param);
-                UbtLog.d(TAG, "获取文件：" + name);
-                robotActionList.add(name);
-
-
-            } else if ((cmd & 0xff) == (ConstValue.UV_STOPACTIONFILE & 0xff)) {
-                UbtLog.d(TAG, "获取文件结束");
-                if (null != mActionListener) {
-                    mActionListener.getRobotActionLists(robotActionList);
-                }
-            } else if (cmd == ConstValue.DV_ACTION_FINISH) {
-                String finishPlayActionName = BluetoothParamUtil.bytesToString(param);
-                UbtLog.d(TAG, "finishPlayActionName = " + finishPlayActionName);
-                if (finishPlayActionName.contains(playingInfo.actionName)) {
-                    playingInfo = null;
-                }
-                if (!TextUtils.isEmpty(finishPlayActionName) && finishPlayActionName.contains("初始化")) {
-                    //return;
-                } else {
-                    if (null != mActionListener) {
-                        mActionListener.playActionFinish(finishPlayActionName);
-                    }
-
-                }
-            }
         }
 
         @Override
@@ -175,31 +199,54 @@ public class DownLoadActionManager {
 
         @Override
         public void onDeviceDisConnected(String mac) {
-
+            mhandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mRobotDownList.clear();
+                    downLoadCompleteList.clear();
+                    playingInfo = null;
+                    for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
+                        if (null != mActionListener) {
+                            mActionListener.onBlutheDisconnected();
+                        }
+                    }
+                }
+            });
             UbtLog.d(TAG, "onDeviceDisConnected...");
-            mRobotDownList.clear();
-            downLoadCompleteList.clear();
-            playingInfo = null;
-            if (null != mActionListener) {
-                mActionListener.onBlutheDisconnected();
-            }
+
         }
     };
 
 
     // 添加监听者
-    public void addListener(ActionsDownLoadManagerListener listener) {
-        if (!mDownListenerLists.contains(listener)) {
-            mDownListenerLists.add(listener);
+    public void addDownLoadActionListener(DownLoadActionListener listener) {
+        if (!mDownLoadActionListeners.contains(listener)) {
+            mDownLoadActionListeners.add(listener);
         }
     }
 
+
     // 移除监听者
-    public void removeListener(ActionsDownLoadManagerListener listener) {
-        if (mDownListenerLists.contains(listener)) {
-            mDownListenerLists.remove(listener);
+    public void removeDownLoadActionListener(DownLoadActionListener listener) {
+        if (mDownLoadActionListeners.contains(listener)) {
+            mDownLoadActionListeners.remove(listener);
         }
     }
+//
+//    // 添加监听者
+//    public void addListener(ActionsDownLoadManagerListener listener) {
+//        if (!mDownListenerLists.contains(listener)) {
+//            mDownListenerLists.add(listener);
+//        }
+//    }
+//
+//
+//    // 移除监听者
+//    public void removeListener(ActionsDownLoadManagerListener listener) {
+//        if (mDownListenerLists.contains(listener)) {
+//            mDownListenerLists.remove(listener);
+//        }
+//    }
 
     /**
      * 注册蓝牙监听
@@ -213,8 +260,7 @@ public class DownLoadActionManager {
     /**
      * 获取机器人动作列表
      */
-    public void getRobotAction(GetRobotActionListener listener) {
-        this.mActionListener = listener;
+    public void getRobotAction() {
         robotActionList.clear();
         try {
             doSendComm(ConstValue.DV_GETACTIONFILE, (new String(FileTools.actions_download_robot_path)).getBytes("GBK"));
@@ -225,59 +271,40 @@ public class DownLoadActionManager {
 
 
     /**
-     * 总的处理接口，首先判断文件是否下载过，
-     *
-     * @param isDownload
-     * @param actionInfo
-     * @return 返回状态
-     */
-    public int dealAction(boolean isDownload, ActionInfo actionInfo) {
-        if (isRobotDownloading(actionInfo.actionId)) {
-            return STATU_INIT;
-        }
-        if (isCompletedActionById(actionInfo.actionId)) {//本地下载过，直接播放
-            playingInfo = actionInfo;
-            doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(actionInfo.actionName));
-            return STATU_PLAYING;
-        } else {
-            if (isDownload) {
-                playingInfo = actionInfo;
-                doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(actionInfo.actionName));
-                return STATU_PLAYING;
-            } else {
-                downRobotAction(actionInfo);
-                return STATU_DOWNLOADING;
-            }
-        }
-    }
-
-
-    /**
      * 播放动作文件
      *
+     * @param isFromDetail 是否从详情页播放
      * @param actionInfo
      */
-    public void playAction(ActionInfo actionInfo) {
+    public void playAction(boolean isFromDetail, DynamicActionModel actionInfo) {
+        doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(Constant.COURSE_ACTION_PATH + actionInfo.getActionName() + ".hts"));
+        if (isFromDetail) {
+            for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
+                if (null != mActionListener) {
+                    mActionListener.doActionPlay(actionInfo.getActionId(), 1);
+                }
+            }
+        }
         playingInfo = actionInfo;
-        doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(actionInfo.actionName));
     }
 
 
     /**
      * 发送机器人下载
      *
-     * @param actionInfo
+     * @param dynamicActionModel 实体类
      */
-    public void downRobotAction(ActionInfo actionInfo) {
+    public void downRobotAction(DynamicActionModel dynamicActionModel) {
+        // mQueue.add(actionInfo);
 
-        ActionInfo c_info = getRobotDownloadActionById(actionInfo.actionId);
+        DynamicActionModel c_info = getRobotDownloadActionById(dynamicActionModel.getActionId());
         if (c_info == null) {
-            c_info = actionInfo;
+            c_info = dynamicActionModel;
             //倒序
             mRobotDownList.add(0, c_info);
         }
-        String params = BluetoothParamUtil.paramsToJsonString(new String[]{actionInfo.actionId + "",
-                actionInfo.actionName, actionInfo.actionPath}, ConstValue.DV_DO_DOWNLOAD_ACTION);
+        String params = BluetoothParamUtil.paramsToJsonString(new String[]{dynamicActionModel.getActionId() + "",
+                dynamicActionModel.getActionName(), dynamicActionModel.getDownloadUrl()}, ConstValue.DV_DO_DOWNLOAD_ACTION);
 
         /*String params = BluetoothParamUtil.paramsToJsonString(new String[]{ actionInfo.actionId + "",
                 actionInfo.actionName,"https://services.ubtrobot.com/action/16/3/蚂蚁与鸽子.zip" }, ConstValue.DV_DO_DOWNLOAD_ACTION);*/
@@ -310,17 +337,27 @@ public class DownLoadActionManager {
      *
      * @return
      */
-    public ActionInfo getPlayingInfo() {
+    public DynamicActionModel getPlayingInfo() {
         return playingInfo;
     }
 
     /**
      * 结束动作
+     *
+     * @param isFromDetail 是否从详情页结束
      */
-    public void stopAction() {
+    public void stopAction(boolean isFromDetail) {
         ((AlphaApplication) mContext
                 .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) mContext.getApplicationContext())
                 .getCurrentBluetooth().getAddress(), ConstValue.DV_STOPPLAY, null, 0, false);
+        if (isFromDetail) {
+            for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
+                if (null != mActionListener) {
+                    mActionListener.doActionPlay(playingInfo.getActionId(), 0);
+                }
+            }
+        }
+        this.playingInfo = null;
     }
 
     /**
@@ -329,10 +366,10 @@ public class DownLoadActionManager {
      * @param id
      * @return
      */
-    public ActionInfo getRobotDownloadActionById(long id) {
-        ActionInfo info = null;
+    public DynamicActionModel getRobotDownloadActionById(long id) {
+        DynamicActionModel info = null;
         for (int i = 0; i < mRobotDownList.size(); i++) {
-            if (mRobotDownList.get(i).actionId == id) {
+            if (mRobotDownList.get(i).getActionId() == id) {
                 info = mRobotDownList.get(i);
             }
         }
@@ -348,7 +385,7 @@ public class DownLoadActionManager {
     public boolean isRobotDownloading(long action_id) {
         boolean result = false;
         for (int i = 0; i < mRobotDownList.size(); i++) {
-            if (mRobotDownList.get(i).actionId == action_id) {
+            if (mRobotDownList.get(i).getActionId() == action_id) {
                 result = true;
             }
         }
@@ -361,7 +398,7 @@ public class DownLoadActionManager {
      *
      * @return
      */
-    public List<ActionInfo> getRobotDownList() {
+    public List<DynamicActionModel> getRobotDownList() {
         return mRobotDownList;
     }
 
@@ -374,7 +411,7 @@ public class DownLoadActionManager {
     public boolean isCompletedActionById(long id) {
         boolean result = false;
         for (int i = 0; i < downLoadCompleteList.size(); i++) {
-            if (downLoadCompleteList.get(i).actionId == id) {
+            if (downLoadCompleteList.get(i).getActionId() == id) {
                 result = true;
                 break;
             }
@@ -382,14 +419,16 @@ public class DownLoadActionManager {
         return result;
     }
 
-    public interface GetRobotActionListener {
+    public interface DownLoadActionListener {
         void getRobotActionLists(List<String> list);
 
-        void getDownLoadProgress(ActionInfo info, DownloadProgressInfo progressInfo);
+        void getDownLoadProgress(DynamicActionModel info, DownloadProgressInfo progressInfo);
 
         void playActionFinish(String actionName);
 
         void onBlutheDisconnected();
+
+        void doActionPlay(long actionId, int statu);
     }
 
 }
