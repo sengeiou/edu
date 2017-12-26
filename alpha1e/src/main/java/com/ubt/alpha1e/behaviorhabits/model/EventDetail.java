@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 
 @Parcelable
-public class EventDetail extends BaseModel{
+public class EventDetail<T> extends BaseModel{
     public String userId;
     public String eventId;
     public String eventName;
@@ -25,7 +25,7 @@ public class EventDetail extends BaseModel{
     public String remindSecond;
     public String status;
     public String type;
-    public ArrayList contentIds;
+    public T contents;
     public EventDetail thiz;
     @Override
     public EventDetail getThiz(String json) {
@@ -83,7 +83,7 @@ public class EventDetail extends BaseModel{
                 ", remindFirst='" + remindFirst + '\'' +
                 ", remindSecond='" + remindSecond + '\'' +
                 ", status='" + status + '\'' +
-                ", contentIds='" + contentIds + '\'' +
+                ", contentIds='" + contents + '\'' +
                 ", type='" + type + '\'' +
                 '}';
     }

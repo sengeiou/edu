@@ -26,8 +26,7 @@ import com.ubt.alpha1e.behaviorhabits.adapter.HabitsEventRecyclerAdapter;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
-import com.ubt.alpha1e.behaviorhabits.model.HabitsEventInfo;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -51,6 +50,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
 
     public static final int CLICK_SWITCH_EVENT = 1;
     public static final int SHOW_EVENT_INFO = 2;
+    private static final int UPDATE_UI_DATA = 3;
 
     Unbinder unbinder;
     @BindView(R.id.ll_base_back)
@@ -78,8 +78,8 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
     ImageView ivHolidaysSelect;
 
     public HabitsEventRecyclerAdapter mAdapter;
-    private List<HabitsEventInfo> mHabitsEventInfoDatas = null;
-    private boolean isWorkdayMode = true;
+    private List<HabitsEvent> mHabitsEventInfoDatas = null;
+    private boolean isWorkdayMode = false;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -88,20 +88,29 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
             switch (msg.what){
                 case CLICK_SWITCH_EVENT:
                     //切换开关
-                    HabitsEventInfo habitsEventInfo = mHabitsEventInfoDatas.get(msg.arg1);
-                    if("1".equals(habitsEventInfo.eventSwitch)){
-                        habitsEventInfo.eventSwitch = "0";
+                    HabitsEvent habitsEventInfo = mHabitsEventInfoDatas.get(msg.arg1);
+                    if("1".equals(habitsEventInfo.status)){
+                        habitsEventInfo.status = "0";
                     }else {
-                        habitsEventInfo.eventSwitch = "1";
+                        habitsEventInfo.status = "1";
                     }
                     mAdapter.notifyItemChanged(msg.arg1);
+                    //mPresenter
                     break;
                 case SHOW_EVENT_INFO:
                     //显示详情
-                    UbtLog.d(TAG,"--SHOW_EVENT_INFO--");
 
                     startForResult(HibitsEventEditFragment.newInstance(mHabitsEventInfoDatas.get(msg.arg1)), Constant.HIBITS_EVENT_EDIT_REQUEST_CODE);
 
+                    break;
+                case UPDATE_UI_DATA:
+                    UserScore<List<HabitsEvent>> userScore = (UserScore<List<HabitsEvent>>) msg.obj;
+                    if(userScore != null){
+                        List<HabitsEvent> habitsEventList = userScore.details;
+                        mHabitsEventInfoDatas.clear();
+                        mHabitsEventInfoDatas.addAll(habitsEventList);
+                        mAdapter.notifyDataSetChanged();
+                    }
                     break;
             }
         }
@@ -122,49 +131,9 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
 
         mHabitsEventInfoDatas = new ArrayList<>();
 
-        HabitsEventInfo h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "07:45";
-        h.eventName = "早餐";
-        h.eventSwitch = "1";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "午餐";
-        h.eventSwitch = "0";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "晚餐";
-        h.eventSwitch = "1";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "夜宵";
-        h.eventSwitch = "0";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "夜宵";
-        h.eventSwitch = "0";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "夜宵";
-        h.eventSwitch = "0";
-        mHabitsEventInfoDatas.add(h);
-
         initRecyclerViews();
+
+        switchMode();
     }
 
     public void initRecyclerViews() {
@@ -238,12 +207,24 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
     }
 
     @Override
+    public void showParentBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
+        if(status){
+            Message msg = new Message();
+            msg.what = UPDATE_UI_DATA;
+            msg.obj = userScore;
+            mHandler.sendMessage(msg);
+        }else {
+            ToastUtils.showShort(errorMsg);
+        }
+    }
+
+    @Override
     public void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg) {
 
     }
 
     @Override
-    public void showBehaviourPlayContent(boolean status, List<PlayContent> playList, String errorMsg) {
+    public void showBehaviourPlayContent(boolean status, List<PlayContentInfo> playList, String errorMsg) {
 
     }
 
@@ -265,10 +246,10 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
                 pop();
                 break;
             case R.id.iv_title_right:
-                mPresenter.getBehaviourList("1","5");
+                /*mPresenter.getBehaviourList("1","5");
                 mPresenter.getBehaviourEvent("12345");
                 mPresenter.getBehaviourPlayContent("1","6");
-                mPresenter.setBehaviourEvent("1234",1);
+                mPresenter.setBehaviourEvent("1234",1);*/
                 break;
             case R.id.rl_workdays:
                 switchMode();
@@ -289,7 +270,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
             ivHolidays.setBackgroundResource(R.drawable.icon_habits_holidays_selected);
             tvHolidays.setTextColor(getResources().getColor(R.color.T25));
             ivHolidaysSelect.setVisibility(View.VISIBLE);
-
+            mPresenter.getParentBehaviourList("1","1","1");
         }else {
             isWorkdayMode = true;
             ivWorkdays.setBackgroundResource(R.drawable.icon_habits_workdays_selected);
@@ -299,6 +280,8 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
             ivHolidays.setBackgroundResource(R.drawable.icon_habits_holidays_unselected);
             tvHolidays.setTextColor(getResources().getColor(R.color.T26));
             ivHolidaysSelect.setVisibility(View.INVISIBLE);
+
+            mPresenter.getParentBehaviourList("1","1","2");
         }
 
     }

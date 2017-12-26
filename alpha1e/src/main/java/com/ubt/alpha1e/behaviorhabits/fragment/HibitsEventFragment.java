@@ -17,13 +17,13 @@ import android.widget.TextView;
 
 import com.baoyz.pg.PG;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.adapter.HabitsEventRecyclerAdapter;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
-import com.ubt.alpha1e.behaviorhabits.model.HabitsEventInfo;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
@@ -51,6 +51,8 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
     private static final String TAG = HibitsEventFragment.class.getSimpleName();
 
+    private static final int UPDATE_UI_DATA = 1;
+
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     Unbinder unbinder;
@@ -72,13 +74,27 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     TextView tvScore;
 
     public HabitsEventRecyclerAdapter mAdapter;
-    private List<HabitsEventInfo> mHabitsEventInfoDatas = null;
+    private List<HabitsEvent> mHabitsEventInfoDatas = null;
 
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            switch (msg.what){
+                case UPDATE_UI_DATA:
+                    UserScore<List<HabitsEvent>> userScore = (UserScore<List<HabitsEvent>>) msg.obj;
+                    if(userScore != null){
+                        tvRatio.setText(getStringRes("ui_habits_has_finish") + userScore.percent+"%");
+                        tvScore.setText(userScore.totalScore);
+                        cbScore.setSweepAngle(Float.parseFloat(userScore.percent));
 
+                        List<HabitsEvent> habitsEventList = userScore.details;
+                        mHabitsEventInfoDatas.clear();
+                        mHabitsEventInfoDatas.addAll(habitsEventList);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                    break;
+            }
         }
     };
 
@@ -95,55 +111,14 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
         ivTitleRight.setVisibility(View.VISIBLE);
 
         tvToday.setText(sdf.format(new Date()));
-        tvRatio.setText(getStringRes("ui_habits_has_finish") + "25%");
-        tvScore.setText("30");
-        cbScore.setSweepAngle(25f);
+        tvRatio.setText(getStringRes("ui_habits_has_finish") + "0%");
+        tvScore.setText("0");
+        cbScore.setSweepAngle(0f);
 
         mHabitsEventInfoDatas = new ArrayList<>();
-
-        HabitsEventInfo h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "07:45";
-        h.eventName = "早餐";
-        h.eventSwitch = "1";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "午餐";
-        h.eventSwitch = "0";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "晚餐";
-        h.eventSwitch = "1";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "夜宵";
-        h.eventSwitch = "0";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "夜宵";
-        h.eventSwitch = "0";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "夜宵";
-        h.eventSwitch = "0";
-        mHabitsEventInfoDatas.add(h);
-
         initRecyclerViews();
+
+        mPresenter.getBehaviourList("1","1");
     }
 
     public void initRecyclerViews() {
@@ -213,6 +188,19 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
     @Override
     public void showBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
+        if(status){
+
+            Message msg = new Message();
+            msg.what = UPDATE_UI_DATA;
+            msg.obj = userScore;
+            mHandler.sendMessage(msg);
+        }else {
+            ToastUtils.showShort(errorMsg);
+        }
+    }
+
+    @Override
+    public void showParentBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
 
     }
 
@@ -222,7 +210,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     }
 
     @Override
-    public void showBehaviourPlayContent(boolean status, List<PlayContent> playList, String errorMsg) {
+    public void showBehaviourPlayContent(boolean status, List<PlayContentInfo> playList, String errorMsg) {
 
     }
 
@@ -254,7 +242,9 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
      */
     private void enterParentManageCenter() {
 
-        new InputPasswordDialog(getContext()).builder()
+        startForResult(ParentManageCenterFragment.newInstance(), 0);
+
+        /*new InputPasswordDialog(getContext()).builder()
                 .setMsg(getStringRes("ui_habits_password_input_tip"))
                 .setCancelable(true)
                 .setPassword("123456")
@@ -269,7 +259,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
                     }
                 })
-                .show();
+                .show();*/
 
     }
 
