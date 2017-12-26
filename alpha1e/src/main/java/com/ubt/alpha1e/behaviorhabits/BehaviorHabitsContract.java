@@ -44,8 +44,8 @@ public class BehaviorHabitsContract {
         void getBehaviourPlayContent(String sex,String grade);
         //开启/关闭行为习惯具体某个EventId状态，status=0 关闭，status=1 打开
         void setBehaviourEvent(String eventId, int status);
-        //保存编辑的行为习惯
-        void saveBehaviourEvent(HabitsEventDetail content);
+        //保存编辑的行为习惯 workday=1; holiday=2
+        void saveBehaviourEvent(HabitsEventDetail content,int dayType);
 
         //显示提醒时间对话框
         void showAlertDialog(Context context, int currentPosition, List<String> alertList, int alertType);

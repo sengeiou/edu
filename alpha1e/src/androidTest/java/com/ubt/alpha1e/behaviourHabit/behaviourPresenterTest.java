@@ -20,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
@@ -43,7 +44,7 @@ public class behaviourPresenterTest {
 
             @Override
             public void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg) {
-                 Log.d("TEST","showBehaviourEventContent "+content.contentIds.get(2));
+                 Log.d("TEST","showBehaviourEventContent "+content.contents);
             }
 
             @Override
@@ -53,6 +54,11 @@ public class behaviourPresenterTest {
 
             @Override
             public void showNetworkRequestError() {
+
+            }
+
+            @Override
+            public void onAlertSelectItem(int index, String language, int alertType) {
 
             }
 
@@ -100,11 +106,15 @@ public class behaviourPresenterTest {
 
     @Test
     public void testSaveBehaviourEvent() throws Exception {
+        List<String> contentId=new ArrayList<>();
+        contentId.add("123");
+        contentId.add("456");
         HabitsEventDetail mHabitsEventDetail=new HabitsEventDetail();
-        mHabitsEventDetail.setEventId("12");
-        mHabitsEventDetail.setRemindOne("12:11");
-        mHabitsEventDetail.setRemindTwo("12:22");
+        mHabitsEventDetail.setEventId("62");
+        mHabitsEventDetail.setRemindOne("5");
+        mHabitsEventDetail.setRemindTwo("10");
         mHabitsEventDetail.setStatus("1");
-        mPresenter.saveBehaviourEvent(mHabitsEventDetail);
+        mHabitsEventDetail.setContentIds(contentId);
+        mPresenter.saveBehaviourEvent(mHabitsEventDetail,1);
     }
 }

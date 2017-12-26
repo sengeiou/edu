@@ -19,6 +19,8 @@ import com.ubt.alpha1e.base.RequstMode.BehaviourSaveUpdateRequest;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
@@ -96,13 +98,18 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
     }
 
     @Override
-    public void saveBehaviourEvent(HabitsEventDetail content) {
+    public void saveBehaviourEvent(HabitsEventDetail content, int dayType) {
         BehaviourSaveUpdateRequest mBehaviourSaveUpdateRequest=new BehaviourSaveUpdateRequest();
         mBehaviourSaveUpdateRequest.setEventId(content.getEventId());
         mBehaviourSaveUpdateRequest.setEventTime(content.getEventTime());
+        mBehaviourSaveUpdateRequest.setRemindOne(content.getRemindOne());
+        mBehaviourSaveUpdateRequest.setRemindTwo(content.getRemindTwo());
         mBehaviourSaveUpdateRequest.setContentIds(content.getContentIds());
+        mBehaviourSaveUpdateRequest.setStatus(content.getStatus());
+        mBehaviourSaveUpdateRequest.setType(String.valueOf(dayType));
         doRequestFromWeb(url+SaveModifyEventPath, mBehaviourSaveUpdateRequest,GET_BEHAVIOURSAVEUPDATE_CMD);
     }
+
 
     @Override
     public void showAlertDialog(Context context, int currentPosition, final List<String> alertList, final int alertType) {
@@ -177,9 +184,9 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                         mView.showBehaviourList(true,((UserScore) baseResponseModel.models),"success");
                         break;
                     case GET_BEHAVIOUREVENT_CMD:
-                        BaseResponseModel<EventDetail>baseResponseModel1=GsonImpl.get().toObject(response,new TypeToken<BaseResponseModel<EventDetail>>(){
+                        BaseResponseModel<EventDetail<List<PlayContent>>>baseResponseModel1=GsonImpl.get().toObject(response,new TypeToken<BaseResponseModel<EventDetail<List<PlayContent>>>>(){
                         }.getType());
-                        UbtLog.d(TAG, "GET_BEHAVIOUREVENT_CMD baseResponseModel = " + baseResponseModel1.models.contentIds.get(2));
+                        UbtLog.d(TAG, "GET_BEHAVIOUREVENT_CMD baseResponseModel = " + baseResponseModel1.models.contents.get(0).getContentName());
                         mView.showBehaviourEventContent(true,(EventDetail)baseResponseModel1.models,"success");
                         break;
                     case GET_BEHAVIOURCONTROL_CMD:

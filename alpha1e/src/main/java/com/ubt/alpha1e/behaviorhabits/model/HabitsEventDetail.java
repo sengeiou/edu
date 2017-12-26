@@ -1,5 +1,7 @@
 package com.ubt.alpha1e.behaviorhabits.model;
 
+import java.util.List;
+
 /**
  * @作者：ubt
  * @日期: 2017/12/19 11:21
@@ -7,12 +9,14 @@ package com.ubt.alpha1e.behaviorhabits.model;
  */
 
 
-public class HabitsEventDetail {
+public class HabitsEventDetail{
     String eventTime;
     String eventId;
-    String[] contentIds;
+    List<String> contentIds;
     String remindOne;
     String remindTwo;
+    String status;
+
 
     public String getStatus() {
         return status;
@@ -22,7 +26,7 @@ public class HabitsEventDetail {
         this.status = status;
     }
 
-    String status;
+
 
     public String getEventId() {
         return eventId;
@@ -42,11 +46,11 @@ public class HabitsEventDetail {
     }
 
 
-    public String[] getContentIds() {
+    public List<String> getContentIds() {
         return contentIds;
     }
 
-    public void setContentIds(String[] contentIds) {
+    public void setContentIds(List<String> contentIds) {
         this.contentIds = contentIds;
     }
 

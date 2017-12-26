@@ -17,8 +17,10 @@ public class HabitsEvent extends BaseModel{
     public String eventId;
     public String eventName;
     public String eventTime;
+    public String eventType;
     public String status;
     public String score;
+
 
     public HabitsEvent thiz;
 
@@ -74,6 +76,7 @@ public class HabitsEvent extends BaseModel{
                 "eventId=" + eventId +
                 ", eventName='" + eventName + '\'' +
                 ", eventTime='" + eventTime + '\'' +
+                ", eventType='" + eventType + '\'' +
                 ", status='" + status + '\'' +
                 ", score='" + score + '\'' +
                 '}';
