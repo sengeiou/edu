@@ -23,7 +23,6 @@ import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.adapter.HabitsEventRecyclerAdapter;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
-import com.ubt.alpha1e.behaviorhabits.model.HabitsEventInfo;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.Constant;
@@ -75,7 +74,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     TextView tvScore;
 
     public HabitsEventRecyclerAdapter mAdapter;
-    private List<HabitsEventInfo> mHabitsEventInfoDatas = null;
+    private List<HabitsEvent> mHabitsEventInfoDatas = null;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -85,12 +84,14 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                 case UPDATE_UI_DATA:
                     UserScore<List<HabitsEvent>> userScore = (UserScore<List<HabitsEvent>>) msg.obj;
                     if(userScore != null){
-                        tvRatio.setText(getStringRes("ui_habits_has_finish") + userScore.percent);
+                        tvRatio.setText(getStringRes("ui_habits_has_finish") + userScore.percent+"%");
                         tvScore.setText(userScore.totalScore);
-                        cbScore.setSweepAngle(25f);
+                        cbScore.setSweepAngle(Float.parseFloat(userScore.percent));
 
                         List<HabitsEvent> habitsEventList = userScore.details;
-
+                        mHabitsEventInfoDatas.clear();
+                        mHabitsEventInfoDatas.addAll(habitsEventList);
+                        mAdapter.notifyDataSetChanged();
                     }
                     break;
             }
@@ -110,54 +111,11 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
         ivTitleRight.setVisibility(View.VISIBLE);
 
         tvToday.setText(sdf.format(new Date()));
-        tvRatio.setText(getStringRes("ui_habits_has_finish") + "25%");
-        tvScore.setText("30");
-        cbScore.setSweepAngle(25f);
+        tvRatio.setText(getStringRes("ui_habits_has_finish") + "0%");
+        tvScore.setText("0");
+        cbScore.setSweepAngle(0f);
 
         mHabitsEventInfoDatas = new ArrayList<>();
-
-        HabitsEventInfo h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "07:45";
-        h.eventName = "早餐";
-        h.eventSwitch = "1";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "午餐";
-        h.eventSwitch = "0";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "晚餐";
-        h.eventSwitch = "1";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "夜宵";
-        h.eventSwitch = "0";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "夜宵";
-        h.eventSwitch = "0";
-        mHabitsEventInfoDatas.add(h);
-
-        h = new HabitsEventInfo();
-        h.eventId = "1";
-        h.eventTime = "09:45";
-        h.eventName = "夜宵";
-        h.eventSwitch = "0";
-        mHabitsEventInfoDatas.add(h);
-
         initRecyclerViews();
 
         mPresenter.getBehaviourList("1","1");

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.baoyz.pg.PG;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.FlowLayoutManager;
@@ -26,7 +27,6 @@ import com.ubt.alpha1e.behaviorhabits.drag.DragRecyclerView;
 import com.ubt.alpha1e.behaviorhabits.drag.HoldTouchHelper;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
-import com.ubt.alpha1e.behaviorhabits.model.HabitsEventInfo;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.SampleEntity;
@@ -54,6 +54,8 @@ import butterknife.Unbinder;
 public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContract.View, BehaviorHabitsPresenter> implements BehaviorHabitsContract.View {
 
     private static final String TAG = HibitsEventEditFragment.class.getSimpleName();
+
+    private static final int UPDATE_UI_DATA = 1;
 
     Unbinder unbinder;
     @BindView(R.id.ll_base_back)
@@ -85,16 +87,15 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
 
     private String[] mAlertArr = {"5分钟后", "10分钟后", "15分钟后", "20分钟后", "25分钟后"};
 
-    private HabitsEventInfo mHabitsEventInfo = null;
-
+    private HabitsEvent mHabitsEvent = null;
 
     public FlowPlayContentRecyclerAdapter mAdapter;
     private List<SampleEntity> mPlayContentInfoDatas = new ArrayList<>();
 
-    public static HibitsEventEditFragment newInstance(HabitsEventInfo habitsEventInfo) {
+    public static HibitsEventEditFragment newInstance(HabitsEvent habitsEvent) {
         HibitsEventEditFragment eventEditFragment = new HibitsEventEditFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constant.HABITS_EVENT_INFO_KEY, PG.convertParcelable(habitsEventInfo));
+        bundle.putParcelable(Constant.HABITS_EVENT_INFO_KEY, PG.convertParcelable(habitsEvent));
         eventEditFragment.setArguments(bundle);
         return eventEditFragment;
     }
@@ -104,16 +105,59 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
+                case UPDATE_UI_DATA:
+                    EventDetail<List<PlayContentInfo>> eventDetail = (EventDetail<List<PlayContentInfo>>) msg.obj;
+                    UbtLog.d(TAG,"eventDetail = " + eventDetail);
+                    if(eventDetail != null){
+                        UbtLog.d(TAG,"eventDetail = " + eventDetail.eventTime + " ");
+                        String[] eventTime = eventDetail.eventTime.split(":");
+                        if(eventTime.length == 2){
+                            lvHour.setInitPosition(0);
+                            lvHour.setCurrentPosition(getHourIndex(eventTime[0]));
 
+                            lvMinute.setInitPosition(0);
+                            lvMinute.setCurrentPosition(getMinuteIndex(eventTime[1]));
+                        }
+
+                        updatePlayContentData(eventDetail.contents);
+                    }
+                    break;
             }
         }
     };
+
+    private int getHourIndex(String hour){
+        int index = 0;
+        for(String h : mHourArr){
+            if(Integer.parseInt(h) == Integer.parseInt(hour) ){
+                return index;
+            }
+            index++;
+        }
+        return 0;
+    }
+
+    private int getMinuteIndex(String minute){
+        int index = 0;
+        for(String m : mMinuteArr){
+            if(Integer.parseInt(m) == Integer.parseInt(minute) ){
+                return index;
+            }
+            index++;
+        }
+        return 0;
+    }
 
     @Override
     protected void initUI() {
 
         ivBack.setBackgroundResource(R.drawable.action_close);
-        tvBaseTitleName.setText(getStringRes("ui_common_edit") + "早餐");
+        if(mHabitsEvent != null){
+            tvBaseTitleName.setText(getStringRes("ui_common_edit") + mHabitsEvent.eventName);
+        }else {
+            tvBaseTitleName.setText(getStringRes("ui_common_edit"));
+        }
+
         ivTitleRight.setVisibility(View.VISIBLE);
 
         // 设置原始数据
@@ -129,6 +173,10 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         lvMinute.setCurrentPosition(10);
 
         initRecyclerViews();
+
+        if(mHabitsEvent != null){
+            mPresenter.getBehaviourEvent(mHabitsEvent.eventId);
+        }
     }
 
     public void initRecyclerViews() {
@@ -194,13 +242,14 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
         if (getArguments() != null) {
-            mHabitsEventInfo = getArguments().getParcelable(Constant.HABITS_EVENT_INFO_KEY);
+            mHabitsEvent = getArguments().getParcelable(Constant.HABITS_EVENT_INFO_KEY);
         }
 
-        UbtLog.d(TAG, "mHabitsEventInfo = " + mHabitsEventInfo);
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+
+        UbtLog.d(TAG, "mHabitsEvent = " + mHabitsEvent);
         return rootView;
     }
 
@@ -217,11 +266,11 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             ArrayList<? extends PlayContentInfo> playContentInfoList = data.getParcelableArrayList(Constant.PLAY_CONTENT_INFO_LIST_KEY);
             UbtLog.d(TAG, "playContentInfoList = " + playContentInfoList.size());
 
-            updateData(playContentInfoList);
+            updatePlayContentData(playContentInfoList);
         }
     }
 
-    private void updateData(ArrayList<? extends PlayContentInfo> playContentInfList){
+    private void updatePlayContentData(List<? extends PlayContentInfo> playContentInfList){
         mPlayContentInfoDatas.clear();
         SampleEntity sampleEntity = null;
         for(PlayContentInfo playContentInfo : playContentInfList){
@@ -246,7 +295,14 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
 
     @Override
     public void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg) {
-
+        if(status){
+            Message msg = new Message();
+            msg.what = UPDATE_UI_DATA;
+            msg.obj = content;
+            mHandler.sendMessage(msg);
+        }else {
+            ToastUtils.showShort(errorMsg);
+        }
     }
 
     @Override
@@ -301,7 +357,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             @Override
             public void onClick(View v) {
                 Bundle resultBundle = new Bundle();
-                resultBundle.putParcelable(Constant.HABITS_EVENT_INFO_KEY, PG.convertParcelable(mHabitsEventInfo));
+                resultBundle.putParcelable(Constant.HABITS_EVENT_INFO_KEY, PG.convertParcelable(mHabitsEvent));
                 setFragmentResult(Constant.HIBITS_EVENT_EDIT_RESPONSE_CODE, resultBundle);
                 pop();
             }

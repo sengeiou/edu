@@ -13,8 +13,7 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.behaviorhabits.fragment.ParentManageCenterFragment;
-import com.ubt.alpha1e.behaviorhabits.model.HabitsEventInfo;
-import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +27,12 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final String TAG = HabitsEventRecyclerAdapter.class.getSimpleName();
 
     private Context mContext;
-    public List<HabitsEventInfo> mDatas = new ArrayList<>();
+    public List<HabitsEvent> mDatas = new ArrayList<>();
     private View mView;
     private boolean isSinpleShow;
     private Handler mHandler = null;
 
-    public HabitsEventRecyclerAdapter(Context mContext, List<HabitsEventInfo> list, boolean isSinpleShow, Handler handler) {
+    public HabitsEventRecyclerAdapter(Context mContext, List<HabitsEvent> list, boolean isSinpleShow, Handler handler) {
         super();
         this.mContext = mContext;
         this.mDatas = list;
@@ -41,7 +40,7 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         this.isSinpleShow = isSinpleShow;
     }
 
-    public void setData(List<HabitsEventInfo>  data) {
+    public void setData(List<HabitsEvent>  data) {
         this.mDatas = data;
     }
 
@@ -49,17 +48,15 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
         MyHabitsEventHolder myHolder  = (MyHabitsEventHolder) holder;
-        HabitsEventInfo habitsEventInfo = mDatas.get(position);
+        HabitsEvent habitsEventInfo = mDatas.get(position);
 
-        if("1".equals(habitsEventInfo.eventSwitch) || isSinpleShow){
+        if("1".equals(habitsEventInfo.status) || isSinpleShow){
             myHolder.ivEventSwitch.setBackgroundResource(R.drawable.icon_habits_switch_open);
-            myHolder.ivEventLogo.setBackgroundResource(R.drawable.icon_habits_awake_highlight);
-
         }else {
             myHolder.ivEventSwitch.setBackgroundResource(R.drawable.icon_habits_switch_close);
-            myHolder.ivEventLogo.setBackgroundResource(R.drawable.icon_habits_awake_grey);
         }
 
+        myHolder.ivEventLogo.setBackgroundResource(getBackgroundViewId(habitsEventInfo.eventType, habitsEventInfo.status));
         myHolder.tvEventTime.setText(habitsEventInfo.eventTime);
         myHolder.tvEventName.setText(habitsEventInfo.eventName);
 
@@ -68,10 +65,18 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             myHolder.tvRight.setVisibility(View.GONE);
 
             myHolder.rlRight.setVisibility(View.VISIBLE);
-            myHolder.ivStar1.setBackgroundResource(R.drawable.icon_habits_star_highlight);
-            myHolder.ivStar2.setBackgroundResource(R.drawable.icon_habits_star_grey);
-            myHolder.tvScore.setText("5分");
+            if(habitsEventInfo.score == "5"){
+                myHolder.ivStar1.setBackgroundResource(R.drawable.icon_habits_star_highlight);
+                myHolder.ivStar2.setBackgroundResource(R.drawable.icon_habits_star_grey);
+            }else if(habitsEventInfo.score == "10"){
+                myHolder.ivStar1.setBackgroundResource(R.drawable.icon_habits_star_highlight);
+                myHolder.ivStar2.setBackgroundResource(R.drawable.icon_habits_star_highlight);
+            }else {
+                myHolder.ivStar1.setBackgroundResource(R.drawable.icon_habits_star_grey);
+                myHolder.ivStar2.setBackgroundResource(R.drawable.icon_habits_star_grey);
+            }
 
+            myHolder.tvScore.setText(habitsEventInfo.score + "分");
         }else {
             myHolder.ivEventSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -93,8 +98,6 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 }
             });
         }
-
-
     }
 
     @Override
@@ -135,4 +138,72 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    /**
+     *
+     * eventType 1：起床 2：午休 3：睡晚觉 4：洗漱 5：早餐 6：午餐 7：晚餐 8：上学 9：作业 10：阅读 11：编程 12：娱乐 13：洗澡
+     * @param eventType
+     * @param status
+     * @return
+     */
+    private int getBackgroundViewId(String eventType,String status){
+        int imageId = 0;
+        if("1".equals(status)){
+            if("1".equals(eventType)){
+                imageId = R.drawable.icon_habits_awake_highlight;
+            }else if("2".equals(eventType)){
+                imageId = R.drawable.icon_habits_sleep_highlight;
+            }else if("3".equals(eventType)){
+                imageId = R.drawable.icon_habits_sleep_highlight;
+            }else if("4".equals(eventType)){
+                imageId = R.drawable.icon_habits_wash_highlight;
+            }else if("5".equals(eventType)){
+                imageId = R.drawable.icon_habits_breackfast_highlight;
+            }else if("6".equals(eventType)){
+                imageId = R.drawable.icon_habits_lunch_highlight;
+            }else if("7".equals(eventType)){
+                imageId = R.drawable.icon_habits_dinner_highlight;
+            }else if("8".equals(eventType)){
+                imageId = R.drawable.icon_habits_english_highlight;
+            }else if("9".equals(eventType)){
+                imageId = R.drawable.icon_habits_homework_highlight;
+            }else if("10".equals(eventType)){
+                imageId = R.drawable.icon_habits_read_highlight;
+            }else if("11".equals(eventType)){
+                imageId = R.drawable.icon_habits_homework_highlight;
+            }else if("12".equals(eventType)){
+                imageId = R.drawable.icon_habits_entertainment_highlight;
+            }else{
+                imageId = R.drawable.icon_habits_homework_highlight;
+            }
+        }else {
+            if("1".equals(eventType)){
+                imageId = R.drawable.icon_habits_awake_grey;
+            }else if("2".equals(eventType)){
+                imageId = R.drawable.icon_habits_sleep_grey;
+            }else if("3".equals(eventType)){
+                imageId = R.drawable.icon_habits_sleep_grey;
+            }else if("4".equals(eventType)){
+                imageId = R.drawable.icon_habits_wash_grey;
+            }else if("5".equals(eventType)){
+                imageId = R.drawable.icon_habits_breackfast_grey;
+            }else if("6".equals(eventType)){
+                imageId = R.drawable.icon_habits_lunch_grey;
+            }else if("7".equals(eventType)){
+                imageId = R.drawable.icon_habits_dinner_grey;
+            }else if("8".equals(eventType)){
+                imageId = R.drawable.icon_habits_english_grey;
+            }else if("9".equals(eventType)){
+                imageId = R.drawable.icon_habits_homework_grey;
+            }else if("10".equals(eventType)){
+                imageId = R.drawable.icon_habits_read_grey;
+            }else if("11".equals(eventType)){
+                imageId = R.drawable.icon_habits_homework_grey;
+            }else if("12".equals(eventType)){
+                imageId = R.drawable.icon_habits_entertainment_grey;
+            }else{
+                imageId = R.drawable.icon_habits_homework_grey;
+            }
+        }
+        return imageId;
+    }
 }
