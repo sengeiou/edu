@@ -1,9 +1,13 @@
 package com.ubt.alpha1e.behaviorhabits.fragment;
 
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +19,17 @@ import com.baoyz.pg.PG;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
+import com.ubt.alpha1e.behaviorhabits.FlowLayoutManager;
+import com.ubt.alpha1e.behaviorhabits.adapter.FlowPlayContentRecyclerAdapter;
+import com.ubt.alpha1e.behaviorhabits.adapter.SampleAdapter;
+import com.ubt.alpha1e.behaviorhabits.drag.DragRecyclerView;
+import com.ubt.alpha1e.behaviorhabits.drag.HoldTouchHelper;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEventInfo;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
+import com.ubt.alpha1e.behaviorhabits.model.SampleEntity;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
@@ -60,10 +70,10 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     TextView tvAlertOne;
     @BindView(R.id.tv_alert_two)
     TextView tvAlertTwo;
-    @BindView(R.id.tv_play_content_list)
-    TextView tvPlayContentList;
     @BindView(R.id.iv_back)
     ImageView ivBack;
+    @BindView(R.id.rv_play_content)
+    DragRecyclerView rvPlayContent;
 
     private String[] mHourArr = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
     private String[] mMinuteArr = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
@@ -77,6 +87,9 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
 
     private HabitsEventInfo mHabitsEventInfo = null;
 
+
+    public FlowPlayContentRecyclerAdapter mAdapter;
+    private List<SampleEntity> mPlayContentInfoDatas = new ArrayList<>();
 
     public static HibitsEventEditFragment newInstance(HabitsEventInfo habitsEventInfo) {
         HibitsEventEditFragment eventEditFragment = new HibitsEventEditFragment();
@@ -115,7 +128,53 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         lvMinute.setInitPosition(0);
         lvMinute.setCurrentPosition(10);
 
+        initRecyclerViews();
     }
+
+    public void initRecyclerViews() {
+        UbtLog.d(TAG, "rvPlayContent =>> " + rvPlayContent);
+        //LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
+        rvPlayContent.setLayoutManager(flowLayoutManager);
+        RecyclerView.ItemAnimator animator = rvPlayContent.getItemAnimator();
+        if (animator instanceof SimpleItemAnimator) {
+            ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
+        }
+
+        rvPlayContent.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                outRect.right = 30;
+                outRect.bottom = 30;
+            }
+        });
+
+        mAdapter = new FlowPlayContentRecyclerAdapter(getContext(), mPlayContentInfoDatas, mHandler);
+        rvPlayContent.setAdapter(mAdapter);
+
+        /** custom setting */
+        rvPlayContent
+                .dragEnable(true)
+                .showDragAnimation(true)
+                .setDragAdapter(mAdapter)
+                .bindEvent(onItemTouchEvent);
+    }
+
+    HoldTouchHelper.OnItemTouchEvent onItemTouchEvent = new HoldTouchHelper.OnItemTouchEvent() {
+        @Override
+        public void onLongPress(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int position) {
+            if (((SampleAdapter) recyclerView.getAdapter()).onItemDrag(position)) {
+                ((DragRecyclerView) recyclerView).startDrag(position);
+            }
+        }
+
+        @Override
+        public void onItemClick(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int position) {
+            //String text = mAllDeviceDatas.get(position).getDeviceEntity().getDeviceName();
+            //Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void initControlListener() {
@@ -140,8 +199,8 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         if (getArguments() != null) {
             mHabitsEventInfo = getArguments().getParcelable(Constant.HABITS_EVENT_INFO_KEY);
         }
-        UbtLog.d(TAG, "mHabitsEventInfo = " + mHabitsEventInfo);
 
+        UbtLog.d(TAG, "mHabitsEventInfo = " + mHabitsEventInfo);
         return rootView;
     }
 
@@ -158,17 +217,21 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             ArrayList<? extends PlayContentInfo> playContentInfoList = data.getParcelableArrayList(Constant.PLAY_CONTENT_INFO_LIST_KEY);
             UbtLog.d(TAG, "playContentInfoList = " + playContentInfoList.size());
 
-            String playContents = "";
-            for (int i = 0; i < playContentInfoList.size(); i++) {
-                PlayContentInfo info = playContentInfoList.get(i);
-                if ((i + 1) == playContentInfoList.size()) {
-                    playContents += info.contentName;
-                } else {
-                    playContents += info.contentName + "、";
-                }
-            }
-            tvPlayContentList.setText(playContents);
+            updateData(playContentInfoList);
         }
+    }
+
+    private void updateData(ArrayList<? extends PlayContentInfo> playContentInfList){
+        mPlayContentInfoDatas.clear();
+        SampleEntity sampleEntity = null;
+        for(PlayContentInfo playContentInfo : playContentInfList){
+            sampleEntity = new SampleEntity();
+            sampleEntity.setDragEnable(true);
+            sampleEntity.setDropEnable(true);
+            sampleEntity.setPlayContentInfo(playContentInfo);
+            mPlayContentInfoDatas.add(sampleEntity);
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -225,7 +288,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         }
     }
 
-    private void exitEdit(){
+    private void exitEdit() {
         new ConfirmDialog(getContext()).builder()
                 .setMsg(getStringRes("ui_habits_exit_edit_tip"))
                 .setCancelable(false)
@@ -235,13 +298,13 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
 
                     }
                 }).setNegativeButton(getStringRes("ui_habits_exit_edit"), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Bundle resultBundle = new Bundle();
-                        resultBundle.putParcelable(Constant.HABITS_EVENT_INFO_KEY, PG.convertParcelable(mHabitsEventInfo));
-                        setFragmentResult(Constant.HIBITS_EVENT_EDIT_RESPONSE_CODE, resultBundle);
-                        pop();
-                    }
+            @Override
+            public void onClick(View v) {
+                Bundle resultBundle = new Bundle();
+                resultBundle.putParcelable(Constant.HABITS_EVENT_INFO_KEY, PG.convertParcelable(mHabitsEventInfo));
+                setFragmentResult(Constant.HIBITS_EVENT_EDIT_RESPONSE_CODE, resultBundle);
+                pop();
+            }
         }).show();
     }
 

@@ -230,7 +230,7 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_back:
-                getActivity().finish();
+                pop();
                 break;
             case R.id.iv_title_right:
                 doConfirm();
