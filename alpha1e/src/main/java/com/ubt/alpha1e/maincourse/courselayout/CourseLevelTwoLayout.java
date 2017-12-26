@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.orhanobut.dialogplus.DialogPlus;
@@ -22,6 +23,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
 import com.ubt.alpha1e.action.model.PrepareDataModel;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.maincourse.adapter.ActionCourseTwoUtil;
 import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
@@ -57,7 +59,8 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
      * 高亮对话框的TextView显示
      */
     TextView tv;
-
+    RelativeLayout mRlInstruction;
+    private TextView mTextView;
     CourseProgressListener courseProgressListener;
     /**
      * 当前课时
@@ -128,18 +131,20 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
         setImageViewBg();
         UbtLog.d(TAG, "currentCourse==" + currentCourse);
         if (currentCourse == 1) {
-            showOneCardContent();
+            mRlInstruction.setVisibility(View.VISIBLE);
+            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑2总介.hts");
+            //showOneCardContent();
         } else if (currentCourse == 2) {
             ivActionLib.setEnabled(true);
             ivActionLibMore.setEnabled(false);
             showLeftArrow(true);
             secondIndex = 1;
-            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务描述.mp3\",\"playcount\":1}");
+            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引1.mp3\",\"playcount\":1}");
         } else if (currentCourse == 3) {
             ivActionLib.setEnabled(false);
             ivActionLibMore.setEnabled(true);
             showLeftArrow1(true);
-            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务描述2.mp3\",\"playcount\":1}");
+            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引4.mp3\",\"playcount\":1}");
             threeIndex = 1;
         }
 
@@ -161,6 +166,9 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
         ivLeftArrow.setOnClickListener(this);
         ivLeftArrow1 = findViewById(R.id.iv_add_action_arrow1);
         ivLeftArrow1.setOnClickListener(this);
+        mRlInstruction = findViewById(R.id.rl_instruction);
+        mTextView = findViewById(R.id.tv_all_introduc);
+        mTextView.setText(ResourceManager.getInstance(mContext).getStringResources("action_course_card2_1_all"));
     }
 
     /**
@@ -276,31 +284,34 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
         if (((Activity) mContext).isFinishing()) {
             return;
         }
-        if (currentCourse == 2) {
+        if (currentCourse == 1) {
+            mRlInstruction.setVisibility(View.GONE);
+            showNextDialog(2);
+        } else if (currentCourse == 2) {
             UbtLog.d(TAG, "secondIndex==" + secondIndex);
             if (secondIndex == 1) {
                 secondIndex = 2;
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引1.mp3\",\"playcount\":1}");
+                        //    ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引1.mp3\",\"playcount\":1}");
                     }
                 }, 500);
             }
         } else if (currentCourse == 3) {
             if (threeIndex == 1) {
                 threeIndex = 2;
-                ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引4.mp3\",\"playcount\":1}");
+                // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引4.mp3\",\"playcount\":1}");
             }
         }
         UbtLog.d(TAG, "isPlayAction==" + isPlayAction);
-        if (isPlayAction) {
-            if (null != mActionCourseTwoUtil) {
-                mActionCourseTwoUtil.showAddAnimal();
-            }
-            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引6.mp3\",\"playcount\":1}");
-            isPlayAction = false;
-        }
+//        if (isPlayAction) {
+//            if (null != mActionCourseTwoUtil) {
+//                mActionCourseTwoUtil.showAddAnimal();
+//            }
+//            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引6.mp3\",\"playcount\":1}");
+//            isPlayAction = false;
+//        }
     }
 
 
@@ -460,6 +471,15 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
         isPlayAction = true;
         playAction(prepareDataModel);
         UbtLog.d(TAG, "playCourseAction===" + currentCourse);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (null != mActionCourseTwoUtil) {
+                    mActionCourseTwoUtil.showAddAnimal();
+                }
+                ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引6.mp3\",\"playcount\":1}");
+            }
+        }, 1200);
 
     }
 

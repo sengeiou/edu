@@ -39,9 +39,9 @@ public class UserCenterImpPresenter extends BasePresenterImpl<UserCenterContact.
             LeftMenuModel menuModel2 = new LeftMenuModel(ResourceManager.getInstance(context).getStringResources("user_center_message"));
             menuModel2.setImageId(R.drawable.radio_selector_main_left_message);
             leftMenuModels.add(menuModel2);
-            LeftMenuModel menuModel3 = new LeftMenuModel(ResourceManager.getInstance(context).getStringResources("user_center_dynamic"));
-            menuModel3.setImageId(R.drawable.radio_selector_main_left_dynaic);
-            leftMenuModels.add(menuModel3);
+//            LeftMenuModel menuModel3 = new LeftMenuModel(ResourceManager.getInstance(context).getStringResources("user_center_dynamic"));
+//            menuModel3.setImageId(R.drawable.radio_selector_main_left_dynaic);
+//            leftMenuModels.add(menuModel3);
             LeftMenuModel menuModel4 = new LeftMenuModel(ResourceManager.getInstance(context).getStringResources("user_center_original"));
             menuModel4.setImageId(R.drawable.radio_selector_main_left_create);
             leftMenuModels.add(menuModel4);
@@ -53,7 +53,7 @@ public class UserCenterImpPresenter extends BasePresenterImpl<UserCenterContact.
             leftMenuModels.add(menuModel6);
 
             List<Fragment> fragmentList = new ArrayList<>();
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 6; i++) {
                 if (i == 0) {
                     fragmentList.add(UserInfoFragment.newInstance(leftMenuModels.get(i).getNameString(), ""));
                 } else if (i == 1) {
@@ -61,12 +61,10 @@ public class UserCenterImpPresenter extends BasePresenterImpl<UserCenterContact.
                 } else if (i == 2) {
                     fragmentList.add(NoticeFragment.newInstance("2", ""));
                 } else if (i == 3) {
-                    fragmentList.add(NoticeFragment.newInstance("3", ""));
-                } else if (i == 4) {
                     fragmentList.add(DynamicActionFragment.newInstance("", ""));
-                } else if (i == 5) {
+                } else if (i == 4) {
                     fragmentList.add(NoticeFragment.newInstance("5", ""));
-                } else if (i == 6) {
+                } else if (i == 5) {
                     Fragment fragment = SettingFragment.newInstance(leftMenuModels.get(i).getNameString(), "");
                     fragmentList.add(fragment);
                 }

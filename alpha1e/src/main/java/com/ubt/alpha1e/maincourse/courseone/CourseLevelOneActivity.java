@@ -206,7 +206,8 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
             UbtLog.d("CourseOneActivity", "返回键");
             showExitDialog();
         }
-        return super.onKeyDown(keyCode, event);
+        return false;
+        //return super.onKeyDown(keyCode, event);
     }
 
     @Override

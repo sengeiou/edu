@@ -9,6 +9,10 @@ import com.ubt.alpha1e.base.popup.HorizontalGravity;
 import com.ubt.alpha1e.base.popup.VerticalGravity;
 import com.ubt.alpha1e.maincourse.model.CourseActionModel;
 import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
+import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
+import com.ubt.alpha1e.utils.log.UbtLog;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,27 +83,41 @@ public class ActionCourseDataManager {
         one1Content5.setId(R.id.iv_add_frame);
         one1Content5.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
         one1Content5.setActionPath(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
-        one1Content5.setTitle("添加按钮");
+        one1Content5.setTitle("缩放时间轴");
         one1Content5.setDirection(1);
         one1Content5.setX(20);
         one1Content5.setY(0);
         one1Content5.setVertGravity(VerticalGravity.CENTER);
         one1Content5.setHorizGravity(HorizontalGravity.LEFT);
         one1ContentList.add(one1Content5);
-
-        CourseOne1Content one1Content6 = new CourseOne1Content();
-        one1Content6.setIndex(5);
-        one1Content6.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_6"));
-        one1Content6.setId(R.id.iv_play_music);
-        one1Content6.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
-        one1Content6.setActionPath(Constant.COURSE_ACTION_PATH + "播放按钮.hts");
-        one1Content6.setTitle("播放按钮");
-        one1Content6.setDirection(0);
-        one1Content6.setX(-20);
-        one1Content6.setY(0);
-        one1Content6.setVertGravity(VerticalGravity.CENTER);
-        one1Content6.setHorizGravity(HorizontalGravity.RIGHT);
-        one1ContentList.add(one1Content6);
+//
+//        CourseOne1Content one1Content5 = new CourseOne1Content();
+//        one1Content5.setIndex(4);
+//        one1Content5.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_5"));
+//        one1Content5.setId(R.id.iv_add_frame);
+//        one1Content5.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
+//        one1Content5.setActionPath(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
+//        one1Content5.setTitle("添加按钮");
+//        one1Content5.setDirection(1);
+//        one1Content5.setX(20);
+//        one1Content5.setY(0);
+//        one1Content5.setVertGravity(VerticalGravity.CENTER);
+//        one1Content5.setHorizGravity(HorizontalGravity.LEFT);
+//        one1ContentList.add(one1Content5);
+//
+//        CourseOne1Content one1Content6 = new CourseOne1Content();
+//        one1Content6.setIndex(5);
+//        one1Content6.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_6"));
+//        one1Content6.setId(R.id.iv_play_music);
+//        one1Content6.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
+//        one1Content6.setActionPath(Constant.COURSE_ACTION_PATH + "播放按钮.hts");
+//        one1Content6.setTitle("播放按钮");
+//        one1Content6.setDirection(0);
+//        one1Content6.setX(-20);
+//        one1Content6.setY(0);
+//        one1Content6.setVertGravity(VerticalGravity.CENTER);
+//        one1Content6.setHorizGravity(HorizontalGravity.RIGHT);
+//        one1ContentList.add(one1Content6);
         return one1ContentList;
     }
 
@@ -115,12 +133,12 @@ public class ActionCourseDataManager {
         CourseActionModel model3 = null;
         if (card == 1) {
             model1 = new CourseActionModel("1.认识时间轴", 0);
-            model2 = new CourseActionModel("2.熟悉动作添加", 0);
-            model3 = new CourseActionModel("3.了解音乐库", 0);
+            model2 = new CourseActionModel("2.了解添加键", 0);
+            model3 = new CourseActionModel("3.了解播放键", 0);
         } else if (card == 2) {
-            model1 = new CourseActionModel("1.了解动作模板", 0);
-            model2 = new CourseActionModel("2.模板讲解(添加基础动作)", 0);
-            model3 = new CourseActionModel("3.添加指定动作(添加高级动作)", 0);
+            model1 = new CourseActionModel("1.了解动作库", 0);
+            model2 = new CourseActionModel("2.初级动作库", 0);
+            model3 = new CourseActionModel("3.高级动作库", 0);
         }
         if (currentCourse == 1) {
             model1.setStatu(2);
@@ -137,6 +155,33 @@ public class ActionCourseDataManager {
         list.add(model3);
 
         return list;
+    }
+
+
+    public static List<CourseActionModel> getCourseDataList(int position) {
+        int level = 1;// 当前第几个课时
+        if (position == 0) {//第一关卡
+            LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+            if (null != record) {
+                UbtLog.d("getDataList", "record===" + record.toString());
+                int course = record.getCourseLevel();
+                int recordlevel = record.getPeriodLevel();
+                if (course == 2) {
+                    if (recordlevel == 0) {
+                        level = 1;
+                    } else if (recordlevel == 1) {
+                        level = 2;
+                    } else if (recordlevel == 2) {
+                        level = 3;
+                    } else if (recordlevel == 3) {
+                        level = 1;
+                    }
+                }
+
+            }
+        }
+
+        return getCourseActionModel(++position, level);
     }
 
 

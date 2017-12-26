@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.ubt.alpha1e"
-    android:versionCode="1"
-    android:versionName="V1.0.0.9">
-
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ubt.alpha1e"
           android:versionCode="1"
           android:versionName="V1.0.0.10">
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="21"/>
 
     <meta-data
         android:name="design_width"
@@ -61,6 +56,7 @@
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
+
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -689,6 +685,7 @@
         <activity
             android:name=".action.actioncreate.SaveSuccessActivity"
             android:screenOrientation="landscape"
+
             android:theme="@style/NoTitleThemeFullScreen" />
         <activity
             android:name=".action.help.HelpActivity"
@@ -697,6 +694,17 @@
         <activity android:name=".bluetoothandnet.BluetoothHelp"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"></activity>
+
+         <activity
+            android:name=".action.help.HelpActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".userinfo.dynamicaction.ActionDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
 
     </application>
 

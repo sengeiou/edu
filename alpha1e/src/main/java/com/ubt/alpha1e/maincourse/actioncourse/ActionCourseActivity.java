@@ -30,6 +30,8 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResponseMode.CourseDetailScoreModule;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.maincourse.adapter.ActionCoursedapter;
+import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
+import com.ubt.alpha1e.maincourse.courselayout.ActionCourseDataManager;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
@@ -239,7 +241,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         title.setText(mActionCourseModels.get(position).getTitle());
         RecyclerView mrecyle = contentView.findViewById(R.id.recyleview_content);
         mrecyle.setLayoutManager(new LinearLayoutManager(this));
-        ItemAdapter itemAdapter = new ItemAdapter(R.layout.layout_action_course_dialog, mActionCourseModels.get(position).getList());
+        CourseItemAdapter itemAdapter = new CourseItemAdapter(R.layout.layout_action_course_dialog, ActionCourseDataManager.getCourseDataList(position));
         mrecyle.setAdapter(itemAdapter);
         ViewHolder viewHolder = new ViewHolder(contentView);
         WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
