@@ -51,13 +51,14 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
     private static final int GET_BEHAVIOURPLAYCONTENT_CMD=3;
     private static final int GET_BEHAVIOURCONTROL_CMD=4;
     private static final int GET_BEHAVIOURSAVEUPDATE_CMD=5;
-    private static final int GET_BEHAVIOURDELAYALERT=6;
+    private static final int GET_BEHAVIOURDELAYALERT_CMD=6;
+    private static final int GET_BEHAVIOURPARENTEVENTLIST_CMD=7;
     String url = "http://10.10.1.14:8090";
     private String GetTemplatePath="/alpha1e/event/getEventList";
     private String GetEventPath="/alpha1e/event/getUserEvent";
     private String SaveModifyEventPath="/alpha1e/event/updateUserEvent";
     private String DelayAlert="/alpha1e/event/remindReply";
-    private String ControlEventPath="/behaviour/template/update";
+    private String ControlEventPath="/alpha1e/event/updateUserEvent"; //the same SaveModifyEventPath
     private String GetPlayContentPath="/behaviour/template/getEventContent";
 
     @Override
@@ -71,6 +72,15 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
         mBehaviourListRequest.setSex(sex);
         mBehaviourListRequest.setGrade(grade);
         doRequestFromWeb(url+GetTemplatePath, mBehaviourListRequest, GET_BEHAVIOURLIST_CMD);
+    }
+
+    @Override
+    public void getParentBehaviourList(String sex, String grade, String type) {
+        BehaviourListRequest mBehaviourListRequest = new BehaviourListRequest();
+        mBehaviourListRequest.setSex(sex);
+        mBehaviourListRequest.setGrade(grade);
+        mBehaviourListRequest.setType(type);
+        doRequestFromWeb(url+GetTemplatePath, mBehaviourListRequest, GET_BEHAVIOURPARENTEVENTLIST_CMD);
     }
 
     @Override
@@ -89,10 +99,10 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
     }
 
     @Override
-    public void setBehaviourEvent(String eventId, int status) {
+    public void enableBehaviourEvent(String eventId, int status) {
         BehaviourControlRequest mBehaviourControlRequest=new BehaviourControlRequest();
         mBehaviourControlRequest.setEventId(eventId);
-        mBehaviourControlRequest.setOperateType(new Integer(status).toString());
+        mBehaviourControlRequest.setType(new Integer(status).toString());
         doRequestFromWeb(url+ControlEventPath, mBehaviourControlRequest,GET_BEHAVIOURCONTROL_CMD);
     }
 
@@ -113,7 +123,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
         BehaviourDelayAlertRequest  mBehaviourDelayAlertRequest=new BehaviourDelayAlertRequest();
         mBehaviourDelayAlertRequest.setEventId(eventId);
         mBehaviourDelayAlertRequest.setDelayTime(delayTime);
-        doRequestFromWeb(url+DelayAlert, mBehaviourDelayAlertRequest,GET_BEHAVIOURDELAYALERT);
+        doRequestFromWeb(url+DelayAlert, mBehaviourDelayAlertRequest,GET_BEHAVIOURDELAYALERT_CMD);
     }
 
     @Override
@@ -172,7 +182,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                         break;
                     case GET_BEHAVIOURSAVEUPDATE_CMD:
                         break;
-                    case GET_BEHAVIOURDELAYALERT:
+                    case GET_BEHAVIOURDELAYALERT_CMD:
                         break;
                     default:
                         break;
@@ -202,8 +212,16 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                         break;
                     case GET_BEHAVIOURSAVEUPDATE_CMD:
                         break;
-                    case GET_BEHAVIOURDELAYALERT:
-
+                    case GET_BEHAVIOURDELAYALERT_CMD:
+                        break;
+                    case GET_BEHAVIOURPARENTEVENTLIST_CMD:
+                        BaseResponseModel<UserScore<List<HabitsEvent>>> baseResponseModel2 = GsonImpl.get().toObject(response,
+                                new TypeToken<BaseResponseModel<UserScore<List<HabitsEvent>>>>() {
+                                }.getType());//加上type转换，避免泛型擦除
+                        UbtLog.d(TAG, "parent baseResponseModel = " + baseResponseModel2.models);
+                        UbtLog.d(TAG, "parent baseResponseModel percent = " + ((UserScore) baseResponseModel2.models).percent);
+                        UbtLog.d(TAG, "parent baseResponseModel details = " + ((List<HabitsEvent>) (((UserScore) baseResponseModel2.models).details)));
+                        mView.showParentBehaviourList(true,((UserScore) baseResponseModel2.models),"success");
                         break;
                     default:
                         break;

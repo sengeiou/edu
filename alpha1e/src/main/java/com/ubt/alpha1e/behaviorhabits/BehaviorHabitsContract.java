@@ -22,6 +22,8 @@ public class BehaviorHabitsContract {
         void onTest(boolean isSuccess);
         //显示行为列表以及分数
         void showBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg);
+        //显示家长管理模式列表
+        void showParentBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg);
         //显示编辑的EventID具体内容
         void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg);
         //显示行为习惯播放内容
@@ -35,12 +37,14 @@ public class BehaviorHabitsContract {
         void doTest();
         //获得行为习惯列表以及分数
         void getBehaviourList(String  sex, String grade);
+        //家长模式下，编辑行为列表，type=1 workday type=2 holiday
+        void getParentBehaviourList(String sex,String grade, String type);
         //获得行为习惯某个EventId具体详情
         void getBehaviourEvent(String eventId);
         //获得行为习惯的播放内容
         void getBehaviourPlayContent(String sex,String grade);
         //开启/关闭行为习惯具体某个EventId状态，status=0 关闭，status=1 打开
-        void setBehaviourEvent(String eventId, int status);
+        void enableBehaviourEvent(String eventId, int status);
         //保存编辑的行为习惯 workday=1; holiday=2
         void saveBehaviourEvent(HabitsEventDetail content,int dayType);
         //显示提醒时间对话框

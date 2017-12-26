@@ -242,6 +242,11 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     }
 
     @Override
+    public void showParentBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
+
+    }
+
+    @Override
     public void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg) {
 
     }

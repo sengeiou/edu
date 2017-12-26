@@ -238,6 +238,11 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
     }
 
     @Override
+    public void showParentBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
+
+    }
+
+    @Override
     public void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg) {
 
     }
@@ -268,7 +273,6 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
                 mPresenter.getBehaviourList("1","5");
                 mPresenter.getBehaviourEvent("12345");
                 mPresenter.getBehaviourPlayContent("1","6");
-                mPresenter.setBehaviourEvent("1234",1);
                 break;
             case R.id.rl_workdays:
                 switchMode();
