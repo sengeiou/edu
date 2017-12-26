@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.baoyz.pg.PG;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.adapter.HabitsEventRecyclerAdapter;
@@ -51,6 +52,8 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
     private static final String TAG = HibitsEventFragment.class.getSimpleName();
 
+    private static final int UPDATE_UI_DATA = 1;
+
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     Unbinder unbinder;
@@ -78,7 +81,19 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            switch (msg.what){
+                case UPDATE_UI_DATA:
+                    UserScore<List<HabitsEvent>> userScore = (UserScore<List<HabitsEvent>>) msg.obj;
+                    if(userScore != null){
+                        tvRatio.setText(getStringRes("ui_habits_has_finish") + userScore.percent);
+                        tvScore.setText(userScore.totalScore);
+                        cbScore.setSweepAngle(25f);
 
+                        List<HabitsEvent> habitsEventList = userScore.details;
+
+                    }
+                    break;
+            }
         }
     };
 
@@ -144,6 +159,8 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
         mHabitsEventInfoDatas.add(h);
 
         initRecyclerViews();
+
+        mPresenter.getBehaviourList("1","1");
     }
 
     public void initRecyclerViews() {
@@ -213,7 +230,15 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
     @Override
     public void showBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
+        if(status){
 
+            Message msg = new Message();
+            msg.what = UPDATE_UI_DATA;
+            msg.obj = userScore;
+            mHandler.sendMessage(msg);
+        }else {
+            ToastUtils.showShort(errorMsg);
+        }
     }
 
     @Override
@@ -254,7 +279,9 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
      */
     private void enterParentManageCenter() {
 
-        new InputPasswordDialog(getContext()).builder()
+        startForResult(ParentManageCenterFragment.newInstance(), 0);
+
+        /*new InputPasswordDialog(getContext()).builder()
                 .setMsg(getStringRes("ui_habits_password_input_tip"))
                 .setCancelable(true)
                 .setPassword("123456")
@@ -269,7 +296,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
                     }
                 })
-                .show();
+                .show();*/
 
     }
 
