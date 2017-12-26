@@ -24,6 +24,7 @@ public class HabitsEventInfo extends BaseModel implements Serializable{
     public String eventIconSelect;
     public String eventIconUnSelect;
 
+
     public HabitsEventInfo thiz;
 
     @Override
