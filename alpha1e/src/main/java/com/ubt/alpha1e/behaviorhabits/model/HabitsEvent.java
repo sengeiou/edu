@@ -23,7 +23,6 @@ public class HabitsEvent extends BaseModel implements Serializable {
     public String status;
     public String score;
 
-
     public HabitsEvent thiz;
 
     @Override

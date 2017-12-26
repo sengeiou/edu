@@ -82,6 +82,7 @@ public class behaviourPresenterTest {
     @Test
     public void testDealayAlertTime() throws Exception {
        // mPresenter.dealayAlertTime(5);
+        mPresenter.delayBehaviourEventAlert("12","5");
     }
 
     @Test

@@ -27,15 +27,12 @@ public class BehaviorHabitsContract {
         //显示行为习惯播放内容
         void showBehaviourPlayContent(boolean status,List<PlayContent> playList,String errorMsg);
         void showNetworkRequestError();
-
         //提醒对话框点击
         void onAlertSelectItem(int index,String language,int alertType);
     }
 
     public interface  Presenter extends BasePresenter<View> {
         void doTest();
-        //延时提醒时间count=-1,count=0; count=5; count=10; 对应不提醒，准时，延时5分钟，延时10分钟
-        void dealayAlertTime(int count);
         //获得行为习惯列表以及分数
         void getBehaviourList(String  sex, String grade);
         //获得行为习惯某个EventId具体详情
@@ -46,8 +43,9 @@ public class BehaviorHabitsContract {
         void setBehaviourEvent(String eventId, int status);
         //保存编辑的行为习惯 workday=1; holiday=2
         void saveBehaviourEvent(HabitsEventDetail content,int dayType);
-
         //显示提醒时间对话框
         void showAlertDialog(Context context, int currentPosition, List<String> alertList, int alertType);
+        //延时提醒  delayTime: -1：关闭；0：准时；5：延迟5分钟；10：延迟10分钟
+        void delayBehaviourEventAlert(String eventId, String delayTime);
     }
 }
