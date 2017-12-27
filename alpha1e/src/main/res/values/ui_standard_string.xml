@@ -999,7 +999,7 @@
     <string name="ui_habits_password_over_count">密码错误输入四次，是否需要找回密码？</string>
     <string name="ui_habits_password_input_again">重新输入</string>
     <string name="ui_habits_password_find_back">找回密码</string>
-
+    <string name="ui_habits_minute_later">分钟后</string>
 
     <!--动作编辑课程 -->
     <string name="action_course_card1_1">1.了解时间轴</string>

@@ -94,6 +94,8 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
                     }else {
                         habitsEventInfo.status = "1";
                     }
+                    int status = "0".equals(habitsEventInfo.status) ? 1 : 0;
+                    mPresenter.enableBehaviourEvent(habitsEventInfo.eventId, status);
                     mAdapter.notifyItemChanged(msg.arg1);
                     //mPresenter
                     break;

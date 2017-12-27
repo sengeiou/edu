@@ -84,12 +84,17 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             "40", "41", "42", "43", "44", "45", "46", "47", "48", "49",
             "50", "51", "52", "53", "54", "55", "56", "57", "58", "59",};
 
-    private String[] mAlertArr = {"5分钟后", "10分钟后", "15分钟后", "20分钟后", "25分钟后"};
+    private String[] mAlertArr = {"5", "10", "15", "20", "25"};
 
     private HabitsEvent mHabitsEvent = null;
 
     public FlowPlayContentRecyclerAdapter mAdapter;
     private List<SampleEntity> mPlayContentInfoDatas = new ArrayList<>();
+    private int mRemindFirstIndex = 0;
+    private int mRemindSecondIndex = 0;
+    private boolean hasEdit = false;
+    private EventDetail<List<PlayContentInfo>> originEventDetail = null;
+    private EventDetail<List<PlayContentInfo>> newEventDetail = null;
 
     public static HibitsEventEditFragment newInstance(HabitsEvent habitsEvent) {
         HibitsEventEditFragment eventEditFragment = new HibitsEventEditFragment();
@@ -105,11 +110,12 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             super.handleMessage(msg);
             switch (msg.what) {
                 case UPDATE_UI_DATA:
-                    EventDetail<List<PlayContentInfo>> eventDetail = (EventDetail<List<PlayContentInfo>>) msg.obj;
-                    UbtLog.d(TAG,"eventDetail = " + eventDetail);
-                    if(eventDetail != null){
-                        UbtLog.d(TAG,"eventDetail = " + eventDetail.eventTime + " ");
-                        String[] eventTime = eventDetail.eventTime.split(":");
+                    originEventDetail = (EventDetail<List<PlayContentInfo>>) msg.obj;
+                    newEventDetail = originEventDetail;
+                    UbtLog.d(TAG,"originEventDetail = " + originEventDetail);
+                    if(originEventDetail != null){
+                        UbtLog.d(TAG,"eventDetail = " + originEventDetail.eventTime + " ");
+                        String[] eventTime = originEventDetail.eventTime.split(":");
                         if(eventTime.length == 2){
                             lvHour.setInitPosition(0);
                             lvHour.setCurrentPosition(getHourIndex(eventTime[0]));
@@ -117,8 +123,12 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
                             lvMinute.setInitPosition(0);
                             lvMinute.setCurrentPosition(getMinuteIndex(eventTime[1]));
                         }
+                        mRemindFirstIndex = getAlertIndex(originEventDetail.remindFirst);
+                        mRemindSecondIndex = getAlertIndex(originEventDetail.remindSecond);
 
-                        updatePlayContentData(eventDetail.contents);
+                        tvAlertOne.setText(mAlertArr[mRemindFirstIndex] + getStringRes("ui_habits_minute_later"));
+                        tvAlertTwo.setText(mAlertArr[mRemindSecondIndex] + getStringRes("ui_habits_minute_later"));
+                        updatePlayContentData(originEventDetail.contents);
                     }
                     break;
             }
@@ -140,6 +150,17 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         int index = 0;
         for(String m : mMinuteArr){
             if(Integer.parseInt(m) == Integer.parseInt(minute) ){
+                return index;
+            }
+            index++;
+        }
+        return 0;
+    }
+
+    private int getAlertIndex(String alertTime){
+        int index = 0;
+        for(String a : mAlertArr){
+            if(Integer.parseInt(a) == Integer.parseInt(alertTime) ){
                 return index;
             }
             index++;
@@ -322,9 +343,11 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     @Override
     public void onAlertSelectItem(int index, String alertVal, int alertType) {
         if (alertType == 1) {
-            tvAlertOne.setText(alertVal);
+            mRemindFirstIndex = index;
+            tvAlertOne.setText(mAlertArr[mRemindFirstIndex] + getStringRes("ui_habits_minute_later"));
         } else if (alertType == 2) {
-            tvAlertTwo.setText(alertVal);
+            mRemindSecondIndex = index;
+            tvAlertTwo.setText(mAlertArr[mRemindSecondIndex] + getStringRes("ui_habits_minute_later"));
         }
     }
 
@@ -335,17 +358,53 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
                 exitEdit();
                 break;
             case R.id.iv_title_right:
+                saveHibitsEvent();
                 break;
             case R.id.rl_alert_one:
-                mPresenter.showAlertDialog(getContext(), 0, Arrays.asList(mAlertArr), 1);
+                mPresenter.showAlertDialog(getContext(), mRemindFirstIndex, Arrays.asList(mAlertArr), 1);
                 break;
             case R.id.rl_alert_two:
-                mPresenter.showAlertDialog(getContext(), 0, Arrays.asList(mAlertArr), 2);
+                mPresenter.showAlertDialog(getContext(), mRemindSecondIndex, Arrays.asList(mAlertArr), 2);
                 break;
             case R.id.rl_play_content_tip:
                 startForResult(PlayContentSelectFragment.newInstance(), Constant.PLAY_CONTENT_SELECT_REQUEST_CODE);
                 break;
         }
+    }
+
+    private void saveHibitsEvent(){
+        if(originEventDetail != null && newEventDetail != null){
+            if(isHasEdit()){
+                //mPresenter.saveBehaviourEvent();
+            }
+        }
+    }
+
+    private boolean isHasEdit(){
+        if(originEventDetail != null && newEventDetail != null){
+            if(!originEventDetail.eventTime.equals(newEventDetail.eventTime)){
+                return true;
+            }
+            if(originEventDetail.remindFirst.equals(newEventDetail.remindFirst)){
+                return true;
+            }
+            if(originEventDetail.remindSecond.equals(newEventDetail.remindSecond)){
+                return true;
+            }
+
+            if(originEventDetail.contents.size() != (newEventDetail.contents.size())){
+                return true;
+            }else {
+                for(int index = 0; index < originEventDetail.contents.size();index++ ){
+                    PlayContentInfo originInfo = originEventDetail.contents.get(index);
+                    PlayContentInfo newInfo = newEventDetail.contents.get(index);
+                    if(!originInfo.contentId.equals(newInfo.contentId)){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private void exitEdit() {

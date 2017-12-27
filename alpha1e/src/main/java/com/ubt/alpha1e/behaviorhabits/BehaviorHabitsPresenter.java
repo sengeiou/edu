@@ -25,6 +25,8 @@ import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -127,6 +129,11 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
 
     @Override
     public void showAlertDialog(Context context, int currentPosition, final List<String> alertList, final int alertType) {
+        List<String> alertShowList = new ArrayList<>();
+        for(String alert : alertList){
+            alertShowList.add(alert + ((MVPBaseActivity) mView.getContext()).getStringResources("ui_habits_minute_later"));
+        }
+
         View contentView = LayoutInflater.from(context).inflate(R.layout.dialog_useredit_wheel, null);
         ViewHolder viewHolder = new ViewHolder(contentView);
         final LoopView loopView = (LoopView) contentView.findViewById(R.id.loopView);
@@ -148,8 +155,9 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                     }
                 })
                 .create().show();
+
         // 设置原始数据
-        loopView.setItems(alertList);
+        loopView.setItems(alertShowList);
         loopView.setInitPosition(0);
         UbtLog.d("currentPosition","currentPosition => " + currentPosition);
         if(currentPosition < 0){
@@ -208,6 +216,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                         mView.showBehaviourEventContent(true,(EventDetail)baseResponseModel1.models,"success");
                         break;
                     case GET_BEHAVIOURCONTROL_CMD:
+
                         break;
                     case GET_BEHAVIOURSAVEUPDATE_CMD:
                         break;
