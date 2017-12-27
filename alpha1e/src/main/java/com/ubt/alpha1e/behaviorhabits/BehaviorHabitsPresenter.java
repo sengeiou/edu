@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.sina.weibo.sdk.api.BaseMediaObject;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.BehaviourControlRequest;
@@ -21,6 +22,7 @@ import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
+import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -44,15 +46,16 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
 
     private static final String TAG = BehaviorHabitsPresenter.class.getSimpleName();
 
-    private static final int GET_BEHAVIOURLIST_CMD = 1;
-    private static final int GET_BEHAVIOUREVENT_CMD=2;
-    private static final int GET_BEHAVIOURPLAYCONTENT_CMD=3;
-    private static final int GET_BEHAVIOURCONTROL_CMD=4;
-    private static final int GET_BEHAVIOURSAVEUPDATE_CMD=5;
-    private static final int GET_BEHAVIOURDELAYALERT_CMD=6;
-    private static final int GET_BEHAVIOURPARENTEVENTLIST_CMD=7;
-    private static final int NETWORK_ERROR=1000;
-    private static final int NETWORK_SUCCESS=2000;
+    public static final int GET_BEHAVIOURLIST_CMD = 1;
+    public static final int GET_BEHAVIOUREVENT_CMD=2;
+    public static final int GET_BEHAVIOURPLAYCONTENT_CMD=3;
+    public static final int GET_BEHAVIOURCONTROL_CMD=4;
+    public static final int GET_BEHAVIOURSAVEUPDATE_CMD=5;
+    public static final int GET_BEHAVIOURDELAYALERT_CMD=6;
+    public static final int GET_BEHAVIOURPARENTEVENTLIST_CMD=7;
+    public static final int NETWORK_ERROR=1000;
+    public static final int NETWORK_SUCCESS=2000;
+    public static final int NETWORK_SERVER_EXCEPTION=3000;
     String url = "http://10.10.1.14:8090";
     private String GetTemplatePath="/alpha1e/event/getEventList";
     private String GetEventPath="/alpha1e/event/getUserEvent";
@@ -172,85 +175,92 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
      * 请求网络操作
      */
     public void doRequestFromWeb(String url, BaseRequest baseRequest, int requestId) {
-
-        OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage());
-                switch (id){
-                    case GET_BEHAVIOURLIST_CMD:
-                       // mView.showBehaviourList(false,null,"network error");
-                        mView.onRequestStatus(GET_BEHAVIOURLIST_CMD,NETWORK_ERROR);
-                        break;
-                    case GET_BEHAVIOUREVENT_CMD:
-                       // mView.showBehaviourEventContent(false,null,"network error");
-                        mView.onRequestStatus(GET_BEHAVIOUREVENT_CMD,NETWORK_ERROR);
-                        break;
-                    case GET_BEHAVIOURCONTROL_CMD:
-                        mView.onRequestStatus(GET_BEHAVIOURCONTROL_CMD,NETWORK_ERROR);
-                        break;
-                    case GET_BEHAVIOURSAVEUPDATE_CMD:
-                        mView.onRequestStatus(GET_BEHAVIOURSAVEUPDATE_CMD,NETWORK_ERROR);
-                        break;
-                    case GET_BEHAVIOURDELAYALERT_CMD:
-                        mView.onRequestStatus(GET_BEHAVIOURDELAYALERT_CMD,NETWORK_ERROR);
-                        break;
-                    default:
-                        mView.onRequestStatus(id,NETWORK_ERROR);
-                        break;
+        synchronized (this) {
+            OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                    UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage());
+                    switch (id) {
+                        case GET_BEHAVIOURLIST_CMD:
+                            // mView.showBehaviourList(false,null,"network error");
+                            mView.onRequestStatus(GET_BEHAVIOURLIST_CMD, NETWORK_ERROR);
+                            break;
+                        case GET_BEHAVIOUREVENT_CMD:
+                            // mView.showBehaviourEventContent(false,null,"network error");
+                            mView.onRequestStatus(GET_BEHAVIOUREVENT_CMD, NETWORK_ERROR);
+                            break;
+                        case GET_BEHAVIOURCONTROL_CMD:
+                            mView.onRequestStatus(GET_BEHAVIOURCONTROL_CMD, NETWORK_ERROR);
+                            break;
+                        case GET_BEHAVIOURSAVEUPDATE_CMD:
+                            mView.onRequestStatus(GET_BEHAVIOURSAVEUPDATE_CMD, NETWORK_ERROR);
+                            break;
+                        case GET_BEHAVIOURDELAYALERT_CMD:
+                            mView.onRequestStatus(GET_BEHAVIOURDELAYALERT_CMD, NETWORK_ERROR);
+                            break;
+                        default:
+                            mView.onRequestStatus(id, NETWORK_ERROR);
+                            break;
+                    }
                 }
-            }
 
-            @Override
-            public void onResponse(String response, int id) {
-                UbtLog.d(TAG,"response = " + response);
-                switch (id) {
-                    case GET_BEHAVIOURLIST_CMD:
-                        BaseResponseModel<UserScore<List<HabitsEvent>>> baseResponseModel = GsonImpl.get().toObject(response,
-                                new TypeToken<BaseResponseModel<UserScore<List<HabitsEvent>>>>() {
-                                }.getType());//加上type转换，避免泛型擦除
-                        if(!baseResponseModel.status){
-                             return;
-                        }
-                        UbtLog.d(TAG, "baseResponseModel = " + baseResponseModel.models);
-                        UbtLog.d(TAG, "baseResponseModel percent = " + ((UserScore) baseResponseModel.models).percent);
-                        UbtLog.d(TAG, "baseResponseModel details = " + ((List<HabitsEvent>) (((UserScore) baseResponseModel.models).details)));
-                        mView.showBehaviourList(true,((UserScore) baseResponseModel.models),"success");
-                        break;
-                    case GET_BEHAVIOUREVENT_CMD:
-                        BaseResponseModel<EventDetail<List<PlayContentInfo>>>baseResponseModel1=GsonImpl.get().toObject(response,new TypeToken<BaseResponseModel<EventDetail<List<PlayContentInfo>>>>(){
-                        }.getType());
-                        if(!baseResponseModel1.status){
-                            return;
-                        }
-                        UbtLog.d(TAG, "GET_BEHAVIOUREVENT_CMD baseResponseModel = " + baseResponseModel1.models.contents.get(0).contentName);
-                        mView.showBehaviourEventContent(true,(EventDetail)baseResponseModel1.models,"success");
-                        break;
-                    case GET_BEHAVIOURCONTROL_CMD:
-                        mView.onRequestStatus(GET_BEHAVIOURCONTROL_CMD,NETWORK_SUCCESS);
-                        break;
-                    case GET_BEHAVIOURSAVEUPDATE_CMD:
-                        break;
-                    case GET_BEHAVIOURDELAYALERT_CMD:
-                        mView.onRequestStatus(GET_BEHAVIOURDELAYALERT_CMD,NETWORK_SUCCESS);
-                        break;
-                    case GET_BEHAVIOURPARENTEVENTLIST_CMD:
-                        BaseResponseModel<UserScore<List<HabitsEvent>>> baseResponseModel2 = GsonImpl.get().toObject(response,
-                                new TypeToken<BaseResponseModel<UserScore<List<HabitsEvent>>>>() {
-                                }.getType());//加上type转换，避免泛型擦除
-                        if(!baseResponseModel2.status){
-                               return;
-                        }
-                        UbtLog.d(TAG, "parent baseResponseModel = " + baseResponseModel2.models);
-                        UbtLog.d(TAG, "parent baseResponseModel percent = " + ((UserScore) baseResponseModel2.models).percent);
-                        UbtLog.d(TAG, "parent baseResponseModel details = " + ((List<HabitsEvent>) (((UserScore) baseResponseModel2.models).details)));
-                        mView.showParentBehaviourList(true,((UserScore) baseResponseModel2.models),"success");
-                        break;
-                    default:
-                        break;
+                @Override
+                public void onResponse(String response, int id) {
+                    UbtLog.d(TAG, "response = " + response);
+                    BaseResponseModel mbaseResponseModel = GsonImpl.get().toObject(response,
+                            new TypeToken<BaseResponseModel>() {
+                            }.getType());//加上type转换，避免泛型擦除
+                    switch (id) {
+                        case GET_BEHAVIOURLIST_CMD:
+                            BaseResponseModel<UserScore<List<HabitsEvent>>> baseResponseModel = GsonImpl.get().toObject(response,
+                                    new TypeToken<BaseResponseModel<UserScore<List<HabitsEvent>>>>() {
+                                    }.getType());//加上type转换，避免泛型擦除
+                            if (!baseResponseModel.status) {
+                                mView.onRequestStatus(id,NETWORK_SERVER_EXCEPTION);
+                                return;
+                            }
+                            UbtLog.d(TAG, "baseResponseModel = " + baseResponseModel.models);
+                            UbtLog.d(TAG, "baseResponseModel percent = " + ((UserScore) baseResponseModel.models).percent);
+                            UbtLog.d(TAG, "baseResponseModel details = " + ((List<HabitsEvent>) (((UserScore) baseResponseModel.models).details)));
+                            mView.showBehaviourList(true, ((UserScore) baseResponseModel.models), "success");
+                            break;
+                        case GET_BEHAVIOUREVENT_CMD:
+                            BaseResponseModel<EventDetail<List<PlayContentInfo>>> baseResponseModel1 = GsonImpl.get().toObject(response, new TypeToken<BaseResponseModel<EventDetail<List<PlayContentInfo>>>>() {
+                            }.getType());
+                            if (!baseResponseModel1.status) {
+                                mView.onRequestStatus(id,NETWORK_SERVER_EXCEPTION);
+                                return;
+                            }
+                            UbtLog.d(TAG, "GET_BEHAVIOUREVENT_CMD baseResponseModel = " + baseResponseModel1.models.contents.get(0).contentName);
+                            mView.showBehaviourEventContent(true, (EventDetail) baseResponseModel1.models, "success");
+                            break;
+                        case GET_BEHAVIOURCONTROL_CMD:
+                        case GET_BEHAVIOURSAVEUPDATE_CMD:
+                        case GET_BEHAVIOURDELAYALERT_CMD:
+                            if(mbaseResponseModel.status) {
+                                mView.onRequestStatus(id, NETWORK_SUCCESS);
+                            }else {
+                                mView.onRequestStatus(id, NETWORK_SERVER_EXCEPTION);
+                            }
+                            break;
+                        case GET_BEHAVIOURPARENTEVENTLIST_CMD:
+                            BaseResponseModel<UserScore<List<HabitsEvent>>> baseResponseModel2 = GsonImpl.get().toObject(response,
+                                    new TypeToken<BaseResponseModel<UserScore<List<HabitsEvent>>>>() {
+                                    }.getType());//加上type转换，避免泛型擦除
+                            if (!baseResponseModel2.status) {
+                                mView.onRequestStatus(id,NETWORK_SERVER_EXCEPTION);
+                                return;
+                            }
+                            UbtLog.d(TAG, "parent baseResponseModel = " + baseResponseModel2.models);
+                            UbtLog.d(TAG, "parent baseResponseModel percent = " + ((UserScore) baseResponseModel2.models).percent);
+                            UbtLog.d(TAG, "parent baseResponseModel details = " + ((List<HabitsEvent>) (((UserScore) baseResponseModel2.models).details)));
+                            mView.showParentBehaviourList(true, ((UserScore) baseResponseModel2.models), "success");
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
-        });
-
+            });
+        }
     }
 }
