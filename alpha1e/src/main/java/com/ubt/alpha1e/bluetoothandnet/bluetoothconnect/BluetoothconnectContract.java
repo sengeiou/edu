@@ -5,9 +5,13 @@ import android.content.Context;
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
 
+
 /**
- * MVPPlugin
- *  邮箱 784787081@qq.com
+ * @author: dicy.cheng
+ * @description:  蓝牙搜索
+ * @create: 2017/12/21
+ * @email: dicy.cheng@ubtrobot.com
+ * @modified:
  */
 
 public class BluetoothconnectContract {

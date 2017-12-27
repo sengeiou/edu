@@ -322,10 +322,10 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
             mBluetoothStateHelper.RegisterHelper();
         }
         if(!BluetoothStateHelper.getInstance(getContext()).isLostCoon()){
-                BluetoothDevice b = (BluetoothDevice)((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getCurrentBluetooth();
-                String name = b.getName();
-                String macAddr = b.getAddress();
-                UbtLog.d(TAG,"当前连接设备："+name +" mac地址："+macAddr);
+            BluetoothDevice b = (BluetoothDevice)((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getCurrentBluetooth();
+            String name = b.getName();
+            String macAddr = b.getAddress();
+            UbtLog.d(TAG,"当前连接设备："+name +" mac地址："+macAddr);
             onlyBluetoothConnect(name);
 
             BluetoothStateHelper.getInstance(getContext()).readNetworkStatus();

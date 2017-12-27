@@ -134,6 +134,8 @@ public class AlphaApplication extends LoginApplication {
 
     private static String mNeedOpenActivity = null;
 
+    public static String currentRobotSN = "";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -356,6 +358,7 @@ public class AlphaApplication extends LoginApplication {
 
     public void doLostConnect() {
 
+        setCurrentBluetooth(null);
         UbtLog.d(TAG, "doLostConnect ..... ");
         ActionPlayer.StopCycleThread(true);
         // 蓝牙断线

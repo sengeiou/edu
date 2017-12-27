@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.ui.dialog;
+package com.ubt.alpha1e.ui.dialog.alertview;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,16 +9,15 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 
 /**
- * Created by liuqiang on 10/23/15.
+ * Created by dicy.cheng on 10/23/15.
  */
-public class ConfirmDialog {
+public class RobotBindDialog {
     private Context context;
     private Dialog dialog;
     private LinearLayout lLayout_bg;
@@ -32,15 +31,27 @@ public class ConfirmDialog {
     private boolean showPosBtn = false;
     private boolean showNegBtn = false;
 
-    public ConfirmDialog(Context context) {
+    public RobotBindDialog(Context context) {
         this.context = context;
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         display = windowManager.getDefaultDisplay();
     }
 
-    public ConfirmDialog builder() {
+
+    public RobotBindDialog setTitlePicture(Drawable drawable){
+        drawable.setBounds(0, 0, 60, 60);
+        txt_title.setCompoundDrawables(drawable,null,null,null);
+        return this;
+    }
+
+    public RobotBindDialog setNoTitleLayout(){
+        txt_title.setPadding(0,100,0,0);
+        return this;
+    }
+
+    public RobotBindDialog builder() {
         // 获取Dialog布局
-        View view = LayoutInflater.from(context).inflate(R.layout.view_comfirmdialog, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.view_robotbind_dialog, null);
 
         // 获取自定义Dialog布局中的控件
         lLayout_bg = (LinearLayout) view.findViewById(R.id.lLayout_bg);
@@ -64,7 +75,7 @@ public class ConfirmDialog {
         return this;
     }
 
-    public ConfirmDialog setTitle(String title) {
+    public RobotBindDialog setTitle(String title) {
         showTitle = true;
         if ("".equals(title)) {
             txt_title.setText("标题");
@@ -74,7 +85,7 @@ public class ConfirmDialog {
         return this;
     }
 
-    public ConfirmDialog setMsg(String msg) {
+    public RobotBindDialog setMsg(String msg) {
         showMsg = true;
         if ("".equals(msg)) {
             txt_msg.setText("内容");
@@ -84,13 +95,13 @@ public class ConfirmDialog {
         return this;
     }
 
-    public ConfirmDialog setCancelable(boolean cancel) {
+    public RobotBindDialog setCancelable(boolean cancel) {
         dialog.setCancelable(cancel);
         return this;
     }
 
-    public ConfirmDialog setPositiveButton(String text,
-                                           final View.OnClickListener listener) {
+    public RobotBindDialog setPositiveButton(String text,
+                                             final View.OnClickListener listener) {
         showPosBtn = true;
         if ("".equals(text)) {
             btn_pos.setText("确定");
@@ -107,7 +118,7 @@ public class ConfirmDialog {
         return this;
     }
 
-    public ConfirmDialog setNegativeButton(String text, final View.OnClickListener listener) {
+    public RobotBindDialog setNegativeButton(String text, final View.OnClickListener listener) {
         showNegBtn = true;
         if ("".equals(text)) {
             btn_neg.setText("取消");

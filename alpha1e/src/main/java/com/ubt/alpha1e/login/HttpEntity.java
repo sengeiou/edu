@@ -31,9 +31,11 @@ public class HttpEntity {
     public static final String THRID_LOGIN_URL = BASIC_THIRD_LOGIN_URL + "user/login/third";
 
     //  http://10.10.1.14:8080
-    public static final String BASIC_UBX_SYS = "http://10.10.1.14:8080/ubx/sys/"; //测试环境
+//    public static final String BASIC_UBX_SYS = "http://10.10.1.14:8080/ubx/sys/"; //测试环境
+    public static final String BASIC_UBX_SYS = "http://10.10.1.12:8085"; //测试环境
+
     public static final String REQUEST_SMS_CODE = BASIC_UBX_SYS + "register";
-    public static final String GET_USER_INFO = BASIC_UBX_SYS + "getUserInfo";
+    public static final String GET_USER_INFO = BASIC_UBX_SYS + "/getUserInfo";
     public static final String BIND_ACCOUNT = BASIC_UBX_SYS + "bind";
     public static final String UPDATE_USERINFO = BASIC_UBX_SYS + "updateUserInfo";
     public static final String MODIFY_MANAGE_PASSWORD = BASIC_UBX_SYS + "updateUserPwd";
@@ -43,6 +45,18 @@ public class HttpEntity {
     public static final String CHECK_APP_UPDATE = BASIC_UBX_SYS + "updateApp";
     public static final String SAVE_COURSE_PROGRESS = BASIC_UBX_SYS + "saveCourseProgress";
     public static final String GET_COURSE_PROGRESS = BASIC_UBX_SYS + "getCourseProgress";
+
+    //查询绑定关系
+    public static final String CHECK_IS_BIND = BASIC_UBX_SYS + "/relation/check";
+
+    //绑定
+    public static final String ROBOT_BIND = BASIC_UBX_SYS + "/relation/bind";
+
+    //解绑
+    public static final String ROBOT_UNBIND = BASIC_UBX_SYS + "/relation/unbind";
+
+    //查询本账户绑定的机器人信息
+    public static final String CHECK_ROBOT_INFO = BASIC_UBX_SYS + "/relation/getEquipmentInfo";
 
 
     public static final String COURSE_GET_PROGRESS = BASIC_UBX_SYS + "getCourseProgress";
