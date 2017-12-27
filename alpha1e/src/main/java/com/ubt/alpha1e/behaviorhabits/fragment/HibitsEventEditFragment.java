@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.behaviorhabits.fragment;
 
 
+import android.app.Dialog;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +34,7 @@ import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
 
@@ -55,6 +57,8 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     private static final String TAG = HibitsEventEditFragment.class.getSimpleName();
 
     private static final int UPDATE_UI_DATA = 1;
+    private static final int NETWORK_EXCEPTION = 2;
+    private static final int SAVE_SUCCESS = 3;
 
     Unbinder unbinder;
     @BindView(R.id.ll_base_back)
@@ -76,15 +80,15 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     @BindView(R.id.rv_play_content)
     DragRecyclerView rvPlayContent;
 
-    private String[] mHourArr = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"};
-    private String[] mMinuteArr = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+    private String[] mHourArr = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"};
+    private String[] mMinuteArr = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
             "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
             "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
             "30", "31", "32", "33", "34", "35", "36", "37", "38", "39",
             "40", "41", "42", "43", "44", "45", "46", "47", "48", "49",
             "50", "51", "52", "53", "54", "55", "56", "57", "58", "59",};
 
-    private String[] mAlertArr = {"5", "10", "15", "20", "25"};
+    private String[] mAlertArr = {"5", "10", "15", "20"};
 
     private HabitsEvent mHabitsEvent = null;
 
@@ -92,14 +96,17 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     private List<SampleEntity> mPlayContentInfoDatas = new ArrayList<>();
     private int mRemindFirstIndex = 0;
     private int mRemindSecondIndex = 0;
-    private boolean hasEdit = false;
     private EventDetail<List<PlayContentInfo>> originEventDetail = null;
     private EventDetail<List<PlayContentInfo>> newEventDetail = null;
+    private int mWorkdayMode = 1;
 
-    public static HibitsEventEditFragment newInstance(HabitsEvent habitsEvent) {
+    protected Dialog mCoonLoadingDia;
+
+    public static HibitsEventEditFragment newInstance(HabitsEvent habitsEvent,int dayType) {
         HibitsEventEditFragment eventEditFragment = new HibitsEventEditFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constant.HABITS_EVENT_INFO_KEY, PG.convertParcelable(habitsEvent));
+        bundle.putInt(Constant.PLAY_HIBITS_EVENT_WORKDAY_TYPE, dayType);
         eventEditFragment.setArguments(bundle);
         return eventEditFragment;
     }
@@ -110,11 +117,11 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             super.handleMessage(msg);
             switch (msg.what) {
                 case UPDATE_UI_DATA:
+                    mCoonLoadingDia.cancel();
                     originEventDetail = (EventDetail<List<PlayContentInfo>>) msg.obj;
-                    newEventDetail = originEventDetail;
+                    newEventDetail = EventDetail.cloneNewInstance(originEventDetail);
                     UbtLog.d(TAG,"originEventDetail = " + originEventDetail);
                     if(originEventDetail != null){
-                        UbtLog.d(TAG,"eventDetail = " + originEventDetail.eventTime + " ");
                         String[] eventTime = originEventDetail.eventTime.split(":");
                         if(eventTime.length == 2){
                             lvHour.setInitPosition(0);
@@ -130,6 +137,21 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
                         tvAlertTwo.setText(mAlertArr[mRemindSecondIndex] + getStringRes("ui_habits_minute_later"));
                         updatePlayContentData(originEventDetail.contents);
                     }
+                    break;
+                case NETWORK_EXCEPTION:
+                    if(mCoonLoadingDia.isShowing()){
+                        mCoonLoadingDia.cancel();
+                    }
+                    ToastUtils.showShort(getStringRes("ui_common_network_request_failed"));
+                    break;
+                case SAVE_SUCCESS:
+                    mCoonLoadingDia.cancel();
+                    mHabitsEvent.eventTime = newEventDetail.eventTime;
+
+                    Bundle resultBundle = new Bundle();
+                    resultBundle.putParcelable(Constant.HABITS_EVENT_INFO_KEY, PG.convertParcelable(mHabitsEvent));
+                    setFragmentResult(Constant.HIBITS_EVENT_EDIT_RESPONSE_CODE, resultBundle);
+                    pop();
                     break;
             }
         }
@@ -170,6 +192,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
 
     @Override
     protected void initUI() {
+        mCoonLoadingDia = SLoadingDialog.getInstance(getContext());
 
         ivBack.setBackgroundResource(R.drawable.action_close);
         if(mHabitsEvent != null){
@@ -195,13 +218,12 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         initRecyclerViews();
 
         if(mHabitsEvent != null){
+            mCoonLoadingDia.show();
             mPresenter.getBehaviourEvent(mHabitsEvent.eventId);
         }
     }
 
     public void initRecyclerViews() {
-        UbtLog.d(TAG, "rvPlayContent =>> " + rvPlayContent);
-        //LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         FlowLayoutManager flowLayoutManager = new FlowLayoutManager();
         rvPlayContent.setLayoutManager(flowLayoutManager);
         RecyclerView.ItemAnimator animator = rvPlayContent.getItemAnimator();
@@ -264,6 +286,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         // TODO: inflate a fragment view
         if (getArguments() != null) {
             mHabitsEvent = getArguments().getParcelable(Constant.HABITS_EVENT_INFO_KEY);
+            mWorkdayMode = getArguments().getInt(Constant.PLAY_HIBITS_EVENT_WORKDAY_TYPE,1);
         }
 
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
@@ -320,13 +343,14 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
 
     @Override
     public void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg) {
+
         if(status){
             Message msg = new Message();
             msg.what = UPDATE_UI_DATA;
             msg.obj = content;
             mHandler.sendMessage(msg);
         }else {
-            ToastUtils.showShort(errorMsg);
+            mHandler.sendEmptyMessage(NETWORK_EXCEPTION);
         }
     }
 
@@ -345,23 +369,35 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         if (alertType == 1) {
             mRemindFirstIndex = index;
             tvAlertOne.setText(mAlertArr[mRemindFirstIndex] + getStringRes("ui_habits_minute_later"));
+            newEventDetail.remindFirst = mAlertArr[mRemindFirstIndex];
         } else if (alertType == 2) {
             mRemindSecondIndex = index;
             tvAlertTwo.setText(mAlertArr[mRemindSecondIndex] + getStringRes("ui_habits_minute_later"));
+            newEventDetail.remindSecond = mAlertArr[mRemindSecondIndex];
         }
     }
 
     @Override
     public void onRequestStatus(int requestType, int errorCode) {
+        if(errorCode == mPresenter.NETWORK_SUCCESS){
+            if(requestType == mPresenter.GET_BEHAVIOURSAVEUPDATE_CMD){
+                mHandler.sendEmptyMessage(SAVE_SUCCESS);
+            }
+        }else {
+            mHandler.sendEmptyMessage(NETWORK_EXCEPTION);
+        }
 
     }
-
 
     @OnClick({R.id.ll_base_back, R.id.iv_title_right, R.id.rl_alert_one, R.id.rl_alert_two, R.id.rl_play_content_tip})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_back:
-                exitEdit();
+                if(isHasEdit()){
+                    exitEditConfirm();
+                }else {
+                    pop();
+                }
                 break;
             case R.id.iv_title_right:
                 saveHibitsEvent();
@@ -381,29 +417,37 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     private void saveHibitsEvent(){
         if(originEventDetail != null && newEventDetail != null){
             if(isHasEdit()){
-                //mPresenter.saveBehaviourEvent();
+                List<String> contentIds = new ArrayList<>();
+                for(int index = 0; index < mPlayContentInfoDatas.size();index++ ){
+                    UbtLog.d(TAG,"contentId = " + mPlayContentInfoDatas.get(index).getPlayContentInfo().contentId);
+                    contentIds.add(mPlayContentInfoDatas.get(index).getPlayContentInfo().contentId);
+                }
+                newEventDetail.contentIds = contentIds;
+
+                mCoonLoadingDia.show();
+                mPresenter.saveBehaviourEvent(newEventDetail, mWorkdayMode);
             }
         }
     }
 
     private boolean isHasEdit(){
         if(originEventDetail != null && newEventDetail != null){
+            newEventDetail.eventTime = mHourArr[lvHour.getSelectedItem()] + ":" + mMinuteArr[lvMinute.getSelectedItem()];
             if(!originEventDetail.eventTime.equals(newEventDetail.eventTime)){
                 return true;
             }
-            if(originEventDetail.remindFirst.equals(newEventDetail.remindFirst)){
+            if(!originEventDetail.remindFirst.equals(newEventDetail.remindFirst)){
                 return true;
             }
-            if(originEventDetail.remindSecond.equals(newEventDetail.remindSecond)){
+            if(!originEventDetail.remindSecond.equals(newEventDetail.remindSecond)){
                 return true;
             }
-
-            if(originEventDetail.contents.size() != (newEventDetail.contents.size())){
+            if(originEventDetail.contents.size() != (mPlayContentInfoDatas.size())){
                 return true;
             }else {
                 for(int index = 0; index < originEventDetail.contents.size();index++ ){
                     PlayContentInfo originInfo = originEventDetail.contents.get(index);
-                    PlayContentInfo newInfo = newEventDetail.contents.get(index);
+                    PlayContentInfo newInfo = mPlayContentInfoDatas.get(index).getPlayContentInfo();
                     if(!originInfo.contentId.equals(newInfo.contentId)){
                         return true;
                     }
@@ -413,7 +457,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         return false;
     }
 
-    private void exitEdit() {
+    private void exitEditConfirm() {
         new ConfirmDialog(getContext()).builder()
                 .setMsg(getStringRes("ui_habits_exit_edit_tip"))
                 .setCancelable(false)
@@ -425,9 +469,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
                 }).setNegativeButton(getStringRes("ui_habits_exit_edit"), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle resultBundle = new Bundle();
-                resultBundle.putParcelable(Constant.HABITS_EVENT_INFO_KEY, PG.convertParcelable(mHabitsEvent));
-                setFragmentResult(Constant.HIBITS_EVENT_EDIT_RESPONSE_CODE, resultBundle);
+
                 pop();
             }
         }).show();
