@@ -98,4 +98,9 @@ public class Constant {
      * Block跳转蓝牙连接页面标志
      */
     public final static String BLUETOOTH_REQUEST = "bluetooth_request";
+
+    /**
+     * 是否要弹出绑定对话
+     */
+    public final static String IS_TOAST_BINDED = "is_toast_binded";
 }

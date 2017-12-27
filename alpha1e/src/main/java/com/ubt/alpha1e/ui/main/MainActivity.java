@@ -250,6 +250,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         registerReceiver(mBroadcastReceiver1, filter1);
         looperThread = new LooperThread(this);
         looperThread.start();
+        SPUtils.getInstance().put(Constant.IS_TOAST_BINDED, false);
         // 启动发送clientId服务
         SendClientIdService.startService(MainActivity.this);
     }
@@ -489,7 +490,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG,"onLostBtConn");
     }
     ConfirmDialog dialog = null ;
-    long lastTime = System.currentTimeMillis();
 
     @Override
     public void onEventRobot(RobotEvent event) {
@@ -497,31 +497,22 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if(event.getEvent() == RobotEvent.Event.NETWORK_STATUS) {
             NetworkInfo networkInfo = (NetworkInfo)  event.getNetworkInfo();
             UbtLog.d(TAG,"networkInfo == " + networkInfo.status);
-            if(MainActivity.this != null){
-                ((AlphaApplication) MainActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
-            }
+
             isNetworkConnect=networkInfo.status;
             if(isNetworkConnect){
+                if(MainActivity.this != null){
+                    ((AlphaApplication) MainActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         hiddenDisconnectIcon();
-                        if(System.currentTimeMillis() - lastTime > 2000){
-                            lastTime = System.currentTimeMillis();
-//                            new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
-//                                    .setTitle("提示")
-//                                    .setMsg("请去绑定机器人")
-//                                    .setCancelable(true)
-//                                    .setPositiveButton("去绑定", new View.OnClickListener() {
-//                                        @Override
-//                                        public void onClick(View view) {
-//                                            UbtLog.d(TAG, "去连接蓝牙 ");
-//                                        }
-//                                    }).show();
-                        }
                     }
                 });
             }else {
+                if(MainActivity.this != null){
+                    ((AlphaApplication) MainActivity.this.getApplication()).setmCurrentNetworkInfo(null);
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

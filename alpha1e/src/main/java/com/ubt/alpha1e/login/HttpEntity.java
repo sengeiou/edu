@@ -55,6 +55,9 @@ public class HttpEntity {
     //解绑
     public static final String ROBOT_UNBIND = BASIC_UBX_SYS + "/relation/unbind";
 
+    //查询本账户绑定的机器人信息
+    public static final String CHECK_ROBOT_INFO = BASIC_UBX_SYS + "/relation/getEquipmentInfo";
+
 
     public static final String COURSE_GET_PROGRESS = BASIC_UBX_SYS + "getCourseProgress";
 

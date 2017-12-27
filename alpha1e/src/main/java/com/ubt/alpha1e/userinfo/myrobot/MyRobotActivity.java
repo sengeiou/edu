@@ -8,11 +8,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.method.ScrollingMovementMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
@@ -21,6 +23,7 @@ import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.GotoBindRequest;
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
@@ -28,6 +31,7 @@ import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.UnbindConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -76,9 +80,25 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
     @BindView(R.id.btn_goto_bluetooth_connect)
     Button btn_goto_bluetooth_connect;
 
-    //自动升级
+    //机器人序列号
+    @BindView(R.id.tv_robot_sn_number)
+    TextView tv_robot_sn_number;
+
+    //机器人版本
+    @BindView(R.id.tv_robot_version)
+    TextView tv_robot_version;
+
+    //自动升级状态
+    @BindView(R.id.tv_robot_auto_update_state)
+    TextView tv_robot_auto_update_state;
+
+    //自动升级状态按钮
     @BindView(R.id.btn_auto_upgrade)
     ImageButton btn_auto_upgrade;
+
+    //自动升级提示
+    @BindView(R.id.tv_robot_auto_update_ad)
+    TextView tv_robot_auto_update_ad;
 
     private static final int NO_CONNECTED_AND_NOBINDED = 1;
     private static final int BINDED = 2;
@@ -88,6 +108,10 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
     private static final int ROBOT_GOTO_BIND = 2;
 
     private boolean isAutoUpgrade = false;
+
+
+    String openAutoUpgrade = "当前自动升级功能已经开启后，机器人每次重新联网后都会去检测新版本，如果有新版本，机器人将自动下载并且升级。\n如果你关闭自动升级功能，当机器人有新版本时，我们会提示你去升级。";
+    String closeAutoUpgrade = "当前自动升级功能已经关闭，当机器人有更新版本时，我们会提示你进行升级。\n开启自动升级后，机器人每次重联网后都会去检测新版本，如果有新版本，机器人将自动下载并且升级。";
 
     private Handler mHandler = new Handler(){
         @Override
@@ -142,9 +166,13 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
             case R.id.btn_auto_upgrade:
                 if(isAutoUpgrade){
                     isAutoUpgrade = false;
+                    tv_robot_auto_update_state.setText("自动升级：关闭");
+                    tv_robot_auto_update_ad.setText(closeAutoUpgrade);
                     btn_auto_upgrade.setBackgroundResource(R.drawable.menu_setting_unselect);
                 }else {
                     isAutoUpgrade = true;
+                    tv_robot_auto_update_state.setText("自动升级：开启");
+                    tv_robot_auto_update_ad.setText(openAutoUpgrade);
                     btn_auto_upgrade.setBackgroundResource(R.drawable.menu_setting_select);
                 }
                 break;
@@ -181,11 +209,46 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initUI();
     }
 
     @Override
     protected void initUI() {
 
+        Intent i = getIntent();
+        if(i.getIntExtra("isBinded",0) == 1){
+            content_goto_bind.setVisibility(View.GONE);
+            content_goto_unbind.setVisibility(View.VISIBLE);
+            content_goto_connect_bluetooth.setVisibility(View.GONE);
+            String sn = i.getStringExtra("equipmentSeq");
+            tv_robot_sn_number.setText(sn);
+            String v = i.getStringExtra("serverVersion");
+            tv_robot_version.setText("固件版本："+v);
+            String upgrade = i.getStringExtra("autoupdate");
+            if(upgrade.equals("1")){
+                tv_robot_auto_update_state.setText("自动升级：开启");
+                isAutoUpgrade = true;
+                tv_robot_auto_update_ad.setText(openAutoUpgrade);
+                btn_auto_upgrade.setBackgroundResource(R.drawable.menu_setting_select);
+            }else {
+                tv_robot_auto_update_state.setText("自动升级：关闭");
+                isAutoUpgrade = false;
+                tv_robot_auto_update_ad.setText(closeAutoUpgrade);
+                btn_auto_upgrade.setBackgroundResource(R.drawable.menu_setting_unselect);
+            }
+        }else if(i.getIntExtra("isBinded",0) == 2){
+            if(((AlphaApplication) MyRobotActivity.this.getApplicationContext())
+                    .getCurrentBluetooth() == null){
+                content_goto_bind.setVisibility(View.GONE);
+                content_goto_unbind.setVisibility(View.GONE);
+                content_goto_connect_bluetooth.setVisibility(View.VISIBLE);
+            }else {
+                content_goto_bind.setVisibility(View.VISIBLE);
+                content_goto_unbind.setVisibility(View.GONE);
+                content_goto_connect_bluetooth.setVisibility(View.GONE);
+            }
+        }
+        tv_robot_auto_update_ad.setMovementMethod(ScrollingMovementMethod.getInstance());
     }
 
     @Override
@@ -205,7 +268,7 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
 
     //一键解绑
     public void gotoUnBind(){
-
+        LoadingDialog.show(MyRobotActivity.this);
         GotoBindRequest gotoBindRequest = new GotoBindRequest();
         gotoBindRequest.setEquipmentId(AlphaApplication.currentRobotSN);
         gotoBindRequest.setSystemType("3");
@@ -227,6 +290,7 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
                 switch (id){
                     case ROBOT_GOTO_UNBIND:
                         UbtLog.d(TAG, "解绑失败" );
+                        LoadingDialog.dismiss(MyRobotActivity.this);
                         ToastUtils.showShort("解绑失败");
 
                         break;
@@ -252,6 +316,7 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
                 switch (id){
                     case ROBOT_GOTO_UNBIND:
                         UbtLog.d(TAG, "status:" + baseResponseModel.status);
+                        LoadingDialog.dismiss(MyRobotActivity.this);
                         if(baseResponseModel.status){
                             UbtLog.d(TAG, "解绑成功" );
                             ToastUtils.showShort("解绑成功");
@@ -326,6 +391,7 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
                     @Override
                     public void onClick(View view) {
                         UbtLog.d(TAG, "我知道了 ");
+                        MyRobotActivity.this.finish();
                     }
                 })
                 .setTitlePicture(img_ok)
@@ -364,9 +430,11 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             if(robotBindingDialog != null && robotBindingDialog.isShowing()){
                 robotBindingDialog.display();
+                robotBindingDialog = null ;
+                return false;
+            }else {
+                return super.onKeyDown(keyCode, event);
             }
-            robotBindingDialog = null ;
-            return false;
         }else {
             return super.onKeyDown(keyCode, event);
         }

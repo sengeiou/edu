@@ -79,6 +79,17 @@ public class SendClientIdService extends Service {
 
     static Context mContext = null ;
 
+//	private SendClientIdService() {}
+
+	public static SendClientIdService getInstance(Context context){
+
+		if(instance == null){
+			mContext = context;
+			instance = new SendClientIdService();
+		}
+		return instance;
+	}
+
 	/**
 	 * 启动服务
 	 * @param context
@@ -134,6 +145,7 @@ public class SendClientIdService extends Service {
 				com.ubt.alpha1e.data.model.NetworkInfo networkInfo = ((AlphaApplication) SendClientIdService.this.getApplication()).getmCurrentNetworkInfo();
 				UbtLog.d(TAG,"机器人网络为：  "+ networkInfo.name);
 				gotoCheckIsBind();
+
 			}else {
 				UbtLog.d(TAG,"机器人网络为null  ");
 			}
@@ -142,8 +154,13 @@ public class SendClientIdService extends Service {
 	}
 
 
-	void gotoCheckIsBind(){
-		mHandler.sendEmptyMessage(CONNECT_WIFI);
+	public void gotoCheckIsBind(){
+		UbtLog.d(TAG,"gotoCheckIsBind  ");
+		if(!SPUtils.getInstance().getBoolean(Constant.IS_TOAST_BINDED)){
+			SPUtils.getInstance().put(Constant.IS_TOAST_BINDED,true);
+			UbtLog.d(TAG,"gotoCheckIsBind  go ");
+			mHandler.sendEmptyMessage(CONNECT_WIFI);
+		}
 	}
 
 
@@ -173,6 +190,7 @@ public class SendClientIdService extends Service {
 				UbtLog.d(TAG, "doRequestCheckIsBind onError:" + e.getMessage());
 				switch (id){
 					case CHECK_IS_BIND:
+						SPUtils.getInstance().put(Constant.IS_TOAST_BINDED,false);
 						break;
 					case ROBOT_GOTO_BIND:
 						if(robotBindingDialog != null && robotBindingDialog.isShowing()){
@@ -195,20 +213,37 @@ public class SendClientIdService extends Service {
 					case CHECK_IS_BIND:
 						UbtLog.d(TAG, "status:" + baseResponseModel.status);
 						if(!baseResponseModel.status){
+							SPUtils.getInstance().put(Constant.IS_TOAST_BINDED,false);
 							return;
 						}
 						UbtLog.d(TAG, "info:" + baseResponseModel.info);
 						UbtLog.d(TAG, "models:" + baseResponseModel.models.toString());
 						String state = baseResponseModel.models;
 						if(state == null){
+							SPUtils.getInstance().put(Constant.IS_TOAST_BINDED,false);
 							return;
 						}
 						if(state.equals("1003")){
-							adviceBind();
+							mHandler.postDelayed(new Runnable() {
+								@Override
+								public void run() {
+									adviceBind();
+								}
+							},500);
 						}else if(state.equals("1002")){
-							adviceRobotBinded();
+							mHandler.postDelayed(new Runnable() {
+								@Override
+								public void run() {
+									adviceRobotBinded();
+								}
+							},500);
 						}else if(state.equals("1001")){
-							adviceBindedOtherRobot();
+							mHandler.postDelayed(new Runnable() {
+								@Override
+								public void run() {
+									adviceBindedOtherRobot();
+								}
+							},500);
 						}else if(state.equals("1000")){
 
 						}
@@ -355,6 +390,7 @@ public class SendClientIdService extends Service {
 					@Override
 					public void onClick(View view) {
 						UbtLog.d(TAG, "暂不 ");
+//						SPUtils.getInstance().put(Constant.IS_TOAST_BINDED, true);
 					}
 				}).show();
 	}
