@@ -89,14 +89,17 @@ public class behaviourPresenterTest {
     @Test
     public void testDealayAlertTime() throws Exception {
        // mPresenter.dealayAlertTime(5);
-        mPresenter.delayBehaviourEventAlert("62","5");
+       // mPresenter.delayBehaviourEventAlert("62","5");
     }
 
     @Test
     public void testGetBehaviourList() throws Exception {
-        mPresenter.getBehaviourList("1","1");
+       // mPresenter.getBehaviourList("1","1");
     }
-
+    @Test
+    public void testSetBehaviourEvent() throws Exception {
+        mPresenter.enableBehaviourEvent("62",0);
+    }
     @Test
     public void testGetBehaviourEvent() throws Exception {
         mPresenter.getBehaviourEvent("62");
@@ -104,25 +107,22 @@ public class behaviourPresenterTest {
 
     @Test
     public void testGetBehaviourPlayContent() throws Exception {
-        mPresenter.getParentBehaviourList("1","1","1");
+     //   mPresenter.getParentBehaviourList("1","1","1");
     }
 
-    @Test
-    public void testSetBehaviourEvent() throws Exception {
-        mPresenter.enableBehaviourEvent("62",0);
-    }
+
 
     @Test
     public void testSaveBehaviourEvent() throws Exception {
-        List<String> contentId=new ArrayList<>();
-        contentId.add("123");
-        contentId.add("456");
-        EventDetail mEventDetail=new EventDetail();
-        mEventDetail.remindFirst="5";
-        mEventDetail.remindSecond="10";
-        mEventDetail.eventId="62";
-        mEventDetail.status="1";
-        mEventDetail.contentIds=contentId;
-        mPresenter.saveBehaviourEvent(mEventDetail,1);
+//        List<String> contentId=new ArrayList<>();
+//        contentId.add("123");
+//        contentId.add("456");
+//        EventDetail mEventDetail=new EventDetail();
+//        mEventDetail.remindFirst="5";
+//        mEventDetail.remindSecond="10";
+//        mEventDetail.eventId="62";
+//        mEventDetail.status="1";
+//        mEventDetail.contentIds=contentId;
+//        mPresenter.saveBehaviourEvent(mEventDetail,1);
     }
 }

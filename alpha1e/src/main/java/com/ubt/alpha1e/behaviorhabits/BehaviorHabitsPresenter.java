@@ -102,7 +102,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
     public void enableBehaviourEvent(String eventId, int status) {
         BehaviourControlRequest mBehaviourControlRequest=new BehaviourControlRequest();
         mBehaviourControlRequest.setEventId(eventId);
-        mBehaviourControlRequest.setType(new Integer(status).toString());
+        mBehaviourControlRequest.setStatus(new Integer(status).toString());
         doRequestFromWeb(url+ControlEventPath, mBehaviourControlRequest,GET_BEHAVIOURCONTROL_CMD);
     }
 
@@ -111,8 +111,8 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
         BehaviourSaveUpdateRequest mBehaviourSaveUpdateRequest=new BehaviourSaveUpdateRequest();
         mBehaviourSaveUpdateRequest.setEventId(content.eventId);
         mBehaviourSaveUpdateRequest.setEventTime(content.eventTime);
-        mBehaviourSaveUpdateRequest.setRemindOne(content.remindFirst);
-        mBehaviourSaveUpdateRequest.setRemindTwo(content.remindSecond);
+        mBehaviourSaveUpdateRequest.setRemindFirst(content.remindFirst);
+        mBehaviourSaveUpdateRequest.setRemindSecond(content.remindSecond);
         mBehaviourSaveUpdateRequest.setContentIds(content.contentIds);
         mBehaviourSaveUpdateRequest.setStatus(content.status);
         mBehaviourSaveUpdateRequest.setType(String.valueOf(dayType));
