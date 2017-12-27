@@ -168,4 +168,11 @@ public class OkHttpClientUtils {
                 .build();
     }
 
+
+    public static RequestCall getDownloadFile(String url) {
+        return OkHttpUtils.get()
+                .url(url)
+                .build();
+    }
+
 }

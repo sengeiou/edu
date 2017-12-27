@@ -80,4 +80,17 @@ public class HttpEntity {
     public static final String UPDATE_USER_PROGRAM = BASIC_UBX_SYS + "updateUserProgram";
 
 
+    public static final String BLOCKLY_COURSE_BASE = "http://10.10.1.14:8090/alpha1e/graph/";
+
+    /**
+     * 获取逻辑编程课程列表
+     */
+    public static final String BLOCKLY_COURSE_LIST = BLOCKLY_COURSE_BASE + "list";
+
+    /**
+     *更新Blockly 课程当前进度
+     */
+    public static final String UPDATE_BLOCKLY_COURSE = BLOCKLY_COURSE_BASE + "update";
+
+
 }

@@ -685,11 +685,23 @@
         <activity
             android:name=".action.actioncreate.SaveSuccessActivity"
             android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity android:name=".action.help.HelpActivity"
             android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/NoTitleThemeFullScreen" />
+
+        <activity android:name=".blocklycourse.BlocklyCourseActivity"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity android:name=".blocklycourse.courselist.CourseListActivity"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/NoTitleThemeFullScreen"/>
 
     </application>
 
