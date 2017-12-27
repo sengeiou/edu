@@ -356,7 +356,7 @@ public class CourseTwoLayout extends BaseActionEditLayout implements ActionCours
     }
 
     @Override
-    public void playCourseAction(PrepareDataModel prepareDataModel) {
+    public void playCourseAction(PrepareDataModel prepareDataModel,int type) {
         playAction(prepareDataModel);
     }
 

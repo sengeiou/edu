@@ -22,6 +22,9 @@ import com.ubt.alpha1e.ui.custom.ClearableEditText;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.userinfo.aboutus.AboutUsActivity;
 import com.ubt.alpha1e.userinfo.psdmanage.PsdManageActivity;
+import com.ubt.alpha1e.userinfo.psdmanage.psdverifycode.PsdVerifyCodeFragment;
+import com.ubt.alpha1e.utils.log.MyLog;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,6 +54,11 @@ public class PsdModifyFragment extends MVPBaseFragment<PsdModifyContract.View, P
             super.handleMessage(msg);
         }
     };
+
+    public static PsdModifyFragment newInstance(){
+        PsdModifyFragment psdModifyFragment = new PsdModifyFragment();
+        return psdModifyFragment;
+    }
 
     @Override
     protected void initUI() {

@@ -41,7 +41,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         List<ActionCourseModel> list = new ArrayList<>();
         ActionCourseModel courseModel1 = new ActionCourseModel();
         courseModel1.setActionCourcesName("第一关");
-        courseModel1.setTitle("第一关 基本概念");
+        courseModel1.setTitle("第一关 了解动作编辑器");
         courseModel1.setActionLockType(1);
         courseModel1.setDrawableId(R.drawable.ic_action_level1);
         List<String> card1 = new ArrayList<>();
@@ -87,7 +87,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
 
         ActionCourseModel courseModel6 = new ActionCourseModel();
         courseModel6.setActionCourcesName("第六关");
-        courseModel6.setTitle("第五关 创定指定动作");
+        courseModel6.setTitle("第六关 创建音频");
         courseModel6.setDrawableId(R.drawable.ic_action_level6);
         courseModel6.setActionLockType(0);
         list.add(courseModel6);

@@ -67,6 +67,7 @@ import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.yokeyword.fragmentation.SupportActivity;
 
 import static com.ubt.alpha1e.ui.ActionUnpublishedActivity.KEY_ACTION_SYNC_STATE;
 import static com.ubt.alpha1e.ui.custom.CommonCtrlView.KEY_CURRENT_PLAYING_ACTION_NAME;
@@ -77,7 +78,7 @@ import static com.ubt.alpha1e.ui.custom.CommonCtrlView.KEY_CURRENT_PLAYING_ACTIO
  * 邮箱 784787081@qq.com
  */
 
-public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresenterImpl<V>> extends AppCompatActivity implements ISkinChangedListener, LayoutInflaterFactory, IUI, BaseView {
+public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresenterImpl<V>> extends SupportActivity implements ISkinChangedListener, LayoutInflaterFactory, IUI, BaseView {
 
     private String mCurrentSetLanguage = "";
 

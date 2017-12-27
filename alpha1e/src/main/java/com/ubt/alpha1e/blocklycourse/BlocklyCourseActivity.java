@@ -256,7 +256,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressedSupport() {
         //先返回正常状态
         if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             videoPlayer.getFullscreenButton().performClick();

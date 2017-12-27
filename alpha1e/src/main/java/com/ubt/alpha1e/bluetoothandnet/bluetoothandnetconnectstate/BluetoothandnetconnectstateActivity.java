@@ -5,15 +5,16 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,24 +35,18 @@ import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
-import com.ubt.alpha1e.services.AutoScanConnectService;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
-import com.ubt.alpha1e.ui.helper.BluetoothHelper;
 import com.ubt.alpha1e.ui.helper.BluetoothStateHelper;
-import com.ubt.alpha1e.ui.helper.IScanUI;
-import com.ubt.alpha1e.ui.helper.ScanHelper;
+import com.ubt.alpha1e.ui.main.MainUiBtHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.yanzhenjie.permission.Permission;
 
 import org.greenrobot.eventbus.Subscribe;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 
@@ -74,41 +69,49 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     @BindView(R.id.ib_close)
     ImageButton ib_close;
 
-    @BindView(R.id.ig_bluetooth)
-    ImageView ig_bluetooth;
+    //上面是大布局
+    @BindView(R.id.rl_state1_up_big)
+    RelativeLayout rl_state1_up_big;
 
-    @BindView(R.id.ig_wifi)
-    ImageView ig_wifi;
+    @BindView(R.id.ig_rl_state1_robot)
+    ImageView ig_rl_state1_robot;
 
-    @BindView(R.id.ig_get_bluetooth_list)
-    ImageView ig_get_bluetooth_list;
+    @BindView(R.id.ed_state1_bluetooth_name)
+    EditText ed_state1_bluetooth_name;
 
-    @BindView(R.id.ig_get_wifi_list)
-    ImageView ig_get_wifi_list;
+    @BindView(R.id.ig_state1_get_bluetooth_list)
+    Button ig_state1_get_bluetooth_list;
 
-    @BindView(R.id.rl_content_device_list)
-    RelativeLayout rl_content_device_list;
+    @BindView(R.id.ig_state1_wifi)
+    ImageView ig_state1_wifi;
 
-    @BindView(R.id.buletooth_device_list)
-    RecyclerView buletooth_device_list;
+    @BindView(R.id.ed_state1_wifi_name)
+    EditText ed_state1_wifi_name;
 
-    @BindView(R.id.rl_devices_list)
-    RelativeLayout rl_devices_list;
+    @BindView(R.id.ig_state1_goto_connect_net)
+    TextView ig_state1_goto_connect_net;
 
-    @BindView(R.id.tv_devices_num)
-    TextView tv_devices_num;
+    //上面是小布局
+    @BindView(R.id.rl_state2_up_small)
+    RelativeLayout rl_state2_up_small;
 
-    @BindView(R.id.ed_bluetooth_name)
-    EditText ed_bluetooth_name;
+    @BindView(R.id.ig_state2_wifi)
+    ImageView ig_state2_wifi;
 
-    @BindView(R.id.ed_wifi_name)
-    EditText ed_wifi_name;
+    @BindView(R.id.ed_state2_wifi_name)
+    EditText ed_state2_wifi_name;
 
-    @BindView(R.id.no_buletooth_devices)
-    TextView no_buletooth_devices;
+    @BindView(R.id.ig_state2_goto_connect_net)
+    TextView ig_state2_goto_connect_net;
 
-    @BindView(R.id.ig_phone)
-    ImageView ig_phone;
+    @BindView(R.id.ed_state2_bluetooth_name)
+    EditText ed_state2_bluetooth_name;
+
+    @BindView(R.id.ig_state2_get_bluetooth_list)
+    Button ig_state2_get_bluetooth_list;
+
+    @BindView(R.id.tv_advice1)
+    TextView tv_advice1;
 
     private static final int UPDATE_WIFI_STATUS = 1; //更新WIFI状态
     public static final int MSG_DO_BLUETOOTH_DISCONNECT = 8; //蓝牙断开
@@ -130,29 +133,28 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 case UPDATE_WIFI_STATUS:
                     NetworkInfo networkInfo = (NetworkInfo) msg.obj;
                     UbtLog.d(TAG,"networkInfo == " + networkInfo);
-                    if(ed_wifi_name == null){
-                        return;
-                    }
-                    ed_wifi_name.setText(networkInfo.name);
-
                     if(networkInfo.status){
-                        ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_nomal));
-                        ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
+                        if(!MainUiBtHelper.getInstance(getContext()).isLostCoon()){
+                            UbtLog.d(TAG,"bluetoothandnetstate CONNECT_SUCCESS 2");
+                            BluetoothDevice b = (BluetoothDevice)((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getCurrentBluetooth();
+                            String name = b.getName();
+                            bluetoothAndNetConnect(name,networkInfo.name);
+                            ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
+                        }else {
+                            bluetoothDisconnect();
+                            ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(null);
+                        }
                     }else {
-                        ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
+                        BluetoothDevice b = (BluetoothDevice)((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getCurrentBluetooth();
+                        String name = b.getName();
+                        onlyBluetoothConnect(name);
                         ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(null);
                     }
                     break;
                 case MSG_DO_BLUETOOTH_DISCONNECT:
                     UbtLog.d(TAG,"MSG_DO_BLUETOOTH_DISCONNECT ..... " );
                     ((AlphaApplication) getApplicationContext()).doLostConnect();
-                    if(ig_bluetooth == null){
-                        return;
-                    }
-                    ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.buletooth_con_fail));
-                    ed_bluetooth_name.setText("");
-                    ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
-                    ed_wifi_name.setText("");
+                    bluetoothDisconnect();
                     ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(null);
                     break;
                 default:
@@ -165,7 +167,6 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         lst_robots_result_datas = new ArrayList<>();
-        AutoScanConnectService.doEntryManalConnect(true);
         mBluetoothStateHelper = BluetoothStateHelper.getInstance(getContext());
         initUI();
     }
@@ -173,16 +174,65 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     @Override
     protected void initUI() {
         ib_return.setOnClickListener(this);
-        ib_return.callOnClick();
         ib_close.setOnClickListener(this);
-        ig_get_bluetooth_list.setOnClickListener(this);
-        ig_get_wifi_list.setOnClickListener(this);
+        ig_state1_get_bluetooth_list.setOnClickListener(this);
+        ig_state1_goto_connect_net.setOnClickListener(this);
+        ig_state2_goto_connect_net.setOnClickListener(this);
+        ig_state2_get_bluetooth_list.setOnClickListener(this);
+        bluetoothDisconnect();
 
-        rl_content_device_list.setOnClickListener(this);
-        rl_devices_list.setOnClickListener(this);
-        no_buletooth_devices.setOnClickListener(this);
-        rl_devices_list.setVisibility(View.INVISIBLE);
     }
+
+    //蓝牙断开状态
+    void bluetoothDisconnect(){
+        UbtLog.d(TAG, "蓝牙断开状态!");
+        if(rl_state1_up_big == null){
+            return;
+        }
+        rl_state1_up_big.setVisibility(View.VISIBLE);
+        rl_state2_up_small.setVisibility(View.INVISIBLE);
+        ig_rl_state1_robot.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.img_robot_fail));
+        ed_state1_bluetooth_name.setText("");
+        ig_state1_get_bluetooth_list.setText("连接");
+        ig_state1_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
+        ed_state1_wifi_name.setText("");
+        ig_state1_goto_connect_net.setText("联网");
+        ig_state1_goto_connect_net.setTextColor(Color.parseColor("#C1C1C1"));
+        tv_advice1.setVisibility(View.INVISIBLE);
+    }
+
+    //蓝牙和网络同时连接
+    void bluetoothAndNetConnect(String bluetoothName,String wifiName){
+        UbtLog.d(TAG, "蓝牙和网络同时连接!");
+        if(rl_state1_up_big == null){
+            return;
+        }
+        rl_state1_up_big.setVisibility(View.VISIBLE);
+        rl_state2_up_small.setVisibility(View.INVISIBLE);
+        ig_rl_state1_robot.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.img_alpha_connected_s));
+        ed_state1_bluetooth_name.setText(bluetoothName);
+        ig_state1_get_bluetooth_list.setText("断开连接");
+        ig_state1_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.img_wifi_connected));
+        ed_state1_wifi_name.setText(wifiName);
+        ig_state1_goto_connect_net.setText("切换Wi-Fi");
+        ig_state1_goto_connect_net.setTextColor(Color.parseColor("#02AAE8"));
+        tv_advice1.setVisibility(View.INVISIBLE);
+    }
+
+    //只有蓝牙连接
+    void onlyBluetoothConnect(String bluetoothName){
+        UbtLog.d(TAG, "只有蓝牙连接!");
+        if(rl_state1_up_big == null){
+            return;
+        }
+        rl_state1_up_big.setVisibility(View.INVISIBLE);
+        rl_state2_up_small.setVisibility(View.VISIBLE);
+        tv_advice1.setVisibility(View.VISIBLE);
+        ig_state2_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.img_alpha_connected_b));
+        ed_state2_wifi_name.setText(bluetoothName);
+        ig_state2_goto_connect_net.setText("断开连接");
+    }
+
 
     @Override
     protected void initControlListener() {
@@ -202,10 +252,23 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     @Subscribe
     public void onEventRobot(RobotEvent event) {
         super.onEventRobot(event);
+        UbtLog.d(TAG,"bluetoothandnetstate onEventRobot state:"+event.getEvent());
         if(event.getEvent() == RobotEvent.Event.NETWORK_STATUS){
             updateNetworkStatus(event);
         }else if(event.getEvent() == RobotEvent.Event.DISCONNECT){
             onBluetoothDisconnect(event);
+        }else if(event.getEvent()== RobotEvent.Event.CONNECT_SUCCESS){
+            UbtLog.d(TAG,"bluetoothandnetstate CONNECT_SUCCESS 1");
+            if(!MainUiBtHelper.getInstance(getContext()).isLostCoon()){
+                UbtLog.d(TAG,"bluetoothandnetstate CONNECT_SUCCESS 2");
+                BluetoothDevice b = (BluetoothDevice)((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getCurrentBluetooth();
+                String name = b.getName();
+                String macAddr = b.getAddress();
+                UbtLog.d(TAG,"当前连接设备："+name +" mac地址："+macAddr);
+                onlyBluetoothConnect(name);
+
+                BluetoothStateHelper.getInstance(getContext()).readNetworkStatus();
+            }
         }
     }
 
@@ -244,7 +307,6 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         } catch (Exception e) {
             e.printStackTrace();
         }
-        AutoScanConnectService.doEntryManalConnect(false);
         super.onDestroy();
     }
 
@@ -260,48 +322,20 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
             mBluetoothStateHelper.RegisterHelper();
         }
         if(!BluetoothStateHelper.getInstance(getContext()).isLostCoon()){
-                ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_connect_sucess));
                 BluetoothDevice b = (BluetoothDevice)((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getCurrentBluetooth();
                 String name = b.getName();
                 String macAddr = b.getAddress();
                 UbtLog.d(TAG,"当前连接设备："+name +" mac地址："+macAddr);
-                if(ed_bluetooth_name == null){
-                    return;
-                }
-                ed_bluetooth_name.setText(name);
-                ed_wifi_name.requestFocus();
+            onlyBluetoothConnect(name);
 
             BluetoothStateHelper.getInstance(getContext()).readNetworkStatus();
             if(BluetoothandnetconnectstateActivity.this != null && ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getmCurrentNetworkInfo() != null){
-
                 NetworkInfo networkInfo = ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getmCurrentNetworkInfo();
-
-                if(ed_wifi_name == null){
-                    return;
-                }
-                ed_wifi_name.setText(networkInfo.name);
-
-                if(networkInfo.status){
-                    ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_nomal));
-                }else {
-                    ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
-                }
-            }else {
-                if(ig_wifi != null)
-                    return;
-                ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
-                ed_wifi_name.setText("");
+                UbtLog.d(TAG,"网络和蓝牙都连接了  "+ networkInfo.name);
+                bluetoothAndNetConnect(name,networkInfo.name);
             }
         }else {
-            if(rl_content_device_list == null){
-                return;
-            }
-            rl_content_device_list.setVisibility(View.GONE);
-            ig_bluetooth.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.buletooth_con_fail));
-            ed_bluetooth_name.setText("");
-
-            ig_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.bluetooth_wifi_abnomal));
-            ed_wifi_name.setText("");
+            bluetoothDisconnect();
             ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(null);
         }
     }
@@ -347,8 +381,13 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 dealUI();
                 BluetoothandnetconnectstateActivity.this.finish();
                 break;
-            case R.id.ig_get_bluetooth_list:
-
+            case R.id.ig_state1_get_bluetooth_list:
+                if(!ig_state1_get_bluetooth_list.getText().toString().equals("连接")){
+                    UbtLog.d(TAG,"点击断开连接1");
+                    BluetoothStateHelper.getInstance(getContext()).doCancelCoon();
+                    bluetoothDisconnect();
+                    return;
+                }
                 BluetoothAdapter mBtAdapter;
                 mBtAdapter = BluetoothAdapter.getDefaultAdapter();
                 if (!mBtAdapter.isEnabled()) {
@@ -388,36 +427,49 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 }
 
                 break;
-            case R.id.ig_get_wifi_list:
-                if(!BluetoothStateHelper.getInstance(getContext()).isLostCoon()){
-                    if(!isOPen(this)){
-                        UbtLog.d(TAG,"请先打开位置信息");
-                        new ConfirmDialog(this).builder()
-                                .setTitle("提示")
-                                .setMsg("请在手机的设置中把“位置服务”打开")
-                                .setCancelable(true)
-                                .setPositiveButton("确定", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        UbtLog.d(TAG, "位置信息确定 ");
-                                    }
-                                }).show();
-                        return;
-                    }
-
-                    Intent i = new Intent();
-                    i.putExtra("wifiName",ed_wifi_name.getText().toString());
-                    UbtLog.d(TAG,"ed_wifi_name===="+ed_wifi_name.getText().toString());
-                    i.setClass(BluetoothandnetconnectstateActivity.this,NetSearchResultActivity.class);
-                    this.startActivityForResult(i,REQUEST_CODE_ENTER_NETSEARCHRESULT);
-
-                }else {
-                    UbtLog.d(TAG,"请先连接蓝牙");
-                    ToastUtils.showShort("请先连接机器人");
-                }
+            case R.id.ig_state2_get_bluetooth_list:
+                searchNet();
+                break;
+            case R.id.ig_state1_goto_connect_net:
+                searchNet();
+                break;
+            case R.id.ig_state2_goto_connect_net:
+                UbtLog.d(TAG,"点击断开连接2");
+                BluetoothStateHelper.getInstance(getContext()).doCancelCoon();
+                bluetoothDisconnect();
                 break;
 
             default:
+        }
+    }
+
+
+    void searchNet(){
+        if(!BluetoothStateHelper.getInstance(getContext()).isLostCoon()){
+            if(!isOPen(this)){
+                UbtLog.d(TAG,"请先打开位置信息");
+                new ConfirmDialog(this).builder()
+                        .setTitle("提示")
+                        .setMsg("请在手机的设置中把“位置服务”打开")
+                        .setCancelable(true)
+                        .setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                UbtLog.d(TAG, "位置信息确定 ");
+                            }
+                        }).show();
+                return;
+            }
+
+            Intent i = new Intent();
+            i.putExtra("wifiName",ed_state2_wifi_name.getText().toString());
+            UbtLog.d(TAG,"ed_wifi_name===="+ed_state2_wifi_name.getText().toString());
+            i.setClass(BluetoothandnetconnectstateActivity.this,NetSearchResultActivity.class);
+            this.startActivityForResult(i,REQUEST_CODE_ENTER_NETSEARCHRESULT);
+
+        }else {
+            UbtLog.d(TAG,"请先连接蓝牙");
+            ToastUtils.showShort("请先连接机器人");
         }
     }
 
@@ -441,9 +493,15 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     }
 
     @Override
-    public void onBackPressed() {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() ==KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            onBack();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void onBack() {
         dealUI();
-        super.onBackPressed();
     }
 
     //处理相应界面

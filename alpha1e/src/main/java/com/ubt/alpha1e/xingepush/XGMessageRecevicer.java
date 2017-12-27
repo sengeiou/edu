@@ -52,6 +52,6 @@ public class  XGMessageRecevicer extends XGPushBaseReceiver {
     //通知栏消息，会自动显示到通知栏里，样式可定制参考类说明网址
     @Override
     public void onNotifactionShowedResult(Context context, XGPushShowedResult xgPushShowedResult) {
-        Log.d("TPush","onNotifactionShowedResult result="+xgPushShowedResult.getContent());
+        Log.d("TPush","onNotifactionShowedResult result="+xgPushShowedResult.getCustomContent().toString()+" content=="+xgPushShowedResult.getContent());
     }
 }

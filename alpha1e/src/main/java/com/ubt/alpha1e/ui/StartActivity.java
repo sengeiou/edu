@@ -64,7 +64,7 @@ public class StartActivity extends BaseActivity implements IStartUI, BaseDiaUI {
         // google play不自主升级-------------------start
 //        ((StartHelper) mHelper).doUpdateApk();
         // google play不自主升级-------------------end
-        ((StartHelper) mHelper).doGetLocation();
+        //((StartHelper) mHelper).doGetLocation();
 //        ((StartHelper) mHelper).doRunGetResServices();
 
         //add by lihai upgadeDB

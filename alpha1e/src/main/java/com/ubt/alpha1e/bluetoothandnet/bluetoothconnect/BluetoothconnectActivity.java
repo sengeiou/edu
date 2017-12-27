@@ -23,6 +23,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
+import com.ubt.alpha1e.bluetoothandnet.BluetoothHelp;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -174,6 +175,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     @Override
     protected void onResume() {
         initControlListener();
+        AutoScanConnectService.doEntryManalConnect(true);
         super.onResume();
     }
 
@@ -189,6 +191,7 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
             UbtLog.d(TAG, "--onPause--mHelper UnRegisterHelper! " + mHelper.getClass().getSimpleName());
             mHelper.UnRegisterHelper();
         }
+        AutoScanConnectService.doEntryManalConnect(false);
     }
 
     @Override
@@ -497,6 +500,8 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
                 break;
             case R.id.ib_help:
                 UbtLog.d(TAG,"ib_help click");
+                Intent help = new Intent(BluetoothconnectActivity.this, BluetoothHelp.class);
+                startActivity(help);
                 break;
             case R.id.rl_search:
 

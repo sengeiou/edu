@@ -49,7 +49,6 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initUI();
-        AutoScanConnectService.doEntryManalConnect(true);
     }
 
     @Override
@@ -151,7 +150,6 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        AutoScanConnectService.doStopSelf();
     }
 
     @Override

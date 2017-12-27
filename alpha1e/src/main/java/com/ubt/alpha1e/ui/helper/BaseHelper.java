@@ -352,13 +352,15 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 });*/
         } else if (cmd == ConstValue.DV_READ_NETWORK_STATUS) {
             String networkInfoJson = BluetoothParamUtil.bytesToString(param);
-            UbtLog.d(TAG, "cmd = " + cmd + "    networkInfoJson = " + networkInfoJson);
+            UbtLog.d(TAG, "base cmd = " + cmd + "    networkInfoJson = " + networkInfoJson);
 
             NetworkInfo networkInfo = GsonImpl.get().toObject(networkInfoJson, NetworkInfo.class);
             if (networkInfo.status) {
                 hasConnectNetwork = true;
+                UbtLog.d(TAG, "base 网络已经连接" );
             } else {
                 hasConnectNetwork = false;
+                UbtLog.d(TAG, "base 网络没有连接" );
             }
         }
 

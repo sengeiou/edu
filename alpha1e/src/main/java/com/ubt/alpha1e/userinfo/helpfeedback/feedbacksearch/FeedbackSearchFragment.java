@@ -66,6 +66,11 @@ public class FeedbackSearchFragment extends MVPBaseFragment<FeedbackSearchContra
         }
     };
 
+    public static FeedbackSearchFragment newInstance(){
+        FeedbackSearchFragment searchFragment = new FeedbackSearchFragment();
+        return searchFragment;
+    }
+
     public FeedbackSearchFragment() {
 
     }

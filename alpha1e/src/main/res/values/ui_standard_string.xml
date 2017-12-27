@@ -180,6 +180,7 @@
     <string name="ui_settings_language_updating">正在更新语言包...</string>
     <string name="ui_settings_wifi">仅WIFI下载</string>
     <string name="ui_settings_message_remind">通知</string>
+    <string name="ui_settings_message_myrobot">我的机器人</string>
     <string name="ui_settings_play_during_charging">边充边玩</string>
     <string name="ui_settings_play_during_charging_tips">为保护您的爱机，充电状态下使用机器已被禁止，如需打开请前往设置</string>
     <string name="ui_settings_logout">退出账号</string>
@@ -845,6 +846,10 @@
     <string name="lowpower_indicator">电量低于</string>
     <string name="buddle_text_init_status">开机来叫醒沉睡的Alpha吧</string>
     <string name="buddle_bluetoothConnection">嗨，我是阿尔法</string>
+    <!--behaviour habit-->
+    <string name="network_request_error">网络请求失败</string>
+    <string name="network_request_success">网络请求成功</string>
+
 
     <string name="ui_setting_clear_cache">清除缓存数据</string>
     <string name="ui_setting_use_memory_title">Alpha1E已用空间</string>
@@ -971,14 +976,36 @@
     <string name="ui_common_save_success">保存成功</string>
     <string name="ui_common_save_fail">保存失败</string>
     <string name="ui_common_save_to_dcim">长按保存到相册</string>
-
+    <string name="ui_habits_parent_management_center">家长管理中心</string>
+    <string name="ui_habits_workdays">工作日</string>
+    <string name="ui_habits_holidays">假期</string>
+    <string name="ui_habits_alert_one">第1次提醒</string>
+    <string name="ui_habits_alert_two">第2次提醒</string>
+    <string name="ui_habits_time_setting">时间设置</string>
+    <string name="ui_habits_play_content">播放内容</string>
+    <string name="ui_habits_play_content_tip">(长按后可拖动顺序)</string>
+    <string name="ui_habits_play_content_select">选择播放内容</string>
+    <string name="ui_habits_exit_edit_tip">您已改动提醒事项，退出编辑吗？</string>
+    <string name="ui_habits_exit_edit">退出编辑</string>
+    <string name="ui_habits_continue_edit">继续编辑</string>
+    <string name="ui_habits_alert_event">提醒事项</string>
+    <string name="ui_habits_score_today">今日得分</string>
+    <string name="ui_habits_has_finish">已完成：</string>
+    <string name="ui_habits_minute">分</string>
+    <string name="ui_habits_coming_reminding">即将提醒</string>
+    <string name="ui_habits_password_input_tip">请输入家长管理密码</string>
+    <string name="ui_habits_password_error_tip">密码错误，请重新输入</string>
+    <string name="ui_habits_tip">提示</string>
+    <string name="ui_habits_password_over_count">密码错误输入四次，是否需要找回密码？</string>
+    <string name="ui_habits_password_input_again">重新输入</string>
+    <string name="ui_habits_password_find_back">找回密码</string>
 
 
     <!--动作编辑课程 -->
-    <string name="action_course_card1_1">1.认识时间轴</string>
-    <string name="action_course_card1_2">2.熟悉动作添加</string>
-    <string name="action_course_card1_3">3.了解音乐库</string>
-    <string name="action_course_card1_1_all">阿尔法的动作很酷吧，这些动作是怎样创建出来的呢？让我们先来了解一下动作编辑器吧。</string>
+    <string name="action_course_card1_1">1.了解时间轴</string>
+    <string name="action_course_card1_2">2.了解添加键</string>
+    <string name="action_course_card1_3">3.了解播放键</string>
+    <string name="action_course_card1_1_all">阿尔法的动作是怎样创建出来的呢？让我们先来了解一下动作编辑器吧。</string>
     <string name="action_course_card1_1_1"> 时间轴: 这是时间轴，它就像一个奇妙的盒子，上面装着音乐，下面装着动作，添加的动作会按先后顺序显示在轴上。右侧的“+ 、-”图标：点击这里，可以让时间轴变大变小，这样才能看清上面的动作，更好地编辑它们。</string>
     <string name="action_course_card1_1_2">点击这里，可以让时间轴变大变小，这样才能看清上面的动作，更好地编辑它们。</string>
     <string name="action_course_card1_1_3">音乐轴: 在这里，可以给阿尔法的动作配上音乐，让它随着音乐节拍跳舞、做动作。仔细听清音乐节拍，使用标记工具，可以帮你将动作安放在恰当的节拍上。</string>
@@ -989,11 +1016,11 @@
     <string name="action_course_card1_3_1">这是音乐库，里面有很多好听又欢快的音乐，进入这里，可以把这些音乐添加到时间轴上，让阿尔法的动作有音乐相伴，更生动有趣啦。</string>
 
 
-    <string name="action_course_card2_1">1.基础模板</string>
-    <string name="action_course_card2_2">2.高级模板</string>
-    <string name="action_course_card2_3">3.任务添加出招</string>
+    <string name="action_course_card2_1">1.了解动作库</string>
+    <string name="action_course_card2_2">2.初级动作库</string>
+    <string name="action_course_card2_3">3.高级动作库</string>
 
-    <string name="action_course_card2_1_all">阿尔法有自己的动作库，这可是一个大宝库，里面有各种各样的动作，可以用来添加到时间轴上去，动作库分为基础动作和高级动作。</string>
+    <string name="action_course_card2_1_all">阿尔法有自己的动作库，这可是一个大宝库哟。分为基础动作和高级动作，用来添加到时间轴上。</string>
     <string name="action_course_card2_2_1">这里是基础动作库，里面的动作简单又快速，还可以将这些动作添加到时间轴上</string>
     <string name="action_course_card2_2_2">这里是高级动作库，里面的动作酷炫又好玩，还可以将这些动作添加到时间轴上。</string>
 

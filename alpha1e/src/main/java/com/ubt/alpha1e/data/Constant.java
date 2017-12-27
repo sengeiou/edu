@@ -29,6 +29,14 @@ public class Constant {
     public static final int USER_LOGIN_REQUEST_CODE = 10011;
     public static final int USER_LOGIN_RESPONSE_CODE = 10012;
 
+    //行为习惯编辑
+    public static final int HIBITS_EVENT_EDIT_REQUEST_CODE = 10013;
+    public static final int HIBITS_EVENT_EDIT_RESPONSE_CODE = 10014;
+
+    //行为习惯播放内容编辑
+    public static final int PLAY_CONTENT_SELECT_REQUEST_CODE = 10015;
+    public static final int PLAY_CONTENT_SELECT_RESPONSE_CODE = 10016;
+
     //定义字符串常量KEY
     public static final String SCREEN_ORIENTATION = "SCREEN_ORIENTATION";
     public static final String INSTRUCTION_INFO_KEY = "INSTRUCTION_INFO_KEY";
@@ -43,6 +51,8 @@ public class Constant {
     public static final String SHARE_BLOCKLY_CHAllANGE = "SHARE_BLOCKLY_CHAllANGE";
 
     public static final String FEEDBACK_INFO_KEY = "FEEDBACK_INFO_KEY";
+    public static final String HABITS_EVENT_INFO_KEY = "HABITS_EVENT_INFO_KEY";
+    public static final String PLAY_CONTENT_INFO_LIST_KEY = "PLAY_CONTENT_INFO_LIST_KEY";
 
     public static final String WakeUpActionName="初始化";
 }

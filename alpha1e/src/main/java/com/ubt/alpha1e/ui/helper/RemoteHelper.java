@@ -30,6 +30,7 @@ import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ByteHexHelper;
 import com.ubtechinc.base.ConstValue;
 import com.ubtechinc.file.FileUploader;
 
@@ -293,6 +294,14 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
         mPlayer.addListener(mUI);
     }
 
+    public void doRemoterState(byte state){
+        byte[] params = new byte[2];
+        params[0] = state;
+        params[1] = 0;
+        UbtLog.d(TAG, "doChangeEditState params:" + ByteHexHelper.bytesToHexString(params));
+        doSendComm(ConstValue.DV_INTO_EDIT, params);
+    }
+
     @Override
     public void RegisterHelper() {
         super.RegisterHelper();
@@ -499,6 +508,10 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
                 else {
 
                 }
+            }
+        }else if(cmd == ConstValue.DV_INTO_EDIT){
+            if(param != null){
+                UbtLog.d(TAG, "DV_INTO_EDIT:" + ByteHexHelper.bytesToHexString(param)  + "   = " + mUI);
             }
         }
     }
