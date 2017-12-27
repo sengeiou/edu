@@ -328,6 +328,12 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         }
     }
 
+    @Override
+    public void onRequestStatus(int requestType, int errorCode) {
+
+    }
+
+
     @OnClick({R.id.ll_base_back, R.id.iv_title_right, R.id.rl_alert_one, R.id.rl_alert_two, R.id.rl_play_content_tip})
     public void onViewClicked(View view) {
         switch (view.getId()) {

@@ -2,23 +2,19 @@ package com.ubt.alpha1e.behaviourHabit;
 
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
 
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
-import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +49,10 @@ public class behaviourPresenterTest {
             }
 
             @Override
-            public void showBehaviourPlayContent(boolean status, List<PlayContent> playList, String errorMsg) {
+            public void showBehaviourPlayContent(boolean status, List<PlayContentInfo> playList, String errorMsg) {
 
             }
+
 
             @Override
             public void showNetworkRequestError() {
@@ -64,6 +61,11 @@ public class behaviourPresenterTest {
 
             @Override
             public void onAlertSelectItem(int index, String language, int alertType) {
+
+            }
+
+            @Override
+            public void onRequestStatus(int requestType, int errorCode) {
 
             }
 
@@ -87,7 +89,7 @@ public class behaviourPresenterTest {
     @Test
     public void testDealayAlertTime() throws Exception {
        // mPresenter.dealayAlertTime(5);
-        mPresenter.delayBehaviourEventAlert("12","5");
+        mPresenter.delayBehaviourEventAlert("62","5");
     }
 
     @Test
@@ -97,7 +99,7 @@ public class behaviourPresenterTest {
 
     @Test
     public void testGetBehaviourEvent() throws Exception {
-        mPresenter.getBehaviourEvent("12");
+        mPresenter.getBehaviourEvent("62");
     }
 
     @Test
@@ -107,7 +109,7 @@ public class behaviourPresenterTest {
 
     @Test
     public void testSetBehaviourEvent() throws Exception {
-        mPresenter.enableBehaviourEvent("12",1);
+        mPresenter.enableBehaviourEvent("62",0);
     }
 
     @Test
@@ -115,12 +117,12 @@ public class behaviourPresenterTest {
         List<String> contentId=new ArrayList<>();
         contentId.add("123");
         contentId.add("456");
-        HabitsEventDetail mHabitsEventDetail=new HabitsEventDetail();
-        mHabitsEventDetail.setEventId("62");
-        mHabitsEventDetail.setRemindOne("5");
-        mHabitsEventDetail.setRemindTwo("10");
-        mHabitsEventDetail.setStatus("1");
-        mHabitsEventDetail.setContentIds(contentId);
-        mPresenter.saveBehaviourEvent(mHabitsEventDetail,1);
+        EventDetail mEventDetail=new EventDetail();
+        mEventDetail.remindFirst="5";
+        mEventDetail.remindSecond="10";
+        mEventDetail.eventId="62";
+        mEventDetail.status="1";
+        mEventDetail.contentIds=contentId;
+        mPresenter.saveBehaviourEvent(mEventDetail,1);
     }
 }

@@ -224,6 +224,10 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
     }
 
+    @Override
+    public void onRequestStatus(int requestType, int errorCode) {
+
+    }
 
     @OnClick({R.id.ll_base_back, R.id.iv_title_right})
     public void onViewClicked(View view) {

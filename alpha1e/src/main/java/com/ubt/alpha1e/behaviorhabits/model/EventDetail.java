@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @作者：ubt
@@ -26,6 +27,7 @@ public class EventDetail<T> extends BaseModel{
     public String status;
     public String type;
     public T contents;
+    public List<String> contentIds;
     public EventDetail thiz;
     @Override
     public EventDetail getThiz(String json) {

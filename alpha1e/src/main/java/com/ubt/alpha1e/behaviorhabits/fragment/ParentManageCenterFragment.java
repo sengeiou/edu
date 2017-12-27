@@ -16,16 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baoyz.pg.PG;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
-import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsActivity;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.adapter.HabitsEventRecyclerAdapter;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
-import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
@@ -45,6 +42,7 @@ import butterknife.Unbinder;
  */
 
 public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsContract.View, BehaviorHabitsPresenter> implements BehaviorHabitsContract.View {
+
 
     private static final String TAG = ParentManageCenterFragment.class.getSimpleName();
 
@@ -238,6 +236,10 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
 
     }
 
+    @Override
+    public void onRequestStatus(int requestType, int errorCode) {
+
+    }
 
     @OnClick({R.id.ll_base_back, R.id.iv_title_right, R.id.rl_workdays, R.id.rl_holidays})
     public void onViewClicked(View view) {

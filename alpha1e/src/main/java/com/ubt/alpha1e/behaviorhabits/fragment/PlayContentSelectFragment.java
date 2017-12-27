@@ -229,6 +229,10 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
 
     }
 
+    @Override
+    public void onRequestStatus(int requestType, int errorCode) {
+
+    }
 
     @OnClick({R.id.ll_base_back, R.id.iv_title_right})
     public void onViewClicked(View view) {
@@ -239,7 +243,6 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
             case R.id.iv_title_right:
                 doConfirm();
                 break;
-
         }
     }
 
