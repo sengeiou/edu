@@ -26,6 +26,7 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.maincourse.adapter.ActionCourseTwoUtil;
 import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
+import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -33,10 +34,6 @@ import com.ubt.alpha1e.utils.log.UbtLog;
 import org.litepal.crud.DataSupport;
 
 import zhy.com.highlight.HighLight;
-import zhy.com.highlight.interfaces.HighLightInterface;
-import zhy.com.highlight.position.OnRightLocal1PosCallback;
-import zhy.com.highlight.shape.RectLightShape;
-import zhy.com.highlight.view.HightLightView;
 
 
 /**
@@ -52,8 +49,11 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
     private String TAG = CourseLevelTwoLayout.class.getSimpleName();
     private ImageView ivLeftArrow;
     private ImageView ivLeftArrow1;
+    private ImageView playArrow;
+
     AnimationDrawable animation1;
     AnimationDrawable animation2;
+    AnimationDrawable animation3;
     ActionCourseTwoUtil mActionCourseTwoUtil;
     /**
      * 高亮对话框的TextView显示
@@ -147,7 +147,6 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引4.mp3\",\"playcount\":1}");
             threeIndex = 1;
         }
-
     }
 
     /**
@@ -166,6 +165,8 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
         ivLeftArrow.setOnClickListener(this);
         ivLeftArrow1 = findViewById(R.id.iv_add_action_arrow1);
         ivLeftArrow1.setOnClickListener(this);
+        playArrow = findViewById(R.id.iv_play_arrow);
+        playArrow.setOnClickListener(this);
         mRlInstruction = findViewById(R.id.rl_instruction);
         mTextView = findViewById(R.id.tv_all_introduc);
         mTextView.setText(ResourceManager.getInstance(mContext).getStringResources("action_course_card2_1_all"));
@@ -224,6 +225,28 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
         }
     }
 
+    /**
+     * 播放按钮箭头动效
+     *
+     * @param flag true 播放 false 结束
+     */
+    private void showPlayArrow1(boolean flag) {
+        ivPlay.setEnabled(true);
+        ivBack.setEnabled(false);
+        ivAddFrame.setEnabled(false);
+        if (flag) {
+            playArrow.setVisibility(View.VISIBLE);
+            playArrow.setImageResource(R.drawable.animal_left_arrow);
+            animation3 = (AnimationDrawable) playArrow.getDrawable();
+            animation3.start();
+        } else {
+            playArrow.setVisibility(View.GONE);
+            if (null != animation3) {
+                animation3.stop();
+            }
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -244,8 +267,31 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             case R.id.iv_add_action_arrow1:
                 showActionDialog();
                 break;
+            case R.id.iv_play_music:
+                playAction();
+                break;
+            case R.id.iv_play_arrow:
+                playAction();
+                break;
             default:
         }
+    }
+
+    /**
+     * 播放按钮，过3秒钟结束
+     */
+    private void playAction() {
+        startPlayAction();
+        showPlayArrow1(false);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (courseProgressListener != null) {
+                    courseProgressListener.completeCurrentCourse(3);
+                }
+            }
+        }, 4000);
+
     }
 
     /**
@@ -279,6 +325,9 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
         }
     }
 
+    /**
+     * 机器人播放音乐和动作回调
+     */
     public void playComplete() {
         UbtLog.d(TAG, "播放完成");
         if (((Activity) mContext).isFinishing()) {
@@ -294,24 +343,17 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //    ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引1.mp3\",\"playcount\":1}");
+
                     }
                 }, 500);
             }
         } else if (currentCourse == 3) {
             if (threeIndex == 1) {
                 threeIndex = 2;
-                // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引4.mp3\",\"playcount\":1}");
             }
         }
         UbtLog.d(TAG, "isPlayAction==" + isPlayAction);
-//        if (isPlayAction) {
-//            if (null != mActionCourseTwoUtil) {
-//                mActionCourseTwoUtil.showAddAnimal();
-//            }
-//            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引6.mp3\",\"playcount\":1}");
-//            isPlayAction = false;
-//        }
+
     }
 
 
@@ -326,44 +368,6 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
 
     }
 
-    /**
-     * 第一个关卡第一个课时
-     */
-    private void showOneCardContent() {
-        ivActionLib.setEnabled(true);
-        ivActionLibMore.setEnabled(true);
-        mHightLight = new HighLight(mContext)//
-                .autoRemove(false)//设置背景点击高亮布局自动移除为false 默认为true
-                .intercept(true)//设置拦截属性为false 高亮布局不影响后面布局
-                .enableNext()
-                .maskColor(0xAA000000)
-                // .anchor(findViewById(R.id.id_container))//如果是Activity上增加引导层，不需要设置anchor
-                .addHighLight(R.id.iv_action_lib, R.layout.layout_pop_course_right_level, new OnRightLocal1PosCallback(30), new RectLightShape())
-                .addHighLight(R.id.iv_action_lib_more, R.layout.layout_pop_course_right_level, new OnRightLocal1PosCallback(30), new RectLightShape())
-                .setOnShowCallback(new HighLightInterface.OnShowCallback() {
-                    @Override
-                    public void onShow(HightLightView hightLightView) {
-                        HighLight.ViewPosInfo viewPosInfo = hightLightView.getCurentViewPosInfo();
-                        if (null != viewPosInfo) {
-                            int layoutId = viewPosInfo.layoutId;
-                            View tipView = hightLightView.findViewById(layoutId);
-                            tv = tipView.findViewById(R.id.tv_content);
-                            tv.setText("基础模板");
-                            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "基础模版.hts");
-                        }
-                    }
-                }).setOnNextCallback(new HighLightInterface.OnNextCallback() {
-                    @Override
-                    public void onNext(HightLightView hightLightView, View targetView, View tipView) {//动态设置文字
-                        tv = tipView.findViewById(R.id.tv_content);
-                        tv.setText("高级模板");
-                        oneIndex = 2;
-                        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "高级模版.hts");
-                    }
-                });
-        mHightLight.show();
-
-    }
 
     /**
      * 响应所有R.id.iv_known的控件的点击事件
@@ -457,9 +461,8 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
                     showNextDialog(3);
                     UbtLog.d(TAG, "showNextDialog====");
                 } else if (currentCourse == 3) {
-                    if (courseProgressListener != null) {
-                        courseProgressListener.completeCurrentCourse(3);
-                    }
+                    showPlayArrow1(true);
+
                 }
             }
         }, 1000);
@@ -481,13 +484,6 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             }
         }, 1200);
 
-    }
-
-
-    public interface CourseProgressListener {
-        void completeCurrentCourse(int current);
-
-        void finishActivity();
     }
 
 

@@ -131,14 +131,33 @@ public class ActionCourseDataManager {
         CourseActionModel model1 = null;
         CourseActionModel model2 = null;
         CourseActionModel model3 = null;
+        CourseActionModel model4 = null;
         if (card == 1) {
             model1 = new CourseActionModel("1.认识时间轴", 0);
             model2 = new CourseActionModel("2.了解添加键", 0);
             model3 = new CourseActionModel("3.了解播放键", 0);
+            list.add(model1);
+            list.add(model2);
+            list.add(model3);
         } else if (card == 2) {
             model1 = new CourseActionModel("1.了解动作库", 0);
             model2 = new CourseActionModel("2.初级动作库", 0);
             model3 = new CourseActionModel("3.高级动作库", 0);
+            list.add(model1);
+            list.add(model2);
+            list.add(model3);
+        } else if (card == 3) {
+            model1 = new CourseActionModel("1.了解音乐库", 0);
+            model2 = new CourseActionModel("2.打开音乐库", 0);
+            list.add(model1);
+            list.add(model2);
+        } else if (card == 4) {
+            model1 = new CourseActionModel("1.添加舞蹈动作", 0);
+            model2 = new CourseActionModel("2.添加london音频", 0);
+            model3 = new CourseActionModel("3.预览执行", 0);
+            list.add(model1);
+            list.add(model2);
+            list.add(model3);
         }
         if (currentCourse == 1) {
             model1.setStatu(2);
@@ -149,39 +168,41 @@ public class ActionCourseDataManager {
             model1.setStatu(1);
             model2.setStatu(1);
             model3.setStatu(2);
+        } else if (currentCourse == 4) {
+            model1.setStatu(1);
+            model2.setStatu(1);
+            model3.setStatu(1);
+            model4.setStatu(2);
         }
-        list.add(model1);
-        list.add(model2);
-        list.add(model3);
 
         return list;
     }
 
 
-    public static List<CourseActionModel> getCourseDataList(int position) {
+    /**
+     * 关卡列表页获取数据
+     *
+     * @param position
+     * @param size
+     * @return
+     */
+    public static List<CourseActionModel> getCourseDataList(int position, int size) {
         int level = 1;// 当前第几个课时
-        if (position == 0) {//第一关卡
-            LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
-            if (null != record) {
-                UbtLog.d("getDataList", "record===" + record.toString());
-                int course = record.getCourseLevel();
-                int recordlevel = record.getPeriodLevel();
-                if (course == 2) {
-                    if (recordlevel == 0) {
-                        level = 1;
-                    } else if (recordlevel == 1) {
-                        level = 2;
-                    } else if (recordlevel == 2) {
-                        level = 3;
-                    } else if (recordlevel == 3) {
-                        level = 1;
-                    }
+        int currentCourse = position + 1;
+        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+        if (null != record) {
+            UbtLog.d("getDataList", "record===" + record.toString());
+            int course = record.getCourseLevel();
+            int recordlevel = record.getPeriodLevel();
+            if (course == currentCourse) {//只有当最新记录跟position+1相等时才需要获取到课时
+                if (recordlevel < size) {
+                    level = ++recordlevel;
+                } else if (recordlevel == size) {
+                    level = 1;
                 }
-
             }
         }
-
-        return getCourseActionModel(++position, level);
+        return getCourseActionModel(currentCourse, level);
     }
 
 

@@ -24,14 +24,15 @@ public class HttpEntity {
     public static final String bindXGServer = XG_URL + "push/userToken";
 
 
-
-
     //http://10.10.32.52:8080/ubx/sys/register  http://10.10.20.71:8010
     public static final String BASIC_THIRD_LOGIN_URL = "http://10.10.20.71:8010/user-service-rest/v2/"; //测试环境后续上线需要修改正式环境
     public static final String THRID_LOGIN_URL = BASIC_THIRD_LOGIN_URL + "user/login/third";
 
     //  http://10.10.1.14:8080
     public static final String BASIC_UBX_SYS = "http://10.10.1.14:8080/ubx/sys/"; //测试环境
+    public static final String BASIC_UBX_USERCENTER = "http://10.10.1.14:8090/alpha1e/"; //测试环境
+
+
     public static final String REQUEST_SMS_CODE = BASIC_UBX_SYS + "register";
     public static final String GET_USER_INFO = BASIC_UBX_SYS + "getUserInfo";
     public static final String BIND_ACCOUNT = BASIC_UBX_SYS + "bind";
@@ -47,13 +48,33 @@ public class HttpEntity {
 
     public static final String COURSE_GET_PROGRESS = BASIC_UBX_SYS + "getCourseProgress";
 
-
+    //保存课程最新进度
     public static final String COURSE_SAVE_PROGRESS = BASIC_UBX_SYS + "saveCourseProgress";
-
+    //保存每个关卡分数
     public static final String COURSE_SAVE_STATU = BASIC_UBX_SYS + "saveCourseStatus";
-
+    /**
+     * 获取所有上传关卡的分数获取
+     */
     public static final String COURSE_GET_STATU = BASIC_UBX_SYS + "getCourseStatus";
 
+    /**
+     * 获取消息列表
+     */
+    public static final String MESSAGE_GET_LIST = BASIC_UBX_USERCENTER + "/message/listByPage";
+    /**
+     * 获取未读消息数量
+     */
+    public static final String MESSAGE_UNREAD_TOTAL = BASIC_UBX_USERCENTER + "/message/countUnread";
+
+    /**
+     * 获取消息列表
+     */
+    public static final String MESSAGE_UPDATE_STATU = BASIC_UBX_USERCENTER + "/message/update";
+
+    /**
+     * 删除消息
+     */
+    public static final String MESSAGE_DELETE = BASIC_UBX_USERCENTER + "/message/deleteByMessageId";
     /**
      * 保存blockly编程项目
      */

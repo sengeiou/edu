@@ -15,16 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
-import com.ubt.alpha1e.maincourse.courselayout.CourseLevelTwoLayout;
+import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
+import com.ubt.alpha1e.maincourse.courselayout.CourseLevelOneLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -44,25 +43,16 @@ import java.util.List;
  * 邮箱 784787081@qq.com
  */
 
-public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseLevelTwoLayout.CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
+public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
 
-    private static final String TAG = CourseLevelSixActivity.class.getSimpleName();
+    private static final String TAG = CourseLevelOneActivity.class.getSimpleName();
     BaseHelper mHelper;
-    CourseLevelTwoLayout mActionEdit;
-    RelativeLayout mRlInstruction;
-    private TextView mTextView;
-
+    CourseLevelOneLayout mActionEdit;
 
     /**
      * 当前课时
      */
     private int currentCourse;
-
-
-    /**
-     * 是否从总介绍播放
-     */
-    private boolean isAllIntroduc;
 
 
     @Override
@@ -73,10 +63,7 @@ public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.Vi
         ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
         ((ActionsEditHelper) mHelper).doEnterCourse((byte) 1);
-
-        mRlInstruction.setVisibility(View.GONE);
         mActionEdit.setData(this);
-//        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑2总介.hts");
     }
 
     Handler mHandler = new Handler() {
@@ -84,10 +71,6 @@ public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.Vi
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1111) {
-                isAllIntroduc = true;
-                mRlInstruction.setVisibility(View.GONE);
-                mActionEdit.setData(CourseLevelSixActivity.this);
-            } else if (msg.what == 1112) {
                 mActionEdit.playComplete();
             }
         }
@@ -102,10 +85,7 @@ public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.Vi
 
     @Override
     protected void initUI() {
-        mActionEdit = (CourseLevelTwoLayout) findViewById(R.id.action_edit);
-        mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
-        mTextView = (TextView) findViewById(R.id.tv_all_introduc);
-        mTextView.setText(ResourceManager.getInstance(this).getStringResources("action_course_card2_1_all"));
+        mActionEdit = (CourseLevelOneLayout) findViewById(R.id.action_edit);
         mActionEdit.setUp(mHelper);
 
     }
@@ -134,6 +114,7 @@ public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.Vi
         }
     }
 
+
     /**
      * 保存进度到数据库
      *
@@ -146,24 +127,14 @@ public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.Vi
             UbtLog.d(TAG, "保存进度到数据库2" + record.toString());
             int course = record.getCourseLevel();
             int level = record.getPeriodLevel();
-            if (course < 2) {
+            if (course == 1 && level < current) {
                 UbtLog.d(TAG, "保存进度到数据库3" + "保存成功");
                 ContentValues values = new ContentValues();
-                values.put("CourseLevel", 2);
+                values.put("CourseLevel", 1);
                 values.put("periodLevel", current);
                 values.put("isUpload", false);
                 DataSupport.updateAll(LocalActionRecord.class, values);
-                mPresenter.saveLastProgress("2", String.valueOf(current));
-            } else if (course == 2) {
-                if (level < current) {
-                    UbtLog.d(TAG, "保存进度到数据库3" + "保存成功");
-                    ContentValues values = new ContentValues();
-                    values.put("CourseLevel", 2);
-                    values.put("periodLevel", current);
-                    values.put("isUpload", false);
-                    DataSupport.updateAll(LocalActionRecord.class, values);
-                    mPresenter.saveLastProgress("2", String.valueOf(current));
-                }
+                mPresenter.saveLastProgress(String.valueOf(1), String.valueOf(current));
             }
         }
     }
@@ -190,7 +161,7 @@ public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.Vi
      */
     public void returnCardActivity() {
         Intent intent = new Intent();
-        intent.putExtra("course", 2);//第几关
+        intent.putExtra("course", 1);//第几关
         intent.putExtra("leavel", currentCourse);//第几个课时
         intent.putExtra("isComplete", true);
         intent.putExtra("score", 1);
@@ -215,17 +186,18 @@ public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.Vi
             UbtLog.d("CourseOneActivity", "返回键");
             showExitDialog();
         }
-        return super.onKeyDown(keyCode, event);
+        return false;
+        //return super.onKeyDown(keyCode, event);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         UbtLog.d(TAG, "------------onDestroy------------");
-        //((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
+        // ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
         mActionEdit.onPause();
-        isAllIntroduc = false;
     }
+
 
     private void showExitDialog() {
         View contentView = LayoutInflater.from(this).inflate(R.layout.view_comfirmdialog, null);
@@ -243,7 +215,7 @@ public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.Vi
                 .setContentHolder(viewHolder)
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(width)
-                //.setContentBackgroundResource(R.drawable.action_dialog_filter_rect)
+                // .setContentBackgroundResource(R.drawable.action_dialog_filter_rect)
                 .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
@@ -262,6 +234,7 @@ public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.Vi
                 .create().show();
     }
 
+
     @Override
     protected void initControlListener() {
 
@@ -274,7 +247,7 @@ public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.Vi
 
     @Override
     public int getContentViewId() {
-        return R.layout.activity_action_course_level_two;
+        return R.layout.activity_action_course_level_one;
     }
 
     @Override
@@ -346,12 +319,9 @@ public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     public void playComplete() {
         UbtLog.d("EditHelper", "播放完成");
-        mHandler.sendEmptyMessageDelayed(1112, 2000);
-//        if (isAllIntroduc) {
-//            mHandler.sendEmptyMessageDelayed(1112, 2000);
-//        } else {
-//            mHandler.sendEmptyMessageDelayed(1111, 2000);
-//        }
+
+        mHandler.sendEmptyMessageDelayed(1111, 2000);
+
     }
 
     @Override
