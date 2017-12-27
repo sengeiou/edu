@@ -53,16 +53,18 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
     public static final int GET_BEHAVIOURSAVEUPDATE_CMD=5;
     public static final int GET_BEHAVIOURDELAYALERT_CMD=6;
     public static final int GET_BEHAVIOURPARENTEVENTLIST_CMD=7;
+    public static final int GET_BEHAVIOUERGETUSERPASSWORD_CMD=8;
     public static final int NETWORK_ERROR=1000;
     public static final int NETWORK_SUCCESS=2000;
     public static final int NETWORK_SERVER_EXCEPTION=3000;
     String url = "http://10.10.1.14:8090";
-    private String GetTemplatePath="/alpha1e/event/getEventList";
-    private String GetEventPath="/alpha1e/event/getUserEvent";
-    private String SaveModifyEventPath="/alpha1e/event/updateUserEvent";
-    private String DelayAlert="/alpha1e/event/remindReply";
-    private String ControlEventPath="/alpha1e/event/updateUserEvent"; //the same SaveModifyEventPath
-    private String GetPlayContentPath="/behaviour/template/getEventContent";
+    private String GetTemplatePath = "/alpha1e/event/getEventList";
+    private String GetEventPath = "/alpha1e/event/getUserEvent";
+    private String SaveModifyEventPath = "/alpha1e/event/updateUserEvent";
+    private String DelayAlert = "/alpha1e/event/remindReply";
+    private String ControlEventPath = "/alpha1e/event/updateUserEvent"; //the same SaveModifyEventPath
+    private String GetPlayContentPath = "/alpha1e/event/getContents";
+    private String GetUserPassword = "/alpha1e/user/getUserPwd";
 
     @Override
     public void doTest() {
@@ -94,11 +96,10 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
     }
 
     @Override
-    public void getBehaviourPlayContent(String sex, String grade) {
-        BehaviourListRequest mBehaviourListRequest = new BehaviourListRequest();
-        mBehaviourListRequest.setSex(sex);
-        mBehaviourListRequest.setGrade(grade);
-        doRequestFromWeb(url+GetPlayContentPath, mBehaviourListRequest, GET_BEHAVIOURPLAYCONTENT_CMD);
+    public void getBehaviourPlayContent(String eventId) {
+        BehaviourEventRequest mBehaviourEventRequest = new BehaviourEventRequest();
+        mBehaviourEventRequest.setEventId(eventId);
+        doRequestFromWeb(url+GetPlayContentPath, mBehaviourEventRequest, GET_BEHAVIOURPLAYCONTENT_CMD);
     }
 
     @Override
@@ -128,6 +129,12 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
         mBehaviourDelayAlertRequest.setEventId(eventId);
         mBehaviourDelayAlertRequest.setDelayTime(delayTime);
         doRequestFromWeb(url+DelayAlert, mBehaviourDelayAlertRequest,GET_BEHAVIOURDELAYALERT_CMD);
+    }
+
+    @Override
+    public void getUserPassword() {
+        BaseRequest mBaseRequest=new BaseRequest();
+        doRequestFromWeb(url+GetUserPassword,mBaseRequest,GET_BEHAVIOUERGETUSERPASSWORD_CMD);
     }
 
     @Override
@@ -255,6 +262,28 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                             UbtLog.d(TAG, "parent baseResponseModel percent = " + ((UserScore) baseResponseModel2.models).percent);
                             UbtLog.d(TAG, "parent baseResponseModel details = " + ((List<HabitsEvent>) (((UserScore) baseResponseModel2.models).details)));
                             mView.showParentBehaviourList(true, ((UserScore) baseResponseModel2.models), "success");
+                            break;
+                        case  GET_BEHAVIOURPLAYCONTENT_CMD:
+                            BaseResponseModel<ArrayList<PlayContentInfo>> baseResponseModel3 = GsonImpl.get().toObject(response,
+                                    new TypeToken<BaseResponseModel<ArrayList<PlayContentInfo>>>() {
+                                    }.getType());//加上type转换，避免泛型擦除
+                            if (!baseResponseModel3.status) {
+                                mView.onRequestStatus(id,NETWORK_SERVER_EXCEPTION);
+                                return;
+                            }
+                            UbtLog.d(TAG,"GETPLAYCONTENT"+baseResponseModel3.models.get(0));
+                            mView.showBehaviourPlayContent(true,baseResponseModel3.models,"success");
+                            break;
+                        case GET_BEHAVIOUERGETUSERPASSWORD_CMD:
+                            BaseResponseModel baseResponseModel4 = GsonImpl.get().toObject(response,
+                                    new TypeToken<BaseResponseModel>() {
+                                    }.getType());//加上type转换，避免泛型擦除
+                            if (!baseResponseModel4.status) {
+                                mView.onRequestStatus(id,NETWORK_SERVER_EXCEPTION);
+                                return;
+                            }
+                            mView.onUserPassword((String)baseResponseModel4.models);
+                            UbtLog.d(TAG,"Password"+(String)baseResponseModel4.models);
                             break;
                         default:
                             break;

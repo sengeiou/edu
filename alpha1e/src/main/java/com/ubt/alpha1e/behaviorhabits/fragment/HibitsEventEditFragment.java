@@ -331,14 +331,15 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     }
 
     @Override
-    public void showBehaviourPlayContent(boolean status, List<PlayContentInfo> playList, String errorMsg) {
+    public void showBehaviourPlayContent(boolean status, ArrayList<PlayContentInfo> playList, String errorMsg) {
 
     }
 
     @Override
-    public void showNetworkRequestError() {
+    public void onUserPassword(String password) {
 
     }
+
 
     @Override
     public void onAlertSelectItem(int index, String alertVal, int alertType) {

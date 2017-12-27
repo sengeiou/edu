@@ -9,6 +9,7 @@ import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,8 +27,8 @@ public class BehaviorHabitsContract {
         //显示编辑的EventID具体内容
         void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg);
         //显示行为习惯播放内容
-        void showBehaviourPlayContent(boolean status, List<PlayContentInfo> playList, String errorMsg);
-        void showNetworkRequestError();
+        void showBehaviourPlayContent(boolean status, ArrayList<PlayContentInfo> playList, String errorMsg);
+        void onUserPassword(String password);
         //提醒对话框点击
         void onAlertSelectItem(int index,String language,int alertType);
         //网络请求错误回调  requestType 网络请求的标识，errorCode 错误码
@@ -43,7 +44,7 @@ public class BehaviorHabitsContract {
         //获得行为习惯某个EventId具体详情
         void getBehaviourEvent(String eventId);
         //获得行为习惯的播放内容
-        void getBehaviourPlayContent(String sex,String grade);
+        void getBehaviourPlayContent(String eventId);
         //开启/关闭行为习惯具体某个EventId状态，status=0 关闭，status=1 打开
         void enableBehaviourEvent(String eventId, int status);
         //保存编辑的行为习惯 workday=1; holiday=2
@@ -52,5 +53,7 @@ public class BehaviorHabitsContract {
         void showAlertDialog(Context context, int currentPosition, List<String> alertList, int alertType);
         //延时提醒  delayTime: -1：关闭；0：准时；5：延迟5分钟；10：延迟10分钟
         void delayBehaviourEventAlert(String eventId, String delayTime);
+        //从服务端获取密码
+        void getUserPassword();
     }
 }

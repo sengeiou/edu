@@ -49,15 +49,16 @@ public class behaviourPresenterTest {
             }
 
             @Override
-            public void showBehaviourPlayContent(boolean status, List<PlayContentInfo> playList, String errorMsg) {
-
+            public void showBehaviourPlayContent(boolean status, ArrayList<PlayContentInfo> playList, String errorMsg) {
+                Log.d("TEST","showBehaviourPlayContent "+playList.get(0));
             }
-
 
             @Override
-            public void showNetworkRequestError() {
-
+            public void onUserPassword(String password) {
+                Log.d("TEST","onUserPassword "+password);
             }
+
+
 
             @Override
             public void onAlertSelectItem(int index, String language, int alertType) {
@@ -106,7 +107,8 @@ public class behaviourPresenterTest {
 
     @Test
     public void testGetBehaviourPlayContent() throws Exception {
-        mPresenter.getParentBehaviourList("1","1","1");
+       // mPresenter.getParentBehaviourList("1","1","1");
+        mPresenter.getBehaviourPlayContent("62");
     }
 
     @Test
@@ -121,5 +123,9 @@ public class behaviourPresenterTest {
         mEventDetail.status="1";
         mEventDetail.contentIds=contentId;
         mPresenter.saveBehaviourEvent(mEventDetail,1);
+    }
+    @Test
+    public void testGetUserPassword(){
+        mPresenter.getUserPassword();
     }
 }
