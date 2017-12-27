@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
@@ -201,7 +198,6 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 }
             }
         }
-
         LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
         if (null != record) {
             UbtLog.d(TAG, "getCourseScores==" + "course==" + record.getCourseLevel() + "   leavel==" + record.getPeriodLevel());
@@ -218,15 +214,61 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 if (level == 3) {
                     mActionCourseModels.get(1).setActionCourcesScore(1);
                 }
+            } else if (course == 3) {
+                mActionCourseModels.get(2).setActionLockType(1);
+                mActionCourseModels.get(1).setActionCourcesScore(1);
+                if (level == 3) {
+                    mActionCourseModels.get(2).setActionCourcesScore(1);
+                }
+            } else if (course == 4) {
+                mActionCourseModels.get(3).setActionLockType(1);
+                mActionCourseModels.get(2).setActionCourcesScore(1);
+                if (level == 3) {
+                    mActionCourseModels.get(3).setActionCourcesScore(1);
+                }
+            } else if (course == 5) {
+                mActionCourseModels.get(4).setActionLockType(1);
+                mActionCourseModels.get(3).setActionCourcesScore(1);
+                if (level == 3) {
+                    mActionCourseModels.get(4).setActionCourcesScore(1);
+                }
+            } else if (course == 6) {
+                mActionCourseModels.get(5).setActionLockType(1);
+                mActionCourseModels.get(4).setActionCourcesScore(1);
+                if (level == 3) {
+                    mActionCourseModels.get(5).setActionCourcesScore(1);
+                }
+            } else if (course == 7) {
+                mActionCourseModels.get(6).setActionLockType(1);
+                mActionCourseModels.get(5).setActionCourcesScore(1);
+                if (level == 3) {
+                    mActionCourseModels.get(6).setActionCourcesScore(1);
+                }
+            } else if (course == 8) {
+                mActionCourseModels.get(7).setActionLockType(1);
+                mActionCourseModels.get(6).setActionCourcesScore(1);
+                if (level == 3) {
+                    mActionCourseModels.get(7).setActionCourcesScore(1);
+                }
+            } else if (course == 9) {
+                mActionCourseModels.get(8).setActionLockType(1);
+                mActionCourseModels.get(7).setActionCourcesScore(1);
+                if (level == 3) {
+                    mActionCourseModels.get(8).setActionCourcesScore(1);
+                }
+            } else if (course == 10) {
+                mActionCourseModels.get(9).setActionLockType(1);
+                mActionCourseModels.get(8).setActionCourcesScore(1);
+                if (level == 3) {
+                    mActionCourseModels.get(9).setActionCourcesScore(1);
+                }
             }
             if (!record.isUpload()) {
                 mPresenter.saveLastProgress(String.valueOf(record.getCourseLevel()), String.valueOf(record.getPeriodLevel()));
             }
         }
         mMainCoursedapter.notifyDataSetChanged();
-
         LoadingDialog.dismiss(this);
-
     }
 
     @Override
@@ -378,16 +420,4 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 .create().show();
     }
 
-
-    public class ItemAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
-
-        public ItemAdapter(@LayoutRes int layoutResId, @Nullable List<String> data) {
-            super(layoutResId, data);
-        }
-
-        @Override
-        protected void convert(BaseViewHolder helper, String item) {
-            helper.setText(R.id.tv_action_course_item, item);
-        }
-    }
 }
