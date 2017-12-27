@@ -50,7 +50,8 @@ import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseLevelActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
@@ -68,7 +69,6 @@ import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
-import com.ubtechinc.sqlite.UBXDataBaseHelper;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -245,6 +245,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mCurrentTouchTime=System.currentTimeMillis();
         getScreenInch();
         initUI();
+        mPresenter.getXGInfo();
         mHelper=MainUiBtHelper.getInstance(getContext());
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mBroadcastReceiver1, filter1);
@@ -546,7 +547,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                     || mActivity instanceof FeatureActivity*/
                                     ||mActivity instanceof ActionTestActivity
                                     ||mActivity instanceof ActionCourseActivity
-                                    ||mActivity instanceof CourseLevelActivity
+                                    ||mActivity instanceof CourseLevelOneActivity
+                                    ||mActivity instanceof CourseLevelTwoActivity
                                     ||mActivity instanceof NetconnectActivity
                                     ||mActivity instanceof NetSearchResultActivity
                                     ||mActivity instanceof CourseTwoActivity

@@ -23,7 +23,6 @@ import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.adapter.PlayContentRecyclerAdapter;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.Constant;
@@ -206,12 +205,17 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
     }
 
     @Override
+    public void showParentBehaviourList(boolean status, UserScore<List<HabitsEvent>> userScore, String errorMsg) {
+
+    }
+
+    @Override
     public void showBehaviourEventContent(boolean status, EventDetail content, String errorMsg) {
 
     }
 
     @Override
-    public void showBehaviourPlayContent(boolean status, List<PlayContent> playList, String errorMsg) {
+    public void showBehaviourPlayContent(boolean status, List<PlayContentInfo> playList, String errorMsg) {
 
     }
 
@@ -225,17 +229,20 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
 
     }
 
+    @Override
+    public void onRequestStatus(int requestType, int errorCode) {
+
+    }
 
     @OnClick({R.id.ll_base_back, R.id.iv_title_right})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_back:
-                getActivity().finish();
+                pop();
                 break;
             case R.id.iv_title_right:
                 doConfirm();
                 break;
-
         }
     }
 

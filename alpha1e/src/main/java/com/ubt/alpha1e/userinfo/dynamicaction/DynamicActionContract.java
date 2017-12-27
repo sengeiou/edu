@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DynamicActionContract {
     interface View extends BaseView {
-        void setDynamicData(List<DynamicActionModel> list);
+        void setDynamicData(boolean status,int type,List<DynamicActionModel> list);
     }
 
     interface  Presenter extends BasePresenter<View> {

@@ -10,7 +10,7 @@ import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
 import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseLevelActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
@@ -93,7 +93,7 @@ public class AppManager {
                         || mActivity instanceof FeatureActivity
                         ||mActivity instanceof ActionTestActivity
                         ||mActivity instanceof ActionCourseActivity
-                        ||mActivity instanceof CourseLevelActivity
+                        ||mActivity instanceof CourseLevelOneActivity
                         ||mActivity instanceof CourseTwoActivity
                         ||mActivity instanceof CourseOneActivity
                         ) {

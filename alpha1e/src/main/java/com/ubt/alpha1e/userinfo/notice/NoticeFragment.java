@@ -8,12 +8,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.popup.EasyPopup;
 import com.ubt.alpha1e.base.popup.HorizontalGravity;
 import com.ubt.alpha1e.base.popup.VerticalGravity;
@@ -26,6 +32,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * MVPPlugin
@@ -39,6 +47,9 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     private static final String ARG_PARAM2 = "param2";
     @BindView(R.id.recyclerview_notice)
     RecyclerView mRecyclerviewNotice;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout mRefreshLayout;
+    Unbinder unbinder;
 
     private NoticeAdapter mNoticeAdapter;
     /**
@@ -121,6 +132,52 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
 
             }
         });
+
+        mRefreshLayout.setEnableAutoLoadmore(true);//开启自动加载功能（非必须）
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(final RefreshLayout refreshlayout) {
+                refreshlayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mNoticeAdapter.setNewData(getData());
+                        mRefreshLayout.finishRefresh();
+                        refreshlayout.resetNoMoreData();
+                    }
+                }, 1000);
+            }
+        });
+        mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(final RefreshLayout refreshlayout) {
+                refreshlayout.getLayout().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mNoticeAdapter.addData(getData());
+                        if (mNoticeAdapter.getItemCount() > 20) {
+                            ToastUtils.showShort("数据全部加载完毕");
+                            mRefreshLayout.finishLoadmoreWithNoMoreData();//将不会再次触发加载更多事件
+                        } else {
+                            mRefreshLayout.finishLoadmore();
+                        }
+                    }
+                }, 1000);
+            }
+        });
+
+        //触发自动刷新
+        mRefreshLayout.autoRefresh();
+    }
+
+    private List<NoticeModel> getData() {
+        List<NoticeModel> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            NoticeModel noticeModel = new NoticeModel();
+            noticeModel.setNoticeTitle("系统消息" + i);
+            noticeModel.setNoticeContent("测试数据测试数据测试数据测试数据测试数据");
+            list.add(noticeModel);
+        }
+        return list;
     }
 
     @Override
@@ -167,7 +224,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         long currentTime = Calendar.getInstance().getTimeInMillis();
         if (currentTime - lastClickTime > MIN_CLICK_DELAY_TIME) {
             lastClickTime = currentTime;
-            UbtLog.d("onItemLongClick","执行长按事件");
+            UbtLog.d("onItemLongClick", "执行长按事件");
             adapter.getViewByPosition(position, R.id.rl_root).setBackgroundColor(getActivity().getResources().getColor(R.color.background_delete_coor));
             UbtLog.d("onItemLongClick", "position==========" + position);
             if (null != mCirclePop) {
@@ -198,9 +255,23 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
                     mCirclePop.dismiss();
                 }
             });
-        }else{
-            UbtLog.d("onItemLongClick","没有执行长按事件");
+        } else {
+            UbtLog.d("onItemLongClick", "没有执行长按事件");
         }
         return false;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }

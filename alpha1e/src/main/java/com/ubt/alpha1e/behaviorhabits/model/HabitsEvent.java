@@ -1,22 +1,25 @@
 package com.ubt.alpha1e.behaviorhabits.model;
 
+import com.baoyz.pg.Parcelable;
 import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.utils.GsonImpl;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2017/12/18.
  */
-
-public class HabitsEvent extends BaseModel{
+@Parcelable
+public class HabitsEvent extends BaseModel implements Serializable {
 
     public String eventId;
     public String eventName;
     public String eventTime;
+    public String eventType;
     public String status;
     public String score;
 
@@ -74,6 +77,7 @@ public class HabitsEvent extends BaseModel{
                 "eventId=" + eventId +
                 ", eventName='" + eventName + '\'' +
                 ", eventTime='" + eventTime + '\'' +
+                ", eventType='" + eventType + '\'' +
                 ", status='" + status + '\'' +
                 ", score='" + score + '\'' +
                 '}';

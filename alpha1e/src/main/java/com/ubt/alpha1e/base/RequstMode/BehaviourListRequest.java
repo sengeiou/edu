@@ -11,6 +11,16 @@ public class BehaviourListRequest extends BaseRequest {
     String sex;
     String  grade;
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    String type;
+
     public String getSex() {
         return sex;
     }
