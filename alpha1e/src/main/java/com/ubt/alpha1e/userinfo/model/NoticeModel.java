@@ -10,40 +10,97 @@ package com.ubt.alpha1e.userinfo.model;
  */
 
 public class NoticeModel {
-    private String noticeId;
-    private String noticeTime;
-    private String noticeContent;
-    private String noticeTitle;
+    private int id;
 
-    public String getNoticeId() {
-        return noticeId;
+    private String userId;
+
+    private String content;
+
+    private String imageUrl;
+
+    private String type;
+
+    private String status;
+
+    private long createTime;
+
+    private long updateTime;
+
+    public int getId() {
+        return id;
     }
 
-    public void setNoticeId(String noticeId) {
-        this.noticeId = noticeId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getNoticeTime() {
-        return noticeTime;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setNoticeTime(String noticeTime) {
-        this.noticeTime = noticeTime;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getNoticeContent() {
-        return noticeContent;
+    public String getContent() {
+        return content;
     }
 
-    public void setNoticeContent(String noticeContent) {
-        this.noticeContent = noticeContent;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getNoticeTitle() {
-        return noticeTitle;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setNoticeTitle(String noticeTitle) {
-        this.noticeTitle = noticeTitle;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "NoticeModel{" +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
+                ", content='" + content + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", type='" + type + '\'' +
+                ", status='" + status + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime='" + updateTime + '\'' +
+                '}';
     }
 }

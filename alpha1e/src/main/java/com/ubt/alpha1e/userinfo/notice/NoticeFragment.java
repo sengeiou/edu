@@ -1,7 +1,9 @@
 package com.ubt.alpha1e.userinfo.notice;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -20,6 +23,7 @@ import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.base.popup.EasyPopup;
 import com.ubt.alpha1e.base.popup.HorizontalGravity;
 import com.ubt.alpha1e.base.popup.VerticalGravity;
@@ -40,7 +44,7 @@ import butterknife.Unbinder;
  * 邮箱 784787081@qq.com
  */
 
-public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticePresenter> implements NoticeContract.View, BaseQuickAdapter.OnItemLongClickListener {
+public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticePresenter> implements NoticeContract.View, BaseQuickAdapter.OnItemLongClickListener, BaseQuickAdapter.OnItemClickListener {
 
 
     private static final String ARG_PARAM1 = "param1";
@@ -50,7 +54,10 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout mRefreshLayout;
     Unbinder unbinder;
-
+    private TextView tvEmpty;
+    private TextView tvRetry;
+    private LinearLayout llError;
+    private ImageView ivStatu;
     private NoticeAdapter mNoticeAdapter;
     /**
      * 消息数据列表
@@ -62,6 +69,10 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     private String mParam1;
     private String mParam2;
 
+    private int page = 1;
+    private int offset = 8;
+    private int currentType;
+    private boolean isNoneFinishLoadMore;
 
     public NoticeFragment() {
     }
@@ -94,7 +105,6 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPresenter.getNoticeData(0);
 
     }
 
@@ -111,24 +121,18 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         mRecyclerviewNotice.setAdapter(mNoticeAdapter);
         mNoticeAdapter.bindToRecyclerView(mRecyclerviewNotice);
         mNoticeAdapter.setOnItemLongClickListener(this);
+        mNoticeAdapter.setOnItemClickListener(this);
         emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_empty, null);
-        String emptyMsg = "";
-        if (mParam1.equals("1")) {
-            emptyMsg = "你目前没有任何成就";
-        } else if (mParam1.equals("2")) {
-            emptyMsg = "你目前没有任何消息";
-        } else if (mParam1.equals("3")) {
-            emptyMsg = "你目前没有任何动态";
-        } else if (mParam1.equals("5")) {
-            emptyMsg = "你目前没有任何下载";
-        }
-        ((TextView) emptyView.findViewById(R.id.tv_no_data)).setText(emptyMsg);
+        emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_empty, null);
+        tvEmpty = (TextView) emptyView.findViewById(R.id.tv_no_data);
+        tvRetry = emptyView.findViewById(R.id.tv_retry);
+        llError = emptyView.findViewById(R.id.ll_error_layout);
+        ivStatu = emptyView.findViewById(R.id.iv_no_data);
 
-        ((ImageView) emptyView.findViewById(R.id.iv_no_data)).setImageResource(R.drawable.ic_setting_push_deafult);
         emptyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.getNoticeData(1);
+                mPresenter.getNoticeData(0, 1, offset);
 
             }
         });
@@ -137,31 +141,14 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(final RefreshLayout refreshlayout) {
-                refreshlayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mNoticeAdapter.setNewData(getData());
-                        mRefreshLayout.finishRefresh();
-                        refreshlayout.resetNoMoreData();
-                    }
-                }, 1000);
+                mPresenter.getNoticeData(0, 1, offset);
             }
         });
         mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {
-                refreshlayout.getLayout().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mNoticeAdapter.addData(getData());
-                        if (mNoticeAdapter.getItemCount() > 20) {
-                            ToastUtils.showShort("数据全部加载完毕");
-                            mRefreshLayout.finishLoadmoreWithNoMoreData();//将不会再次触发加载更多事件
-                        } else {
-                            mRefreshLayout.finishLoadmore();
-                        }
-                    }
-                }, 1000);
+                ++page;
+                mPresenter.getNoticeData(1, page, offset);
             }
         });
 
@@ -169,16 +156,6 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         mRefreshLayout.autoRefresh();
     }
 
-    private List<NoticeModel> getData() {
-        List<NoticeModel> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            NoticeModel noticeModel = new NoticeModel();
-            noticeModel.setNoticeTitle("系统消息" + i);
-            noticeModel.setNoticeContent("测试数据测试数据测试数据测试数据测试数据");
-            list.add(noticeModel);
-        }
-        return list;
-    }
 
     @Override
     protected void initControlListener() {
@@ -195,23 +172,6 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
 
     }
 
-
-    /**
-     * 设置返回的消息列表
-     *
-     * @param list
-     */
-    @Override
-    public void setNoticeData(List<NoticeModel> list) {
-        if (null != list) {
-            mNoticeModels.clear();
-            mNoticeModels.addAll(list);
-            mNoticeAdapter.notifyDataSetChanged();
-        }
-        if (null == mNoticeModels || mNoticeModels.size() == 0) {
-            mNoticeAdapter.setEmptyView(emptyView);
-        }
-    }
 
     EasyPopup mCirclePop = null;
     public static final int MIN_CLICK_DELAY_TIME = 1000;
@@ -251,7 +211,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
             tvDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mNoticeModels.remove(position);
+                    mPresenter.deleteNotice(mNoticeModels.get(position).getId());
                     mCirclePop.dismiss();
                 }
             });
@@ -273,5 +233,135 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void showLoading() {
+        LoadingDialog.show(getActivity());
+    }
+
+    @Override
+    public void dissLoding() {
+        LoadingDialog.dismiss(getActivity());
+    }
+
+    @Override
+    public void setNoticeData(boolean isSuccess, int type, List<NoticeModel> list) {
+        if (isSuccess) {
+            if (type == 0) {
+                mNoticeModels.clear();
+                mNoticeModels.addAll(list);
+            } else if (type == 1) {
+                mNoticeModels.addAll(list);
+            }
+            if (list.size() < 8) {
+                isNoneFinishLoadMore = true;
+            } else {
+                isNoneFinishLoadMore = false;
+            }
+        } else {
+            if (mNoticeModels.size() == 0) {//如果请求失败切列表数据为0，则显示错误页面
+                showStatuLayout(2);
+                ToastUtils.showShort("加载失败");
+            }
+        }
+        if (null == mNoticeModels || mNoticeModels.size() == 0) {//数据为空
+            showStatuLayout(1);
+        }
+        finishRefresh(type);
+    }
+
+    @Override
+    public void updateStatu(boolean isSuccess, int noticeId) {
+        if (isSuccess){
+            if (null!=mCallBackListener){
+                mCallBackListener.onChangeUnReadMessage();
+                UbtLog.d("Notice","updateStatu=="+isSuccess);
+            }
+        }
+    }
+
+    @Override
+    public void deleteNotice(boolean isSuccess, int noticeId) {
+        for (int i = 0; i < mNoticeModels.size(); i++) {
+            if (mNoticeModels.get(i).getId() == noticeId) {
+                mNoticeModels.remove(i);
+                break;
+            }
+        }
+        mNoticeAdapter.notifyDataSetChanged();
+    }
+
+
+    /**
+     * 结束刷新事件
+     */
+    private void finishRefresh(int type) {
+        if (type == 0) {
+            mRefreshLayout.finishRefresh();
+            if (isNoneFinishLoadMore) {
+                mRefreshLayout.finishLoadmoreWithNoMoreData();//将不会再次触发加载更多事件
+            }
+            mRefreshLayout.resetNoMoreData();
+        } else if (type == 1) {
+            if (isNoneFinishLoadMore) {
+                mRefreshLayout.finishLoadmoreWithNoMoreData();//将不会再次触发加载更多事件
+            } else {
+                mRefreshLayout.finishLoadmore();
+            }
+        }
+
+        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableLoadmore(true);
+        mNoticeAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 显示空View还是Error View 1表示Empty 2表示Error
+     *
+     * @param status
+     */
+    private void showStatuLayout(int status) {
+        if (status == 1) {
+            tvEmpty.setVisibility(View.VISIBLE);
+            llError.setVisibility(View.GONE);
+            ivStatu.setImageResource(R.drawable.ic_setting_action_deafult);
+            String emptyMsg = "";
+            if (mParam1.equals("1")) {
+                emptyMsg = "你目前没有任何成就";
+            } else if (mParam1.equals("2")) {
+                emptyMsg = "你目前没有任何消息";
+            } else if (mParam1.equals("3")) {
+                emptyMsg = "你目前没有任何动态";
+            } else if (mParam1.equals("5")) {
+                emptyMsg = "你目前没有任何下载";
+            }
+            tvEmpty.setText(emptyMsg);
+        } else if (status == 2) {
+            tvRetry.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
+            tvRetry.getPaint().setAntiAlias(true);//抗锯齿
+            tvEmpty.setVisibility(View.GONE);
+            llError.setVisibility(View.VISIBLE);
+            ivStatu.setImageResource(R.drawable.ic_loading_failed);
+            mRefreshLayout.setEnableRefresh(false);
+            mRefreshLayout.setEnableLoadmore(false);
+        }
+        mNoticeAdapter.setEmptyView(emptyView);
+    }
+
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        mPresenter.updateNoticeStatu(mNoticeModels.get(position).getId());
+    }
+    CallBackListener mCallBackListener;
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallBackListener = (CallBackListener) activity;
+    }
+
+    //设置用于修改文本的回调接口
+    public static interface CallBackListener{
+        public void onChangeUnReadMessage();
     }
 }
