@@ -63,4 +63,5 @@
 
     <string name="to_expand_hint">Expand</string>
     <string name="to_shrink_hint">Shrink</string>
+    <string name="retry_get"><b>点击重试</b></string>
 </resources>
