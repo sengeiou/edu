@@ -43,6 +43,15 @@ import butterknife.Unbinder;
  */
 
 public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsContract.View, BehaviorHabitsPresenter> implements BehaviorHabitsContract.View {
+    @Override
+    public void showBehaviourPlayContent(boolean status, ArrayList<PlayContentInfo> playList, String errorMsg) {
+
+    }
+
+    @Override
+    public void onUserPassword(String password) {
+
+    }
 
     private static final String TAG = PlayContentSelectFragment.class.getSimpleName();
 
@@ -214,21 +223,17 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
 
     }
 
-    @Override
-    public void showBehaviourPlayContent(boolean status, List<PlayContentInfo> playList, String errorMsg) {
 
-    }
-
-    @Override
-    public void showNetworkRequestError() {
-
-    }
 
     @Override
     public void onAlertSelectItem(int index, String language, int alertType) {
 
     }
 
+    @Override
+    public void onRequestStatus(int requestType, int errorCode) {
+
+    }
 
     @OnClick({R.id.ll_base_back, R.id.iv_title_right})
     public void onViewClicked(View view) {
@@ -239,7 +244,6 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
             case R.id.iv_title_right:
                 doConfirm();
                 break;
-
         }
     }
 

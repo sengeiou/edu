@@ -13,8 +13,8 @@ public class BehaviourSaveUpdateRequest extends BaseRequest {
     String eventId;
     String eventTime;
     List<String> contentIds;
-    String remindOne;
-    String remindTwo;
+    String remindFirst;
+    String remindSecond;
     String status;
 
     public String getType() {
@@ -36,20 +36,20 @@ public class BehaviourSaveUpdateRequest extends BaseRequest {
 
 
 
-    public String getRemindOne() {
-        return remindOne;
+    public String getRemindFirst() {
+        return remindFirst;
     }
 
-    public void setRemindOne(String remindOne) {
-        this.remindOne = remindOne;
+    public void setRemindFirst(String remindFirst) {
+        this.remindFirst = remindFirst;
     }
 
-    public String getRemindTwo() {
-        return remindTwo;
+    public String getRemindSecond() {
+        return remindSecond;
     }
 
-    public void setRemindTwo(String remindTwo) {
-        this.remindTwo = remindTwo;
+    public void setRemindSecond(String remindSecond) {
+        this.remindSecond= remindSecond;
     }
 
 
