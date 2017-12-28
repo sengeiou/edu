@@ -30,6 +30,7 @@ import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.UnbindConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.UpgradeOSDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
 import com.ubt.alpha1e.ui.helper.SendClientIdHelper;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -78,8 +79,6 @@ public class SendClientIdService extends Service {
 	};
 
     static Context mContext = null ;
-
-//	private SendClientIdService() {}
 
 	public static SendClientIdService getInstance(Context context){
 
@@ -145,14 +144,11 @@ public class SendClientIdService extends Service {
 				com.ubt.alpha1e.data.model.NetworkInfo networkInfo = ((AlphaApplication) SendClientIdService.this.getApplication()).getmCurrentNetworkInfo();
 				UbtLog.d(TAG,"机器人网络为：  "+ networkInfo.name);
 				gotoCheckIsBind();
-
 			}else {
 				UbtLog.d(TAG,"机器人网络为null  ");
 			}
 		}
-
 	}
-
 
 	public void gotoCheckIsBind(){
 		UbtLog.d(TAG,"gotoCheckIsBind  ");
@@ -162,7 +158,6 @@ public class SendClientIdService extends Service {
 			mHandler.sendEmptyMessage(CONNECT_WIFI);
 		}
 	}
-
 
 	void checkIsBind(){
 		String token = SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN, "");
@@ -177,7 +172,6 @@ public class SendClientIdService extends Service {
 		doRequestBind(url,checkIsBindRequest,CHECK_IS_BIND);
 
 	}
-
 
 	/**
 	 * 网络请求
@@ -211,6 +205,13 @@ public class SendClientIdService extends Service {
 						new TypeToken<BaseResponseModel<String>>(){}.getType());
 				switch (id){
 					case CHECK_IS_BIND:
+//						mHandler.postDelayed(new Runnable() {
+//							@Override
+//							public void run() {
+//								upgradeOS("1.2","增加行为习惯功能");
+//							}
+//						},10000);
+
 						UbtLog.d(TAG, "status:" + baseResponseModel.status);
 						if(!baseResponseModel.status){
 							SPUtils.getInstance().put(Constant.IS_TOAST_BINDED,false);
@@ -324,7 +325,6 @@ public class SendClientIdService extends Service {
 		}
 	}
 
-
 	@Override
 	public void onDestroy() {
 		UbtLog.d(TAG, "-onDestroy--");
@@ -333,7 +333,6 @@ public class SendClientIdService extends Service {
 			mContext.unregisterReceiver(mBroadCastReceiver);
 		}
 	}
-
 
 	public static void send(){
 		if(sendClientIdHelper!= null){
@@ -371,7 +370,6 @@ public class SendClientIdService extends Service {
 		doRequestBind(url,gotoBindRequest,ROBOT_GOTO_BIND);
 
 	}
-
 
 	//提示去绑定
 	public void adviceBind(){
@@ -497,5 +495,24 @@ public class SendClientIdService extends Service {
 					.show();
 	}
 
+	//固件有升级
+	public void upgradeOS(String version,String versionContent){
+		new UpgradeOSDialog(AppManager.getInstance().currentActivity()).builder()
+				.setTitle("固件升级")
+				.setMsg("你的机器人固件有更新版本啦。V"+version +"版本更新了如下内容："+versionContent)
+				.setCancelable(false)
+				.setPositiveButton("去升级", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						UbtLog.d(TAG, "去升级 ");
+					}
+				})
+				.setNegativeButton("暂不", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						UbtLog.d(TAG, "暂不 ");
+					}
+				}).show();
+	}
 
 }

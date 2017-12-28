@@ -388,6 +388,9 @@ public class AlphaApplication extends LoginApplication {
         cleanBluetoothConnectData();
 
         Activity mActivity = null;
+        if(mActivityList == null){
+            return;
+        }
         for (int i = 0; i < mActivityList.size(); i++) {
             try {
                 mActivity = mActivityList.get(i);
