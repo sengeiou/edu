@@ -55,5 +55,7 @@ public class BehaviorHabitsContract {
         void delayBehaviourEventAlert(String eventId, String delayTime);
         //从服务端获取密码
         void getUserPassword();
+        //设置密码
+        void doSetUserPassword(String password);
     }
 }

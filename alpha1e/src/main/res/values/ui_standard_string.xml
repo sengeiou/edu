@@ -994,12 +994,18 @@
     <string name="ui_habits_minute">分</string>
     <string name="ui_habits_coming_reminding">即将提醒</string>
     <string name="ui_habits_password_input_tip">请输入家长管理密码</string>
+    <string name="ui_habits_password_set_title">设置家长管理密码</string>
+    <string name="ui_habits_password_confirm_title">再次确认密码</string>
+    <string name="ui_habits_password_confirm_req">请输入确认密码</string>
+    <string name="ui_habits_password_difference_tip">两次密码输入不一致，请重新输入</string>
+    <string name="ui_habits_password_set_msg">在您进入管理中心时，将用密码确认您的身份</string>
     <string name="ui_habits_password_error_tip">密码错误，请重新输入</string>
     <string name="ui_habits_tip">提示</string>
     <string name="ui_habits_password_over_count">密码错误输入四次，是否需要找回密码？</string>
     <string name="ui_habits_password_input_again">重新输入</string>
     <string name="ui_habits_password_find_back">找回密码</string>
     <string name="ui_habits_minute_later">分钟后</string>
+    <string name="ui_habits_play_content_empty_tip">播放内容不能为空</string>
 
     <!--动作编辑课程 -->
     <string name="action_course_card1_1">1.了解时间轴</string>

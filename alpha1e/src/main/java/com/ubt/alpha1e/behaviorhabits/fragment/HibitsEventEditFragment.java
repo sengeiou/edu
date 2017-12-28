@@ -410,7 +410,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
                 mPresenter.showAlertDialog(getContext(), mRemindSecondIndex, Arrays.asList(mAlertArr), 2);
                 break;
             case R.id.rl_play_content_tip:
-                startForResult(PlayContentSelectFragment.newInstance(), Constant.PLAY_CONTENT_SELECT_REQUEST_CODE);
+                startForResult(PlayContentSelectFragment.newInstance(originEventDetail), Constant.PLAY_CONTENT_SELECT_REQUEST_CODE);
                 break;
         }
     }
