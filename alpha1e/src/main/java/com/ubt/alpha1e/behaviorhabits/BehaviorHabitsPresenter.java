@@ -18,12 +18,14 @@ import com.ubt.alpha1e.base.RequstMode.BehaviourDelayAlertRequest;
 import com.ubt.alpha1e.base.RequstMode.BehaviourEventRequest;
 import com.ubt.alpha1e.base.RequstMode.BehaviourListRequest;
 import com.ubt.alpha1e.base.RequstMode.BehaviourSaveUpdateRequest;
+import com.ubt.alpha1e.base.RequstMode.SetUserPasswordRequest;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
@@ -54,6 +56,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
     public static final int GET_BEHAVIOURDELAYALERT_CMD=6;
     public static final int GET_BEHAVIOURPARENTEVENTLIST_CMD=7;
     public static final int GET_BEHAVIOUERGETUSERPASSWORD_CMD=8;
+    public static final int SET_USER_PASSWORD = 9;
     public static final int NETWORK_ERROR=1000;
     public static final int NETWORK_SUCCESS=2000;
     public static final int NETWORK_SERVER_EXCEPTION=3000;
@@ -176,7 +179,16 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
         }
     }
 
+    @Override
+    public void doSetUserPassword(String password) {
 
+        SetUserPasswordRequest setUserPasswordRequest = new SetUserPasswordRequest();
+        setUserPasswordRequest.setPassword(password);
+
+        String url = HttpEntity.SET_USER_PASSWORD;
+        doRequestFromWeb(url,setUserPasswordRequest,SET_USER_PASSWORD);
+
+    }
 
     /**
      * 请求网络操作
@@ -204,6 +216,9 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                             break;
                         case GET_BEHAVIOURDELAYALERT_CMD:
                             mView.onRequestStatus(GET_BEHAVIOURDELAYALERT_CMD, NETWORK_ERROR);
+                            break;
+                        case SET_USER_PASSWORD:
+                            mView.onRequestStatus(SET_USER_PASSWORD, NETWORK_ERROR);
                             break;
                         default:
                             mView.onRequestStatus(id, NETWORK_ERROR);
@@ -244,6 +259,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                         case GET_BEHAVIOURCONTROL_CMD:
                         case GET_BEHAVIOURSAVEUPDATE_CMD:
                         case GET_BEHAVIOURDELAYALERT_CMD:
+                        case SET_USER_PASSWORD:
                             if(mbaseResponseModel.status) {
                                 mView.onRequestStatus(id, NETWORK_SUCCESS);
                             }else {

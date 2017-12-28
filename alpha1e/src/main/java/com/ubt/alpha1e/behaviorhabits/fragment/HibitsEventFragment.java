@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.behaviorhabits.fragment;
 
 
+import android.app.Dialog;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +9,7 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,9 @@ import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.custom.CircleBar;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.InputPasswordDialog;
+import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
+import com.ubt.alpha1e.ui.dialog.SetPasswordDialog;
+import com.ubt.alpha1e.userinfo.psdmanage.PsdManageActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.text.SimpleDateFormat;
@@ -75,6 +80,9 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
     public HabitsEventRecyclerAdapter mAdapter;
     private List<HabitsEvent> mHabitsEventInfoDatas = null;
+    private String mUserPassword = null;
+
+    protected Dialog mCoonLoadingDia;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -106,6 +114,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     @Override
     protected void initUI() {
         UbtLog.d(TAG, "--initUI--");
+        mCoonLoadingDia = SLoadingDialog.getInstance(getContext());
         tvBaseTitleName.setText(getStringRes("ui_habits_alert_event"));
         ivTitleRight.setBackgroundResource(R.drawable.icon_habits_parentscentral);
         ivTitleRight.setVisibility(View.VISIBLE);
@@ -118,6 +127,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
         mHabitsEventInfoDatas = new ArrayList<>();
         initRecyclerViews();
 
+        mPresenter.getUserPassword();
         mPresenter.getBehaviourList("1","1");
     }
 
@@ -216,7 +226,8 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
     @Override
     public void onUserPassword(String password) {
-
+        mUserPassword = password;
+        UbtLog.d(TAG,"mUserPassword = " + mUserPassword);
     }
 
 
@@ -228,7 +239,28 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
     @Override
     public void onRequestStatus(int requestType, int errorCode) {
+        if(requestType == mPresenter.SET_USER_PASSWORD){
+            if(errorCode == mPresenter.NETWORK_SUCCESS){
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCoonLoadingDia.cancel();
+                        ToastUtils.showShort(getStringRes("ui_setting_password_modify_success"));
+                    }
+                });
+            }else {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mUserPassword = "";
+                        mCoonLoadingDia.cancel();
+                        ToastUtils.showShort(getStringRes("ui_setting_password_modify_fail"));
+                    }
+                });
+            }
+        }else {
 
+        }
     }
 
     @OnClick({R.id.ll_base_back, R.id.iv_title_right})
@@ -247,23 +279,38 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
      * 进入家长管理中心
      */
     private void enterParentManageCenter() {
+        if(TextUtils.isEmpty(mUserPassword)){
+            new SetPasswordDialog(getContext()).builder()
+                    .setCancelable(true)
+                    .setCallbackListener(new SetPasswordDialog.ISetPasswordListener() {
+                        @Override
+                        public void onSetPassword(String password) {
+                            mUserPassword = password;
+                            mCoonLoadingDia.show();
+                            mPresenter.doSetUserPassword(password);
+                        }
+                    })
+                    .show();
 
-        new InputPasswordDialog(getContext()).builder()
-                .setMsg(getStringRes("ui_habits_password_input_tip"))
-                .setCancelable(true)
-                .setPassword("123456")
-                .setCallbackListener(new InputPasswordDialog.IInputPasswordListener() {
-                    @Override
-                    public void onCorrectPassword() {
-                        startForResult(ParentManageCenterFragment.newInstance(), 0);
-                    }
+        }else {
+            new InputPasswordDialog(getContext()).builder()
+                    .setMsg(getStringRes("ui_habits_password_input_tip"))
+                    .setCancelable(true)
+                    .setPassword(mUserPassword)
+                    .setCallbackListener(new InputPasswordDialog.IInputPasswordListener() {
+                        @Override
+                        public void onCorrectPassword() {
+                            startForResult(ParentManageCenterFragment.newInstance(), 0);
+                        }
 
-                    @Override
-                    public void onFindPassword() {
+                        @Override
+                        public void onFindPassword() {
+                            PsdManageActivity.LaunchActivity(getContext(),true);
+                        }
+                    })
+                    .show();
 
-                    }
-                })
-                .show();
+        }
 
     }
 
