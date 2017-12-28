@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.text.TextUtils;
 
 import com.ubt.alpha1e.AlphaApplication;
-import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.business.ActionsDownLoadManagerListener;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionInfo;
@@ -277,7 +276,7 @@ public class DownLoadActionManager {
      * @param actionInfo
      */
     public void playAction(boolean isFromDetail, DynamicActionModel actionInfo) {
-        doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(Constant.COURSE_ACTION_PATH + actionInfo.getActionName() + ".hts"));
+        doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(FileTools.actions_download_robot_path + actionInfo.getActionOriginalId() + ".hts"));
         if (isFromDetail) {
             for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
                 if (null != mActionListener) {
@@ -304,7 +303,7 @@ public class DownLoadActionManager {
             mRobotDownList.add(0, c_info);
         }
         String params = BluetoothParamUtil.paramsToJsonString(new String[]{dynamicActionModel.getActionId() + "",
-                dynamicActionModel.getActionName(), dynamicActionModel.getDownloadUrl()}, ConstValue.DV_DO_DOWNLOAD_ACTION);
+                dynamicActionModel.getActionOriginalId(), dynamicActionModel.getActionUrl()}, ConstValue.DV_DO_DOWNLOAD_ACTION);
 
         /*String params = BluetoothParamUtil.paramsToJsonString(new String[]{ actionInfo.actionId + "",
                 actionInfo.actionName,"https://services.ubtrobot.com/action/16/3/蚂蚁与鸽子.zip" }, ConstValue.DV_DO_DOWNLOAD_ACTION);*/

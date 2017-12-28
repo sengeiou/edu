@@ -76,6 +76,15 @@ public class HttpEntity {
      */
     public static final String MESSAGE_DELETE = BASIC_UBX_USERCENTER + "/message/deleteByMessageId";
     /**
+     * 获取原创列表
+     */
+    public static final String ACTION_DYNAMIC_LIST = BASIC_UBX_USERCENTER + "/original/listByPage";
+    /**
+     * 删除动作ByID
+     */
+    public static final String ACTION_DYNAMIC_DELETE = BASIC_UBX_USERCENTER + "/original/deleteByActionId";
+
+    /**
      * 保存blockly编程项目
      */
     public static final String SAVE_USER_PROGRAM = BASIC_UBX_SYS + "saveUserProgram";

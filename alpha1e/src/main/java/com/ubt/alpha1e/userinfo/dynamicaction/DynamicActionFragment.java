@@ -2,6 +2,7 @@ package com.ubt.alpha1e.userinfo.dynamicaction;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +25,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.model.DownloadProgressInfo;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
@@ -35,6 +37,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.ubt.alpha1e.userinfo.dynamicaction.ActionDetailActivity.dynamicModel;
 
 
 /**
@@ -74,7 +78,9 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout mRefreshLayout;
     Unbinder unbinder;
-    private List<DynamicActionModel> mDynamicActionModels = new ArrayList<>();
+    private List<DynamicActionModel> mDynamicActionModels = new ArrayList<>();//原创列表
+    private List<String> robotActionList = new ArrayList<>();//机器人下载列表
+
     private View emptyView;
     private TextView tvEmpty;
     private TextView tvRetry;
@@ -86,6 +92,9 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
 
     private int currentType = 0;//上拉下拉类型
     private boolean isNoneFinishLoadMore = false;//是否可以上拉加载 true不能上拉 false 可以上拉
+
+    private int page = 0;
+    private int offset = 8;
 
     public DynamicActionFragment() {
     }
@@ -142,7 +151,11 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         tvRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.getDynamicData(0);
+                page = 0;
+                mPresenter.getDynamicData(0, page, offset);
+                UbtLog.d("tvRetry", "重试一次");
+                LoadingDialog.show(getActivity());
+
             }
         });
         //触发自动刷新
@@ -151,14 +164,16 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(final RefreshLayout refreshlayout) {
-                mPresenter.getDynamicData(0);
+                page = 0;
+                mPresenter.getDynamicData(0, page, offset);
 
             }
         });
         mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {
-                mPresenter.getDynamicData(1);
+                ++page;
+                mPresenter.getDynamicData(1, page, offset);
             }
         });
 
@@ -200,6 +215,12 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
                 ToastUtils.showShort("加载失败");
             }
         }
+        LoadingDialog.dismiss(getActivity());
+    }
+
+    @Override
+    public void deleteActionResult(boolean isSuccess) {
+
     }
 
     /**
@@ -221,10 +242,11 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             } else {
                 isNoneFinishLoadMore = false;
             }
-            if (isBulueToothConnected()) {//蓝牙连接成功则从机器人获取列表动作
+            if (isBulueToothConnected() && type == 0) {//蓝牙连接成功则从机器人获取列表动作
                 DownLoadActionManager.getInstance(getActivity()).getRobotAction();
                 mHandler.sendEmptyMessageDelayed(HANDLE_GET_ROBOTACTIONLIST_TIMEOUT, 3000);
             } else {
+                mPresenter.praseGetRobotData(getActivity(), robotActionList, mDynamicActionModels);
                 finishRefresh();
             }
 
@@ -252,6 +274,8 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             ivStatu.setImageResource(R.drawable.ic_loading_failed);
             mRefreshLayout.setEnableRefresh(false);
             mRefreshLayout.setEnableLoadmore(false);
+            mRefreshLayout.finishRefresh();
+            mRefreshLayout.finishLoadmore();
         }
         mDynamicActionAdapter.setEmptyView(emptyView);
     }
@@ -313,7 +337,38 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
      */
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        ActionDetailActivity.launch(getActivity(), mDynamicActionModels.get(position));
+        // ActionDetailActivity.launch(getActivity(), mDynamicActionModels.get(position));
+        Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
+        intent.putExtra(dynamicModel, mDynamicActionModels.get(position));
+        startActivityForResult(intent, 1);
+    }
+
+    /**
+     * 详情页删除actionId回调
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UbtLog.d(TAG, "onActivityResult=======================");
+        if (requestCode == 1) {
+            if (resultCode == ActionDetailActivity.REQUEST_CODE) {
+                boolean isDelete = data.getBooleanExtra(ActionDetailActivity.DELETE_RESULT, false);
+                int actionId = data.getIntExtra(ActionDetailActivity.DELETE_ACTIONID, 0);
+                if (isDelete && actionId != 0) {
+                    for (int i = 0; i < mDynamicActionModels.size(); i++) {
+                        if (mDynamicActionModels.get(i).getActionId() == actionId) {
+                            mDynamicActionModels.remove(i);
+                            break;
+                        }
+                    }
+                    mDynamicActionAdapter.notifyDataSetChanged();
+                }
+            }
+        }
     }
 
     /**
@@ -361,6 +416,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     @Override
     public void getRobotActionLists(List<String> list) {
         UbtLog.d(TAG, "获取机器人列表==" + list.toString());
+        this.robotActionList = list;
         mHandler.removeMessages(HANDLE_GET_ROBOTACTIONLIST_TIMEOUT);
         mPresenter.praseGetRobotData(getActivity(), list, mDynamicActionModels);
         finishRefresh();

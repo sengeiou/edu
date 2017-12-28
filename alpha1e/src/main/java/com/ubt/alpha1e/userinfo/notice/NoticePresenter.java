@@ -22,17 +22,17 @@ import okhttp3.Call;
  */
 
 public class NoticePresenter extends BasePresenterImpl<NoticeContract.View> implements NoticeContract.Presenter {
-
+    private static String TAG = NoticePresenter.class.getSimpleName();
 
     @Override
     public void getNoticeData(final int type, int page, int offset) {
         GetMessageListRequest messageListRequest = new GetMessageListRequest();
-        messageListRequest.setLimit(offset);
         messageListRequest.setOffset(page);
+        messageListRequest.setLimit(offset);
         OkHttpClientUtils.getJsonByPostRequest(HttpEntity.MESSAGE_GET_LIST, messageListRequest, 0).execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                UbtLog.d("getLoopData", "onError:" + e.getMessage());
+                UbtLog.d(TAG, " getNoticeData onError:" + e.getMessage());
                 if (mView != null) {
                     mView.setNoticeData(false, type, null);
                 }
@@ -40,14 +40,14 @@ public class NoticePresenter extends BasePresenterImpl<NoticeContract.View> impl
 
             @Override
             public void onResponse(String response, int id) {
-                UbtLog.d("getLoopData", "getUser__response==" + response);
+                UbtLog.d(TAG, "getNoticeData==" + response);
 
                 BaseResponseModel<List<NoticeModel>> baseResponseModel = GsonImpl.get().toObject(response,
                         new TypeToken<BaseResponseModel<List<NoticeModel>>>() {
                         }.getType());
                 if (baseResponseModel.status) {
                     if (mView != null) {
-                        UbtLog.d("getLoopData", "baseResponseModel.models==" + baseResponseModel.models);
+                        UbtLog.d(TAG, "getNoticeData.models==" + baseResponseModel.models);
                         mView.setNoticeData(true, type, baseResponseModel.models);
                     }
                 } else {
@@ -71,7 +71,7 @@ public class NoticePresenter extends BasePresenterImpl<NoticeContract.View> impl
         OkHttpClientUtils.getJsonByPostRequest(HttpEntity.MESSAGE_UPDATE_STATU, messageListRequest, 0).execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                UbtLog.d("getLoopData", "onError:" + e.getMessage());
+                UbtLog.d(TAG, "updateNoticeStatu onError:" + e.getMessage());
                 if (mView != null) {
                     mView.updateStatu(false, noticeId);
                 }
@@ -79,14 +79,14 @@ public class NoticePresenter extends BasePresenterImpl<NoticeContract.View> impl
 
             @Override
             public void onResponse(String response, int id) {
-                UbtLog.d("getLoopData", "getUser__response==" + response);
+                UbtLog.d(TAG, "updateNoticeStatu==" + response);
 
                 BaseResponseModel<List<NoticeModel>> baseResponseModel = GsonImpl.get().toObject(response,
                         new TypeToken<BaseResponseModel<List<NoticeModel>>>() {
                         }.getType());
                 if (baseResponseModel.status) {
                     if (mView != null) {
-                        UbtLog.d("getLoopData", "baseResponseModel.models==" + baseResponseModel.models);
+                        UbtLog.d(TAG, "updateNoticeStatu.models==" + baseResponseModel.models);
                         mView.updateStatu(true, noticeId);
                     }
                 } else {
@@ -100,12 +100,15 @@ public class NoticePresenter extends BasePresenterImpl<NoticeContract.View> impl
 
     @Override
     public void deleteNotice(final int noticeId) {
+        if (mView != null) {
+            mView.showLoading();
+        }
         UpdateMessageRequest messageListRequest = new UpdateMessageRequest();
         messageListRequest.setMessageId(noticeId);
         OkHttpClientUtils.getJsonByPostRequest(HttpEntity.MESSAGE_DELETE, messageListRequest, 0).execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                UbtLog.d("getLoopData", "onError:" + e.getMessage());
+                UbtLog.d(TAG, "onError:" + e.getMessage());
                 if (mView != null) {
                     mView.deleteNotice(false, noticeId);
                 }
@@ -113,14 +116,14 @@ public class NoticePresenter extends BasePresenterImpl<NoticeContract.View> impl
 
             @Override
             public void onResponse(String response, int id) {
-                UbtLog.d("getLoopData", "getUser__response==" + response);
+                UbtLog.d(TAG, "deleteNotice==" + response);
 
                 BaseResponseModel<List<NoticeModel>> baseResponseModel = GsonImpl.get().toObject(response,
                         new TypeToken<BaseResponseModel<List<NoticeModel>>>() {
                         }.getType());
                 if (baseResponseModel.status) {
                     if (mView != null) {
-                        UbtLog.d("getLoopData", "baseResponseModel.models==" + baseResponseModel.models);
+                        UbtLog.d(TAG, "deleteNotice.models==" + baseResponseModel.models);
                         mView.deleteNotice(true, noticeId);
                     }
                 } else {

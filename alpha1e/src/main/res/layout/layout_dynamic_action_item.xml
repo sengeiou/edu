@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
+
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_margin="15dp"
               android:orientation="horizontal">
 
 
-    <ImageView
+    <com.ubt.alpha1e.utils.RoundAngleImageView
         android:id="@+id/iv_action_background"
         android:layout_width="86dp"
         android:layout_height="86dp"
-        android:src="@drawable/img_action_background"/>
+        android:src="@drawable/action_sport_1b"
+        />
 
 
     <LinearLayout
@@ -25,6 +28,8 @@
             android:id="@+id/tv_dynamic_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:drawableRight="@drawable/tab_action"
             android:text="机械舞"
             android:textColor="@color/tv_center_color"
             android:textSize="16sp"
@@ -35,7 +40,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="时长:03:30"
             android:textColor="@color/tv_notice_title"
             android:textSize="12sp"
             />

@@ -233,7 +233,9 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
     private void showPlayArrow1(boolean flag) {
         ivPlay.setEnabled(true);
         ivBack.setEnabled(false);
+        ivActionLibMore.setEnabled(false);
         ivAddFrame.setEnabled(false);
+        ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
         if (flag) {
             playArrow.setVisibility(View.VISIBLE);
             playArrow.setImageResource(R.drawable.animal_left_arrow);

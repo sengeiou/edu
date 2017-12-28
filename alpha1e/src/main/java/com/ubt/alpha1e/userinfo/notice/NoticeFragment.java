@@ -22,7 +22,6 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.base.popup.EasyPopup;
 import com.ubt.alpha1e.base.popup.HorizontalGravity;
@@ -69,7 +68,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     private String mParam1;
     private String mParam2;
 
-    private int page = 1;
+    private int page = 0;
     private int offset = 8;
     private int currentType;
     private boolean isNoneFinishLoadMore;
@@ -128,20 +127,20 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         tvRetry = emptyView.findViewById(R.id.tv_retry);
         llError = emptyView.findViewById(R.id.ll_error_layout);
         ivStatu = emptyView.findViewById(R.id.iv_no_data);
-
-        emptyView.setOnClickListener(new View.OnClickListener() {
+        tvRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPresenter.getNoticeData(0, 1, offset);
-
+                page = 0;
+                mPresenter.getNoticeData(0, page, offset);
+                showLoading();
             }
         });
-
         mRefreshLayout.setEnableAutoLoadmore(true);//开启自动加载功能（非必须）
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(final RefreshLayout refreshlayout) {
-                mPresenter.getNoticeData(0, 1, offset);
+                page = 0;
+                mPresenter.getNoticeData(0, page, offset);
             }
         });
         mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
@@ -245,76 +244,105 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         LoadingDialog.dismiss(getActivity());
     }
 
+    /**
+     * 获取消息列表数据
+     *
+     * @param isSuccess
+     * @param type
+     * @param list
+     */
     @Override
     public void setNoticeData(boolean isSuccess, int type, List<NoticeModel> list) {
         if (isSuccess) {
-            if (type == 0) {
+            mRefreshLayout.setEnableRefresh(true);
+            mRefreshLayout.setEnableLoadmore(true);
+            if (type == 0) {//下拉刷新
                 mNoticeModels.clear();
                 mNoticeModels.addAll(list);
-            } else if (type == 1) {
+                mRefreshLayout.finishRefresh();
+                if (list.size() < 8) {
+                    mRefreshLayout.setLoadmoreFinished(true);//将不会再次触发加载更多事件
+                } else {
+                    mRefreshLayout.resetNoMoreData();
+                }
+            } else if (type == 1) {//上拉加载
                 mNoticeModels.addAll(list);
+                if (list.size() < 8) {
+                    mRefreshLayout.finishLoadmoreWithNoMoreData();//将不会再次触发加载更多事件
+                } else {
+                    mRefreshLayout.finishLoadmore();
+                }
             }
-            if (list.size() < 8) {
-                isNoneFinishLoadMore = true;
-            } else {
-                isNoneFinishLoadMore = false;
+
+            if (null == mNoticeModels || mNoticeModels.size() == 0) {//数据为空
+                showStatuLayout(1);
             }
         } else {
             if (mNoticeModels.size() == 0) {//如果请求失败切列表数据为0，则显示错误页面
                 showStatuLayout(2);
-                ToastUtils.showShort("加载失败");
+                mRefreshLayout.finishRefresh();
+                mRefreshLayout.finishLoadmore();
+                mRefreshLayout.setEnableRefresh(false);
+                mRefreshLayout.setEnableLoadmore(false);
             }
         }
-        if (null == mNoticeModels || mNoticeModels.size() == 0) {//数据为空
-            showStatuLayout(1);
-        }
-        finishRefresh(type);
+        dissLoding();
     }
-
-    @Override
-    public void updateStatu(boolean isSuccess, int noticeId) {
-        if (isSuccess){
-            if (null!=mCallBackListener){
-                mCallBackListener.onChangeUnReadMessage();
-                UbtLog.d("Notice","updateStatu=="+isSuccess);
-            }
-        }
-    }
-
-    @Override
-    public void deleteNotice(boolean isSuccess, int noticeId) {
-        for (int i = 0; i < mNoticeModels.size(); i++) {
-            if (mNoticeModels.get(i).getId() == noticeId) {
-                mNoticeModels.remove(i);
-                break;
-            }
-        }
-        mNoticeAdapter.notifyDataSetChanged();
-    }
-
 
     /**
-     * 结束刷新事件
+     * 更新消息状态
+     *
+     * @param isSuccess
+     * @param noticeId
      */
-    private void finishRefresh(int type) {
-        if (type == 0) {
-            mRefreshLayout.finishRefresh();
-            if (isNoneFinishLoadMore) {
-                mRefreshLayout.finishLoadmoreWithNoMoreData();//将不会再次触发加载更多事件
+    @Override
+    public void updateStatu(boolean isSuccess, int noticeId) {
+        if (isSuccess) {
+            for (int i = 0; i < mNoticeModels.size(); i++) {
+                if (mNoticeModels.get(i).getId() == noticeId) {
+                    mNoticeModels.get(i).setStatus("1");
+                    break;
+                }
             }
-            mRefreshLayout.resetNoMoreData();
-        } else if (type == 1) {
-            if (isNoneFinishLoadMore) {
-                mRefreshLayout.finishLoadmoreWithNoMoreData();//将不会再次触发加载更多事件
-            } else {
-                mRefreshLayout.finishLoadmore();
+            mNoticeAdapter.notifyDataSetChanged();
+            if (null != mCallBackListener) {
+                mCallBackListener.onChangeUnReadMessage();
+                UbtLog.d("Notice", "updateStatu==" + isSuccess);
             }
         }
-
-        mRefreshLayout.setEnableRefresh(true);
-        mRefreshLayout.setEnableLoadmore(true);
-        mNoticeAdapter.notifyDataSetChanged();
     }
+
+    /**
+     * 删除消息返回结果
+     *
+     * @param isSuccess
+     * @param noticeId
+     */
+    @Override
+    public void deleteNotice(boolean isSuccess, int noticeId) {
+        dissLoding();
+        if (isSuccess) {
+            for (int i = 0; i < mNoticeModels.size(); i++) {
+                if (mNoticeModels.get(i).getId() == noticeId) {
+                    if (mNoticeModels.get(i).getStatus().equals("0")) {
+                        if (null != mCallBackListener) {
+                            mCallBackListener.onChangeUnReadMessage();
+                            UbtLog.d("Notice", "updateStatu==" + isSuccess);
+                        }
+                    }
+                    mNoticeModels.remove(i);
+                    break;
+                }
+
+            }
+            mNoticeAdapter.notifyDataSetChanged();
+            if (mNoticeModels.size() == 0) {
+                showStatuLayout(1);
+            }
+
+        }
+    }
+
 
     /**
      * 显示空View还是Error View 1表示Empty 2表示Error
@@ -353,7 +381,9 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         mPresenter.updateNoticeStatu(mNoticeModels.get(position).getId());
     }
+
     CallBackListener mCallBackListener;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -361,7 +391,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     }
 
     //设置用于修改文本的回调接口
-    public static interface CallBackListener{
+    public static interface CallBackListener {
         public void onChangeUnReadMessage();
     }
 }

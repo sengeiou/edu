@@ -201,7 +201,9 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        mView.updateUserModelFailed("用户名更新失败");
+                        if (null != mView) {
+                            mView.updateUserModelFailed("用户名更新失败");
+                        }
                     }
 
                     @Override
@@ -226,10 +228,14 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                                 mView.updateUserModelSuccess(baseResponseModel.models);
                             }
                         } else {
-                            if(baseResponseModel.info.equals("11300")){
-                                mView.updateUserModelFailed("不能输入非法字符");
-                            }else{
-                                mView.updateUserModelFailed("更新失败");
+                            if (baseResponseModel.info.equals("11300")) {
+                                if (null != mView) {
+                                    mView.updateUserModelFailed("不能输入非法字符");
+                                }
+                            } else {
+                                if (null != mView) {
+                                    mView.updateUserModelFailed("更新失败");
+                                }
                             }
                         }
                     }

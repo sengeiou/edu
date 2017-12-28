@@ -27,8 +27,7 @@
         android:layout_toRightOf="@+id/tv_item_name"
         android:background="@drawable/message_unread_selector"
         android:gravity="center"
-        android:text="10"
-        android:visibility="gone"
+         android:visibility="gone"
         android:textColor="#FFFFFF"
         android:textSize="10dp"/>
 
