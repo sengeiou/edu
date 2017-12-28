@@ -208,7 +208,7 @@ public class SendClientIdService extends Service {
 //						mHandler.postDelayed(new Runnable() {
 //							@Override
 //							public void run() {
-//								upgradeOS("1.2","增加行为习惯功能");
+//								upgradeOSDialog("1.2","\n1.增加行为习惯功能 \n2.增加行为习惯功能\n3.增加行为习惯功能\n4.增加行为习惯功能\n5.增加行为习惯功能\n6.增加行为习惯功能\n6.增加行为习惯功能");
 //							}
 //						},10000);
 
@@ -218,7 +218,7 @@ public class SendClientIdService extends Service {
 							return;
 						}
 						UbtLog.d(TAG, "info:" + baseResponseModel.info);
-						UbtLog.d(TAG, "models:" + baseResponseModel.models.toString());
+						UbtLog.d(TAG, "models:" + baseResponseModel.models);
 						String state = baseResponseModel.models;
 						if(state == null){
 							SPUtils.getInstance().put(Constant.IS_TOAST_BINDED,false);
@@ -496,7 +496,7 @@ public class SendClientIdService extends Service {
 	}
 
 	//固件有升级
-	public void upgradeOS(String version,String versionContent){
+	public void upgradeOSDialog(String version,String versionContent){
 		new UpgradeOSDialog(AppManager.getInstance().currentActivity()).builder()
 				.setTitle("固件升级")
 				.setMsg("你的机器人固件有更新版本啦。V"+version +"版本更新了如下内容："+versionContent)
@@ -505,6 +505,7 @@ public class SendClientIdService extends Service {
 					@Override
 					public void onClick(View view) {
 						UbtLog.d(TAG, "去升级 ");
+						sendCmdUpgradeDialog();
 					}
 				})
 				.setNegativeButton("暂不", new View.OnClickListener() {
@@ -513,6 +514,33 @@ public class SendClientIdService extends Service {
 						UbtLog.d(TAG, "暂不 ");
 					}
 				}).show();
+	}
+
+	//确认升级对话框
+	public void sendCmdUpgradeDialog(){
+		new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+				.setTitle("提示")
+				.setMsg("开始升级后就不能使用其它功能！")
+				.setCancelable(false)
+				.setPositiveButton("升级", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						UbtLog.d(TAG, "升级 ");
+						sendCmdUpgrade();
+					}
+				})
+				.setNegativeButton("暂不", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						UbtLog.d(TAG, "暂不 ");
+					}
+				}).show();
+	}
+
+	public void sendCmdUpgrade(){
+		if(sendClientIdHelper!= null){
+			sendClientIdHelper.startUpgrade();
+		}
 	}
 
 }

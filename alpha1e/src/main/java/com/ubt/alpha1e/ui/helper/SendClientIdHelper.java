@@ -133,6 +133,13 @@ public class SendClientIdHelper extends BaseHelper {
 
     }
 
+    //升级命令
+    public void startUpgrade() {
+        UbtLog.d(TAG,"发送 startUpgrade  ");
+//        doSendComm(ConstValue.DV_PRODUCT_AND_DSN, null);
+
+    }
+
     //获取机器人序列号
     public void sendCmdReadSN() {
         UbtLog.d(TAG,"发送 给mac：  ");
