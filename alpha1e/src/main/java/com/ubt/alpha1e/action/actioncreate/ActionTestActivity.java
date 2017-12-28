@@ -21,6 +21,8 @@ import static com.ubt.alpha1e.base.Constant.SP_GUIDE_STEP;
 
 public class ActionTestActivity extends BaseActivity implements IEditActionUI, BaseActionEditLayout.OnSaveSucessListener, ActionsEditHelper.PlayCompleteListener {
 
+    private static String TAG = "ActionTestActivity";
+
     ActionEditsStandard mActionEdit;
 
     private BaseHelper mHelper;
@@ -74,11 +76,18 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
 
     @Override
     protected void onStop() {
+        UbtLog.d(TAG, "onStop");
         super.onStop();
         if(actionGuideView != null){
             actionGuideView.closeAppGuideView();
             actionGuideView = null;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        UbtLog.d(TAG, "onDestroy");
     }
 
     @Override
@@ -158,6 +167,9 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
 
 
         if (requestCode == ActionsEditHelper.SaveActionReq) {
+            if(mHelper != null){
+                ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x04);
+            }
 
             if(data == null){
                 return;
