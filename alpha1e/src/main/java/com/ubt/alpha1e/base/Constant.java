@@ -98,4 +98,10 @@ public class Constant {
      * Block跳转蓝牙连接页面标志
      */
     public final static String BLUETOOTH_REQUEST = "bluetooth_request";
+
+    /**
+     * 上传服务器失败时保存当前的课程进度
+     */
+    public final static String SP_CURRENT_BLOCK_COURSE_ID = "currentCourseId";
+
 }

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +17,7 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -257,6 +260,38 @@ public class BlocklyVideoPlayer extends StandardGSYVideoPlayer {
         return sampleVideo;
     }
 
+
+    @Override
+    public void onAutoCompletion() {
+        UbtLog.d(TAG, "onAutoCompletion");
+        super.onAutoCompletion();
+    }
+
+    @Override
+    public void onCompletion() {
+        UbtLog.d(TAG, "onCompletion");
+        super.onCompletion();
+    }
+
+    @Override
+    public void onSeekComplete() {
+        UbtLog.d(TAG, "onSeekComplete");
+        super.onSeekComplete();
+    }
+
+    @Override
+    public void onVideoResume() {
+        UbtLog.d(TAG, "onVideoResume");
+        super.onVideoResume();
+    }
+
+    @Override
+    public void onVideoPause() {
+        UbtLog.d(TAG, "onVideoPause");
+        super.onVideoPause();
+    }
+
+
     /**
      * 推出全屏时将对应处理参数逻辑返回给非播放器
      *
@@ -432,4 +467,125 @@ public class BlocklyVideoPlayer extends StandardGSYVideoPlayer {
         }
     }
 
+    private ViewListener viewListener;
+    public void setViewListener(ViewListener viewListener){
+        this.viewListener = viewListener;
+    }
+
+    @Override
+    protected void onClickUiToggle() {
+        super.onClickUiToggle();
+        UbtLog.d(TAG, "onClickUiToggle");
+        if(viewListener != null){
+            viewListener.onClickUiToggle();
+        }
+
+    }
+
+    @Override
+    protected void hideAllWidget() {
+        super.hideAllWidget();
+        UbtLog.d(TAG, "hideAllWidget");
+        if(viewListener != null){
+            viewListener.hideAllWidget();
+        }
+
+    }
+
+    @Override
+    protected void clickStartIcon() {
+        UbtLog.d(TAG, "clickStartIcon");
+        super.clickStartIcon();
+    }
+
+    public void clickPauseIcon(){
+        clickStartIcon();
+    }
+
+    @Override
+    protected void changeUiToPauseShow() {
+        super.changeUiToPauseShow();
+    }
+
+    //重写次方法，去掉双击点击事件
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        int id = v.getId();
+        float x = event.getX();
+        float y = event.getY();
+
+        if (mIfCurrentIsFullscreen && mLockCurScreen && mNeedLockFull) {
+            onClickUiToggle();
+            startDismissControlViewTimer();
+            return true;
+        }
+
+        if (id == R.id.fullscreen) {
+            return false;
+        }
+
+        if (id == R.id.surface_container) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+
+                    touchSurfaceDown(x, y);
+
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    float deltaX = x - mDownX;
+                    float deltaY = y - mDownY;
+                    float absDeltaX = Math.abs(deltaX);
+                    float absDeltaY = Math.abs(deltaY);
+
+                    if ((mIfCurrentIsFullscreen && mIsTouchWigetFull)
+                            || (mIsTouchWiget && !mIfCurrentIsFullscreen)) {
+                        if (!mChangePosition && !mChangeVolume && !mBrightness) {
+                            touchSurfaceMoveFullLogic(absDeltaX, absDeltaY);
+                        }
+                    }
+                    touchSurfaceMove(deltaX, deltaY, y);
+
+                    break;
+                case MotionEvent.ACTION_UP:
+
+                    startDismissControlViewTimer();
+
+                    touchSurfaceUp();
+
+                    startProgressTimer();
+
+                    //不要和隐藏虚拟按键后，滑出虚拟按键冲突
+                    if (mHideKey && mShowVKey) {
+                        return true;
+                    }
+                    break;
+            }
+//            gestureDetector.onTouchEvent(event);
+        } else if (id == R.id.progress) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    cancelDismissControlViewTimer();
+                case MotionEvent.ACTION_MOVE:
+                    cancelProgressTimer();
+                    ViewParent vpdown = getParent();
+                    while (vpdown != null) {
+                        vpdown.requestDisallowInterceptTouchEvent(true);
+                        vpdown = vpdown.getParent();
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    startDismissControlViewTimer();
+                    startProgressTimer();
+                    ViewParent vpup = getParent();
+                    while (vpup != null) {
+                        vpup.requestDisallowInterceptTouchEvent(false);
+                        vpup = vpup.getParent();
+                    }
+                    mBrightnessData = -1f;
+                    break;
+            }
+        }
+
+        return false;
+    }
 }

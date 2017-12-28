@@ -16,9 +16,12 @@ import java.util.List;
 public class CourseListContract {
     interface View extends BaseView {
         void setBlocklyCourseData(List<CourseData> list);
+        void updateSuccess();
+        void updateFail();
     }
 
     interface  Presenter extends BasePresenter<View> {
         void getBlocklyCourseList(Context context);
+        void updateCurrentCourse(int cid);
     }
 }

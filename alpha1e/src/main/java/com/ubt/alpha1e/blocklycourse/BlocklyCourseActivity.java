@@ -2,9 +2,9 @@ package com.ubt.alpha1e.blocklycourse;
 
 
 import android.annotation.TargetApi;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.transition.Transition;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -29,12 +30,14 @@ import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.blocklycourse.model.CourseData;
 import com.ubt.alpha1e.blocklycourse.model.UpdateCourseRequest;
 import com.ubt.alpha1e.blocklycourse.videoPlayer.BlocklyVideoPlayer;
 import com.ubt.alpha1e.blocklycourse.videoPlayer.BlocklyVideoPlayerListener;
 import com.ubt.alpha1e.blocklycourse.videoPlayer.OnTransitionListener;
+import com.ubt.alpha1e.blocklycourse.videoPlayer.ViewListener;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -43,6 +46,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,13 +54,15 @@ import java.io.FileNotFoundException;
 import butterknife.BindView;
 import okhttp3.Call;
 
+import static com.ubt.alpha1e.base.Constant.SP_CURRENT_BLOCK_COURSE_ID;
+
 
 /**
  * MVPPlugin
  *  邮箱 784787081@qq.com
  */
 
-public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract.View, BlocklyCoursePresenter> implements BlocklyCourseContract.View {
+public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract.View, BlocklyCoursePresenter> implements BlocklyCourseContract.View, ViewListener {
 
     private static final String TAG = "BlocklyCourseActivity";
 
@@ -113,11 +119,12 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 //            }
 //        });
 
+        videoPlayer.setViewListener(this); //设置UI显示回调
+
         //设置返回键
         videoPlayer.getBackButton().setVisibility(View.VISIBLE);
 
         videoPlayer.getStartButton().setVisibility(View.GONE);
-        videoPlayer.setThumbPlay(false);
 
 
         //videoPlayer.setBottomProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_progress));
@@ -128,7 +135,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
         //videoPlayer.setDialogProgressColor(getResources().getColor(R.color.colorAccent), -11);
 
         //是否可以滑动调整
-        videoPlayer.setIsTouchWiget(true);
+        videoPlayer.setIsTouchWiget(false);
 
         //设置横屏锁住
         videoPlayer.setLockLand(true);
@@ -140,7 +147,8 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
             @Override
             public void onClick(View v) {
                 UbtLog.d(TAG, "back");
-                onBackPressed();
+//                onBackPressed();
+                onBackPressedSupport();
             }
         });
         //过渡动画
@@ -198,7 +206,8 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
         ivPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                videoPlayer.startPlayLogic();
+                UbtLog.d(TAG, "ivPause");
+                videoPlayer.clickPauseIcon();
             }
         });
 
@@ -257,16 +266,11 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 
     @Override
     public void onBackPressedSupport() {
-        //先返回正常状态
-        if (orientationUtils.getScreenType() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            videoPlayer.getFullscreenButton().performClick();
-            return;
-        }
         //释放所有
         videoPlayer.setStandardVideoAllCallBack(null);
         GSYVideoPlayer.releaseAllVideos();
         if (isTransition && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            super.onBackPressed();
+            super.onBackPressedSupport();
         } else {
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -281,6 +285,26 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
     @Override
     public int getContentViewId() {
         return R.layout.activity_blockly_video;
+    }
+
+    @Override
+    public void onClickUiToggle() {
+        if(rlGoPro.getVisibility() == View.VISIBLE){
+            rlGoPro.setVisibility(View.GONE);
+        }else{
+            rlGoPro.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void hideAllWidget() {
+        rlGoPro.setVisibility(View.GONE);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+
     }
 
 
@@ -321,6 +345,17 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
                                     @Override
                                     public void onError(Call call, Exception e, int id) {
                                         UbtLog.e(TAG, "updateCurrentCourse onError:" + e.getMessage());
+                                        //保存失败则主动更新本地数据，并保存当前进度
+                                        ContentValues values = new ContentValues();
+                                        values.put("currGraphProgramId", courseData.getCid() + 1);
+                                        DataSupport.updateAll(CourseData.class, values);
+                                        SPUtils.getInstance().put(SP_CURRENT_BLOCK_COURSE_ID, courseData.getCid() + 1);
+                                        CourseData updateCourseData = new CourseData();
+                                        updateCourseData.setStatus("1");
+                                        updateCourseData.update(courseData.getCid() + 1);
+
+                                        onBackPressed();
+                                        dialog.dismiss();
 
                                     }
 
@@ -359,6 +394,15 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
                 .create().show();
     }
 
+    @Override
+    public void updateSuccess() {
+
+    }
+
+    @Override
+    public void updateFail() {
+
+    }
 
     @Override
     protected void initUI() {
