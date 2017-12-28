@@ -60,7 +60,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
     public static final int NETWORK_ERROR=1000;
     public static final int NETWORK_SUCCESS=2000;
     public static final int NETWORK_SERVER_EXCEPTION=3000;
-    String url = "http://10.10.1.14:8090";
+    String url = "http://10.10.1.14:8080";
     private String GetTemplatePath = "/alpha1e/event/getEventList";
     private String GetEventPath = "/alpha1e/event/getUserEvent";
     private String SaveModifyEventPath = "/alpha1e/event/updateUserEvent";

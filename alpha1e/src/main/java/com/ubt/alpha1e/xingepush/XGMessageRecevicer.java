@@ -11,6 +11,7 @@ import com.tencent.android.tpush.XGPushShowedResult;
 import com.tencent.android.tpush.XGPushTextMessage;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
+import com.ubt.alpha1e.ui.dialog.HibitsAlertDialog;
 import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.utils.Json;
@@ -81,6 +82,12 @@ public class  XGMessageRecevicer extends XGPushBaseReceiver {
                     if(  mJson.getString("category").equals(BEHAVIOUR_HABIT)) {
                         if (mJson.get("eventId") != null) {
                             Log.d("TPush"," contents"+xgPushShowedResult.getContent());
+                            new HibitsAlertDialog(AppManager.getInstance().currentActivity()).builder()
+                                    .setCancelable(true)
+                                    .setEventId(mJson.get("eventId").toString())
+                                    .setMsg(xgPushShowedResult.getContent())
+                                    .show();
+
                           //  new LowBatteryDialog(AppManager.getInstance().currentActivity()).setBatteryThresHold(1000000).builder().show();
                         }
                     }

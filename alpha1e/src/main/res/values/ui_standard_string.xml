@@ -1006,6 +1006,9 @@
     <string name="ui_habits_password_find_back">找回密码</string>
     <string name="ui_habits_minute_later">分钟后</string>
     <string name="ui_habits_play_content_empty_tip">播放内容不能为空</string>
+    <string name="ui_habits_alert_title">#时间将在*开启</string>
+    <string name="ui_habits_alert_set_success">设置提醒成功</string>
+    <string name="ui_habits_alert_set_fail">设置提醒失败</string>
 
     <!--动作编辑课程 -->
     <string name="action_course_card1_1">1.了解时间轴</string>
