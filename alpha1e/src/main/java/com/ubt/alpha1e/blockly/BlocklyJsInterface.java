@@ -84,7 +84,7 @@ public class BlocklyJsInterface {
             }
             UbtLog.d(TAG, "mActions=" + mActions);
         }
-        return mActions;
+        return mActions.substring(0, mActions.length()-1);
     }
 
     /**

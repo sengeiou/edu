@@ -10,12 +10,14 @@ import com.ubt.alpha1e.mvp.BaseView;
 
 public class BlocklyCourseContract {
     interface View extends BaseView {
+        void updateSuccess();
+        void updateFail();
         
     }
 
     interface  Presenter extends BasePresenter<View> {
         void getData();
-        void updateCourseData();
+        void updateCourseData(int cid);
 
     }
 }

@@ -162,6 +162,7 @@ public class PsdModifyFragment extends MVPBaseFragment<PsdModifyContract.View, P
                 }
                 if(isSuccess){
                     ToastUtils.showShort(((MVPBaseActivity)getActivity()).getStringResources("ui_setting_password_modify_success"));
+                    getActivity().finish();
                 }else {
                     ToastUtils.showShort(msg);
                 }

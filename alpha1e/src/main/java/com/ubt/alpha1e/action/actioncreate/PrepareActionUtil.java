@@ -160,6 +160,8 @@ public class PrepareActionUtil implements BaseQuickAdapter.OnItemClickListener, 
         void playAction(PrepareDataModel prepareDataModel);
 
         void onMusicConfirm(PrepareMusicModel prepareMusicModel);
+
+        void onMusicDelete(PrepareMusicModel prepareMusicModel);
     }
 
 

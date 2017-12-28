@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.baoyz.pg.PG;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.blocklycourse.BlocklyCourseActivity;
 import com.ubt.alpha1e.blocklycourse.BlocklyUtil;
@@ -31,6 +32,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import okhttp3.Call;
+
+import static com.ubt.alpha1e.base.Constant.SP_CURRENT_BLOCK_COURSE_ID;
 
 
 /**
@@ -59,7 +62,13 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.getBlocklyCourseList(this);
+        UbtLog.d(TAG, "currentId:" + SPUtils.getInstance().getInt(SP_CURRENT_BLOCK_COURSE_ID));
+        if(SPUtils.getInstance().getInt(SP_CURRENT_BLOCK_COURSE_ID) != -1){
+            mPresenter.updateCurrentCourse(SPUtils.getInstance().getInt(SP_CURRENT_BLOCK_COURSE_ID) );
+        }else{
+            mPresenter.getBlocklyCourseList(this);
+        }
+
     }
 
     @Override
@@ -103,12 +112,26 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
     }
 
     @Override
+    public void updateFail() {
+        mPresenter.getBlocklyCourseList(this);
+    }
+
+    @Override
+    public void updateSuccess() {
+        SPUtils.getInstance().put(SP_CURRENT_BLOCK_COURSE_ID, -1);
+        mPresenter.getBlocklyCourseList(this);
+    }
+
+    @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
         //判断该课程是否下载完成，下载完成则直接播放，没有则开始下载
 
         CourseData courseData = (CourseData) adapter.getItem(position);
         UbtLog.d(TAG, "onItemClick:" + courseData);
+        if(!courseData.getStatus().equals("1")){
+            return;
+        }
 //        if(TextUtils.isEmpty(courseData.getLocalVideoPath())){
 //            ProgressBar pbVideo = view.findViewById(R.id.pb_video);
 //            pbVideo.setVisibility(View.VISIBLE);

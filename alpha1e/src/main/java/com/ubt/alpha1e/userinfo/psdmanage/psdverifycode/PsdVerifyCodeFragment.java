@@ -67,6 +67,7 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
             super.handleMessage(msg);
             switch (msg.what){
                 case GO_TO_NEXT:
+                    requestCountDown.cancel();
                     ((PsdManageActivity)getActivity()).switchFragment(PsdManageActivity.FRAGMENT_SETTING_PASSWORD);
                     break;
             }

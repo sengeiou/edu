@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.behaviorhabits.fragment;
 
 
+import android.app.Dialog;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.baoyz.pg.PG;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.adapter.PlayContentRecyclerAdapter;
@@ -27,6 +29,7 @@ import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
+import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
@@ -43,19 +46,11 @@ import butterknife.Unbinder;
  */
 
 public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsContract.View, BehaviorHabitsPresenter> implements BehaviorHabitsContract.View {
-    @Override
-    public void showBehaviourPlayContent(boolean status, ArrayList<PlayContentInfo> playList, String errorMsg) {
-
-    }
-
-    @Override
-    public void onUserPassword(String password) {
-
-    }
 
     private static final String TAG = PlayContentSelectFragment.class.getSimpleName();
 
     public static final int CLICK_SELECT = 1;
+    private static final int UPDATE_UI_DATA = 2;
 
     Unbinder unbinder;
     @BindView(R.id.ll_base_back)
@@ -69,6 +64,8 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
 
     public PlayContentRecyclerAdapter mAdapter;
     private List<PlayContentInfo> mPlayContentInfoDatas = null;
+    private EventDetail<List<PlayContentInfo>> mEventDetail = null;
+    protected Dialog mCoonLoadingDia;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -85,68 +82,48 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
                     }
                     mAdapter.notifyItemChanged(msg.arg1);
                     break;
-
+                case UPDATE_UI_DATA:
+                    mCoonLoadingDia.cancel();
+                    List<PlayContentInfo> playContentInfoList = (List<PlayContentInfo>)msg.obj;
+                    List<PlayContentInfo> hasSelectList = mEventDetail.contents;
+                    for(PlayContentInfo playContentInfo1 :  playContentInfoList){
+                        playContentInfo1.isSelect = "0";
+                        for(PlayContentInfo playContentInfo2 :  hasSelectList){
+                            if(playContentInfo1.contentId.equals(playContentInfo2.contentId)){
+                                playContentInfo1.isSelect = "1";
+                                break;
+                            }
+                        }
+                    }
+                    mPlayContentInfoDatas.clear();
+                    mPlayContentInfoDatas.addAll(playContentInfoList);
+                    mAdapter.notifyDataSetChanged();
+                    break;
             }
         }
     };
 
-    public static PlayContentSelectFragment newInstance(){
+    public static PlayContentSelectFragment newInstance(EventDetail eventDetail){
         PlayContentSelectFragment selectFragment = new PlayContentSelectFragment();
         Bundle bundle = new Bundle();
+        bundle.putParcelable(Constant.HIBITS_EVENT_DETAIL, PG.convertParcelable(eventDetail));
         selectFragment.setArguments(bundle);
         return selectFragment;
     }
 
     @Override
     protected void initUI() {
+        mCoonLoadingDia = SLoadingDialog.getInstance(getContext());
+
         tvBaseTitleName.setText(getStringRes("ui_habits_play_content_select"));
         ivTitleRight.setVisibility(View.VISIBLE);
 
         mPlayContentInfoDatas = new ArrayList<>();
 
-        PlayContentInfo h = new PlayContentInfo();
-        h.contentId = "1";
-        h.contentName = "小学一年级语文课";
-        h.isSelect = "1";
-        mPlayContentInfoDatas.add(h);
-
-        h = new PlayContentInfo();
-        h.contentId = "1";
-        h.contentName = "小学二年级语文课";
-        h.isSelect = "1";
-        mPlayContentInfoDatas.add(h);
-
-        h = new PlayContentInfo();
-        h.contentId = "1";
-        h.contentName = "小学三年级语文课";
-        h.isSelect = "0";
-        mPlayContentInfoDatas.add(h);
-
-        h = new PlayContentInfo();
-        h.contentId = "1";
-        h.contentName = "小学一年级语文课";
-        h.isSelect = "0";
-        mPlayContentInfoDatas.add(h);
-
-        h = new PlayContentInfo();
-        h.contentId = "1";
-        h.contentName = "宋词";
-        h.isSelect = "1";
-        mPlayContentInfoDatas.add(h);
-
-        h = new PlayContentInfo();
-        h.contentId = "1";
-        h.contentName = "儿歌三百首";
-        h.isSelect = "1";
-        mPlayContentInfoDatas.add(h);
-
-        h = new PlayContentInfo();
-        h.contentId = "1";
-        h.contentName = "全唐诗";
-        h.isSelect = "0";
-        mPlayContentInfoDatas.add(h);
-
         initRecyclerViews();
+
+        mCoonLoadingDia.show();
+        mPresenter.getBehaviourPlayContent(mEventDetail.eventId);
     }
 
     public void initRecyclerViews() {
@@ -192,6 +169,10 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO: inflate a fragment view
+        if (getArguments() != null) {
+            mEventDetail = getArguments().getParcelable(Constant.HIBITS_EVENT_DETAIL);
+        }
+
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
         return rootView;
@@ -232,6 +213,35 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
 
     @Override
     public void onRequestStatus(int requestType, int errorCode) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mCoonLoadingDia.cancel();
+                ToastUtils.showShort(getStringRes("ui_common_network_request_failed"));
+            }
+        });
+    }
+
+    @Override
+    public void showBehaviourPlayContent(boolean status, ArrayList<PlayContentInfo> playList, String errorMsg) {
+        if(status){
+            Message msg = new Message();
+            msg.what = UPDATE_UI_DATA;
+            msg.obj = playList;
+            mHandler.sendMessage(msg);
+        }else {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mCoonLoadingDia.cancel();
+                    ToastUtils.showShort(getStringRes("ui_common_network_request_failed"));
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onUserPassword(String password) {
 
     }
 
@@ -255,11 +265,13 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
             }
         }
         UbtLog.d(TAG,"selectList = " + selectList.size());
-
-        Bundle resultBundle = new Bundle();
-        resultBundle.putParcelableArrayList(Constant.PLAY_CONTENT_INFO_LIST_KEY, selectList);
-        setFragmentResult(Constant.PLAY_CONTENT_SELECT_RESPONSE_CODE, resultBundle);
-        pop();
-
+        if(selectList.isEmpty()){
+            ToastUtils.showShort(getStringRes("ui_habits_play_content_empty_tip"));
+        }else {
+            Bundle resultBundle = new Bundle();
+            resultBundle.putParcelableArrayList(Constant.PLAY_CONTENT_INFO_LIST_KEY, selectList);
+            setFragmentResult(Constant.PLAY_CONTENT_SELECT_RESPONSE_CODE, resultBundle);
+            pop();
+        }
     }
 }
