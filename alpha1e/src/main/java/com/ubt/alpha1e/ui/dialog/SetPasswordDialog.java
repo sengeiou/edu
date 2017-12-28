@@ -24,48 +24,55 @@ import com.ubt.alpha1e.utils.log.UbtLog;
 /**
  * Created by liuqiang on 10/23/15.
  */
-public class InputPasswordDialog {
+public class SetPasswordDialog {
+
+    private static final String TAG = SetPasswordDialog.class.getSimpleName();
+
     private Context mContext;
     private Dialog dialog;
     private LinearLayout lLayout_bg;
     private RelativeLayout rlInputPassword;
     private RelativeLayout rlInputPasswordOver;
+    private LinearLayout llOperation;
 
     private TextView tvMsg;
+    private TextView tvMsgTip;
+    private TextView tvErrorMsg;
     private EditText edtPassword1;
     private EditText edtPassword2;
     private EditText edtPassword3;
     private EditText edtPassword4;
     private EditText edtPassword5;
     private EditText edtPassword6;
-    private TextView tvErrorTip;
 
-    private Button btnInputAgain;
-    private Button btnFindPsw;
+    private Button btnCancel;
+    private Button btnConfirm;
 
     private Display display;
     private String mPassword = "";
-    private int inputCount = 0;
-    private IInputPasswordListener mInputPasswordListener;
+    private ISetPasswordListener mISetPasswordListener;
+    private String mPasswordFirst = "";
+    private String mPasswordSecond = "";
 
-
-    public InputPasswordDialog(Context context) {
+    public SetPasswordDialog(Context context) {
         this.mContext = context;
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         display = windowManager.getDefaultDisplay();
     }
 
-    public InputPasswordDialog builder() {
+    public SetPasswordDialog builder() {
         // 获取Dialog布局
-        View view = LayoutInflater.from(mContext).inflate(R.layout.view_input_password, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.viev_set_password, null);
 
         // 获取自定义Dialog布局中的控件
         lLayout_bg = (LinearLayout) view.findViewById(R.id.lLayout_bg);
         rlInputPassword = (RelativeLayout) view.findViewById(R.id.rl_input_password);
         rlInputPasswordOver = (RelativeLayout) view.findViewById(R.id.rl_input_password_over);
+        llOperation = (LinearLayout) view.findViewById(R.id.ll_operation);
 
         tvMsg = (TextView) view.findViewById(R.id.tv_msg);
-        tvErrorTip = (TextView) view.findViewById(R.id.tv_error_tip);
+        tvMsgTip = (TextView) view.findViewById(R.id.tv_msg_tip);
+        tvErrorMsg = (TextView) view.findViewById(R.id.tv_error_msg);
         edtPassword1 = (EditText) view.findViewById(R.id.edt_password_1);
         edtPassword2 = (EditText) view.findViewById(R.id.edt_password_2);
         edtPassword3 = (EditText) view.findViewById(R.id.edt_password_3);
@@ -73,8 +80,8 @@ public class InputPasswordDialog {
         edtPassword5 = (EditText) view.findViewById(R.id.edt_password_5);
         edtPassword6 = (EditText) view.findViewById(R.id.edt_password_6);
 
-        btnInputAgain = (Button) view.findViewById(R.id.btn_input_again);
-        btnFindPsw    = (Button) view.findViewById(R.id.btn_find_psw);
+        btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+        btnConfirm    = (Button) view.findViewById(R.id.btn_confirm);
 
         edtPassword1.addTextChangedListener(mTextWatcher);
         edtPassword2.addTextChangedListener(mTextWatcher);
@@ -83,24 +90,24 @@ public class InputPasswordDialog {
         edtPassword5.addTextChangedListener(mTextWatcher);
         edtPassword6.addTextChangedListener(mTextWatcher);
 
-        btnInputAgain.setOnClickListener(new View.OnClickListener() {
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                inputCount = 0;
-                tvErrorTip.setText("");
-
-                rlInputPassword.setVisibility(View.VISIBLE);
-                rlInputPasswordOver.setVisibility(View.GONE);
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
-        btnFindPsw.setOnClickListener(new View.OnClickListener() {
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if(mInputPasswordListener != null){
-                    mInputPasswordListener.onFindPassword();
+            public void onClick(View v) {
+                if(TextUtils.isEmpty(mPasswordSecond)){
+                    ToastUtils.showShort(mContext.getString(R.string.ui_habits_password_confirm_req));
+                    return;
                 }
-                dismiss();
+                dialog.dismiss();
+                if(mISetPasswordListener != null){
+                    mISetPasswordListener.onSetPassword(mPasswordFirst);
+                }
             }
         });
 
@@ -115,21 +122,21 @@ public class InputPasswordDialog {
         return this;
     }
 
-    public InputPasswordDialog setTitle(String title) {
+    public SetPasswordDialog setTitle(String title) {
         return this;
     }
 
-    public InputPasswordDialog setMsg(String msg) {
+    public SetPasswordDialog setMsg(String msg) {
         tvMsg.setText(msg);
         return this;
     }
 
-    public InputPasswordDialog setCancelable(boolean cancel) {
+    public SetPasswordDialog setCancelable(boolean cancel) {
         dialog.setCancelable(cancel);
         return this;
     }
 
-    public InputPasswordDialog setPassword(String password) {
+    public SetPasswordDialog setPassword(String password) {
         mPassword = password;
         return this;
     }
@@ -167,15 +174,30 @@ public class InputPasswordDialog {
         @Override
         public void afterTextChanged(Editable editable) {
             if(isInputFinish()){
-                inputCount++;
-                if(isCorrectPassword()){
-                    tvErrorTip.setText("");
-                    if(mInputPasswordListener != null){
-                        mInputPasswordListener.onCorrectPassword();
-                    }
-                    dismiss();
+                if(TextUtils.isEmpty(mPasswordFirst)){
+                    mPasswordFirst = getInputPassword();
+
+                    edtPassword1.setText("");
+                    edtPassword2.setText("");
+                    edtPassword3.setText("");
+                    edtPassword4.setText("");
+                    edtPassword5.setText("");
+                    edtPassword6.setText("");
+                    edtPassword1.requestFocus();
+
+                    tvMsgTip.setVisibility(View.GONE);
+                    tvMsg.setText(mContext.getString(R.string.ui_habits_password_confirm_title));
+
+                    tvErrorMsg.setText("");
+                    tvErrorMsg.setVisibility(View.VISIBLE);
+                    llOperation.setVisibility(View.VISIBLE);
                 }else {
-                    if(inputCount >3 ){
+                    mPasswordSecond = getInputPassword();
+                    UbtLog.d(TAG,"mPasswordFirst = " + mPasswordFirst + "   mPasswordSecond = " + mPasswordSecond);
+                    if(isSavePassword()){
+                        tvErrorMsg.setText("");
+                        tvErrorMsg.setVisibility(View.VISIBLE);
+                    }else {
                         edtPassword1.setText("");
                         edtPassword2.setText("");
                         edtPassword3.setText("");
@@ -183,21 +205,14 @@ public class InputPasswordDialog {
                         edtPassword5.setText("");
                         edtPassword6.setText("");
 
-                        rlInputPasswordOver.setVisibility(View.VISIBLE);
-                        rlInputPassword.setVisibility(View.GONE);
-                    }else {
-                        tvErrorTip.setText(mContext.getResources().getString(R.string.ui_habits_password_error_tip));
-                        edtPassword1.setText("");
-                        edtPassword2.setText("");
-                        edtPassword3.setText("");
-                        edtPassword4.setText("");
-                        edtPassword5.setText("");
-                        edtPassword6.setText("");
+                        mPasswordSecond = "";
+                        tvErrorMsg.setText(mContext.getString(R.string.ui_habits_password_difference_tip));
+                        tvErrorMsg.setVisibility(View.VISIBLE);
                         edtPassword1.requestFocus();
                     }
                 }
             }else {
-
+                tvErrorMsg.setText("");
                 if(edtPassword1.isFocused() && !TextUtils.isEmpty(edtPassword1.getText().toString())){
                     edtPassword2.requestFocus();
                 }else if(edtPassword2.isFocused() && !TextUtils.isEmpty(edtPassword2.getText().toString())){
@@ -227,30 +242,33 @@ public class InputPasswordDialog {
         }
     }
 
-    private boolean isCorrectPassword(){
+    private String getInputPassword(){
         String inputPassword = edtPassword1.getText().toString()
                 +edtPassword2.getText().toString()
                 +edtPassword3.getText().toString()
                 +edtPassword4.getText().toString()
                 +edtPassword5.getText().toString()
                 +edtPassword6.getText().toString();
-        UbtLog.d("InputPasswordDialog","inputPassword = " + inputPassword + " = " + Md5.getMD5(inputPassword).toLowerCase() + " mPassword = " + mPassword);
-        if(Md5.getMD5(inputPassword).toLowerCase().equals(mPassword)){
+        UbtLog.d("inputPassword","inputPassword = " + inputPassword);
+        return inputPassword;
+    }
+
+    private boolean isSavePassword(){
+        if(mPasswordFirst.equals(mPasswordSecond)){
             return true;
         }else {
             return false;
         }
     }
 
-    public InputPasswordDialog setCallbackListener(IInputPasswordListener listener) {
-        mInputPasswordListener = listener;
+    public SetPasswordDialog setCallbackListener(ISetPasswordListener listener) {
+        mISetPasswordListener = listener;
         return this;
     }
 
-    public interface IInputPasswordListener{
+    public interface ISetPasswordListener{
 
-        void onCorrectPassword();
+        void onSetPassword(String password);
 
-        void onFindPassword();
     }
 }

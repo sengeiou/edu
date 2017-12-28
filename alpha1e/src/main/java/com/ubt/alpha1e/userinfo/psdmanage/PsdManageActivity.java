@@ -44,16 +44,22 @@ public class PsdManageActivity extends MVPBaseActivity<PsdManageContract.View, P
     TextView tvBaseTitleName;
 
     public MVPBaseFragment mCurrentFragment;
+    private boolean mFindPassword = false;
 
-    public static void LaunchActivity(Context context) {
+    public static void LaunchActivity(Context context, boolean isFindPassword) {
         Intent intent = new Intent(context, PsdManageActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("isFindPassword", isFindPassword);
         context.startActivity(intent);
     }
 
     @Override
     protected void initUI() {
-        switchFragment(FRAGMENT_SETTING_MODIFY);
+        if(mFindPassword){
+            switchFragment(FRAGMENT_FORGET_PASSWORD);
+        }else {
+            switchFragment(FRAGMENT_SETTING_MODIFY);
+        }
     }
 
     @Override
@@ -76,6 +82,9 @@ public class PsdManageActivity extends MVPBaseActivity<PsdManageContract.View, P
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+        if(getIntent() != null){
+            mFindPassword = getIntent().getBooleanExtra("isFindPassword", false);
+        }
 
         initUI();
     }

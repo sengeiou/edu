@@ -203,6 +203,9 @@ public class PsdSettingFragment extends MVPBaseFragment<PsdSettingContract.View,
                 if(!TextUtils.isEmpty(msg)){
                     ToastUtils.showShort(msg);
                 }
+                if(isSuccess){
+                    getActivity().finish();
+                }
             }
         });
     }
