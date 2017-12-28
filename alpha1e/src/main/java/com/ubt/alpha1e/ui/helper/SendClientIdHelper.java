@@ -112,6 +112,9 @@ public class SendClientIdHelper extends BaseHelper {
             UbtLog.d(TAG,"cmd = " + cmd + "    获取到序列号1: "+new String(param));
             String sn = new String(param, 1, param.length - 1);
             UbtLog.d(TAG,"cmd = " + cmd + "    获取到序列号2: "+sn);
+            if(sn == null || sn.equals("")){
+                return;
+            }
             AlphaApplication.currentRobotSN = sn ;
             RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.BLUETOOTH_GET_ROBOT_SN_SUCCESSS);
             EventBus.getDefault().post(robotEvent);

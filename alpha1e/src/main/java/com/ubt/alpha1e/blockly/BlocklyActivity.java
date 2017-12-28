@@ -217,6 +217,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     private boolean fromVideo = false;
     private RelativeLayout rlGoVideo;
     private ImageView ivGoVideo;
+    private ImageView ivShotAlbum;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -306,6 +307,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         rlBlank = (RelativeLayout) findViewById(R.id.rl_blank);
         rlGoVideo = (RelativeLayout) findViewById(R.id.rl_go_video);
         ivGoVideo = (ImageView) findViewById(R.id.iv_go_video);
+        ivShotAlbum = (ImageView) findViewById(R.id.iv_shot_album);
         ivGoVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -706,7 +708,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     rlGoVideo.setVisibility(View.VISIBLE);
                     Bitmap bitmap = BitmapFactory.decodeFile(BlocklyUtil.getPath() + SHOTCUT_NAME+ ".jpg");
                     if(bitmap != null){
-                        ivGoVideo.setImageBitmap(bitmap);
+                        ivShotAlbum.setImageBitmap(bitmap);
                     }
 
                 }else{

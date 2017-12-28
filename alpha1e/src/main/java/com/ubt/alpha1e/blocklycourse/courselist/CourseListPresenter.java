@@ -67,6 +67,10 @@ public class CourseListPresenter extends BasePresenterImpl<CourseListContract.Vi
                     UbtLog.d(TAG, "courseData:" + courseData.toString());
                 }
 
+
+
+
+
                 if (isAttachView()) {
                     List<CourseData> courseDataList = DataSupport.findAll(CourseData.class);
                     UbtLog.d(TAG, "courseDataList:" + courseDataList.toString());
@@ -77,12 +81,9 @@ public class CourseListPresenter extends BasePresenterImpl<CourseListContract.Vi
             }
         });
 
-
-
-
-
     }
 
+    @Override
     public void updateCurrentCourse(int cid) {
         UpdateCourseRequest courseRequest = new UpdateCourseRequest();
         courseRequest.setCurrGraphProgramId(cid);
@@ -91,12 +92,17 @@ public class CourseListPresenter extends BasePresenterImpl<CourseListContract.Vi
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.e(TAG, "updateCurrentCourse onError:" + e.getMessage());
+                if(isAttachView()){
+                    mView.updateFail();
+                }
             }
 
             @Override
             public void onResponse(String response, int id) {
                 UbtLog.d(TAG, "updateCurrentCourse onResponse:" + response.toString());
-
+                if(isAttachView()){
+                    mView.updateSuccess();
+                }
             }
         });
     }

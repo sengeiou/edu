@@ -273,7 +273,6 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
                                 UbtLog.d(TAG, "autoUpgrade = " + baseResponseModel.models.get(0).getAutoUpgrade());
                                 UbtLog.d(TAG, "equipmentSeq = " + baseResponseModel.models.get(0).getEquipmentSeq());
                                 UbtLog.d(TAG, "equipmentVersion = " + baseResponseModel.models.get(0).getEquipmentVersion());
-
                                 mView.onGetRobotInfo(1,baseResponseModel.models.get(0));
                             }
                         }
