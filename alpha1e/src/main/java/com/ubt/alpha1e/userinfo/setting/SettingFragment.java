@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.userinfo.setting;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,7 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.login.LoginActivity;
@@ -23,6 +26,7 @@ import com.ubt.alpha1e.userinfo.aboutus.AboutUsActivity;
 import com.ubt.alpha1e.userinfo.cleancache.CleanCacheActivity;
 import com.ubt.alpha1e.userinfo.contactus.ContactUsActivity;
 import com.ubt.alpha1e.userinfo.helpfeedback.HelpFeedbackActivity;
+import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.userinfo.myrobot.MyRobotActivity;
 import com.ubt.alpha1e.userinfo.psdmanage.PsdManageActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -200,7 +204,7 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
                 CleanCacheActivity.LaunchActivity(getContext());
                 break;
             case R.id.rl_password_massage:
-                PsdManageActivity.LaunchActivity(getContext());
+                PsdManageActivity.LaunchActivity(getContext(),false);
                 break;
             case R.id.btn_wifi_download:
                 if (mPresenter.isOnlyWifiDownload(getContext())) {
@@ -265,6 +269,8 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
             case R.id.rl_message_myrobot:
                 UbtLog.d(TAG, "--rl_message_myrobot");
 //                MyRobotActivity.LaunchActivity(getContext());
+                com.ubt.alpha1e.base.loading.LoadingDialog.show(getActivity());
+                mPresenter.checkMyRobotState();
                 break;
         }
     }
@@ -292,6 +298,28 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
     public void onChangeLanguage() {
 
         mHandler.sendEmptyMessage(REFRESH_LANGUAGE_FINISH);
+    }
+
+    @Override
+    public void onGetRobotInfo(int result, MyRobotModel model) {
+        UbtLog.d(TAG, "onGetRobotInfo == " );
+        com.ubt.alpha1e.base.loading.LoadingDialog.dismiss(getActivity());
+        if(result == 0){
+            ToastUtils.showShort("获取机器人信息失败！");
+        }else if(result == 1){
+            UbtLog.d(TAG, "账号已经绑定 " );
+            Intent intent = new Intent(getActivity(),MyRobotActivity.class);
+            intent.putExtra("isBinded",1);
+            intent.putExtra("serverVersion",model.getServerVersion());
+            intent.putExtra("equipmentSeq",model.getEquipmentSeq());
+            intent.putExtra("autoupdate",model.getAutoUpgrade());
+            startActivity(intent);
+        }else if(result == 2){
+            UbtLog.d(TAG, "账户没有绑定 " );
+            Intent intent = new Intent(getActivity(),MyRobotActivity.class);
+            intent.putExtra("isBinded",2);
+            startActivity(intent);
+        }
     }
 
 }

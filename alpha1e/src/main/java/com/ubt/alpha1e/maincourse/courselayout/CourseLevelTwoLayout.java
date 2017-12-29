@@ -132,19 +132,19 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
         UbtLog.d(TAG, "currentCourse==" + currentCourse);
         if (currentCourse == 1) {
             mRlInstruction.setVisibility(View.VISIBLE);
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑2总介.hts");
+            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor8.hts");
             //showOneCardContent();
         } else if (currentCourse == 2) {
             ivActionLib.setEnabled(true);
             ivActionLibMore.setEnabled(false);
             showLeftArrow(true);
             secondIndex = 1;
-            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引1.mp3\",\"playcount\":1}");
+            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor9.mp3\",\"playcount\":1}");
         } else if (currentCourse == 3) {
             ivActionLib.setEnabled(false);
             ivActionLibMore.setEnabled(true);
             showLeftArrow1(true);
-            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引4.mp3\",\"playcount\":1}");
+            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor12.mp3\",\"playcount\":1}");
             threeIndex = 1;
         }
     }
@@ -310,7 +310,7 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引2.mp3\",\"playcount\":1}");
+                    ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor10.mp3\",\"playcount\":1}");
                 }
             }, 1000);
             mActionCourseTwoUtil.showActionDialog(1, this);
@@ -482,7 +482,7 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
                 if (null != mActionCourseTwoUtil) {
                     mActionCourseTwoUtil.showAddAnimal();
                 }
-                ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引6.mp3\",\"playcount\":1}");
+                ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor11.mp3\",\"playcount\":1}");
             }
         }, 1200);
 

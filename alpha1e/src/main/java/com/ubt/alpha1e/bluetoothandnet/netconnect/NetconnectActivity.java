@@ -30,6 +30,7 @@ import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.event.NetworkEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.services.SendClientIdService;
 import com.ubt.alpha1e.ui.dialog.AlertDialog;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.WifiSelectAlertDialog;
@@ -357,7 +358,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                 case NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY:
                     displayDialog();
                     UbtLog.d(TAG,"网络连接成功 wifiName: " +wifiName  );
-
+                    SendClientIdService.getInstance(NetconnectActivity.this).gotoCheckIsBind();
                     Intent intent = new Intent();
                     //把返回数据存入Intent
                     intent.putExtra("wifiName", ed_wifi_name.getText().toString());

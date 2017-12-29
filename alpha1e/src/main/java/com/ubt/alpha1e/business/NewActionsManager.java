@@ -14,6 +14,7 @@ import com.ubt.alpha1e.data.FileTools.State;
 import com.ubt.alpha1e.data.IFileListener;
 import com.ubt.alpha1e.data.ZipTools;
 import com.ubt.alpha1e.data.model.NewActionInfo;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.ui.DubActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -277,11 +278,14 @@ public class NewActionsManager implements IFileListener {
             params.put("actionDesciber", mChangeNewActionInfo.actionDesciber);
             params.put("actionType", mChangeNewActionInfo.actionType + "");
             params.put("actionTime", mChangeNewActionInfo.actionTime+ "");
-            String url = HttpAddress.getRequestUrl(HttpAddress.Request_type.createaction_upload);
+           // String url = HttpAddress.getRequestUrl(HttpAddress.Request_type.createaction_upload);
+           // String url = HttpAddress.getRequestUrl(HttpEntity.SAVE_ACTION);
+           UbtLog.d("maptojson",new Gson().toJson(params));
+
             OkHttpUtils.post()//
                     .addFile("mFile1", file.getName(), file)//
                     .addFile("mFile2", imageFile.getName(), imageFile)
-                    .url(url)//
+                    .url(HttpEntity.SAVE_ACTION)//
                     .params(params)//
                     .build()//
                     .execute(new StringCallback() {
@@ -319,7 +323,6 @@ public class NewActionsManager implements IFileListener {
             isSaveSuccess = false;
             notifyListeners();
         }
-
     }
 
     public void doRename(NewActionInfo info) {

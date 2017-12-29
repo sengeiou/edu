@@ -9,10 +9,10 @@
               android:orientation="horizontal">
 
 
-    <com.ubt.alpha1e.utils.RoundAngleImageView
+    <ImageView
         android:id="@+id/iv_action_background"
         android:layout_width="86dp"
-        android:layout_height="86dp"
+        android:layout_height="90dp"
         android:src="@drawable/action_sport_1b"
         />
 

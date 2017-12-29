@@ -58,6 +58,7 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
     DialogPlus mDialogPlus;
 
     private boolean isShowDelete;
+    private ImageView ivDelete;
 
     public PrepareMusicUtil(Context context) {
         this.mContext = context;
@@ -74,8 +75,8 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
         ViewHolder viewHolder = new ViewHolder(contentView);
         TextView tvTitle = contentView.findViewById(R.id.title_actions);
         tvTitle.setText(ResourceManager.getInstance(mContext).getStringResources("ui_create_music"));
-        ImageView imageView = contentView.findViewById(R.id.iv_delete);
-        imageView.setVisibility(View.VISIBLE);
+        ivDelete = contentView.findViewById(R.id.iv_delete);
+        ivDelete.setVisibility(View.VISIBLE);
         tvCancle = contentView.findViewById(R.id.tv_cancel);
         tvConfirm = contentView.findViewById(R.id.tv_confirm);
         RecyclerView recyclerView = contentView.findViewById(R.id.rv_actions);
@@ -146,6 +147,9 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
 
 
         } else {
+            if(isShowDelete){
+                return;
+            }
             selectDataModel = (PrepareMusicModel) adapter.getData().get(position);
             previewMusic(selectDataModel);
             for (int i = 0; i < list.size(); i++) {
@@ -180,7 +184,17 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
 
                 break;
             case R.id.iv_delete:
-                isShowDelete = true;
+                if(player != null){
+                    player.stop();
+                }
+                if(isShowDelete){
+                    isShowDelete = false;
+                    ivDelete.setImageResource(R.drawable.icon_delete);
+                }else{
+                    isShowDelete = true;
+                    ivDelete.setImageResource(R.drawable.icon_save);
+                }
+
                 actionAdapter.notifyDataSetChanged();
                 break;
             default:
@@ -200,6 +214,9 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
         deleteMP3RecordFile(list.get(position).getMusicName());
         list.remove(position);
         actionAdapter.notifyDataSetChanged();
+        if(mDialogListener != null){
+            mDialogListener.onMusicDelete(list.get(position));
+        }
     }
 
 
@@ -240,6 +257,15 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
                     ivDelete.setVisibility(View.VISIBLE);
                 } else {
                     ivDelete.setVisibility(View.GONE);
+                }
+                if(isShowDelete){
+                    if(animationDrawable != null){
+                        selectDataModel = null;
+                        tvConfirm.setTextColor(mContext.getResources().getColor(R.color.tv_user_edit_color));
+                        tvConfirm.setEnabled(true);
+                        item.setPlaying(false);
+                        animationDrawable.stop();
+                    }
                 }
             }
 

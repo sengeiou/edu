@@ -93,7 +93,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     private int currentType = 0;//上拉下拉类型
     private boolean isNoneFinishLoadMore = false;//是否可以上拉加载 true不能上拉 false 可以上拉
 
-    private int page = 0;
+    private int page = 1;
     private int offset = 8;
 
     public DynamicActionFragment() {
@@ -151,7 +151,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         tvRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                page = 0;
+                page = 1;
                 mPresenter.getDynamicData(0, page, offset);
                 UbtLog.d("tvRetry", "重试一次");
                 LoadingDialog.show(getActivity());
@@ -164,7 +164,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(final RefreshLayout refreshlayout) {
-                page = 0;
+                page = 1;
                 mPresenter.getDynamicData(0, page, offset);
 
             }
@@ -237,7 +237,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             } else if (type == 1) {
                 mDynamicActionModels.addAll(list);
             }
-            if (list.size() < 5) {
+            if (list.size() < 8) {
                 isNoneFinishLoadMore = true;
             } else {
                 isNoneFinishLoadMore = false;
@@ -375,13 +375,16 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
      * 结束刷新事件
      */
     private void finishRefresh() {
+        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableLoadmore(true);
         if (currentType == 0) {
             mRefreshLayout.finishRefresh();
             if (isNoneFinishLoadMore) {
-                mRefreshLayout.finishLoadmoreWithNoMoreData();//将不会再次触发加载更多事件
+                mRefreshLayout.setLoadmoreFinished(true);//将不会再次触发加载更多事件
+            } else {
+                mRefreshLayout.resetNoMoreData();
             }
-            mRefreshLayout.resetNoMoreData();
-        } else if (currentType == 1) {
+         } else if (currentType == 1) {
             if (isNoneFinishLoadMore) {
                 mRefreshLayout.finishLoadmoreWithNoMoreData();//将不会再次触发加载更多事件
             } else {
@@ -391,8 +394,6 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         if (null == mDynamicActionModels || mDynamicActionModels.size() == 0) {//数据为空
             showStatuLayout(1);
         }
-        mRefreshLayout.setEnableRefresh(true);
-        mRefreshLayout.setEnableLoadmore(true);
         mDynamicActionAdapter.notifyDataSetChanged();
     }
 
@@ -484,6 +485,20 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
                 break;
             }
 
+        }
+        mDynamicActionAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 拍头打断
+     */
+    @Override
+    public void doTapHead() {
+        for (int i = 0; i < mDynamicActionModels.size(); i++) {
+            if (mDynamicActionModels.get(i).getActionStatu() == 1) {
+                UbtLog.d(TAG, "actionName==" + mDynamicActionModels.get(i));
+                mDynamicActionModels.get(i).setActionStatu(0);
+            }
         }
         mDynamicActionAdapter.notifyDataSetChanged();
     }

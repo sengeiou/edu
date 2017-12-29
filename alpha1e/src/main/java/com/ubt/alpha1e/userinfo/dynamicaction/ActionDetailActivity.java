@@ -12,7 +12,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.GlideRoundTransform;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.TimeTools;
@@ -26,6 +29,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.ubt.alpha1e.AlphaApplication.mContext;
+
 public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.View, DynamicActionPresenter> implements DynamicActionContract.View, DownLoadActionManager.DownLoadActionListener {
 
     @BindView(R.id.iv_back)
@@ -38,10 +43,6 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
     ImageView mIvCover;
     @BindView(R.id.tv_action_name)
     TextView mTvActionName;
-    @BindView(R.id.iv_action_type)
-    ImageView mIvActionType;
-    @BindView(R.id.ll_name)
-    LinearLayout mLlName;
     @BindView(R.id.tv_action_create_time)
     TextView mTvActionCreateTime;
     @BindView(R.id.tv_action_time)
@@ -102,8 +103,12 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
     protected void initUI() {
         mTvActionName.setText(mDynamicActionModel.getActionName());
         mTvActionCreateTime.setText(TimeTools.format(mDynamicActionModel.getActionDate()) + "创建");
-        mTvActionTime.setText(TimeTools.getMMTime(mDynamicActionModel.getActionTime()));
+        mTvActionTime.setText(TimeTools.getMMTime(mDynamicActionModel.getActionTime() * 1000));
         mTvContent.setText(mDynamicActionModel.getActionDesciber());
+        Glide.with(mContext).load(mDynamicActionModel.getActionHeadUrl()).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.action_sport_1b)
+                .transform(new GlideRoundTransform(mContext, 10))
+                .into(mIvCover);
         if (mDynamicActionModel.getActionStatu() == 1) {
             setPlaBtnAction(2);
         } else if (mDynamicActionModel.getActionStatu() == 2) {
@@ -287,6 +292,12 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
     @Override
     public void doActionPlay(long actionId, int statu) {
 
+    }
+
+    @Override
+    public void doTapHead() {
+        mDynamicActionModel.setActionStatu(0);
+        setPlaBtnAction(1);
     }
 
     @Override

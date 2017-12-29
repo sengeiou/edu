@@ -1,7 +1,6 @@
 package behaviourHabit;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
-import com.ubt.alpha1e.behaviorhabits.model.HabitsEventDetail;
 
 import org.junit.Before;
 import org.junit.Test;

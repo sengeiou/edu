@@ -40,7 +40,7 @@ public class ActionCourseDataManager {
         one1Content1.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_1"));
         one1Content1.setId(R.id.ll_frame);
         one1Content1.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
-        one1Content1.setActionPath(Constant.COURSE_ACTION_PATH + "时间轴.hts");
+        one1Content1.setActionPath(Constant.COURSE_ACTION_PATH + "AE_action editor2.hts");
         one1Content1.setTitle("时间轴");
         one1Content1.setDirection(0);
         one1Content1.setX(0);
@@ -54,7 +54,7 @@ public class ActionCourseDataManager {
         one1Content3.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_3"));
         one1Content3.setId(R.id.rl_musicz_zpne);
         one1Content3.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
-        one1Content3.setActionPath(Constant.COURSE_ACTION_PATH + "音乐轴.hts");
+        one1Content3.setActionPath(Constant.COURSE_ACTION_PATH + "AE_action editor3.hts");
         one1Content3.setTitle("音乐轴");
         one1Content3.setX(0);
         one1Content3.setY(-50);
@@ -68,7 +68,7 @@ public class ActionCourseDataManager {
         one1Content4.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_4"));
         one1Content4.setId(R.id.iv_reset_index);
         one1Content4.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
-        one1Content4.setActionPath(Constant.COURSE_ACTION_PATH + "动作帧.hts");
+        one1Content4.setActionPath(Constant.COURSE_ACTION_PATH + "AE_action editor4.hts");
         one1Content4.setTitle("动作帧");
         one1Content4.setDirection(0);
         one1Content4.setX(80);
@@ -82,7 +82,7 @@ public class ActionCourseDataManager {
         one1Content5.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_5"));
         one1Content5.setId(R.id.iv_add_frame);
         one1Content5.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
-        one1Content5.setActionPath(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
+        one1Content5.setActionPath(Constant.COURSE_ACTION_PATH + "AE_action editor5.hts");
         one1Content5.setTitle("缩放时间轴");
         one1Content5.setDirection(1);
         one1Content5.setX(20);

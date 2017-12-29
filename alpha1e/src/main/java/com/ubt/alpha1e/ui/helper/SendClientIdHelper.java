@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.login.LoginManger;
+import com.ubt.alpha1e.services.ActivationService;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.BlueToothManager;
@@ -107,6 +108,17 @@ public class SendClientIdHelper extends BaseHelper {
             }catch (Exception e){
                 e.printStackTrace();
             }
+        }else if(cmd == ConstValue.READ_SN_CODE){
+            UbtLog.d(TAG,"cmd = " + cmd + "    获取到序列号1: "+new String(param));
+            String sn = new String(param, 1, param.length - 1);
+            UbtLog.d(TAG,"cmd = " + cmd + "    获取到序列号2: "+sn);
+            if(sn == null || sn.equals("")){
+                return;
+            }
+            AlphaApplication.currentRobotSN = sn ;
+            RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.BLUETOOTH_GET_ROBOT_SN_SUCCESSS);
+            EventBus.getDefault().post(robotEvent);
+            return;
         }
 
 
@@ -118,6 +130,13 @@ public class SendClientIdHelper extends BaseHelper {
         clientIdSendWhich = 0;
         clientid = null ;
         doSendComm(ConstValue.DV_PRODUCT_AND_DSN, null);
+
+    }
+
+    //获取机器人序列号
+    public void sendCmdReadSN() {
+        UbtLog.d(TAG,"发送 给mac：  ");
+        doSendComm(ConstValue.READ_SN_CODE, new byte[] { 0 });
 
     }
 

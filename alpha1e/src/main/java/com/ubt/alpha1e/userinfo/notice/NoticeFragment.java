@@ -68,7 +68,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     private String mParam1;
     private String mParam2;
 
-    private int page = 0;
+    private int page = 1;
     private int offset = 8;
     private int currentType;
     private boolean isNoneFinishLoadMore;
@@ -130,7 +130,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         tvRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                page = 0;
+                page = 1;
                 mPresenter.getNoticeData(0, page, offset);
                 showLoading();
             }
@@ -139,7 +139,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(final RefreshLayout refreshlayout) {
-                page = 0;
+                page = 1;
                 mPresenter.getNoticeData(0, page, offset);
             }
         });

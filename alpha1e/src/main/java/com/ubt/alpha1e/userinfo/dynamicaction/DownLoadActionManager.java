@@ -180,6 +180,13 @@ public class DownLoadActionManager {
                                 }
                             }
                         }
+                    }else if (cmd == ConstValue.DV_TAP_HEAD) {
+                        UbtLog.d("EditHelper", "TAP_HEAD = " + cmd);
+                        for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
+                            if (null != mActionListener) {
+                                mActionListener.doTapHead();
+                            }
+                        }
                     }
                 }
             });
@@ -276,7 +283,10 @@ public class DownLoadActionManager {
      * @param actionInfo
      */
     public void playAction(boolean isFromDetail, DynamicActionModel actionInfo) {
-        doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(FileTools.actions_download_robot_path + actionInfo.getActionOriginalId() + ".hts"));
+        UbtLog.d(TAG, "actionInfo======" + actionInfo.toString());
+        String path = FileTools.actions_download_robot_path +"/"+ actionInfo.getActionOriginalId() + ".hts";
+        UbtLog.d(TAG, "path======" + path);
+        doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(path));
         if (isFromDetail) {
             for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
                 if (null != mActionListener) {
@@ -428,6 +438,8 @@ public class DownLoadActionManager {
         void onBlutheDisconnected();
 
         void doActionPlay(long actionId, int statu);
+
+        void doTapHead();
     }
 
 }

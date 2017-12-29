@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -22,6 +23,7 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -38,6 +40,7 @@ import com.ubt.alpha1e.blockly.bean.RobotSensor;
 import com.ubt.alpha1e.blockly.sensor.SensorHelper;
 import com.ubt.alpha1e.blockly.sensor.SensorObservable;
 import com.ubt.alpha1e.blockly.sensor.SensorObserver;
+import com.ubt.alpha1e.blocklycourse.BlocklyUtil;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.NewActionPlayer;
@@ -207,6 +210,14 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     private boolean isPlayLocalAudio = false; //是否播放本地音效
     private boolean hasShowLessonTask = false;
     private int playCount = 0;  //动作播放次数（目前在播放左转右转45用到）
+    private boolean loadError = false;
+
+    public static final String FROM_VIDEO = "fromVideo";
+    public static final String SHOTCUT_NAME = "shotVideo";
+    private boolean fromVideo = false;
+    private RelativeLayout rlGoVideo;
+    private ImageView ivGoVideo;
+    private ImageView ivShotAlbum;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -276,7 +287,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 case DO_PLAY_SOUND_EFFECT_FINISH:
                     if(mWebView != null){
                         UbtLog.d(TAG, "play sound or emoji finish!");
-                        mWebView.loadUrl("javascript:continueSteps()");
+//                        mWebView.loadUrl("javascript:continueSteps()");
+                        mWebView.loadUrl("javascript:playSoundEffectFinish()");
                     }
                     break;
                 default:
@@ -293,10 +305,22 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         setContentView(R.layout.activity_blockly);
         mWebView = (WebView) findViewById(R.id.blockly_webView);
         rlBlank = (RelativeLayout) findViewById(R.id.rl_blank);
+        rlGoVideo = (RelativeLayout) findViewById(R.id.rl_go_video);
+        ivGoVideo = (ImageView) findViewById(R.id.iv_go_video);
+        ivShotAlbum = (ImageView) findViewById(R.id.iv_shot_album);
+        ivGoVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(0, R.anim.activity_close_down_up);
+            }
+        });
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER );
         isFromCourse = getIntent().getBooleanExtra(Constant.IS_FROM_COURSE,false);
+
+        fromVideo =  getIntent().getBooleanExtra(FROM_VIDEO, false);
 
         if(isFromCourse){
             hasShowLessonTask = false;
@@ -321,10 +345,13 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if(mWebView != null){
+            if(mWebView != null && isLoadFinish && !loadError){
                 UbtLog.d(TAG, "上报返回按键事件给前端");
                 mWebView.loadUrl("javascript:phoneClickBack()");
                 return true;
+            }else{
+                finish();
+                this.overridePendingTransition(0, R.anim.activity_close_down_up);
             }
         }
         return super.onKeyDown(keyCode, event);
@@ -639,6 +666,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);
                 isLoadFinish = true;
+                loadError = true;
                 if(!checkWalk){
                     dismissLoading();
                 }
@@ -674,6 +702,17 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                         mHandler.sendEmptyMessage(DO_SHOW_LESSON_TASK);
                     }
                     dismissLoading();
+                }
+
+                if(fromVideo){
+                    rlGoVideo.setVisibility(View.VISIBLE);
+                    Bitmap bitmap = BitmapFactory.decodeFile(BlocklyUtil.getPath() + SHOTCUT_NAME+ ".jpg");
+                    if(bitmap != null){
+                        ivShotAlbum.setImageBitmap(bitmap);
+                    }
+
+                }else{
+                    rlGoVideo.setVisibility(View.GONE);
                 }
             }
 
@@ -1106,13 +1145,30 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             mMyActionsHelper.doPlayForBlockly(walkActionName, true);
         }else{
             //动作播放完成后，调用js方法通知执行下一个block块
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.d(TAG, "notePlayFinish mWebView loadUrl!");
-                    mWebView.loadUrl("javascript:continueSteps()");
+            if(mSourceActionNameList.size()>0){
+                if(mSourceActionNameList.get(0).equals("default") || mSourceActionNameList.get(0).equals("初始化")){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d(TAG, "notePlayFinish mWebView loadUrl!");
+                            mWebView.loadUrl("javascript:continueSteps()");
+                        }
+                    });
+                }else{
+                    UbtLog.d(TAG, "notePlayFinish 初始化");
+                    playRobotAction("初始化", false, "", false);
                 }
-            });
+            }else{
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "notePlayFinish mWebView loadUrl!");
+                        mWebView.loadUrl("javascript:continueSteps()");
+                    }
+                });
+            }
+
+
         }
 
 
@@ -1387,12 +1443,14 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             }
         }else if(event.getType() == BlocklyEvent.CALL_ROBOT_WALK_STOP){
             UbtLog.d(TAG, "机器人上报步态行走停止或者异常!");
-            mWebView.post(new Runnable() {
-                @Override
-                public void run() {
-                    mWebView.loadUrl("javascript:continueSteps()");
-                }
-            });
+
+            playRobotAction("初始化",false,"", false);
+//            mWebView.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mWebView.loadUrl("javascript:continueSteps()");
+//                }
+//            });
         }else if(event.getType() == BlocklyEvent.CALL_6D_GESTURE){
             final int gesture = ByteHexHelper.byteToInt((byte)event.getMessage());
             mWebView.post(new Runnable() {
@@ -2765,6 +2823,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     mWebView.post(new Runnable() {
                         @Override
                         public void run() {
+                            UbtLog.d(TAG, "projectIsOver");
                             mWebView.loadUrl("javascript:projectIsOver()");
                         }
                     });
@@ -2786,6 +2845,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                             mWebView.post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    UbtLog.d(TAG, "projectIsOver");
                                     mWebView.loadUrl("javascript:projectIsOver()");
                                 }
                             });

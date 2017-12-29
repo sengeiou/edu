@@ -17,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.data.Md5;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 /**
@@ -232,7 +234,8 @@ public class InputPasswordDialog {
                 +edtPassword4.getText().toString()
                 +edtPassword5.getText().toString()
                 +edtPassword6.getText().toString();
-        if(inputPassword.equals(mPassword)){
+        UbtLog.d("InputPasswordDialog","inputPassword = " + inputPassword + " = " + Md5.getMD5(inputPassword).toLowerCase() + " mPassword = " + mPassword);
+        if(Md5.getMD5(inputPassword).toLowerCase().equals(mPassword)){
             return true;
         }else {
             return false;

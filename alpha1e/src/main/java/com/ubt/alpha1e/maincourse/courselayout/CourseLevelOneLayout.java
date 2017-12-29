@@ -153,7 +153,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         if (currentCourse == 1) {
             isInstruction = true;
             mRlInstruction.setVisibility(View.VISIBLE);
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑1总介.hts");
+            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor1.hts");
         } else if (currentCourse == 2) {
             showAddLight();
 
@@ -301,6 +301,9 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
     };
 
 
+    /**
+     * 完成播放
+     */
     public void playComplete() {
         UbtLog.d(TAG, "播放完成"+currentCourse);
         if (((Activity) mContext).isFinishing()) {
@@ -541,7 +544,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 });
 
         mHightLight.show();
-        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
+        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor6.hts");
     }
 
 
@@ -572,7 +575,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 });
 
         mHightLight.show();
-        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
+        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor7.hts");
     }
 
     /**

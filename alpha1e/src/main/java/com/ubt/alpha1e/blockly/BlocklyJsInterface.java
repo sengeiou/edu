@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo;
 import android.webkit.JavascriptInterface;
 
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.bean.RobotSensor;
@@ -83,7 +84,7 @@ public class BlocklyJsInterface {
             }
             UbtLog.d(TAG, "mActions=" + mActions);
         }
-        return mActions;
+        return mActions.substring(0, mActions.length()-1);
     }
 
     /**
@@ -140,6 +141,7 @@ public class BlocklyJsInterface {
     public void closeBlocklyWindow() {
         UbtLog.d(TAG, "closeBlocklyWindow");
         ((BlocklyActivity) mBaseActivity).finish();
+        ((BlocklyActivity) mBaseActivity).overridePendingTransition(0, R.anim.activity_close_down_up);
 //        ((BlocklyActivity) mBaseActivity).startOrStopRun((byte)0x02);
 
     }

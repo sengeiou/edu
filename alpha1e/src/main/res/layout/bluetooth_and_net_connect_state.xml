@@ -57,7 +57,7 @@
 
     //上面大布局
     <RelativeLayout
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_width="370dp"
         android:layout_height="205dp"
         android:layout_below="@id/line"
@@ -78,7 +78,7 @@
             android:layout_height="90dp"
             android:background="@drawable/img_robot_fail"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="30dp"/>
+            android:layout_marginLeft="60dp"/>
         <EditText
             android:id="@+id/ed_state1_bluetooth_name"
             android:layout_width="240dp"
@@ -130,10 +130,10 @@
                 android:layout_height="40dp"
                 android:background="@drawable/bluetooth_wifi_abnomal"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="60dp"/>
+                android:layout_marginLeft="69dp"/>
             <EditText
                 android:id="@+id/ed_state1_wifi_name"
-                android:layout_width="100dp"
+                android:layout_width="135dp"
                 android:layout_height="40dp"
                 android:layout_toRightOf="@id/ig_state1_wifi"
                 android:layout_centerVertical="true"
@@ -141,7 +141,7 @@
                 android:textColorHint="#666666"
                 android:textStyle="bold"
                 android:gravity="center_vertical"
-                android:paddingLeft="10dp"
+                android:paddingLeft="6dp"
                 android:textColor="#666666"
                 android:singleLine="true"
                 android:maxLines="1"
@@ -157,7 +157,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_toRightOf="@id/ed_state1_wifi_name"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:focusableInTouchMode="false"
                 android:layout_centerVertical="true"
                 android:textColor="#02AAE8"
@@ -173,7 +173,7 @@
 
     //上面小布局
     <RelativeLayout
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_width="370dp"
         android:layout_height="205dp"
         android:layout_below="@id/line"
@@ -249,7 +249,7 @@
                 android:layout_height="90dp"
                 android:background="@drawable/img_wifi_toconnect_s"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="30dp"/>
+                android:layout_marginLeft="81dp"/>
             <EditText
                 android:id="@+id/ed_state2_bluetooth_name"
                 android:layout_width="220dp"

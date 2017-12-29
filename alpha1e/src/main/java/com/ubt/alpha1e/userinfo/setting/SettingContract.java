@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
+import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public class SettingContract {
         void onReadCurrentLanguage(int index,String language);
 
         void onChangeLanguage();
+
+        void onGetRobotInfo(int result, MyRobotModel model);
 
     }
 
@@ -43,5 +46,7 @@ public class SettingContract {
         void doChangeLanguage(Context context,String language);
 
         void doLogout();
+
+        void checkMyRobotState();
     }
 }
