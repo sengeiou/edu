@@ -283,6 +283,7 @@ public class BlocklyVideoPlayer extends StandardGSYVideoPlayer {
     public void onVideoResume() {
         UbtLog.d(TAG, "onVideoResume");
         super.onVideoResume();
+        UbtLog.d(TAG, "onVideoResume:" + getCurrentState());
     }
 
     @Override
