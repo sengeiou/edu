@@ -193,7 +193,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginLeft="199dp"
             android:layout_marginRight="30dp"
-            android:layout_marginBottom="40dp">
+            android:layout_marginBottom="50dp">
             <RelativeLayout
                 android:id="@+id/robot_bind_info"
                 android:layout_width="match_parent"
@@ -304,7 +304,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="15dp"
                 android:layout_below="@id/line2"
-                android:layout_height="120dp">
+                android:layout_height="110dp">
                 <TextView
                     android:id="@+id/tv_robot_auto_update_state"
                     android:text="自动升级：开启"

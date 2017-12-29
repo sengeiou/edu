@@ -244,7 +244,6 @@ public class NewActionsManager implements IFileListener {
      */
     public void saveActionToServer() {
 
-
         try {
 //            if(((AlphaApplication) mContext
 //            ).getCurrentUserInfo() == null)
@@ -280,7 +279,9 @@ public class NewActionsManager implements IFileListener {
             params.put("actionDesciber", mChangeNewActionInfo.actionDesciber);
             params.put("actionType", mChangeNewActionInfo.actionType + "");
             params.put("actionTime", mChangeNewActionInfo.actionTime+ "");
-//            String url = HttpAddress.getRequestUrl(HttpAddress.Request_type.createaction_upload);
+           // String url = HttpAddress.getRequestUrl(HttpAddress.Request_type.createaction_upload);
+           // String url = HttpAddress.getRequestUrl(HttpEntity.SAVE_ACTION);
+           UbtLog.d("maptojson",new Gson().toJson(params));
 
             OkHttpUtils.post()//
                     .addFile("mFile1", file.getName(), file)//

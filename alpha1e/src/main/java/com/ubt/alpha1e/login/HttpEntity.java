@@ -11,6 +11,7 @@ package com.ubt.alpha1e.login;
 
 public class HttpEntity {
 
+    public static final String HIBITS_STATISTICS = "http://10.10.1.14:8080/alpha1e";
 
     /**
      * 信鸽获取
@@ -22,6 +23,7 @@ public class HttpEntity {
     public static final String getXGAppId = XG_URL + "push/appInfo";
 
     public static final String bindXGServer = XG_URL + "push/userToken";
+    public static final String unbindXGServer=XG_URL+"push/unbindToken";
 
 
 
@@ -46,27 +48,59 @@ public class HttpEntity {
     public static final String SAVE_COURSE_PROGRESS = BASIC_UBX_SYS + "course/addCourseProgress";
     public static final String GET_COURSE_PROGRESS = BASIC_UBX_SYS + "course/getCourseProgress";
 
+
+    public static final String BASIC_UBX_SYS_BIND = "http://10.10.1.12:8085/"; //绑定相关 测试环境
     //查询绑定关系
-    public static final String CHECK_IS_BIND = BASIC_UBX_SYS + "relation/check";
+    public static final String CHECK_IS_BIND = BASIC_UBX_SYS_BIND + "relation/check";
 
     //绑定
-    public static final String ROBOT_BIND = BASIC_UBX_SYS + "relation/bind";
+    public static final String ROBOT_BIND = BASIC_UBX_SYS_BIND + "relation/bind";
 
     //解绑
-    public static final String ROBOT_UNBIND = BASIC_UBX_SYS + "relation/unbind";
+    public static final String ROBOT_UNBIND = BASIC_UBX_SYS_BIND + "relation/unbind";
 
     //查询本账户绑定的机器人信息
-    public static final String CHECK_ROBOT_INFO = BASIC_UBX_SYS + "relation/getEquipmentInfo";
+    public static final String CHECK_ROBOT_INFO = BASIC_UBX_SYS_BIND + "relation/getEquipmentInfo";
 
 
-    public static final String COURSE_GET_PROGRESS = BASIC_UBX_SYS + "course/getCourseProgress";
 
 
-    public static final String COURSE_SAVE_PROGRESS = BASIC_UBX_SYS + "course/addCourseProgress";
 
     public static final String COURSE_SAVE_STATU = BASIC_UBX_SYS + "course/addCourseStatus";
 
     public static final String COURSE_GET_STATU = BASIC_UBX_SYS + "course/getCourseStatus";
+
+    /**
+     * 获取消息列表
+     */
+    public static final String MESSAGE_GET_LIST = BASIC_UBX_SYS + "message/listByPage";
+    /**
+     * 获取未读消息数量
+     */
+    public static final String MESSAGE_UNREAD_TOTAL = BASIC_UBX_SYS + "message/countUnread";
+
+    /**
+     * 获取消息列表
+     */
+    public static final String MESSAGE_UPDATE_STATU = BASIC_UBX_SYS + "message/update";
+
+    /**
+     * 删除消息
+     */
+    public static final String MESSAGE_DELETE = BASIC_UBX_SYS + "message/deleteByMessageId";
+    /**
+     * 获取原创列表
+     */
+    public static final String ACTION_DYNAMIC_LIST = BASIC_UBX_SYS + "original/listByPage";
+    /**
+     * 删除动作ByID
+     */
+    public static final String ACTION_DYNAMIC_DELETE = BASIC_UBX_SYS + "original/deleteByActionId";
+    /**
+     * 保存动作
+     */
+    public static final String SAVE_ACTION = BASIC_UBX_SYS + "original/upload";
+
 
     /**
      * 保存blockly编程项目

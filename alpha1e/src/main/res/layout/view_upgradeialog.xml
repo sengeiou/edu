@@ -7,8 +7,8 @@
     android:gravity="center">
 
     <RelativeLayout
-        android:layout_width="350dp"
-        android:layout_height="200dp"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
         android:minWidth="300dp"
         android:minHeight="200dp"
         android:background="@drawable/alert_backgroud">
@@ -16,9 +16,8 @@
         <LinearLayout
             android:id="@+id/ll_msg"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:minHeight="100dp"
-            android:paddingTop="10dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
             android:orientation="vertical"
             android:layout_gravity="center">
 
@@ -36,34 +35,33 @@
                 />
 
             <TextView
-                android:id="@+id/txt_msg"
+                android:id="@+id/txt_advice"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:maxLines="3"
+                android:text="你的机器人固件有更新版本啦。"
+                android:scrollbars="vertical"
+                android:textColor="@color/T21"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/txt_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="1dp"
+                android:gravity="left"
+                android:maxLines="8"
                 android:scrollbars="vertical"
                 android:textColor="@color/T21"
                 android:textSize="16sp" />
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/txt_advice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ll_msg"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="快去更新机器人固件版本吧。"
-            android:scrollbars="vertical"
-            android:textColor="@color/T21"
-            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -71,7 +69,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="15dp"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/txt_advice"
+            android:layout_below="@+id/ll_msg"
             android:layout_marginBottom="10dp">
 
             <Button

@@ -28,9 +28,11 @@ import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.Constant;
+import com.ubt.alpha1e.data.Md5;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.custom.CircleBar;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.HibitsAlertDialog;
 import com.ubt.alpha1e.ui.dialog.InputPasswordDialog;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.ui.dialog.SetPasswordDialog;
@@ -285,13 +287,17 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     .setCallbackListener(new SetPasswordDialog.ISetPasswordListener() {
                         @Override
                         public void onSetPassword(String password) {
-                            mUserPassword = password;
+                            mUserPassword = Md5.getMD5(password).toLowerCase();
                             mCoonLoadingDia.show();
                             mPresenter.doSetUserPassword(password);
                         }
                     })
                     .show();
-
+            /*new HibitsAlertDialog(getContext()).builder()
+                    .setCancelable(true)
+                    .setEventId("182")
+                    .setMsg("起床时间将在07:00开启")
+                    .show();*/
         }else {
             new InputPasswordDialog(getContext()).builder()
                     .setMsg(getStringRes("ui_habits_password_input_tip"))

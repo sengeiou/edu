@@ -24,6 +24,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
+import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
 import com.ubt.alpha1e.maincourse.courselayout.CourseLevelTwoLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
@@ -44,7 +45,7 @@ import java.util.List;
  * 邮箱 784787081@qq.com
  */
 
-public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseLevelTwoLayout.CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
+public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
 
     private static final String TAG = CourseLevelTwoActivity.class.getSimpleName();
     BaseHelper mHelper;
@@ -128,7 +129,7 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     public void completeCurrentCourse(int current) {
         currentCourse = current;
-        saveLastProgress(current);
+        mPresenter.savaCourseDataToDB(2, current);
         if (current == 3) {
             returnCardActivity();
         }
@@ -153,7 +154,7 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
                 values.put("periodLevel", current);
                 values.put("isUpload", false);
                 DataSupport.updateAll(LocalActionRecord.class, values);
-                mPresenter.saveLastProgress("2", String.valueOf(current));
+                //  mPresenter.saveLastProgress("2", String.valueOf(current));
             } else if (course == 2) {
                 if (level < current) {
                     UbtLog.d(TAG, "保存进度到数据库3" + "保存成功");
@@ -162,7 +163,7 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
                     values.put("periodLevel", current);
                     values.put("isUpload", false);
                     DataSupport.updateAll(LocalActionRecord.class, values);
-                    mPresenter.saveLastProgress("2", String.valueOf(current));
+                    //   mPresenter.saveLastProgress("2", String.valueOf(current));
                 }
             }
         }
@@ -346,7 +347,7 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     public void playComplete() {
         UbtLog.d("EditHelper", "播放完成");
-        mHandler.sendEmptyMessageDelayed(1112, 2000);
+        mHandler.sendEmptyMessage(1112);
 //        if (isAllIntroduc) {
 //            mHandler.sendEmptyMessageDelayed(1112, 2000);
 //        } else {

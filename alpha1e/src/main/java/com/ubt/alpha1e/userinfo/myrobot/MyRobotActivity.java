@@ -110,8 +110,8 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
     private boolean isAutoUpgrade = false;
 
 
-    String openAutoUpgrade = "当前自动升级功能已经开启后，机器人每次重新联网后都会去检测新版本，如果有新版本，机器人将自动下载并且升级。\n如果你关闭自动升级功能，当机器人有新版本时，我们会提示你去升级。";
-    String closeAutoUpgrade = "当前自动升级功能已经关闭，当机器人有更新版本时，我们会提示你进行升级。\n开启自动升级后，机器人每次重联网后都会去检测新版本，如果有新版本，机器人将自动下载并且升级。";
+    String openAutoUpgrade = "当前自动升级功能已经开启，机器人每次重新联网后都会去检测新版本，如果有新版本，机器人将自动下载并且升级。";
+    String closeAutoUpgrade = "当前自动升级功能已经关闭，当机器人有更新版本时，我们会提示你进行升级。";
 
     private Handler mHandler = new Handler(){
         @Override
@@ -225,7 +225,7 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
             String v = i.getStringExtra("serverVersion");
             tv_robot_version.setText("固件版本："+v);
             String upgrade = i.getStringExtra("autoupdate");
-            if(upgrade.equals("1")){
+            if(upgrade != null && upgrade.equals("1")){
                 tv_robot_auto_update_state.setText("自动升级：开启");
                 isAutoUpgrade = true;
                 tv_robot_auto_update_ad.setText(openAutoUpgrade);

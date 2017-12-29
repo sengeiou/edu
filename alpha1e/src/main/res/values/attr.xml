@@ -63,4 +63,10 @@ encoding="utf-8"?>
         <attr name="drag_enable" format="boolean"/>
         <attr name="show_drag_animation" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="RoundAngleImageView">
+        <attr name="roundWidth" format="dimension" />
+        <attr name="roundHeight" format="dimension" />
+    </declare-styleable>
+
 </resources>

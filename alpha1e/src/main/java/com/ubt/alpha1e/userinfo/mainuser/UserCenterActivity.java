@@ -3,6 +3,7 @@ package com.ubt.alpha1e.userinfo.mainuser;
 /*import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;*/
+
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -21,6 +22,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.userinfo.notice.NoticeFragment;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
 
 /**
  * @author：liuhai
@@ -37,7 +40,7 @@ import butterknife.OnClick;
  * 个人中心主界面
  * version
  */
-public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCenterView, UserCenterImpPresenter> implements UserCenterContact.UserCenterView {
+public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCenterView, UserCenterImpPresenter> implements UserCenterContact.UserCenterView, NoticeFragment.CallBackListener {
     private static final String TAG = UserCenterActivity.class.getSimpleName();
 
     @BindView(R.id.tv_main_title)
@@ -64,6 +67,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_user_center);
         mPresenter.initData(this);
+        mPresenter.getUnReadMessage();
         initUI();
     }
 
@@ -81,13 +85,13 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
     @Override
     protected void onPause() {
         super.onPause();
-        UbtLog.d(TAG,"------onPause---");
+        UbtLog.d(TAG, "------onPause---");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        UbtLog.d(TAG,"------onDestroy---");
+        UbtLog.d(TAG, "------onDestroy---");
     }
 
     /**
@@ -111,7 +115,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 LeftMenuModel menuModel = mMenuModels.get(position);
-               // mTvTitle.setText(menuModel.getNameString());
+                // mTvTitle.setText(menuModel.getNameString());
                 loadFragment(mFragmentList.get(position));
                 for (int i = 0; i < mMenuModels.size(); i++) {
                     if (mMenuModels.get(i).getNameString().equals(menuModel.getNameString())) {
@@ -172,6 +176,22 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         mFragmentList.addAll(fragments);
     }
 
+    @Override
+    public void getUnReadMessage(boolean isSuccess, int count) {
+        if (count > 0) {
+            mMenuModels.get(2).setCountUnRead(count);
+            mBaseQuickAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onChangeUnReadMessage() {
+        UbtLog.d("Notice","onChangeUnReadMessage==");
+        int unReadCount = mMenuModels.get(2).getCountUnRead();
+        mMenuModels.get(2).setCountUnRead(unReadCount - 1);
+        mBaseQuickAdapter.notifyDataSetChanged();
+    }
+
 
     public class LeftAdapter extends BaseQuickAdapter<LeftMenuModel, BaseViewHolder> {
 
@@ -182,6 +202,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         @Override
         protected void convert(BaseViewHolder helper, LeftMenuModel item) {
             helper.setText(R.id.tv_item_name, item.getNameString());
+            TextView barView = helper.getView(R.id.bar_num);
             Drawable drawable = getResources().getDrawable(item.getImageId());
             /// 这一步必须要做,否则不会显示.
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -194,6 +215,19 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
                 //  helper.setBackgroundColor(R.id.tv_item_name, getContext().getResources().getColor(R.color.white));
                 tv.setEnabled(false);
             }
+            if (item.getNameString().equals("消息")) {
+                if (item.getCountUnRead() > 0) {
+                    barView.setVisibility(View.VISIBLE);
+                    if (item.getCountUnRead() < 100) {
+                        barView.setText(item.getCountUnRead()+"");
+                    } else {
+                        barView.setText("99+");
+                    }
+                }
+            } else {
+                barView.setVisibility(View.GONE);
+            }
+
         }
     }
 }
