@@ -147,7 +147,7 @@ public class DownLoadActionManager {
                         }
 
 
-                    }   else if ((cmd & 0xff) == (ConstValue.DV_DO_CHECK_ACTION_FILE_EXIST & 0xff)) {
+                    } else if ((cmd & 0xff) == (ConstValue.DV_DO_CHECK_ACTION_FILE_EXIST & 0xff)) {
                         UbtLog.d(TAG, "播放文件是否存在：" + param[0]);
                         downRobotAction(playingInfo);
                         UbtLog.d(TAG, "播放文件：" + FileTools.actions_download_robot_path + "/" + playingInfo.getActionName() + ".hts");
@@ -348,14 +348,16 @@ public class DownLoadActionManager {
     }
 
     private void doSendComm(byte cmd, byte[] param) {
-
-        ((AlphaApplication) mContext.getApplicationContext())
-                .getBlueToothManager()
-                .sendCommand(((AlphaApplication) mContext
-                                .getApplicationContext()).getCurrentBluetooth()
-                                .getAddress(), cmd,
-                        param, param == null ? 0 : param.length,
-                        false);
+        if (null != ((AlphaApplication) mContext
+                .getApplicationContext()).getCurrentBluetooth()) {
+            ((AlphaApplication) mContext.getApplicationContext())
+                    .getBlueToothManager()
+                    .sendCommand(((AlphaApplication) mContext
+                                    .getApplicationContext()).getCurrentBluetooth()
+                                    .getAddress(), cmd,
+                            param, param == null ? 0 : param.length,
+                            false);
+        }
     }
 
     public void resetData() {
