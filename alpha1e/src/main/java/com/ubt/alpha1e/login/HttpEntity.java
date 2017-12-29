@@ -140,7 +140,5 @@ public class HttpEntity {
      */
     public static final String UPDATE_BLOCKLY_COURSE = BASIC_UBX_SYS + "graph/update";
 
-    public static final String SAVE_ACTION = BASIC_UBX_SYS + "original/upload";
-
 
 }
