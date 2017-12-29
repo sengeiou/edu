@@ -473,11 +473,12 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                         if (currentIndex < mOne1ContentList.size()) {
                             CourseOne1Content oneContent = mOne1ContentList.get(currentIndex);
                             tv.setText(oneContent.getTitle());
-                            if (currentIndex == 3) {
-                                ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor5.mp3\",\"playcount\":1}");
-                            } else {
-                                ((ActionsEditHelper) mHelper).playAction(oneContent.getActionPath());
-                            }
+//                            if (currentIndex == 3) {
+//                                ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor5.mp3\",\"playcount\":1}");
+//                            } else {
+//                                ((ActionsEditHelper) mHelper).playAction(oneContent.getActionPath());
+//                            }
+                            ((ActionsEditHelper) mHelper).playAction(oneContent.getActionPath());
                             UbtLog.d(TAG, " onNext====" + oneContent.getTitle());
                             UbtLog.d(TAG, " oneContent====" + oneContent.toString());
                             currentIndex++;
@@ -569,7 +570,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         }
         if (currentCourse == 1) {
             if (currentIndex == 4) {
-                ((ActionsEditHelper) mHelper).stopSoundAudio();
+                ((ActionsEditHelper) mHelper).stopAction();
                 doReset();
                 showNextDialog(2);
                 if (courseProgressListener != null) {
