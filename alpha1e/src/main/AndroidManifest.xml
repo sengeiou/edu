@@ -107,6 +107,7 @@
         <service android:name=".services.RecordSoftService" />
         <service android:name=".services.AutoScanConnectService" />
         <service android:name=".services.SyncDataService" />
+        <service android:name=".services.HibitsAlertService" />
         <service android:name=".services.SendClientIdService" />
 
         <!-- Facebook -->

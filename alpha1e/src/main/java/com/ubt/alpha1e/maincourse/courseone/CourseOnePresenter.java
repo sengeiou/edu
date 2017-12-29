@@ -263,7 +263,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         proQequest.setCourseTwo(courseTwo);
         proQequest.setProgressTwo("1");
         proQequest.setType(2);
-        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_SAVE_PROGRESS, proQequest, 100)
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.SAVE_COURSE_PROGRESS, proQequest, 100)
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
