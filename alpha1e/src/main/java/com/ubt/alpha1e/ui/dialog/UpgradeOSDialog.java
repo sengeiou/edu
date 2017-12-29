@@ -77,7 +77,7 @@ public class UpgradeOSDialog {
     public UpgradeOSDialog setMsg(String msg) {
         showMsg = true;
         if ("".equals(msg)) {
-            txt_msg.setText("内容");
+            txt_msg.setText("");
         } else {
             txt_msg.setText(msg);
         }
