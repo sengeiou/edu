@@ -51,6 +51,7 @@ public class Constant {
      */
     public final static String SP_XG_ACCESSID ="accessid";
     public final static String SP_XG_ACCESSKEY ="accessKey";
+    public final static String SP_XG_USERID="userId";
 
     /**
      * 首次获取蓝牙权限
