@@ -315,7 +315,7 @@ public class ActionsEditHelper extends BaseHelper implements
      * @param actionName
      */
     public void playAction(String actionName) {
-
+        UbtLog.d("ActionEditHelper"," playAction actionName==="+actionName);
         byte[] actions = BluetoothParamUtil.stringToBytes(actionName);
         ((AlphaApplication) mContext
                 .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) mContext.getApplicationContext())
