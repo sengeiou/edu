@@ -494,13 +494,24 @@ public class BlocklyVideoPlayer extends StandardGSYVideoPlayer {
 
     @Override
     protected void clickStartIcon() {
-        UbtLog.d(TAG, "clickStartIcon");
         super.clickStartIcon();
+        UbtLog.d(TAG, "clickStartIcon:" + getCurrentState());
+        if(getCurrentState() == 5){
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    hideAllWidget();
+                }
+            }, 1500);
+        }
+
     }
 
     public void clickPauseIcon(){
         clickStartIcon();
     }
+
+
 
     @Override
     protected void changeUiToPauseShow() {

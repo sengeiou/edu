@@ -11,6 +11,7 @@ package com.ubt.alpha1e.login;
 
 public class HttpEntity {
 
+    public static final String HIBITS_STATISTICS = "http://10.10.1.14:8080/alpha1e";
 
     /**
      * 信鸽获取
@@ -22,6 +23,7 @@ public class HttpEntity {
     public static final String getXGAppId = XG_URL + "push/appInfo";
 
     public static final String bindXGServer = XG_URL + "push/userToken";
+    public static final String unbindXGServer=XG_URL+"push/unbindToken";
 
 
 

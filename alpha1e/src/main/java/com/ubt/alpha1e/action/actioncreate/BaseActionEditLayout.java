@@ -1630,7 +1630,16 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     @Override
     public void onMusicDelete(PrepareMusicModel prepareMusicModel) {
-        UbtLog.d(TAG, "onMusicDelete:" + prepareMusicModel.getMusicPath() + "__mDir:" + mDir);
+        UbtLog.d(TAG, "onMusicDelete:" + prepareMusicModel.toString() + "__mDir:" + mDir);
+        if(prepareMusicModel.getMusicType()==1){
+            if(!TextUtils.isEmpty(mDir)){
+                UbtLog.d(TAG, "path:" + FileTools.tmp_file_cache + "/"+prepareMusicModel.getMusicName());
+                if((FileTools.tmp_file_cache + "/"+prepareMusicModel.getMusicName()+".mp3").equals(mDir)){
+                    deleteMusic();
+                    changeSaveAndPlayState();
+                }
+            }
+        }
     }
 
     String mCurrentSourcePath;

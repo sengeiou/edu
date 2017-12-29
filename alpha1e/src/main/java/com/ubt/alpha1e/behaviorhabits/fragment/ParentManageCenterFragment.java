@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
@@ -26,10 +27,14 @@ import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
+import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.data.Constant;
+import com.ubt.alpha1e.webcontent.WebContentActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +89,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
     private List<HabitsEvent> mHabitsEventInfoDatas = null;
     private int mWorkdayMode = 1;//workday=1; holiday=2
     private HabitsEvent switchHabitsEvent = null;//
-
+    private UserModel userModel = null;
     protected Dialog mCoonLoadingDia;
 
     private Handler mHandler = new Handler() {
@@ -152,6 +157,9 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
 
     @Override
     protected void initUI() {
+
+        userModel = (UserModel) SPUtils.getInstance().readObject(com.ubt.alpha1e.base.Constant.SP_USER_INFO);
+
         mCoonLoadingDia = SLoadingDialog.getInstance(getContext());
 
         tvBaseTitleName.setText(getStringRes("ui_habits_parent_management_center"));
@@ -298,6 +306,8 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
                 mPresenter.getBehaviourEvent("12345");
                 mPresenter.getBehaviourPlayContent("1","6");
                 mPresenter.setBehaviourEvent("1234",1);*/
+                WebContentActivity.launchActivity(getActivity(), HttpEntity.HIBITS_STATISTICS,"");
+
                 break;
             case R.id.rl_workdays:
                 switchMode(1);
@@ -333,7 +343,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
         }
 
         mCoonLoadingDia.show();
-        mPresenter.getParentBehaviourList("1","1",String.valueOf(workdayMode));
+        mPresenter.getParentBehaviourList(userModel.getSex(),"1",String.valueOf(workdayMode));
     }
 
 }

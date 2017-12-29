@@ -212,11 +212,13 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         deleteMP3RecordFile(list.get(position).getMusicName());
-        list.remove(position);
-        actionAdapter.notifyDataSetChanged();
+        UbtLog.d("onItemChildClick", "list:" + list.get(position) );
         if(mDialogListener != null){
             mDialogListener.onMusicDelete(list.get(position));
         }
+        list.remove(position);
+        actionAdapter.notifyDataSetChanged();
+
     }
 
 

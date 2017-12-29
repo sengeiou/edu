@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.action.actioncreate.WriteImageListener;
 import com.ubt.alpha1e.business.NewActionPlayer;
 import com.ubt.alpha1e.business.NewActionPlayer.PlayerState;
 import com.ubt.alpha1e.business.NewActionsManager;
@@ -415,16 +416,30 @@ public class ActionsEditHelper extends BaseHelper implements
 
     }
 
-    public void saveMyNewAction(NewActionInfo mCurrentAction,
-                                Bitmap mCurrentActionImg, String musicDir) {
+    public void saveMyNewAction(final NewActionInfo mCurrentAction,
+                                Bitmap mCurrentActionImg, final String musicDir) {
         if (mCurrentActionImg != null) {
             mCurrentAction.actionHeadUrl = FileTools.actions_new_cache + File.separator + "Images/" + System.currentTimeMillis() + ".jpg";
-            FileTools.writeImage(mCurrentActionImg,
-                    mCurrentAction.actionHeadUrl, true);
+            FileTools.writeActionImg(mCurrentActionImg,
+                    mCurrentAction.actionHeadUrl, true, new WriteImageListener() {
+                        @Override
+                        public void writeFinsh() {
+                            if (getCurrentUser() == null) {
+                                mCurrentAction.editerId = "";
+                            } else {
+                                mCurrentAction.editerId = getCurrentUser().userId + "";
+                            }
+                            if (mCurrentAction.actionId == -1) {
+                                mNewActionsManager.doSave(mCurrentAction, musicDir);
+                            } else {
+                                mNewActionsManager.doUpdate(mCurrentAction);
+                            }
+                        }
+                    });
         } else {
             mCurrentAction.actionHeadUrl = "";
         }
-        if (getCurrentUser() == null) {
+/*        if (getCurrentUser() == null) {
             mCurrentAction.editerId = "";
         } else {
             mCurrentAction.editerId = getCurrentUser().userId + "";
@@ -433,7 +448,7 @@ public class ActionsEditHelper extends BaseHelper implements
             mNewActionsManager.doSave(mCurrentAction, musicDir);
         } else {
             mNewActionsManager.doUpdate(mCurrentAction);
-        }
+        }*/
     }
 
     public void saveMyNewAction(NewActionInfo mCurrentAction,

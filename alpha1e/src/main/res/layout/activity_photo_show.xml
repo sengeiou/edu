@@ -31,7 +31,7 @@
                 android:id="@+id/iv_ubt_wechat"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
-                android:src="@drawable/ubt_wechat"></ImageView>
+                android:src="@drawable/ubt_wechat_bigger"></ImageView>
 
             <TextView
                 android:layout_width="wrap_content"

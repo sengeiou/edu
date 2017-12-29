@@ -104,9 +104,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 //        String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
         //需要路径的
         videoPlayer.setUp(url, true, new File(FileUtils.getPath()), courseData.getName());
-        //增加title
-//        videoPlayer.getTitleTextView().setVisibility(View.INVISIBLE);
-        //videoPlayer.setShowPauseCover(false);
+
         //videoPlayer.setSpeed(2f);
         orientationUtils = new OrientationUtils(this, videoPlayer);
         orientationUtils.setRotateWithSystem(false);
@@ -136,6 +134,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 
         //是否可以滑动调整
         videoPlayer.setIsTouchWiget(false);
+        videoPlayer.setIfCurrentIsFullscreen(true);
 
         //设置横屏锁住
         videoPlayer.setLockLand(true);
@@ -194,6 +193,17 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
                 ivPause.setVisibility(View.GONE);
             }
 
+            @Override
+            public void onClickStopFullscreen(String s, Object... objects) {
+                UbtLog.d(TAG, "onClickStopFullscreen");
+                ivPause.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onClickResumeFullscreen(String s, Object... objects) {
+                UbtLog.d(TAG, "onClickResumeFullscreen");
+                ivPause.setVisibility(View.GONE);
+            }
 
             @Override
             public void onAutoComplete(String s, Object... objects) {
@@ -289,6 +299,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 
     @Override
     public void onClickUiToggle() {
+        UbtLog.d(TAG, "onClickUiToggle");
         if(rlGoPro.getVisibility() == View.VISIBLE){
             rlGoPro.setVisibility(View.GONE);
         }else{
@@ -298,6 +309,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 
     @Override
     public void hideAllWidget() {
+        UbtLog.d(TAG, "hideAllWidget");
         rlGoPro.setVisibility(View.GONE);
     }
 

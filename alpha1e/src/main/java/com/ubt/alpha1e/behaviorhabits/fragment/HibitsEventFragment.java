@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.baoyz.pg.PG;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
@@ -28,6 +29,7 @@ import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.Constant;
+import com.ubt.alpha1e.data.Md5;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.custom.CircleBar;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
@@ -35,6 +37,7 @@ import com.ubt.alpha1e.ui.dialog.HibitsAlertDialog;
 import com.ubt.alpha1e.ui.dialog.InputPasswordDialog;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.ui.dialog.SetPasswordDialog;
+import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.psdmanage.PsdManageActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -128,8 +131,11 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
         mHabitsEventInfoDatas = new ArrayList<>();
         initRecyclerViews();
 
+        UserModel userModel = (UserModel) SPUtils.getInstance().readObject(com.ubt.alpha1e.base.Constant.SP_USER_INFO);
+        UbtLog.d(TAG,"userModel = " + userModel.getSex() + "    " + userModel.getGrade());
+
         mPresenter.getUserPassword();
-        mPresenter.getBehaviourList("1","1");
+        mPresenter.getBehaviourList(userModel.getSex(), "1");
     }
 
     public void initRecyclerViews() {
@@ -286,7 +292,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     .setCallbackListener(new SetPasswordDialog.ISetPasswordListener() {
                         @Override
                         public void onSetPassword(String password) {
-                            mUserPassword = password;
+                            mUserPassword = Md5.getMD5(password).toLowerCase();
                             mCoonLoadingDia.show();
                             mPresenter.doSetUserPassword(password);
                         }

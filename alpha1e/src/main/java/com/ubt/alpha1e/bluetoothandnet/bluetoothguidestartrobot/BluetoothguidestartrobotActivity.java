@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.PermissionUtils;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.services.AutoScanConnectService;
@@ -141,7 +142,8 @@ public class BluetoothguidestartrobotActivity extends MVPBaseActivity<Bluetoothg
     void startBluetoothConnect(){
         Intent intent = new Intent();
         intent.putExtra("isFirst","yes");
-        intent.setClass(BluetoothguidestartrobotActivity.this,BluetoothconnectActivity.class);
+//        intent.setClass(BluetoothguidestartrobotActivity.this,BluetoothconnectActivity.class);
+        intent.setClass(BluetoothguidestartrobotActivity.this,BluetoothandnetconnectstateActivity.class);
         this.startActivity(intent);
         this.overridePendingTransition(R.anim.activity_open_up_down,0);
         BluetoothguidestartrobotActivity.this.finish();

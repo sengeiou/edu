@@ -3,6 +3,7 @@ package com.ubt.alpha1e.blocklycourse.adapter;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -64,13 +65,13 @@ public class BlocklyCourseAdapter extends BaseQuickAdapter<CourseData, BaseViewH
         }
 //        ivStar.setImageResource(item.getActionCourcesScore() == 0 ? R.drawable.img_action_incomplete : R.drawable.img_action_completed);
 
-//        if (TextUtils.isEmpty(item.getName())) {
-//            helper.getView(R.id.rl_content).setVisibility(View.GONE);
-//            helper.getView(R.id.iv_next).setVisibility(View.VISIBLE);
-//        } else {
-//            helper.getView(R.id.rl_content).setVisibility(View.VISIBLE);
-//            helper.getView(R.id.iv_next).setVisibility(View.GONE);
-//        }
+        if (TextUtils.isEmpty(item.getName())) {
+            helper.getView(R.id.rl_content).setVisibility(View.GONE);
+            helper.getView(R.id.iv_next).setVisibility(View.VISIBLE);
+        } else {
+            helper.getView(R.id.rl_content).setVisibility(View.VISIBLE);
+            helper.getView(R.id.iv_next).setVisibility(View.GONE);
+        }
     }
 
 }
