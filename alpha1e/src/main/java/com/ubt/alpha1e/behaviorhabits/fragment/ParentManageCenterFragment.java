@@ -26,10 +26,13 @@ import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.data.Constant;
+import com.ubt.alpha1e.webcontent.WebContentActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -298,6 +301,8 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
                 mPresenter.getBehaviourEvent("12345");
                 mPresenter.getBehaviourPlayContent("1","6");
                 mPresenter.setBehaviourEvent("1234",1);*/
+                WebContentActivity.launchActivity(getActivity(), HttpEntity.HIBITS_STATISTICS,"");
+
                 break;
             case R.id.rl_workdays:
                 switchMode(1);

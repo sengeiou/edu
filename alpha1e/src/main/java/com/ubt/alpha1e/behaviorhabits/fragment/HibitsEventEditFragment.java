@@ -80,7 +80,9 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     @BindView(R.id.rv_play_content)
     DragRecyclerView rvPlayContent;
 
-    private String[] mHourArr = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"};
+    private String[] mHourArr = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
+                                "10", "11","12","13","14","15","16","17","18","19",
+                                "20", "21","22","23"};
     private String[] mMinuteArr = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
             "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
             "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",

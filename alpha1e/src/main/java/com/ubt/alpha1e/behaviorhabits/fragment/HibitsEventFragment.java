@@ -28,6 +28,7 @@ import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.Constant;
+import com.ubt.alpha1e.data.Md5;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.custom.CircleBar;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
@@ -286,7 +287,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     .setCallbackListener(new SetPasswordDialog.ISetPasswordListener() {
                         @Override
                         public void onSetPassword(String password) {
-                            mUserPassword = password;
+                            mUserPassword = Md5.getMD5(password).toLowerCase();
                             mCoonLoadingDia.show();
                             mPresenter.doSetUserPassword(password);
                         }

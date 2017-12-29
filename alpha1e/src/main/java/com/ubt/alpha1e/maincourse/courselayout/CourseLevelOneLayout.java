@@ -27,7 +27,9 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
 import com.ubt.alpha1e.action.model.ActionConstant;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
+import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
 import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
@@ -65,6 +67,11 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
     AnimationDrawable animation3;
     private RelativeLayout rlActionCenter;
     private ImageView ivCenterAction;
+
+    RelativeLayout mRlInstruction;
+    private TextView mTextView;
+    private boolean isInstruction;
+
     /**
      * 高亮对话框的TextView显示
      */
@@ -129,7 +136,6 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                     level = 1;
                 }
             }
-
         }
         this.currentCourse = level;
         this.courseProgressListener = courseProgressListener;
@@ -145,8 +151,9 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         setImageViewBg();
         UbtLog.d(TAG, "currentCourse==" + currentCourse);
         if (currentCourse == 1) {
-
-            showCourseOne();
+            isInstruction = true;
+            mRlInstruction.setVisibility(View.VISIBLE);
+            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor1.hts");
         } else if (currentCourse == 2) {
             showAddLight();
 
@@ -180,7 +187,9 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
 
         rlActionCenter = findViewById(R.id.rl_action_animal);
         ivCenterAction = findViewById(R.id.iv_center_action);
-
+        mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
+        mTextView = (TextView) findViewById(R.id.tv_all_introduc);
+        mTextView.setText(ResourceManager.getInstance(mContext).getStringResources("action_course_card1_1_all"));
     }
 
     /**
@@ -292,15 +301,35 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
     };
 
 
+    /**
+     * 完成播放
+     */
     public void playComplete() {
-        UbtLog.d(TAG, "播放完成");
+        UbtLog.d(TAG, "播放完成"+currentCourse);
         if (((Activity) mContext).isFinishing()) {
             return;
         }
 
         if (currentCourse == 1) {
-
+            if (isInstruction) {
+                isInstruction = false;
+                mRlInstruction.setVisibility(View.GONE);
+                showCourseOne();
+            } else {
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        clickKnown();
+                    }
+                }, 1000);
+            }
         } else if (currentCourse == 2) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    clickKnown();
+                }
+            }, 1000);
             UbtLog.d(TAG, "playComplete==" + 2);
             if (secondIndex == 1) {
                 lostRightLeg = true;
@@ -309,6 +338,13 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 startEditLeftHand();
             }
 
+        } else if (currentCourse == 3) {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    clickKnown();
+                }
+            }, 1000);
         }
     }
 
@@ -508,7 +544,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 });
 
         mHightLight.show();
-        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
+        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor6.hts");
     }
 
 
@@ -539,7 +575,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 });
 
         mHightLight.show();
-        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
+        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor7.hts");
     }
 
     /**
@@ -637,13 +673,6 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 })
                 .setCancelable(false)
                 .create().show();
-    }
-
-
-    public interface CourseProgressListener {
-        void completeCurrentCourse(int current);
-
-        void finishActivity();
     }
 
 

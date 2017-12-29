@@ -35,7 +35,6 @@ import java.util.ListIterator;
 public class  XGMessageRecevicer extends XGPushBaseReceiver {
     private String BEHAVIOUR_HABIT="1";
     private String COMMUNITY="2";
-    BehaviorHabitsPresenter mPresenter;
     @Override
     public void onRegisterResult(Context context, int i, XGPushRegisterResult xgPushRegisterResult) {
 

@@ -263,7 +263,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         proQequest.setCourseTwo(courseTwo);
         proQequest.setProgressTwo("1");
         proQequest.setType(2);
-        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_SAVE_PROGRESS, proQequest, 100)
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.SAVE_COURSE_PROGRESS, proQequest, 100)
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
@@ -306,5 +306,31 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
                     }
                 });
 
+    }
+
+
+    /**
+     * 保存课程记录到本地和后台
+     *
+     * @param currentCourse 当前学习的课程关卡
+     * @param courseLevel   当前学习到第几课
+     */
+    public void savaCourseDataToDB(int currentCourse, int courseLevel) {
+        UbtLog.d("savaCourseDataToDB", "保存进度到数据库1" + "currentCourse==" + currentCourse + "courseLevel" + courseLevel);
+        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+        if (null != record) {
+            UbtLog.d("savaCourseDataToDB", "保存进度到数据库2" + record.toString());
+            int course = record.getCourseLevel();
+            int level = record.getPeriodLevel();
+            if ((currentCourse > course) || (course == currentCourse && level < courseLevel)) {
+                UbtLog.d("savaCourseDataToDB", "保存进度到数据库3" + "保存成功");
+                ContentValues values = new ContentValues();
+                values.put("CourseLevel", currentCourse);
+                values.put("periodLevel", courseLevel);
+                values.put("isUpload", false);
+                DataSupport.updateAll(LocalActionRecord.class, values);
+                saveLastProgress(String.valueOf(currentCourse), String.valueOf(courseLevel));
+            }
+        }
     }
 }

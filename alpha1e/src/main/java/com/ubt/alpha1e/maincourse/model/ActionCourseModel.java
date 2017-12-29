@@ -23,7 +23,7 @@ public class ActionCourseModel {
      * 当前进行到哪个课时
      */
     private int currentCourseIndex;
-
+    private int size;
     private List<String> mList;
 
 
@@ -91,6 +91,14 @@ public class ActionCourseModel {
         this.title = title;
     }
 
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     @Override
     public String toString() {
         return "ActionCourseModel{" +
@@ -101,6 +109,7 @@ public class ActionCourseModel {
                 ", drawableId=" + drawableId +
                 ", ActionCourcesScore=" + ActionCourcesScore +
                 ", currentCourseIndex=" + currentCourseIndex +
+                ", size=" + size +
                 ", mList=" + mList +
                 '}';
     }

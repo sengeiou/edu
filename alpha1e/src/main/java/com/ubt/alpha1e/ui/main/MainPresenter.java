@@ -2,14 +2,20 @@ package com.ubt.alpha1e.ui.main;
 
 import android.text.TextUtils;
 
+import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.RequstMode.BaseRequest;
+import com.ubt.alpha1e.base.RequstMode.CheckIsBindRequest;
 import com.ubt.alpha1e.base.RequstMode.XGGetAccessIdRequest;
 import com.ubt.alpha1e.base.ResponseMode.XGDeviceMode;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.xingepush.XGUBTManager;
 import com.ubtechinc.base.ConstValue;
@@ -20,6 +26,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import okhttp3.Call;
 import okhttp3.MediaType;
 
@@ -28,7 +36,7 @@ import static android.R.attr.id;
 
 public class MainPresenter extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
     private String TAG = "MainPresenter";
-
+    private static final int CHECK_ROBOT_INFO_HABIT = 10;
 
     @Override
     public void requestCartoonAction(String json) {
@@ -187,6 +195,65 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         //Exit the course enter
         papram[0] = 0x0;
         commandRobotAction(ConstValue.DV_ENTER_COURSE, papram);
+
+    }
+
+    @Override
+    public void checkMyRobotState() {
+        CheckIsBindRequest checkRobotInfo = new CheckIsBindRequest();
+        checkRobotInfo.setSystemType("3");
+        String url = HttpEntity.CHECK_ROBOT_INFO;
+        doRequest(url,checkRobotInfo,CHECK_ROBOT_INFO_HABIT);
+    }
+
+    /**
+     * 请求网络操作
+     */
+    public void doRequest(String url, BaseRequest baseRequest, int requestId) {
+
+        OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d(TAG, "doRequest onError:" + e.getMessage());
+                switch (id){
+                    case CHECK_ROBOT_INFO_HABIT:
+                        mView.onGetRobotInfo(0,null);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d(TAG,"response = " + response);
+                switch (id) {
+                    case CHECK_ROBOT_INFO_HABIT:
+                        BaseResponseModel<ArrayList<MyRobotModel>> baseResponseModel = GsonImpl.get().toObject(response,
+                                new TypeToken<BaseResponseModel<ArrayList<MyRobotModel>>>() {
+                                }.getType());//加上type转换，避免泛型擦除
+                        if(!baseResponseModel.status || baseResponseModel.models == null){
+                            mView.onGetRobotInfo(0,null);
+                        }else {
+                            if(baseResponseModel.models.size() == 0){
+                                mView.onGetRobotInfo(2,null);
+                                return;
+                            }else {
+                                UbtLog.d(TAG, "size = "+baseResponseModel.models.size());
+                                UbtLog.d(TAG, "autoUpgrade = " + baseResponseModel.models.get(0).getAutoUpgrade());
+                                UbtLog.d(TAG, "equipmentSeq = " + baseResponseModel.models.get(0).getEquipmentSeq());
+                                UbtLog.d(TAG, "equipmentVersion = " + baseResponseModel.models.get(0).getEquipmentVersion());
+                                mView.onGetRobotInfo(1,baseResponseModel.models.get(0));
+                            }
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        });
 
     }
 

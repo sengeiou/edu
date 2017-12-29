@@ -4,16 +4,26 @@ package com.ubt.alpha1e.userinfo.mainuser;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.userinfo.dynamicaction.DynamicActionFragment;
 import com.ubt.alpha1e.userinfo.notice.NoticeFragment;
 import com.ubt.alpha1e.userinfo.setting.SettingFragment;
 import com.ubt.alpha1e.userinfo.usermanager.UserInfoFragment;
+import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
+import com.ubt.alpha1e.utils.log.UbtLog;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * @author：liuhai
@@ -63,7 +73,7 @@ public class UserCenterImpPresenter extends BasePresenterImpl<UserCenterContact.
                 } else if (i == 3) {
                     fragmentList.add(DynamicActionFragment.newInstance("", ""));
                 } else if (i == 4) {
-                    fragmentList.add(NoticeFragment.newInstance("5", ""));
+                    fragmentList.add(DynamicActionFragment.newInstance("", ""));
                 } else if (i == 5) {
                     Fragment fragment = SettingFragment.newInstance(leftMenuModels.get(i).getNameString(), "");
                     fragmentList.add(fragment);
@@ -74,5 +84,40 @@ public class UserCenterImpPresenter extends BasePresenterImpl<UserCenterContact.
         }
     }
 
+    /**
+     * 更新消息状态
+     */
+    @Override
+    public void getUnReadMessage() {
+        BaseRequest messageListRequest = new BaseRequest();
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.MESSAGE_UNREAD_TOTAL, messageListRequest, 0).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d("getLoopData", "onError:" + e.getMessage());
+                if (mView != null) {
+                    mView.getUnReadMessage(false, 0);
+                }
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d("getLoopData", "getUser__response==" + response);
+
+                BaseResponseModel baseResponseModel = GsonImpl.get().toObject(response,
+                        new TypeToken<BaseResponseModel>() {
+                        }.getType());
+                if (baseResponseModel.status) {
+                    if (mView != null) {
+                        UbtLog.d("getLoopData", "baseResponseModel.models==" + baseResponseModel.models);
+                        mView.getUnReadMessage(true, Integer.parseInt(baseResponseModel.models.toString()));
+                    }
+                } else {
+                    if (mView != null) {
+                        mView.getUnReadMessage(false, 0);
+                    }
+                }
+            }
+        });
+    }
 
 }

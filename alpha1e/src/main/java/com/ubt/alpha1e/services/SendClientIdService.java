@@ -166,6 +166,9 @@ public class SendClientIdService extends Service {
 
 		CheckIsBindRequest checkIsBindRequest = new CheckIsBindRequest();
 		checkIsBindRequest.setEquipmentId(AlphaApplication.currentRobotSN);
+		if(AlphaApplication.currentRobotSN != null && AlphaApplication.currentRobotSN.equals("")){
+			return;
+		}
 		checkIsBindRequest.setSystemType("3");
 
 		String url = HttpEntity.CHECK_IS_BIND;
@@ -208,7 +211,7 @@ public class SendClientIdService extends Service {
 //						mHandler.postDelayed(new Runnable() {
 //							@Override
 //							public void run() {
-//								upgradeOSDialog("1.2","\n1.增加行为习惯功能 \n2.增加行为习惯功能\n3.增加行为习惯功能\n4.增加行为习惯功能\n5.增加行为习惯功能\n6.增加行为习惯功能\n6.增加行为习惯功能");
+//								upgradeOSDialog("1.2","\n1.增加行为习惯功能 \n2.增加行为习惯功能\n3.增加行为习惯功能");
 //							}
 //						},10000);
 
@@ -499,7 +502,7 @@ public class SendClientIdService extends Service {
 	public void upgradeOSDialog(String version,String versionContent){
 		new UpgradeOSDialog(AppManager.getInstance().currentActivity()).builder()
 				.setTitle("固件升级")
-				.setMsg("你的机器人固件有更新版本啦。V"+version +"版本更新了如下内容："+versionContent)
+				.setMsg("V"+version +"版本更新了如下内容："+versionContent)
 				.setCancelable(false)
 				.setPositiveButton("去升级", new View.OnClickListener() {
 					@Override
@@ -520,7 +523,7 @@ public class SendClientIdService extends Service {
 	public void sendCmdUpgradeDialog(){
 		new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
 				.setTitle("提示")
-				.setMsg("开始升级后就不能使用其它功能！")
+				.setMsg("机器人固件升级大约需要4-6分钟。固件升级期间，你将不能使用机器人的任何功能哦。确定要升级么？")
 				.setCancelable(false)
 				.setPositiveButton("升级", new View.OnClickListener() {
 					@Override

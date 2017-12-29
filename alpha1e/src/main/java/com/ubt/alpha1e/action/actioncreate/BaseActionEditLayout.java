@@ -630,13 +630,17 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     }
 
+    public void onPlayMusicComplete(){
+
+    }
+
     private void initMediaPlayer() {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 UbtLog.d(TAG, "播放完毕:" + isFinishFramePlay);
-
+                onPlayMusicComplete();
                 playFinish = true;
                 mHandler.removeMessages(0);
                 if(isFinishFramePlay){
