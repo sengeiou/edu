@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -92,6 +93,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         isTransition = getIntent().getBooleanExtra(TRANSITION, false);
         courseData = (CourseData)getIntent().getSerializableExtra(COURSE_DATA);
         UbtLog.d(TAG, "onCreate courseData:" + courseData);
@@ -255,7 +257,16 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
     @Override
     protected void onResume() {
         super.onResume();
+        UbtLog.d(TAG, "onResume 0:" + videoPlayer.getCurrentState());
         videoPlayer.onVideoResume();
+        UbtLog.d(TAG, "onResume 1:" + videoPlayer.getCurrentState());
+        if(ivPause.getVisibility()==View.VISIBLE && videoPlayer.getCurrentState()==2){
+//            GSYVideoManager.instance().getMediaPlayer().pause();
+//            hideAllWidget();
+            videoPlayer.clickPauseIcon();
+        }
+
+
     }
 
     @Override
