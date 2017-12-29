@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.BuildConfig;
+import com.ubt.alpha1e.action.actioncreate.WriteImageListener;
 import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.ActionRecordInfo;
 import com.ubt.alpha1e.utils.YHDCollectionUtils;
@@ -28,7 +29,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -176,6 +176,7 @@ public class FileTools {
                         img.compress(Bitmap.CompressFormat.JPEG, 50, out);
                         out.flush();
                         out.close();
+                        UbtLog.d(TAG, "writeImage finish");
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -184,6 +185,46 @@ public class FileTools {
 
             }
         });
+
+    }
+
+    public static void writeActionImg(final Bitmap img, final String key_name,
+                                      final boolean isReplace, final WriteImageListener writeImageListener){
+        pool.execute(new Runnable() {
+            @Override
+            public void run() {
+                File f = new File(key_name);
+                File path = new File(f.getParent());
+                if (!path.exists()) {
+                    path.mkdirs();
+                }
+                if (f.exists()) {
+                    if (isReplace) {
+                        deleteFileSafely(f);
+                    } else{
+                        return;
+                    }
+
+                } else {
+                    try {
+                        f.createNewFile();
+                        FileOutputStream out = new FileOutputStream(f);
+                        img.compress(Bitmap.CompressFormat.JPEG, 50, out);
+                        out.flush();
+                        out.close();
+                        UbtLog.d(TAG, "writeImage finish");
+                        if(writeImageListener != null){
+                            writeImageListener.writeFinsh();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+
 
     }
 

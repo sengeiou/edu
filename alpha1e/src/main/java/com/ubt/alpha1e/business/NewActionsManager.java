@@ -14,6 +14,7 @@ import com.ubt.alpha1e.data.FileTools.State;
 import com.ubt.alpha1e.data.IFileListener;
 import com.ubt.alpha1e.data.ZipTools;
 import com.ubt.alpha1e.data.model.NewActionInfo;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.ui.DubActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -243,6 +244,7 @@ public class NewActionsManager implements IFileListener {
      */
     public void saveActionToServer() {
 
+
         try {
 //            if(((AlphaApplication) mContext
 //            ).getCurrentUserInfo() == null)
@@ -259,6 +261,7 @@ public class NewActionsManager implements IFileListener {
             File file = new File(FileTools.actions_new_cache + File.separator + mChangeNewActionInfo.actionId + ".zip");
             File imageFile;
             if (!TextUtils.isEmpty(mChangeNewActionInfo.actionHeadUrl)) {
+                UbtLog.d(TAG, "writeImage to server");
                 imageFile = new File(mChangeNewActionInfo.actionHeadUrl);
             } else {
                 imageFile = new File(FileTools.actions_new_cache + File.separator + "Images/" + "default.jpg");
@@ -277,11 +280,12 @@ public class NewActionsManager implements IFileListener {
             params.put("actionDesciber", mChangeNewActionInfo.actionDesciber);
             params.put("actionType", mChangeNewActionInfo.actionType + "");
             params.put("actionTime", mChangeNewActionInfo.actionTime+ "");
-            String url = HttpAddress.getRequestUrl(HttpAddress.Request_type.createaction_upload);
+//            String url = HttpAddress.getRequestUrl(HttpAddress.Request_type.createaction_upload);
+
             OkHttpUtils.post()//
                     .addFile("mFile1", file.getName(), file)//
                     .addFile("mFile2", imageFile.getName(), imageFile)
-                    .url(url)//
+                    .url(HttpEntity.SAVE_ACTION)//
                     .params(params)//
                     .build()//
                     .execute(new StringCallback() {

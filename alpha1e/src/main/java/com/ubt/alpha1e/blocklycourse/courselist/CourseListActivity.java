@@ -17,6 +17,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.blocklycourse.BlocklyCourseActivity;
 import com.ubt.alpha1e.blocklycourse.BlocklyUtil;
 import com.ubt.alpha1e.blocklycourse.adapter.BlocklyCourseAdapter;
@@ -68,6 +69,7 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
         }else{
             mPresenter.getBlocklyCourseList(this);
         }
+        LoadingDialog.show(this);
 
     }
 
@@ -109,6 +111,7 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
         UbtLog.d(TAG, "setBlocklyCourseData list:" + list.toString());
         courseList.addAll(list);
         courseAdapter.notifyDataSetChanged();
+        LoadingDialog.dismiss(this);
     }
 
     @Override
