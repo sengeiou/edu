@@ -26,6 +26,7 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.maincourse.adapter.ActionCourseTwoUtil;
 import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
+import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -484,11 +485,7 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
     }
 
 
-    public interface CourseProgressListener {
-        void completeCurrentCourse(int current);
 
-        void finishActivity();
-    }
 
 
 }

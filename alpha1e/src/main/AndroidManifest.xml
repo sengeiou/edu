@@ -107,6 +107,7 @@
         <service android:name=".services.RecordSoftService" />
         <service android:name=".services.AutoScanConnectService" />
         <service android:name=".services.SyncDataService" />
+        <service android:name=".services.HibitsAlertService" />
         <service android:name=".services.SendClientIdService" />
 
         <!-- Facebook -->
@@ -681,12 +682,21 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen" />
-
+        <activity
+            android:name=".maincourse.courseone.CourseLevelThreeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.courseone.CourseLevelFourActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".action.actioncreate.SaveSuccessActivity"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/NoTitleThemeFullScreen"/>
+            android:theme="@style/NoTitleThemeFullScreen" />
 
         <activity
             android:name=".action.help.HelpActivity"
@@ -696,10 +706,7 @@
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"></activity>
 
-         <activity
-            android:name=".action.help.HelpActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen"/>
+
         <activity
             android:name=".userinfo.dynamicaction.ActionDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

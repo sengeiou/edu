@@ -15,16 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.Constant;
-import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
+import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
 import com.ubt.alpha1e.maincourse.courselayout.CourseLevelOneLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
@@ -45,25 +43,16 @@ import java.util.List;
  * 邮箱 784787081@qq.com
  */
 
-public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseLevelOneLayout.CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
+public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
 
     private static final String TAG = CourseLevelOneActivity.class.getSimpleName();
     BaseHelper mHelper;
     CourseLevelOneLayout mActionEdit;
-    RelativeLayout mRlInstruction;
-    private TextView mTextView;
-
 
     /**
      * 当前课时
      */
     private int currentCourse;
-
-
-    /**
-     * 是否从总介绍播放
-     */
-    private boolean isAllIntroduc;
 
 
     @Override
@@ -74,9 +63,7 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
         ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
         ((ActionsEditHelper) mHelper).doEnterCourse((byte) 1);
-
-        mRlInstruction.setVisibility(View.VISIBLE);
-        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑1总介.hts");
+        mActionEdit.setData(this);
     }
 
     Handler mHandler = new Handler() {
@@ -84,10 +71,6 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1111) {
-                isAllIntroduc = true;
-                mRlInstruction.setVisibility(View.GONE);
-                mActionEdit.setData(CourseLevelOneActivity.this);
-            } else if (msg.what == 1112) {
                 mActionEdit.playComplete();
             }
         }
@@ -103,9 +86,6 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     protected void initUI() {
         mActionEdit = (CourseLevelOneLayout) findViewById(R.id.action_edit);
-        mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
-        mTextView = (TextView) findViewById(R.id.tv_all_introduc);
-        mTextView.setText(ResourceManager.getInstance(this).getStringResources("action_course_card1_1_all"));
         mActionEdit.setUp(mHelper);
 
     }
@@ -128,7 +108,7 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     public void completeCurrentCourse(int current) {
         currentCourse = current;
-        saveLastProgress(current);
+        mPresenter.savaCourseDataToDB(1, current);
         if (current == 3) {
             returnCardActivity();
         }
@@ -216,8 +196,7 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
         UbtLog.d(TAG, "------------onDestroy------------");
         // ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
         mActionEdit.onPause();
-        isAllIntroduc = false;
-    }
+     }
 
 
     private void showExitDialog() {
@@ -340,11 +319,9 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     public void playComplete() {
         UbtLog.d("EditHelper", "播放完成");
-        if (isAllIntroduc) {
-            mHandler.sendEmptyMessageDelayed(1112, 2000);
-        } else {
-            mHandler.sendEmptyMessageDelayed(1111, 2000);
-        }
+
+        mHandler.sendEmptyMessage(1111);
+
     }
 
     @Override
