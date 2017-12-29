@@ -392,7 +392,11 @@ public class ConstValue {
 	 */
 	public static final byte  DV_INTO_EDIT = (byte)0x95;
 
-
-
+	/**
+	 *  1E 机器人控制舵机命令
+	 *  参数1 1B: 1.掉电；2.上电
+	 *  参数2 1B：1.左手；2.右手 3.双脚。
+	 */
+	public static final byte DV_CONTROL_ENGINE_COMMAND = (byte) 0x97;
 
 }

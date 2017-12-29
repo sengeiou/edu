@@ -170,6 +170,7 @@ public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.V
 
     private void switchMode(boolean isSerch) {
         if (isSerch) {
+
             ivTitleRight.setVisibility(View.INVISIBLE);
             tvBaseTitleName.setVisibility(View.INVISIBLE);
             rlBaseSearch.setVisibility(View.VISIBLE);
@@ -183,6 +184,7 @@ public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.V
             loadRootFragment(R.id.rl_content, mCurrentFragment,false,false);
 
         } else {
+            edtBaseTitle.setText("");
             ivTitleRight.setVisibility(View.VISIBLE);
             tvBaseTitleName.setVisibility(View.VISIBLE);
             rlBaseSearch.setVisibility(View.INVISIBLE);
