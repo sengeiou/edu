@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @作者：ubt
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  */
 
 @Parcelable
-public class EventDetail extends BaseModel{
+public class EventDetail<T> extends BaseModel{
     public String userId;
     public String eventId;
     public String eventName;
@@ -25,7 +26,8 @@ public class EventDetail extends BaseModel{
     public String remindSecond;
     public String status;
     public String type;
-    public ArrayList contentIds;
+    public T contents;
+    public List<String> contentIds;
     public EventDetail thiz;
     @Override
     public EventDetail getThiz(String json) {
@@ -62,7 +64,7 @@ public class EventDetail extends BaseModel{
         }
     }
 
-    public static String getString(UserScore  info)
+    public static String getString(EventDetail  info)
     {
         try {
             return  GsonImpl.get().toJson(info);
@@ -71,6 +73,21 @@ public class EventDetail extends BaseModel{
         {
             return  "";
         }
+    }
+
+    public static EventDetail<List<PlayContentInfo>> cloneNewInstance(EventDetail<List<PlayContentInfo>> eventDetail){
+        EventDetail<List<PlayContentInfo>> newInstance = new EventDetail<List<PlayContentInfo>>();
+        newInstance.userId = eventDetail.userId;
+        newInstance.eventId = eventDetail.eventId;
+        newInstance.eventName = eventDetail.eventName;
+        newInstance.eventTime = eventDetail.eventTime;
+        newInstance.remindFirst = eventDetail.remindFirst;
+        newInstance.remindSecond = eventDetail.remindSecond;
+        newInstance.status = eventDetail.status;
+        newInstance.type = eventDetail.type;
+        newInstance.contents = eventDetail.contents;
+        newInstance.contentIds = eventDetail.contentIds;
+        return newInstance;
     }
 
     @Override
@@ -83,7 +100,7 @@ public class EventDetail extends BaseModel{
                 ", remindFirst='" + remindFirst + '\'' +
                 ", remindSecond='" + remindSecond + '\'' +
                 ", status='" + status + '\'' +
-                ", contentIds='" + contentIds + '\'' +
+                ", contentIds='" + contents + '\'' +
                 ", type='" + type + '\'' +
                 '}';
     }

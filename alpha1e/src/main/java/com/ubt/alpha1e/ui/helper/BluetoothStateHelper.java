@@ -46,10 +46,7 @@ public class BluetoothStateHelper extends BaseHelper {
     }
 
     public void doCancelCoon() {
-
-        ((AlphaApplication) mContext.getApplicationContext()).getBlueToothManager().releaseAllConnected();
-        ((AlphaApplication) mContext.getApplicationContext()).setCurrentBluetooth(null);
-
+        ((AlphaApplication) mContext.getApplicationContext()).doLostConnect();
     }
 
     @Override

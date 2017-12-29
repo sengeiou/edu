@@ -8,6 +8,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
@@ -899,7 +900,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         UbtLog.d(TAG, "view = " + view);
         switch (view.getId()) {
             case R.id.iv_back:
-                onBackPressed();
+                onBack();
                 break;
             case R.id.tv_next:
                 if (mCurrentProgress < 4 && getLearnCount() < 7) {
@@ -1063,7 +1064,17 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     }
 
     @Override
-    public void onBackPressed() {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() ==KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            onBack();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 返回
+     */
+    public void onBack() {
         if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 2 ){
             ((PrincipleHelper) mHelper).doInit();
             ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);

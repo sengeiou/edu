@@ -1,10 +1,7 @@
 package com.ubt.alpha1e.userinfo.helpfeedback;
 
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.Service;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +10,6 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,12 +18,11 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.userinfo.helpfeedback.feedbacksearch.FeedbackSearchFragment;
 import com.ubt.alpha1e.userinfo.helpfeedback.hotquestion.HotQuestionFragment;
 import com.ubt.alpha1e.userinfo.usermanager.AndroidAdjustResizeBugFix;
 import com.ubt.alpha1e.utils.log.UbtLog;
-
-import java.util.LinkedHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,9 +37,6 @@ import butterknife.OnClick;
 public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.View, HelpFeedbackPresenter> implements HelpFeedbackContract.View , AndroidAdjustResizeBugFix.OnKeyChangerListeler{
 
     private static final String TAG = HelpFeedbackActivity.class.getSimpleName();
-
-    private final static int FRAGMENT_HOT_QUESTION = 1;
-    private final static int FRAGMENT_SEARCH_QUESTION = 2;
 
     @BindView(R.id.ll_base_back)
     LinearLayout llBaseBack;
@@ -64,10 +56,7 @@ public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.V
     @BindView(R.id.rl_main)
     RelativeLayout rlMain;
 
-    private FragmentManager mFragmentManager;
-    private FragmentTransaction mFragmentTransaction;
-    public Fragment mCurrentFragment;
-    private LinkedHashMap<Integer, Fragment> mFragmentCache = new LinkedHashMap<>();
+    public MVPBaseFragment mCurrentFragment;
 
     private String editString = null;
 
@@ -108,13 +97,7 @@ public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.V
         ivTitleRight.setBackgroundResource(R.drawable.icon_title_search);
         ivTitleRight.setVisibility(View.VISIBLE);
 
-        mFragmentTransaction = this.mFragmentManager.beginTransaction();
-        HotQuestionFragment hotQuestionFragment = new HotQuestionFragment();
-        mFragmentTransaction.add(R.id.rl_content, hotQuestionFragment);
-        mFragmentTransaction.commit();
-        mCurrentFragment = hotQuestionFragment;
-        mFragmentCache.put(FRAGMENT_HOT_QUESTION, hotQuestionFragment);
-
+        switchMode(false);
         initControlListener();
     }
 
@@ -160,7 +143,7 @@ public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.V
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
-        mFragmentManager = this.getFragmentManager();
+
         assistActivity = new AndroidAdjustResizeBugFix(this);
         assistActivity.setOnKeyChangerListeler(this);
 
@@ -187,54 +170,32 @@ public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.V
 
     private void switchMode(boolean isSerch) {
         if (isSerch) {
+
             ivTitleRight.setVisibility(View.INVISIBLE);
             tvBaseTitleName.setVisibility(View.INVISIBLE);
             rlBaseSearch.setVisibility(View.VISIBLE);
             tvBaseRight.setVisibility(View.VISIBLE);
             tvBaseRight.setText(getStringResources("ui_common_cancel"));
 
-            Fragment f = mFragmentCache.containsKey(FRAGMENT_SEARCH_QUESTION) ? mFragmentCache.get(FRAGMENT_SEARCH_QUESTION)
-                    : new FeedbackSearchFragment();
-            if (!mFragmentCache.containsKey(FRAGMENT_SEARCH_QUESTION)) {
-                mFragmentCache.put(FRAGMENT_SEARCH_QUESTION, f);
+            mCurrentFragment = findFragment(FeedbackSearchFragment.class);
+            if(mCurrentFragment == null){
+                mCurrentFragment = FeedbackSearchFragment.newInstance();
             }
-            loadFragment(f);
+            loadRootFragment(R.id.rl_content, mCurrentFragment,false,false);
 
         } else {
+            edtBaseTitle.setText("");
             ivTitleRight.setVisibility(View.VISIBLE);
             tvBaseTitleName.setVisibility(View.VISIBLE);
             rlBaseSearch.setVisibility(View.INVISIBLE);
             tvBaseRight.setVisibility(View.INVISIBLE);
 
-            Fragment f = mFragmentCache.containsKey(FRAGMENT_HOT_QUESTION) ? mFragmentCache.get(FRAGMENT_HOT_QUESTION)
-                    : new HotQuestionFragment();
-            if (!mFragmentCache.containsKey(FRAGMENT_HOT_QUESTION)) {
-                mFragmentCache.put(FRAGMENT_HOT_QUESTION, f);
+            mCurrentFragment = findFragment(HotQuestionFragment.class);
+            if(mCurrentFragment == null){
+                mCurrentFragment = HotQuestionFragment.newInstance();
             }
-            loadFragment(f);
+            loadRootFragment(R.id.rl_content, mCurrentFragment, false, false);
         }
-    }
-
-    private void loadFragment(Fragment targetFragment) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        UbtLog.d(TAG, "targetFragment.isAdded()->>>" + (!targetFragment.isAdded()));
-        if (!targetFragment.isAdded()) {
-            mCurrentFragment.onStop();
-
-            transaction
-                    .hide(mCurrentFragment)
-                    .add(R.id.rl_content, targetFragment)
-                    .commit();
-        } else {
-            mCurrentFragment.onStop();
-            targetFragment.onResume();
-
-            transaction
-                    .hide(mCurrentFragment)
-                    .show(targetFragment)
-                    .commit();
-        }
-        mCurrentFragment = targetFragment;
     }
 
     @Override

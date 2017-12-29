@@ -21,6 +21,7 @@ import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.custom.ClearableEditText;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.userinfo.psdmanage.PsdManageActivity;
+import com.ubt.alpha1e.userinfo.psdmanage.psdsetting.PsdSettingFragment;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import butterknife.BindView;
@@ -55,12 +56,18 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
 
     protected Dialog mCoonLoadingDia;
 
+    public static PsdVerifyCodeFragment newInstance(){
+        PsdVerifyCodeFragment psdVerifyCodeFragment = new PsdVerifyCodeFragment();
+        return psdVerifyCodeFragment;
+    }
+
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
                 case GO_TO_NEXT:
+                    requestCountDown.cancel();
                     ((PsdManageActivity)getActivity()).switchFragment(PsdManageActivity.FRAGMENT_SETTING_PASSWORD);
                     break;
             }

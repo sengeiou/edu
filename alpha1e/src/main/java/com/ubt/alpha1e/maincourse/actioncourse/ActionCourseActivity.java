@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
@@ -30,8 +27,11 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResponseMode.CourseDetailScoreModule;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.maincourse.adapter.ActionCoursedapter;
-import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
+import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
+import com.ubt.alpha1e.maincourse.courselayout.ActionCourseDataManager;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelThreeActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -65,6 +65,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
 
     private static final int REQUESTCODE = 10000;
     private static ActionCourseActivity mainCourseInstance = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +101,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         mRecyleviewContent.setAdapter(mMainCoursedapter);
 
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -108,11 +110,12 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
 
     }
 
-    public static void finishByMySelf(){
-        if(mainCourseInstance != null && !mainCourseInstance.isFinishing()){
+    public static void finishByMySelf() {
+        if (mainCourseInstance != null && !mainCourseInstance.isFinishing()) {
             mainCourseInstance.finish();
         }
     }
+
     @Override
     protected void initControlListener() {
 
@@ -152,7 +155,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         mActionCourseModels.clear();
         mActionCourseModels.addAll(list);
         mMainCoursedapter.notifyDataSetChanged();
-        mPresenter.getCourseProgress();
+        mPresenter.getLastCourseProgress();
 
     }
 
@@ -163,7 +166,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
      */
     @Override
     public void getLastProgressResult(boolean result) {
-        mPresenter.getLastProgress();
+        mPresenter.getAllCourseScore();
         LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
         if (null != record) {
             UbtLog.d(TAG, "record===" + record.toString() + "  record.size===" + DataSupport.findAll(LocalActionRecord.class).size());
@@ -177,57 +180,37 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
      */
     @Override
     public void getCourseScores(List<CourseDetailScoreModule> list) {
-        if (null != list && list.size() > 0) {
-            UbtLog.d(TAG, "list===" + list.size());
-            for (CourseDetailScoreModule module : list) {
-                int coureseIndex = Integer.parseInt(module.getCourse());
-                int statu = Integer.parseInt(module.getStatus());
-                mActionCourseModels.get(coureseIndex - 1).setActionCourcesScore(statu);
-                mActionCourseModels.get(coureseIndex - 1).setActionLockType(1);
-            }
-        } else {
-            //如果后台获取失败，则从本地获取到最后保存的记录
-            LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
-            if (null != record) {
-                int course = record.getCourseLevel();
-                for (int i = 0; i < course; i++) {
-                    mActionCourseModels.get(i).setActionLockType(1);
-                    //mActionCourseModels.get(i).setActionCourcesScore(1);
-                }
-            }
-        }
-
         LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
         if (null != record) {
-            UbtLog.d(TAG, "getCourseScores==" + "course==" + record.getCourseLevel() + "   leavel==" + record.getPeriodLevel());
             int course = record.getCourseLevel();
-            int level = record.getPeriodLevel();
-            if (course == 1) {
-                if (level == 3) {
-                    mActionCourseModels.get(1).setActionLockType(1);
-                    mActionCourseModels.get(0).setActionCourcesScore(1);
+            int level = record.getPeriodLevel();//课时
+            UbtLog.d(TAG, "getCourseScores==" + "course==" + course + "   leavel==" + level);
+
+            for (int i = 0; i < course; i++) {
+                mActionCourseModels.get(i).setActionLockType(1);
+                mActionCourseModels.get(i).setActionCourcesScore(1);
+                if (i == (course - 1)) {
+                    int totalLeavel = mActionCourseModels.get(i).getSize();//总的课时数
+                    if (level < totalLeavel) {
+                        mActionCourseModels.get(i).setActionCourcesScore(0);
+                    } else if (level == totalLeavel) {
+                        mActionCourseModels.get(i + 1).setActionLockType(1);
+                    }
                 }
-            } else if (course == 2) {
-                mActionCourseModels.get(1).setActionLockType(1);
-                mActionCourseModels.get(0).setActionCourcesScore(1);
-                if (level == 3) {
-                    mActionCourseModels.get(1).setActionCourcesScore(1);
-                }
-            }
-            if (!record.isUpload()) {
-                mPresenter.saveLastProgress(String.valueOf(record.getCourseLevel()), String.valueOf(record.getPeriodLevel()));
             }
         }
+
         mMainCoursedapter.notifyDataSetChanged();
-
         LoadingDialog.dismiss(this);
-
+        if (!record.isUpload()) {
+            mPresenter.saveLastProgress(String.valueOf(record.getCourseLevel()), String.valueOf(record.getPeriodLevel()));
+        }
     }
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, final int position) {
 
-        if (mActionCourseModels.get(position).getActionLockType() == 0 || position > 1) {
+        if (mActionCourseModels.get(position).getActionLockType() == 0) {
             return;
         }
 
@@ -236,7 +219,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         title.setText(mActionCourseModels.get(position).getTitle());
         RecyclerView mrecyle = contentView.findViewById(R.id.recyleview_content);
         mrecyle.setLayoutManager(new LinearLayoutManager(this));
-        ItemAdapter itemAdapter = new ItemAdapter(R.layout.layout_action_course_dialog, mActionCourseModels.get(position).getList());
+        CourseItemAdapter itemAdapter = new CourseItemAdapter(R.layout.layout_action_course_dialog, ActionCourseDataManager.getCourseDataList(position, mActionCourseModels.get(position).getSize()));
         mrecyle.setAdapter(itemAdapter);
         ViewHolder viewHolder = new ViewHolder(contentView);
         WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
@@ -253,14 +236,18 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_pos) {
                             int n = position + 1;
-//                            Intent intent = new Intent(ActionCourseActivity.this, CourseLevelActivity.class);
-//                            intent.putExtra("currentCard", n);
-//                            startActivityForResult(intent, REQUESTCODE);
                             if (position == 0) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseOneActivity.class), REQUESTCODE);
+                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class), REQUESTCODE);
                             } else if (position == 1) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseTwoActivity.class), REQUESTCODE);
+                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class), REQUESTCODE);
+                            } else if (position == 2) {
+                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelThreeActivity.class), REQUESTCODE);
                             }
+//                            if (position == 0) {
+//                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseOneActivity.class), REQUESTCODE);
+//                            } else if (position == 1) {
+//                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseTwoActivity.class), REQUESTCODE);
+//                            }
                             ActionCourseActivity.this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                             dialog.dismiss();
                         }
@@ -274,6 +261,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 .setCancelable(true)
                 .create().show();
     }
+
     /**
      * 播放动作
      *
@@ -285,6 +273,18 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         ((AlphaApplication) this
                 .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) this.getApplicationContext())
                 .getCurrentBluetooth().getAddress(), ConstValue.DV_PLAYACTION, actions, actions.length, false);
+    }
+
+    /**
+     * 播放动作
+     */
+    public void exitCourse() {
+        UbtLog.d(TAG, "退出课程:" + 0);
+        byte[] params = new byte[1];
+        params[0] = 0;
+        ((AlphaApplication) this
+                .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) this.getApplicationContext())
+                .getCurrentBluetooth().getAddress(), ConstValue.DV_ENTER_COURSE, params, params.length, false);
     }
 
     // 为了获取结果
@@ -304,6 +304,12 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 UbtLog.d(TAG, "course==" + course + "   leavel==" + leavel + "  isComplete==" + isComplete + "  socre===" + score);
                 mPresenter.saveCourseProgress(String.valueOf(course), isComplete ? "1" : "0");
                 playAction(Constant.COURSE_ACTION_PATH + "胜利.hts");
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        exitCourse();
+                    }
+                }, 4000);
             }
         }
     }
@@ -352,16 +358,4 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 .create().show();
     }
 
-
-    public class ItemAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
-
-        public ItemAdapter(@LayoutRes int layoutResId, @Nullable List<String> data) {
-            super(layoutResId, data);
-        }
-
-        @Override
-        protected void convert(BaseViewHolder helper, String item) {
-            helper.setText(R.id.tv_action_course_item, item);
-        }
-    }
 }

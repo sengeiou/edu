@@ -13,6 +13,7 @@ public class LeftMenuModel {
     private String nameString;
     private boolean chick;   //标识
     private int imageId;
+    private int countUnRead;
 
     public LeftMenuModel(String nameString) {
         this.nameString = nameString;
@@ -40,5 +41,23 @@ public class LeftMenuModel {
 
     public void setImageId(int imageId) {
         this.imageId = imageId;
+    }
+
+    public int getCountUnRead() {
+        return countUnRead;
+    }
+
+    public void setCountUnRead(int countUnRead) {
+        this.countUnRead = countUnRead;
+    }
+
+    @Override
+    public String toString() {
+        return "LeftMenuModel{" +
+                "nameString='" + nameString + '\'' +
+                ", chick=" + chick +
+                ", imageId=" + imageId +
+                ", countUnRead=" + countUnRead +
+                '}';
     }
 }

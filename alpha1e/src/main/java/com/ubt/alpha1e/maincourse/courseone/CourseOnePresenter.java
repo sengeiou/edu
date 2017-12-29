@@ -57,6 +57,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content1.setId(R.id.ll_frame);
         one1Content1.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
         one1Content1.setActionPath(Constant.COURSE_ACTION_PATH + "时间轴.hts");
+        one1Content1.setTitle("时间轴");
         one1Content1.setDirection(0);
         one1Content1.setX(0);
         one1Content1.setY(-50);
@@ -64,13 +65,13 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content1.setHorizGravity(HorizontalGravity.RIGHT);
         one1ContentList.add(one1Content1);
 
-
         CourseOne1Content one1Content3 = new CourseOne1Content();
         one1Content3.setIndex(2);
         one1Content3.setContent(ResourceManager.getInstance(context).getStringResources("action_course_card1_1_3"));
         one1Content3.setId(R.id.rl_musicz_zpne);
         one1Content3.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
         one1Content3.setActionPath(Constant.COURSE_ACTION_PATH + "音乐轴.hts");
+        one1Content1.setTitle("音乐轴");
         one1Content3.setX(0);
         one1Content3.setY(-50);
         one1Content3.setVertGravity(VerticalGravity.CENTER);
@@ -84,6 +85,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content4.setId(R.id.iv_reset_index);
         one1Content4.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
         one1Content4.setActionPath(Constant.COURSE_ACTION_PATH + "动作帧.hts");
+        one1Content1.setTitle("动作帧");
         one1Content4.setDirection(0);
         one1Content4.setX(80);
         one1Content4.setY(30);
@@ -97,6 +99,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content5.setId(R.id.iv_add_frame);
         one1Content5.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
         one1Content5.setActionPath(Constant.COURSE_ACTION_PATH + "添加按钮.hts");
+        one1Content1.setTitle("添加按钮");
         one1Content5.setDirection(1);
         one1Content5.setX(20);
         one1Content5.setY(0);
@@ -110,6 +113,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content6.setId(R.id.iv_play_music);
         one1Content6.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
         one1Content6.setActionPath(Constant.COURSE_ACTION_PATH + "播放按钮.hts");
+        one1Content1.setTitle("播放按钮");
         one1Content6.setDirection(0);
         one1Content6.setX(-20);
         one1Content6.setY(0);
@@ -153,6 +157,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content8.setId(R.id.iv_action_bgm);
         one1Content8.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
         one1Content8.setActionPath(Constant.COURSE_ACTION_PATH + "音乐库.hts");
+        one1Content1.setTitle("音乐库");
         one1Content8.setDirection(0);
         one1Content8.setX(0);
         one1Content8.setY(0);
@@ -188,6 +193,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content1.setId(R.id.iv_action_lib);
         one1Content1.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
         one1Content1.setActionPath(Constant.COURSE_ACTION_PATH + "基础模版.hts");
+        one1Content1.setTitle("基础模板");
         one1Content1.setDirection(0);
         one1Content1.setX(0);
         one1Content1.setY(0);
@@ -211,6 +217,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         one1Content8.setId(R.id.iv_action_lib_more);
         one1Content8.setVoiceName("{\"filename\":\"id_elephant.wav\",\"playcount\":1}");
         one1Content8.setActionPath(Constant.COURSE_ACTION_PATH + "高级模版.hts");
+        one1Content1.setTitle("高级模板");
         one1Content8.setDirection(0);
         one1Content8.setX(0);
         one1Content8.setY(0);
@@ -256,7 +263,7 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
         proQequest.setCourseTwo(courseTwo);
         proQequest.setProgressTwo("1");
         proQequest.setType(2);
-        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_SAVE_PROGRESS, proQequest, 100)
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.SAVE_COURSE_PROGRESS, proQequest, 100)
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
@@ -299,5 +306,31 @@ public class CourseOnePresenter extends BasePresenterImpl<CourseOneContract.View
                     }
                 });
 
+    }
+
+
+    /**
+     * 保存课程记录到本地和后台
+     *
+     * @param currentCourse 当前学习的课程关卡
+     * @param courseLevel   当前学习到第几课
+     */
+    public void savaCourseDataToDB(int currentCourse, int courseLevel) {
+        UbtLog.d("savaCourseDataToDB", "保存进度到数据库1" + "currentCourse==" + currentCourse + "courseLevel" + courseLevel);
+        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+        if (null != record) {
+            UbtLog.d("savaCourseDataToDB", "保存进度到数据库2" + record.toString());
+            int course = record.getCourseLevel();
+            int level = record.getPeriodLevel();
+            if ((currentCourse > course) || (course == currentCourse && level < courseLevel)) {
+                UbtLog.d("savaCourseDataToDB", "保存进度到数据库3" + "保存成功");
+                ContentValues values = new ContentValues();
+                values.put("CourseLevel", currentCourse);
+                values.put("periodLevel", courseLevel);
+                values.put("isUpload", false);
+                DataSupport.updateAll(LocalActionRecord.class, values);
+                saveLastProgress(String.valueOf(currentCourse), String.valueOf(courseLevel));
+            }
+        }
     }
 }

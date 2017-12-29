@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_user_main"
+    >
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/back_icon"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:text="详情"
+        android:textColor="@color/tv_user_edit_color"
+        android:textSize="20sp"
+        />
+
+    <ImageView
+        android:id="@+id/iv_delete"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="28dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/ic_delete"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tv_title"
+        android:layout_marginBottom="25dp"
+        android:layout_marginLeft="90dp"
+        android:layout_marginRight="90dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/bg_edit_user">
+
+        <ImageView
+            android:id="@+id/iv_cover"
+            android:layout_width="86dp"
+            android:layout_height="86dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/img_action_background"
+            />
+
+
+
+            <TextView
+                android:id="@+id/tv_action_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/iv_cover"
+                android:text="测试"
+                android:textColor="@color/tv_center_color"
+                android:drawableRight="@drawable/tab_action"
+                android:drawablePadding="5dp"
+                android:textSize="15sp"
+                />
+
+
+
+
+        <TextView
+            android:id="@+id/tv_action_create_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="18dp"
+            android:text="五分钟前创建"
+            android:textColor="@color/tv_notice_title"
+            android:textSize="14sp"
+            />
+
+        <View
+            android:id="@+id/view_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/tv_action_name"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/iv_cover"
+            android:background="@color/tv_notice_title"
+            />
+
+        <LinearLayout
+            android:id="@+id/ll_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_line"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@+id/iv_cover"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_action_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_duration"
+                android:gravity="center"
+                android:text="03:21"
+                android:textColor="@color/tv_notice_title"
+                android:textSize="14sp"
+                />
+
+            <ImageView
+                android:id="@+id/iv_action_type1"
+                android:layout_width="13dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/tv_action_name"
+                android:src="@drawable/myniew_publish_sport"
+                />
+
+            <TextView
+                android:id="@+id/tv_action_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/tv_action_time"
+                android:gravity="center"
+                android:text="03:21"
+                android:textColor="@color/tv_notice_title"
+                android:textSize="14sp"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_flag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_type"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/iv_cover"
+            android:text="描述:"
+            android:textColor="@color/tv_content_color"
+            android:textSize="13sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="23dp"
+            android:text="空的数据付哈扩所付测试测试测试测试测试测空的数据付哈扩所付测试测试测试测试测试测"
+            android:textColor="@color/tv_content_color"
+            android:textSize="13sp"
+            android:layout_alignBaseline="@+id/tv_flag"
+            android:layout_alignBottom="@+id/tv_flag"
+            android:layout_toEndOf="@+id/tv_flag"/>
+
+        <View
+            android:id="@+id/view_line1"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/tv_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="40dp"
+            android:background="@color/tv_notice_title"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_line1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_publish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/btn_blue"
+                android:text="发布到社区"
+                android:textColor="@color/white"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_play_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/btn_orange">
+
+                <ProgressBar
+                    android:id="@+id/progress_download"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    android:progressDrawable="@drawable/circle_progress_bar"
+                    tools:max="100"
+                    tools:progress="1"/>
+
+                <TextView
+                    android:id="@+id/tv_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:drawableLeft="@drawable/ic_btn_play1"
+                    android:drawablePadding="10dp"
+                    android:gravity="center"
+                    android:text="播放"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    />
+
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

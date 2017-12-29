@@ -6,10 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.ant.country.CountryActivity;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreater;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreater;
+import com.scwang.smartrefresh.layout.api.RefreshFooter;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.tencent.ai.tvs.LoginApplication;
 import com.ubt.alpha1e.AlphaApplicationValues.Thrid_login_type;
 import com.ubt.alpha1e.base.AppManager;
@@ -58,7 +67,9 @@ import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.update.EngineUpdateManager;
-import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
+ import com.ubt.alpha1e.userinfo.dynamicaction.DownLoadActionManager;
+ import com.ubt.alpha1e.utils.DynamicTimeFormat;
+ import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
 import com.ubt.alpha1e.utils.crash.CrashHandler;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.xingepush.XGUBTManager;
@@ -123,6 +134,8 @@ public class AlphaApplication extends LoginApplication {
 
     private static String mNeedOpenActivity = null;
 
+    public static String currentRobotSN = "";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -136,6 +149,7 @@ public class AlphaApplication extends LoginApplication {
         initXG();
         initLanguage();
         LitePal.initialize(this);
+        initSmartRefresh();
 //        LeakCanary.install(this);
         //   VCamera.setVideoCachePath(FileTools.media_cache);
         //  VCamera.setDebugMode(true);
@@ -152,6 +166,25 @@ public class AlphaApplication extends LoginApplication {
 //            }
 //        }, screenOffFilter);
 
+    }
+
+    private void initSmartRefresh() {
+        SmartRefreshLayout.setDefaultRefreshHeaderCreater(new DefaultRefreshHeaderCreater() {
+            @NonNull
+            @Override
+            public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
+                layout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.black);//全局设置主题颜色
+                return new ClassicsHeader(context).setTimeFormat(new DynamicTimeFormat("更新于 %s"));
+            }
+        });
+        //设置全局的Footer构建器
+        SmartRefreshLayout.setDefaultRefreshFooterCreater(new DefaultRefreshFooterCreater() {
+            @Override
+            public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
+                //指定为经典Footer，默认是 BallPulseFooter
+                return new ClassicsFooter(context).setDrawableSize(20);
+            }
+        });
     }
 
 
@@ -183,18 +216,18 @@ public class AlphaApplication extends LoginApplication {
         ConnectClientUtil.getInstance().init();
     }
 
-    public void initLanguage(){
+    public void initLanguage() {
         String currentLanguage = BasicSharedPreferencesOperator.getInstance(this,
                 BasicSharedPreferencesOperator.DataType.APP_INFO_RECORD).doReadSync(
                 BasicSharedPreferencesOperator.LANGUAGE_SET_KEY);
 
-       if(currentLanguage.equals(BasicSharedPreferencesOperator.NO_VALUE)){
-           BasicSharedPreferencesOperator.getInstance(this,
-                   BasicSharedPreferencesOperator.DataType.APP_INFO_RECORD).doWrite(
-                   BasicSharedPreferencesOperator.LANGUAGE_SET_KEY, "zh_CN",
-                   null, -1);
-       }
-   }
+        if (currentLanguage.equals(BasicSharedPreferencesOperator.NO_VALUE)) {
+            BasicSharedPreferencesOperator.getInstance(this,
+                    BasicSharedPreferencesOperator.DataType.APP_INFO_RECORD).doWrite(
+                    BasicSharedPreferencesOperator.LANGUAGE_SET_KEY, "zh_CN",
+                    null, -1);
+        }
+    }
 
 
     @Override
@@ -325,6 +358,7 @@ public class AlphaApplication extends LoginApplication {
 
     public void doLostConnect() {
 
+        setCurrentBluetooth(null);
         UbtLog.d(TAG, "doLostConnect ..... ");
         ActionPlayer.StopCycleThread(true);
         // 蓝牙断线
@@ -340,12 +374,12 @@ public class AlphaApplication extends LoginApplication {
     public void doLostConn(Activity mCurrentAct) {
         CommonCtrlView.closeCommonCtrlView();
         MyActionsHelper.doStopMp3ForMyDownload();
-        if(mCurrentAct !=null){
+        if (mCurrentAct != null) {
             MyActionsHelper.getInstance((BaseActivity) mCurrentAct).resetPlayer();
         }
         ActionPlayer.StopCycleThread(true);
         ActionsDownLoadManager.resetData();
-
+        DownLoadActionManager.getInstance(this).resetData();
         // 蓝牙断线
         if (mBlueManager != null) {
             mBlueManager.releaseAllConnected();
@@ -354,6 +388,9 @@ public class AlphaApplication extends LoginApplication {
         cleanBluetoothConnectData();
 
         Activity mActivity = null;
+        if(mActivityList == null){
+            return;
+        }
         for (int i = 0; i < mActivityList.size(); i++) {
             try {
                 mActivity = mActivityList.get(i);
@@ -397,7 +434,7 @@ public class AlphaApplication extends LoginApplication {
                         continue;
                     }
                 }
-                UbtLog.d(TAG,"mActivity finish");
+                UbtLog.d(TAG, "mActivity finish");
                 mActivity.finish();
             } catch (Exception e) {
                 e.printStackTrace();

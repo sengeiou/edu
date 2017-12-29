@@ -51,6 +51,7 @@ public class Constant {
      */
     public final static String SP_XG_ACCESSID ="accessid";
     public final static String SP_XG_ACCESSKEY ="accessKey";
+    public final static String SP_XG_USERID="userId";
 
     /**
      * 首次获取蓝牙权限
@@ -98,4 +99,15 @@ public class Constant {
      * Block跳转蓝牙连接页面标志
      */
     public final static String BLUETOOTH_REQUEST = "bluetooth_request";
+
+    /**
+     * 是否要弹出绑定对话
+     */
+    public final static String IS_TOAST_BINDED = "is_toast_binded";
+
+    /**
+     * 上传服务器失败时保存当前的课程进度
+     */
+    public final static String SP_CURRENT_BLOCK_COURSE_ID = "currentCourseId";
+
 }

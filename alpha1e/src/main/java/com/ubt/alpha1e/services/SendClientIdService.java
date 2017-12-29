@@ -5,21 +5,43 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Parcelable;
-import android.provider.Settings;
+import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.RequstMode.BaseRequest;
+import com.ubt.alpha1e.base.RequstMode.CheckIsBindRequest;
+import com.ubt.alpha1e.base.RequstMode.GotoBindRequest;
+import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.event.RobotEvent;
+import com.ubt.alpha1e.login.HttpEntity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
+import com.ubt.alpha1e.ui.dialog.UnbindConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.UpgradeOSDialog;
+import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
 import com.ubt.alpha1e.ui.helper.SendClientIdHelper;
+import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import okhttp3.Call;
 
 /**
  * 发送clientId服务
@@ -28,7 +50,9 @@ import org.greenrobot.eventbus.Subscribe;
 public class SendClientIdService extends Service {
 
 	private static final String TAG = "SendClientIdService";
-	private static final int SCAN_TO_CONNECT = 3;
+	private static final int CONNECT_WIFI = 4;
+	private static final int CHECK_IS_BIND = 5;
+	private static final int ROBOT_GOTO_BIND = 6;
 
 	private static SendClientIdService instance = null;
 
@@ -43,8 +67,9 @@ public class SendClientIdService extends Service {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			switch (msg.what){
-				case SCAN_TO_CONNECT:
-
+				case CONNECT_WIFI:
+					UbtLog.d(TAG, "-CONNECT_WIFI-");
+					checkIsBind();
 					break;
 
 				default:
@@ -54,6 +79,15 @@ public class SendClientIdService extends Service {
 	};
 
     static Context mContext = null ;
+
+	public static SendClientIdService getInstance(Context context){
+
+		if(instance == null){
+			mContext = context;
+			instance = new SendClientIdService();
+		}
+		return instance;
+	}
 
 	/**
 	 * 启动服务
@@ -103,7 +137,141 @@ public class SendClientIdService extends Service {
 		if(event.getEvent() == RobotEvent.Event.BLUETOOTH_SEND_CLIENTID_SUCCESS){
 			UbtLog.d(TAG, "-发送clientId成功-");
 			isSendClientId = true ;
+			sendClientIdHelper.sendCmdReadSN();
+		}else if(event.getEvent() == RobotEvent.Event.BLUETOOTH_GET_ROBOT_SN_SUCCESSS){
+			UbtLog.d(TAG, "-获取到sn成功-");
+			if(SendClientIdService.this != null && ((AlphaApplication) SendClientIdService.this.getApplication()).getmCurrentNetworkInfo() != null){
+				com.ubt.alpha1e.data.model.NetworkInfo networkInfo = ((AlphaApplication) SendClientIdService.this.getApplication()).getmCurrentNetworkInfo();
+				UbtLog.d(TAG,"机器人网络为：  "+ networkInfo.name);
+				gotoCheckIsBind();
+			}else {
+				UbtLog.d(TAG,"机器人网络为null  ");
+			}
 		}
+	}
+
+	public void gotoCheckIsBind(){
+		UbtLog.d(TAG,"gotoCheckIsBind  ");
+		if(!SPUtils.getInstance().getBoolean(Constant.IS_TOAST_BINDED)){
+			SPUtils.getInstance().put(Constant.IS_TOAST_BINDED,true);
+			UbtLog.d(TAG,"gotoCheckIsBind  go ");
+			mHandler.sendEmptyMessage(CONNECT_WIFI);
+		}
+	}
+
+	void checkIsBind(){
+		String token = SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN, "");
+		String userId = SPUtils.getInstance().getString(Constant.SP_USER_ID, "");
+		UbtLog.d(TAG,"token:  "+token+"   userId:"+userId);
+
+		CheckIsBindRequest checkIsBindRequest = new CheckIsBindRequest();
+		checkIsBindRequest.setEquipmentId(AlphaApplication.currentRobotSN);
+		if(AlphaApplication.currentRobotSN != null && AlphaApplication.currentRobotSN.equals("")){
+			return;
+		}
+		checkIsBindRequest.setSystemType("3");
+
+		String url = HttpEntity.CHECK_IS_BIND;
+		doRequestBind(url,checkIsBindRequest,CHECK_IS_BIND);
+
+	}
+
+	/**
+	 * 网络请求
+	 */
+	public void doRequestBind(String url, BaseRequest baseRequest, int requestId) {
+
+		OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
+			@Override
+			public void onError(Call call, Exception e, int id) {
+				UbtLog.d(TAG, "doRequestCheckIsBind onError:" + e.getMessage());
+				switch (id){
+					case CHECK_IS_BIND:
+						SPUtils.getInstance().put(Constant.IS_TOAST_BINDED,false);
+						break;
+					case ROBOT_GOTO_BIND:
+						if(robotBindingDialog != null && robotBindingDialog.isShowing()){
+							robotBindingDialog.display();
+						}
+						adviceBindFail();
+						break;
+					default:
+						break;
+				}
+			}
+
+			@Override
+			public void onResponse(String response, int id) {
+				UbtLog.d(TAG,"doRequestCheckIsBind response = " + response);
+//				BaseResponseModel<BaseModel> baseResponseModel = GsonImpl.get().toObject(response,new TypeToken<BaseResponseModel<BaseModel>>() {}.getType());
+				BaseResponseModel<String> baseResponseModel = GsonImpl.get().toObject(response,
+						new TypeToken<BaseResponseModel<String>>(){}.getType());
+				switch (id){
+					case CHECK_IS_BIND:
+//						mHandler.postDelayed(new Runnable() {
+//							@Override
+//							public void run() {
+//								upgradeOSDialog("1.2","\n1.增加行为习惯功能 \n2.增加行为习惯功能\n3.增加行为习惯功能");
+//							}
+//						},10000);
+
+						UbtLog.d(TAG, "status:" + baseResponseModel.status);
+						if(!baseResponseModel.status){
+							SPUtils.getInstance().put(Constant.IS_TOAST_BINDED,false);
+							return;
+						}
+						UbtLog.d(TAG, "info:" + baseResponseModel.info);
+						UbtLog.d(TAG, "models:" + baseResponseModel.models);
+						String state = baseResponseModel.models;
+						if(state == null){
+							SPUtils.getInstance().put(Constant.IS_TOAST_BINDED,false);
+							return;
+						}
+						if(state.equals("1003")){
+							mHandler.postDelayed(new Runnable() {
+								@Override
+								public void run() {
+									adviceBind();
+								}
+							},500);
+						}else if(state.equals("1002")){
+							mHandler.postDelayed(new Runnable() {
+								@Override
+								public void run() {
+									adviceRobotBinded();
+								}
+							},500);
+						}else if(state.equals("1001")){
+							mHandler.postDelayed(new Runnable() {
+								@Override
+								public void run() {
+									adviceBindedOtherRobot();
+								}
+							},500);
+						}else if(state.equals("1000")){
+
+						}
+					break;
+					case ROBOT_GOTO_BIND:
+						if(robotBindingDialog != null && robotBindingDialog.isShowing()){
+							robotBindingDialog.display();
+						}
+						UbtLog.d(TAG, "status:" + baseResponseModel.status);
+						UbtLog.d(TAG, "info:" + baseResponseModel.info);
+						if(baseResponseModel.status){
+							UbtLog.d(TAG, "绑定成功" );
+							adviceBindSuccess();
+						}else {
+							adviceBindFail();
+							UbtLog.d(TAG, "绑定失败" );
+						}
+						break;
+
+					default:
+						break;
+				}
+			}
+		});
 
 	}
 
@@ -160,7 +328,6 @@ public class SendClientIdService extends Service {
 		}
 	}
 
-
 	@Override
 	public void onDestroy() {
 		UbtLog.d(TAG, "-onDestroy--");
@@ -169,7 +336,6 @@ public class SendClientIdService extends Service {
 			mContext.unregisterReceiver(mBroadCastReceiver);
 		}
 	}
-
 
 	public static void send(){
 		if(sendClientIdHelper!= null){
@@ -180,13 +346,203 @@ public class SendClientIdService extends Service {
 		}
 	}
 
-
 	/**
 	 * 停止服务
 	 */
 	public static void doStopSelf(){
 		if(instance != null){
 			instance.stopSelf();
+		}
+	}
+
+	RobotBindingDialog robotBindingDialog = null ;
+	//一键绑定
+	public void gotoBind(){
+
+		if(robotBindingDialog == null){
+			robotBindingDialog = new RobotBindingDialog(AppManager.getInstance().currentActivity())
+					.builder()
+					.setCancelable(true);
+		}
+		robotBindingDialog.show();
+		GotoBindRequest gotoBindRequest = new GotoBindRequest();
+		gotoBindRequest.setEquipmentId(AlphaApplication.currentRobotSN);
+		gotoBindRequest.setSystemType("3");
+
+		String url = HttpEntity.ROBOT_BIND;
+		doRequestBind(url,gotoBindRequest,ROBOT_GOTO_BIND);
+
+	}
+
+	//提示去绑定
+	public void adviceBind(){
+		new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+				.setTitle("请将账户与机器人绑定以开通功能")
+				.setMsg("1、“行为习惯养成”功能 \n2、控制机器人版本升级")
+				.setCancelable(true)
+				.setPositiveButton("一键绑定", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						UbtLog.d(TAG, "一键绑定 ");
+						gotoBind();
+					}
+				})
+				.setNegativeButton("暂不", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						UbtLog.d(TAG, "暂不 ");
+//						SPUtils.getInstance().put(Constant.IS_TOAST_BINDED, true);
+					}
+				}).show();
+	}
+
+	//该机器人已被其他账号绑定部分功能不可用
+	public void adviceRobotBinded(){
+			new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+			.setTitle("提示")
+			.setMsg("该机器人已被其他账号绑定部分功能不可用！")
+			.setCancelable(true)
+			.setPositiveButton("我知道了", new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					UbtLog.d(TAG, "我知道了 ");
+				}
+			})
+			.show();
+	}
+
+	//是否要解绑之前的机器人，绑定当前机器人
+	public void adviceBindedOtherRobot(){
+		new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+		.setTitle("你的账户连接了一台新机器人")
+		.setMsg("是否要解绑之前的机器人，绑定当前机器人")
+		.setCancelable(true)
+		.setPositiveButton("更换绑定", new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				UbtLog.d(TAG, "更换绑定 ");
+				gotoBind();
+			}
+		})
+		.setNegativeButton("暂不", new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				UbtLog.d(TAG, "暂不 ");
+			}
+		}).show();
+	}
+
+	//如要使用此功能，需先绑定机器人
+	public void adviceGoBindForHabit(){
+		new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+				.setTitle("提示")
+				.setMsg("如要使用此功能，需先绑定机器人")
+				.setCancelable(true)
+				.setPositiveButton("一键绑定", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						UbtLog.d(TAG, "一键绑定 ");
+					}
+				})
+				.setNegativeButton("暂不", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						UbtLog.d(TAG, "暂不 ");
+					}
+				}).show();
+	}
+
+	//绑定成功！
+	public void adviceBindSuccess(){
+		Drawable img_ok;
+		Resources res1 = getResources();
+		img_ok = res1.getDrawable(R.drawable.ic_bind_success);
+		new RobotBindDialog(AppManager.getInstance().currentActivity()).builder()
+				.setTitle("绑定成功！")
+				.setMsg("可到“个人中心-设置-我的机器人”查看状态。")
+				.setCancelable(true)
+				.setPositiveButton("我知道了", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						UbtLog.d(TAG, "我知道了 ");
+					}
+				})
+				.setTitlePicture(img_ok)
+				.setNoTitleLayout()
+				.show();
+	}
+
+	//绑定失败！
+	public void adviceBindFail(){
+			Drawable img_off;
+			Resources res2 = getResources();
+			img_off = res2.getDrawable(R.drawable.ic_bind_fail);
+			new RobotBindDialog(AppManager.getInstance().currentActivity()).builder()
+					.setTitle("绑定失败！")
+					.setCancelable(true)
+					.setPositiveButton("重试", new View.OnClickListener() {
+						@Override
+						public void onClick(View view) {
+							UbtLog.d(TAG, "重试 ");
+							gotoBind();
+						}
+					})
+					.setNegativeButton("取消", new View.OnClickListener() {
+						@Override
+						public void onClick(View view) {
+							UbtLog.d(TAG, "取消 ");
+						}
+					})
+					.setTitlePicture(img_off)
+					.setNoTitleLayout()
+					.show();
+	}
+
+	//固件有升级
+	public void upgradeOSDialog(String version,String versionContent){
+		new UpgradeOSDialog(AppManager.getInstance().currentActivity()).builder()
+				.setTitle("固件升级")
+				.setMsg("V"+version +"版本更新了如下内容："+versionContent)
+				.setCancelable(false)
+				.setPositiveButton("去升级", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						UbtLog.d(TAG, "去升级 ");
+						sendCmdUpgradeDialog();
+					}
+				})
+				.setNegativeButton("暂不", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						UbtLog.d(TAG, "暂不 ");
+					}
+				}).show();
+	}
+
+	//确认升级对话框
+	public void sendCmdUpgradeDialog(){
+		new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+				.setTitle("提示")
+				.setMsg("机器人固件升级大约需要4-6分钟。固件升级期间，你将不能使用机器人的任何功能哦。确定要升级么？")
+				.setCancelable(false)
+				.setPositiveButton("升级", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						UbtLog.d(TAG, "升级 ");
+						sendCmdUpgrade();
+					}
+				})
+				.setNegativeButton("暂不", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						UbtLog.d(TAG, "暂不 ");
+					}
+				}).show();
+	}
+
+	public void sendCmdUpgrade(){
+		if(sendClientIdHelper!= null){
+			sendClientIdHelper.startUpgrade();
 		}
 	}
 

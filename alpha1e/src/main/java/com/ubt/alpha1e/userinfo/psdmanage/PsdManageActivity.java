@@ -1,18 +1,18 @@
 package com.ubt.alpha1e.userinfo.psdmanage;
 
-
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.userinfo.psdmanage.psdmodify.PsdModifyFragment;
 import com.ubt.alpha1e.userinfo.psdmanage.psdsetting.PsdSettingFragment;
 import com.ubt.alpha1e.userinfo.psdmanage.psdverifycode.PsdVerifyCodeFragment;
@@ -34,8 +34,8 @@ public class PsdManageActivity extends MVPBaseActivity<PsdManageContract.View, P
 
     private static final String TAG = PsdManageActivity.class.getSimpleName();
 
-    public final static int FRAGMENT_SETTING_PASSWORD = 1;
-    public final static int FRAGMENT_SETTING_MODIFY = 2;
+    public final static int FRAGMENT_SETTING_MODIFY = 1;
+    public final static int FRAGMENT_SETTING_PASSWORD = 2;
     public final static int FRAGMENT_FORGET_PASSWORD = 3;
 
     @BindView(R.id.ll_base_back)
@@ -43,28 +43,23 @@ public class PsdManageActivity extends MVPBaseActivity<PsdManageContract.View, P
     @BindView(R.id.tv_base_title_name)
     TextView tvBaseTitleName;
 
-    private FragmentManager mFragmentManager;
-    private FragmentTransaction mFragmentTransaction;
-    public Fragment mCurrentFragment;
-    private LinkedHashMap<Integer, Fragment> mFragmentCache = new LinkedHashMap<>();
+    public MVPBaseFragment mCurrentFragment;
+    private boolean mFindPassword = false;
 
-    public static void LaunchActivity(Context context) {
+    public static void LaunchActivity(Context context, boolean isFindPassword) {
         Intent intent = new Intent(context, PsdManageActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("isFindPassword", isFindPassword);
         context.startActivity(intent);
     }
 
     @Override
     protected void initUI() {
-
-        tvBaseTitleName.setText(getStringResources("ui_setting_password_massage"));
-
-        mFragmentTransaction = this.mFragmentManager.beginTransaction();
-        PsdModifyFragment mPsdModifyFragment = new PsdModifyFragment();
-        mFragmentTransaction.add(R.id.rl_content, mPsdModifyFragment);
-        mFragmentTransaction.commit();
-        mCurrentFragment = mPsdModifyFragment;
-        mFragmentCache.put(FRAGMENT_SETTING_MODIFY, mPsdModifyFragment);
+        if(mFindPassword){
+            switchFragment(FRAGMENT_FORGET_PASSWORD);
+        }else {
+            switchFragment(FRAGMENT_SETTING_MODIFY);
+        }
     }
 
     @Override
@@ -87,7 +82,9 @@ public class PsdManageActivity extends MVPBaseActivity<PsdManageContract.View, P
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
-        mFragmentManager = this.getFragmentManager();
+        if(getIntent() != null){
+            mFindPassword = getIntent().getBooleanExtra("isFindPassword", false);
+        }
 
         initUI();
     }
@@ -102,55 +99,28 @@ public class PsdManageActivity extends MVPBaseActivity<PsdManageContract.View, P
     }
 
     public void switchFragment(int index){
-        if(index == FRAGMENT_FORGET_PASSWORD){
-            tvBaseTitleName.setText(getStringResources("ui_setting_forget_password"));
-
-            Fragment f = mFragmentCache.containsKey(FRAGMENT_FORGET_PASSWORD) ? mFragmentCache.get(FRAGMENT_FORGET_PASSWORD)
-                    : new PsdVerifyCodeFragment();
-            if (!mFragmentCache.containsKey(FRAGMENT_FORGET_PASSWORD)) {
-                mFragmentCache.put(FRAGMENT_FORGET_PASSWORD, f);
-            }
-            loadFragment(f);
-        }else if(index == FRAGMENT_SETTING_MODIFY){
+        if(index == FRAGMENT_SETTING_MODIFY){
             tvBaseTitleName.setText(getStringResources("ui_setting_password_massage"));
-
-            Fragment f = mFragmentCache.containsKey(FRAGMENT_SETTING_MODIFY) ? mFragmentCache.get(FRAGMENT_SETTING_MODIFY)
-                    : new PsdSettingFragment();
-            if (!mFragmentCache.containsKey(FRAGMENT_SETTING_MODIFY)) {
-                mFragmentCache.put(FRAGMENT_SETTING_MODIFY, f);
+            mCurrentFragment = findFragment(PsdModifyFragment.class);
+            if (mCurrentFragment == null) {
+                mCurrentFragment = PsdModifyFragment.newInstance();
             }
-            loadFragment(f);
+            loadRootFragment(R.id.rl_content, mCurrentFragment);
+        }else if(index == FRAGMENT_FORGET_PASSWORD){
+            tvBaseTitleName.setText(getStringResources("ui_setting_forget_password"));
+            mCurrentFragment = findFragment(PsdVerifyCodeFragment.class);
+            if (mCurrentFragment == null) {
+                mCurrentFragment = PsdVerifyCodeFragment.newInstance();
+            }
+            loadRootFragment(R.id.rl_content, mCurrentFragment, false, false);
         }else if(index == FRAGMENT_SETTING_PASSWORD){
             tvBaseTitleName.setText(getStringResources("ui_setting_password_massage"));
-
-            Fragment f = mFragmentCache.containsKey(FRAGMENT_SETTING_PASSWORD) ? mFragmentCache.get(FRAGMENT_SETTING_PASSWORD)
-                    : new PsdSettingFragment();
-            if (!mFragmentCache.containsKey(FRAGMENT_SETTING_PASSWORD)) {
-                mFragmentCache.put(FRAGMENT_SETTING_PASSWORD, f);
+            mCurrentFragment = findFragment(PsdSettingFragment.class);
+            if (mCurrentFragment == null) {
+                mCurrentFragment = PsdSettingFragment.newInstance();
             }
-            loadFragment(f);
+            loadRootFragment(R.id.rl_content, mCurrentFragment, false, false);
         }
-    }
-
-    private void loadFragment(Fragment targetFragment) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        UbtLog.d(TAG,"targetFragment.isAdded()->>>"+(!targetFragment.isAdded()));
-        if (!targetFragment.isAdded()) {
-            mCurrentFragment.onStop();
-
-            transaction
-                    .hide(mCurrentFragment)
-                    .add(R.id.rl_content, targetFragment)
-                    .commit();
-        } else {
-            mCurrentFragment.onStop();
-            targetFragment.onResume();
-
-            transaction
-                    .hide(mCurrentFragment)
-                    .show(targetFragment)
-                    .commit();
-        }
-        mCurrentFragment = targetFragment;
+        UbtLog.d(TAG,"mCurrentFragment = " + mCurrentFragment);
     }
 }

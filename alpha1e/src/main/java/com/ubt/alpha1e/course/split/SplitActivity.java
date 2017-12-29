@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -336,7 +337,7 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
-                onBackPressed();
+                onBack();
                 break;
             case R.id.tv_next:
                 doAplitAll();
@@ -366,7 +367,17 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
     }
 
     @Override
-    public void onBackPressed() {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() ==KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            onBack();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 返回
+     */
+    public void onBack() {
         if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 0 ){
             ((PrincipleHelper) mHelper).doInit();
             ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
@@ -595,8 +606,10 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                             ivLegLeftBg.setBackgroundResource(R.drawable.icon_principle_leftleg_white);
                             hasLostLegLeft = true;
                             if(hasLostLegRight){
-                                ((PrincipleHelper)mHelper).doLostLeftFoot();
-                                ((PrincipleHelper)mHelper).doLostRightFoot();
+                                /*((PrincipleHelper)mHelper).doLostLeftFoot();
+                                ((PrincipleHelper)mHelper).doLostRightFoot();*/
+
+                                ((PrincipleHelper)mHelper).doControlEngine(1,3);
                             }
                         }else if(view.getId() == R.id.iv_leg_right){
                             targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRightBg.getWidth()*2 + SizeUtils.dip2px(getContext(),30)*2;
@@ -604,8 +617,11 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                             ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_white);
                             hasLostLegRight = true;
                             if(hasLostLegLeft){
-                                ((PrincipleHelper)mHelper).doLostLeftFoot();
-                                ((PrincipleHelper)mHelper).doLostRightFoot();
+                                /*((PrincipleHelper)mHelper).doLostLeftFoot();
+                                ((PrincipleHelper)mHelper).doLostRightFoot();*/
+
+                                ((PrincipleHelper)mHelper).doControlEngine(1,3);
+
                             }
                         }
                         if(hasLearnFinish()){

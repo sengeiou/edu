@@ -11,11 +11,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.blockly.BlocklyActivity;
-import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.blocklycourse.courselist.CourseListActivity;
 import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
@@ -161,7 +161,7 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
             startActivity(new Intent(this, ActionCourseActivity.class));
 
         } else if (position == 2) {
-            startActivity(new Intent(this, BlocklyActivity.class));
+            startActivity(new Intent(this, CourseListActivity.class));
         }
         this.overridePendingTransition(R.anim.activity_open_up_down, 0);
     }

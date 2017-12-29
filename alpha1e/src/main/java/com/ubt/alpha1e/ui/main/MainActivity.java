@@ -7,9 +7,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,12 +27,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.animator.FrameAnimation;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.RequstMode.BaseRequest;
+import com.ubt.alpha1e.base.RequstMode.GotoBindRequest;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loopHandler.HandlerCallback;
@@ -45,12 +50,15 @@ import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
 import com.ubt.alpha1e.course.split.SplitActivity;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.event.RobotEvent;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseLevelActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
@@ -61,14 +69,20 @@ import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
+import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
+import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.userinfo.myrobot.MyRobotActivity;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
+import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
-import com.ubtechinc.sqlite.UBXDataBaseHelper;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -82,7 +96,7 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
+import okhttp3.Call;
 
 
 /**
@@ -237,6 +251,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int CURRENT_ACTION_NAME=0;
     private boolean cartoon_enable=false;
 
+    private static final int ROBOT_GOTO_BIND = 20;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -250,6 +266,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         registerReceiver(mBroadcastReceiver1, filter1);
         looperThread = new LooperThread(this);
         looperThread.start();
+        SPUtils.getInstance().put(Constant.IS_TOAST_BINDED, false);
         // 启动发送clientId服务
         SendClientIdService.startService(MainActivity.this);
     }
@@ -265,6 +282,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         super.onResume();
         UbtLog.d(TAG,"onResume");
         initUI();
+        mPresenter.getXGInfo();
         if(!isBulueToothConnected()){
              showDisconnectIcon();
             looperThread.send(createMessage(APP_LAUNCH_STATUS));
@@ -431,7 +449,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
                 break;
             case R.id.habit_alert:
-                BehaviorHabitsActivity.LaunchActivity(this);
+//                BehaviorHabitsActivity.LaunchActivity(this);
+                mPresenter.checkMyRobotState();
                 break;
             default:
                 break;
@@ -489,7 +508,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG,"onLostBtConn");
     }
     ConfirmDialog dialog = null ;
-    long lastTime = System.currentTimeMillis();
 
     @Override
     public void onEventRobot(RobotEvent event) {
@@ -497,31 +515,22 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if(event.getEvent() == RobotEvent.Event.NETWORK_STATUS) {
             NetworkInfo networkInfo = (NetworkInfo)  event.getNetworkInfo();
             UbtLog.d(TAG,"networkInfo == " + networkInfo.status);
-            if(MainActivity.this != null){
-                ((AlphaApplication) MainActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
-            }
+
             isNetworkConnect=networkInfo.status;
             if(isNetworkConnect){
+                if(MainActivity.this != null){
+                    ((AlphaApplication) MainActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         hiddenDisconnectIcon();
-                        if(System.currentTimeMillis() - lastTime > 2000){
-                            lastTime = System.currentTimeMillis();
-//                            new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
-//                                    .setTitle("提示")
-//                                    .setMsg("请去绑定机器人")
-//                                    .setCancelable(true)
-//                                    .setPositiveButton("去绑定", new View.OnClickListener() {
-//                                        @Override
-//                                        public void onClick(View view) {
-//                                            UbtLog.d(TAG, "去连接蓝牙 ");
-//                                        }
-//                                    }).show();
-                        }
                     }
                 });
             }else {
+                if(MainActivity.this != null){
+                    ((AlphaApplication) MainActivity.this.getApplication()).setmCurrentNetworkInfo(null);
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -555,7 +564,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                     || mActivity instanceof FeatureActivity*/
                                     ||mActivity instanceof ActionTestActivity
                                     ||mActivity instanceof ActionCourseActivity
-                                    ||mActivity instanceof CourseLevelActivity
+                                    ||mActivity instanceof CourseLevelOneActivity
+                                    ||mActivity instanceof CourseLevelTwoActivity
                                     ||mActivity instanceof NetconnectActivity
                                     ||mActivity instanceof NetSearchResultActivity
                                     ||mActivity instanceof CourseTwoActivity
@@ -918,6 +928,172 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     public void showCartoonText(String text) {
+    }
+
+    @Override
+    public void onGetRobotInfo(int result, MyRobotModel model) {
+        UbtLog.d(TAG, "onGetRobotInfo == " );
+        com.ubt.alpha1e.base.loading.LoadingDialog.dismiss(MainActivity.this);
+        if(result == 0){
+            ToastUtils.showShort("获取机器人信息失败！");
+        }else if(result == 1){
+            UbtLog.d(TAG, "账号已经绑定 " );
+            BehaviorHabitsActivity.LaunchActivity(this);
+        }else if(result == 2){
+            UbtLog.d(TAG, "账户没有绑定 " );
+            habitAdviceGotoBindDialog();
+        }
+    }
+
+
+    //若要使用此功能，需先绑定机器人！
+    public void habitAdviceGotoBindDialog(){
+        new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                .setTitle("提示")
+                .setMsg("若要使用此功能，需先绑定机器人！")
+                .setCancelable(false)
+                .setPositiveButton("一键绑定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "一键绑定 ");
+                        if(MainUiBtHelper.getInstance(getContext()).isLostCoon()){
+                            UbtLog.d(TAG, "没有连接蓝牙 " );
+                            Intent intent = new Intent(MainActivity.this,BluetoothandnetconnectstateActivity.class);
+                            startActivity(intent);
+                        }else {
+                            UbtLog.d(TAG, "连接了蓝牙 " );
+                            gotoBind();
+                        }
+                    }
+                })
+                .setNegativeButton("暂不", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "暂不 ");
+                    }
+                }).show();
+    }
+
+
+    RobotBindingDialog robotBindingDialog = null ;
+    //一键绑定
+    public void gotoBind(){
+
+        if(robotBindingDialog == null){
+            robotBindingDialog = new RobotBindingDialog(AppManager.getInstance().currentActivity())
+                    .builder()
+                    .setCancelable(true);
+        }
+        robotBindingDialog.show();
+        GotoBindRequest gotoBindRequest = new GotoBindRequest();
+        gotoBindRequest.setEquipmentId(AlphaApplication.currentRobotSN);
+        gotoBindRequest.setSystemType("3");
+
+        String url = HttpEntity.ROBOT_BIND;
+        doRequestBind(url,gotoBindRequest,ROBOT_GOTO_BIND);
+
+    }
+
+    /**
+     * 网络请求
+     */
+    public void doRequestBind(String url, BaseRequest baseRequest, int requestId) {
+
+        OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d(TAG, "doRequestCheckIsBind onError:" + e.getMessage());
+                switch (id){
+                    case ROBOT_GOTO_BIND:
+                        if(robotBindingDialog != null && robotBindingDialog.isShowing()){
+                            robotBindingDialog.display();
+                            robotBindingDialog = null ;
+                        }
+                        adviceBindFail("");
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d(TAG,"doRequestCheckIsBind response = " + response);
+//				BaseResponseModel<BaseModel> baseResponseModel = GsonImpl.get().toObject(response,new TypeToken<BaseResponseModel<BaseModel>>() {}.getType());
+                BaseResponseModel<String> baseResponseModel = GsonImpl.get().toObject(response,
+                        new TypeToken<BaseResponseModel<String>>(){}.getType());
+                switch (id){
+                    case ROBOT_GOTO_BIND:
+                        if(robotBindingDialog != null && robotBindingDialog.isShowing()){
+                            robotBindingDialog.display();
+                            robotBindingDialog = null ;
+                        }
+                        UbtLog.d(TAG, "status:" + baseResponseModel.status);
+                        UbtLog.d(TAG, "info:" + baseResponseModel.info);
+                        if(baseResponseModel.status){
+                            UbtLog.d(TAG, "绑定成功" );
+                            adviceBindSuccess();
+                        }else {
+                            String reason = "";
+                            if(baseResponseModel.models != null && baseResponseModel.models.equals("1002")){
+                                reason = "机器人已被他人绑定！";
+                            }
+                            adviceBindFail(reason);
+                            UbtLog.d(TAG, "绑定失败" );
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        });
+    }
+
+    //绑定成功！
+    public void adviceBindSuccess(){
+        Drawable img_ok;
+        Resources res1 = getResources();
+        img_ok = res1.getDrawable(R.drawable.ic_bind_success);
+        new RobotBindDialog(AppManager.getInstance().currentActivity()).builder()
+                .setTitle("绑定成功！")
+                .setMsg("可到“个人中心-设置-我的机器人”查看状态。")
+                .setCancelable(true)
+                .setPositiveButton("我知道了", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "我知道了 ");
+                    }
+                })
+                .setTitlePicture(img_ok)
+                .setNoTitleLayout()
+                .show();
+    }
+    //绑定失败！
+    public void adviceBindFail(String reason){
+        Drawable img_off;
+        Resources res2 = getResources();
+        img_off = res2.getDrawable(R.drawable.ic_bind_fail);
+        new RobotBindDialog(AppManager.getInstance().currentActivity()).builder()
+                .setTitle("绑定失败！")
+                .setMsg(reason)
+                .setCancelable(true)
+                .setPositiveButton("重试", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "重试 ");
+                        gotoBind();
+                    }
+                })
+                .setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "取消 ");
+                    }
+                })
+                .setTitlePicture(img_off)
+                .setNoTitleLayout()
+                .show();
     }
 
     @Override

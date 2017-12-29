@@ -305,9 +305,9 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 //                        ((RemoteHelper) mHelper).doWalkAction(1,1,0);
 //                    }
 //                }else {
-                    longClickItem = view;
-                    execActions(longClickItem);
-                    keepExec = true;
+//                    longClickItem = view;
+//                    execActions(longClickItem);
+//                    keepExec = true;
 //
 //                }
             }else if(event.getAction() == MotionEvent.ACTION_UP){
@@ -320,6 +320,9 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 //
 //                    ((RemoteHelper) mHelper).doStopWalkAction();
 //                }else {
+                if(!keepExec){
+                    return false;
+                }
 //
                     keepExec = false;
                     longClickItem = null;
@@ -327,6 +330,19 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 //                }
                 lastClickTime = System.currentTimeMillis();
             }
+            return false;
+        }
+    };
+
+
+
+    private View.OnLongClickListener viewOnLongTouchListener = new View.OnLongClickListener() {
+
+        @Override
+        public boolean onLongClick(View view) {
+            longClickItem = view;
+            execActions(longClickItem);
+            keepExec = true;
             return false;
         }
     };
@@ -376,8 +392,8 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         public void onClick(View arg0) {
             // TODO Auto-generated method stub
 //            arg0.setClickable(false);
-            if(System.currentTimeMillis()-lastClickTime < 800){
-                UbtLog.d(TAG,"800ms才能点击");
+            if(System.currentTimeMillis()-lastClickTime < 1000){
+                UbtLog.d(TAG,"1000ms才能点击");
                 return;
             }
             lastClickTime = System.currentTimeMillis();
@@ -428,12 +444,19 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
         //方向键可以长按一直执行
         btn_up.setOnTouchListener(viewOnTouchListener);
+        btn_up.setOnLongClickListener(viewOnLongTouchListener);
         btn_left.setOnTouchListener(viewOnTouchListener);
+        btn_left.setOnLongClickListener(viewOnLongTouchListener);
         btn_right.setOnTouchListener(viewOnTouchListener);
+        btn_right.setOnLongClickListener(viewOnLongTouchListener);
         btn_down.setOnTouchListener(viewOnTouchListener);
+        btn_down.setOnLongClickListener(viewOnLongTouchListener);
 
         btn_to_left.setOnTouchListener(viewOnTouchListener);
+        btn_to_left.setOnLongClickListener(viewOnLongTouchListener);
         btn_to_right.setOnTouchListener(viewOnTouchListener);
+
+        btn_to_right.setOnLongClickListener(viewOnLongTouchListener);
 
         btn_stop.setOnClickListener(controlListener);
         if(RemoteHelper.mCurrentType != RemoteRecordOperater.ModelType.CUSTOM){

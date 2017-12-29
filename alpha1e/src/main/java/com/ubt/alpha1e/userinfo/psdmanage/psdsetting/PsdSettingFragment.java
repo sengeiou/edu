@@ -54,6 +54,11 @@ public class PsdSettingFragment extends MVPBaseFragment<PsdSettingContract.View,
         }
     };
 
+    public static PsdSettingFragment newInstance(){
+        PsdSettingFragment psdSettingFragment = new PsdSettingFragment();
+        return psdSettingFragment;
+    }
+
     public PsdSettingFragment() {
 
     }
@@ -197,6 +202,9 @@ public class PsdSettingFragment extends MVPBaseFragment<PsdSettingContract.View,
                 }
                 if(!TextUtils.isEmpty(msg)){
                     ToastUtils.showShort(msg);
+                }
+                if(isSuccess){
+                    getActivity().finish();
                 }
             }
         });

@@ -388,7 +388,6 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     Runnable overTimeDo = new Runnable() {
         @Override
         public void run() {
-//            ToastUtils.showShort("蓝牙连接失败");
             UbtLog.d(TAG,"蓝牙连接超时");
             isConnecting = false;
             if(mHelper != null){
@@ -480,7 +479,6 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
     @Override
     protected void initControlListener() {
 
-
     }
 
     @Override
@@ -520,7 +518,6 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
                 break;
 
             default:
-
         }
     }
 
@@ -562,8 +559,6 @@ public class BluetoothconnectActivity extends MVPBaseActivity<BluetoothconnectCo
         timer = new Timer();
         timer.schedule(task, 30*1000);
     }
-
-
 
     @Override
     public void onGetHistoryBindDevices(Set<BluetoothDevice> history_deivces) {

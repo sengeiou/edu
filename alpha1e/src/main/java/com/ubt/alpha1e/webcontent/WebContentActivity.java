@@ -77,6 +77,7 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
         WebViewClient webViewClient = new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                UbtLog.d(TAG,"url = " + url);
                 doGotoPage(url);
                 return true;
             }
@@ -92,8 +93,7 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
             }
         };
         webContent.setWebViewClient(webViewClient);
-        doGotoPage(mUrl);
-
+        webContent.loadUrl(mUrl);
     }
 
     private void doGotoPage(String url) {
@@ -116,7 +116,9 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == event.ACTION_DOWN && event.getKeyCode() == event.KEYCODE_BACK) {
-            return doBackPage();
+            this.finish();
+            //return doBackPage();
+            return true;
         }
         return false;
     }

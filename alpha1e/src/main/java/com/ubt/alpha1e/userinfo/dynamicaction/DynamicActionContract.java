@@ -13,10 +13,15 @@ import java.util.List;
 
 public class DynamicActionContract {
     interface View extends BaseView {
-        void setDynamicData(List<DynamicActionModel> list);
+        void setDynamicData(boolean status,int type,List<DynamicActionModel> list);
+        void deleteActionResult(boolean isSuccess);
     }
 
     interface  Presenter extends BasePresenter<View> {
         void getDynamicData(int type);
+
+        void getDynamicData(int type,int page,int offset);
+
+        void deleteActionById(int actionId);
     }
 }
