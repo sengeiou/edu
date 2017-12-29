@@ -1009,7 +1009,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             robotBindingDialog.display();
                             robotBindingDialog = null ;
                         }
-                        adviceBindFail();
+                        adviceBindFail("");
                         break;
                     default:
                         break;
@@ -1034,7 +1034,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             UbtLog.d(TAG, "绑定成功" );
                             adviceBindSuccess();
                         }else {
-                            adviceBindFail();
+                            String reason = "";
+                            if(baseResponseModel.models != null && baseResponseModel.models.equals("1002")){
+                                reason = "机器人已被他人绑定！";
+                            }
+                            adviceBindFail(reason);
                             UbtLog.d(TAG, "绑定失败" );
                         }
                         break;
@@ -1044,7 +1048,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
             }
         });
-
     }
 
     //绑定成功！
@@ -1067,12 +1070,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 .show();
     }
     //绑定失败！
-    public void adviceBindFail(){
+    public void adviceBindFail(String reason){
         Drawable img_off;
         Resources res2 = getResources();
         img_off = res2.getDrawable(R.drawable.ic_bind_fail);
         new RobotBindDialog(AppManager.getInstance().currentActivity()).builder()
                 .setTitle("绑定失败！")
+                .setMsg(reason)
                 .setCancelable(true)
                 .setPositiveButton("重试", new View.OnClickListener() {
                     @Override
