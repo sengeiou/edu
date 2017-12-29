@@ -308,7 +308,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         rlGoVideo = (RelativeLayout) findViewById(R.id.rl_go_video);
         ivGoVideo = (ImageView) findViewById(R.id.iv_go_video);
         ivShotAlbum = (ImageView) findViewById(R.id.iv_shot_album);
-        ivGoVideo.setOnClickListener(new View.OnClickListener() {
+        rlGoVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
