@@ -44,6 +44,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         courseModel1.setTitle("第一关 了解动作编辑器");
         courseModel1.setActionLockType(1);
         courseModel1.setDrawableId(R.drawable.ic_action_level1);
+        courseModel1.setSize(3);
         List<String> card1 = new ArrayList<>();
         card1.add(ResourceManager.getInstance(context).getStringResources("action_course_card1_1"));
         card1.add(ResourceManager.getInstance(context).getStringResources("action_course_card1_2"));
@@ -56,7 +57,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         courseModel2.setTitle("第二关 创定指定动作");
         courseModel2.setDrawableId(R.drawable.ic_action_level2);
         courseModel2.setActionLockType(0);
-
+        courseModel2.setSize(3);
         List<String> card2 = new ArrayList<>();
         card2.add(ResourceManager.getInstance(context).getStringResources("action_course_card2_1"));
         card2.add(ResourceManager.getInstance(context).getStringResources("action_course_card2_2"));
@@ -66,16 +67,18 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
 
         ActionCourseModel courseModel3 = new ActionCourseModel();
         courseModel3.setActionCourcesName("第三关");
-        courseModel3.setTitle("第三关 创定指定动作");
+        courseModel3.setTitle("第三关 学习音乐库");
         courseModel3.setDrawableId(R.drawable.ic_action_level3);
         courseModel3.setActionLockType(0);
+        courseModel3.setSize(2);
         list.add(courseModel3);
 
         ActionCourseModel courseModel4 = new ActionCourseModel();
         courseModel4.setActionCourcesName("第四关");
-        courseModel4.setTitle("第四关 创定指定动作");
+        courseModel4.setTitle("第四关 添加动作音频");
         courseModel4.setDrawableId(R.drawable.ic_action_level4);
         courseModel4.setActionLockType(0);
+        courseModel4.setSize(3);
         list.add(courseModel4);
 
         ActionCourseModel courseModel5 = new ActionCourseModel();
@@ -146,76 +149,60 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
     /**
      * 获取最新进度
      */
-    public void getCourseProgress() {
+    public void getLastCourseProgress() {
         SaveCourseProQuest proQequest = new SaveCourseProQuest();
         proQequest.setType(2);
-        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_GET_PROGRESS, proQequest, 100)
+        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
+        //本地没有记录，说明之前没用过，则根据后台返回保存本地记录
+        if (null == record) {
+            LocalActionRecord record1 = new LocalActionRecord();
+            record1.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
+            record1.setCourseLevel(1);
+            record1.setPeriodLevel(0);
+            record1.setUpload(true);
+            UbtLog.d("getLastCourseProgress", "record1===" + record1.toString());
+            record1.save();
+        }
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.GET_COURSE_PROGRESS, proQequest, 100)
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        UbtLog.d("getCourseProgress", "e===" + e.getMessage());
-                        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
-                        //本地没有记录，说明之前没用过，则根据后台返回保存本地记录
-                        if (null == record) {
-                            LocalActionRecord record1 = new LocalActionRecord();
-                            record1.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
-                            record1.setCourseLevel(1);
-                            record1.setPeriodLevel(0);
-                            record1.setUpload(true);
-                            UbtLog.d("getCourseProgress", "record1===" + record1.toString());
-                            record1.save();
-                        }
+                        UbtLog.d("getLastCourseProgress", "e===" + e.getMessage());
                         if (isAttachView()) {
                             mView.getLastProgressResult(false);
                         }
                     }
 
+                    //   {"status":true,"info":"0000","models":{"userId":"748872","courseOne":"1","progressOne":"2","courseTwo":"3","progressTwo":"1","type":"2"}}
                     @Override
                     public void onResponse(String response, int id) {
-                        UbtLog.d("getCourseProgress", "response===" + response);
+                        UbtLog.d("ActionCourseActivity", " getLastCourseProgress response===" + response);
                         BaseResponseModel<CourseLastProgressModule> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<CourseLastProgressModule>>() {
                                 }.getType());
-                        UbtLog.d("getCourseProgress", "baseResponseModel==" + baseResponseModel.status + "  " + "info  " + baseResponseModel.info + baseResponseModel.models);
-                        if (baseResponseModel.status) {
+                         if (baseResponseModel.status) {
                             CourseLastProgressModule courseLastProgressModule = baseResponseModel.models;
                             LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
-                            //本地没有记录，说明之前没用过，则根据后台返回保存本地记录
-                            if (null == record) {
-                                LocalActionRecord record1 = new LocalActionRecord();
-                                if (null != courseLastProgressModule) {
-                                    record1.setUserId(courseLastProgressModule.getUserId());
-                                    record1.setCourseLevel(Integer.parseInt(courseLastProgressModule.getCourseOne()));
-                                    record1.setPeriodLevel(Integer.parseInt(courseLastProgressModule.getCourseTwo()));
-                                    record1.setUpload(true);
-                                } else {
-                                    record1.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
-                                    record1.setCourseLevel(1);
-                                    record1.setPeriodLevel(0);
-                                    record1.setUpload(true);
-                                }
-                                UbtLog.d("getCourseProgress", "record1===" + record1.toString());
 
-                                record1.save();
-                            } else {
-                                //本地有记录，证明需要更新本地数据，或者上传记录
-                                int course = record.getCourseLevel();
-                                int level = record.getPeriodLevel();
-                                if (null != courseLastProgressModule) {
-                                    if (Integer.parseInt(courseLastProgressModule.getCourseOne()) > course) {
+                            //本地有记录，证明需要更新本地数据，或者上传记录
+                            int course = record.getCourseLevel();
+                            int level = record.getPeriodLevel();
+                            if (null != courseLastProgressModule) {
+                                //如果从后台取得关卡大于本地则更新本地数据
+                                if (Integer.parseInt(courseLastProgressModule.getProgressOne()) > course) {
+                                    ContentValues values = new ContentValues();
+                                    values.put("CourseLevel", Integer.parseInt(courseLastProgressModule.getProgressOne()));
+                                    values.put("periodLevel", Integer.parseInt(courseLastProgressModule.getCourseTwo()));
+                                    values.put("isUpload", true);
+                                    DataSupport.updateAll(LocalActionRecord.class, values);
+                                } else if (Integer.parseInt(courseLastProgressModule.getCourseOne()) == course) {
+                                    //如果从后台取得的关卡跟本地一致则判断课程，如果后台的课程大于本地的课程则更新本地
+                                    if (Integer.parseInt(courseLastProgressModule.getCourseTwo()) > level) {
                                         ContentValues values = new ContentValues();
-                                        values.put("CourseLevel", Integer.parseInt(courseLastProgressModule.getCourseOne()));
+                                        values.put("CourseLevel", Integer.parseInt(courseLastProgressModule.getProgressOne()));
                                         values.put("periodLevel", Integer.parseInt(courseLastProgressModule.getCourseTwo()));
                                         values.put("isUpload", true);
                                         DataSupport.updateAll(LocalActionRecord.class, values);
-                                    } else if (Integer.parseInt(courseLastProgressModule.getCourseOne()) == course) {
-                                        if (Integer.parseInt(courseLastProgressModule.getCourseTwo()) > level) {
-                                            ContentValues values = new ContentValues();
-                                            values.put("CourseLevel", Integer.parseInt(courseLastProgressModule.getCourseOne()));
-                                            values.put("periodLevel", Integer.parseInt(courseLastProgressModule.getCourseTwo()));
-                                            values.put("isUpload", true);
-                                            DataSupport.updateAll(LocalActionRecord.class, values);
-                                        }
                                     }
                                 }
                             }
@@ -237,14 +224,14 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
     /**
      * 获取所有上传关卡的分数获取
      */
-    public void getLastProgress() {
+    public void getAllCourseScore() {
         SaveCourseStatuRequest statuRequest = new SaveCourseStatuRequest();
         statuRequest.setType(2);
         OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_GET_STATU, statuRequest, 100)
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        UbtLog.d("ActionCourseActivity", "e===" + e.getMessage());
+                        UbtLog.d("ActionCourseActivity", " getAllCourseScore e===" + e.getMessage());
                         if (isAttachView()) {
                             mView.getCourseScores(null);
                         }
@@ -252,13 +239,12 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
 
                     @Override
                     public void onResponse(String response, int id) {
-                        UbtLog.d("ActionCourseActivity", "response===" + response);
+                        UbtLog.d("ActionCourseActivity", " getAllCourseScoreresponse===" + response);
 
                         BaseResponseModel<List<CourseDetailScoreModule>> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<List<CourseDetailScoreModule>>>() {
                                 }.getType());
-                        UbtLog.d("ActionCourseActivity", "baseResponseModel==" + baseResponseModel.status + "  " + "info  " + baseResponseModel.info + baseResponseModel.models);
-                        if (baseResponseModel.status) {
+                         if (baseResponseModel.status) {
                             if (isAttachView()) {
                                 mView.getCourseScores(baseResponseModel.models);
                             }
@@ -269,7 +255,6 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
                         }
                     }
                 });
-
     }
 
     /**
@@ -282,7 +267,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         proQequest.setCourseTwo(courseTwo);
         proQequest.setProgressTwo("1");
         proQequest.setType(2);
-        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.COURSE_SAVE_PROGRESS, proQequest, 100)
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.SAVE_COURSE_PROGRESS, proQequest, 100)
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {

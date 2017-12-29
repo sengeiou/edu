@@ -1,7 +1,7 @@
 package com.ubt.alpha1e.userinfo.mainuser;
 
-
 //import android.app.Fragment;
+
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
@@ -22,13 +22,15 @@ import java.util.List;
 public interface UserCenterContact {
 
     interface UserCenterView extends BaseView {
-        void loadData(List<LeftMenuModel> list,List<Fragment> fragmentList);
+        void loadData(List<LeftMenuModel> list, List<Fragment> fragmentList);
 
+        void getUnReadMessage(boolean isSuccess, int count);
     }
 
     interface UserCenterPresenter extends BasePresenter<UserCenterView> {
         void initData(Context contex);
 
+        void getUnReadMessage();
     }
 
 }

@@ -20,15 +20,6 @@
             android:src="@drawable/pic1"
             />
 
-        <ImageView
-            android:id="@+id/iv_add_action_arrow"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:layout_alignBottom="@+id/iv_action_icon"
-            android:layout_alignEnd="@+id/iv_action_icon"
-            android:src="@drawable/zuojiantou_4"
-            android:visibility="gone"
-            />
 
         <ImageView
             android:id="@+id/iv_action_select"
@@ -56,6 +47,16 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="24dp"
             android:src="@drawable/laba_anim"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/iv_add_action_arrow"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignBottom="@+id/iv_action_icon"
+            android:layout_alignEnd="@+id/iv_action_icon"
+            android:src="@drawable/zuojiantou_4"
             android:visibility="gone"
             />
 

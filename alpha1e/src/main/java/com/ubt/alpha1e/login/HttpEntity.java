@@ -62,14 +62,44 @@ public class HttpEntity {
     public static final String CHECK_ROBOT_INFO = BASIC_UBX_SYS_BIND + "relation/getEquipmentInfo";
 
 
-    public static final String COURSE_GET_PROGRESS = BASIC_UBX_SYS + "course/getCourseProgress";
 
 
-    public static final String COURSE_SAVE_PROGRESS = BASIC_UBX_SYS + "course/addCourseProgress";
 
     public static final String COURSE_SAVE_STATU = BASIC_UBX_SYS + "course/addCourseStatus";
 
     public static final String COURSE_GET_STATU = BASIC_UBX_SYS + "course/getCourseStatus";
+
+    /**
+     * 获取消息列表
+     */
+    public static final String MESSAGE_GET_LIST = BASIC_UBX_SYS + "message/listByPage";
+    /**
+     * 获取未读消息数量
+     */
+    public static final String MESSAGE_UNREAD_TOTAL = BASIC_UBX_SYS + "message/countUnread";
+
+    /**
+     * 获取消息列表
+     */
+    public static final String MESSAGE_UPDATE_STATU = BASIC_UBX_SYS + "message/update";
+
+    /**
+     * 删除消息
+     */
+    public static final String MESSAGE_DELETE = BASIC_UBX_SYS + "message/deleteByMessageId";
+    /**
+     * 获取原创列表
+     */
+    public static final String ACTION_DYNAMIC_LIST = BASIC_UBX_SYS + "original/listByPage";
+    /**
+     * 删除动作ByID
+     */
+    public static final String ACTION_DYNAMIC_DELETE = BASIC_UBX_SYS + "original/deleteByActionId";
+    /**
+     * 保存动作
+     */
+    public static final String SAVE_ACTION = BASIC_UBX_SYS + "original/upload";
+
 
     /**
      * 保存blockly编程项目
