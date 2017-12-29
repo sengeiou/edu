@@ -367,7 +367,9 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                if (!isFinishing()){
                 showTapHeadDialog();
+                }
             }
         });
     }

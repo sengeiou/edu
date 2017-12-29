@@ -273,10 +273,11 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
                     mRefreshLayout.finishLoadmore();
                 }
             }
-
+            mNoticeAdapter.notifyDataSetChanged();
             if (null == mNoticeModels || mNoticeModels.size() == 0) {//数据为空
                 showStatuLayout(1);
             }
+
         } else {
             if (mNoticeModels.size() == 0) {//如果请求失败切列表数据为0，则显示错误页面
                 showStatuLayout(2);
@@ -371,16 +372,31 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
             tvEmpty.setVisibility(View.GONE);
             llError.setVisibility(View.VISIBLE);
             ivStatu.setImageResource(R.drawable.ic_loading_failed);
-            mRefreshLayout.setEnableRefresh(false);
-            mRefreshLayout.setEnableLoadmore(false);
         }
         mNoticeAdapter.setEmptyView(emptyView);
     }
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        mPresenter.updateNoticeStatu(mNoticeModels.get(position).getId());
+        if (!isFastDoubleClick()) {
+            if (mNoticeModels.get(position).getStatus().equals("0")) {
+                mPresenter.updateNoticeStatu(mNoticeModels.get(position).getId());
+            }
+            //WebActivity.launchActivity(getActivity(), "https://www.ubtrobot.com/cn/", "详情");
+        }
     }
+
+    private static long lastClickTime1;
+
+    public static boolean isFastDoubleClick() {
+        long time = System.currentTimeMillis();
+        if (time - lastClickTime1 < 500) {
+            return true;
+        }
+        lastClickTime1 = time;
+        return false;
+    }
+
 
     CallBackListener mCallBackListener;
 

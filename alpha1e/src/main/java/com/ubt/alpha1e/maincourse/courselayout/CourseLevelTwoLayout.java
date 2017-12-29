@@ -318,12 +318,12 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             threeIndex = 0;
             showLeftArrow1(false);
             mActionCourseTwoUtil.showActionDialog(2, this);
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引5.mp3\",\"playcount\":1}");
-                }
-            }, 1000);
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引5.mp3\",\"playcount\":1}");
+//                }
+//            }, 1000);
         }
     }
 
