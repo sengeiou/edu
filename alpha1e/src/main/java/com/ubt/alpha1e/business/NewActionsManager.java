@@ -260,6 +260,7 @@ public class NewActionsManager implements IFileListener {
             File file = new File(FileTools.actions_new_cache + File.separator + mChangeNewActionInfo.actionId + ".zip");
             File imageFile;
             if (!TextUtils.isEmpty(mChangeNewActionInfo.actionHeadUrl)) {
+                UbtLog.d(TAG, "writeImage to server");
                 imageFile = new File(mChangeNewActionInfo.actionHeadUrl);
             } else {
                 imageFile = new File(FileTools.actions_new_cache + File.separator + "Images/" + "default.jpg");
@@ -323,6 +324,7 @@ public class NewActionsManager implements IFileListener {
             isSaveSuccess = false;
             notifyListeners();
         }
+
     }
 
     public void doRename(NewActionInfo info) {

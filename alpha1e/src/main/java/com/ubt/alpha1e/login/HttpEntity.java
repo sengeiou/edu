@@ -23,6 +23,7 @@ public class HttpEntity {
     public static final String getXGAppId = XG_URL + "push/appInfo";
 
     public static final String bindXGServer = XG_URL + "push/userToken";
+    public static final String unbindXGServer=XG_URL+"push/unbindToken";
 
 
 

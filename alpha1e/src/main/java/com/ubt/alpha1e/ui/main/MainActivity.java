@@ -261,7 +261,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mCurrentTouchTime=System.currentTimeMillis();
         getScreenInch();
         initUI();
-        mPresenter.getXGInfo();
         mHelper=MainUiBtHelper.getInstance(getContext());
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mBroadcastReceiver1, filter1);
@@ -283,6 +282,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         super.onResume();
         UbtLog.d(TAG,"onResume");
         initUI();
+        mPresenter.getXGInfo();
         if(!isBulueToothConnected()){
              showDisconnectIcon();
             looperThread.send(createMessage(APP_LAUNCH_STATUS));

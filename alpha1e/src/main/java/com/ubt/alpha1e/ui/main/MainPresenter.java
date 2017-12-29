@@ -77,7 +77,14 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     public void getXGInfo() {
         String accessId = SPUtils.getInstance().getString(Constant.SP_XG_ACCESSID);
         String accessKey = SPUtils.getInstance().getString(Constant.SP_XG_ACCESSKEY);
-        if (TextUtils.isEmpty(accessId) || TextUtils.isEmpty(accessKey)) {
+        String userId = SPUtils.getInstance().getString(Constant.SP_XG_USERID);
+        UbtLog.d("XGREquest","getXGInfo  old userId"+userId+ "new USERID "+SPUtils.getInstance().getString(Constant.SP_USER_ID));
+        //if (TextUtils.isEmpty(accessId) || TextUtils.isEmpty(accessKey)) {
+        if(TextUtils.isEmpty(userId)||!userId.equals(SPUtils.getInstance().getString(Constant.SP_USER_ID))){
+            if(!userId.equals(SPUtils.getInstance().getString(Constant.SP_USER_ID))){
+               // UnBindXGServer();
+                UnBindXGServer("20002",userId);
+            }
             String Url = HttpEntity.getXGAppId + "?appName=ALPHA1E";
             UbtLog.d("XGREquest", "url===" + Url);
             OkHttpUtils.get()
@@ -101,6 +108,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                         if (xgDeviceMode.getDevice().equals("a")) {
                             SPUtils.getInstance().put(Constant.SP_XG_ACCESSID, xgDeviceMode.getAccessId());
                             SPUtils.getInstance().put(Constant.SP_XG_ACCESSKEY, xgDeviceMode.getAccessKey());
+
                             BindXGServer(xgDeviceMode);
                         }
                     } catch (JSONException e) {
@@ -121,6 +129,8 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                     //  }
                 }
             });
+        }else {
+            UbtLog.d("XGREquest","accessId:   "+accessId+"accessKey:    "+accessKey);
         }
     }
 
@@ -146,7 +156,33 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             @Override
             public void onResponse(String response, int id) {
                 UbtLog.d("XGREquest", "response===" + response);
+                SPUtils.getInstance().put(Constant.SP_XG_ACCESSKEY, SPUtils.getInstance().getString(Constant.SP_USER_ID));
+                SPUtils.getInstance().put(Constant.SP_XG_USERID,SPUtils.getInstance().getString(Constant.SP_USER_ID));
                 AlphaApplication.initXG();
+            }
+        });
+    }
+
+    public void UnBindXGServer(String appId,String userId) {
+        XGGetAccessIdRequest request = new XGGetAccessIdRequest();
+        request.setAppId(appId);
+        request.setUserId(userId);
+        request.setToken(XGUBTManager.getInstance(AlphaApplication.getmContext()).getDeviceToken());
+        UbtLog.d("XGREquest", "url===" + HttpEntity.unbindXGServer +"unbind UserId: "+userId);
+        OkHttpUtils.postString()
+                .addHeader("authorization", SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN))
+                .url(HttpEntity.unbindXGServer)
+                .mediaType(MediaType.parse("application/json; charset=utf-8"))
+                .content(GsonImpl.get().toJson(request))
+                .id(id)
+                .build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d("XGREquest", "unbind onError===" + e.getMessage());
+            }
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d("XGREquest", "unbind response===" + response);
             }
         });
     }
