@@ -1032,13 +1032,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         UbtLog.d(TAG, "info:" + baseResponseModel.info);
                         if(baseResponseModel.status){
                             UbtLog.d(TAG, "绑定成功" );
-                            adviceBindSuccess();
-                        }else {
-                            String reason = "";
-                            if(baseResponseModel.models != null && baseResponseModel.models.equals("1002")){
-                                reason = "机器人已被他人绑定！";
+                            if(baseResponseModel.models == null || baseResponseModel.models.equals("")){
+                                adviceBindSuccess();
+                            }else if(baseResponseModel.models != null && baseResponseModel.models.equals("1002")){
+                                adviceBindFail("机器人已被他人绑定！");
+                            }else {
+                                adviceBindFail("");
                             }
-                            adviceBindFail(reason);
+                        }else {
+                            adviceBindFail("");
                             UbtLog.d(TAG, "绑定失败" );
                         }
                         break;

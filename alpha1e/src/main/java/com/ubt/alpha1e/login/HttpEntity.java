@@ -49,7 +49,7 @@ public class HttpEntity {
     public static final String GET_COURSE_PROGRESS = BASIC_UBX_SYS + "course/getCourseProgress";
 
 
-    public static final String BASIC_UBX_SYS_BIND = "http://10.10.1.12:8085/"; //绑定相关 测试环境
+    public static final String BASIC_UBX_SYS_BIND = "http://10.10.1.12:8085/equipment/"; //绑定相关 测试环境
     //查询绑定关系
     public static final String CHECK_IS_BIND = BASIC_UBX_SYS_BIND + "relation/check";
 
