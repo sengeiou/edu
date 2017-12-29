@@ -11,6 +11,7 @@ package com.ubt.alpha1e.login;
 
 public class HttpEntity {
 
+    public static final String HIBITS_STATISTICS = "http://10.10.1.14:8080/alpha1e";
 
     /**
      * 信鸽获取
