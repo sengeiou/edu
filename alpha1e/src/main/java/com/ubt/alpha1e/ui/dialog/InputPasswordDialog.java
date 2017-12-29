@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -83,6 +84,13 @@ public class InputPasswordDialog {
         edtPassword5.addTextChangedListener(mTextWatcher);
         edtPassword6.addTextChangedListener(mTextWatcher);
 
+        edtPassword1.setOnKeyListener(onKeyListener);
+        edtPassword2.setOnKeyListener(onKeyListener);
+        edtPassword3.setOnKeyListener(onKeyListener);
+        edtPassword4.setOnKeyListener(onKeyListener);
+        edtPassword5.setOnKeyListener(onKeyListener);
+        edtPassword6.setOnKeyListener(onKeyListener);
+
         btnInputAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,6 +160,40 @@ public class InputPasswordDialog {
             dialog.dismiss();
         }
     }
+
+    public View.OnKeyListener onKeyListener = new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+
+            if (keyCode == KeyEvent.KEYCODE_DEL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                if(view.getId() == R.id.edt_password_6){
+                    edtPassword6.setText("");
+                    edtPassword5.requestFocus();
+                    edtPassword5.setSelection(edtPassword5.getText().length());
+                }else if(view.getId() == R.id.edt_password_5){
+                    edtPassword5.setText("");
+                    edtPassword4.requestFocus();
+                    edtPassword4.setSelection(edtPassword4.getText().length());
+                }else if(view.getId() == R.id.edt_password_4){
+                    edtPassword4.setText("");
+                    edtPassword3.requestFocus();
+                    edtPassword3.setSelection(edtPassword3.getText().length());
+                }else if(view.getId() == R.id.edt_password_3){
+                    edtPassword3.setText("");
+                    edtPassword2.requestFocus();
+                    edtPassword2.setSelection(edtPassword2.getText().length());
+                }else if(view.getId() == R.id.edt_password_2){
+                    edtPassword2.setText("");
+                    edtPassword1.requestFocus();
+                    edtPassword1.setSelection(edtPassword1.getText().length());
+                }else if(view.getId() == R.id.edt_password_1){
+                    edtPassword1.setText("");
+                }
+                return true;
+            }
+            return false;
+        }
+    };
 
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override

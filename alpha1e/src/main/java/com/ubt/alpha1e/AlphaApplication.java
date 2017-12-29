@@ -146,7 +146,7 @@ public class AlphaApplication extends LoginApplication {
         initActivityLife();
         initSkin(this);
         initConnectClient();
-       // initXG();
+        initXG();
         initLanguage();
         LitePal.initialize(this);
         initSmartRefresh();
