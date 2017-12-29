@@ -98,7 +98,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     if(userScore != null){
                         tvRatio.setText(getStringRes("ui_habits_has_finish") + userScore.percent+"%");
                         tvScore.setText(userScore.totalScore);
-                        cbScore.setSweepAngle(Float.parseFloat(userScore.percent));
+                        cbScore.setSweepAngle((Float.parseFloat(userScore.percent)*250)/100);
 
                         List<HabitsEvent> habitsEventList = userScore.details;
                         mHabitsEventInfoDatas.clear();
