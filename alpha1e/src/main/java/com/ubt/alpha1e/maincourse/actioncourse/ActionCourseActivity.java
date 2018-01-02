@@ -29,6 +29,8 @@ import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.maincourse.adapter.ActionCoursedapter;
 import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
 import com.ubt.alpha1e.maincourse.courselayout.ActionCourseDataManager;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelFiveActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelFourActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelThreeActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
@@ -242,6 +244,10 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class), REQUESTCODE);
                             } else if (position == 2) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelThreeActivity.class), REQUESTCODE);
+                            }else if (position == 3) {
+                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFourActivity.class), REQUESTCODE);
+                            }else if (position == 4) {
+                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFiveActivity.class), REQUESTCODE);
                             }
 //                            if (position == 0) {
 //                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseOneActivity.class), REQUESTCODE);

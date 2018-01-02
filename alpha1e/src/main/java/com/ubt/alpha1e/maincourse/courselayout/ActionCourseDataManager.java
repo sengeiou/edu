@@ -158,6 +158,13 @@ public class ActionCourseDataManager {
             list.add(model1);
             list.add(model2);
             list.add(model3);
+        }else if (card == 5) {
+            model1 = new CourseActionModel("1.模板讲解", 0);
+            model2 = new CourseActionModel("2.创建指定动作—踢腿", 0);
+            model3 = new CourseActionModel("3.保存动作", 0);
+            list.add(model1);
+            list.add(model2);
+            list.add(model3);
         }
         if (currentCourse == 1) {
             model1.setStatu(2);

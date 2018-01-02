@@ -118,7 +118,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
 
         ActionCourseModel courseModel10 = new ActionCourseModel();
         courseModel10.setActionCourcesName("第十关");
-        courseModel10.setTitle("第五关 创定指定动作");
+        courseModel10.setTitle("第五关 创建动作");
         courseModel10.setDrawableId(R.drawable.ic_action_level10);
         courseModel10.setActionLockType(0);
         list.add(courseModel10);

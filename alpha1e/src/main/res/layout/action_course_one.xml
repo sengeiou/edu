@@ -43,6 +43,19 @@
             />
 
         <ImageView
+            android:id="@+id/iv_save_arrow"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignBottom="@+id/iv_save_action"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignEnd="@+id/iv_save_action"
+            android:src="@drawable/youjiantou_4"
+            android:visibility="gone"
+            />
+
+
+        <ImageView
             android:id="@+id/iv_auto_read"
             android:layout_width="45dp"
             android:layout_height="45dp"
@@ -60,7 +73,17 @@
             android:src="@drawable/actions_edit_reset_selector"
 
             />
-
+        <ImageView
+            android:id="@+id/iv_reset_arrow"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_alignBottom="@+id/iv_reset"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignEnd="@+id/iv_reset"
+            android:src="@drawable/youjiantou_4"
+            android:visibility="gone"
+            />
 
     </RelativeLayout>
 

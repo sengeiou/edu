@@ -23,7 +23,6 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.action.actioncreate.PrepareActionUtil;
 import com.ubt.alpha1e.action.model.ActionConstant;
 import com.ubt.alpha1e.action.model.PrepareMusicModel;
 import com.ubt.alpha1e.base.PermissionUtils;
@@ -54,14 +53,14 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
     MusicAdapter actionAdapter;
     private TextView tvCancle;
     private TextView tvConfirm;
-    private PrepareActionUtil.OnDialogListener mDialogListener;
+    private OnMusicDialogListener mDialogListener;
     private PrepareMusicModel selectDataModel;
     DialogPlus mDialogPlus;
 
     private boolean isShowDelete;
     AnimationDrawable animation2;
     private ImageView ivConfirmArrow;
-    private int type;
+    private int selectPosition;
     private boolean isShow = true;
 
     public CourseMusicDialogUtil(Context context) {
@@ -71,8 +70,8 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
     /**
      * 显示对话框
      */
-    public void showMusicDialog(int type, PrepareActionUtil.OnDialogListener mDialogListener) {
-        this.type = type;
+    public void showMusicDialog(int position, OnMusicDialogListener mDialogListener) {
+        this.selectPosition = position;
         isShow = true;
         isShowDelete = false;
         this.mDialogListener = mDialogListener;
@@ -142,7 +141,7 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         //第一个位置弹出录音框
-        if (position == 0 && type == 2) {
+        if (position == 0) {
             PermissionUtils.getInstance(mContext).request(new PermissionUtils.PermissionLocationCallback() {
                 @Override
                 public void onSuccessful() {
@@ -171,7 +170,7 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
 
 
         } else {
-            if (position == 1) {
+            if (position == selectPosition) {
                 isShow = false;
                 showAddAnimal(true);
                 selectDataModel = (PrepareMusicModel) adapter.getData().get(position);
@@ -209,7 +208,7 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
 
                 break;
             case R.id.iv_delete:
-               // isShowDelete = true;
+                // isShowDelete = true;
                 //actionAdapter.notifyDataSetChanged();
                 break;
             case R.id.iv_add_action_arrow:
@@ -282,7 +281,7 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
             }
             ImageView ivArrow = helper.getView(R.id.iv_add_action_arrow);
 
-            if (item.getMusicName().equals(list.get(1).getMusicName()) && isShow) {
+            if (item.getMusicName().equals(list.get(selectPosition).getMusicName()) && isShow) {
                 ivArrow.setVisibility(View.VISIBLE);
                 ivArrow.setImageResource(R.drawable.animal_left_arrow);
                 AnimationDrawable animation1;
@@ -391,5 +390,13 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
         FileTools.DeleteFile(new File(FileTools.record + File.separator + name + ".mp3"));
 
     }
+
+    public interface OnMusicDialogListener {
+
+        void onMusicConfirm(PrepareMusicModel prepareMusicModel);
+
+        void onMusicDelete(PrepareMusicModel prepareMusicModel);
+    }
+
 
 }

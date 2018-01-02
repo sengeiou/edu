@@ -145,8 +145,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public String [] init = {"93", "20", "66", "86", "156", "127", "90", "74", "95", "104", "89", "89",
                 "104", "81", "76", "90"};
     public boolean lostLeftHand = false;
-    private boolean lostRightHand = false;
-    private boolean lostLeftLeg = false;
+    public boolean lostRightHand = false;
+    public boolean lostLeftLeg = false;
     public boolean lostRightLeg = false;
     public boolean needAdd = false;
     private List<Integer> ids = new ArrayList<Integer>();
@@ -174,7 +174,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     private long clickTime = 0;
 
-    private ImageView ivResetIndex;
+    public ImageView ivResetIndex;
 
     private List<Map<String, Object>> listActionLib;
     public static final String ACTION_TIME = "action_time";
@@ -818,7 +818,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         return true;
     }
 
-    private void saveNewAction() {
+    public void saveNewAction() {
 
         if (musicTimes == 0) {
             if (list_frames.size() < 1) {
