@@ -77,7 +77,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private int paddingBottomHeight ; //定义浮动按钮距离页面底部的高度
 
     private ImageView ivPop;
-    private LinearLayout lay_ctrl, lay_ctrl_more;
+    private static LinearLayout lay_ctrl, lay_ctrl_more;
     private Button btn_stop, btn_reset, btn_more;  //lay_ctrl btn
     private ImageView btn_reset_m, btn_pause_or_continue, btn_lose_power, btn_stop_m, btn_vol_log, btn_cycle,btn_lig_logo;
     private TextView btn_exit;
@@ -128,11 +128,9 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     };
 
     public static CommonCtrlView getInstace(Context context){
-        if(commonCtrlView != null){
-            commonCtrlView.onDestroy();
-            commonCtrlView = null;
+        if(commonCtrlView == null) {
+            commonCtrlView = new CommonCtrlView(context);
         }
-        commonCtrlView = new CommonCtrlView(context);
         return commonCtrlView;
     }
 
@@ -1022,7 +1020,17 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         return BasicSharedPreferencesOperator.getInstance(mBaseActivity, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doReadSync(BasicSharedPreferencesOperator.KEY_HAS_FLOAT_SHOW);
     }
 
-
+   public static void exitGlocalControlCenter(){
+//       if(float_view_enable) {
+//           mWindowManager.removeView(mFloatLayout);
+//       }
+       if (lay_ctrl_more != null)
+           lay_ctrl_more.setVisibility(View.GONE);
+       if (commonCtrlView != null) {
+           commonCtrlView.onDestroy();
+           commonCtrlView = null;
+       }
+   }
 
 
 

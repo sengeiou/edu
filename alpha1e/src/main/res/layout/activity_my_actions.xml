@@ -46,20 +46,11 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/btn_start_cycle"
         >
+        <!--android:layout_above="@+id/btn_start_cycle"-->
+
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/btn_start_cycle"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/B5"
-        android:gravity="center"
-        android:text="@string/ui_action_cycle_start"
-        android:textColor="@color/T5"
-        android:textSize="18sp"
-        android:visibility="gone"
-         />
+
 
 
 </RelativeLayout>

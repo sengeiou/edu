@@ -165,8 +165,8 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
             mSyncAlertDialog.setPositiveButton(getStringResources("ui_background_synchorize"),backDownloadListener);
         }
 
-        btn_start_cycle = (Button) findViewById(R.id.btn_start_cycle);
-        btn_start_cycle.setOnClickListener(this);
+       // btn_start_cycle = (Button) findViewById(R.id.btn_start_cycle);
+       // btn_start_cycle.setOnClickListener(this);
 
     }
 
@@ -290,8 +290,8 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
     public void onFragmentInteraction() {
         if(myActionsCircleFragment!=null&&!myActionsCircleFragment.isHidden())
             getSupportFragmentManager().beginTransaction().hide(myActionsCircleFragment).commit();
-        if(btn_start_cycle!=null)
-            btn_start_cycle.setVisibility(View.GONE);
+//        if(btn_start_cycle!=null)
+//            btn_start_cycle.setVisibility(View.GONE);
         if(fragment!=null)
             fragment.userVisible(true);
 
@@ -303,7 +303,7 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
             MyActionsActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    btn_start_cycle.setVisibility(View.VISIBLE);
+                   btn_start_cycle.setVisibility(View.VISIBLE);
                 }
             });
 
@@ -1200,7 +1200,7 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
             getSupportFragmentManager().beginTransaction().show(myActionsCircleFragment).commit();
         }
         myActionsCircleFragment.setDatas(mInsideDatas);
-        btn_start_cycle.setVisibility(View.VISIBLE);
+      //  btn_start_cycle.setVisibility(View.VISIBLE);
         if(fragment!=null){
             fragment.userVisible(false);
         }

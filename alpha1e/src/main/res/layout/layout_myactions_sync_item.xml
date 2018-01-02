@@ -5,26 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
    >
 
-    <LinearLayout
-        android:id="@+id/layout_img_select"
-        android:visibility="visible"
-        android:layout_width="60dp"
-        android:gravity="center"
-        android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/img_select"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:src="@drawable/myactions_normal"/>
-    </LinearLayout>
-
     <RelativeLayout
         android:id="@+id/rl_logo_info"
-        android:layout_width="100dp"
-        android:paddingLeft="10dp"
-        android:layout_toRightOf="@+id/layout_img_select"
-        android:layout_height="100dp">
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="40dp">
 
+        <!--android:layout_toRightOf="@+id/layout_img_select"-->
         <com.ubt.alpha1e.ui.custom.ShapedImageView
             android:id="@+id/action_logo"
             android:layout_width="80dp"
@@ -33,7 +20,16 @@
             android:layout_centerVertical="true"
             app:round_radius="16dp"
             app:shape_mode="round_rect"
-            app:stroke_width="1dp" />
+            app:stroke_width="1dp"
+        />
+        <ImageView
+            android:id="@+id/control_play"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_play"
+            android:layout_marginBottom="-40dp"
+            android:layout_alignBottom="@+id/action_logo"
+            />
 
         <RelativeLayout
             android:id="@+id/lay_info"
@@ -53,8 +49,31 @@
                 android:text="@string/hello_world"
                 android:textColor="@color/txt_new_edtion"
                 android:textSize="16sp" />
+            <TextView
+                android:id="@+id/txt_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_below="@+id/txt_action_name"
+                android:text="00:00"
+                android:textColor="#b5b5b5"
+                android:textSize="12sp" />
+               <LinearLayout
+                    android:id="@+id/layout_img_select"
+                   android:visibility="visible"
+                    android:layout_width="60dp"
+                    android:gravity="center"
+                    android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/img_select"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:src="@drawable/myactions_normal"/>
+               </LinearLayout>
 
             <TextView
+                android:visibility="invisible"
                 android:id="@+id/txt_disc"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
@@ -63,7 +82,8 @@
                 android:maxLines="2"
                 android:text="Tell a story about being Tell a story about being about being being about be being about be"
                 android:textColor="#71777d"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+               />
 
             <RelativeLayout
                 android:id="@+id/lay_center"
@@ -74,14 +94,16 @@
                 >
 
                 <ImageView
+                    android:visibility="invisible"
                     android:id="@+id/img_type_logo"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/actionlib_item_story_icon"
-                    />
+                 />
 
                 <TextView
+                    android:visibility="invisible"
                     android:id="@+id/txt_type_des"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -92,28 +114,19 @@
                     android:maxEms="6"
                     android:layout_toRightOf="@+id/img_type_logo"
                     android:textColor="#b5b5b5"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                  />
 
                 <ImageView
+                    android:visibility="invisible"
                     android:id="@+id/img_time_long"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/txt_type_des"
                     android:layout_marginLeft="15dp"
-                    android:background="@drawable/actionlib_item_time_icon" />
-
-                <TextView
-                    android:id="@+id/txt_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@+id/img_time_long"
-                    android:text="Stroy"
-                    android:textColor="#b5b5b5"
-                    android:textSize="12sp" />
-
+                    android:background="@drawable/actionlib_item_time_icon"
+                  />
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>

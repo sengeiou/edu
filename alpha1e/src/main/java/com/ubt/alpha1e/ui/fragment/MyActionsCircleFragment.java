@@ -32,7 +32,10 @@ import com.ubt.alpha1e.ui.helper.ActionsHelper;
 import com.ubt.alpha1e.ui.helper.ActionsLibHelper;
 import com.ubt.alpha1e.ui.helper.IActionsUI;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
+import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +90,32 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             public void onClick(View v) {
                 getActivity().finish();
 //                onButtonPressed();
+            }
+        });
+        ImageView img_circle=(ImageView)mView.findViewById(R.id.btn_start_cycle);
+        img_circle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //循环播放
+                UbtLog.d(TAG,"BEGIN CIRCLE ");
+                if (MyActionsHelper.mCurrentSeletedNameList.size() < 1) {
+                    UbtLog.d(TAG,"BEGIN CIRCLE LESS ONE  ");
+                }else
+                {
+                    UbtLog.d(TAG,"BEGIN CIRCLE MOR ONE  ");
+                    JSONArray action_cyc_list = new JSONArray(MyActionsHelper.mCurrentSeletedNameList);
+                    mHelper.doCycle(action_cyc_list);
+                    List<Map<String,Object>> playActionMap = new ArrayList<>();
+                    for(Map<String,Object> actionMap : mActivity.mInsideDatas){
+                        UbtLog.e(TAG, "mInsideDatas size=" +  mActivity.mInsideDatas.size());
+                        if(MyActionsHelper.mCurrentSeletedActionInfoMap.get(actionMap.get(MyActionsHelper.map_val_action_name)) != null){
+                            actionMap.put(MyActionsHelper.map_val_action_is_playing,true);
+                            actionMap.put(MyActionsHelper.map_val_action_selected,true);
+                            playActionMap.add(actionMap);
+                        }
+                    }
+                   setDatas(playActionMap);
+                }
             }
         });
         mSyncRecyclerview = (RecyclerView) mView.findViewById(R.id.recyclerview_circle);

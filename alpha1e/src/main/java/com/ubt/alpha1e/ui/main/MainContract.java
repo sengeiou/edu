@@ -35,5 +35,7 @@ public class MainContract {
         void dealMessage(String json);
 
         void checkMyRobotState();
+        //收起全局控制按钮
+        void exitGlocalControlCenter();
     }
 }
