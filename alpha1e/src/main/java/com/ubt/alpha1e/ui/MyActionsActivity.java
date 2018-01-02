@@ -148,7 +148,6 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
                 break;
             case 3:
                 initTitle(getStringResources("ui_myaction_creation"));
-
                 break;
         }
 

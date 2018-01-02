@@ -5,11 +5,14 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
+        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
         applicationId "com.ubt.alpha1e"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-
+        versionCode 1
+        flavorDimensions "versionCode"
         multiDexEnabled true
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 
         ndk {
             //根据需要 自行选择添加的对应cpu类型的.so库。
@@ -149,24 +152,33 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     //信鸽稳定版 相关依赖
     compile 'com.tencent.xinge:xinge:3.1.81-alpha'
-    //wup包
-    //    compile 'com.tencent.wup:wup:1.0.0.E-alpha'
-    //            {
-    //                exclude ''
-    //            }
-    //mid包
     compile 'com.tencent.mid:mid:3.72.4-alpha'
     compile(name: 'tvsloginlib', ext: 'aar')
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
     compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     compile 'com.yanzhenjie:permission:1.1.2'
     compile 'org.litepal.android:core:1.6.0'
-
-    compile project(':highlight')
+    //compile 'com.isanwenyu.highlight:highlight:1.8.0'
+    //local unit test
+    testCompile "junit:junit:4.12"
+    testCompile "org.mockito:mockito-all:1.10.19"
+    //android unit test
+//    androidTestCompile "org.mockito:mockito-core:1.10.20"
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
+    androidTestCompile "com.android.support.test:runner:1.0.1"
+    androidTestCompile "com.android.support.test:rules:1.0.1"
+    androidTestCompile 'com.android.support:support-annotations:23.4.0'
+    androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+	compile project(':highlight')
     compile 'me.yokeyword:fragmentation:1.1.8'
 
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-4'
+     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-4'
     //视频播放
-    compile 'com.shuyu:GSYVideoPlayer:2.1.1'
+     compile 'com.shuyu:GSYVideoPlayer:2.1.1'
+
+
 
 }

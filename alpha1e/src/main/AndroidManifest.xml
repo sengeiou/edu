@@ -375,7 +375,7 @@
             android:theme="@style/NoTitleTheme" />
         <activity
             android:name=".ui.MyActionsActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:theme="@style/NoTitleTheme" />
         <activity android:name=".utils.test.JNIActivity" />
         <activity

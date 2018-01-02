@@ -16,12 +16,11 @@
             android:layout_width="23dp"
             android:layout_height="23dp"
             android:src="@drawable/myactions_normal"/>
-
     </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/rl_logo_info"
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
         android:paddingLeft="10dp"
         android:layout_toRightOf="@+id/layout_img_select"
         android:layout_height="100dp">
