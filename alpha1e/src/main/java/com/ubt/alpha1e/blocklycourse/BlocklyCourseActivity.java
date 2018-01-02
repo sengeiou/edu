@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -92,6 +93,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         isTransition = getIntent().getBooleanExtra(TRANSITION, false);
         courseData = (CourseData)getIntent().getSerializableExtra(COURSE_DATA);
         UbtLog.d(TAG, "onCreate courseData:" + courseData);
@@ -134,6 +136,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 
         //是否可以滑动调整
         videoPlayer.setIsTouchWiget(false);
+        videoPlayer.setIfCurrentIsFullscreen(true);
 
         //设置横屏锁住
         videoPlayer.setLockLand(true);
@@ -192,6 +195,17 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
                 ivPause.setVisibility(View.GONE);
             }
 
+            @Override
+            public void onClickStopFullscreen(String s, Object... objects) {
+                UbtLog.d(TAG, "onClickStopFullscreen");
+                ivPause.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onClickResumeFullscreen(String s, Object... objects) {
+                UbtLog.d(TAG, "onClickResumeFullscreen");
+                ivPause.setVisibility(View.GONE);
+            }
 
             @Override
             public void onAutoComplete(String s, Object... objects) {
@@ -243,7 +257,16 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
     @Override
     protected void onResume() {
         super.onResume();
+        UbtLog.d(TAG, "onResume 0:" + videoPlayer.getCurrentState());
         videoPlayer.onVideoResume();
+        UbtLog.d(TAG, "onResume 1:" + videoPlayer.getCurrentState());
+        if(ivPause.getVisibility()==View.VISIBLE && videoPlayer.getCurrentState()==2){
+//            GSYVideoManager.instance().getMediaPlayer().pause();
+//            hideAllWidget();
+            videoPlayer.clickPauseIcon();
+        }
+
+
     }
 
     @Override
@@ -287,6 +310,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 
     @Override
     public void onClickUiToggle() {
+        UbtLog.d(TAG, "onClickUiToggle");
         if(rlGoPro.getVisibility() == View.VISIBLE){
             rlGoPro.setVisibility(View.GONE);
         }else{
@@ -296,6 +320,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 
     @Override
     public void hideAllWidget() {
+        UbtLog.d(TAG, "hideAllWidget");
         rlGoPro.setVisibility(View.GONE);
     }
 

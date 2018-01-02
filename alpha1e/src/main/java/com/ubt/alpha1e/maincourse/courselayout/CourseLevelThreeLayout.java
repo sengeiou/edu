@@ -152,7 +152,7 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout {
         if (currentCourse == 1) {
             isInstruction = true;
             mRlInstruction.setVisibility(View.VISIBLE);
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑1总介.hts");
+            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor14.hts");
         } else if (currentCourse == 2) {
             showMusicArrow(true);
         }

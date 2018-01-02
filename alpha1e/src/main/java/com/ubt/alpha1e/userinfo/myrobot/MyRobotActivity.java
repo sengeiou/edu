@@ -281,7 +281,7 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
     /**
      * 网路请求
      */
-    public void doRequest(String url, BaseRequest baseRequest, int requestId) {
+    public void doRequest(String url, BaseRequest baseRequest, final int requestId) {
 
         OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
             @Override
@@ -340,13 +340,13 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
                         UbtLog.d(TAG, "info:" + baseResponseModel.info);
                         if(baseResponseModel.status){
                             UbtLog.d(TAG, "绑定成功" );
-                            adviceBindSuccess();
-                        }else {
-                            String reason = "";
-                            if(baseResponseModel.models != null && baseResponseModel.models.equals("1002")){
-                                reason = "机器人已被他人绑定！";
+                            if(baseResponseModel.models == null || baseResponseModel.models.equals("")){
+                                adviceBindSuccess();
+                            }else if(baseResponseModel.models != null && baseResponseModel.models.equals("1002")){
+                                adviceBindFail("机器人已被他人绑定！");
                             }
-                            adviceBindFail(reason);
+                        }else {
+                            adviceBindFail("");
                             UbtLog.d(TAG, "绑定失败" );
                         }
                         break;

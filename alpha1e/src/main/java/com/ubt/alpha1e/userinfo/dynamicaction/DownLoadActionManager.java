@@ -10,6 +10,7 @@ import com.ubt.alpha1e.business.ActionsDownLoadManagerListener;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.DownloadProgressInfo;
+import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.net.http.basic.FileDownloadListener;
 import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
@@ -146,8 +147,6 @@ public class DownLoadActionManager {
                         }
 
 
-                    } else if (cmd == ConstValue.DV_READ_NETWORK_STATUS) {
-
                     } else if ((cmd & 0xff) == (ConstValue.DV_DO_CHECK_ACTION_FILE_EXIST & 0xff)) {
                         UbtLog.d(TAG, "播放文件是否存在：" + param[0]);
                         downRobotAction(playingInfo);
@@ -180,11 +179,28 @@ public class DownLoadActionManager {
                                 }
                             }
                         }
-                    }else if (cmd == ConstValue.DV_TAP_HEAD) {
+                    } else if (cmd == ConstValue.DV_TAP_HEAD) {
                         UbtLog.d("EditHelper", "TAP_HEAD = " + cmd);
                         for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
                             if (null != mActionListener) {
                                 mActionListener.doTapHead();
+                            }
+                        }
+                    } else if (cmd == ConstValue.DV_READ_NETWORK_STATUS) {
+                        String networkInfoJson = BluetoothParamUtil.bytesToString(param);
+                        UbtLog.d(TAG, "base cmd = " + cmd + "    networkInfoJson = " + networkInfoJson);
+
+                        NetworkInfo networkInfo = GsonImpl.get().toObject(networkInfoJson, NetworkInfo.class);
+                        if (networkInfo.status) {
+                            //hasConnectNetwork = true;
+                            UbtLog.d(TAG, "base 网络已经连接");
+                        } else {
+                            //hasConnectNetwork = false;
+                            UbtLog.d(TAG, "base 网络没有连接");
+                        }
+                        for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
+                            if (null != mActionListener) {
+                                mActionListener.isAlpha1EConnectNet(networkInfo.status);
                             }
                         }
                     }
@@ -284,7 +300,7 @@ public class DownLoadActionManager {
      */
     public void playAction(boolean isFromDetail, DynamicActionModel actionInfo) {
         UbtLog.d(TAG, "actionInfo======" + actionInfo.toString());
-        String path = FileTools.actions_download_robot_path +"/"+ actionInfo.getActionOriginalId() + ".hts";
+        String path = FileTools.actions_download_robot_path + "/" + actionInfo.getActionOriginalId() + ".hts";
         UbtLog.d(TAG, "path======" + path);
         doSendComm(ConstValue.DV_PLAYACTION, BluetoothParamUtil.stringToBytes(path));
         if (isFromDetail) {
@@ -297,6 +313,13 @@ public class DownLoadActionManager {
         playingInfo = actionInfo;
     }
 
+    /**
+     * 读取 1E 联网状态
+     */
+    public void readNetworkStatus() {
+        UbtLog.d(TAG, "--readNetworkStatus-- ");
+        doSendComm(ConstValue.DV_READ_NETWORK_STATUS, null);
+    }
 
     /**
      * 发送机器人下载
@@ -325,14 +348,16 @@ public class DownLoadActionManager {
     }
 
     private void doSendComm(byte cmd, byte[] param) {
-
-        ((AlphaApplication) mContext.getApplicationContext())
-                .getBlueToothManager()
-                .sendCommand(((AlphaApplication) mContext
-                                .getApplicationContext()).getCurrentBluetooth()
-                                .getAddress(), cmd,
-                        param, param == null ? 0 : param.length,
-                        false);
+        if (null != ((AlphaApplication) mContext
+                .getApplicationContext()).getCurrentBluetooth()) {
+            ((AlphaApplication) mContext.getApplicationContext())
+                    .getBlueToothManager()
+                    .sendCommand(((AlphaApplication) mContext
+                                    .getApplicationContext()).getCurrentBluetooth()
+                                    .getAddress(), cmd,
+                            param, param == null ? 0 : param.length,
+                            false);
+        }
     }
 
     public void resetData() {
@@ -440,6 +465,8 @@ public class DownLoadActionManager {
         void doActionPlay(long actionId, int statu);
 
         void doTapHead();
+
+        void isAlpha1EConnectNet(boolean statu);
     }
 
 }

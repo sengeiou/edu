@@ -139,12 +139,14 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             ivActionLibMore.setEnabled(false);
             showLeftArrow(true);
             secondIndex = 1;
-            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor9.mp3\",\"playcount\":1}");
+            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor9.hts");
+           // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor9.mp3\",\"playcount\":1}");
         } else if (currentCourse == 3) {
             ivActionLib.setEnabled(false);
             ivActionLibMore.setEnabled(true);
             showLeftArrow1(true);
-            ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor12.mp3\",\"playcount\":1}");
+            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor12.hts");
+           // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor12.mp3\",\"playcount\":1}");
             threeIndex = 1;
         }
     }
@@ -310,7 +312,8 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor10.mp3\",\"playcount\":1}");
+                    ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor10.hts");
+                   // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor10.mp3\",\"playcount\":1}");
                 }
             }, 1000);
             mActionCourseTwoUtil.showActionDialog(1, this);
@@ -318,12 +321,12 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             threeIndex = 0;
             showLeftArrow1(false);
             mActionCourseTwoUtil.showActionDialog(2, this);
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引5.mp3\",\"playcount\":1}");
-                }
-            }, 1000);
+//            mHandler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"任务指引5.mp3\",\"playcount\":1}");
+//                }
+//            }, 1000);
         }
     }
 
@@ -482,7 +485,8 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
                 if (null != mActionCourseTwoUtil) {
                     mActionCourseTwoUtil.showAddAnimal();
                 }
-                ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor11.mp3\",\"playcount\":1}");
+                ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor11.hts");
+               // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor11.mp3\",\"playcount\":1}");
             }
         }, 1200);
 
