@@ -14,8 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ant.country.CountryActivity;
-import com.ant.country.CountryTool;
+/*import com.ant.country.CountryActivity;
+import com.ant.country.CountryTool;*/
 import com.facebook.Profile;
 import com.sina.weibo.sdk.openapi.models.User;
 import com.ubt.alpha1e.AlphaApplicationValues;
@@ -190,14 +190,14 @@ public class PrivateInfoActivity extends BaseActivity implements
         // -------------------------------------------------
         txt_sel_country = (TextView) findViewById(R.id.txt_country_name);
         if (((PrivateInfoHelper) mHelper).getCurrentUserCountryCode() != null) {
-            txt_sel_country.setText(CountryTool.getContryNameByCode(
+            /*txt_sel_country.setText(CountryTool.getContryNameByCode(
                     ((PrivateInfoHelper) mHelper).getCurrentUserCountryCode(),
                     this));
             txt_sel_country.setClickable(false);
 
             iv_sel_country.setClickable(false);
             mCountryNumber = ((PrivateInfoHelper) mHelper)
-                    .getCurrentUserCountryCode();
+                    .getCurrentUserCountryCode();*/
         } else {
             txt_sel_country.setClickable(true);
             iv_sel_country.setClickable(false);
@@ -423,7 +423,7 @@ public class PrivateInfoActivity extends BaseActivity implements
         // }
         // });
         if (((PrivateInfoHelper) mHelper).getCurrentUserCountryCode() == null) {
-            txt_sel_country.setOnClickListener(new OnClickListener() {
+            /*txt_sel_country.setOnClickListener(new OnClickListener() {
 
                 @Override
                 public void onClick(View arg0) {
@@ -443,7 +443,7 @@ public class PrivateInfoActivity extends BaseActivity implements
                             CountryActivity.class);
                     startActivityForResult(intent, MSG_GET_COUNTRY);
                 }
-            });
+            });*/
         }
     }
 

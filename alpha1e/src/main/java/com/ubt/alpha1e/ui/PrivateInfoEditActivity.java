@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ant.country.CountryTool;
+//import com.ant.country.CountryTool;
 import com.facebook.Profile;
 import com.sina.weibo.sdk.openapi.models.User;
 import com.ubt.alpha1e.R;
@@ -180,8 +180,8 @@ public class PrivateInfoEditActivity extends BaseActivity implements
             txt_phone.setText(mCurrentInfo.userPhone);
             txt_phone.setEnabled(false);
         }
-        txt_country.setText(CountryTool.getContryNameByCode(
-                mCurrentInfo.countryCode, this));
+        /*txt_country.setText(CountryTool.getContryNameByCode(
+                mCurrentInfo.countryCode, this));*/
         txt_country.setEnabled(false);
 
     }
