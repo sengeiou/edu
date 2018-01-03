@@ -69,7 +69,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/iv_action_complete"
                 android:layout_marginLeft="10dp"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="14sp"/>

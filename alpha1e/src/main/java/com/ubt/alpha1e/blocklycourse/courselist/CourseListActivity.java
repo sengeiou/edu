@@ -9,10 +9,11 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
-import com.baoyz.pg.PG;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.SPUtils;
@@ -135,11 +136,11 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
         if(!courseData.getStatus().equals("1")){
             return;
         }
-//        if(TextUtils.isEmpty(courseData.getLocalVideoPath())){
-//            ProgressBar pbVideo = view.findViewById(R.id.pb_video);
-//            pbVideo.setVisibility(View.VISIBLE);
-//            downloadVideo(courseData, view);
-//        }else{
+        if(TextUtils.isEmpty(courseData.getLocalVideoPath())){
+            ProgressBar pbVideo = view.findViewById(R.id.pb_video);
+            pbVideo.setVisibility(View.VISIBLE);
+            downloadVideo(courseData, view);
+        }else{
             Intent intent = new Intent(CourseListActivity.this, BlocklyCourseActivity.class);
             intent.putExtra(BlocklyCourseActivity.TRANSITION, true);
              UbtLog.d(TAG, "putExtra:" + courseData);
@@ -153,7 +154,7 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
                 CourseListActivity.this.startActivity(intent);
                 CourseListActivity.this.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
             }
-//        }
+        }
 
 
 
@@ -179,7 +180,7 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
 
                 Intent intent = new Intent(CourseListActivity.this, BlocklyCourseActivity.class);
                 intent.putExtra(BlocklyCourseActivity.TRANSITION, true);
-                intent.putExtra(BlocklyCourseActivity.COURSE_DATA, PG.convertParcelable(courseData));
+                intent.putExtra(BlocklyCourseActivity.COURSE_DATA, courseData);
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     Pair pair = new Pair<>(view, BlocklyCourseActivity.IMG_TRANSITION);
                     ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -194,6 +195,7 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
             @Override
             public void inProgress(float progress, long total, int id) {
                 super.inProgress(progress, total, id);
+                UbtLog.d(TAG, "downloadVideo inProgress:" + progress);
             }
         });
 

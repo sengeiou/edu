@@ -704,7 +704,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     dismissLoading();
                 }
 
-                if(fromVideo){
+                if(fromVideo && !loadError){
                     rlGoVideo.setVisibility(View.VISIBLE);
                     Bitmap bitmap = BitmapFactory.decodeFile(BlocklyUtil.getPath() + SHOTCUT_NAME+ ".jpg");
                     if(bitmap != null){
@@ -718,30 +718,6 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
         };
         mWebView.setWebViewClient(webViewClient);
-
-   /*     mWebView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
-                UbtLog.d(TAG, "mWebView onJsAlert");
-                return super.onJsAlert(view, url, message, result);
-            }
-            //设置响应js 的Confirm()函数
-            @Override
-            public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
-                UbtLog.d(TAG, "mWebView onJsConfirm");
-                return super.onJsConfirm(view, url, message, result);
-            }
-            //设置响应js 的Prompt()函数
-            @Override
-            public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, final JsPromptResult result) {
-                UbtLog.d(TAG, "mWebView onJsPrompt");
-                result.confirm();
-                return super.onJsPrompt(view, url, message, defaultValue, result);
-            }
-        });*/
-
-
-
 
         mBlocklyJsInterface = new BlocklyJsInterface(BlocklyActivity.this);
         mWebView.addJavascriptInterface(mBlocklyJsInterface, "blocklyObj");

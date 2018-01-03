@@ -88,6 +88,9 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
     protected void onDestroy() {
         super.onDestroy();
         UbtLog.d(TAG, "onDestroy");
+        if(mActionEdit != null){
+            mActionEdit.doReset();
+        }
     }
 
     @Override
