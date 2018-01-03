@@ -267,7 +267,7 @@
             android:label="@string/title_activity_private_info_edit"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleTheme"/>
-        <activity android:name="com.ant.country.CountryActivity"/>
+        <!--<activity android:name="com.ant.country.CountryActivity"/>-->
         <activity
             android:name=".ui.PrivateInfoEditActivity"
             android:label="@string/title_activity_private_info_edit"
