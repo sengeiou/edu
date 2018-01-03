@@ -134,7 +134,7 @@ public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.V
      */
     public void returnCardActivity() {
         Intent intent = new Intent();
-        intent.putExtra("course", 3);//第几关
+        intent.putExtra("course", 5);//第几关
         intent.putExtra("leavel", currentCourse);//第几个课时
         intent.putExtra("isComplete", true);
         intent.putExtra("score", 1);
@@ -309,14 +309,15 @@ public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.V
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (!isFinishing()) {
+                if (!isFinishing()&&!isHowHeadDialog) {
                     showTapHeadDialog();
                 }
             }
         });
     }
-
+    private boolean isHowHeadDialog;
     private void showTapHeadDialog() {
+        isHowHeadDialog=true;
         new ConfirmDialog(this).builder()
                 .setMsg(getStringResources("ui_course_principle_exit_tip"))
                 .setCancelable(false)
@@ -327,12 +328,12 @@ public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.V
                         ActionCourseActivity.finishByMySelf();
                         CourseLevelFiveActivity.this.finish();
                         CourseLevelFiveActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
-
+                        isHowHeadDialog=false;
                     }
                 }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                isHowHeadDialog=false;
             }
         }).show();
     }
@@ -356,9 +357,11 @@ public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.V
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ActionsEditHelper.SaveActionReq) {
-            boolean isSaveSuccess = (Boolean) data.getExtras().get(ActionsEditHelper.SaveActionResult);
-            if (isSaveSuccess) {
-                completeCurrentCourse(3);
+            if (null != data) {
+                boolean isSaveSuccess = (Boolean) data.getExtras().get(ActionsEditHelper.SaveActionResult);
+                if (isSaveSuccess) {
+                    completeCurrentCourse(3);
+                }
             }
         }
 

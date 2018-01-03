@@ -86,6 +86,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         courseModel5.setTitle("第五关 创定指定动作");
         courseModel5.setDrawableId(R.drawable.ic_action_level5);
         courseModel5.setActionLockType(0);
+        courseModel5.setSize(3);
         list.add(courseModel5);
 
         ActionCourseModel courseModel6 = new ActionCourseModel();
@@ -93,13 +94,15 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         courseModel6.setTitle("第六关 创建音频");
         courseModel6.setDrawableId(R.drawable.ic_action_level6);
         courseModel6.setActionLockType(0);
+        courseModel6.setSize(4);
         list.add(courseModel6);
 
         ActionCourseModel courseModel7 = new ActionCourseModel();
         courseModel7.setActionCourcesName("第七关");
-        courseModel7.setTitle("第五关 创定指定动作");
+        courseModel7.setTitle("第七关 创定指定动作");
         courseModel7.setDrawableId(R.drawable.ic_action_level7);
         courseModel7.setActionLockType(0);
+        courseModel7.setSize(2);
         list.add(courseModel7);
 
         ActionCourseModel courseModel8 = new ActionCourseModel();

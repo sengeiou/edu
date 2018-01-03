@@ -158,13 +158,27 @@ public class ActionCourseDataManager {
             list.add(model1);
             list.add(model2);
             list.add(model3);
-        }else if (card == 5) {
+        } else if (card == 5) {
             model1 = new CourseActionModel("1.模板讲解", 0);
             model2 = new CourseActionModel("2.创建指定动作—踢腿", 0);
             model3 = new CourseActionModel("3.保存动作", 0);
             list.add(model1);
             list.add(model2);
             list.add(model3);
+        } else if (card == 6) {
+            model1 = new CourseActionModel("1.模板讲解", 0);
+            model2 = new CourseActionModel("2.创建指定音频", 0);
+            model3 = new CourseActionModel("3.添加创建音频", 0);
+            model4 = new CourseActionModel("4.预览执行动作", 0);
+            list.add(model1);
+            list.add(model2);
+            list.add(model3);
+            list.add(model4);
+        } else if (card == 7) {
+            model1 = new CourseActionModel("1.了解目标动作", 0);
+            model2 = new CourseActionModel("2.修改指定动作", 0);
+            list.add(model1);
+            list.add(model2);
         }
         if (currentCourse == 1) {
             model1.setStatu(2);

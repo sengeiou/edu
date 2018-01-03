@@ -503,7 +503,7 @@
                         android:src="@drawable/ic_backtotop_enable"
                         />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="46dp"
                         android:background="@drawable/bg_action_frame_list"
@@ -519,8 +519,14 @@
                             >
 
                         </android.support.v7.widget.RecyclerView>
-
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/iv_update_arrow"
+                            android:layout_width="55dp"
+                            android:layout_height="55dp"
+                            android:src="@drawable/zuojiantou_4"
+                            android:visibility="gone"
+                            />
+                    </RelativeLayout>
 
 
                 </LinearLayout>

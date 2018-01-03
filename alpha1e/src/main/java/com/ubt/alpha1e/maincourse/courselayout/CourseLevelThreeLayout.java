@@ -198,20 +198,7 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
         ivAddFrame.setEnabled(false);
     }
 
-    /**
-     * 设置添加按钮高亮
-     */
-    public void setAddButton() {
-        ivAddFrame.setEnabled(true);
-        ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
-    }
 
-    /**
-     * 设置播放按钮高亮
-     */
-    public void setPlayButton() {
-        ivPlay.setEnabled(true);
-    }
 
     /**
      * 设置添加按钮高亮
@@ -279,13 +266,6 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
             mMusicDialogUtil = new CourseMusicDialogUtil(mContext);
         }
         mMusicDialogUtil.showMusicDialog(1, this);
-//        mHandler.postDelayed(new Runnable() {//延迟一秒播放语音
-//            @Override
-//            public void run() {
-//                ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "动作编辑1总介.hts");
-//            }
-//        }, 1000);
-
     }
 
 
@@ -610,6 +590,11 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
 //                ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "任务指引6.hts");
 //            }
 //        }, 1000);
+    }
+
+    @Override
+    public void onStopRecord(PrepareMusicModel prepareMusicModel,int type) {
+
     }
 
 

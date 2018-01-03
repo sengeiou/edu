@@ -2,8 +2,6 @@ package com.ubt.alpha1e.maincourse.courselayout;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,23 +23,19 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
 import com.ubt.alpha1e.action.model.ActionConstant;
+import com.ubt.alpha1e.action.model.PrepareDataModel;
 import com.ubt.alpha1e.action.model.PrepareMusicModel;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.maincourse.adapter.ActionCourseTwoUtil;
 import com.ubt.alpha1e.maincourse.adapter.CourseArrowAminalUtil;
 import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
 import com.ubt.alpha1e.maincourse.adapter.CourseMusicDialogUtil;
 import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
-import com.ubt.alpha1e.maincourse.model.CourseOne1Content;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.litepal.crud.DataSupport;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import zhy.com.highlight.HighLight;
 
 
 /**
@@ -53,55 +47,43 @@ import zhy.com.highlight.HighLight;
  * version
  */
 
-public class CourseLevelFiveLayout extends BaseActionEditLayout implements CourseMusicDialogUtil.OnMusicDialogListener {
-    private String TAG = CourseLevelFiveLayout.class.getSimpleName();
-    private ImageView ivMusicArror;
-    private ImageView ivRightArrow;
-    private ImageView playArrow;
+public class CourseLevelSevenLayout extends BaseActionEditLayout implements ActionCourseTwoUtil.OnCourseDialogListener {
+    private String TAG = CourseLevelSevenLayout.class.getSimpleName();
+    private ImageView ivAddLibArrow;
+    private ImageView ivLeftArrow1;
 
-    private ImageView ivRightLegArrow;
+    private ImageView ivLeftHandArrow;
 
-    private ImageView resetArrow;
+    private ImageView ivUpdateArrow;
 
-    private ImageView saveArrow;
-
-    RelativeLayout mRlInstruction;
-    private TextView mTextView;
-    private boolean isInstruction;
-
-    CourseMusicDialogUtil mMusicDialogUtil;
-
+    private ImageView ivPlayArrow;
+    ActionCourseTwoUtil mActionCourseTwoUtil;
     /**
      * 高亮对话框的TextView显示
      */
     TextView tv;
-
-
-    private List<CourseOne1Content> mOne1ContentList = new ArrayList<>();
-
+    RelativeLayout mRlInstruction;
+    private TextView mTextView;
     CourseProgressListener courseProgressListener;
     /**
      * 当前课时
      */
     private int currentCourse = 1;
 
-    /**
-     * 课时一
-     */
-    private int currentIndex = 0;
-    //课时3顺序
-    private int secondIndex = 0;
-    private HighLight mHightLight;
 
-    public CourseLevelFiveLayout(Context context) {
+    private boolean isPlayAction;
+
+    private CourseMusicDialogUtil mMusicDialogUtil;
+
+    public CourseLevelSevenLayout(Context context) {
         super(context);
     }
 
-    public CourseLevelFiveLayout(Context context, @Nullable AttributeSet attrs) {
+    public CourseLevelSevenLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CourseLevelFiveLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CourseLevelSevenLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -116,23 +98,27 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
      * @param courseProgressListener 回调监听
      */
     public void setData(CourseProgressListener courseProgressListener) {
-        mOne1ContentList.clear();
-        mOne1ContentList.addAll(ActionCourseDataManager.getCardOneList(mContext));
+
         int level = 1;// 当前第几个课时
         LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
         if (null != record) {
             UbtLog.d(TAG, "record===" + record.toString());
             int course = record.getCourseLevel();
             int recordlevel = record.getPeriodLevel();
-            if (course == 3) {
-                if (recordlevel == 0 || recordlevel == 2) {
+            if (course == 7) {
+                if (recordlevel == 0) {
                     level = 1;
                 } else if (recordlevel == 1) {
                     level = 2;
+                } else if (recordlevel == 2) {
+                    level = 3;
+                } else if (recordlevel == 3) {
+                    level = 1;
                 }
             }
+
         }
-        this.currentCourse = level;
+        this.currentCourse = 1;
         this.courseProgressListener = courseProgressListener;
         setLayoutByCurrentCourse();
         isSaveAction = true;
@@ -146,17 +132,11 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         setImageViewBg();
         UbtLog.d(TAG, "currentCourse==" + currentCourse);
         if (currentCourse == 1) {
-            isInstruction = true;
             mRlInstruction.setVisibility(View.VISIBLE);
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor18.hts");
+            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor22.hts");
         } else if (currentCourse == 2) {
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor19.hts");
-            CourseArrowAminalUtil.startViewAnimal(true, ivRightLegArrow, 2);
-        } else if (currentCourse == 3) {
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor21.hts");
-            CourseArrowAminalUtil.startViewAnimal(true, saveArrow, 1);
-            ivSave.setEnabled(true);
-
+            ivActionLib.setEnabled(false);
+            CourseArrowAminalUtil.startViewAnimal(true, ivLeftHandArrow, 1);
         }
 
     }
@@ -169,32 +149,29 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
     @Override
     public void init(Context context) {
         super.init(context);
-        isOnCourse = true;
+        isOnCourse = false;
         ivAddFrame.setEnabled(false);
         ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
         setImageViewBg();
-        playArrow = findViewById(R.id.iv_play_arrow);
-        playArrow.setOnClickListener(this);
+        ivAddLibArrow = findViewById(R.id.iv_add_action_arrow);
+        ivAddLibArrow.setOnClickListener(this);
+        ivLeftArrow1 = findViewById(R.id.iv_add_action_arrow1);
+        ivLeftArrow1.setOnClickListener(this);
+        mRlInstruction = findViewById(R.id.rl_instruction);
+        mTextView = findViewById(R.id.tv_all_introduc);
+        mTextView.setText("知道吗？对阿尔法的动作不满意，你还可以修改呢。");
 
-        ivRightArrow = findViewById(R.id.iv_add_frame_arrow);
-        resetArrow = findViewById(R.id.iv_reset_arrow);
-        resetArrow.setOnClickListener(this);
-        mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
-        mTextView = (TextView) findViewById(R.id.tv_all_introduc);
-        mTextView.setText("想不想自己创建一个机器人动作呢？点击手臂和腿，我身体对应的部位就会掉电。这时候掰动机器人，摆出你想要的动作，再点击时间轴的添加按钮就可以了。");
+        ivLeftHandArrow = findViewById(R.id.iv_left_arrow);
+        ivLeftHandArrow.setOnClickListener(this);
+        ivLeftHandArrow();
+        ivPlayArrow = findViewById(R.id.iv_play_arrow);
+        ivUpdateArrow = findViewById(R.id.iv_update_arrow);
 
-        ivRightLegArrow = findViewById(R.id.iv_right_leg_arrow);
-        ivRightLegArrow.setOnClickListener(this);
-        initRightLegArrow();
-
-        saveArrow = findViewById(R.id.iv_save_arrow);
-        saveArrow.setOnClickListener(this);
     }
-
     /**
      * 初始化箭头图片宽高
      */
-    private void initRightLegArrow() {
+    private void ivLeftHandArrow() {
         // 获取屏幕密度（方法2）
         DisplayMetrics dm = new DisplayMetrics();
         dm = getResources().getDisplayMetrics();
@@ -203,8 +180,8 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         if (AlphaApplication.isPad()) {
             UbtLog.d(TAG, "Pad Robot 1");
         } else {
-            ivRightLegArrow.setLayoutParams(ActionConstant.getIvRobotParams(density, ivRightLegArrow));
-            UbtLog.d(TAG, "ivLeftArrow:" + ivRightLegArrow.getWidth() + "/" + ivRightLegArrow.getHeight());
+            ivLeftHandArrow.setLayoutParams(ActionConstant.getIvRobotParams(density, ivLeftHandArrow));
+            UbtLog.d(TAG, "ivLeftArrow:" + ivLeftHandArrow.getWidth() + "/" + ivLeftHandArrow.getHeight());
         }
     }
 
@@ -232,75 +209,36 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
                     courseProgressListener.finishActivity();
                 }
                 break;
+            case R.id.iv_action_lib:
+                showActionDialog();
+                break;
+            case R.id.iv_add_action_arrow:
+                showActionDialog();
+                break;
+
             case R.id.iv_play_music:
                 playAction();
                 break;
             case R.id.iv_play_arrow:
                 playAction();
                 break;
+            case R.id.iv_hand_left:
+                lostRightLeg = true;
+                lostLeft();
+                CourseArrowAminalUtil.startViewAnimal(false, ivLeftHandArrow, 1);
 
-            case R.id.iv_right_leg_arrow:
-                startEditRightLeg();
-
+                CourseArrowAminalUtil.startViewAnimal(true, ivUpdateArrow, 1);
+                ivAddFrame.setEnabled(false);
                 break;
-            case R.id.iv_leg_right:
-                startEditRightLeg();
-                break;
-            case R.id.iv_add_frame://课时二添加动作按钮完成课时二
-                autoRead = false;
-                addFrameOnClick();
-                lostLeftHand = false;
-                lostRightLeg = false;
-                ivLegRight.setSelected(false);
-                isCourseReading = false;
-                CourseArrowAminalUtil.startViewAnimal(false, ivRightArrow, 2);
-                CourseArrowAminalUtil.startViewAnimal(true, playArrow, 2);
-
-                break;
-
-            case R.id.iv_reset:
-                resetAction();
-                break;
-            case R.id.iv_reset_arrow:
-                resetAction();
-                break;
-
-            case R.id.iv_save_arrow:
-                saveAction();
-
-                break;
-
-            case R.id.iv_save_action:
-                saveAction();
+            case R.id.iv_left_arrow:
+                lostRightLeg = true;
+                lostLeft();
+                CourseArrowAminalUtil.startViewAnimal(false, ivLeftHandArrow, 1);
+                CourseArrowAminalUtil.startViewAnimal(true, ivUpdateArrow, 1);
+                ivAddFrame.setEnabled(false);
                 break;
             default:
         }
-    }
-
-    /**
-     * 重置
-     */
-    private void resetAction(){
-        doReset();
-        ivReset.setEnabled(false);
-        ivReset.setImageResource(R.drawable.ic_reset_disable);
-        CourseArrowAminalUtil.startViewAnimal(false, resetArrow, 1);
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showNextDialog(3);
-            }
-        },1500);
-    }
-
-    /**
-     * 保存按钮
-     */
-    private void saveAction(){
-        ((ActionsEditHelper) mHelper).stopAction();
-        ivReset.setEnabled(false);
-       // CourseArrowAminalUtil.startViewAnimal(false, saveArrow, 1);
-        saveNewAction(2);
     }
 
     /**
@@ -309,7 +247,7 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
     private void playAction() {
 
         startPlayAction();
-        CourseArrowAminalUtil.startViewAnimal(false, playArrow, 2);
+        CourseArrowAminalUtil.startViewAnimal(false, ivPlayArrow, 2);
         ivPlay.setEnabled(false);
         ivPlay.setImageResource(R.drawable.ic_pause);
         mHandler.postDelayed(new Runnable() {
@@ -320,7 +258,6 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
             }
         }, 10000);
     }
-
 
     @Override
     public void onFinishPlay() {
@@ -335,86 +272,42 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
                 ivPlay.setImageResource(R.drawable.ic_play_disable);
                 ivReset.setEnabled(true);
                 ivReset.setImageResource(R.drawable.ic_reset);
-                CourseArrowAminalUtil.startViewAnimal(true, resetArrow, 1);
+                if (courseProgressListener != null) {
+                    courseProgressListener.completeCurrentCourse(4);
+                }
             }
         });
 
     }
 
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == MSG_AUTO_READ) {
-                needAdd = true;
-                UbtLog.d(TAG, "adddddd:" + autoRead);
-                if (autoRead) {
-                    readEngOneByOne();
-                }
-            }
-        }
-    };
-
 
     /**
-     * 播放音频或者动作结束
+     * 显示动作对话框
      */
+    public void showActionDialog() {
+        CourseArrowAminalUtil.startViewAnimal(false, ivAddLibArrow, 1);
+        ((ActionsEditHelper) mHelper).stopSoundAudio();
+        if (null == mActionCourseTwoUtil) {
+            mActionCourseTwoUtil = new ActionCourseTwoUtil(mContext);
+        }
+
+        mActionCourseTwoUtil.showActionDialog(1, this);
+
+    }
+
     public void playComplete() {
         UbtLog.d(TAG, "播放完成");
         if (((Activity) mContext).isFinishing()) {
             return;
         }
-
         if (currentCourse == 1) {
-            if (isInstruction) {
-                mRlInstruction.setVisibility(View.GONE);
-                showNextDialog(2);
-            }
+            mRlInstruction.setVisibility(View.GONE);
+            ivActionLib.setEnabled(true);
+            CourseArrowAminalUtil.startViewAnimal(true, ivAddLibArrow, 2);
         } else if (currentCourse == 2) {
-            UbtLog.d(TAG, "playComplete==" + 2);
-            if (secondIndex == 1) {
-                lostLeftHand = true;
-                lostRightLeg();
-                CourseArrowAminalUtil.startViewAnimal(false, ivRightLegArrow, 2);
-                startEditRightLeg();
-            }
+
         }
-    }
-
-    /**
-     * 第二关卡摆动机器人手臂
-     */
-    public void startEditRightLeg() {
-        CourseArrowAminalUtil.startViewAnimal(false, ivRightLegArrow, 2);
-        ((ActionsEditHelper) mHelper).stopAction();
-        doReset();
-        autoRead = true;
-        mHandler.sendEmptyMessage(MSG_AUTO_READ);
-        isCourseReading = true;
-        lostLeftHand = true;
-        lostRightLeg();
-        ivAddFrame.setEnabled(false);
-        ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
-    }
-
-
-    @Override
-    public void onReacHandData() {
-        super.onReacHandData();
-        UbtLog.d(TAG, "机器人角度变化了呢！！");
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                autoRead = false;
-                ((ActionsEditHelper) mHelper).stopSoundAudio();
-                CourseArrowAminalUtil.startViewAnimal(false, ivRightLegArrow, 2);
-                mHandler.removeMessages(MSG_AUTO_READ);
-                setButtonEnable(false);
-                ivAddFrame.setEnabled(true);
-                ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
-                CourseArrowAminalUtil.startViewAnimal(true, ivRightArrow, 1);
-            }
-        }, 2000);
+        UbtLog.d(TAG, "isPlayAction==" + isPlayAction);
 
     }
 
@@ -438,29 +331,7 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
      * </p>
      */
     public void clickKnown() {
-        UbtLog.d(TAG, "currindex==" + currentIndex);
-        if (mHightLight.isShowing() && mHightLight.isNext())//如果开启next模式
-        {
-            mHightLight.next();
-        } else {
-            remove(null);
-            UbtLog.d(TAG, "=====remove=========");
-        }
-        if (currentCourse == 1) {
-            ((ActionsEditHelper) mHelper).stopAction();
 
-            showNextDialog(2);
-        } else if (currentCourse == 2) {
-            ((ActionsEditHelper) mHelper).stopAction();
-            doReset();
-            showNextDialog(3);
-
-        }
-    }
-
-
-    public void remove(View view) {
-        mHightLight.remove();
     }
 
 
@@ -477,22 +348,17 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         UbtLog.d(TAG, "进入第二课时，弹出对话框");
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_action_course_content, null);
         TextView title = contentView.findViewById(R.id.tv_card_name);
-        title.setText("第五关 创建动作");
-
+        title.setText("第二关 创建指定动作");
         Button button = contentView.findViewById(R.id.btn_pos);
         button.setText("下一节");
-
         RecyclerView mrecyle = contentView.findViewById(R.id.recyleview_content);
         mrecyle.setLayoutManager(new LinearLayoutManager(mContext));
-
-        CourseItemAdapter itemAdapter = new CourseItemAdapter(R.layout.layout_action_course_dialog, ActionCourseDataManager.getCourseActionModel(5, current));
+        CourseItemAdapter itemAdapter = new CourseItemAdapter(R.layout.layout_action_course_dialog, ActionCourseDataManager.getCourseActionModel(7, current));
         mrecyle.setAdapter(itemAdapter);
-
         ViewHolder viewHolder = new ViewHolder(contentView);
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         int width = (int) ((display.getWidth()) * 0.6); //设置宽度
-
         DialogPlus.newDialog(mContext)
                 .setContentHolder(viewHolder)
                 .setGravity(Gravity.CENTER)
@@ -502,7 +368,6 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_pos) {
-                            currentIndex = 0;
                             setLayoutByCurrentCourse();
                         }
                         dialog.dismiss();
@@ -512,21 +377,42 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
                 .create().show();
     }
 
-
     /**
-     * 点击添加音乐按钮
+     * 点击添加按钮
      *
-     * @param prepareMusicModel
+     * @param prepareDataModel
      */
     @Override
-    public void onMusicConfirm(PrepareMusicModel prepareMusicModel) {
-        super.onMusicConfirm(prepareMusicModel);
-
+    public void onCourseConfirm(PrepareDataModel prepareDataModel) {
+        UbtLog.d(TAG, "onCourseConfirm====" + currentCourse);
+        onActionConfirm(prepareDataModel);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showNextDialog(2);
+            }
+        }, 1000);
     }
 
     @Override
-    public void onStopRecord(PrepareMusicModel prepareMusicModel,int type) {
+    public void playCourseAction(PrepareDataModel prepareDataModel, int type) {
+        isPlayAction = true;
+        //  playAction(prepareDataModel);
+        UbtLog.d(TAG, "playCourseAction===" + currentCourse);
+    }
 
+    @Override
+    public void onMusicConfirm(PrepareMusicModel prepareMusicModel) {
+        super.onMusicConfirm(prepareMusicModel);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                ivActionLib.setEnabled(true);
+                ivActionBgm.setEnabled(false);
+                CourseArrowAminalUtil.startViewAnimal(true, ivAddLibArrow, 2);
+
+            }
+        });
     }
 
 

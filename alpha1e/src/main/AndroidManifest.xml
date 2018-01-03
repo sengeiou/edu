@@ -343,10 +343,11 @@
             android:theme="@style/NoTitleTheme"/>
         <activity
             android:name=".ui.ActionsEditSaveActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:label="@string/title_activity_actions_edit_save"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
+
         <activity
             android:name=".ui.MyThemeActivity"
             android:screenOrientation="portrait"
@@ -699,16 +700,36 @@
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
-            android:name=".action.actioncreate.SaveSuccessActivity"
-            android:screenOrientation="landscape"
+            android:name=".maincourse.courseone.CourseLevelSixActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelSevenActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.courseone.ActionsCourseSaveActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:label="@string/title_activity_actions_edit_save"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+
+        <activity
+            android:name=".action.actioncreate.SaveSuccessActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".action.help.HelpActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
-        <activity android:name=".bluetoothandnet.BluetoothHelp"
+        <activity
+            android:name=".bluetoothandnet.BluetoothHelp"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"></activity>
 
@@ -728,10 +749,11 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
-        <activity android:name=".userinfo.notice.WebActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize"
-                  android:screenOrientation="landscape"
-                  android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".userinfo.notice.WebActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
     </application>
 
 </manifest>

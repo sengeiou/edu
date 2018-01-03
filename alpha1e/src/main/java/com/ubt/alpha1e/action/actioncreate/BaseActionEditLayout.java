@@ -46,6 +46,7 @@ import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.FrameActionInfo;
 import com.ubt.alpha1e.data.model.NewActionInfo;
+import com.ubt.alpha1e.maincourse.courseone.ActionsCourseSaveActivity;
 import com.ubt.alpha1e.ui.ActionsEditSaveActivity;
 import com.ubt.alpha1e.ui.TimesHideRecycleViewAdapter;
 import com.ubt.alpha1e.ui.TimesRecycleViewAdapter;
@@ -105,6 +106,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public ActionsEditHelper.StartType mCurrentStartType = ActionsEditHelper.StartType.new_type;
     public static String SCHEME_ID = "SCHEME_ID";
     public static String SCHEME_NAME = "SCHEME_NAME";
+    public static String FROM_TYPE = "FROM_TYPE";
     private String mSchemeId = "";
     private String mSchemeName = "";
 
@@ -140,10 +142,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private int current = 0;
 
 
-//    public String[] init = {"90", "90", "90", "90", "90", "90", "90", "60", "76", "110", "90", "90",
+    //    public String[] init = {"90", "90", "90", "90", "90", "90", "90", "60", "76", "110", "90", "90",
 //            "120", "104", "70", "90"};
-    public String [] init = {"93", "20", "66", "86", "156", "127", "90", "74", "95", "104", "89", "89",
-                "104", "81", "76", "90"};
+    public String[] init = {"93", "20", "66", "86", "156", "127", "90", "74", "95", "104", "89", "89",
+            "104", "81", "76", "90"};
     public boolean lostLeftHand = false;
     public boolean lostRightHand = false;
     public boolean lostLeftLeg = false;
@@ -262,8 +264,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             @Override
             public void run() {
 
-                ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x03);
-               doReset();
+                ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x03);
+                doReset();
 
             }
         }, 1000);
@@ -630,7 +632,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     }
 
-    public void onPlayMusicComplete(){
+    public void onPlayMusicComplete() {
 
     }
 
@@ -643,7 +645,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 onPlayMusicComplete();
                 playFinish = true;
                 mHandler.removeMessages(0);
-                if(isFinishFramePlay){
+                if (isFinishFramePlay) {
                     mediaPlayer.seekTo(0);
                     sbVoice.setProgress(0);
                     tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
@@ -651,7 +653,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     ivAddFrame.setEnabled(true);
                     ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
                     recyclerViewTimesHide.setVisibility(View.GONE);
-                    if(isFinishFramePlay){
+                    if (isFinishFramePlay) {
                         setEnable(true);
                     }
                     if (list_frames != null && list_frames.size() > 0) {
@@ -762,7 +764,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     mediaPlayer.stop();
                     playFinish = true;
                 }
-                ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x04);
+                ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x04);
                 ((Activity) mContext).finish();
                 return false;
             }
@@ -773,14 +775,14 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     mediaPlayer.stop();
                     playFinish = true;
                 }
-                ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x04);
+                ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x04);
                 ((Activity) mContext).finish();
                 return false;
             }
         }
 
         if (isSaveSuccess) {
-            ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x04);
+            ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x04);
             if (mediaPlayer != null) {
                 mediaPlayer.stop();
                 playFinish = true;
@@ -809,7 +811,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                                 mediaPlayer.stop();
                                 playFinish = true;
                             }
-                            ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x04);
+                            ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x04);
                             ((Activity) mContext).finish();
                         } else {
                         }
@@ -818,7 +820,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         return true;
     }
 
-    public void saveNewAction() {
+    public void saveNewAction(int type) {
 
         if (musicTimes == 0) {
             if (list_frames.size() < 1) {
@@ -841,10 +843,15 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         }
 
         Intent inte = new Intent();
-        inte.setClass(mContext, ActionsEditSaveActivity.class);
+        if (type == 1) {
+            inte.setClass(mContext, ActionsEditSaveActivity.class);
+        } else {
+            inte.setClass(mContext, ActionsCourseSaveActivity.class);
+        }
         inte.putExtra(ActionsEditHelper.NewActionInfo, PG.convertParcelable(getEditingActions()));
         inte.putExtra(SCHEME_ID, mSchemeId);
         inte.putExtra(SCHEME_NAME, mSchemeName);
+        inte.putExtra(FROM_TYPE, type);
         inte.putExtra(Constant.SCREEN_ORIENTATION, 0);
         if (mDir != "") {
             inte.putExtra(ActionsEditSaveActivity.MUSIC_DIR, mDir);
@@ -890,7 +897,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 doBack();
                 break;
             case R.id.iv_save_action:
-                saveNewAction();
+                saveNewAction(1);
                 break;
             case R.id.iv_cancel_update:
                 doCancelChange();
@@ -920,7 +927,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     pause();
                 }
                 replayMusic();
-                ((ActionsEditHelper)mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop, null);
+                ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop, null);
                 sbVoice.setProgress(0);
                 recyclerViewFrames.smoothScrollToPosition(0);
                 recyclerViewTimes.smoothScrollToPosition(0);
@@ -1133,25 +1140,25 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
      * 删除动作帧
      */
     private void doDeleteItem() {
-        if(TextUtils.isEmpty(mDir) ){
-            if(selectPos == list_frames.size()-1){
+        if (TextUtils.isEmpty(mDir)) {
+            if (selectPos == list_frames.size() - 1) {
                 currentIndex--;
             }
 
-        }else{
-            if(selectPos == list_frames.size()-2){
+        } else {
+            if (selectPos == list_frames.size() - 2) {
                 currentIndex--;
             }
         }
         UbtLog.d(TAG, "doDeleteItem selectPos:" + selectPos + "list:" + list_frames.size() + "currentIndex:" + currentIndex);
         list_frames.remove(mCurrentEditItem);
-        if(TextUtils.isEmpty(mDir) ){
-          if(list_frames.size() == 0){
-              currentIndex = 1;
-          }
+        if (TextUtils.isEmpty(mDir)) {
+            if (list_frames.size() == 0) {
+                currentIndex = 1;
+            }
 
-        }else{
-            if(list_frames.size() == 1){
+        } else {
+            if (list_frames.size() == 1) {
                 currentIndex = 1;
             }
         }
@@ -1631,10 +1638,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     @Override
     public void onMusicDelete(PrepareMusicModel prepareMusicModel) {
         UbtLog.d(TAG, "onMusicDelete:" + prepareMusicModel.toString() + "__mDir:" + mDir);
-        if(prepareMusicModel.getMusicType()==1){
-            if(!TextUtils.isEmpty(mDir)){
-                UbtLog.d(TAG, "path:" + FileTools.tmp_file_cache + "/"+prepareMusicModel.getMusicName());
-                if((FileTools.tmp_file_cache + "/"+prepareMusicModel.getMusicName()+".mp3").equals(mDir)){
+        if (prepareMusicModel.getMusicType() == 1) {
+            if (!TextUtils.isEmpty(mDir)) {
+                UbtLog.d(TAG, "path:" + FileTools.tmp_file_cache + "/" + prepareMusicModel.getMusicName());
+                if ((FileTools.tmp_file_cache + "/" + prepareMusicModel.getMusicName() + ".mp3").equals(mDir)) {
                     deleteMusic();
                     changeSaveAndPlayState();
                 }
@@ -2083,22 +2090,22 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public void setEnable(boolean enable) {
         ivReset.setEnabled(enable);
         ivAutoRead.setEnabled(enable);
-        if(enable){
-            if(TextUtils.isEmpty(mDir) ){
-                if(list_frames.size()==0){
+        if (enable) {
+            if (TextUtils.isEmpty(mDir)) {
+                if (list_frames.size() == 0) {
                     ivSave.setEnabled(false);
-                }else{
+                } else {
                     ivSave.setEnabled(true);
                 }
 
-            }else{
-                if(list_frames.size()>1){
+            } else {
+                if (list_frames.size() > 1) {
                     ivSave.setEnabled(true);
-                }else{
+                } else {
                     ivSave.setEnabled(false);
                 }
             }
-        }else{
+        } else {
             ivSave.setEnabled(enable);
         }
 
@@ -2131,10 +2138,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 i = 0;
                 addFrame();
             } else {
-                if(i<=ids.size()){ //偶现i的值大于ids.size 加此判断
+                if (i <= ids.size()) { //偶现i的值大于ids.size 加此判断
                     ((ActionsEditHelper) mHelper).doLostOnePower(ids.get(i));
-                }else{
-                    UbtLog.e(TAG, "i>ids.size:"  + i + "  ids.size==" + ids.size() );
+                } else {
+                    UbtLog.e(TAG, "i>ids.size:" + i + "  ids.size==" + ids.size());
                 }
 
             }
@@ -2262,12 +2269,12 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
             adapter.notifyDataSetChanged();
             if (musicTimes == 0) {
-                if(list_frames.size()>0){
+                if (list_frames.size() > 0) {
                     recyclerViewFrames.smoothScrollToPosition(list_frames.size() - 1);
                 }
 
             } else {
-                if(list_frames.size() >1){
+                if (list_frames.size() > 1) {
                     recyclerViewFrames.smoothScrollToPosition(list_frames.size() - 2);
                 }
 
@@ -2310,6 +2317,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     }
 
     private boolean overMusicTime = false;
+
     private void handleFrameTime() {
 
         int time = 0;
@@ -2322,40 +2330,39 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
         int backupTime = musicTimes - time;
         UbtLog.d(TAG, "handleFrameTime backupTime:" + backupTime);
-        if (backupTime <= 0 ) {
-            if(!overMusicTime){
-                UbtLog.d(TAG, "1220 ss overMusicTime:" + overMusicTime );
-                list_frames.remove(list_frames.size()-1);
+        if (backupTime <= 0) {
+            if (!overMusicTime) {
+                UbtLog.d(TAG, "1220 ss overMusicTime:" + overMusicTime);
+                list_frames.remove(list_frames.size() - 1);
                 adapter.notifyDataSetChanged();
                 overMusicTime = true;
             }
             return;
-        }else{
-            UbtLog.d(TAG, "1220 overMusicTime:" + overMusicTime  + "backupTime:" + backupTime);
-                overMusicTime = false;
-                FrameActionInfo info = new FrameActionInfo();
-                info.eng_angles = "";
+        } else {
+            UbtLog.d(TAG, "1220 overMusicTime:" + overMusicTime + "backupTime:" + backupTime);
+            overMusicTime = false;
+            FrameActionInfo info = new FrameActionInfo();
+            info.eng_angles = "";
 
-                info.eng_time = backupTime;
-                info.totle_time = backupTime;
-                UbtLog.d(TAG, "backupTime:" + backupTime);
+            info.eng_time = backupTime;
+            info.totle_time = backupTime;
+            UbtLog.d(TAG, "backupTime:" + backupTime);
 
-                Map map = new HashMap<String, Object>();
-                map.put(ActionsEditHelper.MAP_FRAME, info);
-                String item_name = ResourceManager.getInstance(mContext).getStringResources("ui_readback_index");
-                item_name = item_name.replace("#", (list_frames.size() + 1) + "");
-                //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
-                map.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
-                map.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
-                list_frames.set(list_frames.size() - 1, map);
+            Map map = new HashMap<String, Object>();
+            map.put(ActionsEditHelper.MAP_FRAME, info);
+            String item_name = ResourceManager.getInstance(mContext).getStringResources("ui_readback_index");
+            item_name = item_name.replace("#", (list_frames.size() + 1) + "");
+            //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+            map.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
+            map.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+            list_frames.set(list_frames.size() - 1, map);
 
-                adapter.setMusicTime(backupTime);
-                adapter.notifyDataSetChanged();
-                layoutManager.scrollToPosition(list_frames.size() - 2);
+            adapter.setMusicTime(backupTime);
+            adapter.notifyDataSetChanged();
+            layoutManager.scrollToPosition(list_frames.size() - 2);
 
 
         }
-
 
 //        layoutManager.scrollToPositionWithOffset(list_frames.size()-2, 0);
 //        recyclerViewFrames.smoothScrollToPosition(list_frames.size()-2);
@@ -2468,7 +2475,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             @Override
             public void run() {
                 if (playFinish) {
-                    if(mediaPlayer != null && !TextUtils.isEmpty(mDir)){
+                    if (mediaPlayer != null && !TextUtils.isEmpty(mDir)) {
                         mediaPlayer.seekTo(0);
                         sbVoice.setProgress(0);
                     }
@@ -2504,8 +2511,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 } else {
                     if (musicTimes == 0) {
                         layoutManager.scrollToPositionWithOffset(index - 1, 0);
-                    }else{
-                        if(playFinish){
+                    } else {
+                        if (playFinish) {
                             layoutManager.scrollToPositionWithOffset(index - 1, 0);
                         }
                     }
@@ -2571,7 +2578,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         }
         adapter.notifyDataSetChanged();
         changeSaveAndPlayState();
-        if(musicTimes != 0){
+        if (musicTimes != 0) {
             int time = 0;
             for (int i = 0; i < list_frames.size() - 1; i++) {
                 time += (int) list_frames.get(i).get(ActionsEditHelper.MAP_FRAME_TIME);
@@ -2580,10 +2587,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             UbtLog.d(TAG, "handleFrameTime time:" + time + "---musicTimes:" + musicTimes);
 
             int backupTime = musicTimes - time;
-            if(backupTime <0 && overMusicTime){
+            if (backupTime < 0 && overMusicTime) {
 
-            }else{
-                if(overMusicTime){
+            } else {
+                if (overMusicTime) {
                     FrameActionInfo info = new FrameActionInfo();
                     info.eng_angles = "";
 
@@ -2598,7 +2605,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
                     map.put(ActionsEditHelper.MAP_FRAME_NAME, (list_frames.size() + 1) + "");
                     map.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
-                    list_frames.add(list_frames.size() , map);
+                    list_frames.add(list_frames.size(), map);
 
                     adapter.setMusicTime(backupTime);
                     adapter.notifyDataSetChanged();
@@ -2645,7 +2652,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     }
 
 
-    private void handleLastFrame(){
+    private void handleLastFrame() {
         //根据添加的音乐自动补全动作
         if (list_frames.size() == 0) {
             FrameActionInfo info = new FrameActionInfo();

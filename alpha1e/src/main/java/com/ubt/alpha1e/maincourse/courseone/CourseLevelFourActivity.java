@@ -310,14 +310,15 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (!isFinishing()) {
+                if (!isFinishing()&&!isHowHeadDialog) {
                     showTapHeadDialog();
                 }
             }
         });
     }
-
+    private boolean isHowHeadDialog;
     private void showTapHeadDialog() {
+        isHowHeadDialog = true;
         new ConfirmDialog(this).builder()
                 .setMsg(getStringResources("ui_course_principle_exit_tip"))
                 .setCancelable(false)
@@ -328,12 +329,12 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
                         ActionCourseActivity.finishByMySelf();
                         CourseLevelFourActivity.this.finish();
                         CourseLevelFourActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
-
+                        isHowHeadDialog=false;
                     }
                 }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                isHowHeadDialog=false;
             }
         }).show();
     }

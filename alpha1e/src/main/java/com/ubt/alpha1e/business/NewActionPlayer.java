@@ -6,6 +6,7 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.data.model.NewActionInfo;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelFiveActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelSixActivity;
 import com.ubt.alpha1e.ui.ActionsEditActivity;
 import com.ubt.alpha1e.ui.ActionsNewEditActivity;
 import com.ubt.alpha1e.ui.MediaRecordActivity;
@@ -61,7 +62,7 @@ public class NewActionPlayer implements PublicInterface.BlueToothInteracter {
             if(listener instanceof MyActionsActivity || listener instanceof ActionsEditActivity
                     || listener instanceof CommonCtrlView || listener instanceof MediaRecordActivity ||
                         listener instanceof ActionsNewEditActivity||listener instanceof ActionTestActivity
-                    ||listener instanceof CourseLevelFiveActivity){
+                    ||listener instanceof CourseLevelFiveActivity||listener instanceof CourseLevelSixActivity){
                 mListeners.add(listener);
             }
         }

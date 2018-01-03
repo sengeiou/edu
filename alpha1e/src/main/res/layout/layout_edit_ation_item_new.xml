@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:background="@drawable/img_zhezhao"
-    android:visibility="gone"
+    android:visibility="visible"
     >
 
 

@@ -71,11 +71,15 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
      * 显示对话框
      */
     public void showMusicDialog(int position, OnMusicDialogListener mDialogListener) {
-        this.selectPosition = position;
         isShow = true;
         isShowDelete = false;
         this.mDialogListener = mDialogListener;
         list = ActionConstant.getMusicList(mContext);
+        if (position == 1000) {
+            this.selectPosition = list.size() - 1;
+        } else {
+            this.selectPosition = position;
+        }
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_aciton_course_select, null);
         ViewHolder viewHolder = new ViewHolder(contentView);
         TextView tvTitle = contentView.findViewById(R.id.title_actions);
@@ -92,6 +96,9 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
         actionAdapter.setOnItemClickListener(this);
         actionAdapter.setOnItemChildClickListener(this);
         recyclerView.setAdapter(actionAdapter);
+        if (position == 1000) {
+            recyclerView.scrollToPosition(actionAdapter.getItemCount() - 1);
+        }
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         int width = (int) ((display.getWidth()) * 0.8); //设置宽度
@@ -100,6 +107,7 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(width)
                 .setOnClickListener(this)
+                .setCancelable(false)
                 .setOnDismissListener(new OnDismissListener() {
                     @Override
                     public void onDismiss(DialogPlus dialog) {
@@ -148,7 +156,7 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
                     if (null != mDialogPlus && mDialogPlus.isShowing()) {
                         mDialogPlus.dismiss();
                     }
-                    DialogDub dialogDub = new DialogDub(mContext);
+                    DialogDub dialogDub = new DialogDub(mContext, 1, mDialogListener);
                     dialogDub.show();
                 }
 
@@ -396,6 +404,8 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
         void onMusicConfirm(PrepareMusicModel prepareMusicModel);
 
         void onMusicDelete(PrepareMusicModel prepareMusicModel);
+
+        void onStopRecord(PrepareMusicModel prepareMusicModel, int type);
     }
 
 

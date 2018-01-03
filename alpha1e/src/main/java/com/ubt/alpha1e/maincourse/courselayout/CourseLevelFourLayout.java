@@ -527,5 +527,10 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
         }, 1000);
     }
 
+    @Override
+    public void onStopRecord(PrepareMusicModel prepareMusicModel,int type) {
+        UbtLog.d(TAG, "onStopRecord====================================");
+    }
+
 
 }
