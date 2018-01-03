@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ant.country.CountryActivity;
+/*import com.ant.country.CountryActivity;*/
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.data.DataCheckTools;
 import com.ubt.alpha1e.data.model.RegisterInfo;
@@ -232,13 +232,13 @@ public class PhoneRegisterFragment extends BaseFragment implements IRegisterUI,
 
             @Override
             public void onClick(View arg0) {
-                if (code_timer == null) {
+                /*if (code_timer == null) {
                     Intent intent = new Intent();
                     intent.setClass(PhoneRegisterFragment.this.getActivity(),
                             CountryActivity.class);
                     PhoneRegisterFragment.this.getActivity()
                             .startActivityForResult(intent, MSG_GET_COUNTRY);
-                }
+                }*/
             }
         });
 

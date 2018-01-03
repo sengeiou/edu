@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
-import com.ant.country.CountryActivity;
+//import com.ant.country.CountryActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreater;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreater;
@@ -409,7 +409,7 @@ public class AlphaApplication extends LoginApplication {
                         || mActivity instanceof RegisterActivity
                         || mActivity instanceof FindPassWdActivity
                         || mActivity instanceof RegisterNextStepActivity
-                        || mActivity instanceof CountryActivity
+                        /*|| mActivity instanceof CountryActivity*/
                         || mActivity instanceof ActionUnpublishedActivity
                         || mActivity instanceof ActionsPublishActivity
                         || mActivity instanceof MediaRecordActivity

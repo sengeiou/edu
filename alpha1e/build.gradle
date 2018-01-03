@@ -113,7 +113,7 @@ android {
 dependencies {
     compile project(':alpha1sLib')
     compile project(':weiboSDK')
-    compile project(':choseCountryNum')
+    //compile project(':choseCountryNum')
     compile project(':alpha1sGifLib')
     compile project(':ChangeSkin')
     compile fileTree(include: ['*.jar'], dir: 'libs')
