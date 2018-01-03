@@ -79,7 +79,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private ImageView ivPop;
     private static LinearLayout lay_ctrl, lay_ctrl_more;
     private Button btn_stop, btn_reset, btn_more;  //lay_ctrl btn
-    private ImageView btn_reset_m, btn_pause_or_continue, btn_lose_power, btn_stop_m, btn_vol_log, btn_cycle,btn_lig_logo;
+    private ImageView btn_reset_m, btn_pause_or_continue, btn_lose_power, btn_stop_m, btn_vol_log, btn_actionList,btn_lig_logo;
     private TextView btn_exit;
     private TextView txt_action_name, txt_action_name_m, txt_cycle_num;
     private SeekBar sek_vol_ctrl;
@@ -261,7 +261,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         }
 
         //init hide view
-        btn_cycle = (ImageView) view.findViewById(R.id.btn_actionlist);
+        btn_actionList = (ImageView) view.findViewById(R.id.btn_actionlist);
         btn_reset_m=(ImageView) view.findViewById(R.id.btn_reset);
         btn_lose_power = (ImageView) view.findViewById(R.id.btn_poweroff);
         btn_pause_or_continue = (ImageView) view.findViewById(R.id.btn_playaction);
@@ -272,15 +272,15 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         rl_close_more = (RelativeLayout) view.findViewById(R.id.lay_ctrl_more_close);
         btn_exit=(TextView)view.findViewById(R.id.cc_exit);
         //view_alertdialog  layout
-        txt_action_name = (TextView) view.findViewById(R.id.action_test);
-        txt_action_name_m = (TextView) view.findViewById(R.id.action_test);
+        txt_action_name = (TextView) view.findViewById(R.id.text_playContentName);
+        txt_action_name_m = (TextView) view.findViewById(R.id.text_playContentName);
         txt_cycle_num = (TextView) view.findViewById(R.id.action_test);
 
         //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
         ColorMatrix matrix = new ColorMatrix();
         matrix.setSaturation(0);
         ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
-        btn_cycle.setColorFilter(filter);
+        btn_actionList.setColorFilter(filter);
         //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
 
         UbtLog.d(TAG, "playingName=" + playingName);
@@ -324,7 +324,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             }
         });
 
-        btn_cycle.setOnClickListener(new View.OnClickListener() {
+        btn_actionList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                 if(!BaseHelper.hasSdcard){

@@ -23,12 +23,40 @@
             app:stroke_width="1dp"
         />
         <ImageView
-            android:id="@+id/control_play"
+            android:id="@+id/img_play"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_play"
+            android:layout_below="@+id/action_logo"
             android:layout_marginBottom="-40dp"
-            android:layout_alignBottom="@+id/action_logo"
+            android:layout_alignTop="@+id/action_logo"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            />
+        <ImageView
+            android:id="@+id/img_pause"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_pro_pause"
+            android:layout_below="@+id/action_logo"
+            android:layout_marginBottom="-40dp"
+            android:layout_alignTop="@+id/action_logo"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:visibility="invisible"
+            />
+        <!--android:background="#7fff0000"-->
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gif_playing"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/action_play_volum_gif"
+            android:layout_below="@+id/action_logo"
+            android:layout_marginBottom="-40dp"
+            android:layout_alignTop="@+id/action_logo"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:visibility="invisible"
             />
 
         <RelativeLayout
@@ -61,15 +89,18 @@
                 android:textSize="12sp" />
                <LinearLayout
                     android:id="@+id/layout_img_select"
-                   android:visibility="visible"
+                    android:visibility="visible"
                     android:layout_width="60dp"
                     android:gravity="center"
                     android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/img_select"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
-                    android:src="@drawable/myactions_normal"/>
+
+                   <ImageView
+                       android:id="@+id/img_select"
+                       android:layout_width="23dp"
+                       android:layout_height="23dp"
+                       android:layout_marginBottom="10dp"
+                       android:layout_gravity="bottom"
+                       android:src="@drawable/myactions_normal" />
                </LinearLayout>
 
             <TextView
@@ -140,7 +171,7 @@
         android:clickable="true">
 
         <ImageView
-            android:id="@+id/img_state"
+            android:id="@+id/img_state1"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_centerInParent="true"
@@ -148,7 +179,7 @@
             android:src="@drawable/my_actions_play_item_ft" />
 
         <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/gif_playing"
+            android:id="@+id/gif_playing1"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_centerInParent="true"
