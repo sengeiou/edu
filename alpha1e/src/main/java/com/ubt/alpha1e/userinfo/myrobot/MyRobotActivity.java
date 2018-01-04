@@ -22,6 +22,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.GotoBindRequest;
+import com.ubt.alpha1e.base.RequstMode.SetAutoUpgradeRequest;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
@@ -103,11 +104,15 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
     private static final int NO_CONNECTED_AND_NOBINDED = 1;
     private static final int BINDED = 2;
     private static final int CONNECTED_NO_BIND = 3;
+    private static final int AUTO_UPGRADE_STATUS = 4;
 
     private static final int ROBOT_GOTO_UNBIND = 1;
     private static final int ROBOT_GOTO_BIND = 2;
+    private static final int ROBOT_SET_AUTO_UPGRADE = 3;
 
     private boolean isAutoUpgrade = false;
+
+    long lastClickTime = System.currentTimeMillis();
 
 
     String openAutoUpgrade = "当前自动升级功能已经开启，机器人每次重新联网后都会去检测新版本，如果有新版本，机器人将自动下载并且升级。";
@@ -137,7 +142,19 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
                     content_goto_unbind.setVisibility(View.GONE);
                     content_goto_connect_bluetooth.setVisibility(View.GONE);
                     break;
-
+                case AUTO_UPGRADE_STATUS:
+                    if(isAutoUpgrade){
+                        isAutoUpgrade = false;
+                        tv_robot_auto_update_state.setText("自动升级：关闭");
+                        tv_robot_auto_update_ad.setText(closeAutoUpgrade);
+                        btn_auto_upgrade.setBackgroundResource(R.drawable.menu_setting_unselect);
+                    }else {
+                        isAutoUpgrade = true;
+                        tv_robot_auto_update_state.setText("自动升级：开启");
+                        tv_robot_auto_update_ad.setText(openAutoUpgrade);
+                        btn_auto_upgrade.setBackgroundResource(R.drawable.menu_setting_select);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -159,21 +176,28 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
                 gotoBind();
                 break;
             case R.id.btn_goto_bluetooth_connect:
+                if(System.currentTimeMillis()-lastClickTime < 1000){
+                    UbtLog.d(TAG,"1000ms后才能点击");
+                    return;
+                }
+                lastClickTime = System.currentTimeMillis();
                 Intent intent = new Intent(MyRobotActivity.this, BluetoothandnetconnectstateActivity.class);
                 startActivity(intent);
                 MyRobotActivity.this.finish();
                 break;
             case R.id.btn_auto_upgrade:
                 if(isAutoUpgrade){
-                    isAutoUpgrade = false;
-                    tv_robot_auto_update_state.setText("自动升级：关闭");
-                    tv_robot_auto_update_ad.setText(closeAutoUpgrade);
-                    btn_auto_upgrade.setBackgroundResource(R.drawable.menu_setting_unselect);
+                    setAutoUpgrade("0");
+//                    isAutoUpgrade = false;
+//                    tv_robot_auto_update_state.setText("自动升级：关闭");
+//                    tv_robot_auto_update_ad.setText(closeAutoUpgrade);
+//                    btn_auto_upgrade.setBackgroundResource(R.drawable.menu_setting_unselect);
                 }else {
-                    isAutoUpgrade = true;
-                    tv_robot_auto_update_state.setText("自动升级：开启");
-                    tv_robot_auto_update_ad.setText(openAutoUpgrade);
-                    btn_auto_upgrade.setBackgroundResource(R.drawable.menu_setting_select);
+                    setAutoUpgrade("1");
+//                    isAutoUpgrade = true;
+//                    tv_robot_auto_update_state.setText("自动升级：开启");
+//                    tv_robot_auto_update_ad.setText(openAutoUpgrade);
+//                    btn_auto_upgrade.setBackgroundResource(R.drawable.menu_setting_select);
                 }
                 break;
             default:
@@ -187,11 +211,26 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
         context.startActivity(intent);
     }
 
+    //设置自动升级
+    public void setAutoUpgrade(String upgradeType){
+        LoadingDialog.show(MyRobotActivity.this);
+        SetAutoUpgradeRequest setAutoUpgradeRequest = new SetAutoUpgradeRequest();
+        setAutoUpgradeRequest.setAutoUpdate(upgradeType);
+        setAutoUpgradeRequest.setSystemType("3");
+
+        String url = HttpEntity.UPDATE_AUTO_UPGRADE;
+        doRequest(url,setAutoUpgradeRequest,ROBOT_SET_AUTO_UPGRADE);
+
+    }
 
     RobotBindingDialog robotBindingDialog = null ;
     //一键绑定
     public void gotoBind(){
 
+        if(AlphaApplication.currentRobotSN == null || AlphaApplication.currentRobotSN.equals("")){
+            ToastUtils.showShort("机器人序列号为空");
+            return;
+        }
         if(robotBindingDialog == null){
             robotBindingDialog = new RobotBindingDialog(AppManager.getInstance().currentActivity())
                     .builder()
@@ -302,6 +341,12 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
                         adviceBindFail("");
 
                         break;
+                    case ROBOT_SET_AUTO_UPGRADE:
+                        UbtLog.d(TAG, "设置自动升级功能失败" );
+                        LoadingDialog.dismiss(MyRobotActivity.this);
+                        ToastUtils.showShort("设置失败");
+                        break;
+
                     default:
                         break;
                 }
@@ -344,13 +389,25 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
                                 adviceBindSuccess();
                             }else if(baseResponseModel.models != null && baseResponseModel.models.equals("1002")){
                                 adviceBindFail("机器人已被他人绑定！");
+                            }else if(baseResponseModel.models != null && baseResponseModel.models.equals("1004")){
+                                adviceBindFail("机器人不存在！");
                             }
                         }else {
                             adviceBindFail("");
                             UbtLog.d(TAG, "绑定失败" );
                         }
                         break;
-
+                    case ROBOT_SET_AUTO_UPGRADE:
+                        UbtLog.d(TAG, "设置自动升级功能成功" );
+                        LoadingDialog.dismiss(MyRobotActivity.this);
+                        if(baseResponseModel.status){
+                            UbtLog.d(TAG, "设置成功" );
+                            mHandler.sendEmptyMessage(AUTO_UPGRADE_STATUS);
+                        }else {
+                            UbtLog.d(TAG, "设置失败" );
+                            ToastUtils.showShort("设置失败");
+                        }
+                        break;
                     default:
                         break;
                 }

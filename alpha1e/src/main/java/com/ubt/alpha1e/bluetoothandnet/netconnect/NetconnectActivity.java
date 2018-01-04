@@ -183,10 +183,10 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                 gotoSelectWifi();
                 break;
             case R.id.ig_see_wifi_pwd:
-                if(TextUtils.isEmpty(ed_wifi_pwd.getText().toString())){
-                    UbtLog.d(TAG,"密码为null 不可点击切换!!!");
-                    return;
-                }
+//                if(TextUtils.isEmpty(ed_wifi_pwd.getText().toString())){
+//                    UbtLog.d(TAG,"密码为null 不可点击切换!!!");
+//                    return;
+//                }
                 if(ig_see_wifi_pwd == null){
                     return;
                 }
