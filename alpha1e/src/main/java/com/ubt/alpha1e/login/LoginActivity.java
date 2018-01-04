@@ -65,6 +65,8 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
     public static final String PID = "95518e46-af79-494e-b2fa-a6db6409ae6b:77022ec0a7614dbcb33c7ab73d4e2ceb";
     public static final String DSN = "123456";
 
+    public static final String INVALID_TOKEN = "INVALID_TOKEN";
+
     public static void LaunchActivity(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -79,6 +81,11 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
         setContentView(R.layout.activity_login_with_tvs);
         rlQQLgoin = (RelativeLayout) findViewById(R.id.rl_qq_login);
         rlWXLogin = (RelativeLayout) findViewById(R.id.rl_wx_login);
+
+        boolean invalid = getIntent().getBooleanExtra(INVALID_TOKEN, false);
+        if(invalid){
+            ToastUtils.showLong("叮当登录异常，请重新登录");
+        }
 
         initTVS();
         initControlListener();

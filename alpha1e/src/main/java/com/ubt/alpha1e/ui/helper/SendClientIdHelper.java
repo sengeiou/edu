@@ -2,12 +2,15 @@ package com.ubt.alpha1e.ui.helper;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 
-import com.tencent.ai.tvs.AuthorizeListener;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.event.RobotEvent;
+import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.LoginManger;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -205,7 +208,17 @@ public class SendClientIdHelper extends BaseHelper {
             if(i == Constant.INVALID_TOKEN){
                 ((AlphaApplication) mContext.getApplicationContext()).doLostConnect();
                 ((AlphaApplication) mContext.getApplicationContext()).setmCurrentNetworkInfo(null);
+                SPUtils.getInstance().remove(Constant.SP_USER_INFO);
+                SPUtils.getInstance().remove(Constant.SP_USER_ID);
+                SPUtils.getInstance().remove(Constant.SP_USER_IMAGE);
+                SPUtils.getInstance().remove(Constant.SP_USER_NICKNAME);
+                SPUtils.getInstance().remove(Constant.SP_LOGIN_TOKEN);
                 LoginManger.getInstance().loginOut();
+                AppManager.getInstance().finishAllActivity();
+                Intent intent = new Intent(mContext, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(LoginActivity.INVALID_TOKEN, true);
+                mContext.startActivity(intent);
             }
         }
     };
