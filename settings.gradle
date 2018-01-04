@@ -1,7 +1,7 @@
 include ':alpha1sGifLib', ':ChangeSkin', ':library', ':BaseLib', ':factorytest'
 include ':alpha1sLib'
 //include ':alphaQRLib'
-include ':choseCountryNum'
+//include ':choseCountryNum'
 include ':weiboSDK'
 include ':alpha1e'
 include ':highlight'

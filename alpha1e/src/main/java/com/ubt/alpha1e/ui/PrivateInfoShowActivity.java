@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ant.country.CountryTool;
+//import com.ant.country.CountryTool;
 import com.bumptech.glide.Glide;
 import com.facebook.Profile;
 import com.sina.weibo.sdk.openapi.models.User;
@@ -97,7 +97,7 @@ public class PrivateInfoShowActivity extends BaseActivity implements
             txt_email.setText(mCurrentUserInfo.userEmail);
             txt_phone.setText(mCurrentUserInfo.userPhone);
             UbtLog.d(TAG, "code=" + mCurrentUserInfo.countryCode);
-            txt_country.setText(CountryTool.getContryNameByCode(mCurrentUserInfo.countryCode, this));
+            //txt_country.setText(CountryTool.getContryNameByCode(mCurrentUserInfo.countryCode, this));
         }
 
 

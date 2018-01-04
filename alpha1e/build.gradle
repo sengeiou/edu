@@ -113,7 +113,7 @@ android {
 dependencies {
     compile project(':alpha1sLib')
     compile project(':weiboSDK')
-    compile project(':choseCountryNum')
+    //compile project(':choseCountryNum')
     compile project(':alpha1sGifLib')
     compile project(':ChangeSkin')
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -167,6 +167,6 @@ dependencies {
 
     compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-4'
     //视频播放
-    compile 'com.shuyu:GSYVideoPlayer:2.1.1'
+    compile 'com.shuyu:GSYVideoPlayer:2.1.3'
 
 }

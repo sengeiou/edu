@@ -13,6 +13,7 @@ import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.userinfo.dynamicaction.DynamicActionFragment;
 import com.ubt.alpha1e.userinfo.notice.NoticeFragment;
+import com.ubt.alpha1e.userinfo.notice.NoticeFragment1;
 import com.ubt.alpha1e.userinfo.setting.SettingFragment;
 import com.ubt.alpha1e.userinfo.usermanager.UserInfoFragment;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -67,13 +68,13 @@ public class UserCenterImpPresenter extends BasePresenterImpl<UserCenterContact.
                 if (i == 0) {
                     fragmentList.add(UserInfoFragment.newInstance(leftMenuModels.get(i).getNameString(), ""));
                 } else if (i == 1) {
-                    fragmentList.add(NoticeFragment.newInstance("1", ""));
+                    fragmentList.add(NoticeFragment1.newInstance("1", ""));
                 } else if (i == 2) {
                     fragmentList.add(NoticeFragment.newInstance("2", ""));
                 } else if (i == 3) {
                     fragmentList.add(DynamicActionFragment.newInstance("", ""));
                 } else if (i == 4) {
-                    fragmentList.add(DynamicActionFragment.newInstance("", ""));
+                    fragmentList.add(NoticeFragment1.newInstance("5", ""));
                 } else if (i == 5) {
                     Fragment fragment = SettingFragment.newInstance(leftMenuModels.get(i).getNameString(), "");
                     fragmentList.add(fragment);

@@ -372,7 +372,9 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     @Override
     protected void onResume() {
         super.onResume();
-        ((PrincipleHelper)mHelper).doEnterCourse((byte)1);
+        if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) == 2){
+            ((PrincipleHelper)mHelper).doEnterCourse((byte)1);
+        }
     }
 
     @Override
