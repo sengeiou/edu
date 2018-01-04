@@ -177,7 +177,7 @@
             android:name=".ui.PcUpdateFinishActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleTheme"/>
-        <activity
+<!--        <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
             android:noHistory="true">
@@ -189,7 +189,7 @@
 
                 <data android:scheme="1106515940"/>
             </intent-filter>
-        </activity>
+        </activity>-->
         <!--
             <activity
             android:name="com.tencent.connect.common.AssistActivity"
@@ -197,9 +197,9 @@
             android:screenOrientation="behind"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         -->
-        <activity
+       <!-- <activity
             android:name="com.tencent.ai.tvs.ui.TVSAssistActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>-->
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"

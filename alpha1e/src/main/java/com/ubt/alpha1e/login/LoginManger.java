@@ -179,9 +179,9 @@ public class LoginManger implements AuthorizeListener {
             onLoginListener.onError(i);
         }
 
-        if(i == AuthorizeListener.QQOPEN_TVSIDRECV_TYPE || i == AuthorizeListener.WX_TVSIDRECV_TYPE){
+        if(i == AuthorizeListener.QQOPEN_TVSIDRECV_TYPE || i == AuthorizeListener.WX_TVSIDRECV_TYPE || i == AuthorizeListener.REFRESH_TYPE){
             if(onRefreshListener != null){
-                onRefreshListener.onError();
+                onRefreshListener.onError(i);
             }
         }
     }
@@ -203,6 +203,6 @@ public class LoginManger implements AuthorizeListener {
 
     public interface OnRefreshListener{
         void onSuccess();
-        void onError();
+        void onError(int i);
     }
 }

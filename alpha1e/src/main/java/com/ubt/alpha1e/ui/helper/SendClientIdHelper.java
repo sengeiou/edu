@@ -1,14 +1,12 @@
 package com.ubt.alpha1e.ui.helper;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.login.LoginManger;
-import com.ubt.alpha1e.services.ActivationService;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.BlueToothManager;
@@ -182,7 +180,7 @@ public class SendClientIdHelper extends BaseHelper {
         }
 
         @Override
-        public void onError() {
+        public void onError(int i) {
             UbtLog.d(TAG,"onRefreshListener onError  ");
             clientIdSendWhich = 0 ;
         }
