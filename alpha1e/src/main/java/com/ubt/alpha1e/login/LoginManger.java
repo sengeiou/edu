@@ -181,7 +181,7 @@ public class LoginManger implements AuthorizeListener {
 
         if(i == AuthorizeListener.QQOPEN_TVSIDRECV_TYPE || i == AuthorizeListener.WX_TVSIDRECV_TYPE || i == AuthorizeListener.REFRESH_TYPE){
             if(onRefreshListener != null){
-                onRefreshListener.onError(i);
+                onRefreshListener.onError(Constant.INVALID_TOKEN);
             }
         }
     }

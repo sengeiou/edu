@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import com.tencent.ai.tvs.AuthorizeListener;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.login.LoginManger;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
@@ -200,6 +202,11 @@ public class SendClientIdHelper extends BaseHelper {
         public void onError(int i) {
             UbtLog.d(TAG,"onRefreshListener onError  ");
             clientIdSendWhich = 0 ;
+            if(i == Constant.INVALID_TOKEN){
+                ((AlphaApplication) mContext.getApplicationContext()).doLostConnect();
+                ((AlphaApplication) mContext.getApplicationContext()).setmCurrentNetworkInfo(null);
+                LoginManger.getInstance().loginOut();
+            }
         }
     };
 

@@ -421,7 +421,7 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
         new UnbindConfirmDialog(AppManager.getInstance().currentActivity()).builder()
                 .setTitle("解绑机器人后，将无法使用：")
                 .setUnbindMsg("1、“行为习惯养成”功能\n" +
-                        "2、控制机器人邦本升级\n"+"  确定要解绑么？")
+                        "2、控制机器人版本升级\n"+"  确定要解绑吗？")
                 .setCancelable(true)
                 .setPositiveButton("解绑", new View.OnClickListener() {
                     @Override
