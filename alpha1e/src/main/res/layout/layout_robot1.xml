@@ -42,14 +42,28 @@
             android:scaleType="fitCenter"
             android:src="@drawable/img_body"/>
 
-        <ImageView
-            android:id="@+id/iv_hand_right"
-            android:layout_width="75px"
-            android:layout_height="177px"
-            android:layout_marginTop="25dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/hand_right_selector"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/iv_hand_right"
+                android:layout_width="75px"
+                android:layout_height="177px"
+                android:layout_marginTop="25dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/hand_right_selector"/>
+
+            <ImageView
+                android:id="@+id/iv_right_arrow"
+                android:layout_width="80px"
+                android:layout_height="80px"
+                android:layout_alignBottom="@+id/iv_hand_right"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/zuojiantou_4"
+                android:visibility="gone"/>
+        </RelativeLayout>
     </LinearLayout>
 
 

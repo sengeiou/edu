@@ -41,8 +41,6 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-import zhy.com.highlight.HighLight;
-
 
 /**
  * @author：liuhai
@@ -53,23 +51,20 @@ import zhy.com.highlight.HighLight;
  * version
  */
 
-public class CourseLevelFiveLayout extends BaseActionEditLayout implements CourseMusicDialogUtil.OnMusicDialogListener {
-    private String TAG = CourseLevelFiveLayout.class.getSimpleName();
-    private ImageView ivMusicArror;
-    private ImageView ivRightArrow;
+public class CourseLevelEightLayout extends BaseActionEditLayout implements CourseMusicDialogUtil.OnMusicDialogListener {
+    private String TAG = CourseLevelEightLayout.class.getSimpleName();
+    private ImageView ivAddFrameArrow;
     private ImageView playArrow;
 
     private ImageView ivRightLegArrow;
 
     private ImageView resetArrow;
 
-    private ImageView saveArrow;
 
     RelativeLayout mRlInstruction;
     private TextView mTextView;
     private boolean isInstruction;
 
-    CourseMusicDialogUtil mMusicDialogUtil;
 
     /**
      * 高亮对话框的TextView显示
@@ -91,17 +86,16 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
     private int currentIndex = 0;
     //课时3顺序
     private int secondIndex = 0;
-    private HighLight mHightLight;
 
-    public CourseLevelFiveLayout(Context context) {
+    public CourseLevelEightLayout(Context context) {
         super(context);
     }
 
-    public CourseLevelFiveLayout(Context context, @Nullable AttributeSet attrs) {
+    public CourseLevelEightLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CourseLevelFiveLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CourseLevelEightLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -124,7 +118,7 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
             UbtLog.d(TAG, "record===" + record.toString());
             int course = record.getCourseLevel();
             int recordlevel = record.getPeriodLevel();
-            if (course == 5) {
+            if (course == 8) {
                 if (recordlevel == 0 || recordlevel == 2) {
                     level = 1;
                 } else if (recordlevel == 1) {
@@ -148,15 +142,10 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         if (currentCourse == 1) {
             isInstruction = true;
             mRlInstruction.setVisibility(View.VISIBLE);
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor18.hts");
+            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor28.hts");
         } else if (currentCourse == 2) {
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor19.hts");
-            CourseArrowAminalUtil.startViewAnimal(true, ivRightLegArrow, 2);
-        } else if (currentCourse == 3) {
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor21.hts");
-            CourseArrowAminalUtil.startViewAnimal(true, saveArrow, 1);
-            ivSave.setEnabled(true);
-
+            ivPlay.setEnabled(true);
+            CourseArrowAminalUtil.startViewAnimal(true, playArrow, 2);
         }
 
     }
@@ -176,19 +165,17 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         playArrow = findViewById(R.id.iv_play_arrow);
         playArrow.setOnClickListener(this);
 
-        ivRightArrow = findViewById(R.id.iv_add_frame_arrow);
+        ivAddFrameArrow = findViewById(R.id.iv_add_frame_arrow);
         resetArrow = findViewById(R.id.iv_reset_arrow);
         resetArrow.setOnClickListener(this);
         mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
         mTextView = (TextView) findViewById(R.id.tv_all_introduc);
-        mTextView.setText("想不想自己创建一个机器人动作呢？点击手臂和腿，我身体对应的部位就会掉电。这时候掰动机器人，摆出你想要的动作，再点击时间轴的添加按钮就可以了。");
-
+        mTextView.setText("我可是会标准的中国功夫哦，快来给我创建一个标准的踢腿动作吧。");
         ivRightLegArrow = findViewById(R.id.iv_right_leg_arrow);
         ivRightLegArrow.setOnClickListener(this);
         initRightLegArrow();
 
-        saveArrow = findViewById(R.id.iv_save_arrow);
-        saveArrow.setOnClickListener(this);
+
     }
 
     /**
@@ -253,55 +240,14 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
                 lostRightLeg = false;
                 ivLegRight.setSelected(false);
                 isCourseReading = false;
-                CourseArrowAminalUtil.startViewAnimal(false, ivRightArrow, 2);
-                CourseArrowAminalUtil.startViewAnimal(true, playArrow, 2);
-
+                CourseArrowAminalUtil.startViewAnimal(false, ivAddFrameArrow, 2);
+                showNextDialog(2);
                 break;
 
-            case R.id.iv_reset:
-                resetAction();
-                break;
-            case R.id.iv_reset_arrow:
-                resetAction();
-                break;
-
-            case R.id.iv_save_arrow:
-                saveAction();
-
-                break;
-
-            case R.id.iv_save_action:
-                saveAction();
-                break;
             default:
         }
     }
 
-    /**
-     * 重置
-     */
-    private void resetAction() {
-        doReset();
-        ivReset.setEnabled(false);
-        ivReset.setImageResource(R.drawable.ic_reset_disable);
-        CourseArrowAminalUtil.startViewAnimal(false, resetArrow, 1);
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showNextDialog(3);
-            }
-        }, 1500);
-    }
-
-    /**
-     * 保存按钮
-     */
-    private void saveAction() {
-        ((ActionsEditHelper) mHelper).stopAction();
-        ivReset.setEnabled(false);
-        // CourseArrowAminalUtil.startViewAnimal(false, saveArrow, 1);
-        saveNewAction(2);
-    }
 
     /**
      * 播放按钮，过3秒钟结束
@@ -312,13 +258,6 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         CourseArrowAminalUtil.startViewAnimal(false, playArrow, 2);
         ivPlay.setEnabled(false);
         ivPlay.setImageResource(R.drawable.ic_pause);
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                pause();
-                onPlayMusicComplete();
-            }
-        }, 10000);
     }
 
 
@@ -328,13 +267,12 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor20.hts");
                 ivAddFrame.setEnabled(false);
                 ivPlay.setEnabled(false);
                 ivPlay.setImageResource(R.drawable.ic_play_disable);
-                ivReset.setEnabled(true);
-                ivReset.setImageResource(R.drawable.ic_reset);
-                CourseArrowAminalUtil.startViewAnimal(true, resetArrow, 1);
+                if (courseProgressListener != null) {
+                    courseProgressListener.completeCurrentCourse(2);
+                }
             }
         });
 
@@ -363,20 +301,13 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         if (((Activity) mContext).isFinishing()) {
             return;
         }
-
-        if (currentCourse == 1) {
+         if (currentCourse == 1) {
             if (isInstruction) {
                 mRlInstruction.setVisibility(View.GONE);
-                showNextDialog(2);
+                CourseArrowAminalUtil.startViewAnimal(true, ivRightLegArrow, 2);
             }
         } else if (currentCourse == 2) {
-            UbtLog.d(TAG, "playComplete==" + 2);
-            if (secondIndex == 1) {
-                lostLeftHand = true;
-                lostRightLeg();
-                CourseArrowAminalUtil.startViewAnimal(false, ivRightLegArrow, 2);
-                startEditRightLeg();
-            }
+
         }
     }
 
@@ -385,7 +316,7 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
      */
     public void startEditRightLeg() {
         CourseArrowAminalUtil.startViewAnimal(false, ivRightLegArrow, 2);
-        ((ActionsEditHelper) mHelper).stopAction();
+//        ((ActionsEditHelper) mHelper).stopAction();
         doReset();
         autoRead = true;
         mHandler.sendEmptyMessage(MSG_AUTO_READ);
@@ -415,9 +346,9 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
                 setButtonEnable(false);
                 ivAddFrame.setEnabled(true);
                 ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
-                CourseArrowAminalUtil.startViewAnimal(true, ivRightArrow, 1);
+                CourseArrowAminalUtil.startViewAnimal(true, ivAddFrameArrow, 1);
             }
-        }, 2000);
+        }, 5000);
 
     }
 
@@ -441,29 +372,7 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
      * </p>
      */
     public void clickKnown() {
-        UbtLog.d(TAG, "currindex==" + currentIndex);
-        if (mHightLight.isShowing() && mHightLight.isNext())//如果开启next模式
-        {
-            mHightLight.next();
-        } else {
-            remove(null);
-            UbtLog.d(TAG, "=====remove=========");
-        }
-        if (currentCourse == 1) {
-            ((ActionsEditHelper) mHelper).stopAction();
 
-            showNextDialog(2);
-        } else if (currentCourse == 2) {
-            ((ActionsEditHelper) mHelper).stopAction();
-            doReset();
-            showNextDialog(3);
-
-        }
-    }
-
-
-    public void remove(View view) {
-        mHightLight.remove();
     }
 
 
@@ -488,7 +397,7 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         RecyclerView mrecyle = contentView.findViewById(R.id.recyleview_content);
         mrecyle.setLayoutManager(new LinearLayoutManager(mContext));
 
-        CourseItemAdapter itemAdapter = new CourseItemAdapter(R.layout.layout_action_course_dialog, ActionCourseDataManager.getCourseActionModel(5, current));
+        CourseItemAdapter itemAdapter = new CourseItemAdapter(R.layout.layout_action_course_dialog, ActionCourseDataManager.getCourseActionModel(8, current));
         mrecyle.setAdapter(itemAdapter);
 
         ViewHolder viewHolder = new ViewHolder(contentView);

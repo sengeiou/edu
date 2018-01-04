@@ -190,8 +190,12 @@ public class ActionsCourseSaveActivity extends BaseActivity implements
         ivSave.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveNewAction();
+               // saveNewAction();
                 CourseArrowAminalUtil.startViewAnimal(false, ivSaveArrow, 1);
+                Intent intent = new Intent();
+                intent.putExtra(ActionsEditHelper.SaveActionResult, true);
+                setResult(ActionsEditHelper.SaveActionReq, intent);
+                finish();
             }
         });
 
@@ -223,7 +227,7 @@ public class ActionsCourseSaveActivity extends BaseActivity implements
 
                 int after_length = s.length();// 输入内容后编辑框所有内容的总长度
                 // 如果字符添加后超过了限制的长度，那么就移除后面添加的那一部分，这个很关键
-                if (after_length > 2) {
+                if (after_length > 1) {
                     edt_name.setFocusable(false);
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(edt_name.getWindowToken(), 0); //强制隐藏键盘

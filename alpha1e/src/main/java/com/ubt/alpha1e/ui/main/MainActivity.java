@@ -57,10 +57,16 @@ import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelEightActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelFiveActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelFourActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelNineActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelSevenActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelSixActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelTenActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelThreeActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.services.AutoScanConnectService;
@@ -75,7 +81,6 @@ import com.ubt.alpha1e.ui.helper.BluetoothHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
-import com.ubt.alpha1e.userinfo.myrobot.MyRobotActivity;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -104,7 +109,7 @@ import okhttp3.Call;
  * Main UI function
  */
 
-public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View,HandlerCallback {
+public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View, HandlerCallback {
 
     @BindView(R.id.cartoon_body_touch_bg)
     ImageView cartoonBodyTouchBg;
@@ -159,7 +164,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     int init_screen_height = 375;
     RelativeLayout.LayoutParams params;
     private AnimationDrawable frameAnimation;
-     FrameAnimation frameAnimationPro;
+    FrameAnimation frameAnimationPro;
     private int powerThreshold[] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100};
     int index = 0;
     private final int cartoon_action_swing_right_leg = 0;
@@ -177,53 +182,53 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private final int cartoon_action_smile = 12;
     private final int cartoon_aciton_squat_reverse = 13;
     private int buddleTextTimeout = 5000;//5s
-    private int charging_shrink_interval=500;
-    private int chargeShrinkTimeout=1000;
+    private int charging_shrink_interval = 500;
+    private int chargeShrinkTimeout = 1000;
     private Timer mBuddleTextTimer;
     private TimerTask mBuddleTextTimeOutTask;
     private LooperThread looperThread;
     Timer mChargetimer;
     TimerTask mChargingTimeoutTask;
-    private byte mChargeValue=0;
-    private int mPowerValue=0;
-    long mCurrentTouchTime=0;
+    private byte mChargeValue = 0;
+    private int mPowerValue = 0;
+    long mCurrentTouchTime = 0;
     //ONE MINUTE
-    private long noOperationTimeout=1*60*1000;
-    private String STATUS_MACHINE="status_machine";
-    private final byte APP_LAUNCH_STATUS=0x01;
-    private final byte APP_BLUETOOTH_CONNECTED =0x02;
-    private final byte APP_BLUETOOTH_CLOSE=0x03;
-    private final byte ROBOT_LOW_POWER_LESS_TWENTY_STATUS =0x04;
-    private final byte ROBOT_LOW_POWER_LESS_FIVE_STATUS =0x05;
-    private final byte ROBOT_SLEEP_EVENT=0x06;
-    private final byte ROBOT_HIT_HEAD=0x07;
-    private final byte ROBOT_WAKEUP_ACTION =0x08;
-    private final byte ROBOT_POWEROFF=0x09;
-    private final byte ROBOT_hand_stand =0x0a;
-    private final byte ROBOT_fall =0x0b;
-    private final byte ROBOT_CHARGING=0x0c;
-    private final byte ROBOT_default_gesture =0x0d;
-    private final byte ROBOT_sleep_gesture=0x0e;
-    private final int LOW_BATTERY_TWENTY_THRESHOLD=20;
-    private final int LOW_BATTERY_FIVE_THRESHOLD=5;
-    private  boolean ENTER_LOW_BATTERY_FIVE=false;
-    private  boolean ENTER_LOW_BATTERY_TWENTY=false;
-    private int index_one_vol=1; //volatage
-    private int index_two_charging=2; //charging or uncharging
-    private int index_three_powerPercent=3;//power value
+    private long noOperationTimeout = 1 * 60 * 1000;
+    private String STATUS_MACHINE = "status_machine";
+    private final byte APP_LAUNCH_STATUS = 0x01;
+    private final byte APP_BLUETOOTH_CONNECTED = 0x02;
+    private final byte APP_BLUETOOTH_CLOSE = 0x03;
+    private final byte ROBOT_LOW_POWER_LESS_TWENTY_STATUS = 0x04;
+    private final byte ROBOT_LOW_POWER_LESS_FIVE_STATUS = 0x05;
+    private final byte ROBOT_SLEEP_EVENT = 0x06;
+    private final byte ROBOT_HIT_HEAD = 0x07;
+    private final byte ROBOT_WAKEUP_ACTION = 0x08;
+    private final byte ROBOT_POWEROFF = 0x09;
+    private final byte ROBOT_hand_stand = 0x0a;
+    private final byte ROBOT_fall = 0x0b;
+    private final byte ROBOT_CHARGING = 0x0c;
+    private final byte ROBOT_default_gesture = 0x0d;
+    private final byte ROBOT_sleep_gesture = 0x0e;
+    private final int LOW_BATTERY_TWENTY_THRESHOLD = 20;
+    private final int LOW_BATTERY_FIVE_THRESHOLD = 5;
+    private boolean ENTER_LOW_BATTERY_FIVE = false;
+    private boolean ENTER_LOW_BATTERY_TWENTY = false;
+    private int index_one_vol = 1; //volatage
+    private int index_two_charging = 2; //charging or uncharging
+    private int index_three_powerPercent = 3;//power value
     private BluetoothHelper mBtHelper;
-    private int APP_CURRENT_STATUS=-1;
-    private int DV_COMMON_COMMAND_POWEROFF_ZERO=1;
-    private int DV_COMMON_COMMAND_POWEROFF_ONE=0;
-    private int DV_COMMON_COMMAND_POWEROFF_TWO=0;
-    private int Cartoon_animation_last_execute=0;
-   // private boolean  app_bluetooth_conencted_executed=false;
-    private boolean IS_CHARGING=false;
-    private String current_mac_address="";
-    private String FilePath="action/avatar/";
+    private int APP_CURRENT_STATUS = -1;
+    private int DV_COMMON_COMMAND_POWEROFF_ZERO = 1;
+    private int DV_COMMON_COMMAND_POWEROFF_ONE = 0;
+    private int DV_COMMON_COMMAND_POWEROFF_TWO = 0;
+    private int Cartoon_animation_last_execute = 0;
+    // private boolean  app_bluetooth_conencted_executed=false;
+    private boolean IS_CHARGING = false;
+    private String current_mac_address = "";
+    private String FilePath = "action/avatar/";
     private String waveRightArm = "wave the right arm.hts"; //摆右手臂
     private String waveRightLeg = "wave the right leg.hts";  //摆动右腿
-    private String waveLeftArm ="wave the left arm.hts";   //摆左手臂
+    private String waveLeftArm = "wave the left arm.hts";   //摆左手臂
     private String waveLeftLeg = "wave the left leg.hts";  //摆动左腿
     private String upsideDown = "upside-down.hts"; //倒立
     private String squatTuch = "Squat Tuck.hts"; //蹲下抱膝
@@ -233,35 +238,35 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private String fallDown = "fall down.hts"; // 摔倒
     private String sleepState = "sleep.hts"; //  睡觉
     private String sayHi = "say hi.hts";   //打招呼
-    boolean isBtConnect =false;
-    boolean isNetworkConnect=false;
-    String WakeUpActionName="初始化";
-    private int ROBOT_HEAD_UP_STAND=1;
-    private int ROBOT_HEAD_DOWN=2;
-    private int ROBOT_LEFT_SHOULDER_SLEEP=3;
-    private int ROBOT_RIGHT_SHOULDER_SLEEP=4;
-    private int ROBOT_HEAD_UP_SLEEP=5;
-    private int ROBOT_HEAD_DOWN_SLEEP=6;
-    private int CARTOON_FRAME_INTERVAL=4;
-    boolean ANIMAITONSOLUTIONOOM=true;
-    boolean animation_running=false;
-    private int ROBOT_CHARGING_STATUS=0x01;
-    private int ROBOT_UNCHARGE_STATUS=0x0;
-    private int ROBOT_CHARGING_ENOUGH_STATUS=0x03;
-    private int CURRENT_ACTION_NAME=0;
-    private boolean cartoon_enable=false;
+    boolean isBtConnect = false;
+    boolean isNetworkConnect = false;
+    String WakeUpActionName = "初始化";
+    private int ROBOT_HEAD_UP_STAND = 1;
+    private int ROBOT_HEAD_DOWN = 2;
+    private int ROBOT_LEFT_SHOULDER_SLEEP = 3;
+    private int ROBOT_RIGHT_SHOULDER_SLEEP = 4;
+    private int ROBOT_HEAD_UP_SLEEP = 5;
+    private int ROBOT_HEAD_DOWN_SLEEP = 6;
+    private int CARTOON_FRAME_INTERVAL = 4;
+    boolean ANIMAITONSOLUTIONOOM = true;
+    boolean animation_running = false;
+    private int ROBOT_CHARGING_STATUS = 0x01;
+    private int ROBOT_UNCHARGE_STATUS = 0x0;
+    private int ROBOT_CHARGING_ENOUGH_STATUS = 0x03;
+    private int CURRENT_ACTION_NAME = 0;
+    private boolean cartoon_enable = false;
 
     private static final int ROBOT_GOTO_BIND = 20;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UbtLog.d(TAG,"onCreate");
+        UbtLog.d(TAG, "onCreate");
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        mCurrentTouchTime=System.currentTimeMillis();
+        mCurrentTouchTime = System.currentTimeMillis();
         getScreenInch();
         initUI();
-        mHelper=MainUiBtHelper.getInstance(getContext());
+        mHelper = MainUiBtHelper.getInstance(getContext());
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mBroadcastReceiver1, filter1);
         looperThread = new LooperThread(this);
@@ -274,41 +279,41 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     protected void onStart() {
         super.onStart();
-        UbtLog.d(TAG,"onStart");
+        UbtLog.d(TAG, "onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        UbtLog.d(TAG,"onResume");
+        UbtLog.d(TAG, "onResume");
         initUI();
         mPresenter.getXGInfo();
-        if(!isBulueToothConnected()){
-             showDisconnectIcon();
+        if (!isBulueToothConnected()) {
+            showDisconnectIcon();
             looperThread.send(createMessage(APP_LAUNCH_STATUS));
-           // looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_FIVE_STATUS));
-              m_Handler.postDelayed(new Runnable() {
+            // looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_FIVE_STATUS));
+            m_Handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     AutoScanConnectService.startService(MainActivity.this); //add by dicy.cheng 打开自动连接
                 }
-             },100);
-        }else {
+            }, 100);
+        } else {
             MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
-            if(cartoonAction != null) {
-                if( APP_CURRENT_STATUS==ROBOT_SLEEP_EVENT){
-                     looperThread.send(createMessage(ROBOT_sleep_gesture)) ;
-                }else {
+            if (cartoonAction != null) {
+                if (APP_CURRENT_STATUS == ROBOT_SLEEP_EVENT) {
+                    looperThread.send(createMessage(ROBOT_sleep_gesture));
+                } else {
                     looperThread.send(createMessage(ROBOT_default_gesture));
                 }
-                if(MainActivity.this != null && ((AlphaApplication) MainActivity.this.getApplication()).getmCurrentNetworkInfo() != null){
+                if (MainActivity.this != null && ((AlphaApplication) MainActivity.this.getApplication()).getmCurrentNetworkInfo() != null) {
                     NetworkInfo networkInfo = ((AlphaApplication) MainActivity.this.getApplication()).getmCurrentNetworkInfo();
-                    if(networkInfo.status){
+                    if (networkInfo.status) {
                         hiddenDisconnectIcon();
-                    }else {
+                    } else {
                         showDisconnectIcon();
                     }
-                }else {
+                } else {
                     showDisconnectIcon();
                 }
             }
@@ -318,7 +323,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mBroadcastReceiver1!=null) {
+        if (mBroadcastReceiver1 != null) {
             getContext().unregisterReceiver(mBroadcastReceiver1);
         }
         SendClientIdService.doStopSelf();
@@ -333,7 +338,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
             if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
-                switch(state) {
+                switch (state) {
                     case BluetoothAdapter.STATE_OFF:
                         ((AlphaApplication) getContext().getApplicationContext())
                                 .setCurrentBluetooth(null);
@@ -349,7 +354,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3,
             R.id.right_icon4, R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
-            R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg,R.id.bottom_icon,R.id.habit_alert})
+            R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg, R.id.bottom_icon, R.id.habit_alert})
     protected void switchActivity(View view) {
         UbtLog.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
@@ -374,31 +379,31 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 gotoConnectBluetooth();
                 break;
             case R.id.top_icon3:
-                if(isBulueToothConnected()) {
-                try {
-                    CommonCtrlView.getInstace(getContext());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }else {
+                if (isBulueToothConnected()) {
+                    try {
+                        CommonCtrlView.getInstace(getContext());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
                     showBluetoothConnectDialog();
-            }
+                }
                 break;
             case R.id.right_icon:
-                if(isBulueToothConnected()){
+                if (isBulueToothConnected()) {
                     mLaunch.setClass(this, RemoteSelActivity.class);
                     //startActivity(new Intent(this, ActionTestActivity.class));
                     startActivity(mLaunch);
-                }else {
+                } else {
                     showBluetoothConnectDialog();
                 }
                 break;
             case R.id.right_icon2:
-                if(isBulueToothConnected()){
-                    APP_CURRENT_STATUS=ROBOT_default_gesture;
+                if (isBulueToothConnected()) {
+                    APP_CURRENT_STATUS = ROBOT_default_gesture;
                     startActivity(new Intent(this, ActionTestActivity.class));
                     this.overridePendingTransition(R.anim.activity_open_up_down, 0);
-                }else{
+                } else {
                     showBluetoothConnectDialog();
                 }
                 break;
@@ -412,32 +417,32 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.cartoon_head:
                 UbtLog.d(TAG, "click head");
-                sendCommandToRobot(FilePath+squinting_satifying);
+                sendCommandToRobot(FilePath + squinting_satifying);
                 showCartoonAction(cartoon_action_enjoy);
                 break;
             case R.id.cartoon_chest:
                 UbtLog.d(TAG, "click chest");
-                sendCommandToRobot(FilePath+squintLaugh);
+                sendCommandToRobot(FilePath + squintLaugh);
                 showCartoonAction(cartoon_action_smile);
                 break;
             case R.id.cartoon_left_hand:
                 UbtLog.d(TAG, "click left hand");
-                sendCommandToRobot(FilePath+waveRightArm);
+                sendCommandToRobot(FilePath + waveRightArm);
                 showCartoonAction(cartoon_action_swing_left_hand);
                 break;
             case R.id.cartoon_right_hand:
                 UbtLog.d(TAG, "click right hand");
-                sendCommandToRobot(FilePath+waveLeftArm);
+                sendCommandToRobot(FilePath + waveLeftArm);
                 showCartoonAction(cartoon_action_swing_right_hand);
                 break;
             case R.id.cartoon_left_leg:
                 UbtLog.d(TAG, "click left leg");
-                sendCommandToRobot(FilePath+waveRightLeg);
+                sendCommandToRobot(FilePath + waveRightLeg);
                 showCartoonAction(cartoon_action_swing_left_leg);
                 break;
             case R.id.cartoon_right_leg:
                 UbtLog.d(TAG, "click right leg");
-                sendCommandToRobot(FilePath+waveLeftLeg);
+                sendCommandToRobot(FilePath + waveLeftLeg);
                 showCartoonAction(cartoon_action_swing_right_leg);
                 break;
             case R.id.bottom_icon:
@@ -458,7 +463,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
     //显示蓝牙连接对话框
-    void showBluetoothConnectDialog(){
+    void showBluetoothConnectDialog() {
         new ConfirmDialog(this).builder()
                 .setTitle("提示")
                 .setMsg("请先连接蓝牙和Wi-Fi")
@@ -474,7 +479,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
 
     //去连接蓝牙
-    void gotoConnectBluetooth(){
+    void gotoConnectBluetooth() {
         boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
         Intent bluetoothConnectIntent = new Intent();
         if (isfirst) {
@@ -488,11 +493,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         isBtConnect = isBulueToothConnected();
         startActivityForResult(bluetoothConnectIntent, 100);
 
-        if(AppManager.getInstance().currentActivity() != null
+        if (AppManager.getInstance().currentActivity() != null
                 && (AppManager.getInstance().currentActivity() instanceof PrincipleActivity
                 || AppManager.getInstance().currentActivity() instanceof SplitActivity
                 || AppManager.getInstance().currentActivity() instanceof MergeActivity
-                || AppManager.getInstance().currentActivity() instanceof FeatureActivity)){
+                || AppManager.getInstance().currentActivity() instanceof FeatureActivity)) {
             UbtLog.d(TAG, "有需要关闭的课程界面 ");
             AlphaApplication.setmNeedOpenActivity(AppManager.getInstance().currentActivity().getClass().getSimpleName());
             AppManager.getInstance().currentActivity().finish();
@@ -505,20 +510,21 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void onLostBtCoon() {
         super.onLostBtCoon();
         //
-        UbtLog.d(TAG,"onLostBtConn");
+        UbtLog.d(TAG, "onLostBtConn");
     }
-    ConfirmDialog dialog = null ;
+
+    ConfirmDialog dialog = null;
 
     @Override
     public void onEventRobot(RobotEvent event) {
         super.onEventRobot(event);
-        if(event.getEvent() == RobotEvent.Event.NETWORK_STATUS) {
-            NetworkInfo networkInfo = (NetworkInfo)  event.getNetworkInfo();
-            UbtLog.d(TAG,"networkInfo == " + networkInfo.status);
+        if (event.getEvent() == RobotEvent.Event.NETWORK_STATUS) {
+            NetworkInfo networkInfo = (NetworkInfo) event.getNetworkInfo();
+            UbtLog.d(TAG, "networkInfo == " + networkInfo.status);
 
-            isNetworkConnect=networkInfo.status;
-            if(isNetworkConnect){
-                if(MainActivity.this != null){
+            isNetworkConnect = networkInfo.status;
+            if (isNetworkConnect) {
+                if (MainActivity.this != null) {
                     ((AlphaApplication) MainActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
                 }
                 runOnUiThread(new Runnable() {
@@ -527,8 +533,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         hiddenDisconnectIcon();
                     }
                 });
-            }else {
-                if(MainActivity.this != null){
+            } else {
+                if (MainActivity.this != null) {
                     ((AlphaApplication) MainActivity.this.getApplication()).setmCurrentNetworkInfo(null);
                 }
                 runOnUiThread(new Runnable() {
@@ -538,17 +544,17 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     }
                 });
             }
-        }else if(event.getEvent()== RobotEvent.Event.DISCONNECT){//Bluetooth Disconect
-            UbtLog.d(TAG,"DISCONNECTED ");
-            if(MainUiBtHelper.getInstance(getContext()).isLostCoon()){
-                UbtLog.d(TAG,"mainactivity isLostCoon");
+        } else if (event.getEvent() == RobotEvent.Event.DISCONNECT) {//Bluetooth Disconect
+            UbtLog.d(TAG, "DISCONNECTED ");
+            if (MainUiBtHelper.getInstance(getContext()).isLostCoon()) {
+                UbtLog.d(TAG, "mainactivity isLostCoon");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         looperThread.send(createMessage(APP_BLUETOOTH_CLOSE));
 
-                        if(AppManager.getInstance().currentActivity() != null){
-                            UbtLog.d(TAG, "onLostBtCoon " + "  不为空"+ AppManager.getInstance().currentActivity());
+                        if (AppManager.getInstance().currentActivity() != null) {
+                            UbtLog.d(TAG, "onLostBtCoon " + "  不为空" + AppManager.getInstance().currentActivity());
                             Activity mActivity = AppManager.getInstance().currentActivity();
                             if (!(mActivity instanceof RemoteActivity
                                     || mActivity instanceof RemoteSelActivity
@@ -562,37 +568,43 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                     || mActivity instanceof SplitActivity
                                     || mActivity instanceof MergeActivity
                                     || mActivity instanceof FeatureActivity*/
-                                    ||mActivity instanceof ActionTestActivity
-                                    ||mActivity instanceof ActionCourseActivity
-                                    ||mActivity instanceof CourseLevelOneActivity
-                                    ||mActivity instanceof CourseLevelTwoActivity
-                                    ||mActivity instanceof NetconnectActivity
-                                    ||mActivity instanceof NetSearchResultActivity
-                                    ||mActivity instanceof CourseTwoActivity
-                                    ||mActivity instanceof CourseOneActivity
+                                    || mActivity instanceof ActionTestActivity
+                                    || mActivity instanceof ActionCourseActivity
+                                    || mActivity instanceof NetconnectActivity
+                                    || mActivity instanceof NetSearchResultActivity
+                                    || mActivity instanceof CourseLevelOneActivity
+                                    || mActivity instanceof CourseLevelTwoActivity
+                                    || mActivity instanceof CourseLevelThreeActivity
+                                    || mActivity instanceof CourseLevelFourActivity
+                                    || mActivity instanceof CourseLevelFiveActivity
+                                    || mActivity instanceof CourseLevelSixActivity
+                                    || mActivity instanceof CourseLevelSevenActivity
+                                    || mActivity instanceof CourseLevelEightActivity
+                                    || mActivity instanceof CourseLevelNineActivity
+                                    || mActivity instanceof CourseLevelTenActivity
                             )) {
                                 return;
                             }
-                            if(dialog != null){
+                            if (dialog != null) {
                                 dialog.dismiss();
                                 dialog = null;
                             }
-                            if(AppManager.getInstance().currentActivity() instanceof NetconnectActivity || AppManager.getInstance().currentActivity()instanceof NetSearchResultActivity){
+                            if (AppManager.getInstance().currentActivity() instanceof NetconnectActivity || AppManager.getInstance().currentActivity() instanceof NetSearchResultActivity) {
                                 AppManager.getInstance().finishActivity();
                                 return;
                             }
 
                             showBluetoothDisconnect();
-                        }else {
+                        } else {
                             UbtLog.d(TAG, "onLostBtCoon " + "  为空");
                         }
                     }
                 });
             }
-        }else if(event.getEvent()== RobotEvent.Event.CONNECT_SUCCESS){
-            UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 1");
-            if(!MainUiBtHelper.getInstance(getContext()).isLostCoon()){
-                UbtLog.d(TAG,"mainactivity CONNECT_SUCCESS 2");
+        } else if (event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS) {
+            UbtLog.d(TAG, "mainactivity CONNECT_SUCCESS 1");
+            if (!MainUiBtHelper.getInstance(getContext()).isLostCoon()) {
+                UbtLog.d(TAG, "mainactivity CONNECT_SUCCESS 2");
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
                 looperThread.send(createMessage(APP_BLUETOOTH_CONNECTED));
 
@@ -601,7 +613,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     }
 
-    void showBluetoothDisconnect(){
+    void showBluetoothDisconnect() {
         dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
                 .setTitle("提示")
                 .setMsg("蓝牙连接断开，请重新连接")
@@ -625,8 +637,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 100 ){
-            if(isBtConnect !=isBulueToothConnected()) {
+        if (requestCode == 100) {
+            if (isBtConnect != isBulueToothConnected()) {
                 if (isBulueToothConnected()) {
                     looperThread.send(createMessage(APP_BLUETOOTH_CONNECTED));
                 }
@@ -637,8 +649,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         UbtLog.d(TAG, "X ,Y  " + (event.getX() + "," + event.getY()));
-        mCurrentTouchTime=System.currentTimeMillis();
-        if(System.currentTimeMillis()-mCurrentTouchTime<noOperationTimeout) {
+        mCurrentTouchTime = System.currentTimeMillis();
+        if (System.currentTimeMillis() - mCurrentTouchTime < noOperationTimeout) {
             hiddenBuddleTextView();
         }
         return super.onTouchEvent(event);
@@ -662,18 +674,19 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             frameAnimation.setOneShot(true);
             if (!frameAnimation.isRunning()) {
                 frameAnimation.start();
-                 checkIfAnimationDone(frameAnimation);
+                checkIfAnimationDone(frameAnimation);
             } else {
                 UbtLog.d(TAG, "CURRENT ANIMAITON IS RUNNING, SO DONOT EXECUTE " + value);
             }
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
 
     }
-    private void showCartoonAction_performance(final int value ){
-        if(animation_running&&CURRENT_ACTION_NAME==value){
-            UbtLog.d(TAG,"animation is execution");
+
+    private void showCartoonAction_performance(final int value) {
+        if (animation_running && CURRENT_ACTION_NAME == value) {
+            UbtLog.d(TAG, "animation is execution");
             return;
         }
         frameAnimationPro = new FrameAnimation(cartoonAction, getCartoonRes(value), CARTOON_FRAME_INTERVAL, false);
@@ -681,93 +694,96 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             @Override
             public void onAnimationStart() {
                 UbtLog.d(TAG, "start");
-                animation_running=true;
+                animation_running = true;
             }
+
             @Override
             public void onAnimationEnd() {
                 UbtLog.d(TAG, "end");
-                animation_running=false;
+                animation_running = false;
             }
+
             @Override
             public void onAnimationRepeat() {
                 UbtLog.d(TAG, "repeat");
                 frameAnimationPro.pauseAnimation();
             }
         });
-        CURRENT_ACTION_NAME=value;
+        CURRENT_ACTION_NAME = value;
     }
+
     @Override
-    public void showCartoonAction(final int value ){
-        if (ANIMAITONSOLUTIONOOM&cartoon_enable) {
+    public void showCartoonAction(final int value) {
+        if (ANIMAITONSOLUTIONOOM & cartoon_enable) {
             showCartoonAction_performance(value);
         } else {
             //Some time OOM BUG
-           // showCartoonAction_original(value);
+            // showCartoonAction_original(value);
         }
     }
 
-    public int[] getCartoonRes(int value ){
-        String actionName="";
-        TypedArray typedArray=null;
-        int[] resId={0};
+    public int[] getCartoonRes(int value) {
+        String actionName = "";
+        TypedArray typedArray = null;
+        int[] resId = {0};
         switch (value) {
             case cartoon_action_enjoy:
                 typedArray = getResources().obtainTypedArray(R.array.enjoy);
-                actionName="enjoy";
+                actionName = "enjoy";
                 break;
             case cartoon_action_fall:
                 typedArray = getResources().obtainTypedArray(R.array.fall);
-                actionName="fall";
+                actionName = "fall";
                 break;
             case cartoon_action_greeting:
                 typedArray = getResources().obtainTypedArray(R.array.greetting);
-                actionName="greetting";
+                actionName = "greetting";
                 break;
             case cartoon_action_hand_stand:
                 typedArray = getResources().obtainTypedArray(R.array.hand_stand);
-                actionName="hand_stand";
+                actionName = "hand_stand";
                 break;
             case cartoon_action_hand_stand_reverse:
                 typedArray = getResources().obtainTypedArray(R.array.hand_stand_reverse);
-                actionName="hand_stand_reverse";
+                actionName = "hand_stand_reverse";
                 break;
             case cartoon_action_smile:
                 typedArray = getResources().obtainTypedArray(R.array.smile);
-                actionName="smile";
+                actionName = "smile";
                 break;
             case cartoon_action_squat:
                 typedArray = getResources().obtainTypedArray(R.array.squat);
-                actionName="squat";
+                actionName = "squat";
                 break;
             case cartoon_aciton_squat_reverse:
                 typedArray = getResources().obtainTypedArray(R.array.squat_reverse);
-                actionName="squat_reverse";
+                actionName = "squat_reverse";
                 break;
             case cartoon_action_shiver:
                 typedArray = getResources().obtainTypedArray(R.array.shiver);
-                actionName="shiver";
+                actionName = "shiver";
                 break;
             case cartoon_action_swing_left_hand:
                 typedArray = getResources().obtainTypedArray(R.array.swing_lefthand);
-                actionName="left_hand";
+                actionName = "left_hand";
                 break;
             case cartoon_action_swing_left_leg:
                 typedArray = getResources().obtainTypedArray(R.array.swing_leftleg);
-                actionName="left_leg";
+                actionName = "left_leg";
                 break;
             case cartoon_action_swing_right_hand:
                 typedArray = getResources().obtainTypedArray(R.array.swing_righthand);
-                actionName="right_hand";
+                actionName = "right_hand";
                 break;
             case cartoon_action_swing_right_leg:
                 typedArray = getResources().obtainTypedArray(R.array.swing_rightleg);
-                actionName="right_leg";
+                actionName = "right_leg";
                 break;
             default:
                 break;
         }
         UbtLog.d(TAG, "ACTIO NAME IS " + actionName);
-        if(typedArray!=null) {
+        if (typedArray != null) {
             Cartoon_animation_last_execute = value;
             if (value == cartoon_aciton_squat_reverse || value == cartoon_action_sleep) {
                 hiddenCartoonTouchView();
@@ -775,63 +791,65 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 showCartoonTouchView();
             }
             int len = typedArray.length();
-           resId = new int[len];
+            resId = new int[len];
             for (int i = 0; i < len; i++) {
                 resId[i] = typedArray.getResourceId(i, -1);
             }
             typedArray.recycle();
             return resId;
-        }else {
-           return resId ;
+        } else {
+            return resId;
         }
 
     }
 
-    private void checkIfAnimationDone(AnimationDrawable anim){
+    private void checkIfAnimationDone(AnimationDrawable anim) {
         final AnimationDrawable mAnimation = anim;
         int timeBetweenChecks = mAnimation.getDuration(0);
         Handler h = new Handler();
-        h.postDelayed(new Runnable(){
-            public void run(){
-                if (mAnimation.getCurrent() != mAnimation.getFrame(mAnimation.getNumberOfFrames() - 1)){
+        h.postDelayed(new Runnable() {
+            public void run() {
+                if (mAnimation.getCurrent() != mAnimation.getFrame(mAnimation.getNumberOfFrames() - 1)) {
                     checkIfAnimationDone(mAnimation);
                     //UbtLog.d(TAG, "stop the animation recover");
-                } else{
-                   // UbtLog.d(TAG, "stop the animation");
+                } else {
+                    // UbtLog.d(TAG, "stop the animation");
                     mAnimation.stop();
                 }
             }
         }, timeBetweenChecks);
-    };
+    }
+
+    ;
 
     public void buddleTextAsynchronousTask() {
         stopBuddleTextAsynchronousTask();
-        mBuddleTextTimer= new Timer();
-        mBuddleTextTimeOutTask= new TimerTask() {
+        mBuddleTextTimer = new Timer();
+        mBuddleTextTimeOutTask = new TimerTask() {
             @Override
             public void run() {
-                if(System.currentTimeMillis()-mCurrentTouchTime>noOperationTimeout) {
+                if (System.currentTimeMillis() - mCurrentTouchTime > noOperationTimeout) {
                     if (looperThread != null) {
                         looperThread.post(new Runnable() {
                             public void run() {
                                 try {
                                     // boolean isUiThread = Looper.getMainLooper().getThread() == Thread.currentThread();
                                     //UbtLog.d(TAG,"current random show ? "+APP_CURRENT_STATUS);
-                                   if(APP_CURRENT_STATUS!=APP_LAUNCH_STATUS&&APP_CURRENT_STATUS!=APP_BLUETOOTH_CLOSE) {
-                                       runOnUiThread(new Runnable() {
-                                           @Override
-                                           public void run() {
-                                               randomBuddleText();
-                                           }
-                                       });
-                                   }else {
-                                       runOnUiThread(new Runnable() {
-                                           @Override
-                                           public void run() {
-                                               showBuddleText(getString(R.string.buddle_text_init_status));
-                                           }
-                                       });
-                                   }
+                                    if (APP_CURRENT_STATUS != APP_LAUNCH_STATUS && APP_CURRENT_STATUS != APP_BLUETOOTH_CLOSE) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                randomBuddleText();
+                                            }
+                                        });
+                                    } else {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                showBuddleText(getString(R.string.buddle_text_init_status));
+                                            }
+                                        });
+                                    }
                                 } catch (Exception e) {
                                     // TODO Auto-generated catch block
                                     e.printStackTrace();
@@ -842,39 +860,43 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
             }
         };
-       mBuddleTextTimer.schedule(mBuddleTextTimeOutTask, 0, buddleTextTimeout); //execute in every 50000 ms
+        mBuddleTextTimer.schedule(mBuddleTextTimeOutTask, 0, buddleTextTimeout); //execute in every 50000 ms
     }
-   private void stopBuddleTextAsynchronousTask(){
-       if (mBuddleTextTimeOutTask != null){
-           mBuddleTextTimeOutTask.cancel();
-           mBuddleTextTimeOutTask = null;
-           mBuddleTextTimer.purge();
-           mBuddleTextTimer=null;
-       }
-   }
+
+    private void stopBuddleTextAsynchronousTask() {
+        if (mBuddleTextTimeOutTask != null) {
+            mBuddleTextTimeOutTask.cancel();
+            mBuddleTextTimeOutTask = null;
+            mBuddleTextTimer.purge();
+            mBuddleTextTimer = null;
+        }
+    }
+
     public void chargeAsynchronousTask() {
-       mChargetimer= new Timer();
-        mChargingTimeoutTask= new TimerTask() {
+        mChargetimer = new Timer();
+        mChargingTimeoutTask = new TimerTask() {
             @Override
             public void run() {
                 looperThread.post(new Runnable() {
                     public void run() {
                         try {
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
-                                   if(IS_CHARGING) {
-                                       if(charging!=null) {
-                                           charging.setBackground(getDrawableRes("charging"));
-                                           chargingDot.setBackground(getDrawableRes("charging_dot"));
-                                       }
-                                   }
+                                @Override
+                                public void run() {
+                                    if (IS_CHARGING) {
+                                        if (charging != null) {
+                                            charging.setBackground(getDrawableRes("charging"));
+                                            chargingDot.setBackground(getDrawableRes("charging_dot"));
+                                        }
+                                    }
                                 }
                             });
                             Thread.sleep(charging_shrink_interval);
                             runOnUiThread(new Runnable() {
-                                @Override public void run() {
-                                    if(IS_CHARGING) {
-                                        if(charging!=null) {
+                                @Override
+                                public void run() {
+                                    if (IS_CHARGING) {
+                                        if (charging != null) {
                                             charging.setBackground(getDrawableRes("charging"));
                                             chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
                                         }
@@ -890,24 +912,26 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 });
             }
         };
-       mChargetimer.schedule(mChargingTimeoutTask, 0, chargeShrinkTimeout); //execute in every 50000 ms
+        mChargetimer.schedule(mChargingTimeoutTask, 0, chargeShrinkTimeout); //execute in every 50000 ms
     }
-    private void stopchargeAsynchronousTask(){
-        if (mChargingTimeoutTask != null){
+
+    private void stopchargeAsynchronousTask() {
+        if (mChargingTimeoutTask != null) {
             mChargingTimeoutTask.cancel();
-            mChargingTimeoutTask= null;
+            mChargingTimeoutTask = null;
             mChargetimer.purge();
-            mChargetimer=null;
+            mChargetimer = null;
         }
 
     }
 
     private void showBuddleText(String text) {
-        if(buddleText!=null) {
+        if (buddleText != null) {
             buddleText.setText("\u3000" + text);
             showBuddleTextView();
         }
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -932,22 +956,22 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     public void onGetRobotInfo(int result, MyRobotModel model) {
-        UbtLog.d(TAG, "onGetRobotInfo == " );
+        UbtLog.d(TAG, "onGetRobotInfo == ");
         com.ubt.alpha1e.base.loading.LoadingDialog.dismiss(MainActivity.this);
-        if(result == 0){
+        if (result == 0) {
             ToastUtils.showShort("获取机器人信息失败！");
-        }else if(result == 1){
-            UbtLog.d(TAG, "账号已经绑定 " );
+        } else if (result == 1) {
+            UbtLog.d(TAG, "账号已经绑定 ");
             BehaviorHabitsActivity.LaunchActivity(this);
-        }else if(result == 2){
-            UbtLog.d(TAG, "账户没有绑定 " );
+        } else if (result == 2) {
+            UbtLog.d(TAG, "账户没有绑定 ");
             habitAdviceGotoBindDialog();
         }
     }
 
 
     //若要使用此功能，需先绑定机器人！
-    public void habitAdviceGotoBindDialog(){
+    public void habitAdviceGotoBindDialog() {
         new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
                 .setTitle("提示")
                 .setMsg("若要使用此功能，需先绑定机器人！")
@@ -956,12 +980,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     @Override
                     public void onClick(View view) {
                         UbtLog.d(TAG, "一键绑定 ");
-                        if(MainUiBtHelper.getInstance(getContext()).isLostCoon()){
-                            UbtLog.d(TAG, "没有连接蓝牙 " );
-                            Intent intent = new Intent(MainActivity.this,BluetoothandnetconnectstateActivity.class);
+                        if (MainUiBtHelper.getInstance(getContext()).isLostCoon()) {
+                            UbtLog.d(TAG, "没有连接蓝牙 ");
+                            Intent intent = new Intent(MainActivity.this, BluetoothandnetconnectstateActivity.class);
                             startActivity(intent);
-                        }else {
-                            UbtLog.d(TAG, "连接了蓝牙 " );
+                        } else {
+                            UbtLog.d(TAG, "连接了蓝牙 ");
                             gotoBind();
                         }
                     }
@@ -975,11 +999,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
 
-    RobotBindingDialog robotBindingDialog = null ;
-    //一键绑定
-    public void gotoBind(){
+    RobotBindingDialog robotBindingDialog = null;
 
-        if(robotBindingDialog == null){
+    //一键绑定
+    public void gotoBind() {
+
+        if (robotBindingDialog == null) {
             robotBindingDialog = new RobotBindingDialog(AppManager.getInstance().currentActivity())
                     .builder()
                     .setCancelable(true);
@@ -990,7 +1015,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         gotoBindRequest.setSystemType("3");
 
         String url = HttpEntity.ROBOT_BIND;
-        doRequestBind(url,gotoBindRequest,ROBOT_GOTO_BIND);
+        doRequestBind(url, gotoBindRequest, ROBOT_GOTO_BIND);
 
     }
 
@@ -1003,11 +1028,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "doRequestCheckIsBind onError:" + e.getMessage());
-                switch (id){
+                switch (id) {
                     case ROBOT_GOTO_BIND:
-                        if(robotBindingDialog != null && robotBindingDialog.isShowing()){
+                        if (robotBindingDialog != null && robotBindingDialog.isShowing()) {
                             robotBindingDialog.display();
-                            robotBindingDialog = null ;
+                            robotBindingDialog = null;
                         }
                         adviceBindFail("");
                         break;
@@ -1018,30 +1043,31 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
             @Override
             public void onResponse(String response, int id) {
-                UbtLog.d(TAG,"doRequestCheckIsBind response = " + response);
+                UbtLog.d(TAG, "doRequestCheckIsBind response = " + response);
 //				BaseResponseModel<BaseModel> baseResponseModel = GsonImpl.get().toObject(response,new TypeToken<BaseResponseModel<BaseModel>>() {}.getType());
                 BaseResponseModel<String> baseResponseModel = GsonImpl.get().toObject(response,
-                        new TypeToken<BaseResponseModel<String>>(){}.getType());
-                switch (id){
+                        new TypeToken<BaseResponseModel<String>>() {
+                        }.getType());
+                switch (id) {
                     case ROBOT_GOTO_BIND:
-                        if(robotBindingDialog != null && robotBindingDialog.isShowing()){
+                        if (robotBindingDialog != null && robotBindingDialog.isShowing()) {
                             robotBindingDialog.display();
-                            robotBindingDialog = null ;
+                            robotBindingDialog = null;
                         }
                         UbtLog.d(TAG, "status:" + baseResponseModel.status);
                         UbtLog.d(TAG, "info:" + baseResponseModel.info);
-                        if(baseResponseModel.status){
-                            UbtLog.d(TAG, "绑定成功" );
-                            if(baseResponseModel.models == null || baseResponseModel.models.equals("")){
+                        if (baseResponseModel.status) {
+                            UbtLog.d(TAG, "绑定成功");
+                            if (baseResponseModel.models == null || baseResponseModel.models.equals("")) {
                                 adviceBindSuccess();
-                            }else if(baseResponseModel.models != null && baseResponseModel.models.equals("1002")){
+                            } else if (baseResponseModel.models != null && baseResponseModel.models.equals("1002")) {
                                 adviceBindFail("机器人已被他人绑定！");
-                            }else {
+                            } else {
                                 adviceBindFail("");
                             }
-                        }else {
+                        } else {
                             adviceBindFail("");
-                            UbtLog.d(TAG, "绑定失败" );
+                            UbtLog.d(TAG, "绑定失败");
                         }
                         break;
 
@@ -1053,7 +1079,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
     //绑定成功！
-    public void adviceBindSuccess(){
+    public void adviceBindSuccess() {
         Drawable img_ok;
         Resources res1 = getResources();
         img_ok = res1.getDrawable(R.drawable.ic_bind_success);
@@ -1071,8 +1097,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 .setNoTitleLayout()
                 .show();
     }
+
     //绑定失败！
-    public void adviceBindFail(String reason){
+    public void adviceBindFail(String reason) {
         Drawable img_off;
         Resources res2 = getResources();
         img_off = res2.getDrawable(R.drawable.ic_bind_fail);
@@ -1134,7 +1161,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
 
-
     public static class MessageEvent {
         /* Additional fields if needed */
         public final String message;
@@ -1153,36 +1179,36 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //            if(!mMessage.getString("mac").equals(current_mac_address)){
 //                app_bluetooth_conencted_executed=false;
 //            }
-            String mParam=mMessage.getString("param");
+            String mParam = mMessage.getString("param");
             final byte[] mParams = Base64.decode(mParam, Base64.DEFAULT);
-            current_mac_address=mMessage.getString("mac");
+            current_mac_address = mMessage.getString("mac");
             int mCmd = Integer.parseInt(mMessage.getString("cmd"));
-            if(mCmd<0){
-                mCmd=255+mCmd;
+            if (mCmd < 0) {
+                mCmd = 255 + mCmd;
             }
-           //UbtLog.d(TAG,"CMD IS  "+mCmd);
-          if(mCmd==ConstValue.DV_TAP_HEAD) {
-              //looperThread.send(createMessage(ROBOT_HIT_HEAD));
-          }else if(mCmd==ConstValue.DV_6D_GESTURE){
-               UbtLog.d(TAG,"DV_6D_GESTURE index[0]:"+mParams[0]);
-                   if (mParams[0] == ROBOT_HEAD_UP_STAND) {
-                       looperThread.send(createMessage(ROBOT_default_gesture));
-                   } else if (mParams[0] == ROBOT_HEAD_DOWN) {
-                       looperThread.send(createMessage(ROBOT_hand_stand));
-                   } else if (mParams[0] == ROBOT_LEFT_SHOULDER_SLEEP || mParams[0] == ROBOT_RIGHT_SHOULDER_SLEEP || mParams[0] == ROBOT_HEAD_UP_SLEEP || mParams[0] == ROBOT_HEAD_DOWN_SLEEP) {
-                       looperThread.send(createMessage(ROBOT_fall));
-                   }
-          }else if (mCmd == ConstValue.DV_SLEEP_EVENT) {
-                 UbtLog.d(TAG, "ROBOT SLEEP EVENT");
+            //UbtLog.d(TAG,"CMD IS  "+mCmd);
+            if (mCmd == ConstValue.DV_TAP_HEAD) {
+                //looperThread.send(createMessage(ROBOT_HIT_HEAD));
+            } else if (mCmd == ConstValue.DV_6D_GESTURE) {
+                UbtLog.d(TAG, "DV_6D_GESTURE index[0]:" + mParams[0]);
+                if (mParams[0] == ROBOT_HEAD_UP_STAND) {
+                    looperThread.send(createMessage(ROBOT_default_gesture));
+                } else if (mParams[0] == ROBOT_HEAD_DOWN) {
+                    looperThread.send(createMessage(ROBOT_hand_stand));
+                } else if (mParams[0] == ROBOT_LEFT_SHOULDER_SLEEP || mParams[0] == ROBOT_RIGHT_SHOULDER_SLEEP || mParams[0] == ROBOT_HEAD_UP_SLEEP || mParams[0] == ROBOT_HEAD_DOWN_SLEEP) {
+                    looperThread.send(createMessage(ROBOT_fall));
+                }
+            } else if (mCmd == ConstValue.DV_SLEEP_EVENT) {
+                UbtLog.d(TAG, "ROBOT SLEEP EVENT");
                 looperThread.send(createMessage(ROBOT_SLEEP_EVENT));
             } else if (mCmd == ConstValue.DV_LOW_BATTERY) {
-              UbtLog.d(TAG, "ROBOT LOW BATTERY");
-              UbtLog.d(TAG,"LOW BATTERY +"+mParams[0]);
-             // lowBatteryFunction(mParams[0]);
+                UbtLog.d(TAG, "ROBOT LOW BATTERY");
+                UbtLog.d(TAG, "LOW BATTERY +" + mParams[0]);
+                // lowBatteryFunction(mParams[0]);
             } else if (mCmd == ConstValue.DV_READ_BATTERY) {
                 batteryUiShow(mParam);
-            } else if(mCmd==ConstValue.DV_COMMON_COMMAND) {
-              UbtLog.d(TAG,"DV COMMON COMMAND [0]: +"+mParams[0] +"index [1]: "+mParams[1]+"index [2]: " +mParams[2]);
+            } else if (mCmd == ConstValue.DV_COMMON_COMMAND) {
+                UbtLog.d(TAG, "DV COMMON COMMAND [0]: +" + mParams[0] + "index [1]: " + mParams[1] + "index [2]: " + mParams[2]);
 //              if(mParams[0]==DV_COMMON_COMMAND_POWEROFF_ZERO){
 //                  if(mParams[1]==DV_COMMON_COMMAND_POWEROFF_ONE){
 //                      if(mParams[2]==DV_COMMON_COMMAND_POWEROFF_TWO){
@@ -1190,24 +1216,24 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 //                      }
 //                  }
 //              }
-            }else if(mCmd==ConstValue.DV_CURRENT_PLAY_NAME){
-              try {
-                String actionName=new String(mParams, 1, mParams.length-1, "utf-8");
-                UbtLog.d(TAG,"ACTION NAME IS "+actionName);
-                  if(APP_CURRENT_STATUS==ROBOT_SLEEP_EVENT) {
-                      if (actionName.contains(WakeUpActionName)) {
-                          looperThread.send(createMessage(ROBOT_WAKEUP_ACTION));
-                          wakeUpHiddenBuddle();
-                      }
-                  }
-              }catch(UnsupportedEncodingException e){
-                  e.printStackTrace();
-              }
-          } else if(mCmd==ConstValue.DV_VOICE_WAIT){
-             wakeUpHiddenBuddle();
-          } else{
-            //  UbtLog.d(TAG, "ROBOT OTHER SITUATION" + mCmd);
-          }
+            } else if (mCmd == ConstValue.DV_CURRENT_PLAY_NAME) {
+                try {
+                    String actionName = new String(mParams, 1, mParams.length - 1, "utf-8");
+                    UbtLog.d(TAG, "ACTION NAME IS " + actionName);
+                    if (APP_CURRENT_STATUS == ROBOT_SLEEP_EVENT) {
+                        if (actionName.contains(WakeUpActionName)) {
+                            looperThread.send(createMessage(ROBOT_WAKEUP_ACTION));
+                            wakeUpHiddenBuddle();
+                        }
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            } else if (mCmd == ConstValue.DV_VOICE_WAIT) {
+                wakeUpHiddenBuddle();
+            } else {
+                //  UbtLog.d(TAG, "ROBOT OTHER SITUATION" + mCmd);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1227,8 +1253,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if (mParam < powerThreshold[powerThreshold.length / 2]) {
             for (int j = 0; j < powerThreshold.length / 2; j++) {
                 if (mParam < powerThreshold[j + 1] && mParam > powerThreshold[j]) {
-                        power_index = j;
-                        break;
+                    power_index = j;
+                    break;
                 }
                 if (mParam == powerThreshold[j]) {
                     power_index = j;
@@ -1237,7 +1263,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             }
         } else {
             for (int j = powerThreshold.length / 2; j < powerThreshold.length; j++) {
-                if (powerThreshold[j] < mParam && mParam < powerThreshold[j+1]) {
+                if (powerThreshold[j] < mParam && mParam < powerThreshold[j + 1]) {
                     power_index = j;
                     break;
                 }
@@ -1247,11 +1273,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
             }
         }
-       // UbtLog.d(TAG, "Current power is " + power_index);
-        if(cartoonBodyTouchBg!=null) {
-            if(mParam==LOW_BATTERY_TWENTY_THRESHOLD){
-                cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[power_index-1]));
-            }else {
+        // UbtLog.d(TAG, "Current power is " + power_index);
+        if (cartoonBodyTouchBg != null) {
+            if (mParam == LOW_BATTERY_TWENTY_THRESHOLD) {
+                cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[power_index - 1]));
+            } else {
                 cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[power_index]));
             }
         }
@@ -1295,10 +1321,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         return init_y * screen_height / init_screen_height;
     }
 
-   private Message createMessage(byte cmd) {
+    private Message createMessage(byte cmd) {
         Message message = new Message();
         Bundle bundle = new Bundle();
-        bundle.putByte(STATUS_MACHINE,cmd);
+        bundle.putByte(STATUS_MACHINE, cmd);
         message.setData(bundle);
         return message;
     }
@@ -1307,120 +1333,120 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public void handleMessage(Bundle bundle) {
 
-      Byte status= bundle.getByte(STATUS_MACHINE);
-        UbtLog.d(TAG,"STATE MACHINE IS "+status);
-        switch (status){
-           case APP_LAUNCH_STATUS:  //启动应用,虚拟形象睡觉姿势
-             runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       showBuddleText(getString(R.string.buddle_text_init_status));
-                       buddleTextAsynchronousTask();
-                       cartoonAction.setBackgroundResource(R.drawable.sleep21);
-                       hiddenCartoonTouchView();
-                       recoveryBatteryUi();
-                       hiddenBattryUi();
-                       //showCartoonAction(cartoon_action_sleep);
-                   }
-               });
-               break;
-           case APP_BLUETOOTH_CONNECTED: //蓝牙连接成功,虚拟形象站立姿势
-               UbtLog.d(TAG,"APP_CONNECTED"+status);
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       if(isNetworkConnect){
-                           hiddenDisconnectIcon();
-                       }
-                       if(!cartoon_enable){
-                           cartoonAction.setBackgroundResource(R.drawable.main_robot);
-                       }
-                       showCartoonAction(cartoon_action_squat);
-                       showBuddleText(getString(R.string.buddle_bluetoothConnection));
-                       showBattryUi();
-                   }
-               });
-               break;
-           case APP_BLUETOOTH_CLOSE: //手机端，主动关闭蓝牙，虚拟形象睡觉姿势
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       showDisconnectIcon();
-                       stopchargeAsynchronousTask();
-                       stopBuddleTextAsynchronousTask();
+        Byte status = bundle.getByte(STATUS_MACHINE);
+        UbtLog.d(TAG, "STATE MACHINE IS " + status);
+        switch (status) {
+            case APP_LAUNCH_STATUS:  //启动应用,虚拟形象睡觉姿势
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                         showBuddleText(getString(R.string.buddle_text_init_status));
-                       //showCartoonAction(cartoon_action_sleep);
-                       cartoonAction.setBackgroundResource(R.drawable.sleep21);
-                       recoveryBatteryUi();
-                       hiddenBattryUi();
-                   }
-               });
-               break;
-           case ROBOT_LOW_POWER_LESS_TWENTY_STATUS: //低电量的时候，小于百分之20，弹框处理
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                      // new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_TWENTY_THRESHOLD).builder().show();
-                   }
-               });
-               break;
-           case ROBOT_LOW_POWER_LESS_FIVE_STATUS:  //低电量的时候，小于百分之5，弹框，虚拟形象蹲下，气泡处理
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       showCartoonAction(cartoon_aciton_squat_reverse);
-                      // new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_FIVE_THRESHOLD).builder().show();
-                   }
-               });
-               for(int i=0;i<3;i++){
-                   runOnUiThread(new Runnable() {
-                       @Override
-                       public void run() {
-                           lowBatteryBuddleText();
-                       }
-                   });
-                   try {
-                       Thread.sleep(3000);
-                   }catch(InterruptedException e){
-                       e.printStackTrace();
-                   }
-               }
-               break;
-           case ROBOT_SLEEP_EVENT: //休眠执行蹲下动作
-               runOnUiThread(new Runnable() {
-               @Override
-               public void run() {
-                   showCartoonAction(cartoon_aciton_squat_reverse);
-               }
-           });
-               break;
-           case ROBOT_HIT_HEAD:  //该指令没有使用
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       showCartoonAction(cartoon_action_enjoy);
-                   }
-               });
-               break;
-           case ROBOT_WAKEUP_ACTION: //休眠后，虚拟形象站立
-               runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    showCartoonAction(cartoon_action_squat);
+                        buddleTextAsynchronousTask();
+                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
+                        hiddenCartoonTouchView();
+                        recoveryBatteryUi();
+                        hiddenBattryUi();
+                        //showCartoonAction(cartoon_action_sleep);
+                    }
+                });
+                break;
+            case APP_BLUETOOTH_CONNECTED: //蓝牙连接成功,虚拟形象站立姿势
+                UbtLog.d(TAG, "APP_CONNECTED" + status);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isNetworkConnect) {
+                            hiddenDisconnectIcon();
+                        }
+                        if (!cartoon_enable) {
+                            cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                        }
+                        showCartoonAction(cartoon_action_squat);
+                        showBuddleText(getString(R.string.buddle_bluetoothConnection));
+                        showBattryUi();
+                    }
+                });
+                break;
+            case APP_BLUETOOTH_CLOSE: //手机端，主动关闭蓝牙，虚拟形象睡觉姿势
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showDisconnectIcon();
+                        stopchargeAsynchronousTask();
+                        stopBuddleTextAsynchronousTask();
+                        showBuddleText(getString(R.string.buddle_text_init_status));
+                        //showCartoonAction(cartoon_action_sleep);
+                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
+                        recoveryBatteryUi();
+                        hiddenBattryUi();
+                    }
+                });
+                break;
+            case ROBOT_LOW_POWER_LESS_TWENTY_STATUS: //低电量的时候，小于百分之20，弹框处理
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_TWENTY_THRESHOLD).builder().show();
+                    }
+                });
+                break;
+            case ROBOT_LOW_POWER_LESS_FIVE_STATUS:  //低电量的时候，小于百分之5，弹框，虚拟形象蹲下，气泡处理
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showCartoonAction(cartoon_aciton_squat_reverse);
+                        // new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_FIVE_THRESHOLD).builder().show();
+                    }
+                });
+                for (int i = 0; i < 3; i++) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            lowBatteryBuddleText();
+                        }
+                    });
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            });
-            break;
-           case ROBOT_POWEROFF:  //该指令没有使用，通过蓝牙断开回调实现机器人关机的现象
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       showCartoonAction(cartoon_action_sleep);
-                       recoveryBatteryUi();
-                       showDisconnectIcon();
-                       stopchargeAsynchronousTask();
-                   }
-               });
-               break;
+                break;
+            case ROBOT_SLEEP_EVENT: //休眠执行蹲下动作
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showCartoonAction(cartoon_aciton_squat_reverse);
+                    }
+                });
+                break;
+            case ROBOT_HIT_HEAD:  //该指令没有使用
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showCartoonAction(cartoon_action_enjoy);
+                    }
+                });
+                break;
+            case ROBOT_WAKEUP_ACTION: //休眠后，虚拟形象站立
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showCartoonAction(cartoon_action_squat);
+                    }
+                });
+                break;
+            case ROBOT_POWEROFF:  //该指令没有使用，通过蓝牙断开回调实现机器人关机的现象
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showCartoonAction(cartoon_action_sleep);
+                        recoveryBatteryUi();
+                        showDisconnectIcon();
+                        stopchargeAsynchronousTask();
+                    }
+                });
+                break;
             case ROBOT_hand_stand: //机器人被翻转，虚拟形象翻转
                 runOnUiThread(new Runnable() {
                     @Override
@@ -1440,17 +1466,17 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case ROBOT_default_gesture:
                 runOnUiThread(new Runnable() {
                     @Override
-                          public void run(){
-                            cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                    public void run() {
+                        cartoonAction.setBackgroundResource(R.drawable.main_robot);
                     }
                 });
             case ROBOT_sleep_gesture:
                 runOnUiThread(new Runnable() {
                     @Override
-                    public void run(){
-                        if(cartoon_enable) {
+                    public void run() {
+                        if (cartoon_enable) {
                             cartoonAction.setBackgroundResource(R.drawable.squat60);
-                        }else {
+                        } else {
                             cartoonAction.setBackgroundResource(R.drawable.main_robot);
                         }
                     }
@@ -1459,114 +1485,118 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case ROBOT_CHARGING:
                 runOnUiThread(new Runnable() {
                     @Override
-                    public void run(){
-                        if(APP_CURRENT_STATUS!=ROBOT_SLEEP_EVENT) {
-                        // showCartoonAction(cartoon_action_squat);
-                        //站立
-                        cartoonAction.setBackgroundResource(R.drawable.main_robot);
-                    }else {
-                        //蹲下
-                         if(cartoon_enable) {
-                             cartoonAction.setBackgroundResource(R.drawable.squat60);
-                         }else {
-                             cartoonAction.setBackgroundResource(R.drawable.main_robot);
-                         }
+                    public void run() {
+                        if (APP_CURRENT_STATUS != ROBOT_SLEEP_EVENT) {
+                            // showCartoonAction(cartoon_action_squat);
+                            //站立
+                            cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                        } else {
+                            //蹲下
+                            if (cartoon_enable) {
+                                cartoonAction.setBackgroundResource(R.drawable.squat60);
+                            } else {
+                                cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                            }
+                        }
                     }
-                }
                 });
                 break;
-           default:
-               UbtLog.d(TAG,"NO SITUATION "+status);
-               break;
+            default:
+                UbtLog.d(TAG, "NO SITUATION " + status);
+                break;
 
-       }
-       APP_CURRENT_STATUS=status;
+        }
+        APP_CURRENT_STATUS = status;
     }
 
-  private void lowBatteryBuddleText(){
-      Random random = new Random();
-      UbtLog.i(TAG, "LOW_POWER_LESS_TWENTY:   ");
-      String[] arrayText = getResources().getStringArray(R.array.mainUi_buddle_lowpower);
-      int select = random.nextInt(arrayText.length);
-      String text = arrayText[select];
-      showBuddleText(text );
-  }
-  private void randomBuddleText(){
-      Random random = new Random();
-     // UbtLog.i(TAG, "randomBuddleText :   " + buddleTextTimeout + "main thread " );
-      String[] arrayText = getResources().getStringArray(R.array.mainUi_buddle_text);
-      int select = random.nextInt(arrayText.length);
-      final String text = arrayText[select];
-      showBuddleText(text );
-  }
-  private void batteryUiShow(String param){
-      final byte[] mParams = Base64.decode(param, Base64.DEFAULT);
-      for (int i = 0; i < mParams.length; i++) {
-        // UbtLog.d(TAG, "index " + i + "value :" + mParams[i]);
-          if (mParams[index_two_charging] == ROBOT_CHARGING_STATUS&&mParams[index_two_charging]!=mChargeValue) {
-              IS_CHARGING=true;
-              UbtLog.d(TAG, " IS CHARGING ");
-              looperThread.send(createMessage(ROBOT_CHARGING));
-              recoveryLowBatteryFlag();
-              chargeAsynchronousTask();
-          } else if(mParams[index_two_charging]==ROBOT_UNCHARGE_STATUS&&mParams[index_two_charging]!=mChargeValue) {
-              IS_CHARGING=false;
-              stopchargeAsynchronousTask();
-              UbtLog.d(TAG,"NOT CHARGING");
-              runOnUiThread(new Runnable() {
-                  @Override
-                  public void run() {
-                      if(charging!=null) {
-                          charging.setBackground(getDrawableRes("charging_normal"));
-                          chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
-                      }
-                  }
-              });
-          }else if(mParams[index_two_charging]==ROBOT_CHARGING_ENOUGH_STATUS&&mParams[index_two_charging]!=mChargeValue){
-              stopchargeAsynchronousTask();
-              UbtLog.d(TAG,"BATTERY ENOUGH AND PLUG IN CHARGING");
-              runOnUiThread(new Runnable() {
-                  @Override
-                  public void run() {
-                      if(charging!=null) {
-                          charging.setBackground(getDrawableRes("charging"));
-                          chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
-                      }
-                  }
-              });
+    private void lowBatteryBuddleText() {
+        Random random = new Random();
+        UbtLog.i(TAG, "LOW_POWER_LESS_TWENTY:   ");
+        String[] arrayText = getResources().getStringArray(R.array.mainUi_buddle_lowpower);
+        int select = random.nextInt(arrayText.length);
+        String text = arrayText[select];
+        showBuddleText(text);
+    }
 
-          }
-          runOnUiThread(new Runnable(){
-              @Override
-              public void run() {
-                  powerStatusUpdate(mParams[index_three_powerPercent]);
-                  if(mParams[index_two_charging]==0){
-                      lowBatteryFunction(mParams[index_three_powerPercent]);
-                  }
-              }
-          });
-          mChargeValue=mParams[index_two_charging];
-          mPowerValue=mParams[index_three_powerPercent];
+    private void randomBuddleText() {
+        Random random = new Random();
+        // UbtLog.i(TAG, "randomBuddleText :   " + buddleTextTimeout + "main thread " );
+        String[] arrayText = getResources().getStringArray(R.array.mainUi_buddle_text);
+        int select = random.nextInt(arrayText.length);
+        final String text = arrayText[select];
+        showBuddleText(text);
+    }
 
-      }
-  }
-   private void recoveryLowBatteryFlag(){
-       ENTER_LOW_BATTERY_TWENTY=false;
-       ENTER_LOW_BATTERY_FIVE=false;
-   }
+    private void batteryUiShow(String param) {
+        final byte[] mParams = Base64.decode(param, Base64.DEFAULT);
+        for (int i = 0; i < mParams.length; i++) {
+            // UbtLog.d(TAG, "index " + i + "value :" + mParams[i]);
+            if (mParams[index_two_charging] == ROBOT_CHARGING_STATUS && mParams[index_two_charging] != mChargeValue) {
+                IS_CHARGING = true;
+                UbtLog.d(TAG, " IS CHARGING ");
+                looperThread.send(createMessage(ROBOT_CHARGING));
+                recoveryLowBatteryFlag();
+                chargeAsynchronousTask();
+            } else if (mParams[index_two_charging] == ROBOT_UNCHARGE_STATUS && mParams[index_two_charging] != mChargeValue) {
+                IS_CHARGING = false;
+                stopchargeAsynchronousTask();
+                UbtLog.d(TAG, "NOT CHARGING");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (charging != null) {
+                            charging.setBackground(getDrawableRes("charging_normal"));
+                            chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+                        }
+                    }
+                });
+            } else if (mParams[index_two_charging] == ROBOT_CHARGING_ENOUGH_STATUS && mParams[index_two_charging] != mChargeValue) {
+                stopchargeAsynchronousTask();
+                UbtLog.d(TAG, "BATTERY ENOUGH AND PLUG IN CHARGING");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (charging != null) {
+                            charging.setBackground(getDrawableRes("charging"));
+                            chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+                        }
+                    }
+                });
 
-   private void hiddenCartoonTouchView(){
-       if(cartoonChest!=null) {
-           cartoonChest.setVisibility(View.INVISIBLE);
-           cartoonHead.setVisibility(View.INVISIBLE);
-           cartoonLeftHand.setVisibility(View.INVISIBLE);
-           cartoonRightHand.setVisibility(View.INVISIBLE);
-           cartoonLeftLeg.setVisibility(View.INVISIBLE);
-           cartoonRightLeg.setVisibility(View.INVISIBLE);
-       }
-   }
-    private void showCartoonTouchView(){
-        if(cartoonChest!=null) {
+            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    powerStatusUpdate(mParams[index_three_powerPercent]);
+                    if (mParams[index_two_charging] == 0) {
+                        lowBatteryFunction(mParams[index_three_powerPercent]);
+                    }
+                }
+            });
+            mChargeValue = mParams[index_two_charging];
+            mPowerValue = mParams[index_three_powerPercent];
+
+        }
+    }
+
+    private void recoveryLowBatteryFlag() {
+        ENTER_LOW_BATTERY_TWENTY = false;
+        ENTER_LOW_BATTERY_FIVE = false;
+    }
+
+    private void hiddenCartoonTouchView() {
+        if (cartoonChest != null) {
+            cartoonChest.setVisibility(View.INVISIBLE);
+            cartoonHead.setVisibility(View.INVISIBLE);
+            cartoonLeftHand.setVisibility(View.INVISIBLE);
+            cartoonRightHand.setVisibility(View.INVISIBLE);
+            cartoonLeftLeg.setVisibility(View.INVISIBLE);
+            cartoonRightLeg.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void showCartoonTouchView() {
+        if (cartoonChest != null) {
             cartoonChest.setVisibility(View.VISIBLE);
             cartoonHead.setVisibility(View.VISIBLE);
             cartoonLeftHand.setVisibility(View.VISIBLE);
@@ -1575,174 +1605,183 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             cartoonRightLeg.setVisibility(View.VISIBLE);
         }
     }
-    private void lowBatteryFunction(int currentValue){
-        if(currentValue==(LOW_BATTERY_TWENTY_THRESHOLD)){//ROBOT END BATTERY CAPACITY <=5
-            if(!ENTER_LOW_BATTERY_TWENTY) {
+
+    private void lowBatteryFunction(int currentValue) {
+        if (currentValue == (LOW_BATTERY_TWENTY_THRESHOLD)) {//ROBOT END BATTERY CAPACITY <=5
+            if (!ENTER_LOW_BATTERY_TWENTY) {
                 looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_TWENTY_STATUS));
-                ENTER_LOW_BATTERY_TWENTY=true;
+                ENTER_LOW_BATTERY_TWENTY = true;
             }
-        }else if(currentValue==(LOW_BATTERY_FIVE_THRESHOLD)){//ROBOT END BATTERY CAPACITY <=20
-            if(!ENTER_LOW_BATTERY_FIVE) {
+        } else if (currentValue == (LOW_BATTERY_FIVE_THRESHOLD)) {//ROBOT END BATTERY CAPACITY <=20
+            if (!ENTER_LOW_BATTERY_FIVE) {
                 looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_FIVE_STATUS));
-                ENTER_LOW_BATTERY_FIVE=true;
+                ENTER_LOW_BATTERY_FIVE = true;
             }
         }
     }
 
-  private void recoveryBatteryUi(){
-      if(charging!=null) {
-          charging.setBackground(getDrawableRes("charging_normal"));
-          chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
-          cartoonBodyTouchBg.setBackground(getDrawableRes("main_robot_background"));
-      }
-  }
-  private void hiddenBattryUi(){
-      if(charging!=null) {
-          charging.setVisibility(View.INVISIBLE);
-          chargingDot.setVisibility(View.INVISIBLE);
-      }
-  }
- private void showBattryUi(){
-     if(charging!=null) {
-         charging.setVisibility(View.VISIBLE);
-         chargingDot.setVisibility(View.VISIBLE);
-     }
- }
+    private void recoveryBatteryUi() {
+        if (charging != null) {
+            charging.setBackground(getDrawableRes("charging_normal"));
+            chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+            cartoonBodyTouchBg.setBackground(getDrawableRes("main_robot_background"));
+        }
+    }
 
-  private void showUserPicIcon(){
-      UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
-      UbtLog.d(TAG,"user image picture"+userModel.getHeadPic());
+    private void hiddenBattryUi() {
+        if (charging != null) {
+            charging.setVisibility(View.INVISIBLE);
+            chargingDot.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void showBattryUi() {
+        if (charging != null) {
+            charging.setVisibility(View.VISIBLE);
+            chargingDot.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showUserPicIcon() {
+        UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+        UbtLog.d(TAG, "user image picture" + userModel.getHeadPic());
 //      if(topIcon!=null){
 //      }
-  }
-  private void hiddenDisconnectIcon(){
-      if(topIcon2Disconnect!=null)
-      topIcon2Disconnect.setVisibility(View.INVISIBLE);
-  }
-    private void showDisconnectIcon(){
-        if(topIcon2Disconnect!=null)
-        topIcon2Disconnect.setVisibility(View.VISIBLE);
     }
-  private void sendCommandToRobot(String absouteActionPath){
-        if(cartoon_enable) {
+
+    private void hiddenDisconnectIcon() {
+        if (topIcon2Disconnect != null)
+            topIcon2Disconnect.setVisibility(View.INVISIBLE);
+    }
+
+    private void showDisconnectIcon() {
+        if (topIcon2Disconnect != null)
+            topIcon2Disconnect.setVisibility(View.VISIBLE);
+    }
+
+    private void sendCommandToRobot(String absouteActionPath) {
+        if (cartoon_enable) {
             byte[] actions = BluetoothParamUtil.stringToBytes(absouteActionPath);
             mPresenter.commandRobotAction(ConstValue.DV_PLAYACTION, actions);
-        }else {
-            UbtLog.d(TAG,"sendCommandToRobot cartoon disable");
+        } else {
+            UbtLog.d(TAG, "sendCommandToRobot cartoon disable");
         }
-  }
-  private void hiddenBuddleTextView(){
-      if(buddleText == null){
-          return;
-      }
-      buddleText.setVisibility(View.INVISIBLE);
-  }
-  private void showBuddleTextView(){
-      if(buddleText == null){
-          return;
-      }
-      buddleText.setVisibility(View.VISIBLE);
-  }
-  private void debugClickRegion(){
-      if(cartoonHead!=null) {
-          cartoonHead.setBackgroundColor(Color.YELLOW);
-          cartoonChest.setBackgroundColor(Color.YELLOW);
-          cartoonLeftHand.setBackgroundColor(Color.YELLOW);
-          cartoonRightHand.setBackgroundColor(Color.YELLOW);
-          cartoonLeftLeg.setBackgroundColor(Color.YELLOW);
-          cartoonRightLeg.setBackgroundColor(Color.YELLOW);
-      }
+    }
 
-  }
+    private void hiddenBuddleTextView() {
+        if (buddleText == null) {
+            return;
+        }
+        buddleText.setVisibility(View.INVISIBLE);
+    }
 
-  private String loadAnimationResources(int value ){
-      String actionName="";
+    private void showBuddleTextView() {
+        if (buddleText == null) {
+            return;
+        }
+        buddleText.setVisibility(View.VISIBLE);
+    }
 
-          if (value == cartoon_action_swing_left_hand) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.cartoon_left_hand);
-              }
-              actionName = "swing_left_hand";
-          } else if (value == cartoon_action_swing_right_hand) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.swigrighthand);
-              }
-              actionName = "swing_right_hand";
-          } else if (value == cartoon_action_swing_left_leg) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.cartoon_swing_leftleg);
-              }
-              actionName = "swing_left_leg";
-          } else if (value == cartoon_action_swing_right_leg) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.cartoon_right_leg);
-              }
-              actionName = "swing_right_leg";
-          } else if (value == cartoon_action_hand_stand) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand);
-              }
-              actionName = "hand_stand";
-          } else if (value == cartoon_action_hand_stand_reverse) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand_reverse);
-              }
-              actionName = "hand_stand_reverse";
-          } else if (value == cartoon_action_squat) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.cartoon_squat);
-              }
-              actionName = "squat";
-          } else if (value == cartoon_action_enjoy) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.cartoon_enjoy);
-              }
-              actionName = "enjoy";
-          } else if (value == cartoon_action_fall) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.cartoon_fall);
-              }
-              actionName = "fall";
-          } else if (value == cartoon_action_greeting) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.cartoon_greeting);
-              }
-              actionName = "greeting";
-          } else if (value == cartoon_action_shiver) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.cartoon_shiver);
-              }
-              actionName = "shiver";
-          } else if (value == cartoon_action_sleep) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.cartoon_sleep);
-              }
-              actionName = "sleep";
-          } else if (value == cartoon_action_smile) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.cartoon_smile);
-              }
-              actionName = "smile enjoy";
-          } else if (value == cartoon_aciton_squat_reverse) {
-              if(cartoonAction!=null) {
-                  cartoonAction.setBackgroundResource(R.drawable.cartoon_squat_reverse);
-              }
-              actionName = "squat_reverse";
-          }
-          Cartoon_animation_last_execute = value;
-          if (value == cartoon_aciton_squat_reverse || value == cartoon_action_sleep) {
-              hiddenCartoonTouchView();
-          } else {
-              showCartoonTouchView();
-          }
-          UbtLog.d(TAG, "ACTIO NAME IS " + actionName);
-      return actionName;
-  }
+    private void debugClickRegion() {
+        if (cartoonHead != null) {
+            cartoonHead.setBackgroundColor(Color.YELLOW);
+            cartoonChest.setBackgroundColor(Color.YELLOW);
+            cartoonLeftHand.setBackgroundColor(Color.YELLOW);
+            cartoonRightHand.setBackgroundColor(Color.YELLOW);
+            cartoonLeftLeg.setBackgroundColor(Color.YELLOW);
+            cartoonRightLeg.setBackgroundColor(Color.YELLOW);
+        }
 
-  private void wakeUpHiddenBuddle(){
-      mCurrentTouchTime=System.currentTimeMillis();
-      if(System.currentTimeMillis()-mCurrentTouchTime<noOperationTimeout) {
-          hiddenBuddleTextView();
-      }
-  }
+    }
+
+    private String loadAnimationResources(int value) {
+        String actionName = "";
+
+        if (value == cartoon_action_swing_left_hand) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.cartoon_left_hand);
+            }
+            actionName = "swing_left_hand";
+        } else if (value == cartoon_action_swing_right_hand) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.swigrighthand);
+            }
+            actionName = "swing_right_hand";
+        } else if (value == cartoon_action_swing_left_leg) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.cartoon_swing_leftleg);
+            }
+            actionName = "swing_left_leg";
+        } else if (value == cartoon_action_swing_right_leg) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.cartoon_right_leg);
+            }
+            actionName = "swing_right_leg";
+        } else if (value == cartoon_action_hand_stand) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand);
+            }
+            actionName = "hand_stand";
+        } else if (value == cartoon_action_hand_stand_reverse) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.cartoon_hand_stand_reverse);
+            }
+            actionName = "hand_stand_reverse";
+        } else if (value == cartoon_action_squat) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.cartoon_squat);
+            }
+            actionName = "squat";
+        } else if (value == cartoon_action_enjoy) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.cartoon_enjoy);
+            }
+            actionName = "enjoy";
+        } else if (value == cartoon_action_fall) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.cartoon_fall);
+            }
+            actionName = "fall";
+        } else if (value == cartoon_action_greeting) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.cartoon_greeting);
+            }
+            actionName = "greeting";
+        } else if (value == cartoon_action_shiver) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.cartoon_shiver);
+            }
+            actionName = "shiver";
+        } else if (value == cartoon_action_sleep) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.cartoon_sleep);
+            }
+            actionName = "sleep";
+        } else if (value == cartoon_action_smile) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.cartoon_smile);
+            }
+            actionName = "smile enjoy";
+        } else if (value == cartoon_aciton_squat_reverse) {
+            if (cartoonAction != null) {
+                cartoonAction.setBackgroundResource(R.drawable.cartoon_squat_reverse);
+            }
+            actionName = "squat_reverse";
+        }
+        Cartoon_animation_last_execute = value;
+        if (value == cartoon_aciton_squat_reverse || value == cartoon_action_sleep) {
+            hiddenCartoonTouchView();
+        } else {
+            showCartoonTouchView();
+        }
+        UbtLog.d(TAG, "ACTIO NAME IS " + actionName);
+        return actionName;
+    }
+
+    private void wakeUpHiddenBuddle() {
+        mCurrentTouchTime = System.currentTimeMillis();
+        if (System.currentTimeMillis() - mCurrentTouchTime < noOperationTimeout) {
+            hiddenBuddleTextView();
+        }
+    }
 }

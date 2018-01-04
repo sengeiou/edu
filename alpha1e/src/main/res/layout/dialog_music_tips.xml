@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/action_dialog_filter_rect"
-   >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/action_dialog_filter_rect"
+              android:orientation="vertical"
+    >
 
 
     <TextView
@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:padding="16dp"
         android:text="@string/ui_bluetooth_hint"
         android:textSize="16sp"
-        android:padding="16dp"
         />
 
     <View
@@ -28,8 +28,8 @@
         android:id="@+id/tv_tip_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ui_create_cover_music"
         android:padding="16dp"
+        android:text="@string/ui_create_cover_music"
         />
 
     <LinearLayout
@@ -48,6 +48,7 @@
             android:textStyle="bold"
             android:visibility="gone"
             />
+
         <TextView
             android:id="@+id/tv_ps_content"
             android:layout_width="match_parent"
@@ -56,7 +57,6 @@
             />
 
     </LinearLayout>
-
 
 
     <View
@@ -69,9 +69,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal"
         android:layout_marginBottom="16dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
         >
 
         <TextView
@@ -79,11 +79,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginRight="16dp"
-            android:text="@string/ui_common_cancel"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:textColor="#2c87f1"
             android:background="@drawable/btn_alert_bg"
+            android:gravity="center"
+            android:text="@string/ui_common_cancel"
+            android:textColor="#2c87f1"
+            android:textSize="16sp"
             />
 
         <View
@@ -93,27 +93,36 @@
             android:visibility="gone"
             />
 
-        <TextView
-            android:id="@+id/tv_confirm"
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:text="@string/ui_common_confirm"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:textColor="#2c87f1"
-            android:background="@drawable/btn_alert_bg"
-            />
+            >
 
+            <TextView
+                android:id="@+id/tv_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/btn_alert_bg"
+                android:gravity="center"
+                android:text="@string/ui_common_confirm"
+                android:textColor="#2c87f1"
+                android:textSize="16sp"
+                />
 
-
+            <ImageView
+                android:id="@+id/iv_sure_arrow"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/zuojiantou_4"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
 
 
     </LinearLayout>
-
-
-
-
 
 
 </LinearLayout>

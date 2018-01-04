@@ -22,7 +22,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
-import com.ubt.alpha1e.maincourse.courselayout.CourseLevelSevenLayout;
+import com.ubt.alpha1e.maincourse.courselayout.CourseLevelTenLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
@@ -39,11 +39,11 @@ import java.util.List;
  * 邮箱 784787081@qq.com
  */
 
-public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
+public class CourseLevelTenActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
 
-    private static final String TAG = CourseLevelSevenActivity.class.getSimpleName();
+    private static final String TAG = CourseLevelTenActivity.class.getSimpleName();
     BaseHelper mHelper;
-    CourseLevelSevenLayout mActionEdit;
+    CourseLevelTenLayout mActionEdit;
 
     /**
      * 当前课时
@@ -54,7 +54,7 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mHelper = new ActionsEditHelper(CourseLevelSevenActivity.this, this);
+        mHelper = new ActionsEditHelper(CourseLevelTenActivity.this, this);
         mHelper.RegisterHelper();
         ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
@@ -81,7 +81,7 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
 
     @Override
     protected void initUI() {
-        mActionEdit = (CourseLevelSevenLayout) findViewById(R.id.action_edit);
+        mActionEdit = (CourseLevelTenLayout) findViewById(R.id.action_edit);
         mActionEdit.setUp(mHelper);
 
     }
@@ -90,7 +90,7 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
      * 获取到课时列表后设置数据
      *
      * @param list
-     */ 
+     */
     @Override
     public void getCourseOneData(List<ActionCourseOneContent> list) {
 
@@ -104,30 +104,16 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
     @Override
     public void completeCurrentCourse(int current) {
         currentCourse = current;
-        mPresenter.savaCourseDataToDB(7, current);
-        if (current == 2) {
+        mPresenter.savaCourseDataToDB(10, current);
+        if (current == 1) {
             returnCardActivity();
         }
     }
 
 
-
-
-    /**
-     * 响应所有R.id.iv_known的控件的点击事件
-     * <p>
-     * 移除高亮布局
-     * </p>
-     *
-     * @param view
-     */
-    public void clickKnown(View view) {
-        mActionEdit.clickKnown();
-    }
-
     @Override
     public void finishActivity() {
-        showExitDialog();
+        finish();
     }
 
     /**
@@ -135,7 +121,7 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
      */
     public void returnCardActivity() {
         Intent intent = new Intent();
-        intent.putExtra("course", 7);//第几关
+        intent.putExtra("course", 10);//第几关
         intent.putExtra("leavel", currentCourse);//第几个课时
         intent.putExtra("isComplete", true);
         intent.putExtra("score", 1);
@@ -157,19 +143,23 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            UbtLog.d("CourseOneActivity", "返回键");
-            showExitDialog();
+            UbtLog.d(TAG, "返回键");
+
         }
         return false;
         //return super.onKeyDown(keyCode, event);
     }
 
     @Override
+    public void onBackPressedSupport() {
+        //  super.onBackPressedSupport();
+        showExitDialog();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         UbtLog.d(TAG, "------------onDestroy------------");
-        // ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
-        mActionEdit.onPause();
     }
 
 
@@ -197,7 +187,7 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
                             ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
                             finish();
                             //关闭窗体动画显示
-                            CourseLevelSevenActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                            CourseLevelTenActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
                         } else if (view.getId() == R.id.btn_pos) {
 
                         }
@@ -221,7 +211,7 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
 
     @Override
     public int getContentViewId() {
-        return R.layout.activity_action_course_level_seven;
+        return R.layout.activity_action_course_level_ten;
     }
 
     @Override
@@ -310,13 +300,15 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (!isFinishing()&&!isHowHeadDialog) {
+                if (!isFinishing() && !isHowHeadDialog) {
                     showTapHeadDialog();
                 }
             }
         });
     }
+
     private boolean isHowHeadDialog;
+
     private void showTapHeadDialog() {
         isHowHeadDialog = true;
         new ConfirmDialog(this).builder()
@@ -327,14 +319,14 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
                     public void onClick(View view) {
                         ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
                         ActionCourseActivity.finishByMySelf();
-                        CourseLevelSevenActivity.this.finish();
-                        CourseLevelSevenActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
-                        isHowHeadDialog=false;
+                        CourseLevelTenActivity.this.finish();
+                        CourseLevelTenActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                        isHowHeadDialog = false;
                     }
                 }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isHowHeadDialog=false;
+                isHowHeadDialog = false;
             }
         }).show();
     }

@@ -107,38 +107,27 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
 
         ActionCourseModel courseModel8 = new ActionCourseModel();
         courseModel8.setActionCourcesName("第八关");
-        courseModel8.setTitle("第五关 创定指定动作");
+        courseModel8.setTitle("第八关 连续动作");
         courseModel8.setDrawableId(R.drawable.ic_action_level8);
         courseModel8.setActionLockType(0);
+        courseModel8.setSize(2);
         list.add(courseModel8);
 
         ActionCourseModel courseModel9 = new ActionCourseModel();
         courseModel9.setActionCourcesName("第九关");
-        courseModel9.setTitle("第五关 创定指定动作");
+        courseModel9.setTitle("第九关 快速创建连续动作");
         courseModel9.setDrawableId(R.drawable.ic_action_level9);
         courseModel9.setActionLockType(0);
+        courseModel9.setSize(2);
         list.add(courseModel9);
 
         ActionCourseModel courseModel10 = new ActionCourseModel();
         courseModel10.setActionCourcesName("第十关");
-        courseModel10.setTitle("第五关 创建动作");
+        courseModel10.setTitle("第十关 自定义动作");
         courseModel10.setDrawableId(R.drawable.ic_action_level10);
         courseModel10.setActionLockType(0);
+        courseModel10.setSize(1);
         list.add(courseModel10);
-
-        ActionCourseModel courseModel11 = new ActionCourseModel();
-        courseModel11.setActionCourcesName("第十一关");
-        courseModel11.setTitle("第五关 创定指定动作");
-        courseModel11.setDrawableId(R.drawable.ic_action_level11);
-        courseModel11.setActionLockType(0);
-        list.add(courseModel11);
-
-        ActionCourseModel courseModel12 = new ActionCourseModel();
-        courseModel12.setActionCourcesName("第十二关");
-        courseModel12.setTitle("第五关 创定指定动作");
-        courseModel12.setDrawableId(R.drawable.ic_action_level12);
-        courseModel12.setActionLockType(0);
-        list.add(courseModel12);
 
         ActionCourseModel courseModel13 = new ActionCourseModel();
         list.add(courseModel13);
@@ -183,7 +172,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
                         BaseResponseModel<CourseLastProgressModule> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<CourseLastProgressModule>>() {
                                 }.getType());
-                         if (baseResponseModel.status) {
+                        if (baseResponseModel.status) {
                             CourseLastProgressModule courseLastProgressModule = baseResponseModel.models;
                             LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
 
@@ -247,7 +236,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
                         BaseResponseModel<List<CourseDetailScoreModule>> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<List<CourseDetailScoreModule>>>() {
                                 }.getType());
-                         if (baseResponseModel.status) {
+                        if (baseResponseModel.status) {
                             if (isAttachView()) {
                                 mView.getCourseScores(baseResponseModel.models);
                             }

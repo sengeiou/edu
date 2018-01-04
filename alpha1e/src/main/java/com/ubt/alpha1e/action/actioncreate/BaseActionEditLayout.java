@@ -92,7 +92,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public RecyclerView recyclerViewFrames;
     public List<Map<String, Object>> list_frames;
 
-    private List<Map<String, Object>> list_autoFrames = new ArrayList<Map<String, Object>>();
+    public List<Map<String, Object>> list_autoFrames = new ArrayList<Map<String, Object>>();
 
     public FrameRecycleViewAdapter adapter;
     private LinearLayoutManager layoutManager;
@@ -117,7 +117,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
 
     //action edit frame view
-    private RelativeLayout rlEditFrame;
+    public RelativeLayout rlEditFrame;
     private ImageView ivPreview, ivCopy, ivChange, ivCut, ivPaste, ivDelete;
     private TextView tvCut;
 
@@ -153,7 +153,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public boolean needAdd = false;
     private List<Integer> ids = new ArrayList<Integer>();
     private int readCount = -1;
-    private String autoAng = "";
+    public String autoAng = "";
 
     private ImageView ivZoomPlus, ivZoomMinus;
     private int currentPlus = 1;
@@ -167,7 +167,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     private MediaPlayer mediaPlayer;
     private String mDir = "";
-    private int musicTimes = 0;
+    public int musicTimes = 0;
 
     public ImageView ivPlay;
     private TextView tvMusicTime;
@@ -1064,7 +1064,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     /**
      * 修改动作帧
      */
-    private void doChangeItem() {
+    public void doChangeItem() {
         if (ids.size() <= 0) {
             goneEditFrameLayout();
             showLostDialog(0, ResourceManager.getInstance(mContext).getStringResources("ui_create_click_to_cutoff"));
@@ -1602,7 +1602,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     }
 
 
-    private void showEditFrameLayout() {
+    public void showEditFrameLayout() {
         rlEditFrame.setVisibility(View.VISIBLE);
 
     }
@@ -2162,7 +2162,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 .get(ActionsEditHelper.MAP_FRAME)).totle_time = time;
     }
 
-    private void addFrame() {
+    public void addFrame() {
         String angles = "";
         for (int i = 0; i < init.length; i++) {
             angles += init[i] + "#";

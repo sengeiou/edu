@@ -239,7 +239,7 @@ public class DialogDub extends Dialog {
                 if (type == 1) {
                     int after_length = s.length();// 输入内容后编辑框所有内容的总长度
                     // 如果字符添加后超过了限制的长度，那么就移除后面添加的那一部分，这个很关键
-                    if (after_length > 2) {
+                    if (after_length > 1) {
                         editText.setFocusable(false);
                         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0); //强制隐藏键盘

@@ -179,6 +179,20 @@ public class ActionCourseDataManager {
             model2 = new CourseActionModel("2.修改指定动作", 0);
             list.add(model1);
             list.add(model2);
+        } else if (card == 8) {
+            model1 = new CourseActionModel("1.创建指定动作", 0);
+            model2 = new CourseActionModel("2.预览执行动作", 0);
+            list.add(model1);
+            list.add(model2);
+        } else if (card == 9) {
+            model1 = new CourseActionModel("1.创建指定动作", 0);
+            model2 = new CourseActionModel("2.预览执行动作", 0);
+            list.add(model1);
+            list.add(model2);
+        } else if (card == 10) {
+            model1 = new CourseActionModel("1.设计动作", 0);
+            list.add(model1);
+
         }
         if (currentCourse == 1) {
             model1.setStatu(2);

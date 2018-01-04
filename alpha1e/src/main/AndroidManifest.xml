@@ -710,6 +710,24 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelEightActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelNineActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelTenActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".maincourse.courseone.ActionsCourseSaveActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
