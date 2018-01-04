@@ -68,6 +68,7 @@ import com.ubt.alpha1e.services.SendClientIdService;
 import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
+import com.ubt.alpha1e.ui.custom.RemoteGuideView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
@@ -377,6 +378,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 if(isBulueToothConnected()) {
                 try {
                     CommonCtrlView.getInstace(getContext());
+                    new RemoteGuideView(getContext());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

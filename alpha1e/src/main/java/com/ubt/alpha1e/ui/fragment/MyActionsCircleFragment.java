@@ -829,6 +829,12 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             holder.txt_type_des.setText(actionList.get(MyActionsHelper.map_val_action_type_name) + "");
             holder.txt_time.setText(actionList.get(ActionsLibHelper.map_val_action_time) + "");
             UbtLog.d(TAG, "-->isStartLooping=" + isStartLooping);
+            //循环播放的选择框
+            if ((Boolean) actionList.get(MyActionsHelper.map_val_action_selected)) {
+                holder.img_select.setImageResource(R.drawable.mynew_actions_selected);
+            } else {
+                holder.img_select.setImageResource(R.drawable.myactions_normal);
+            }
             if(isStartLooping)
             {
                // holder.layout_img_select.setVisibility(View.GONE);
@@ -836,12 +842,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 holder.layout_img_select.setVisibility(View.VISIBLE);
                 //过去的播放按钮不显示
                 holder.rl_state.setVisibility(View.GONE);
-                //循环播放的选择框
-                if ((Boolean) actionList.get(MyActionsHelper.map_val_action_selected)) {
-                    holder.img_select.setImageResource(R.drawable.mynew_actions_selected);
-                } else {
-                    holder.img_select.setImageResource(R.drawable.myactions_normal);
-                }
                 //循环播放的时候
                 if(actionList.get(MyActionsHelper.map_val_action_is_playing)!=null)
                 {
@@ -879,21 +879,16 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 View.OnClickListener listener  = new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        actionList.put(MyActionsHelper.map_val_action_selected,!(Boolean) actionList.get (MyActionsHelper.map_val_action_selected));
+                        actionList.put(MyActionsHelper.map_val_action_selected, !(Boolean) actionList.get(MyActionsHelper.map_val_action_selected));
                         mAdapter.notifyItemChanged(position);
-                        if(actionList.size()>1){
-                            img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play"));
-                        }else {
-                            img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
-                        }
+//                        if(actionList.size()>1){
+//                            img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play"));
+//                        }else {
+//                            img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
+//                        }
                         String actionName = (String)actionList.get(MyActionsHelper.map_val_action_name);
                         if(!MyActionsHelper.mCurrentSeletedNameList.contains(actionName))
                         {
-                            if ((Boolean) actionList.get(MyActionsHelper.map_val_action_selected)) {
-                                holder.img_select.setImageResource(R.drawable.mynew_actions_selected);
-                            } else {
-                                holder.img_select.setImageResource(R.drawable.myactions_normal);
-                            }
                             MyActionsHelper.mCurrentSeletedNameList.add(actionName);
                             ActionInfo actionInfo = new ActionInfo();
                             actionInfo.actionName = actionName;
@@ -913,6 +908,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     @Override
                     public void onClick(View view) {
                         actionList.put(MyActionsHelper.map_val_action_selected,!(Boolean) actionList.get (MyActionsHelper.map_val_action_selected));
+                        actionList.put(MyActionsHelper.map_val_action_is_playing,!(Boolean)actionList.get(MyActionsHelper.map_val_action_is_playing));
                         mAdapter.notifyItemChanged(position);
                         String actionName = (String)actionList.get(MyActionsHelper.map_val_action_name);
                         if(!MyActionsHelper.mCurrentSeletedNameList.contains(actionName))
@@ -928,6 +924,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                         }else{
                             MyActionsHelper.mCurrentSeletedNameList.remove(actionName);
                             MyActionsHelper.mCurrentSeletedActionInfoMap.remove(actionName);
+                            mHelper.stopPlayAction();
                         }
                     }
                 };
