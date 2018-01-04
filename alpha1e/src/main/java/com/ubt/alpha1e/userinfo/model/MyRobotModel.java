@@ -25,6 +25,24 @@ public class MyRobotModel {
     private String equipmentSeq;
     private String equipmentVersion;
     private String serverVersion;
+    private String releaseNote;
+    private String autoUpdate;
+
+    public String getAutoUpdate() {
+        return autoUpdate;
+    }
+
+    public void setAutoUpdate(String autoUpdate) {
+        this.autoUpdate = autoUpdate;
+    }
+
+    public String getReleaseNote() {
+        return releaseNote;
+    }
+
+    public void setReleaseNote(String releaseNote) {
+        this.releaseNote = releaseNote;
+    }
 
     public String getServerVersion() {
         return serverVersion;

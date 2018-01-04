@@ -978,7 +978,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     RobotBindingDialog robotBindingDialog = null ;
     //一键绑定
     public void gotoBind(){
-
+        if(AlphaApplication.currentRobotSN == null || AlphaApplication.currentRobotSN.equals("")){
+            ToastUtils.showShort("机器人序列号为空");
+            return;
+        }
         if(robotBindingDialog == null){
             robotBindingDialog = new RobotBindingDialog(AppManager.getInstance().currentActivity())
                     .builder()
