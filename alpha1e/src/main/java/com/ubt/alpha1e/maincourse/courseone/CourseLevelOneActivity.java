@@ -196,7 +196,7 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
         UbtLog.d(TAG, "------------onDestroy------------");
         // ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
         mActionEdit.onPause();
-     }
+    }
 
 
     private void showExitDialog() {
@@ -336,7 +336,9 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                showTapHeadDialog();
+                if (!isFinishing()) {
+                    showTapHeadDialog();
+                }
             }
         });
     }

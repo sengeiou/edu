@@ -1,7 +1,6 @@
 package com.ubt.alpha1e.userinfo.notice;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -18,9 +17,6 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.base.popup.EasyPopup;
@@ -43,7 +39,7 @@ import butterknife.Unbinder;
  * 邮箱 784787081@qq.com
  */
 
-public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticePresenter> implements NoticeContract.View, BaseQuickAdapter.OnItemLongClickListener, BaseQuickAdapter.OnItemClickListener {
+public class NoticeFragment1 extends MVPBaseFragment<NoticeContract.View, NoticePresenter> implements NoticeContract.View, BaseQuickAdapter.OnItemLongClickListener, BaseQuickAdapter.OnItemClickListener {
 
 
     private static final String ARG_PARAM1 = "param1";
@@ -73,12 +69,12 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     private int currentType;
     private boolean isNoneFinishLoadMore;
 
-    public NoticeFragment() {
+    public NoticeFragment1() {
     }
 
 
-    public static NoticeFragment newInstance(String param1, String param2) {
-        NoticeFragment fragment = new NoticeFragment();
+    public static NoticeFragment1 newInstance(String param1, String param2) {
+        NoticeFragment1 fragment = new NoticeFragment1();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -135,24 +131,26 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
                 showLoading();
             }
         });
-        mRefreshLayout.setEnableAutoLoadmore(true);//开启自动加载功能（非必须）
-        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(final RefreshLayout refreshlayout) {
-                page = 1;
-                mPresenter.getNoticeData(0, page, offset);
-            }
-        });
-        mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
-            @Override
-            public void onLoadmore(final RefreshLayout refreshlayout) {
-                ++page;
-                mPresenter.getNoticeData(1, page, offset);
-            }
-        });
-
+//        mRefreshLayout.setEnableAutoLoadmore(true);//开启自动加载功能（非必须）
+//        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+//            @Override
+//            public void onRefresh(final RefreshLayout refreshlayout) {
+//                page = 1;
+//                mPresenter.getNoticeData(0, page, offset);
+//            }
+//        });
+//        mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+//            @Override
+//            public void onLoadmore(final RefreshLayout refreshlayout) {
+//                ++page;
+//                mPresenter.getNoticeData(1, page, offset);
+//            }
+//        });
+        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableLoadmore(false);
+        showStatuLayout(1);
         //触发自动刷新
-        mRefreshLayout.autoRefresh();
+        // mRefreshLayout.autoRefresh();
     }
 
 
@@ -305,11 +303,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
                     break;
                 }
             }
-            mNoticeAdapter.notifyDataSetChanged();
-            if (null != mCallBackListener) {
-                mCallBackListener.onChangeUnReadMessage();
-                UbtLog.d("Notice", "updateStatu==" + isSuccess);
-            }
+
         }
     }
 
@@ -326,10 +320,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
             for (int i = 0; i < mNoticeModels.size(); i++) {
                 if (mNoticeModels.get(i).getId() == noticeId) {
                     if (mNoticeModels.get(i).getStatus().equals("0")) {
-                        if (null != mCallBackListener) {
-                            mCallBackListener.onChangeUnReadMessage();
-                            UbtLog.d("Notice", "updateStatu==" + isSuccess);
-                        }
+
                     }
                     mNoticeModels.remove(i);
                     break;
@@ -398,16 +389,6 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
     }
 
 
-    CallBackListener mCallBackListener;
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mCallBackListener = (CallBackListener) activity;
-    }
 
-    //设置用于修改文本的回调接口
-    public static interface CallBackListener {
-        public void onChangeUnReadMessage();
-    }
 }

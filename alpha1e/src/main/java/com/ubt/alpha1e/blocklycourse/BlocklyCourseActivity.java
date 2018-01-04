@@ -101,21 +101,12 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 
     private void initVideoPlayer() {
         String url = "http://7xr4xn.media1.z0.glb.clouddn.com/snh48sxhsy.mp4";
-//        String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-        //需要路径的
-        videoPlayer.setUp(url, true, new File(FileUtils.getPath()), courseData.getName());
+        videoPlayer.setUp(courseData.getLocalVideoPath(), true, new File(FileUtils.getPath()), courseData.getName());
 
         //videoPlayer.setSpeed(2f);
         orientationUtils = new OrientationUtils(this, videoPlayer);
         orientationUtils.setRotateWithSystem(false);
         orientationUtils.setEnable(false);
-        //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
-//        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                orientationUtils.resolveByClick();
-//            }
-//        });
 
         videoPlayer.setViewListener(this); //设置UI显示回调
 
@@ -134,6 +125,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 
         //是否可以滑动调整
         videoPlayer.setIsTouchWiget(false);
+        videoPlayer.setIfCurrentIsFullscreen(true);
 
         //设置横屏锁住
         videoPlayer.setLockLand(true);
@@ -149,8 +141,6 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
                 onBackPressedSupport();
             }
         });
-        //过渡动画
-        initTransition();
 
         ivGoPro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,6 +182,17 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
                 ivPause.setVisibility(View.GONE);
             }
 
+            @Override
+            public void onClickStopFullscreen(String s, Object... objects) {
+                UbtLog.d(TAG, "onClickStopFullscreen");
+                ivPause.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onClickResumeFullscreen(String s, Object... objects) {
+                UbtLog.d(TAG, "onClickResumeFullscreen");
+                ivPause.setVisibility(View.GONE);
+            }
 
             @Override
             public void onAutoComplete(String s, Object... objects) {
@@ -208,6 +209,9 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
                 videoPlayer.clickPauseIcon();
             }
         });
+
+        //过渡动画
+        initTransition();
 
 
     }
@@ -287,6 +291,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 
     @Override
     public void onClickUiToggle() {
+        UbtLog.d(TAG, "onClickUiToggle");
         if(rlGoPro.getVisibility() == View.VISIBLE){
             rlGoPro.setVisibility(View.GONE);
         }else{
@@ -296,6 +301,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 
     @Override
     public void hideAllWidget() {
+        UbtLog.d(TAG, "hideAllWidget");
         rlGoPro.setVisibility(View.GONE);
     }
 

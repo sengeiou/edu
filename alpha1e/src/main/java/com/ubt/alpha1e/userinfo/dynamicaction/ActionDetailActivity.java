@@ -301,6 +301,11 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
     }
 
     @Override
+    public void isAlpha1EConnectNet(boolean statu) {
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         DownLoadActionManager.getInstance(this).removeDownLoadActionListener(this);

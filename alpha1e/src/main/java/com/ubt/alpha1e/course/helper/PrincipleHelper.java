@@ -77,6 +77,8 @@ public class PrincipleHelper extends BaseHelper {
             UbtLog.d(TAG,"TAP_HEAD = " + cmd);
             PrincipleEvent tapHeadEvent = new PrincipleEvent(PrincipleEvent.Event.TAP_HEAD);
             EventBus.getDefault().post(tapHeadEvent);
+        }else if(cmd == ConstValue.DV_CONTROL_ENGINE_COMMAND){
+            UbtLog.d(TAG,"cmd = " + cmd + "    = " + param[0]);
         }
 
     }
@@ -205,6 +207,18 @@ public class PrincipleHelper extends BaseHelper {
         doOnOnePower(14);
         doOnOnePower(15);
         doOnOnePower(16);
+    }
+
+    /**
+     * 机器人控制舵机命令（目前只有控制双脚蹲下掉电）
+     * @param controlType 1.掉电；2.上电
+     * @param position 1.左手；2.右手 3.双脚。
+     */
+    public void doControlEngine(int controlType, int position){
+        byte[] params = new byte[2];
+        params[0] = ByteHexHelper.intToHexByte(controlType);
+        params[1] = ByteHexHelper.intToHexByte(position);
+        doSendComm(ConstValue.DV_CONTROL_ENGINE_COMMAND, params);
     }
 
     /**

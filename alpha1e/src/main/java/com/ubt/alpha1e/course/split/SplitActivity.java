@@ -606,8 +606,10 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                             ivLegLeftBg.setBackgroundResource(R.drawable.icon_principle_leftleg_white);
                             hasLostLegLeft = true;
                             if(hasLostLegRight){
-                                ((PrincipleHelper)mHelper).doLostLeftFoot();
-                                ((PrincipleHelper)mHelper).doLostRightFoot();
+                                /*((PrincipleHelper)mHelper).doLostLeftFoot();
+                                ((PrincipleHelper)mHelper).doLostRightFoot();*/
+
+                                ((PrincipleHelper)mHelper).doControlEngine(1,3);
                             }
                         }else if(view.getId() == R.id.iv_leg_right){
                             targetX = containerWidth/2 + ivRobot.getWidth()/2 + ivHandRightBg.getWidth()*2 + SizeUtils.dip2px(getContext(),30)*2;
@@ -615,8 +617,11 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                             ivLegRightBg.setBackgroundResource(R.drawable.icon_principle_rightleg_white);
                             hasLostLegRight = true;
                             if(hasLostLegLeft){
-                                ((PrincipleHelper)mHelper).doLostLeftFoot();
-                                ((PrincipleHelper)mHelper).doLostRightFoot();
+                                /*((PrincipleHelper)mHelper).doLostLeftFoot();
+                                ((PrincipleHelper)mHelper).doLostRightFoot();*/
+
+                                ((PrincipleHelper)mHelper).doControlEngine(1,3);
+
                             }
                         }
                         if(hasLearnFinish()){

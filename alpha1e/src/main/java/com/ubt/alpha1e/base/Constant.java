@@ -85,6 +85,11 @@ public class Constant {
     public final static int KEY_NICK_HEAD = 5;
 
     /**
+     * token异常处理响应码
+     */
+    public final static int INVALID_TOKEN = 88;
+
+    /**
      * 记录动作编辑指引tag
      */
     public final static String SP_GUIDE_STEP = "sp_guide_step";

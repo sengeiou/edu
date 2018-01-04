@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ubt.alpha1e.R;
@@ -47,7 +48,7 @@ public class BlocklyCourseAdapter extends BaseQuickAdapter<CourseData, BaseViewH
             ivPlayVideo.setVisibility(View.GONE);
         }
 
-//        Glide.with(context).load(item.getThumbnailUrl()).centerCrop().into(ivCourse);
+        Glide.with(context).load(item.getThumbnailUrl()).placeholder(R.drawable.ic_course).fitCenter().into(ivCourse);
 
 //        ((ImageView) helper.getView(R.id.iv_cources)).setImageResource(item.getDrawableId());
         TextView tvActionName = helper.getView(R.id.tv_action_cources_name);

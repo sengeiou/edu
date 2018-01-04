@@ -384,8 +384,9 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
             case R.id.ig_state1_get_bluetooth_list:
                 if(!ig_state1_get_bluetooth_list.getText().toString().equals("连接")){
                     UbtLog.d(TAG,"点击断开连接1");
-                    BluetoothStateHelper.getInstance(getContext()).doCancelCoon();
-                    bluetoothDisconnect();
+                    disconnectBluetoothDialog();
+//                    BluetoothStateHelper.getInstance(getContext()).doCancelCoon();
+//                    bluetoothDisconnect();
                     return;
                 }
                 BluetoothAdapter mBtAdapter;
@@ -435,12 +436,35 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 break;
             case R.id.ig_state2_goto_connect_net:
                 UbtLog.d(TAG,"点击断开连接2");
-                BluetoothStateHelper.getInstance(getContext()).doCancelCoon();
-                bluetoothDisconnect();
+                disconnectBluetoothDialog();
+//                BluetoothStateHelper.getInstance(getContext()).doCancelCoon();
+//                bluetoothDisconnect();
                 break;
 
             default:
         }
+    }
+
+    //确认是否要断开蓝牙
+    public void disconnectBluetoothDialog(){
+        new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                .setTitle("提示")
+                .setMsg("确定断开与机器人的蓝牙连接?")
+                .setCancelable(true)
+                .setPositiveButton("断开", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "断开 ");
+                        BluetoothStateHelper.getInstance(getContext()).doCancelCoon();
+                        bluetoothDisconnect();
+                    }
+                })
+                .setNegativeButton("暂不", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "暂不 ");
+                    }
+                }).show();
     }
 
 

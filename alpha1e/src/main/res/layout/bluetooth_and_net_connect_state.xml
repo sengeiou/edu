@@ -59,16 +59,16 @@
     <RelativeLayout
         android:layout_marginTop="15dp"
         android:layout_width="370dp"
-        android:layout_height="205dp"
+        android:layout_height="230dp"
         android:layout_below="@id/line"
         android:id="@+id/rl_state1_up_big"
         android:layout_centerHorizontal="true"
-        android:visibility="gone">
+        android:visibility="visible">
     <RelativeLayout
         android:id="@+id/rl_state1_robot"
         android:layout_marginTop="1dp"
         android:layout_width="370dp"
-        android:layout_height="130dp"
+        android:layout_height="155dp"
         android:background="@drawable/bluetooth_connect_backgroud"
         android:layout_centerHorizontal="true"
         android:visibility="visible">
@@ -84,7 +84,7 @@
             android:layout_width="240dp"
             android:layout_height="40dp"
             android:layout_toRightOf="@id/ig_rl_state1_robot"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="25dp"
             android:hint="请连接机器人"
             android:textStyle="bold"
             android:gravity="center_vertical"
@@ -111,7 +111,7 @@
             android:textColor="@color/white"
             android:text="连接"
             android:textSize="16sp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:clickable="true"/>
 
 
@@ -175,11 +175,11 @@
     <RelativeLayout
         android:layout_marginTop="15dp"
         android:layout_width="370dp"
-        android:layout_height="205dp"
+        android:layout_height="230dp"
         android:layout_below="@id/line"
         android:id="@+id/rl_state2_up_small"
         android:layout_centerHorizontal="true"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/rl_state2_robot"
@@ -238,7 +238,7 @@
         <RelativeLayout
             android:layout_marginTop="6dp"
             android:layout_width="370dp"
-            android:layout_height="130dp"
+            android:layout_height="155dp"
             android:layout_below="@id/rl_state2_robot"
             android:background="@drawable/bluetooth_connect_backgroud"
             android:layout_centerHorizontal="true"
@@ -283,7 +283,7 @@
                 android:textColor="@color/white"
                 android:text="联网"
                 android:textSize="16sp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="12dp"
                 android:clickable="true"/>
 
 
@@ -292,7 +292,7 @@
 
     <TextView
         android:id="@+id/tv_advice1"
-        android:text="  给机器人聊天才能和它聊天哦！"
+        android:text="  给机器人联网才能和它聊天哦！"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="10dp"
         android:layout_width="wrap_content"

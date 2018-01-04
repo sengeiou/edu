@@ -283,7 +283,6 @@ public class DynamicActionPresenter extends BasePresenterImpl<DynamicActionContr
      * @param mDynamicActionModels
      */
     public void playAction(Context context, int position, List<DynamicActionModel> mDynamicActionModels) {
-
         DynamicActionModel dynamicActionModel = mDynamicActionModels.get(position);
         int actionStatu = dynamicActionModel.getActionStatu();
         UbtLog.d("", "actionName==" + dynamicActionModel.getActionName() + "  actionStatu===" + dynamicActionModel.getActionStatu());
@@ -298,6 +297,7 @@ public class DynamicActionPresenter extends BasePresenterImpl<DynamicActionContr
                 mDynamicActionModels.get(position).setActionStatu(1);
                 DownLoadActionManager.getInstance(context).playAction(false, dynamicActionModel);
             } else {//没有下载，需要下载
+                DownLoadActionManager.getInstance(context).readNetworkStatus();
                 DownLoadActionManager.getInstance(context).downRobotAction(dynamicActionModel);
                 mDynamicActionModels.get(position).setActionStatu(2);
             }

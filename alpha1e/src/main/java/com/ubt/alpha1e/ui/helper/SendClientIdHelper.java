@@ -1,14 +1,14 @@
 package com.ubt.alpha1e.ui.helper;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import com.tencent.ai.tvs.AuthorizeListener;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.login.LoginManger;
-import com.ubt.alpha1e.services.ActivationService;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.BlueToothManager;
@@ -113,15 +113,29 @@ public class SendClientIdHelper extends BaseHelper {
             String sn = new String(param, 1, param.length - 1);
             UbtLog.d(TAG,"cmd = " + cmd + "    获取到序列号2: "+sn);
             if(sn == null || sn.equals("")){
+                UbtLog.d(TAG,"序列号为空 " );
                 return;
             }
             AlphaApplication.currentRobotSN = sn ;
             RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.BLUETOOTH_GET_ROBOT_SN_SUCCESSS);
             EventBus.getDefault().post(robotEvent);
             return;
+        }else if(cmd == ConstValue.DV_DO_UPGRADE_SOFT){
+            UbtLog.d(TAG,"接收到机器人是否升级命令 " );
+            UbtLog.d(TAG,"升级命令长度: "+ param.length);
+            if(param.length == 0){
+                return;
+            }
+            UbtLog.d(TAG,"param0: "+ param[0]);
+
+            if(param[0] == 1){
+                UbtLog.d(TAG,"升级命令 " );
+                RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.BLUETOOTH_GET_ROBOT_UPGRADE);
+                EventBus.getDefault().post(robotEvent);
+            }else if(param[0] == 0) {
+                UbtLog.d(TAG,"开始升级回复命令" );
+            }
         }
-
-
     }
 
     //获取productId 和 DSN
@@ -134,10 +148,13 @@ public class SendClientIdHelper extends BaseHelper {
     }
 
     //升级命令
-    public void startUpgrade() {
+    public void startUpgrade(int type) {
         UbtLog.d(TAG,"发送 startUpgrade  ");
-//        doSendComm(ConstValue.DV_PRODUCT_AND_DSN, null);
-
+        if(type == 2){
+            doSendComm(ConstValue.DV_DO_UPGRADE_SOFT, new byte[] { 2 });
+        }else if(type == 3){
+            doSendComm(ConstValue.DV_DO_UPGRADE_SOFT, new byte[] { 3 });
+        }
     }
 
     //获取机器人序列号
@@ -182,9 +199,14 @@ public class SendClientIdHelper extends BaseHelper {
         }
 
         @Override
-        public void onError() {
+        public void onError(int i) {
             UbtLog.d(TAG,"onRefreshListener onError  ");
             clientIdSendWhich = 0 ;
+            if(i == Constant.INVALID_TOKEN){
+                ((AlphaApplication) mContext.getApplicationContext()).doLostConnect();
+                ((AlphaApplication) mContext.getApplicationContext()).setmCurrentNetworkInfo(null);
+                LoginManger.getInstance().loginOut();
+            }
         }
     };
 

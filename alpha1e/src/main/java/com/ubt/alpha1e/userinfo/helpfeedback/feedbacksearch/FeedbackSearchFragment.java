@@ -7,10 +7,12 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.adapter.FeedbackRecyclerAdapter;
@@ -41,6 +43,8 @@ public class FeedbackSearchFragment extends MVPBaseFragment<FeedbackSearchContra
     RecyclerView rvFeedback;
     @BindView(R.id.rl_empty_result)
     RelativeLayout rlEmptyResult;
+    @BindView(R.id.tv_head_name)
+    TextView tvHeadName;
     Unbinder unbinder;
 
     public FeedbackRecyclerAdapter mAdapter;
@@ -58,7 +62,7 @@ public class FeedbackSearchFragment extends MVPBaseFragment<FeedbackSearchContra
                     mAdapter.notifyDataSetChanged();
                     if (mFeedbackInfoDatas.size() == 0) {
                         rlEmptyResult.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         rlEmptyResult.setVisibility(View.GONE);
                     }
                     break;
@@ -66,7 +70,7 @@ public class FeedbackSearchFragment extends MVPBaseFragment<FeedbackSearchContra
         }
     };
 
-    public static FeedbackSearchFragment newInstance(){
+    public static FeedbackSearchFragment newInstance() {
         FeedbackSearchFragment searchFragment = new FeedbackSearchFragment();
         return searchFragment;
     }
@@ -147,6 +151,12 @@ public class FeedbackSearchFragment extends MVPBaseFragment<FeedbackSearchContra
     }
 
     public void refreshSearchResult(String editStr) {
+        if(TextUtils.isEmpty(editStr)){
+            tvHeadName.setText(getStringRes("ui_setting_hot_question"));
+        }else {
+            tvHeadName.setText(getStringRes("ui_setting_search_result"));
+        }
+
         mAdapter.setSearchName(editStr);
         mPresenter.doSearchResult(mAllFeedbackInfoDatas, editStr);
     }

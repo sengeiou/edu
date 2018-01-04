@@ -312,7 +312,7 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
             intent.putExtra("isBinded",1);
             intent.putExtra("serverVersion",model.getServerVersion());
             intent.putExtra("equipmentSeq",model.getEquipmentSeq());
-            intent.putExtra("autoupdate",model.getAutoUpgrade());
+            intent.putExtra("autoupdate",model.getAutoUpdate());
             startActivity(intent);
         }else if(result == 2){
             UbtLog.d(TAG, "账户没有绑定 " );

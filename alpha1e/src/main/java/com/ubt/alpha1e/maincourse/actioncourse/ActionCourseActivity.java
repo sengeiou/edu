@@ -303,7 +303,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 showResultDialog(course, isComplete);
                 UbtLog.d(TAG, "course==" + course + "   leavel==" + leavel + "  isComplete==" + isComplete + "  socre===" + score);
                 mPresenter.saveCourseProgress(String.valueOf(course), isComplete ? "1" : "0");
-                playAction(Constant.COURSE_ACTION_PATH + "胜利.hts");
+                playAction(Constant.COURSE_ACTION_PATH + "AE_victory editor.hts");
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {

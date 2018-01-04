@@ -52,6 +52,7 @@ public class CourseListPresenter extends BasePresenterImpl<CourseListContract.Vi
                 UbtLog.d(TAG, "BLOCKLY_COURSE_LIST onResponse:" + response.toString());
 
 
+
                 for(int i=0; i<response.size(); i++){
                     CourseData courseData = new CourseData();
                     courseData.setSequence(response.get(i).getSequence());
@@ -66,8 +67,6 @@ public class CourseListPresenter extends BasePresenterImpl<CourseListContract.Vi
 
                     UbtLog.d(TAG, "courseData:" + courseData.toString());
                 }
-
-
 
 
 

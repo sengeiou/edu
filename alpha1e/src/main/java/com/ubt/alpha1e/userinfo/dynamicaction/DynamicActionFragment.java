@@ -26,8 +26,11 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
+import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.data.model.DownloadProgressInfo;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -69,6 +72,8 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
      * 获取机器人动作列表超时
      */
     private static int HANDLE_GET_ROBOTACTIONLIST_TIMEOUT = 1115;
+
+    public static int REQUEST_CODE = 10001;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -305,7 +310,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
      */
     private void playAction(int position) {
         if (!isBulueToothConnected()) {
-            ToastUtils.showShort("请连接蓝牙");
+            showBluetoothConnectDialog();
             return;
         }
         mPresenter.playAction(getActivity(), position, mDynamicActionModels);
@@ -367,6 +372,8 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
                     }
                     mDynamicActionAdapter.notifyDataSetChanged();
                 }
+            } else if (resultCode == REQUEST_CODE) {
+
             }
         }
     }
@@ -384,7 +391,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             } else {
                 mRefreshLayout.resetNoMoreData();
             }
-         } else if (currentType == 1) {
+        } else if (currentType == 1) {
             if (isNoneFinishLoadMore) {
                 mRefreshLayout.finishLoadmoreWithNoMoreData();//将不会再次触发加载更多事件
             } else {
@@ -503,11 +510,60 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         mDynamicActionAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void isAlpha1EConnectNet(boolean statu) {
+        if (!statu) {
+            for (int i = 0; i < mDynamicActionModels.size(); i++) {
+                if (mDynamicActionModels.get(i).getActionStatu() == 2) {
+                    UbtLog.d(TAG, "actionName==" + mDynamicActionModels.get(i));
+                    mDynamicActionModels.get(i).setActionStatu(0);
+                }
+            }
+            showNetWorkConnectDialog();
+        }
+    }
+
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         UbtLog.d(TAG, "--------------onDestory-----------");
         DownLoadActionManager.getInstance(getActivity()).removeDownLoadActionListener(this);
+    }
+
+    //显示蓝牙连接对话框
+    private void showBluetoothConnectDialog() {
+        new ConfirmDialog(getActivity()).builder()
+                .setTitle("提示")
+                .setMsg("请先连接蓝牙和Wi-Fi")
+                .setCancelable(true)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接蓝牙 ");
+                        Intent intent = new Intent();
+                        intent.putExtra(com.ubt.alpha1e.base.Constant.BLUETOOTH_REQUEST, true);
+                        intent.setClass(getActivity(), BluetoothconnectActivity.class);
+                        startActivityForResult(intent, REQUEST_CODE);
+                    }
+                }).show();
+    }
+
+
+    //显示网络连接对话框
+    private void showNetWorkConnectDialog() {
+        new ConfirmDialog(getActivity()).builder()
+                .setTitle("提示")
+                .setMsg("请先连接机器人Wi-Fi")
+                .setCancelable(true)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接Wifi ");
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(), NetconnectActivity.class);
+                        startActivity(intent);
+                    }
+                }).show();
     }
 }
