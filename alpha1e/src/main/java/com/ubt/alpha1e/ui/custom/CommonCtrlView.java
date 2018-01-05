@@ -269,7 +269,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         btn_sensorControl=(ImageView)view.findViewById(R.id.sensor_control);
         btn_actionList = (ImageView) view.findViewById(R.id.btn_actionlist);
         btn_reset_m=(ImageView) view.findViewById(R.id.btn_reset);
-        btn_lose_power = (ImageView) view.findViewById(R.id.btn_poweroff);
+//        btn_lose_power = (ImageView) view.findViewById(R.id.btn_reset);
         btn_pause_or_continue = (ImageView) view.findViewById(R.id.btn_playaction);
         btn_stop_m = (ImageView) view.findViewById(R.id.btn_stopaction);
         btn_vol_log = (ImageView) view.findViewById(R.id.btn_vol_logo);
@@ -331,7 +331,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             }
         });
         btn_sensorControl.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View view) {
                 byte[] papram = new byte[1];
@@ -383,33 +382,32 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 //                    Toast.makeText(mContext, mContext.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
 //                    return;
 //                }
-
                 mHelper.doActionCommand(
                         MyActionsHelper.Command_type.Do_default, "", AlphaApplication.getActionType());
                 txt_action_name_m.setText("暂无播放内容");
                 mBaseActivity.saveCurrentPlayingActionName("");
+                Toast.makeText(mBaseActivity,"机器人已经服务",Toast.LENGTH_SHORT).show();
                // btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
                // gifImageView.setVisibility(View.INVISIBLE);
 
             }
         });
 
-        btn_lose_power.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                lay_ctrl_more.setVisibility(View.GONE);
-
-                initDialogView(dialogLayout);
-                wmParams.gravity = Gravity.CENTER;
-                wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-                wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-                ColorDrawable colorDrawable = new ColorDrawable(Color.argb(120, 0, 0, 0));
-                dialogLayout.setBackground(colorDrawable);
-                mWindowManager.addView(dialogLayout, wmParams);
-                isShowDialog = true;
-
-            }
-        });
+//        btn_lose_power.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                lay_ctrl_more.setVisibility(View.GONE);
+//                initDialogView(dialogLayout);
+//                wmParams.gravity = Gravity.CENTER;
+//                wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+//                wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+//                ColorDrawable colorDrawable = new ColorDrawable(Color.argb(120, 0, 0, 0));
+//                dialogLayout.setBackground(colorDrawable);
+//                mWindowManager.addView(dialogLayout, wmParams);
+//                isShowDialog = true;
+//
+//            }
+//        });
 
         btn_pause_or_continue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -883,6 +881,9 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             mBaseActivity.saveCurrentPlayingActionName(action_name);
             btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
             gifImageView.setVisibility(View.VISIBLE);
+            radiologicalWaveAnim.setOneShot(false);
+            radiologicalWaveAnim.setVisible(true,true);
+            radiologicalWaveAnim.start();
         }
 
     }
