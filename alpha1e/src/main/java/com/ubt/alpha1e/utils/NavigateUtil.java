@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import com.ant.country.CountryActivity;
+/*import com.ant.country.CountryActivity;*/
 import com.baoyz.pg.PG;
 import com.ubt.alpha1e.data.model.RegisterInfo;
 import com.ubt.alpha1e.ui.LoginActivity;
@@ -73,9 +73,9 @@ public enum NavigateUtil {
 
     public void navigateToCountryActivityForResult(Activity context, int requestCode)
     {
-        Intent intent = new Intent();
+        /*Intent intent = new Intent();
         intent.setClass(context, CountryActivity.class);
-        context.startActivityForResult(intent,requestCode);
+        context.startActivityForResult(intent,requestCode);*/
 
     }
 

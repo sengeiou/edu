@@ -205,6 +205,10 @@ public class ConstValue {
 
 	/**
 	 * 升级本体软件.
+	 * 手动升级： 0x43 {小端模式}
+	 参数1: 0未知，　１请求升级，２确定升级（进入升级），　３暂时不升级，４永不升级
+	 回复：
+	 应答：0
 	 */
 	public static final byte DV_DO_UPGRADE_SOFT = (byte) 0x43;
 
