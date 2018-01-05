@@ -351,7 +351,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
             super.handleMessage(msg);
             switch (msg.what) {
                 case NETWORK_CONNECT_SUCCESS:
-                    mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY,1000);
+                    mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY,200);
 
                     break;
                 case NETWORK_CONNECT_FAIL:
