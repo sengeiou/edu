@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ubt.alpha1e"
           android:versionCode="1"
-          android:versionName="V1.0.1.1">
+          android:versionName="V1.0.1.2">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -177,7 +177,7 @@
             android:name=".ui.PcUpdateFinishActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleTheme"/>
-        <activity
+<!--        <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
             android:noHistory="true">
@@ -189,7 +189,7 @@
 
                 <data android:scheme="1106515940"/>
             </intent-filter>
-        </activity>
+        </activity>-->
         <!--
             <activity
             android:name="com.tencent.connect.common.AssistActivity"
@@ -197,9 +197,9 @@
             android:screenOrientation="behind"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         -->
-        <activity
+       <!-- <activity
             android:name="com.tencent.ai.tvs.ui.TVSAssistActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>-->
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
@@ -343,10 +343,11 @@
             android:theme="@style/NoTitleTheme"/>
         <activity
             android:name=".ui.ActionsEditSaveActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:label="@string/title_activity_actions_edit_save"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
+
         <activity
             android:name=".ui.MyThemeActivity"
             android:screenOrientation="portrait"
@@ -375,8 +376,11 @@
             android:theme="@style/NoTitleTheme"/>
         <activity
             android:name=".ui.MyActionsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme"/>
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustPan"/>
+
         <activity android:name=".utils.test.JNIActivity"/>
         <activity
             android:name=".ui.MyActionsSyncActivity"
@@ -661,17 +665,8 @@
             android:name=".action.actioncreate.ActionTestActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen"></activity>
-        <activity
-            android:name=".maincourse.courseone.CourseOneActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen"></activity>
-        <activity
-            android:name=".maincourse.courseone.CourseTwoActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
+
         <activity
             android:name=".maincourse.courseone.CourseLevelOneActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -692,17 +687,61 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelFiveActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.courseone.CourseLevelSixActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelSevenActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelEightActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelNineActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelTenActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.courseone.ActionsCourseSaveActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:label="@string/title_activity_actions_edit_save"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+
         <activity
             android:name=".action.actioncreate.SaveSuccessActivity"
-            android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".action.help.HelpActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
-        <activity android:name=".bluetoothandnet.BluetoothHelp"
+        <activity
+            android:name=".bluetoothandnet.BluetoothHelp"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"></activity>
 
@@ -722,10 +761,11 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
-        <activity android:name=".userinfo.notice.WebActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize"
-                  android:screenOrientation="landscape"
-                  android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".userinfo.notice.WebActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
     </application>
 
 </manifest>

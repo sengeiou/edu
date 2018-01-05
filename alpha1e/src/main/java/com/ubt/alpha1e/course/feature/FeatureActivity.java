@@ -248,7 +248,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                                 showView(tvMsgShow, false, smallerLeftBottomAnim);
                             }
                             showView(rlPrincipleInfraredSensorIntro, true, biggerRightTopAnim);
-                            ((PrincipleHelper) mHelper).playFile("红外传感.hts");
+                            playActionFile("红外传感.hts");
                             startRadiologicalWaveAnim();
                             playCount = 2;
                         } else if (playCount == 2) {
@@ -281,7 +281,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                                 showView(tvMsgShow, false, smallerLeftBottomAnim);
                             }
                             showView(rlPrincipleHeadIntro, true, biggerLeftTopAnim);
-                            ((PrincipleHelper) mHelper).playFile("触摸传感.hts");
+                            playActionFile("触摸传感.hts");
                             startRadiologicalWaveAnim();
                             playCount = 2;
                         } else if (playCount == 2) {
@@ -517,6 +517,20 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         showView(bzvPrincipleEye, 1300);
         showView(bzvPrincipleVoice, 1600);
         showView(bzvPrincipleVoiceObstacleAvoidance, 1900);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        reset();
+        showView(tvMsgShow, false, null);
+        showView(rlPrincipleSteeringEngineIntro,false,null);
+        showView(rlPrincipleInfraredSensorIntro,false,null);
+        showView(rlPrincipleSoundboxIntro,false,null);
+        showView(rlPrincipleHeadIntro,false,null);
+        showView(rlPrincipleEyeIntro,false,null);
+        showView(rlPrincipleVoiceIntro,false,null);
+        showView(rlPrincipleVoiceObstacleAvoidanceIntro,false,null);
     }
 
     private void showView(View view, int delayTime) {

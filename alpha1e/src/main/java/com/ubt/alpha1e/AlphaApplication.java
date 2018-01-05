@@ -36,7 +36,6 @@ import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ISharedPreferensListenet;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
-import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
 import com.ubt.alpha1e.services.AutoScanConnectService;
 import com.ubt.alpha1e.ui.AboutUsActivity;
 import com.ubt.alpha1e.ui.ActionUnpublishedActivity;
@@ -67,9 +66,9 @@ import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.update.EngineUpdateManager;
- import com.ubt.alpha1e.userinfo.dynamicaction.DownLoadActionManager;
- import com.ubt.alpha1e.utils.DynamicTimeFormat;
- import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
+import com.ubt.alpha1e.userinfo.dynamicaction.DownLoadActionManager;
+import com.ubt.alpha1e.utils.DynamicTimeFormat;
+import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
 import com.ubt.alpha1e.utils.crash.CrashHandler;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.xingepush.XGUBTManager;
@@ -388,7 +387,7 @@ public class AlphaApplication extends LoginApplication {
         cleanBluetoothConnectData();
 
         Activity mActivity = null;
-        if(mActivityList == null){
+        if (mActivityList == null) {
             return;
         }
         for (int i = 0; i < mActivityList.size(); i++) {
@@ -417,7 +416,6 @@ public class AlphaApplication extends LoginApplication {
                         || mActivity instanceof RobotControlActivity
                         || mActivity instanceof BlocklyActivity
                         || mActivity instanceof BlocklyCourseActivity
-                        || mActivity instanceof CourseOneActivity
                         || mActivity instanceof NetconnectActivity //add by dicy.cheng  当在网络连接页面时，如果蓝牙掉线，则该网络连接页面也关掉
                         || mActivity instanceof MainActivity
                         || mActivity instanceof BluetoothandnetconnectstateActivity

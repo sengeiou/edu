@@ -7,11 +7,13 @@ import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.maincourse.adapter.CourseArrowAminalUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 /**
@@ -36,6 +38,8 @@ public class DialogMusic extends Dialog {
     private TextView tvContent;
     private LinearLayout llTips;
 
+    private ImageView ivSureArrow;
+
     OnMusicDialogListener mDialogListener;
     private int type = 0;
 
@@ -59,7 +63,7 @@ public class DialogMusic extends Dialog {
         WindowManager.LayoutParams lp = dialogMusic.getWindow().getAttributes();
         lp.width = (int) ((display.getWidth()) * 0.6); //设置宽度
         dialogMusic.getWindow().setAttributes(lp);
-
+        dialogMusic.setCanceledOnTouchOutside(false);
         initView();
     }
 
@@ -71,8 +75,12 @@ public class DialogMusic extends Dialog {
         tvTitle = (TextView) findViewById(R.id.tv_title);
         tvContent = (TextView) findViewById(R.id.tv_tip_content);
         llTips = (LinearLayout) findViewById(R.id.ll_tips);
+        ivSureArrow = findViewById(R.id.iv_sure_arrow);
 
-        if (type == 1) {
+        if (type == 3) {
+            CourseArrowAminalUtil.startViewAnimal(true, ivSureArrow, 2);
+        }
+        if (type == 1||type==3) {
             llTips.setVisibility(View.GONE);
             tvTitle.setText(ResourceManager.getInstance(context).getStringResources("ui_create_auto_record"));
             tvContent.setText(ResourceManager.getInstance(context).getStringResources("ui_create_auto_record_tips"));
@@ -84,7 +92,9 @@ public class DialogMusic extends Dialog {
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+                if (type != 3) {
+                    dismiss();
+                }
             }
         });
 
@@ -93,14 +103,14 @@ public class DialogMusic extends Dialog {
             public void onClick(View v) {
                 if (type == 0) {
                     UbtLog.d(TAG, "select music");
-                    if(null!=mDialogListener){
+                    if (null != mDialogListener) {
                         mDialogListener.setMusic();
                     }
-                } else if (type == 1) {
-                    if(null!=mDialogListener){
+                } else if (type == 1 || type == 3) {
+                    if (null != mDialogListener) {
                         mDialogListener.startAutoRead();
                     }
-                 }
+                }
                 dismiss();
 
             }

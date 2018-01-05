@@ -11,7 +11,7 @@ package com.ubt.alpha1e.login;
 
 public class HttpEntity {
 
-    public static final String HIBITS_STATISTICS = "http://10.10.1.14:8080/alpha1e";
+    public static final String HIBITS_STATISTICS = "http://10.10.1.14:8080/alpha1e/index.html?";
 
     /**
      * 信鸽获取
@@ -62,7 +62,8 @@ public class HttpEntity {
     //查询本账户绑定的机器人信息
     public static final String CHECK_ROBOT_INFO = BASIC_UBX_SYS_BIND + "relation/getEquipmentInfo";
 
-
+    //更新机器人自动升级状态
+    public static final String UPDATE_AUTO_UPGRADE = BASIC_UBX_SYS_BIND + "relation/updateAutoUpgrade";
 
 
 

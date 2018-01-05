@@ -31,6 +31,7 @@ public class Constant {
     public static final String SP_SHOW_REMOTE_PUBLISH = "sp_show_remote_publish";
     public static final String SP_AUTO_UPGRADE = "sp_auto_upgrade";
     public static final String PRINCIPLE_ENTER_PROGRESS = "sp_principle_enter_progress";
+    public static final String SP_SHOW_COMMON_GUIDE = "sp_show_common_guide";
 
     /**
      * 首次申请权限
@@ -83,6 +84,11 @@ public class Constant {
      * 头像
      */
     public final static int KEY_NICK_HEAD = 5;
+
+    /**
+     * token异常处理响应码
+     */
+    public final static int INVALID_TOKEN = 88;
 
     /**
      * 记录动作编辑指引tag

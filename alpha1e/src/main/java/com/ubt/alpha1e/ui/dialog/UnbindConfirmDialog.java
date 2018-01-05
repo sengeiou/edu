@@ -89,7 +89,7 @@ public class UnbindConfirmDialog {
             txt_msg.setText("内容");
         } else {
             txt_msg.setText(Html.fromHtml("1、“行为习惯养成”功能<br>" +
-                    "2、控制机器人邦本升级<br><font color='#ff0000'>  确定要解绑么？</font>"));
+                    "2、控制机器人版本升级<br><font color='#ff0000'>  确定要解绑吗？</font>"));
         }
         return this;
     }

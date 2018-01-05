@@ -14,8 +14,6 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/my_actions_empty"/>
 
-
-
     <TextView
         android:id="@+id/txt_unlogin"
         android:layout_width="wrap_content"

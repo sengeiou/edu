@@ -46,7 +46,7 @@ public class MyActionsSyncActivity extends BaseActivity implements View.OnClickL
     private List<ActionInfo> mSyncList = new ArrayList<>();
     private int type = -1;//属于哪个模块(local/download/collect/create/sync_download/sync_create)
     private TextView txt_delete, txt_download, txt_select_all;
-    private ImageView img_select_all, img_cancel;
+    private ImageView img_select_all, img_cancel,img_circle;
     private boolean isSelectAll;
     private int sync_type = -1;//属于哪个模块的同步(下载/创建)
 
@@ -182,6 +182,7 @@ public class MyActionsSyncActivity extends BaseActivity implements View.OnClickL
         txt_delete.setOnClickListener(this);
         txt_download.setOnClickListener(this);
         img_select_all.setOnClickListener(this);
+        img_circle.setOnClickListener(this);
         txt_select_all.setOnClickListener(this);
         mHelper = MyActionsHelper.getInstance(this);
         mSyncRecyclerview = (RecyclerView) findViewById(R.id.recyclerview_sync);

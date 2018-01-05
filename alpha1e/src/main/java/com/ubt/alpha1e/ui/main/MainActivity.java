@@ -57,10 +57,16 @@ import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelEightActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelFiveActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelFourActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelNineActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelSevenActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelSixActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelTenActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelThreeActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.services.AutoScanConnectService;
@@ -68,6 +74,7 @@ import com.ubt.alpha1e.services.SendClientIdService;
 import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
+import com.ubt.alpha1e.ui.custom.CommonGuideView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
@@ -75,7 +82,6 @@ import com.ubt.alpha1e.ui.helper.BluetoothHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
-import com.ubt.alpha1e.userinfo.myrobot.MyRobotActivity;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -377,6 +383,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 if(isBulueToothConnected()) {
                 try {
                     CommonCtrlView.getInstace(getContext());
+                    UbtLog.d(TAG,"hasShowGuide = " + CommonGuideView.hasShowGuide());
+                    if(!CommonGuideView.hasShowGuide()){
+                        new CommonGuideView(getContext());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -562,14 +572,20 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                     || mActivity instanceof SplitActivity
                                     || mActivity instanceof MergeActivity
                                     || mActivity instanceof FeatureActivity*/
-                                    ||mActivity instanceof ActionTestActivity
-                                    ||mActivity instanceof ActionCourseActivity
-                                    ||mActivity instanceof CourseLevelOneActivity
-                                    ||mActivity instanceof CourseLevelTwoActivity
-                                    ||mActivity instanceof NetconnectActivity
-                                    ||mActivity instanceof NetSearchResultActivity
-                                    ||mActivity instanceof CourseTwoActivity
-                                    ||mActivity instanceof CourseOneActivity
+                                    || mActivity instanceof ActionTestActivity
+                                    || mActivity instanceof ActionCourseActivity
+                                    || mActivity instanceof NetconnectActivity
+                                    || mActivity instanceof NetSearchResultActivity
+                                    || mActivity instanceof CourseLevelOneActivity
+                                    || mActivity instanceof CourseLevelTwoActivity
+                                    || mActivity instanceof CourseLevelThreeActivity
+                                    || mActivity instanceof CourseLevelFourActivity
+                                    || mActivity instanceof CourseLevelFiveActivity
+                                    || mActivity instanceof CourseLevelSixActivity
+                                    || mActivity instanceof CourseLevelSevenActivity
+                                    || mActivity instanceof CourseLevelEightActivity
+                                    || mActivity instanceof CourseLevelNineActivity
+                                    || mActivity instanceof CourseLevelTenActivity
                             )) {
                                 return;
                             }
@@ -641,6 +657,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if(System.currentTimeMillis()-mCurrentTouchTime<noOperationTimeout) {
             hiddenBuddleTextView();
         }
+        mPresenter.exitGlocalControlCenter();
         return super.onTouchEvent(event);
     }
 
@@ -978,7 +995,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     RobotBindingDialog robotBindingDialog = null ;
     //一键绑定
     public void gotoBind(){
-
+        if(AlphaApplication.currentRobotSN == null || AlphaApplication.currentRobotSN.equals("")){
+            ToastUtils.showShort("机器人序列号为空");
+            return;
+        }
         if(robotBindingDialog == null){
             robotBindingDialog = new RobotBindingDialog(AppManager.getInstance().currentActivity())
                     .builder()

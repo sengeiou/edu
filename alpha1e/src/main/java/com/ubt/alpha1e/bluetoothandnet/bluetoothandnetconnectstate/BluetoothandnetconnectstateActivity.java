@@ -25,6 +25,7 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.PermissionUtils;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity;
@@ -115,6 +116,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
     private static final int UPDATE_WIFI_STATUS = 1; //更新WIFI状态
     public static final int MSG_DO_BLUETOOTH_DISCONNECT = 8; //蓝牙断开
+    public static final int CLOSED_ACTIVITY = 9; //关闭页面
 
 
     public static final int REQUEST_CODE = 500;
@@ -156,6 +158,9 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                     ((AlphaApplication) getApplicationContext()).doLostConnect();
                     bluetoothDisconnect();
                     ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(null);
+                    break;
+                case CLOSED_ACTIVITY:
+                    BluetoothandnetconnectstateActivity.this.finish();
                     break;
                 default:
                     break;
@@ -429,10 +434,10 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
                 break;
             case R.id.ig_state2_get_bluetooth_list:
-                searchNet();
+                searchNet(false);
                 break;
             case R.id.ig_state1_goto_connect_net:
-                searchNet();
+                searchNet(true);
                 break;
             case R.id.ig_state2_goto_connect_net:
                 UbtLog.d(TAG,"点击断开连接2");
@@ -468,7 +473,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     }
 
 
-    void searchNet(){
+    void searchNet(boolean isConnectWifi){
         if(!BluetoothStateHelper.getInstance(getContext()).isLostCoon()){
             if(!isOPen(this)){
                 UbtLog.d(TAG,"请先打开位置信息");
@@ -486,8 +491,12 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
             }
 
             Intent i = new Intent();
-            i.putExtra("wifiName",ed_state2_wifi_name.getText().toString());
-            UbtLog.d(TAG,"ed_wifi_name===="+ed_state2_wifi_name.getText().toString());
+            if(isConnectWifi){
+                i.putExtra("wifiName",ed_state1_wifi_name.getText().toString());
+            }else {
+                i.putExtra("wifiName","");
+            }
+            UbtLog.d(TAG,"ed_wifi_name===="+ed_state1_wifi_name.getText().toString());
             i.setClass(BluetoothandnetconnectstateActivity.this,NetSearchResultActivity.class);
             this.startActivityForResult(i,REQUEST_CODE_ENTER_NETSEARCHRESULT);
 

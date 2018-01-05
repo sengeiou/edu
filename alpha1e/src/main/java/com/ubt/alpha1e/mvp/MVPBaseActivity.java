@@ -501,7 +501,8 @@ public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresente
             }
         }
         UbtLog.d(TAG, "skinPath = " + skinPath);
-        SkinManager.getInstance().changeSkin(skinPath, FileTools.package_name, null);
+        //TODO 多语言支持，目前仅支持中文
+       // SkinManager.getInstance().changeSkin(skinPath, FileTools.package_name, null);
 
     }
 

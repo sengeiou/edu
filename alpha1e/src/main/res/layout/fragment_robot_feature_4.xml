@@ -420,7 +420,6 @@
             android:minWidth="215px"
             android:minHeight="59px"
             android:gravity="center_vertical"
-            android:text="@string/ui_principle_head_tips"
             android:paddingRight="10dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"

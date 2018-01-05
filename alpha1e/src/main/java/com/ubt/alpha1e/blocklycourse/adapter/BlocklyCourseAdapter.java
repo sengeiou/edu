@@ -3,11 +3,11 @@ package com.ubt.alpha1e.blocklycourse.adapter;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ubt.alpha1e.R;
@@ -48,7 +48,7 @@ public class BlocklyCourseAdapter extends BaseQuickAdapter<CourseData, BaseViewH
             ivPlayVideo.setVisibility(View.GONE);
         }
 
-//        Glide.with(context).load(item.getThumbnailUrl()).centerCrop().into(ivCourse);
+        Glide.with(context).load(item.getThumbnailUrl()).placeholder(R.drawable.ic_course).fitCenter().into(ivCourse);
 
 //        ((ImageView) helper.getView(R.id.iv_cources)).setImageResource(item.getDrawableId());
         TextView tvActionName = helper.getView(R.id.tv_action_cources_name);
@@ -65,13 +65,13 @@ public class BlocklyCourseAdapter extends BaseQuickAdapter<CourseData, BaseViewH
         }
 //        ivStar.setImageResource(item.getActionCourcesScore() == 0 ? R.drawable.img_action_incomplete : R.drawable.img_action_completed);
 
-        if (TextUtils.isEmpty(item.getName())) {
-            helper.getView(R.id.rl_content).setVisibility(View.GONE);
-            helper.getView(R.id.iv_next).setVisibility(View.VISIBLE);
-        } else {
-            helper.getView(R.id.rl_content).setVisibility(View.VISIBLE);
-            helper.getView(R.id.iv_next).setVisibility(View.GONE);
-        }
+//        if (TextUtils.isEmpty(item.getName())) {
+//            helper.getView(R.id.rl_content).setVisibility(View.GONE);
+//            helper.getView(R.id.iv_next).setVisibility(View.VISIBLE);
+//        } else {
+//            helper.getView(R.id.rl_content).setVisibility(View.VISIBLE);
+//            helper.getView(R.id.iv_next).setVisibility(View.GONE);
+//        }
     }
 
 }

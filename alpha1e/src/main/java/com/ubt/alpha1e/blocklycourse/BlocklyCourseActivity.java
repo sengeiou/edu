@@ -5,7 +5,6 @@ import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +26,6 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
-import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.ubt.alpha1e.R;
@@ -49,7 +47,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 
 import butterknife.BindView;
@@ -93,7 +90,6 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         isTransition = getIntent().getBooleanExtra(TRANSITION, false);
         courseData = (CourseData)getIntent().getSerializableExtra(COURSE_DATA);
         UbtLog.d(TAG, "onCreate courseData:" + courseData);
@@ -102,22 +98,14 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
     }
 
     private void initVideoPlayer() {
-        String url = "http://7xr4xn.media1.z0.glb.clouddn.com/snh48sxhsy.mp4";
-//        String url = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
-        //需要路径的
-        videoPlayer.setUp(url, true, new File(FileUtils.getPath()), courseData.getName());
+//        String url = "http://7xr4xn.media1.z0.glb.clouddn.com/snh48sxhsy.mp4";
+        UbtLog.d(TAG, "initVideoPlayer path:" + courseData.getLocalVideoPath());
+        videoPlayer.setUp(courseData.getLocalVideoPath(), false, null, null);
 
         //videoPlayer.setSpeed(2f);
         orientationUtils = new OrientationUtils(this, videoPlayer);
         orientationUtils.setRotateWithSystem(false);
         orientationUtils.setEnable(false);
-        //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
-//        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                orientationUtils.resolveByClick();
-//            }
-//        });
 
         videoPlayer.setViewListener(this); //设置UI显示回调
 
@@ -152,8 +140,6 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
                 onBackPressedSupport();
             }
         });
-        //过渡动画
-        initTransition();
 
         ivGoPro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,6 +209,9 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
             }
         });
 
+        //过渡动画
+        initTransition();
+
 
     }
 
@@ -257,16 +246,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
     @Override
     protected void onResume() {
         super.onResume();
-        UbtLog.d(TAG, "onResume 0:" + videoPlayer.getCurrentState());
         videoPlayer.onVideoResume();
-        UbtLog.d(TAG, "onResume 1:" + videoPlayer.getCurrentState());
-        if(ivPause.getVisibility()==View.VISIBLE && videoPlayer.getCurrentState()==2){
-//            GSYVideoManager.instance().getMediaPlayer().pause();
-//            hideAllWidget();
-            videoPlayer.clickPauseIcon();
-        }
-
-
     }
 
     @Override

@@ -86,6 +86,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         courseModel5.setTitle("第五关 创定指定动作");
         courseModel5.setDrawableId(R.drawable.ic_action_level5);
         courseModel5.setActionLockType(0);
+        courseModel5.setSize(3);
         list.add(courseModel5);
 
         ActionCourseModel courseModel6 = new ActionCourseModel();
@@ -93,52 +94,43 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         courseModel6.setTitle("第六关 创建音频");
         courseModel6.setDrawableId(R.drawable.ic_action_level6);
         courseModel6.setActionLockType(0);
+        courseModel6.setSize(4);
         list.add(courseModel6);
 
         ActionCourseModel courseModel7 = new ActionCourseModel();
         courseModel7.setActionCourcesName("第七关");
-        courseModel7.setTitle("第五关 创定指定动作");
+        courseModel7.setTitle("第七关 创定指定动作");
         courseModel7.setDrawableId(R.drawable.ic_action_level7);
         courseModel7.setActionLockType(0);
+        courseModel7.setSize(2);
         list.add(courseModel7);
 
         ActionCourseModel courseModel8 = new ActionCourseModel();
         courseModel8.setActionCourcesName("第八关");
-        courseModel8.setTitle("第五关 创定指定动作");
+        courseModel8.setTitle("第八关 连续动作");
         courseModel8.setDrawableId(R.drawable.ic_action_level8);
         courseModel8.setActionLockType(0);
+        courseModel8.setSize(2);
         list.add(courseModel8);
 
         ActionCourseModel courseModel9 = new ActionCourseModel();
         courseModel9.setActionCourcesName("第九关");
-        courseModel9.setTitle("第五关 创定指定动作");
+        courseModel9.setTitle("第九关 快速创建连续动作");
         courseModel9.setDrawableId(R.drawable.ic_action_level9);
         courseModel9.setActionLockType(0);
+        courseModel9.setSize(2);
         list.add(courseModel9);
 
         ActionCourseModel courseModel10 = new ActionCourseModel();
         courseModel10.setActionCourcesName("第十关");
-        courseModel10.setTitle("第五关 创定指定动作");
+        courseModel10.setTitle("第十关 自定义动作");
         courseModel10.setDrawableId(R.drawable.ic_action_level10);
         courseModel10.setActionLockType(0);
+        courseModel10.setSize(1);
         list.add(courseModel10);
-
-        ActionCourseModel courseModel11 = new ActionCourseModel();
-        courseModel11.setActionCourcesName("第十一关");
-        courseModel11.setTitle("第五关 创定指定动作");
-        courseModel11.setDrawableId(R.drawable.ic_action_level11);
-        courseModel11.setActionLockType(0);
-        list.add(courseModel11);
-
-        ActionCourseModel courseModel12 = new ActionCourseModel();
-        courseModel12.setActionCourcesName("第十二关");
-        courseModel12.setTitle("第五关 创定指定动作");
-        courseModel12.setDrawableId(R.drawable.ic_action_level12);
-        courseModel12.setActionLockType(0);
-        list.add(courseModel12);
-
-        ActionCourseModel courseModel13 = new ActionCourseModel();
-        list.add(courseModel13);
+//
+//        ActionCourseModel courseModel13 = new ActionCourseModel();
+//        list.add(courseModel13);
 
         if (isAttachView()) {
             mView.setActionCourseData(list);
@@ -180,7 +172,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
                         BaseResponseModel<CourseLastProgressModule> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<CourseLastProgressModule>>() {
                                 }.getType());
-                         if (baseResponseModel.status) {
+                        if (baseResponseModel.status) {
                             CourseLastProgressModule courseLastProgressModule = baseResponseModel.models;
                             LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
 
@@ -244,7 +236,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
                         BaseResponseModel<List<CourseDetailScoreModule>> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<List<CourseDetailScoreModule>>>() {
                                 }.getType());
-                         if (baseResponseModel.status) {
+                        if (baseResponseModel.status) {
                             if (isAttachView()) {
                                 mView.getCourseScores(baseResponseModel.models);
                             }

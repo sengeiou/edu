@@ -205,6 +205,10 @@ public class ConstValue {
 
 	/**
 	 * 升级本体软件.
+	 * 手动升级： 0x43 {小端模式}
+	 参数1: 0未知，　１请求升级，２确定升级（进入升级），　３暂时不升级，４永不升级
+	 回复：
+	 应答：0
 	 */
 	public static final byte DV_DO_UPGRADE_SOFT = (byte) 0x43;
 
@@ -392,6 +396,10 @@ public class ConstValue {
 	 */
 	public static final byte  DV_INTO_EDIT = (byte)0x95;
 
+	/**
+	 *  传感器控制命令 0 禁止 1 启用
+	 */
+	public static final byte DV_SENSOR_CONTROL=(byte)0x96;
 	/**
 	 *  1E 机器人控制舵机命令
 	 *  参数1 1B: 1.掉电；2.上电

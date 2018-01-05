@@ -40,13 +40,6 @@ public class CourseListPresenter extends BasePresenterImpl<CourseListContract.Vi
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "BLOCKLY_COURSE_LIST onError e:" + e.getMessage());
                 if (isAttachView()) {
-                    CourseData courseData1 = new CourseData();
-                    courseData1.setSequence(110);
-                    courseData1.setCurrGraphProgramId(1);
-                    courseData1.setName("");
-                    courseData1.setStatus("1");
-                    courseData1.setCid(110);
-                    courseData1.saveOrUpdate("cid = ?" , String.valueOf(110));
                     List<CourseData> courseDataList = DataSupport.findAll(CourseData.class);
                     UbtLog.d(TAG, "courseDataList:" + courseDataList.toString());
                     mView.setBlocklyCourseData(courseDataList);
@@ -57,6 +50,7 @@ public class CourseListPresenter extends BasePresenterImpl<CourseListContract.Vi
             @Override
             public void onResponse(List<BlocklyCourseModel> response, int id) {
                 UbtLog.d(TAG, "BLOCKLY_COURSE_LIST onResponse:" + response.toString());
+
 
 
                 for(int i=0; i<response.size(); i++){
@@ -77,14 +71,6 @@ public class CourseListPresenter extends BasePresenterImpl<CourseListContract.Vi
 
 
                 if (isAttachView()) {
-                    //造最后一个即将推出
-                    CourseData courseData1 = new CourseData();
-                    courseData1.setSequence(110);
-                    courseData1.setCurrGraphProgramId(1);
-                    courseData1.setName("");
-                    courseData1.setStatus("1");
-                    courseData1.setCid(110);
-                    courseData1.saveOrUpdate("cid = ?" , String.valueOf(110));
                     List<CourseData> courseDataList = DataSupport.findAll(CourseData.class);
                     UbtLog.d(TAG, "courseDataList:" + courseDataList.toString());
                     mView.setBlocklyCourseData(courseDataList);

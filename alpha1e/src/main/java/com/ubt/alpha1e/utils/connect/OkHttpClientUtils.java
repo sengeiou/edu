@@ -161,6 +161,7 @@ public class OkHttpClientUtils {
 
 
     public static RequestCall getJsonByPutRequest(String url, String params, int id) {
+        UbtLog.d("getJsonByPutRequest", "url:" + url + "__params:" + params);
         return OkHttpUtils.put()
                 .url(url)
                 .requestBody(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), params))
