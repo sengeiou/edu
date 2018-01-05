@@ -77,9 +77,9 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private int paddingBottomHeight ; //定义浮动按钮距离页面底部的高度
 
     private ImageView ivPop;
-    private LinearLayout lay_ctrl, lay_ctrl_more;
+    private static LinearLayout lay_ctrl, lay_ctrl_more;
     private Button btn_stop, btn_reset, btn_more;  //lay_ctrl btn
-    private ImageView btn_reset_m, btn_pause_or_continue, btn_lose_power, btn_stop_m, btn_vol_log, btn_cycle,btn_lig_logo;
+    private ImageView btn_reset_m, btn_pause_or_continue, btn_lose_power, btn_stop_m, btn_vol_log, btn_actionList,btn_lig_logo;
     private TextView btn_exit;
     private TextView txt_action_name, txt_action_name_m, txt_cycle_num;
     private SeekBar sek_vol_ctrl;
@@ -107,7 +107,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private ActionPlayer.Play_state currentState = ActionPlayer.Play_state.action_finish;
     private NewActionPlayer.PlayerState currentNewPlayState = NewActionPlayer.PlayerState.STOPING;
     private static final int CLOSE_VIEW = 1;
-
+    private boolean float_view_enable=true;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -128,11 +128,9 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     };
 
     public static CommonCtrlView getInstace(Context context){
-        if(commonCtrlView != null){
-            commonCtrlView.onDestroy();
-            commonCtrlView = null;
+        if(commonCtrlView == null) {
+            commonCtrlView = new CommonCtrlView(context);
         }
-        commonCtrlView = new CommonCtrlView(context);
         return commonCtrlView;
     }
 
@@ -151,11 +149,15 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         initHelper();
         createFloatView();
         rl_control.setVisibility(View.INVISIBLE);
-        mWindowManager.removeView(mFloatLayout);
+        if(float_view_enable) {
+            mWindowManager.removeView(mFloatLayout);
+        }
         wmParams.y = 0;
         wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         lay_ctrl_more.setVisibility(View.VISIBLE);
-        mWindowManager.addView(mFloatLayout, wmParams);
+        if(float_view_enable) {
+            mWindowManager.addView(mFloatLayout, wmParams);
+        }
 //        //Alpha 1E from Brian
 //        rl_control.setVisibility(View.GONE);
 //        wmParams.y = 0;
@@ -208,23 +210,26 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         //获取浮动窗口视图所在布局
-        mFloatLayout = (LinearLayout) inflater.inflate(R.layout.view_float_control, null);
+        if(float_view_enable) {
+            mFloatLayout = (LinearLayout) inflater.inflate(R.layout.view_float_control, null);
+        }
         mPopWindowLayout = (LinearLayout) inflater.inflate(R.layout.layout_ctrl_more_ft, null);
         dialogLayout = (LinearLayout) inflater.inflate(R.layout.view_alertdialog, null);
         guideLayout = (RelativeLayout) inflater.inflate(R.layout.layout_float_guid, null);
-
         initView(mFloatLayout);
         initRobotState();
+        if(float_view_enable) {
+            mFloatLayout.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Log.d(TAG, "---wmma---Float view onTouched!");
+                    return false;
+                }
+            });
+            mWindowManager.addView(mFloatLayout, wmParams);
+        }
 
-        mFloatLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Log.d(TAG, "---wmma---Float view onTouched!");
-                return false;
-            }
-        });
 
-        mWindowManager.addView(mFloatLayout, wmParams);
         //添加mFloatLayout
 //        if(!readShowState().equals("4")){
 //            ColorDrawable colorDrawable = new ColorDrawable(Color.argb(150, 0, 0, 0));
@@ -248,13 +253,15 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
      */
     private void initView(View view) {
         //View_float_control LAYOUT
-        ivPop = (ImageView) view.findViewById(R.id.iv_pop);
-        lay_ctrl_more = (LinearLayout) view.findViewById(R.id.lay_ctrl_more);
-        rl_control = (RelativeLayout) view.findViewById(R.id.rl_control);
-        gifImageView = (GifImageView) view.findViewById(R.id.gif_playing_control);
+        if(float_view_enable) {
+            ivPop = (ImageView) view.findViewById(R.id.iv_pop);
+            lay_ctrl_more = (LinearLayout) view.findViewById(R.id.lay_ctrl_more);
+            rl_control = (RelativeLayout) view.findViewById(R.id.rl_control);
+            gifImageView = (GifImageView) view.findViewById(R.id.gif_playing_control);
+        }
 
         //init hide view
-        btn_cycle = (ImageView) view.findViewById(R.id.btn_actionlist);
+        btn_actionList = (ImageView) view.findViewById(R.id.btn_actionlist);
         btn_reset_m=(ImageView) view.findViewById(R.id.btn_reset);
         btn_lose_power = (ImageView) view.findViewById(R.id.btn_poweroff);
         btn_pause_or_continue = (ImageView) view.findViewById(R.id.btn_playaction);
@@ -265,15 +272,15 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         rl_close_more = (RelativeLayout) view.findViewById(R.id.lay_ctrl_more_close);
         btn_exit=(TextView)view.findViewById(R.id.cc_exit);
         //view_alertdialog  layout
-        txt_action_name = (TextView) view.findViewById(R.id.action_test);
-        txt_action_name_m = (TextView) view.findViewById(R.id.action_test);
+        txt_action_name = (TextView) view.findViewById(R.id.text_playContentName);
+        txt_action_name_m = (TextView) view.findViewById(R.id.text_playContentName);
         txt_cycle_num = (TextView) view.findViewById(R.id.action_test);
 
         //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
         ColorMatrix matrix = new ColorMatrix();
         matrix.setSaturation(0);
         ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
-        btn_cycle.setColorFilter(filter);
+        btn_actionList.setColorFilter(filter);
         //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
 
         UbtLog.d(TAG, "playingName=" + playingName);
@@ -304,16 +311,20 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             @Override
             public void onClick(View v) {
                 UbtLog.d(TAG, "iv pop onclick!");
-                mWindowManager.removeView(mFloatLayout);
+                if(float_view_enable) {
+                    mWindowManager.removeView(mFloatLayout);
+                }
                 rl_control.setVisibility(View.GONE);
                 wmParams.y = 0;
                 wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
                 lay_ctrl_more.setVisibility(View.VISIBLE);
-                mWindowManager.addView(mFloatLayout, wmParams);
+                if(float_view_enable) {
+                    mWindowManager.addView(mFloatLayout, wmParams);
+                }
             }
         });
 
-        btn_cycle.setOnClickListener(new View.OnClickListener() {
+        btn_actionList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                 if(!BaseHelper.hasSdcard){
@@ -457,7 +468,9 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         btn_exit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                mWindowManager.removeView(mFloatLayout);
+                if(float_view_enable) {
+                    mWindowManager.removeView(mFloatLayout);
+                }
                 lay_ctrl_more.setVisibility(View.GONE);
             }
         });
@@ -972,14 +985,18 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
     public void resetFloatView(){
         UbtLog.d(TAG, "----resetFloatView！");
-        mWindowManager.removeView(mFloatLayout);
+        if(float_view_enable) {
+            mWindowManager.removeView(mFloatLayout);
+        }
         lay_ctrl_more.setVisibility(View.GONE);
         rl_control.setVisibility(View.VISIBLE);
         wmParams.y = paddingBottomHeight;
         wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
-        mWindowManager.addView(mFloatLayout, wmParams);
+        if(float_view_enable) {
+            mWindowManager.addView(mFloatLayout, wmParams);
+        }
     }
 
     private void showFloatView() {
@@ -988,7 +1005,9 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
-        mWindowManager.addView(mFloatLayout, wmParams);
+        if(float_view_enable) {
+            mWindowManager.addView(mFloatLayout, wmParams);
+        }
     }
 
 
@@ -1001,7 +1020,17 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         return BasicSharedPreferencesOperator.getInstance(mBaseActivity, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doReadSync(BasicSharedPreferencesOperator.KEY_HAS_FLOAT_SHOW);
     }
 
-
+   public static void exitGlocalControlCenter(){
+//       if(float_view_enable) {
+//           mWindowManager.removeView(mFloatLayout);
+//       }
+       if (lay_ctrl_more != null)
+           lay_ctrl_more.setVisibility(View.GONE);
+       if (commonCtrlView != null) {
+           commonCtrlView.onDestroy();
+           commonCtrlView = null;
+       }
+   }
 
 
 

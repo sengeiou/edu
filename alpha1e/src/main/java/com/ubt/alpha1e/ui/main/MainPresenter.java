@@ -13,6 +13,7 @@ import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -204,6 +205,11 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         checkRobotInfo.setSystemType("3");
         String url = HttpEntity.CHECK_ROBOT_INFO;
         doRequest(url,checkRobotInfo,CHECK_ROBOT_INFO_HABIT);
+    }
+
+    @Override
+    public void exitGlocalControlCenter() {
+        CommonCtrlView.exitGlocalControlCenter();
     }
 
     /**

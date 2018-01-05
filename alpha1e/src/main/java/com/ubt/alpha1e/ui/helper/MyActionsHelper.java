@@ -1342,8 +1342,8 @@ public class MyActionsHelper extends BaseHelper implements
             }
         }
         mPlayer.doCycle(actions);
-
     }
+
 
     public void doTurnLight() {
         byte[] papram = new byte[1];
@@ -2688,6 +2688,9 @@ public class MyActionsHelper extends BaseHelper implements
 
     public void doPlayForBlockly(String name, boolean isWalk){
         mPlayer.doPlayActionForBlockly(name, isWalk);
+    }
+    public void doPlay(ActionInfo name){
+        mPlayer.doPlayAction(name);
     }
 
 
