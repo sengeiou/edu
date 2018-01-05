@@ -399,7 +399,14 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
     public void playCourseAction(PrepareDataModel prepareDataModel, int type) {
         isPlayAction = true;
         //  playAction(prepareDataModel);
-        UbtLog.d(TAG, "playCourseAction===" + currentCourse);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (null != mActionCourseTwoUtil) {
+                    mActionCourseTwoUtil.showAddAnimal();
+                }
+            }
+        }, 1000);
     }
 
     @Override

@@ -116,7 +116,6 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
                         }
                     }
                 })
-                .setCancelable(true)
                 .create();
         mDialogPlus.show();
         selectDataModel = null;
@@ -149,7 +148,7 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         //第一个位置弹出录音框
-        if (position == 0) {
+        if (position == 0 && selectPosition == 0) {
             PermissionUtils.getInstance(mContext).request(new PermissionUtils.PermissionLocationCallback() {
                 @Override
                 public void onSuccessful() {

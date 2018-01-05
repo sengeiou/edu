@@ -27,6 +27,7 @@ import com.ubt.alpha1e.action.model.PrepareDataModel;
 import com.ubt.alpha1e.action.model.PrepareMusicModel;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.maincourse.adapter.ActionCourseTwoUtil;
+import com.ubt.alpha1e.maincourse.adapter.CourseArrowAminalUtil;
 import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
 import com.ubt.alpha1e.maincourse.adapter.CourseMusicDialogUtil;
 import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
@@ -153,9 +154,12 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
             mRlInstruction.setVisibility(View.VISIBLE);
             ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor16.hts");
         } else if (currentCourse == 2) {
-            showMusicArrow(true);
+            ivActionBgm.setEnabled(true);
+            CourseArrowAminalUtil.startViewAnimal(true,ivMusicArror,2);
         } else if (currentCourse == 3) {
-            showPlayArrow1(true);
+            ivPlay.setEnabled(true);
+            ivAddFrame.setEnabled(false);
+            CourseArrowAminalUtil.startViewAnimal(true,playArrow,2);
             ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor17.hts");
         }
 
@@ -249,7 +253,8 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
      * 点击弹出音乐对话框
      */
     private void showMusicDialog() {
-        showMusicArrow(false);
+        ivActionBgm.setEnabled(false);
+        CourseArrowAminalUtil.startViewAnimal(false,ivMusicArror,2);
         ((ActionsEditHelper) mHelper).stopSoundAudio();
         if (null == mMusicDialogUtil) {
             mMusicDialogUtil = new CourseMusicDialogUtil(mContext);
@@ -266,8 +271,8 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
         if (null == mActionCourseTwoUtil) {
             mActionCourseTwoUtil = new ActionCourseTwoUtil(mContext);
         }
-
-        showActionMoreArrow(false);
+        ivActionLibMore.setEnabled(false);
+        CourseArrowAminalUtil.startViewAnimal(false,ivMoreArrow,2);
         mActionCourseTwoUtil.showActionDialog(2, this);
 
     }
@@ -278,7 +283,8 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
     private void playAction() {
         ((ActionsEditHelper) mHelper).stopAction();
         startPlayAction();
-        showPlayArrow1(false);
+         ivAddFrame.setEnabled(false);
+        CourseArrowAminalUtil.startViewAnimal(false,playArrow,2);
         ivPlay.setEnabled(false);
         ivPlay.setImageResource(R.drawable.ic_pause);
     }
@@ -322,7 +328,9 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
             if (isInstruction) {//第一课程
                 isInstruction = false;
                 mRlInstruction.setVisibility(View.GONE);
-                showActionMoreArrow(true);
+                 ivActionLibMore.setEnabled(true);
+                CourseArrowAminalUtil.startViewAnimal(true,ivMoreArrow,2);
+
             }
         } else if (currentCourse == 2) {
             UbtLog.d(TAG, "playComplete==" + 2);
@@ -331,98 +339,9 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
 
 
     /**
-     * 左边箭头动效
-     *
-     * @param flag true 播放 false 结束
-     */
-    private void showMusicArrow(boolean flag) {
-        ivActionBgm.setEnabled(flag);
-        if (flag) {
-            //((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"音乐库.mp3\",\"playcount\":1}");
-            ivMusicArror.setVisibility(View.VISIBLE);
-            ivMusicArror.setImageResource(R.drawable.animal_left_arrow);
-            animation1 = (AnimationDrawable) ivMusicArror.getDrawable();
-            animation1.start();
-        } else {
-            ivMusicArror.setVisibility(View.GONE);
-            if (null != animation1) {
-                animation1.stop();
-            }
-        }
-    }
-
-
-    /**
-     * 右边箭头动效
-     *
-     * @param flag true 播放 false 结束
-     */
-    private void showActionMoreArrow(boolean flag) {
-        ivActionLibMore.setEnabled(flag);
-        if (flag) {
-            ivMoreArrow.setVisibility(View.VISIBLE);
-            ivMoreArrow.setImageResource(R.drawable.animal_left_arrow);
-            animation3 = (AnimationDrawable) ivMoreArrow.getDrawable();
-            animation3.start();
-        } else {
-            ivMoreArrow.setVisibility(View.GONE);
-            if (null != animation3) {
-                animation3.stop();
-            }
-        }
-    }
-
-    /**
-     * 右边箭头动效
-     *
-     * @param flag true 播放 false 结束
-     */
-    private void showRightArrow(boolean flag) {
-        if (flag) {
-            ivRightArrow.setVisibility(View.VISIBLE);
-            ivRightArrow.setImageResource(R.drawable.animal_right_arrow);
-            animation3 = (AnimationDrawable) ivRightArrow.getDrawable();
-            animation3.start();
-        } else {
-            ivRightArrow.setVisibility(View.GONE);
-            if (null != animation3) {
-                animation3.stop();
-            }
-        }
-    }
-
-
-    /**
-     * 播放按钮箭头动效
-     *
-     * @param flag true 播放 false 结束
-     */
-    private void showPlayArrow1(boolean flag) {
-        ivPlay.setEnabled(true);
-        ivBack.setEnabled(false);
-        ivAddFrame.setEnabled(false);
-        ivActionBgm.setEnabled(false);
-        if (flag) {
-            playArrow.setVisibility(View.VISIBLE);
-            playArrow.setImageResource(R.drawable.animal_left_arrow);
-            animation3 = (AnimationDrawable) playArrow.getDrawable();
-            animation3.start();
-        } else {
-            playArrow.setVisibility(View.GONE);
-            if (null != animation3) {
-                animation3.stop();
-            }
-        }
-    }
-
-    /**
      * Activity执行onPause方法
      */
     public void onPause() {
-        mHandler.removeMessages(1111);
-        mHandler.removeMessages(1112);
-        mHandler.removeMessages(1113);
-        mHandler.removeMessages(1115);
 
     }
 
