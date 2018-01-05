@@ -272,7 +272,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         rl_close_more = (RelativeLayout) view.findViewById(R.id.lay_ctrl_more_close);
         btn_exit=(TextView)view.findViewById(R.id.cc_exit);
         //view_alertdialog  layout
-        txt_action_name = (TextView) view.findViewById(R.id.text_playContentName);
+        //txt_action_name = (TextView) view.findViewById(R.id.text_playContentName);
         txt_action_name_m = (TextView) view.findViewById(R.id.text_playContentName);
         txt_cycle_num = (TextView) view.findViewById(R.id.action_test);
 
@@ -296,7 +296,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             txt_action_name_m.setText(playingName);
         }else{
             gifImageView.setVisibility(View.INVISIBLE);
-            txt_action_name_m.setText("");
+            txt_action_name_m.setText("暂无播放内容");
         }
 
         guideLayout.setOnClickListener(new View.OnClickListener() {
@@ -360,7 +360,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
                 mHelper.doActionCommand(
                         MyActionsHelper.Command_type.Do_default, "", AlphaApplication.getActionType());
-                txt_action_name_m.setText("");
+                txt_action_name_m.setText("暂无播放内容");
                 mBaseActivity.saveCurrentPlayingActionName("");
                // btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
                // gifImageView.setVisibility(View.INVISIBLE);
@@ -729,7 +729,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                     && "#@%".contains(name.toCharArray()[0] + "")) {
                 name = name.substring(1);
             }
-            txt_action_name_m.setText(name);
+            txt_action_name_m.setText("正在播放:"+name);
             mBaseActivity.saveCurrentPlayingActionName(name);
 
         }
@@ -770,7 +770,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             public void run() {
 
                 mHelper.doStopMp3ForMyDownload();
-                txt_action_name_m.setText("");
+                txt_action_name_m.setText("暂无播放内容");
                 mBaseActivity.saveCurrentPlayingActionName("");
                 btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
                 gifImageView.setVisibility(View.INVISIBLE);
@@ -785,11 +785,10 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             @Override
             public void run() {
                 btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
-
                 String name = ((MyActionsHelper) mHelper).getNewPlayerName();
                 mBaseActivity.saveCurrentPlayingActionName(name);
-                txt_action_name.setText(name);
-                txt_action_name_m.setText(name);
+                //txt_action_name.setText(name);
+                txt_action_name_m.setText("正在播放:"+name);
                 gifImageView.setVisibility(View.VISIBLE);
             }
         });
@@ -813,7 +812,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         mBaseActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txt_action_name_m.setText("");
+                txt_action_name_m.setText("暂无播放内容");
                 btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
                 gifImageView.setVisibility(View.INVISIBLE);
                 mBaseActivity.saveCurrentPlayingActionName("");

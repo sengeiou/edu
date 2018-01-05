@@ -55,6 +55,7 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
     BlocklyCourseAdapter courseAdapter;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,9 +138,14 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
             return;
         }
         if(TextUtils.isEmpty(courseData.getLocalVideoPath())){
-            ProgressBar pbVideo = view.findViewById(R.id.pb_video);
-            pbVideo.setVisibility(View.VISIBLE);
-            downloadVideo(courseData, view);
+            if(download){
+                return;
+            }else{
+                ProgressBar pbVideo = view.findViewById(R.id.pb_video);
+                pbVideo.setVisibility(View.VISIBLE);
+                downloadVideo(courseData, view);
+            }
+
         }else{
             Intent intent = new Intent(CourseListActivity.this, BlocklyCourseActivity.class);
             intent.putExtra(BlocklyCourseActivity.TRANSITION, true);
@@ -160,18 +166,23 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
 
     }
 
+    private boolean download = false;
     private void downloadVideo(final CourseData courseData, final View view){
+        download = true;
+
         OkHttpClientUtils.getDownloadFile(courseData.getVideoUrl()).execute(new FileCallBack(BlocklyUtil.getVideoPath(), courseData.getName()) {
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "downloadVideo onError:" + e.getMessage());
                 view.findViewById(R.id.pb_video).setVisibility(View.GONE);
                 ToastUtils.showShort("视频文件下载失败");
+                download = false;
             }
 
             @Override
             public void onResponse(File response, int id) {
                 UbtLog.d(TAG, "downloadVideo onResponse:" + response.getAbsolutePath());
+                download = false;
 
                 view.findViewById(R.id.pb_video).setVisibility(View.GONE);
 
