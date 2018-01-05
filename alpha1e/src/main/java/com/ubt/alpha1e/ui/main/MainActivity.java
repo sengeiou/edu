@@ -296,6 +296,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
              },100);
         }else {
+            UbtLog.d(TAG,"readNetworkStatus");
             MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
             if(cartoonAction != null) {
                 if( APP_CURRENT_STATUS==ROBOT_SLEEP_EVENT){

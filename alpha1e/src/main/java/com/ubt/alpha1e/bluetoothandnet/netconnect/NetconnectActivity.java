@@ -26,8 +26,11 @@ import android.widget.RelativeLayout;
 import com.ubt.alpha1e.AlphaApplication;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.event.NetworkEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.services.SendClientIdService;
@@ -348,7 +351,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
             super.handleMessage(msg);
             switch (msg.what) {
                 case NETWORK_CONNECT_SUCCESS:
-                    mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY,200);
+                    mHandler.sendEmptyMessageDelayed(NETWORK_CONNECT_SUCCESS_DIALOG_DISPLAY,1000);
 
                     break;
                 case NETWORK_CONNECT_FAIL:
@@ -359,14 +362,22 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
                     displayDialog();
                     UbtLog.d(TAG,"网络连接成功 wifiName: " +wifiName  );
                     SendClientIdService.getInstance(NetconnectActivity.this).gotoCheckIsBind();
-                    Intent intent = new Intent();
-                    //把返回数据存入Intent
-                    intent.putExtra("wifiName", ed_wifi_name.getText().toString());
-                    intent.putExtra("isConnectSucces","yes");
-                    //设置返回数据
-                    NetconnectActivity.this.setResult(RESULT_OK, intent);
-                    //关闭Activity
+//                    Intent intent = new Intent();
+//                    //把返回数据存入Intent
+//                    intent.putExtra("wifiName", ed_wifi_name.getText().toString());
+//                    intent.putExtra("isConnectSucces","yes");
+//                    //设置返回数据
+//                    NetconnectActivity.this.setResult(RESULT_OK, intent);
+//                    //关闭Activity
+//                    NetconnectActivity.this.finish();
+
+
+                    Intent intents = new Intent();
+                    intents.setClass(NetconnectActivity.this,MainActivity.class);
+                    startActivity(intents);
                     NetconnectActivity.this.finish();
+
+
                     break;
                 case NETWORK_CONNECT_FAIL_DIALOG_DISPLAY:
                     displayDialog();

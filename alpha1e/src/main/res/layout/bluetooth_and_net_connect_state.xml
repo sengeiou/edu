@@ -104,8 +104,8 @@
 
         <Button
             android:id="@+id/ig_state1_get_bluetooth_list"
-            android:layout_width="80dp"
-            android:layout_height="28dp"
+            android:layout_width="83dp"
+            android:layout_height="30dp"
             android:background="@drawable/action_button_enable"
             android:layout_below="@id/ed_state1_bluetooth_name"
             android:layout_toRightOf="@id/ig_rl_state1_robot"
@@ -113,7 +113,7 @@
             android:focusableInTouchMode="false"
             android:textColor="@color/white"
             android:text="连接"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:layout_marginTop="15dp"
             android:clickable="true"/>
 
