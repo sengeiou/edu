@@ -2,10 +2,13 @@ package com.ubt.alpha1e.maincourse.courselayout;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,11 +21,15 @@ import android.widget.TextView;
 
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
+import com.ubt.alpha1e.action.model.ActionConstant;
 import com.ubt.alpha1e.action.model.PrepareDataModel;
 import com.ubt.alpha1e.action.model.PrepareMusicModel;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.data.model.FrameActionInfo;
 import com.ubt.alpha1e.maincourse.adapter.ActionCourseTwoUtil;
 import com.ubt.alpha1e.maincourse.adapter.CourseArrowAminalUtil;
 import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
@@ -34,6 +41,9 @@ import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.litepal.crud.DataSupport;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * @author：liuhai
@@ -44,14 +54,20 @@ import org.litepal.crud.DataSupport;
  * version
  */
 
-public class CourseLevelSixLayout extends BaseActionEditLayout implements ActionCourseTwoUtil.OnCourseDialogListener, CourseMusicDialogUtil.OnMusicDialogListener {
-    private String TAG = CourseLevelSixLayout.class.getSimpleName();
+public class CourseLevelSevenLayout extends BaseActionEditLayout implements ActionCourseTwoUtil.OnCourseDialogListener {
+    private String TAG = CourseLevelSevenLayout.class.getSimpleName();
     private ImageView ivAddLibArrow;
     private ImageView ivLeftArrow1;
 
-    private ImageView ivMusiArrow;
+    private ImageView ivLeftHandArrow;
+
+    private ImageView ivUpdateArrow;
+
+    private ImageView ivEditArrow;
 
     private ImageView ivPlayArrow;
+
+    private ImageView ivAddArrow;
     ActionCourseTwoUtil mActionCourseTwoUtil;
     /**
      * 高亮对话框的TextView显示
@@ -70,15 +86,15 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
 
     private CourseMusicDialogUtil mMusicDialogUtil;
 
-    public CourseLevelSixLayout(Context context) {
+    public CourseLevelSevenLayout(Context context) {
         super(context);
     }
 
-    public CourseLevelSixLayout(Context context, @Nullable AttributeSet attrs) {
+    public CourseLevelSevenLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CourseLevelSixLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CourseLevelSevenLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -100,7 +116,7 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
             UbtLog.d(TAG, "record===" + record.toString());
             int course = record.getCourseLevel();
             int recordlevel = record.getPeriodLevel();
-            if (course == 6) {
+            if (course == 7) {
                 if (recordlevel == 0) {
                     level = 1;
                 } else if (recordlevel == 1) {
@@ -128,18 +144,10 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
         UbtLog.d(TAG, "currentCourse==" + currentCourse);
         if (currentCourse == 1) {
             mRlInstruction.setVisibility(View.VISIBLE);
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor22.hts");
-            //showOneCardContent();
+            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor26.hts");
         } else if (currentCourse == 2) {
-            ivActionLib.setEnabled(true);
-            ivActionLibMore.setEnabled(false);
-        } else if (currentCourse == 3) {
-            ivActionBgm.setEnabled(true);
-            CourseArrowAminalUtil.startViewAnimal(true, ivMusiArrow, 2);
-        } else if (currentCourse == 4) {
-            ivPlay.setEnabled(true);
-            CourseArrowAminalUtil.startViewAnimal(true, ivPlayArrow, 2);
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor25.hts");
+            ivActionLib.setEnabled(false);
+            CourseArrowAminalUtil.startViewAnimal(true, ivLeftHandArrow, 1);
         }
 
     }
@@ -162,11 +170,36 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
         ivLeftArrow1.setOnClickListener(this);
         mRlInstruction = findViewById(R.id.rl_instruction);
         mTextView = findViewById(R.id.tv_all_introduc);
-        mTextView.setText("现在给阿尔法的踢腿动作配一个声音吧！");
+        mTextView.setText("知道吗？对阿尔法的动作不满意，你还可以修改呢。");
 
-        ivMusiArrow = findViewById(R.id.iv_music_arrow);
-
+        ivLeftHandArrow = findViewById(R.id.iv_left_arrow);
+        ivLeftHandArrow.setOnClickListener(this);
+        ivLeftHandArrow();
         ivPlayArrow = findViewById(R.id.iv_play_arrow);
+        ivUpdateArrow = findViewById(R.id.iv_update_arrow);
+
+        ivEditArrow = findViewById(R.id.iv_edit_arrow);
+        ivEditArrow.setOnClickListener(this);
+
+        ivAddArrow = findViewById(R.id.iv_add_frame_arrow);
+        ivAddArrow.setOnClickListener(this);
+    }
+
+    /**
+     * 初始化箭头图片宽高
+     */
+    private void ivLeftHandArrow() {
+        // 获取屏幕密度（方法2）
+        DisplayMetrics dm = new DisplayMetrics();
+        dm = getResources().getDisplayMetrics();
+        float density = dm.density;
+        UbtLog.d(TAG, "density:" + density);
+        if (AlphaApplication.isPad()) {
+            UbtLog.d(TAG, "Pad Robot 1");
+        } else {
+            ivLeftHandArrow.setLayoutParams(ActionConstant.getIvRobotParams(density, ivLeftHandArrow));
+            UbtLog.d(TAG, "ivLeftArrow:" + ivLeftHandArrow.getWidth() + "/" + ivLeftHandArrow.getHeight());
+        }
     }
 
     /**
@@ -199,27 +232,192 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
             case R.id.iv_add_action_arrow:
                 showActionDialog();
                 break;
-            case R.id.iv_action_lib_more:
-                showActionDialog();
-                break;
-            case R.id.iv_add_action_arrow1:
-                showActionDialog();
-                break;
 
-            case R.id.iv_action_bgm:
-                showMusicDialog();
-                break;
-
-            case R.id.iv_music_arrow:
-                showMusicDialog();
-                break;
             case R.id.iv_play_music:
                 playAction();
                 break;
             case R.id.iv_play_arrow:
                 playAction();
                 break;
+            case R.id.iv_hand_left:
+                lostRightLeg = true;
+                lostLeft();
+                CourseArrowAminalUtil.startViewAnimal(false, ivLeftHandArrow, 1);
+                CourseArrowAminalUtil.startViewAnimal(true, ivUpdateArrow, 2);
+                ivAddFrame.setEnabled(false);
+                isOnCourse = false;
+                break;
+            case R.id.iv_left_arrow:
+                lostRightLeg = true;
+                lostLeft();
+                CourseArrowAminalUtil.startViewAnimal(false, ivLeftHandArrow, 1);
+                CourseArrowAminalUtil.startViewAnimal(true, ivUpdateArrow, 2);
+                ivAddFrame.setEnabled(false);
+                isOnCourse = false;
+                break;
+
+            case R.id.iv_edit_arrow:
+                editUpdate();
+                break;
+
+            case R.id.iv_change:
+                editUpdate();
+                break;
+            case R.id.iv_add_frame_arrow:
+                addFrameOnClick();
+                isOnCourse = true;
+                ivPlay.setEnabled(true);
+                ivPlay.setImageResource(R.drawable.ic_play_enable);
+                CourseArrowAminalUtil.startViewAnimal(true, ivPlayArrow, 2);
+                CourseArrowAminalUtil.startViewAnimal(false, ivAddArrow, 1);
+                break;
+            case R.id.iv_add_frame:
+                addFrameOnClick();
+                isOnCourse = true;
+                ivPlay.setEnabled(true);
+                ivPlay.setImageResource(R.drawable.ic_play_enable);
+                CourseArrowAminalUtil.startViewAnimal(true, ivPlayArrow, 2);
+                CourseArrowAminalUtil.startViewAnimal(false, ivAddArrow, 1);
+                break;
             default:
+        }
+    }
+
+    /**
+     * 点击修改按钮，先复原机器人
+     */
+    private void editUpdate() {
+        ((ActionsEditHelper) mHelper).stopAction();
+
+        UbtLog.d(TAG, "doReset");
+
+        String angles = "93#20#66#86#156#127#90#74#95#104#89#89#104#81#76#90";
+
+//        String angles = "90#90#90#90#90#90#90#60#76#110#90#90#120#104#70#90";
+        FrameActionInfo info = new FrameActionInfo();
+        info.eng_angles = angles;
+
+        info.eng_time = 600;
+        info.totle_time = 600;
+
+        Map map = new HashMap<String, Object>();
+        map.put(ActionsEditHelper.MAP_FRAME, info);
+        String item_name = ResourceManager.getInstance(mContext).getStringResources("ui_readback_index");
+        item_name = item_name.replace("#", 1 + "");
+        //map.put(ActionsEditHelper.MAP_FRAME_NAME, item_name);
+        map.put(ActionsEditHelper.MAP_FRAME_NAME, 1 + "");
+        map.put(ActionsEditHelper.MAP_FRAME_TIME, info.totle_time);
+
+        ((ActionsEditHelper) mHelper)
+                .doCtrlAllEng(((FrameActionInfo) map
+                        .get(ActionsEditHelper.MAP_FRAME)).getData());
+
+        CourseArrowAminalUtil.startViewAnimal(false, ivEditArrow, 1);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doChangeItem();
+                autoRead = true;
+                mHandler.sendEmptyMessage(MSG_AUTO_READ);
+                isCourseReading = true;
+                ivAddFrame.setEnabled(false);
+                ivAddFrame.setImageResource(R.drawable.ic_confirm);
+            }
+        }, 1500);
+
+    }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == MSG_AUTO_READ) {
+                needAdd = true;
+                UbtLog.d(TAG, "adddddd:" + autoRead);
+                if (autoRead) {
+                    readEngOneByOne();
+                }
+                ivAddFrame.setImageResource(R.drawable.ic_confirm);
+            }
+        }
+    };
+    private String autoAng = "";
+
+    /**
+     * 重写父类的方法判断角度变化了
+     */
+    @Override
+    public void addFrame() {
+        if (isChangeData) {
+            super.addFrame();
+            return;
+        }
+        UbtLog.d(TAG, "addFrame:================");
+        String angles = "";
+        for (int i = 0; i < init.length; i++) {
+            angles += init[i] + "#";
+        }
+        UbtLog.d(TAG, "angles:" + angles);
+
+        UbtLog.d(TAG, "autoAng:" + autoAng + "angles:" + angles);
+        if (autoAng.equals(angles)) {
+            mHandler.sendEmptyMessage(MSG_AUTO_READ);
+
+        } else {
+            UbtLog.d(TAG, "autoAng:" + autoAng + "angles:" + angles);
+            if (autoAng.equals("")) {
+                autoAng = angles;
+                mHandler.sendEmptyMessage(MSG_AUTO_READ);
+            } else {
+                String[] auto = autoAng.split("#");
+                String[] ang = angles.split("#");
+                boolean isNeedAdd = false;
+                for (int i = 0; i < auto.length; i++) {
+                    int abs = Integer.valueOf(auto[i]) - Integer.valueOf(ang[i]);
+                    if (Math.abs(abs) > 5) {
+                        autoAng = angles;
+                        isNeedAdd = true;
+                        break;
+                    }
+                }
+                if (!isNeedAdd) {
+                    UbtLog.d(TAG, "no need");
+                    mHandler.sendEmptyMessage(MSG_AUTO_READ);
+                } else {
+                    onReacHandData();
+                }
+            }
+        }
+    }
+
+    private boolean isChangeData;
+
+    @Override
+    public void onReacHandData() {
+        super.onReacHandData();
+        isChangeData = true;
+        UbtLog.d(TAG, "机器人角度变化了呢！！");
+        autoRead = false;
+        mHandler.removeMessages(MSG_AUTO_READ);
+        setButtonEnable(false);
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ivAddFrame.setEnabled(true);
+                ivAddFrame.setImageResource(R.drawable.ic_confirm);
+                CourseArrowAminalUtil.startViewAnimal(true, ivAddArrow, 1);
+            }
+        }, 2000);
+
+    }
+
+    @Override
+    public void showEditFrameLayout() {
+        if (currentCourse==2) {
+            rlEditFrame.setVisibility(View.VISIBLE);
+            CourseArrowAminalUtil.startViewAnimal(true, ivEditArrow, 2);
+            CourseArrowAminalUtil.startViewAnimal(false, ivUpdateArrow, 1);
+            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor27.hts");
         }
     }
 
@@ -232,13 +430,7 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
         CourseArrowAminalUtil.startViewAnimal(false, ivPlayArrow, 2);
         ivPlay.setEnabled(false);
         ivPlay.setImageResource(R.drawable.ic_pause);
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                pause();
-                onPlayMusicComplete();
-            }
-        }, 10000);
+
     }
 
     @Override
@@ -247,37 +439,15 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor20.hts");
-                ivAddFrame.setEnabled(false);
                 ivPlay.setEnabled(false);
-                ivPlay.setEnabled(true);
-                ivPlay.setImageResource(R.drawable.ic_play_disable);
-                ivReset.setEnabled(true);
-                ivReset.setImageResource(R.drawable.ic_reset);
                 if (courseProgressListener != null) {
-                    courseProgressListener.completeCurrentCourse(4);
+                    courseProgressListener.completeCurrentCourse(2);
                 }
             }
         });
 
     }
 
-    /**
-     * 点击弹出音乐对话框
-     */
-    private void showMusicDialog() {
-        CourseArrowAminalUtil.startViewAnimal(false, ivMusiArrow, 2);
-        ((ActionsEditHelper) mHelper).stopAction();
-
-        if (null == mMusicDialogUtil) {
-            mMusicDialogUtil = new CourseMusicDialogUtil(mContext);
-        }
-        if (currentCourse == 1) {
-            mMusicDialogUtil.showMusicDialog(0, this);
-        } else if (currentCourse == 3) {
-            mMusicDialogUtil.showMusicDialog(1000, this);
-        }
-    }
 
     /**
      * 显示动作对话框
@@ -300,12 +470,10 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
         }
         if (currentCourse == 1) {
             mRlInstruction.setVisibility(View.GONE);
-            ivActionBgm.setEnabled(true);
-            CourseArrowAminalUtil.startViewAnimal(true, ivMusiArrow, 2);
+            ivActionLib.setEnabled(true);
+            CourseArrowAminalUtil.startViewAnimal(true, ivAddLibArrow, 2);
         } else if (currentCourse == 2) {
-
-        } else if (currentCourse == 3) {
-
+            autoRead = false;
         }
         UbtLog.d(TAG, "isPlayAction==" + isPlayAction);
 
@@ -353,7 +521,7 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
         button.setText("下一节");
         RecyclerView mrecyle = contentView.findViewById(R.id.recyleview_content);
         mrecyle.setLayoutManager(new LinearLayoutManager(mContext));
-        CourseItemAdapter itemAdapter = new CourseItemAdapter(R.layout.layout_action_course_dialog, ActionCourseDataManager.getCourseActionModel(6, current));
+        CourseItemAdapter itemAdapter = new CourseItemAdapter(R.layout.layout_action_course_dialog, ActionCourseDataManager.getCourseActionModel(7, current));
         mrecyle.setAdapter(itemAdapter);
         ViewHolder viewHolder = new ViewHolder(contentView);
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
@@ -389,8 +557,7 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                showNextDialog(4);
-
+                showNextDialog(2);
             }
         }, 1000);
     }
@@ -399,14 +566,7 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
     public void playCourseAction(PrepareDataModel prepareDataModel, int type) {
         isPlayAction = true;
         //  playAction(prepareDataModel);
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (null != mActionCourseTwoUtil) {
-                    mActionCourseTwoUtil.showAddAnimal();
-                }
-            }
-        }, 1000);
+        UbtLog.d(TAG, "playCourseAction===" + currentCourse);
     }
 
     @Override
@@ -424,23 +584,4 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
     }
 
 
-    @Override
-    public void onStopRecord(PrepareMusicModel prepareMusicModel, int type) {
-        UbtLog.d(TAG, "onStopRecord===========type==" + type);
-
-        if (type == 1) {
-            if (courseProgressListener != null) {
-                courseProgressListener.completeCurrentCourse(1);
-            }
-            currentCourse = 2;
-        } else if (type == 2) {
-            showNextDialog(3);
-            ((ActionsEditHelper) mHelper).stopAction();
-            doReset();
-        } else if (type == 3) {
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor23.hts");
-        } else if (type == 4) {
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor24.hts");
-        }
-    }
 }

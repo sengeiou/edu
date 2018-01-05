@@ -11,8 +11,6 @@ import com.ubt.alpha1e.course.principle.PrincipleActivity;
 import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseOneActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseTwoActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
@@ -94,8 +92,6 @@ public class AppManager {
                         ||mActivity instanceof ActionTestActivity
                         ||mActivity instanceof ActionCourseActivity
                         ||mActivity instanceof CourseLevelOneActivity
-                        ||mActivity instanceof CourseTwoActivity
-                        ||mActivity instanceof CourseOneActivity
                         ) {
                     mActivity.finish();
                 }
