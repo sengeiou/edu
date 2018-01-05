@@ -23,19 +23,33 @@
             android:layout_centerVertical="true"
             android:background="@drawable/icon_habits_switch_open"/>
 
-        <ImageView
-            android:id="@+id/iv_event_logo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+        <RelativeLayout
+            android:id="@+id/rl_event_logo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_toRightOf="@+id/iv_event_switch"
-            android:layout_centerVertical="true"
-            android:background="@drawable/icon_habits_awake_highlight"/>
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/iv_event_logo_wq"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/img_waiquan_undo"/>
+
+            <ImageView
+                android:id="@+id/iv_event_logo"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/icon_habits_awake_highlight"/>
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_event_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/iv_event_logo"
+            android:layout_toRightOf="@+id/rl_event_logo"
             android:layout_marginLeft="20dp"
             android:layout_centerVertical="true"
             android:textColor="@color/T27"
