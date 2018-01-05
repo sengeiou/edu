@@ -57,6 +57,7 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
         myHolder.ivEventLogo.setBackgroundResource(getBackgroundViewId(habitsEventInfo.eventType, habitsEventInfo.status));
+        myHolder.ivEventLogoWq.setBackgroundResource(getWaiQuenBackgroundViewId(habitsEventInfo.eventType, habitsEventInfo.status));
         myHolder.tvEventTime.setText(habitsEventInfo.eventTime);
         myHolder.tvEventName.setText(habitsEventInfo.eventName);
 
@@ -117,8 +118,8 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     public static class MyHabitsEventHolder extends RecyclerView.ViewHolder
     {
 
-        public RelativeLayout rlHibitsEventInfo,rlRight;
-        public ImageView ivEventSwitch,ivEventLogo,ivStar1,ivStar2;
+        public RelativeLayout rlHibitsEventInfo,rlRight,rlEventLogo;
+        public ImageView ivEventSwitch,ivEventLogo,ivEventLogoWq,ivStar1,ivStar2;
         public TextView tvEventTime,tvEventName,tvScore,tvRight;
 
         public MyHabitsEventHolder(View view)
@@ -126,8 +127,10 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             super(view);
 
             rlHibitsEventInfo  = (RelativeLayout) view.findViewById(R.id.rl_hibits_event_info);
+            rlEventLogo  = (RelativeLayout) view.findViewById(R.id.rl_event_logo);
             rlRight  = (RelativeLayout) view.findViewById(R.id.rl_right);
             ivEventSwitch = (ImageView) view.findViewById(R.id.iv_event_switch);
+            ivEventLogoWq = (ImageView) view.findViewById(R.id.iv_event_logo_wq);
             ivEventLogo = (ImageView) view.findViewById(R.id.iv_event_logo);
             ivStar1 = (ImageView) view.findViewById(R.id.iv_star_1);
             ivStar2 = (ImageView) view.findViewById(R.id.iv_star_2);
@@ -203,6 +206,62 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             }else{
                 imageId = R.drawable.icon_habits_homework_grey;
             }
+        }
+        return imageId;
+    }
+
+    /**
+     *
+     * eventType 1：起床 2：午休 3：睡晚觉 4：洗漱 5：早餐 6：午餐 7：晚餐 8：上学 9：作业 10：阅读 11：编程 12：娱乐 13：洗澡
+     * @param eventType
+     * @param status
+     * @return
+     */
+    private int getWaiQuenBackgroundViewId(String eventType,String status){
+        int imageId = 0;
+        if("1".equals(status)){
+            if("1".equals(eventType)){
+                imageId = R.drawable.icon_habits_awake_highlight;
+                imageId = R.drawable.img_waiquan_awake;
+            }else if("2".equals(eventType)){
+                imageId = R.drawable.icon_habits_sleep_highlight;
+                imageId = R.drawable.img_waiquan_sleep;
+            }else if("3".equals(eventType)){
+                imageId = R.drawable.icon_habits_sleep_highlight;
+                imageId = R.drawable.img_waiquan_sleep;
+            }else if("4".equals(eventType)){
+                imageId = R.drawable.icon_habits_wash_highlight;
+                imageId = R.drawable.img_waiquan_wash;
+            }else if("5".equals(eventType)){
+                imageId = R.drawable.icon_habits_breackfast_highlight;
+                imageId = R.drawable.img_waiquan_breackfast;
+            }else if("6".equals(eventType)){
+                imageId = R.drawable.icon_habits_lunch_highlight;
+                imageId = R.drawable.img_waiquan_lunch;
+            }else if("7".equals(eventType)){
+                imageId = R.drawable.icon_habits_dinner_highlight;
+                imageId = R.drawable.img_waiquan_dinner;
+            }else if("8".equals(eventType)){
+                imageId = R.drawable.icon_habits_english_highlight;
+                imageId = R.drawable.img_waiquan_english;
+            }else if("9".equals(eventType)){
+                imageId = R.drawable.icon_habits_homework_highlight;
+                imageId = R.drawable.img_waiquan_homework;
+            }else if("10".equals(eventType)){
+                imageId = R.drawable.icon_habits_read_highlight;
+                imageId = R.drawable.img_waiquan_read;
+            }else if("11".equals(eventType)){
+                imageId = R.drawable.icon_habits_homework_highlight;
+                imageId = R.drawable.img_waiquan_homework;
+            }else if("12".equals(eventType)){
+                imageId = R.drawable.icon_habits_entertainment_highlight;
+                imageId = R.drawable.img_waiquan_entertainment;
+            }else{
+                imageId = R.drawable.icon_habits_homework_highlight;
+                imageId = R.drawable.img_waiquan_homework;
+            }
+        }else {
+            imageId = R.drawable.img_waiquan_undo;
         }
         return imageId;
     }
