@@ -662,17 +662,8 @@
             android:name=".action.actioncreate.ActionTestActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen"></activity>
-        <activity
-            android:name=".maincourse.courseone.CourseOneActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen"></activity>
-        <activity
-            android:name=".maincourse.courseone.CourseTwoActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
+
         <activity
             android:name=".maincourse.courseone.CourseLevelOneActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
