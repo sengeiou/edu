@@ -28,7 +28,7 @@ public class MainCoursePresenter extends BasePresenterImpl<MainCourseContract.Vi
         courseModel2.setLockType(0);
         list.add(courseModel2);
         CourseModel courseModel3 = new CourseModel();
-        courseModel3.setMainCourcesName("Blockly编程");
+        courseModel3.setMainCourcesName("图形化编程");
         courseModel3.setDrawableId(R.drawable.ic_lesson_blockly);
         courseModel3.setLockType(0);
         list.add(courseModel3);

@@ -181,16 +181,14 @@ public class ActionsEditHelper extends BaseHelper implements
 
     /**
      * 进入和退出动作编辑
-     *
      */
-    public void doEnterOrExitActionEdit(byte status){
+    public void doEnterOrExitActionEdit(byte status) {
         byte[] params = new byte[2];
         params[0] = status;
         params[1] = 0;
         UbtLog.d("ActionsEditHelper", "doEnterOrExitActionEdit status:" + ByteHexHelper.bytesToHexString(params));
         doSendComm(ConstValue.DV_INTO_EDIT, params);
     }
-
 
 
     @Override
@@ -265,8 +263,8 @@ public class ActionsEditHelper extends BaseHelper implements
             if (mListener != null) {
                 mListener.tapHead();
             }
-        }else if(cmd == ConstValue.DV_INTO_EDIT){
-            if(param != null){
+        } else if (cmd == ConstValue.DV_INTO_EDIT) {
+            if (param != null) {
                 UbtLog.d("", "进入或退出动作编辑param:" + ByteHexHelper.bytesToHexString(param));
             }
         }
@@ -316,11 +314,14 @@ public class ActionsEditHelper extends BaseHelper implements
      * @param actionName
      */
     public void playAction(String actionName) {
-        UbtLog.d("ActionEditHelper"," playAction actionName==="+actionName);
+        UbtLog.d("ActionEditHelper", " playAction actionName===" + actionName);
         byte[] actions = BluetoothParamUtil.stringToBytes(actionName);
-        ((AlphaApplication) mContext
-                .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) mContext.getApplicationContext())
-                .getCurrentBluetooth().getAddress(), ConstValue.DV_PLAYACTION, actions, actions.length, false);
+        if (null != ((AlphaApplication) mContext
+                .getApplicationContext()).getBlueToothManager()) {
+            ((AlphaApplication) mContext
+                    .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) mContext.getApplicationContext())
+                    .getCurrentBluetooth().getAddress(), ConstValue.DV_PLAYACTION, actions, actions.length, false);
+        }
     }
 
     /**

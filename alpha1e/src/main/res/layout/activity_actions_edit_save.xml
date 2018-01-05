@@ -77,7 +77,7 @@
         android:padding="10dp"
         android:textColor="@color/sec_txt_main"
         android:textSize="14sp"></EditText>
-    
+
     <View
         android:id="@+id/view_split"
         android:layout_width="match_parent"

@@ -26,7 +26,6 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
-import com.shuyu.gsyvideoplayer.utils.FileUtils;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.ubt.alpha1e.R;
@@ -48,7 +47,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 
 import butterknife.BindView;
@@ -100,8 +98,9 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
     }
 
     private void initVideoPlayer() {
-        String url = "http://7xr4xn.media1.z0.glb.clouddn.com/snh48sxhsy.mp4";
-        videoPlayer.setUp(courseData.getLocalVideoPath(), true, new File(FileUtils.getPath()), courseData.getName());
+//        String url = "http://7xr4xn.media1.z0.glb.clouddn.com/snh48sxhsy.mp4";
+        UbtLog.d(TAG, "initVideoPlayer path:" + courseData.getLocalVideoPath());
+        videoPlayer.setUp(courseData.getLocalVideoPath(), false, null, null);
 
         //videoPlayer.setSpeed(2f);
         orientationUtils = new OrientationUtils(this, videoPlayer);

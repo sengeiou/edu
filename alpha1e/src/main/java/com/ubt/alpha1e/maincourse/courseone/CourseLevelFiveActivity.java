@@ -1,7 +1,6 @@
 package com.ubt.alpha1e.maincourse.courseone;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,20 +19,18 @@ import android.widget.TextView;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
-import com.ubt.alpha1e.maincourse.courselayout.CourseLevelThreeLayout;
+import com.ubt.alpha1e.maincourse.courselayout.CourseLevelFiveLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
-import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IEditActionUI;
 import com.ubt.alpha1e.utils.log.UbtLog;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -43,11 +40,11 @@ import java.util.List;
  * 邮箱 784787081@qq.com
  */
 
-public class CourseLevelThreeActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
+public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseProgressListener, ActionsEditHelper.PlayCompleteListener, BaseActionEditLayout.OnSaveSucessListener {
 
-    private static final String TAG = CourseLevelThreeActivity.class.getSimpleName();
+    private static final String TAG = CourseLevelFiveActivity.class.getSimpleName();
     BaseHelper mHelper;
-    CourseLevelThreeLayout mActionEdit;
+    CourseLevelFiveLayout mActionEdit;
 
     /**
      * 当前课时
@@ -58,7 +55,7 @@ public class CourseLevelThreeActivity extends MVPBaseActivity<CourseOneContract.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mHelper = new ActionsEditHelper(CourseLevelThreeActivity.this, this);
+        mHelper = new ActionsEditHelper(CourseLevelFiveActivity.this, this);
         mHelper.RegisterHelper();
         ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
@@ -85,9 +82,9 @@ public class CourseLevelThreeActivity extends MVPBaseActivity<CourseOneContract.
 
     @Override
     protected void initUI() {
-        mActionEdit = (CourseLevelThreeLayout) findViewById(R.id.action_edit);
+        mActionEdit = (CourseLevelFiveLayout) findViewById(R.id.action_edit);
         mActionEdit.setUp(mHelper);
-
+        mActionEdit.setOnSaveSucessListener(this);
     }
 
     /**
@@ -108,36 +105,12 @@ public class CourseLevelThreeActivity extends MVPBaseActivity<CourseOneContract.
     @Override
     public void completeCurrentCourse(int current) {
         currentCourse = current;
-        mPresenter.savaCourseDataToDB(3, current);
-        if (current == 2) {
+        mPresenter.savaCourseDataToDB(5, current);
+        if (current == 3) {
             returnCardActivity();
         }
     }
 
-
-    /**
-     * 保存进度到数据库
-     *
-     * @param current
-     */
-    private void saveLastProgress(int current) {
-        UbtLog.d(TAG, "保存进度到数据库1" + current);
-        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
-        if (null != record) {
-            UbtLog.d(TAG, "保存进度到数据库2" + record.toString());
-            int course = record.getCourseLevel();
-            int level = record.getPeriodLevel();
-            if (course == 3 && level < current) {
-                UbtLog.d(TAG, "保存进度到数据库3" + "保存成功");
-                ContentValues values = new ContentValues();
-                values.put("CourseLevel", 3);
-                values.put("periodLevel", current);
-                values.put("isUpload", false);
-                DataSupport.updateAll(LocalActionRecord.class, values);
-                mPresenter.saveLastProgress(String.valueOf(3), String.valueOf(current));
-            }
-        }
-    }
 
     /**
      * 响应所有R.id.iv_known的控件的点击事件
@@ -161,7 +134,7 @@ public class CourseLevelThreeActivity extends MVPBaseActivity<CourseOneContract.
      */
     public void returnCardActivity() {
         Intent intent = new Intent();
-        intent.putExtra("course", 3);//第几关
+        intent.putExtra("course", 5);//第几关
         intent.putExtra("leavel", currentCourse);//第几个课时
         intent.putExtra("isComplete", true);
         intent.putExtra("score", 1);
@@ -223,7 +196,7 @@ public class CourseLevelThreeActivity extends MVPBaseActivity<CourseOneContract.
                             ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
                             finish();
                             //关闭窗体动画显示
-                            CourseLevelThreeActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                            CourseLevelFiveActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
                         } else if (view.getId() == R.id.btn_pos) {
 
                         }
@@ -247,7 +220,7 @@ public class CourseLevelThreeActivity extends MVPBaseActivity<CourseOneContract.
 
     @Override
     public int getContentViewId() {
-        return R.layout.activity_action_course_level_three;
+        return R.layout.activity_action_course_level_five;
     }
 
     @Override
@@ -344,7 +317,7 @@ public class CourseLevelThreeActivity extends MVPBaseActivity<CourseOneContract.
     }
     private boolean isHowHeadDialog;
     private void showTapHeadDialog() {
-        isHowHeadDialog = true;
+        isHowHeadDialog=true;
         new ConfirmDialog(this).builder()
                 .setMsg(getStringResources("ui_course_principle_exit_tip"))
                 .setCancelable(false)
@@ -353,8 +326,8 @@ public class CourseLevelThreeActivity extends MVPBaseActivity<CourseOneContract.
                     public void onClick(View view) {
                         ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
                         ActionCourseActivity.finishByMySelf();
-                        CourseLevelThreeActivity.this.finish();
-                        CourseLevelThreeActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                        CourseLevelFiveActivity.this.finish();
+                        CourseLevelFiveActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
                         isHowHeadDialog=false;
                     }
                 }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
@@ -372,4 +345,26 @@ public class CourseLevelThreeActivity extends MVPBaseActivity<CourseOneContract.
 //        finish();
 
     }
+
+    @Override
+    public void startSave(Intent intent) {
+        startActivityForResult(intent, ActionsEditHelper.SaveActionReq);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == ActionsEditHelper.SaveActionReq) {
+            if (null != data) {
+                boolean isSaveSuccess = (Boolean) data.getExtras().get(ActionsEditHelper.SaveActionResult);
+                if (isSaveSuccess) {
+                    completeCurrentCourse(3);
+                }
+            }
+        }
+
+    }
+
 }

@@ -22,7 +22,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
-import com.ubt.alpha1e.maincourse.courselayout.CourseLevelThreeLayout;
+import com.ubt.alpha1e.maincourse.courselayout.CourseLevelFourLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
@@ -43,7 +43,7 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
 
     private static final String TAG = CourseLevelFourActivity.class.getSimpleName();
     BaseHelper mHelper;
-    CourseLevelThreeLayout mActionEdit;
+    CourseLevelFourLayout mActionEdit;
 
     /**
      * 当前课时
@@ -81,7 +81,7 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
 
     @Override
     protected void initUI() {
-        mActionEdit = (CourseLevelThreeLayout) findViewById(R.id.action_edit);
+        mActionEdit = (CourseLevelFourLayout) findViewById(R.id.action_edit);
         mActionEdit.setUp(mHelper);
 
     }
@@ -104,8 +104,8 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
     @Override
     public void completeCurrentCourse(int current) {
         currentCourse = current;
-        mPresenter.savaCourseDataToDB(3, current);
-        if (current == 2) {
+        mPresenter.savaCourseDataToDB(4, current);
+        if (current == 3) {
             returnCardActivity();
         }
     }
@@ -135,7 +135,7 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
      */
     public void returnCardActivity() {
         Intent intent = new Intent();
-        intent.putExtra("course", 3);//第几关
+        intent.putExtra("course", 4);//第几关
         intent.putExtra("leavel", currentCourse);//第几个课时
         intent.putExtra("isComplete", true);
         intent.putExtra("score", 1);
@@ -221,7 +221,7 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
 
     @Override
     public int getContentViewId() {
-        return R.layout.activity_action_course_level_three;
+        return R.layout.activity_action_course_level_four;
     }
 
     @Override
@@ -310,14 +310,15 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (!isFinishing()) {
+                if (!isFinishing()&&!isHowHeadDialog) {
                     showTapHeadDialog();
                 }
             }
         });
     }
-
+    private boolean isHowHeadDialog;
     private void showTapHeadDialog() {
+        isHowHeadDialog = true;
         new ConfirmDialog(this).builder()
                 .setMsg(getStringResources("ui_course_principle_exit_tip"))
                 .setCancelable(false)
@@ -328,12 +329,12 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
                         ActionCourseActivity.finishByMySelf();
                         CourseLevelFourActivity.this.finish();
                         CourseLevelFourActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
-
+                        isHowHeadDialog=false;
                     }
                 }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                isHowHeadDialog=false;
             }
         }).show();
     }

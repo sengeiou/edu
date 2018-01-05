@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/B6"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/B6"
+              android:orientation="vertical"
     >
 
 
@@ -11,11 +11,11 @@
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#ECF1F4"
         android:gravity="center"
+        android:padding="16dp"
         android:text="@string/ui_dub"
         android:textSize="16sp"
-        android:padding="16dp"
-        android:background="#ECF1F4"
         />
 
     <View
@@ -37,22 +37,31 @@
             android:id="@+id/iv_dao"
             android:layout_width="140dp"
             android:layout_height="140dp"
-            android:src="@drawable/bgbegin_recording"
             android:layout_centerInParent="true"
+            android:src="@drawable/bgbegin_recording"
             />
 
         <TextView
             android:id="@+id/tv_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="3"
             android:textColor="#fff"
             android:textSize="60dp"
-            android:text="3"
             android:visibility="gone"
             />
 
+        <ImageView
+            android:id="@+id/iv_record_arrow"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignBottom="@+id/iv_dao"
+            android:layout_alignEnd="@+id/iv_dao"
+            android:src="@drawable/zuojiantou_4"
+            android:visibility="gone"
+            />
     </RelativeLayout>
 
     <LinearLayout
@@ -60,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="invisible"
         >
 
 
@@ -77,16 +86,16 @@
                 android:id="@+id/iv_dong"
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"
-                android:src="@drawable/record_bg"
                 android:layout_centerInParent="true"
+                android:src="@drawable/record_bg"
                 />
 
             <ImageView
                 android:id="@+id/iv_stop_dub"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/icon_stop"
                 android:layout_centerInParent="true"
+                android:src="@drawable/icon_stop"
                 />
 
 
@@ -105,10 +114,10 @@
                 android:id="@+id/tv_record_time"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:gravity="center"
                 android:text="00:00"
                 android:textSize="18sp"
-                android:layout_centerInParent="true"
                 android:visibility="invisible"
                 />
 
@@ -117,105 +126,104 @@
                 android:id="@+id/ll_retry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:visibility="invisible"
                 android:layout_toLeftOf="@+id/tv_record_time"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="invisible"
                 >
 
                 <ImageView
                     android:id="@+id/iv_retry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_retry"
                     android:layout_gravity="center"
+                    android:src="@drawable/icon_retry"
                     />
 
                 <TextView
                     android:id="@+id/tv_retry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/ui_distribute_record_again"
                     android:gravity="center"
+                    android:text="@string/ui_distribute_record_again"
                     />
 
 
             </LinearLayout>
 
 
-
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/ll_finish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:visibility="invisible"
                 android:layout_toRightOf="@+id/tv_record_time"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="invisible"
                 >
 
                 <ImageView
                     android:id="@+id/iv_save"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_save"
                     android:layout_gravity="center"
+                    android:src="@drawable/icon_save"
                     />
+
 
                 <TextView
                     android:id="@+id/tv_save"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/ui_remote_finished"
+                    android:layout_below="@+id/iv_save"
                     android:gravity="center"
+                    android:text="@string/ui_remote_finished"
                     />
 
-
-            </LinearLayout>
+                <ImageView
+                    android:id="@+id/iv_complete_arrow"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/zuojiantou_4"
+                    android:visibility="gone"
+                    />
+            </RelativeLayout>
 
 
         </RelativeLayout>
 
 
-
-
     </LinearLayout>
-
-
 
 
     <RelativeLayout
         android:id="@+id/rl_edit_name"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:visibility="gone"
-        android:paddingRight="16dp"
         android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:visibility="gone"
         >
 
         <EditText
             android:id="@+id/et_record_name"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
             android:layout_centerInParent="true"
             android:background="@drawable/input"
-            android:visibility="visible"
             android:hint="@string/ui_create_record_placeholder"
-            android:textColor="@color/A4"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:imeOptions="flagNoExtractUi"
             android:singleLine="true"
+            android:textColor="@color/A4"
+            android:visibility="visible"
             />
 
 
     </RelativeLayout>
-
-
-
-
-
-
-
 
 
     <LinearLayout
@@ -223,7 +231,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="invisible"
+        android:visibility="gone"
         >
 
 
@@ -244,10 +252,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/ui_common_cancel"
                 android:gravity="center"
-                android:textSize="16sp"
+                android:text="@string/ui_common_cancel"
                 android:textColor="#2c87f1"
+                android:textSize="16sp"
                 />
 
             <View
@@ -256,31 +264,36 @@
                 android:background="#ECF1F4"
                 />
 
-            <TextView
-                android:id="@+id/tv_confirm"
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/ui_readback_place_add"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:textColor="#2c87f1"
-                />
+                android:layout_weight="1">
 
+                <TextView
+                    android:id="@+id/tv_confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/ui_readback_place_add"
+                    android:textColor="#2c87f1"
+                    android:textSize="16sp"
+                    />
 
+                <ImageView
+                    android:id="@+id/iv_add_arrow"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="50dp"
+                    android:src="@drawable/zuojiantou_4"
+                    android:visibility="gone"
+                    />
+            </RelativeLayout>
         </LinearLayout>
 
 
-
-
-
     </LinearLayout>
-
-
-
-
-
-
 
 
 </LinearLayout>
