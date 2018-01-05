@@ -397,6 +397,10 @@ public class ConstValue {
 	public static final byte  DV_INTO_EDIT = (byte)0x95;
 
 	/**
+	 *  传感器控制命令 0 禁止 1 启用
+	 */
+	public static final byte DV_SENSOR_CONTROL=(byte)0x96;
+	/**
 	 *  1E 机器人控制舵机命令
 	 *  参数1 1B: 1.掉电；2.上电
 	 *  参数2 1B：1.左手；2.右手 3.双脚。

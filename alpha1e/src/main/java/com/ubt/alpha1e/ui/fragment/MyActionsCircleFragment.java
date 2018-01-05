@@ -108,21 +108,29 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 {
                     UbtLog.d(TAG,"BEGIN CIRCLE MOR ONE  ");
                     if(!isStartLooping) {
+                        isStartLooping=true;
                         img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
                         JSONArray action_cyc_list = new JSONArray(MyActionsHelper.mCurrentSeletedNameList);
-                        mHelper.doCycle(action_cyc_list);
-                        List<Map<String, Object>> playActionMap = new ArrayList<>();
-                        for (Map<String, Object> actionMap : mActivity.mInsideDatas) {
-                            UbtLog.e(TAG, "mInsideDatas size=" + mActivity.mInsideDatas.size());
-                            if (MyActionsHelper.mCurrentSeletedActionInfoMap.get(actionMap.get(MyActionsHelper.map_val_action_name)) != null) {
-                                actionMap.put(MyActionsHelper.map_val_action_is_playing, true);
-                                actionMap.put(MyActionsHelper.map_val_action_selected, true);
-                                playActionMap.add(actionMap);
-                            }
+                        mHelper.stopPlayAction();
+                        try {
+                            Thread.sleep(2000);
+                        }catch(InterruptedException e){
+                            e.printStackTrace();
                         }
+                        mHelper.doCycle(action_cyc_list);
+//                        List<Map<String, Object>> playActionMap = new ArrayList<>();
+//                        for (Map<String, Object> actionMap : mActivity.mInsideDatas) {
+//                            UbtLog.e(TAG, "mInsideDatas size=" + mActivity.mInsideDatas.size());
+//                            if (MyActionsHelper.mCurrentSeletedActionInfoMap.get(actionMap.get(MyActionsHelper.map_val_action_name)) != null) {
+//                                actionMap.put(MyActionsHelper.map_val_action_is_playing, true);
+//                                actionMap.put(MyActionsHelper.map_val_action_selected, true);
+//                                playActionMap.add(actionMap);
+//                            }
+//                        }
                     }else {
                         UbtLog.d(TAG,"STOP CIRCLE PLAY");
                         img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play"));
+                        isStartLooping=false;
                         mHelper.stopPlayAction();
                     }
                  //  setDatas(playActionMap);
@@ -156,7 +164,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         if(mAdapter!=null){
             mAdapter.notifyDataSetChanged();
         }
-
     }
 
     @Override
@@ -183,9 +190,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     public void onResume() {
         super.onResume();
         UbtLog.d("wilson","MyActionsCircleFragment----onResume--");
-        if(isStartLooping){
-            if(mListener!=null) mListener.onHiddenLoopButton();
-        }
+//        if(isStartLooping){
+//            if(mListener!=null) mListener.onHiddenLoopButton();
+//        }
 //        mHelper.stopPlayAction();
 
         if(isStartLooping ){
@@ -203,8 +210,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     playActionMap.add(actionMap);
                 }
             }
-            setDatas(playActionMap);
-            if(mListener!=null) mListener.onHiddenLoopButton();
+          //  setDatas(playActionMap);
+           // if(mListener!=null) mListener.onHiddenLoopButton();
         }
 
 
@@ -273,35 +280,35 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         super.onHiddenChanged(hidden);
 //        UbtLog.d("wilson","MyActionsCircleFragment----onHiddenChanged----"+hidden);
         UbtLog.d(TAG, "-->onHiddenChanged");
-        if(hidden)
-        {
-            if(mHelper!=null)
-                mHelper.removePlayerListeners(this);
-
-        }else
-        {
-            if(mHelper!=null)
-            {
-                mHelper.addPlayerListeners(this);
-                if(mHelper.getPlayerState()== ActionPlayer.Play_state.action_playing&& mHelper.getPlayerType() == ActionPlayer.Play_type.cycle_action)
-                {
-                    if(mListener!=null) mListener.onHiddenLoopButton();
-                    isStartLooping = true;
-                }else
-                {
-                    if(mListener!=null) mListener.onShowLoopButton();
-                    isStartLooping = false;
-                    MyActionsHelper.mCurrentSeletedNameList.clear();
-                    MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
-                    for(Map<String,Object> item:mDatas)
-                    {
-                        item.put(MyActionsHelper.map_val_action_is_playing,false);
-                        item.put(MyActionsHelper.map_val_action_selected,false);
-                    }
-                }
-            }
-
-        }
+//        if(hidden)
+//        {
+//            if(mHelper!=null)
+//                mHelper.removePlayerListeners(this);
+//
+//        }else
+//        {
+//            if(mHelper!=null)
+//            {
+//                mHelper.addPlayerListeners(this);
+//                if(mHelper.getPlayerState()== ActionPlayer.Play_state.action_playing&& mHelper.getPlayerType() == ActionPlayer.Play_type.cycle_action)
+//                {
+//                    if(mListener!=null) mListener.onHiddenLoopButton();
+//                    isStartLooping = true;
+//                }else
+//                {
+//                    if(mListener!=null) mListener.onShowLoopButton();
+//                    isStartLooping = false;
+//                    MyActionsHelper.mCurrentSeletedNameList.clear();
+//                    MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+//                    for(Map<String,Object> item:mDatas)
+//                    {
+//                        item.put(MyActionsHelper.map_val_action_is_playing,false);
+//                        item.put(MyActionsHelper.map_val_action_selected,false);
+//                    }
+//                }
+//            }
+//
+//        }
     }
 
     @Override
@@ -432,23 +439,24 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             });
         }
 
-        isStartLooping = false;
-        MyActionsHelper.mCurrentSeletedNameList.clear();
-        MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
-        for(Map<String,Object> item:mDatas)
-        {
-            item.put(MyActionsHelper.map_val_action_is_playing,false);
-            item.put(MyActionsHelper.map_val_action_selected,false);
+      //  isStartLooping = false;
+        if(!isStartLooping) {
+            MyActionsHelper.mCurrentSeletedNameList.clear();
+            MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+            for (Map<String, Object> item : mDatas) {
+                item.put(MyActionsHelper.map_val_action_is_playing, false);
+                item.put(MyActionsHelper.map_val_action_selected, false);
+            }
         }
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mAdapter.notifyDataSetChanged();
-                if(mListener!=null)
-                {
-                    mListener.onShowLoopButton();
-                }
+//                if(mListener!=null)
+//                {
+//                    mListener.onShowLoopButton();
+//                }
             }
         });
 
@@ -487,7 +495,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         UbtLog.d(TAG, "---notePlayCycleNext--" + action_name);
         currentCycleActionName = action_name;
         //modify False to true
-        isStartLooping = true;
+//        isStartLooping = true;
         for(Map<String,Object> item:mDatas)
         {
             if(action_name.equals(item.get(MyActionsHelper.map_val_action_name)))
@@ -881,11 +889,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     public void onClick(View view) {
                         actionList.put(MyActionsHelper.map_val_action_selected, !(Boolean) actionList.get(MyActionsHelper.map_val_action_selected));
                         mAdapter.notifyItemChanged(position);
-//                        if(actionList.size()>1){
-//                            img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play"));
-//                        }else {
-//                            img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
-//                        }
                         String actionName = (String)actionList.get(MyActionsHelper.map_val_action_name);
                         if(!MyActionsHelper.mCurrentSeletedNameList.contains(actionName))
                         {
@@ -900,39 +903,41 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                             MyActionsHelper.mCurrentSeletedNameList.remove(actionName);
                             MyActionsHelper.mCurrentSeletedActionInfoMap.remove(actionName);
                         }
+                        //循环播放的控制按钮
+                        if(MyActionsHelper.mCurrentSeletedNameList.size()<1){
+                            img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
+                        }else {
+                            img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play"));
+                        }
                     }
                 };
                 holder.layout_img_select.setOnClickListener(listener);
 
-                View.OnClickListener iconlistener  = new View.OnClickListener() {
+                View.OnClickListener actioniconlistener  = new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        actionList.put(MyActionsHelper.map_val_action_selected,!(Boolean) actionList.get (MyActionsHelper.map_val_action_selected));
+                        //actionList.put(MyActionsHelper.map_val_action_selected,!(Boolean) actionList.get (MyActionsHelper.map_val_action_selected));
                         actionList.put(MyActionsHelper.map_val_action_is_playing,!(Boolean)actionList.get(MyActionsHelper.map_val_action_is_playing));
                         mAdapter.notifyItemChanged(position);
                         String actionName = (String)actionList.get(MyActionsHelper.map_val_action_name);
-                        if(!MyActionsHelper.mCurrentSeletedNameList.contains(actionName))
+                        if((Boolean)actionList.get(MyActionsHelper.map_val_action_is_playing))
                         {
-                            MyActionsHelper.mCurrentSeletedNameList.add(actionName);
+                            mHelper.stopPlayAction();
                             ActionInfo actionInfo = new ActionInfo();
                             actionInfo.actionName = actionName;
                             actionInfo.hts_file_name = (String)actionList.get(MyActionsHelper.map_val_action);
                             actionInfo.actionSize = position;//zan cun
-                            MyActionsHelper.mCurrentSeletedActionInfoMap.put(actionName,actionInfo);
                             mHelper.doPlay(actionInfo);
                             UbtLog.d(TAG,"REFACTOR lihai------actionName->"+actionName+"----position->"+position+"--"+actionList.get(MyActionsHelper.map_val_action));
                         }else{
-                            MyActionsHelper.mCurrentSeletedNameList.remove(actionName);
-                            MyActionsHelper.mCurrentSeletedActionInfoMap.remove(actionName);
                             mHelper.stopPlayAction();
                         }
                     }
                 };
 
-                holder.rl_info.setOnClickListener(iconlistener);
+                holder.rl_info.setOnClickListener(actioniconlistener);
 
             }
-
 
         }
 
