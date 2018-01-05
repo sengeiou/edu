@@ -306,8 +306,13 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
                 mPresenter.getBehaviourEvent("12345");
                 mPresenter.getBehaviourPlayContent("1","6");
                 mPresenter.setBehaviourEvent("1234",1);*/
-                WebContentActivity.launchActivity(getActivity(), HttpEntity.HIBITS_STATISTICS,"");
+                String statisticsUrl = HttpEntity.HIBITS_STATISTICS
+                        + "userid=" + SPUtils.getInstance().getString(com.ubt.alpha1e.base.Constant.SP_USER_ID)
+                        + "&token=" + SPUtils.getInstance().getString(com.ubt.alpha1e.base.Constant.SP_LOGIN_TOKEN);
+                UbtLog.d(TAG,"statisticsUrl = " + statisticsUrl);
+                statisticsUrl = "http://10.10.1.14:8080/alpha1e/index.html?userid=12345&token=3";
 
+                WebContentActivity.launchActivity(getActivity(), statisticsUrl,"");
                 break;
             case R.id.rl_workdays:
                 switchMode(1);

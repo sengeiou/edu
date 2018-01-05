@@ -92,15 +92,19 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
                 }
             }
         };
+        UbtLog.d(TAG,"mUrl = " + mUrl);
         webContent.setWebViewClient(webViewClient);
         webContent.loadUrl(mUrl);
     }
 
     private void doGotoPage(String url) {
         UbtLog.d(TAG, "url:" + url + "  mTitle:" + mTitle);
-
-        mUrls.push(url);
-        webContent.loadUrl(url);
+        if(url.startsWith("alpha1e:goBack")){//
+            this.finish();
+        }else {
+            mUrls.push(url);
+            webContent.loadUrl(url);
+        }
     }
 
     private boolean doBackPage() {
