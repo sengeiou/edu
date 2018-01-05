@@ -132,34 +132,43 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
 
         //判断该课程是否下载完成，下载完成则直接播放，没有则开始下载
 
+        if(download){
+            return;
+        }
+
         CourseData courseData = (CourseData) adapter.getItem(position);
         UbtLog.d(TAG, "onItemClick:" + courseData);
         if(!courseData.getStatus().equals("1")){
             return;
         }
         if(TextUtils.isEmpty(courseData.getLocalVideoPath())){
-            if(download){
-                return;
+
+            ProgressBar pbVideo = view.findViewById(R.id.pb_video);
+            pbVideo.setVisibility(View.VISIBLE);
+            downloadVideo(courseData, view);
+
+        }else{
+            File file = new File(courseData.getLocalVideoPath());
+            if(file.exists()){
+                Intent intent = new Intent(CourseListActivity.this, BlocklyCourseActivity.class);
+                intent.putExtra(BlocklyCourseActivity.TRANSITION, true);
+                UbtLog.d(TAG, "putExtra:" + courseData);
+                intent.putExtra(BlocklyCourseActivity.COURSE_DATA, courseData);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    Pair pair = new Pair<>(view, BlocklyCourseActivity.IMG_TRANSITION);
+                    ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            CourseListActivity.this, pair);
+                    ActivityCompat.startActivity(CourseListActivity.this, intent, activityOptions.toBundle());
+                } else {
+                    CourseListActivity.this.startActivity(intent);
+                    CourseListActivity.this.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+                }
             }else{
                 ProgressBar pbVideo = view.findViewById(R.id.pb_video);
                 pbVideo.setVisibility(View.VISIBLE);
                 downloadVideo(courseData, view);
             }
 
-        }else{
-            Intent intent = new Intent(CourseListActivity.this, BlocklyCourseActivity.class);
-            intent.putExtra(BlocklyCourseActivity.TRANSITION, true);
-             UbtLog.d(TAG, "putExtra:" + courseData);
-            intent.putExtra(BlocklyCourseActivity.COURSE_DATA, courseData);
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                Pair pair = new Pair<>(view, BlocklyCourseActivity.IMG_TRANSITION);
-                ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        CourseListActivity.this, pair);
-                ActivityCompat.startActivity(CourseListActivity.this, intent, activityOptions.toBundle());
-            } else {
-                CourseListActivity.this.startActivity(intent);
-                CourseListActivity.this.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
-            }
         }
 
 
@@ -169,8 +178,9 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
     private boolean download = false;
     private void downloadVideo(final CourseData courseData, final View view){
         download = true;
-
-        OkHttpClientUtils.getDownloadFile(courseData.getVideoUrl()).execute(new FileCallBack(BlocklyUtil.getVideoPath(), courseData.getName()) {
+        UbtLog.d(TAG, "path:" + BlocklyUtil.getVideoPath() + "_name:" + courseData.getName());
+//        FileTools.deleteFile(new File(BlocklyUtil.getVideoPath() + File.separator + courseData.getName()));
+        OkHttpClientUtils.getDownloadFile(courseData.getVideoUrl()).execute(new FileCallBack(BlocklyUtil.getVideoPath(), courseData.getName()+".mp4") {
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "downloadVideo onError:" + e.getMessage());
