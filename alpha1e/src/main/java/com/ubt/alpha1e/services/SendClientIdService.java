@@ -440,7 +440,7 @@ public class SendClientIdService extends Service {
 	public void adviceRobotBinded(){
 			new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
 			.setTitle("提示")
-			.setMsg("该机器人已被其他账号绑定部分功能不可用！")
+			.setMsg("该机器人已被其他账号绑定，部分功能不可用！")
 			.setCancelable(true)
 			.setPositiveButton("我知道了", new View.OnClickListener() {
 				@Override
@@ -566,7 +566,7 @@ public class SendClientIdService extends Service {
 	public void sendCmdUpgradeDialog(){
 		new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
 				.setTitle("提示")
-				.setMsg("机器人固件升级大约需要4-6分钟。固件升级期间，你将不能使用机器人的任何功能哦。确定要升级么？")
+				.setMsg("机器人固件升级大约需要4-6分钟。固件升级期间，你将不能使用机器人的任何功能哦。确定要升级吗？")
 				.setCancelable(false)
 				.setPositiveButton("升级", new View.OnClickListener() {
 					@Override
