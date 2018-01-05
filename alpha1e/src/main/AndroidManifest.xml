@@ -376,8 +376,11 @@
             android:theme="@style/NoTitleTheme"/>
         <activity
             android:name=".ui.MyActionsActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
-            android:theme="@style/NoTitleTheme"/>
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustPan"/>
+
         <activity android:name=".utils.test.JNIActivity"/>
         <activity
             android:name=".ui.MyActionsSyncActivity"
