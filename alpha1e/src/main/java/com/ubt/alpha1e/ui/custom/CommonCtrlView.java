@@ -298,8 +298,15 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         if((currentState == ActionPlayer.Play_state.action_playing || currentNewPlayState == NewActionPlayer.PlayerState.PLAYING) && playingName != ""){
             btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
             gifImageView.setVisibility(View.VISIBLE);
+            radiologicalWaveAnim.setOneShot(false);
+            radiologicalWaveAnim.setVisible(true,true);
+            radiologicalWaveAnim.start();
             txt_action_name_m.setText("正在播放: " +playingName);
         }else if((currentState == ActionPlayer.Play_state.action_pause || currentNewPlayState == NewActionPlayer.PlayerState.PAUSING) && playingName != ""){
+            gifImageView.setVisibility(View.VISIBLE);
+            radiologicalWaveAnim.setOneShot(false);
+            radiologicalWaveAnim.setVisible(true,true);
+            radiologicalWaveAnim.start();
             txt_action_name_m.setText("正在播放: " +playingName);
         }else{
             gifImageView.setVisibility(View.INVISIBLE);
