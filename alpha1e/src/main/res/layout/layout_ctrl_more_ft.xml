@@ -2,14 +2,14 @@
     android:id="@+id/lay_ctrl_more"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:layout_marginLeft="17dp"
-    android:layout_marginRight="17dp"
-    android:layout_marginBottom="10.5dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
     android:background="@drawable/content_background"
     android:clickable="true"
     android:orientation="vertical"
     android:visibility="visible">
     <!--android:background="#7fff0000"-->
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -20,8 +20,8 @@
        >
           <ImageView
               android:id="@+id/btn_poweroff"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_width="50dp"
+              android:layout_height="50dp"
               android:layout_alignParentLeft="true"
               android:src="@drawable/cc_poweroff"
               />
@@ -40,61 +40,66 @@
             android:id="@+id/gif_playing_control"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_alignStart="@+id/text_playContentName"
+            android:layout_alignLeft="@+id/text_playContentName"
             android:layout_alignTop="@+id/text_playContentName"
-            android:layout_marginStart="107dp"
+            android:layout_marginLeft="107dp"
             android:src="@drawable/gif_overall_control"
             android:visibility="visible" />
             <ImageView
                 android:id="@+id/sensor_control"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/cc_sensorcontorl"
                 />
     </RelativeLayout>
     <!--android:background="#7fff0000"-->
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:layout_marginLeft="183dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="1dp"
+        android:layout_centerHorizontal="true"
         >
         <ImageView
             android:id="@+id/btn_actionlist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/btn_playaction"
             android:src="@drawable/cc_actionlist"
             />
 
         <ImageView
             android:id="@+id/btn_playaction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="45dp"
-            android:layout_toEndOf="@+id/btn_actionlist"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:layout_centerHorizontal="true"
             android:src="@drawable/cc_playaction" />
 
         <ImageView
             android:id="@+id/btn_stopaction"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="45dp"
-            android:layout_toEndOf="@+id/btn_playaction"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/btn_playaction"
             android:src="@drawable/cc_stop" />
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
         <ImageView
             android:id="@+id/btn_vol_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:scaleType="fitXY"
             android:src="@drawable/cc_volumeicon"
             />
+
         <SeekBar
             android:id="@+id/skb_vol_control"
             android:layout_width="match_parent"
@@ -111,8 +116,9 @@
             />
         <ImageView
             android:id="@+id/btn_lig_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/cc_lightoff" />
@@ -122,11 +128,13 @@
         android:id="@+id/lay_ctrl_more_close"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:visibility="gone"
       >
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@color/A11" />
+
         <TextView
             android:id="@+id/cc_exit"
             android:layout_width="wrap_content"

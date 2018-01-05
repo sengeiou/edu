@@ -266,6 +266,7 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
 
                     }
                 }).show();
+                break;
             case R.id.rl_message_myrobot:
                 UbtLog.d(TAG, "--rl_message_myrobot");
 //                MyRobotActivity.LaunchActivity(getContext());

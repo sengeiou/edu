@@ -58,8 +58,11 @@
     //上面大布局
     <RelativeLayout
         android:layout_marginTop="15dp"
-        android:layout_width="370dp"
-        android:layout_height="230dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="110dp"
+        android:layout_marginRight="110dp"
+        android:layout_marginBottom="25dp"
         android:layout_below="@id/line"
         android:id="@+id/rl_state1_up_big"
         android:layout_centerHorizontal="true"
@@ -67,7 +70,7 @@
     <RelativeLayout
         android:id="@+id/rl_state1_robot"
         android:layout_marginTop="1dp"
-        android:layout_width="370dp"
+        android:layout_width="match_parent"
         android:layout_height="155dp"
         android:background="@drawable/bluetooth_connect_backgroud"
         android:layout_centerHorizontal="true"
@@ -118,7 +121,7 @@
     </RelativeLayout>
         <RelativeLayout
             android:layout_marginTop="5dp"
-            android:layout_width="370dp"
+            android:layout_width="match_parent"
             android:layout_height="75dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/rl_state1_robot"
@@ -174,8 +177,11 @@
     //上面小布局
     <RelativeLayout
         android:layout_marginTop="15dp"
-        android:layout_width="370dp"
-        android:layout_height="230dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="110dp"
+        android:layout_marginRight="110dp"
+        android:layout_marginBottom="25dp"
         android:layout_below="@id/line"
         android:id="@+id/rl_state2_up_small"
         android:layout_centerHorizontal="true"
@@ -184,7 +190,7 @@
         <RelativeLayout
             android:id="@+id/rl_state2_robot"
             android:layout_marginTop="5dp"
-            android:layout_width="370dp"
+            android:layout_width="match_parent"
             android:layout_height="75dp"
             android:layout_centerHorizontal="true"
             android:background="@drawable/bluetooth_connect_backgroud"
@@ -237,7 +243,7 @@
 
         <RelativeLayout
             android:layout_marginTop="6dp"
-            android:layout_width="370dp"
+            android:layout_width="match_parent"
             android:layout_height="155dp"
             android:layout_below="@id/rl_state2_robot"
             android:background="@drawable/bluetooth_connect_backgroud"

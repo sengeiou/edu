@@ -32,7 +32,7 @@
             android:layout_centerInParent="true"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:text="蓝牙链接帮助"
+            android:text="蓝牙连接帮助"
             android:textSize="18sp"/>
         <ImageButton
             android:id="@+id/ib_return"
