@@ -15,24 +15,20 @@ public class MainContract {
     interface View extends BaseView {
         void showCartoonAction(int value );
 
-        void showBluetoothStatus(String status);
-
-        void showCartoonText(String text);
+        void dealMessage(byte cmd);
+        void showBatteryCapacity(int value);
 
         void onGetRobotInfo(int result, MyRobotModel model);
 
     }
 
     interface Presenter extends BasePresenter<View> {
-        void requestCartoonAction(String json);
-
-        void requestCartoonText(String text);
-
-        void requestBluetoothStatus(String status);
-
-        void commandRobotAction(byte cmd,byte[]params);
-
+          int[] requestCartoonAction(int value);
+        String getBuddleText(int type );
+        void commandRobotAction(byte cmd, byte[] params);
         void dealMessage(String json);
+        void setRobotStatus(int status);
+        int getRobotStatus();
 
         void checkMyRobotState();
         //收起全局控制按钮
