@@ -166,6 +166,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         //触发自动刷新
         mRefreshLayout.autoRefresh();
         mRefreshLayout.setEnableAutoLoadmore(true);//开启自动加载功能（非必须）
+        mRefreshLayout.setEnableScrollContentWhenLoaded(true);
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(final RefreshLayout refreshlayout) {
@@ -370,6 +371,10 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
                             break;
                         }
                     }
+                    if (mDynamicActionModels.size()==0){
+                        mRefreshLayout.setEnableLoadmore(false);
+                        showStatuLayout(1);
+                    }
                     mDynamicActionAdapter.notifyDataSetChanged();
                 }
             } else if (resultCode == REQUEST_CODE) {
@@ -399,6 +404,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             }
         }
         if (null == mDynamicActionModels || mDynamicActionModels.size() == 0) {//数据为空
+            mRefreshLayout.setEnableLoadmore(false);
             showStatuLayout(1);
         }
         mDynamicActionAdapter.notifyDataSetChanged();

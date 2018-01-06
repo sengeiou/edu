@@ -137,8 +137,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/tv_action_time"
                 android:gravity="center"
-                android:text="03:21"
-                android:textColor="@color/tv_notice_title"
+                 android:textColor="@color/tv_notice_title"
                 android:textSize="14sp"
                 />
 

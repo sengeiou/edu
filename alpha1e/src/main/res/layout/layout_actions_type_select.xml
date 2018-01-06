@@ -48,6 +48,6 @@
         android:layout_height="30dp"
         android:layout_centerInParent="true"
         android:src="@drawable/zuojiantou_1"
-        android:visibility="visible"
+        android:visibility="gone"
         />
 </RelativeLayout>

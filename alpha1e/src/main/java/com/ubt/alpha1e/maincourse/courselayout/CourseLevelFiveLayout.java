@@ -494,7 +494,9 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         ViewHolder viewHolder = new ViewHolder(contentView);
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
-        int width = (int) ((display.getWidth()) * 0.6); //设置宽度
+        int screenHeight = (int) (display.getHeight() * 0.6);
+        int screenWidth = (int) (display.getWidth() * 0.6);
+        int width = Math.max(screenWidth, screenHeight); //设置宽度
 
         DialogPlus.newDialog(mContext)
                 .setContentHolder(viewHolder)
@@ -507,8 +509,8 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
                         if (view.getId() == R.id.btn_pos) {
                             currentIndex = 0;
                             setLayoutByCurrentCourse();
+                            dialog.dismiss();
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setCancelable(false)
