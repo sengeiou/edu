@@ -66,7 +66,10 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private MyActionsHelper mHelper;
     private String currentCycleActionName;
     private TextView txt_title;
-    ImageView img_circle;
+
+    private RelativeLayout rlCircle;
+    private TextView tvCircle;
+    private ImageView ivCircle;
 
 
     public MyActionsCircleFragment() {
@@ -94,26 +97,35 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             }
         });
 
-        img_circle=(ImageView)mView.findViewById(R.id.btn_start_cycle);
-        img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
-        img_circle.setOnClickListener(new View.OnClickListener() {
+        rlCircle=(RelativeLayout) mView.findViewById(R.id.rl_cycle);
+        ivCircle=(ImageView)mView.findViewById(R.id.btn_start_cycle);
+        tvCircle=(TextView) mView.findViewById(R.id.tv_start_cycle);
+
+        ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
+        tvCircle.setText("循环播放");
+        tvCircle.setAlpha(0.5f);
+        rlCircle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //循环播放
                 UbtLog.d(TAG,"BEGIN CIRCLE");
                 if (MyActionsHelper.mCurrentSeletedNameList.size() < 1) {
                     UbtLog.d(TAG,"BEGIN CIRCLE LESS ONE  ");
-                    img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
+                    ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
+                    tvCircle.setText("循环播放");
+                    tvCircle.setAlpha(0.5f);
                 }else
                 {
                     UbtLog.d(TAG,"BEGIN CIRCLE MOR ONE  ");
                     if(!isStartLooping) {
                         isStartLooping=true;
-                        img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
+                        ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
+                        tvCircle.setText("停止播放");
+                        tvCircle.setAlpha(1.0f);
                         JSONArray action_cyc_list = new JSONArray(MyActionsHelper.mCurrentSeletedNameList);
                         mHelper.stopPlayAction();
                         try {
-                            Thread.sleep(2000);
+                            Thread.sleep(500);
                         }catch(InterruptedException e){
                             e.printStackTrace();
                         }
@@ -129,7 +141,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 //                        }
                     }else {
                         UbtLog.d(TAG,"STOP CIRCLE PLAY");
-                        img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play"));
+                        ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
+                        tvCircle.setText("循环播放");
+                        tvCircle.setAlpha(0.5f);
                         isStartLooping=false;
                         mHelper.stopPlayAction();
                     }
@@ -333,6 +347,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
         if(mSourceActionNameList!=null)
         {
+            UbtLog.d(TAG,"action = " + action + "   mSourceActionNameList = " +mSourceActionNameList.size());
             if(mListener!=null)
                 mListener.onHiddenLoopButton();
             for(String item:mSourceActionNameList)
@@ -341,9 +356,12 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 {
                     if(item.equals(map.get(MyActionsHelper.map_val_action_name)))
                     {
+                        UbtLog.d(TAG,"item = " + item);
                         map.put(MyActionsHelper.map_val_action_is_playing,true);
+                        break;
                     }
                 }
+                break;
             }
             mAdapter.notifyDataSetChanged();
 
@@ -430,33 +448,34 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         }
         if (mCurrentPlayType == ActionPlayer.Play_type.cycle_action) {
             UbtLog.d(TAG, "---show toast  notePlayFinish cycle !");
+            UbtLog.d(TAG, "---isStartLooping = " + isStartLooping);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
+
                     Toast.makeText(
                             getActivity(), mActivity.getStringResources("ui_action_cycle_stop"), Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
-      //  isStartLooping = false;
-        if(!isStartLooping) {
-            MyActionsHelper.mCurrentSeletedNameList.clear();
-            MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
-            for (Map<String, Object> item : mDatas) {
-                item.put(MyActionsHelper.map_val_action_is_playing, false);
-                item.put(MyActionsHelper.map_val_action_selected, false);
-            }
+        isStartLooping = false;
+        MyActionsHelper.mCurrentSeletedNameList.clear();
+        MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+        for (Map<String, Object> item : mDatas) {
+            item.put(MyActionsHelper.map_val_action_is_playing, false);
+            item.put(MyActionsHelper.map_val_action_selected, false);
         }
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mAdapter.notifyDataSetChanged();
-//                if(mListener!=null)
-//                {
-//                    mListener.onShowLoopButton();
-//                }
+
+                ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
+                tvCircle.setText("循环播放");
+                tvCircle.setAlpha(0.5f);
             }
         });
 
@@ -491,6 +510,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
     @Override
     public void notePlayCycleNext(String action_name) {
+        if("初始化".equals(action_name)){
+            return;
+        }
 
         UbtLog.d(TAG, "---notePlayCycleNext--" + action_name);
         currentCycleActionName = action_name;
@@ -904,10 +926,15 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                             MyActionsHelper.mCurrentSeletedActionInfoMap.remove(actionName);
                         }
                         //循环播放的控制按钮
+                        UbtLog.d(TAG,"MyActionsHelper.mCurrentSeletedNameList.size() = " +MyActionsHelper.mCurrentSeletedNameList.size());
                         if(MyActionsHelper.mCurrentSeletedNameList.size()<1){
-                            img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
+                            ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
+                            tvCircle.setText("循环播放");
+                            tvCircle.setAlpha(0.5f);
                         }else {
-                            img_circle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play"));
+                            ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play"));
+                            tvCircle.setText("循环播放");
+                            tvCircle.setAlpha(1.0f);
                         }
                     }
                 };

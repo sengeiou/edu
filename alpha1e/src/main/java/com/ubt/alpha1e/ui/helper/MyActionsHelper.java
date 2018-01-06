@@ -902,7 +902,7 @@ public class MyActionsHelper extends BaseHelper implements
 
             String name = BluetoothParamUtil.bytesToString(param);
 
-            if(!"UBT工厂测试动作2016.11.25".equals(name)){
+            if(!"初始化".equals(name)){
                 mActionsNames.add(name);
             }
 
