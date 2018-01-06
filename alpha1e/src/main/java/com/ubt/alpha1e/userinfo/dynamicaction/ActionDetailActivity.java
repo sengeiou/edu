@@ -127,15 +127,15 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
             mIvActionType1.setImageResource(R.drawable.mynew_publish_story);
 
         } else if (actionType == 3) {//运动
-            mTvActionType.setText("故事");
+            mTvActionType.setText("运动");
             mIvActionType1.setImageResource(R.drawable.myniew_publish_sport);
 
         } else if (actionType == 4) {//儿歌
-            mTvActionType.setText("故事");
+            mTvActionType.setText("儿歌");
             mIvActionType1.setImageResource(R.drawable.mynew_publish_childsong);
 
         } else if (actionType == 5) {//科普
-            mTvActionType.setText("故事");
+            mTvActionType.setText("科普");
             mIvActionType1.setImageResource(R.drawable.mynew_publish_science);
         } else {
             mTvActionType.setText("舞蹈");
