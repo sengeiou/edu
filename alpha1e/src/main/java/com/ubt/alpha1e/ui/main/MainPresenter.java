@@ -1,15 +1,21 @@
 package com.ubt.alpha1e.ui.main;
 
+import android.content.res.TypedArray;
 import android.text.TextUtils;
+import android.util.Base64;
 
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.CheckIsBindRequest;
 import com.ubt.alpha1e.base.RequstMode.XGGetAccessIdRequest;
 import com.ubt.alpha1e.base.ResponseMode.XGDeviceMode;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.business.ActionPlayer;
+import com.ubt.alpha1e.business.ActionPlayerListener;
+import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
@@ -20,6 +26,7 @@ import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.xingepush.XGUBTManager;
 import com.ubtechinc.base.ConstValue;
+import com.ubtechinc.sqlite.UBXDataBaseHelper;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -27,16 +34,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import okhttp3.Call;
 import okhttp3.MediaType;
 
 import static android.R.attr.id;
+import static com.ubt.alpha1e.base.Constant.ROBOT_SLEEP_EVENT;
 
 
-public class MainPresenter extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
+public class MainPresenter extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter,ActionPlayerListener {
     private String TAG = "MainPresenter";
+    public final static int CHECK_ROBOT_INFO_HABIT=1;
     public static int APP_CURRENT_STATUS=-1;
     private int ROBOT_UNCHARGE_STATUS=0x0;
     private int ROBOT_CHARGING_STATUS=0x01;
@@ -312,9 +324,8 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                         if (xgDeviceMode.getDevice().equals("a")) {
                             SPUtils.getInstance().put(Constant.SP_XG_ACCESSID, xgDeviceMode.getAccessId());
                             SPUtils.getInstance().put(Constant.SP_XG_ACCESSKEY, xgDeviceMode.getAccessKey());
-
                             BindXGServer(xgDeviceMode);
-                            break;
+
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -429,7 +440,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                     case CHECK_ROBOT_INFO_HABIT:
                         mView.onGetRobotInfo(0,null);
                         break;
-
                     default:
                         break;
                 }
@@ -458,7 +468,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                             }
                         }
                         break;
-
                     default:
                         break;
                 }
@@ -467,4 +476,34 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     }
 
+    @Override
+    public void notePlayStart(List<String> mSourceActionNameList, ActionInfo action, ActionPlayer.Play_type mCurrentPlayType) {
+        UbtLog.d(TAG,"notePlayStart");
+    }
+
+    @Override
+    public void notePlayPause(List<String> mSourceActionNameList, ActionPlayer.Play_type mCurrentPlayType) {
+        UbtLog.d(TAG,"notePlayPause");
+    }
+
+    @Override
+    public void notePlayContinue(List<String> mSourceActionNameList, ActionPlayer.Play_type mCurrentPlayType) {
+        UbtLog.d(TAG,"notePlayContinue");
+    }
+
+    @Override
+    public void notePlayFinish(List<String> mSourceActionNameList, ActionPlayer.Play_type mCurrentPlayType, String hashCode) {
+        UbtLog.d(TAG,"notePlayFinish");
+    }
+
+    @Override
+    public void notePlayChargingError() {
+        UbtLog.d(TAG,"notePlayChargingError");
+    }
+
+    @Override
+    public void notePlayCycleNext(String action_name) {
+        UbtLog.d(TAG," notePlayChargingError");
+
+    }
 }

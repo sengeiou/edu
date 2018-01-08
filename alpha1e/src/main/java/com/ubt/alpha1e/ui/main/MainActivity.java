@@ -46,6 +46,7 @@ import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.Bluetoothandn
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity;
+import com.ubt.alpha1e.business.ActionPlayerListener;
 import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
@@ -76,6 +77,7 @@ import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.custom.CommonGuideView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.IActionListeter;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
@@ -110,7 +112,7 @@ import okhttp3.Call;
  * Main UI function
  */
 
-public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View,HandlerCallback {
+public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View,HandlerCallback{
 
     @BindView(R.id.cartoon_body_touch_bg)
     ImageView cartoonBodyTouchBg;
@@ -275,6 +277,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         SPUtils.getInstance().put(Constant.IS_TOAST_BINDED, false);
         // 启动发送clientId服务
         SendClientIdService.startService(MainActivity.this);
+
     }
 
     @Override
@@ -833,15 +836,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     }
 
-
-    @Override
-    public void showBluetoothStatus(String status) {
-    }
-
-    @Override
-    public void showCartoonText(String text) {
-    }
-
     @Override
     public void onGetRobotInfo(int result, MyRobotModel model) {
         UbtLog.d(TAG, "onGetRobotInfo == " );
@@ -1015,22 +1009,30 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     protected void initUI() {
+        return;
         //course center icon
-        int course_icon_margin_left = 22;
-        int course_icon_margin_top = 260;
-        RelativeLayout.LayoutParams rlParams = (RelativeLayout.LayoutParams) bottomIcon.getLayoutParams();
-        rlParams.leftMargin = getAdaptiveScreenX(course_icon_margin_left);
-        rlParams.topMargin = getAdaptiveScreenY(course_icon_margin_top);
-        bottomIcon.setLayoutParams(rlParams);
-        bottomIcon.setVisibility(View.VISIBLE);
-        //Buddle Text
-        int buddle_text_margin_left = 388;
-        int buddle_text_margin_top = 116;//height*0.31
-        RelativeLayout.LayoutParams buddleParams = (RelativeLayout.LayoutParams) buddleText.getLayoutParams();
-        buddleParams.leftMargin = getAdaptiveScreenX(buddle_text_margin_left);
-        buddleParams.topMargin = getAdaptiveScreenY(buddle_text_margin_top);
-        buddleText.setLayoutParams(buddleParams);
+//        int course_icon_margin_left = 22;
+//        int course_icon_margin_top = 260;
+//        RelativeLayout.LayoutParams rlParams = (RelativeLayout.LayoutParams) bottomIcon.getLayoutParams();
+//        rlParams.leftMargin = getAdaptiveScreenX(course_icon_margin_left);
+//        rlParams.topMargin = getAdaptiveScreenY(course_icon_margin_top);
+//        bottomIcon.setLayoutParams(rlParams);
+//        bottomIcon.setVisibility(View.VISIBLE);
+//        //Buddle Text
+//        int buddle_text_margin_left = 388;
+//        int buddle_text_margin_top = 116;//height*0.31
+//        RelativeLayout.LayoutParams buddleParams = (RelativeLayout.LayoutParams) buddleText.getLayoutParams();
+//        buddleParams.leftMargin = getAdaptiveScreenX(buddle_text_margin_left);
+//        buddleParams.topMargin = getAdaptiveScreenY(buddle_text_margin_top);
+//        buddleText.setLayoutParams(buddleParams);
 
+    }
+    private int getAdaptiveScreenX(int init_x) {
+        return init_x * screen_width / init_screen_width;
+    }
+
+    private int getAdaptiveScreenY(int init_y) {
+        return init_y * screen_height / init_screen_height;
     }
 
     @Override
@@ -1093,11 +1095,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(MessageEvent event) {
-//       UbtLog.d(TAG, "RECEIVE THE MESSAGE IN MAIN THREAD" + event.message);
-        if(MVP){
             mPresenter.dealMessage(event.message);
-            return;
-        }
     }
    private Message createMessage(byte cmd) {
         Message message = new Message();
@@ -1107,19 +1105,24 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         return message;
     }
 
-    private void showBuddleText(String text) {
-        if(buddleText!=null) {
-            buddleText.setText("\u3000" + text);
-            showBuddleTextView();
-        }
-    }
+
 	    @Override
-    public void showBatteryCapacity(int value) {
+    public void showBatteryCapacity(final int value) {
         if(cartoonBodyTouchBg!=null) {
             if(value==LOW_BATTERY_TWENTY_THRESHOLD){
-                cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[value-1]));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[value - 1]));
+                    }
+                });
             }else {
-                cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[value]));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[value]));
+                    }
+                });
             }
         }
     }
