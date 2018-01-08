@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Alpha 1e</string>
+    <string name="app_name">Alpha Ebot</string>
     <string name="app_name_for_factory">AlphaTest</string>
     <string name="hello_world">&#183; Hello world!</string>
     <string name="title_activity_start_test">StartTestActivity</string>
