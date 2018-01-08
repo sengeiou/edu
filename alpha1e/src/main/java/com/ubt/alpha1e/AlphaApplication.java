@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
-//import com.ant.country.CountryActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreater;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreater;
@@ -71,7 +70,8 @@ import com.ubt.alpha1e.utils.DynamicTimeFormat;
 import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
 import com.ubt.alpha1e.utils.crash.CrashHandler;
 import com.ubt.alpha1e.utils.log.UbtLog;
-import com.ubt.alpha1e.xingepush.XGUBTManager;
+import com.ubt.alpha1e.xingepush.XGListener;
+import com.ubt.xingemodule.XGUBTManager;
 import com.ubtechinc.base.BlueToothManager;
 import com.ubtechinc.sqlite.DBAlphaInfoManager;
 import com.umeng.analytics.MobclickAgent;
@@ -135,10 +135,13 @@ public class AlphaApplication extends LoginApplication {
 
     public static String currentRobotSN = "";
 
+    private static XGListener xgListener;
+
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
+        xgListener = new XGListener();
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(this);
 
@@ -203,7 +206,8 @@ public class AlphaApplication extends LoginApplication {
         String accessId = SPUtils.getInstance().getString(Constant.SP_XG_ACCESSID);
         String accessKey = SPUtils.getInstance().getString(Constant.SP_XG_ACCESSKEY);
         if (!TextUtils.isEmpty(accessId) && !TextUtils.isEmpty(accessKey)) {
-            XGUBTManager.getInstance(mContext).initXG(Long.parseLong(accessId), accessKey);
+            XGUBTManager.getInstance().initXG(mContext,Long.parseLong(accessId), accessKey);
+            XGUBTManager.getInstance().setXGListener(xgListener);
             //  XGUBTManager.getInstance(this).initXG(2100270011, "A783M4PIM7JI");
         }
     }

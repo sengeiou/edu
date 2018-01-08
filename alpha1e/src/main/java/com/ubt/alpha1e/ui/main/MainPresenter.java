@@ -24,7 +24,6 @@ import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
-import com.ubt.alpha1e.xingepush.XGUBTManager;
 import com.ubtechinc.base.ConstValue;
 import com.ubtechinc.sqlite.UBXDataBaseHelper;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -355,7 +354,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         request.setAppId(xgDeviceMode.getAppId());
         request.setCreateTime(xgDeviceMode.getCreateTime());
         request.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
-        request.setToken(XGUBTManager.getInstance(AlphaApplication.getmContext()).getDeviceToken());
+        request.setToken(XGUBTManager.getInstance().getDeviceToken());
         UbtLog.d("XGREquest", "url===" + HttpEntity.bindXGServer);
         OkHttpUtils.postString()
                 .addHeader("authorization", SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN))
@@ -372,7 +371,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             @Override
             public void onResponse(String response, int id) {
                 UbtLog.d("XGREquest", "response===" + response);
-                SPUtils.getInstance().put(Constant.SP_XG_ACCESSKEY, SPUtils.getInstance().getString(Constant.SP_USER_ID));
                 SPUtils.getInstance().put(Constant.SP_XG_USERID,SPUtils.getInstance().getString(Constant.SP_USER_ID));
                 AlphaApplication.initXG();
             }
@@ -383,7 +381,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         XGGetAccessIdRequest request = new XGGetAccessIdRequest();
         request.setAppId(appId);
         request.setUserId(userId);
-        request.setToken(XGUBTManager.getInstance(AlphaApplication.getmContext()).getDeviceToken());
+        request.setToken(XGUBTManager.getInstance().getDeviceToken());
         UbtLog.d("XGREquest", "url===" + HttpEntity.unbindXGServer +"unbind UserId: "+userId);
         OkHttpUtils.postString()
                 .addHeader("authorization", SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN))
