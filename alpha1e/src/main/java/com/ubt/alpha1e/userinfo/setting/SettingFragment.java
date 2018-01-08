@@ -88,6 +88,8 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
     private List<String> mLanguageTitleList = null;
     private int mCurrentLanguageIndex = -1;
 
+    long lastClickTime = System.currentTimeMillis();
+
     protected Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -269,7 +271,11 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
                 break;
             case R.id.rl_message_myrobot:
                 UbtLog.d(TAG, "--rl_message_myrobot");
-//                MyRobotActivity.LaunchActivity(getContext());
+                if(System.currentTimeMillis()-lastClickTime < 1000){
+                    UbtLog.d(TAG,"1000ms后才能点击");
+                    return;
+                }
+                lastClickTime = System.currentTimeMillis();
                 com.ubt.alpha1e.base.loading.LoadingDialog.show(getActivity());
                 mPresenter.checkMyRobotState();
                 break;
