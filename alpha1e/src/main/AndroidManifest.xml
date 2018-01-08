@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ubt.alpha1e"
           android:versionCode="1"
-          android:versionName="V1.0.1.2">
+          android:versionName="V1.0.1.3">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -109,6 +109,7 @@
         <service android:name=".services.SyncDataService"/>
         <service android:name=".services.HibitsAlertService"/>
         <service android:name=".services.SendClientIdService"/>
+        <!--<service android:name=".services.GlobalMsgService"/>-->
 
         <!-- Facebook -->
         <meta-data
@@ -649,17 +650,6 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
-
-        <!-- APP实现的Receiver，用于接收消息和结果反馈 -->
-        <receiver android:name=".xingepush.XGMessageRecevicer">
-            <intent-filter>
-
-                <!-- 接收消息透传 -->
-                <action android:name="com.tencent.android.tpush.action.PUSH_MESSAGE"/>
-                <!-- 监听注册、反注册、设置/删除标签、通知被点击等处理结果 -->
-                <action android:name="com.tencent.android.tpush.action.FEEDBACK"/>
-            </intent-filter>
-        </receiver>
 
         <activity
             android:name=".action.actioncreate.ActionTestActivity"
