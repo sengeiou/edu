@@ -72,6 +72,8 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
     private TextView mTextView;
     private boolean isInstruction;
 
+    private ImageView ivBackInStruction;
+
     /**
      * 高亮对话框的TextView显示
      */
@@ -190,6 +192,9 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
         mTextView = (TextView) findViewById(R.id.tv_all_introduc);
         mTextView.setText(ResourceManager.getInstance(mContext).getStringResources("action_course_card1_1_all"));
+
+        ivBackInStruction = findViewById(R.id.iv_back_instruction);
+        ivBackInStruction.setOnClickListener(this);
     }
 
     /**
@@ -281,6 +286,12 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                     }
                 }, 1000);
 
+                break;
+
+            case R.id.iv_back_instruction:
+                if (null != courseProgressListener) {
+                    courseProgressListener.finishActivity();
+                }
                 break;
             default:
         }

@@ -76,6 +76,7 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
     RelativeLayout mRlInstruction;
     private TextView mTextView;
     CourseProgressListener courseProgressListener;
+    private ImageView ivBackInStruction;
     /**
      * 当前课时
      */
@@ -183,6 +184,9 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
 
         ivAddArrow = findViewById(R.id.iv_add_frame_arrow);
         ivAddArrow.setOnClickListener(this);
+
+        ivBackInStruction = findViewById(R.id.iv_back_instruction);
+        ivBackInStruction.setOnClickListener(this);
     }
 
     /**
@@ -278,6 +282,11 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
                 ivPlay.setImageResource(R.drawable.ic_play_enable);
                 CourseArrowAminalUtil.startViewAnimal(true, ivPlayArrow, 2);
                 CourseArrowAminalUtil.startViewAnimal(false, ivAddArrow, 1);
+                break;
+            case R.id.iv_back_instruction:
+                if (null != courseProgressListener) {
+                    courseProgressListener.finishActivity();
+                }
                 break;
             default:
         }

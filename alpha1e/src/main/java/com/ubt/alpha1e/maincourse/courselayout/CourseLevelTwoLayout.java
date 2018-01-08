@@ -62,6 +62,8 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
     RelativeLayout mRlInstruction;
     private TextView mTextView;
     CourseProgressListener courseProgressListener;
+
+    private ImageView ivBackInStruction;
     /**
      * 当前课时
      */
@@ -172,6 +174,8 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
         mRlInstruction = findViewById(R.id.rl_instruction);
         mTextView = findViewById(R.id.tv_all_introduc);
         mTextView.setText(ResourceManager.getInstance(mContext).getStringResources("action_course_card2_1_all"));
+        ivBackInStruction = findViewById(R.id.iv_back_instruction);
+        ivBackInStruction.setOnClickListener(this);
     }
 
     /**
@@ -276,6 +280,11 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
                 break;
             case R.id.iv_play_arrow:
                 playAction();
+                break;
+            case R.id.iv_back_instruction:
+                if (null != courseProgressListener) {
+                    courseProgressListener.finishActivity();
+                }
                 break;
             default:
         }

@@ -64,7 +64,7 @@ public class CourseLevelEightLayout extends BaseActionEditLayout implements Cour
     RelativeLayout mRlInstruction;
     private TextView mTextView;
     private boolean isInstruction;
-
+    private ImageView ivBackInStruction;
 
     /**
      * 高亮对话框的TextView显示
@@ -174,7 +174,8 @@ public class CourseLevelEightLayout extends BaseActionEditLayout implements Cour
         ivRightLegArrow = findViewById(R.id.iv_right_leg_arrow);
         ivRightLegArrow.setOnClickListener(this);
         initRightLegArrow();
-
+        ivBackInStruction = findViewById(R.id.iv_back_instruction);
+        ivBackInStruction.setOnClickListener(this);
 
     }
 
@@ -243,7 +244,11 @@ public class CourseLevelEightLayout extends BaseActionEditLayout implements Cour
                 CourseArrowAminalUtil.startViewAnimal(false, ivAddFrameArrow, 2);
                 showNextDialog(2);
                 break;
-
+            case R.id.iv_back_instruction:
+                if (null != courseProgressListener) {
+                    courseProgressListener.finishActivity();
+                }
+                break;
             default:
         }
     }

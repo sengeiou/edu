@@ -71,6 +71,7 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
     RelativeLayout mRlInstruction;
     private TextView mTextView;
     CourseProgressListener courseProgressListener;
+    private ImageView ivBackInStruction;
     /**
      * 当前课时
      */
@@ -177,6 +178,9 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
 
         ivHandLeft.setEnabled(false);
         ivHandRight.setEnabled(false);
+
+        ivBackInStruction = findViewById(R.id.iv_back_instruction);
+        ivBackInStruction.setOnClickListener(this);
     }
 
     /**
@@ -280,6 +284,12 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
                 CourseArrowAminalUtil.startViewAnimal(false, ivAutoReadArrow, 1);
                 ivAddFrame.setEnabled(false);
                 ivAddFrame.setImageResource(R.drawable.ic_stop);
+                break;
+
+            case R.id.iv_back_instruction:
+                if (null != courseProgressListener) {
+                    courseProgressListener.finishActivity();
+                }
                 break;
             default:
         }
