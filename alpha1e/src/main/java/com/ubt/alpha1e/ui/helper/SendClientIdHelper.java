@@ -162,7 +162,7 @@ public class SendClientIdHelper extends BaseHelper {
 
     //获取机器人序列号
     public void sendCmdReadSN() {
-        UbtLog.d(TAG,"发送 给mac：  ");
+        UbtLog.d(TAG,"获取机器人序列号  ");
         doSendComm(ConstValue.READ_SN_CODE, new byte[] { 0 });
 
     }
