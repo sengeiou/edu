@@ -18,6 +18,7 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
+import com.tencent.android.tpush.XGPushTextMessage;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
@@ -76,6 +78,7 @@ import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.custom.CommonGuideView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.HibitsAlertDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
@@ -87,6 +90,7 @@ import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.alpha1e.xingepush.XGCmdConstract;
 import com.ubtechinc.base.ConstValue;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -1765,4 +1769,27 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
           hiddenBuddleTextView();
       }
   }
+
+    @Subscribe
+    public void onDataSynEvent(XGPushTextMessage xgPushTextMessage) {
+        UbtLog.i(TAG,"onDataSynEvent event---->" + xgPushTextMessage.getContent());
+        try {
+            JSONObject mJson = new JSONObject(xgPushTextMessage.getCustomContent());
+            if(  mJson.getString("category").equals(XGCmdConstract.BEHAVIOUR_HABIT)) {
+                if (mJson.get("eventId") != null) {
+                    Log.d("TPush"," contents"+xgPushTextMessage.getContent());
+                    new HibitsAlertDialog(AppManager.getInstance().currentActivity()).builder()
+                            .setCancelable(true)
+                            .setEventId(mJson.get("eventId").toString())
+                            .setMsg(xgPushTextMessage.getContent())
+                            .show();
+
+                    //  new LowBatteryDialog(AppManager.getInstance().currentActivity()).setBatteryThresHold(1000000).builder().show();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

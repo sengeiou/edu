@@ -17,6 +17,7 @@ public class HttpEntity {
      * 信鸽获取
      */
     public static final String XG_URL = "https://test79.ubtrobot.com/xinge-push-rest/";
+//    public static final String XG_URL = "https://account.ubtrobot.com/xinge-push-rest/";
     /**
      * 获取XG AppaccessId AppaccessKey
      */
