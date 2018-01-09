@@ -8,9 +8,12 @@ import com.tencent.ai.tvs.LoginApplication;
 import com.tencent.ai.tvs.LoginProxy;
 import com.tencent.ai.tvs.env.ELoginEnv;
 import com.tencent.ai.tvs.env.ELoginPlatform;
+import com.tencent.ai.tvs.env.EUserAttrType;
+import com.tencent.ai.tvs.info.DeviceManager;
 import com.tencent.ai.tvs.info.LoginInfoManager;
 import com.tencent.ai.tvs.info.QQOpenInfoManager;
 import com.tencent.ai.tvs.info.WxInfoManager;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
@@ -53,7 +56,7 @@ public class LoginManger implements AuthorizeListener {
     }
 
     public LoginManger(){
-        proxy = LoginProxy.getInstance(appidWx, appidQQOpen);
+        proxy = LoginProxy.getInstance(appidWx, appidQQOpen, AlphaApplication.getmContext());
         proxy.setAuthorizeListener(this);
         proxy.setLoginEnv(ELoginEnv.FORMAL);
         wxInfoManager = (WxInfoManager) proxy.getInfoManager(ELoginPlatform.WX);
@@ -122,7 +125,32 @@ public class LoginManger implements AuthorizeListener {
         }else{
             return proxy.getClientId(ELoginPlatform.WX);
         }
+    }
 
+    //跳转到用户中心
+    public void toUserCenter(){
+        DeviceManager mgr = new DeviceManager();
+        mgr.productId = SPUtils.getInstance().getString(Constant.SP_ROBOT_PRODUCT_ID);
+        mgr.dsn =  SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN);
+        UbtLog.d(TAG, "pid:"+ mgr.productId + "__dsn:" + mgr.dsn);
+        mgr.deviceOEM = "UBT-Alpha1E";
+        mgr.deviceType = "ROBOT";
+        proxy.toUserCenter(EUserAttrType.HOMEPAGE, mgr);
+    }
+
+    public void getMemberStatus(){
+        int type = SPUtils.getInstance().getInt(Constant.SP_LOGIN_TYPE);
+        DeviceManager mgr = new DeviceManager();
+        mgr.productId = SPUtils.getInstance().getString(Constant.SP_ROBOT_PRODUCT_ID);
+        mgr.dsn =  SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN);
+        UbtLog.d(TAG, "pid:"+ mgr.productId + "__dsn:" + mgr.dsn);
+        mgr.deviceOEM = "UBT-Alpha1E";
+        mgr.deviceType = "ROBOT";
+        if(type == 1){
+            proxy.getMemberStatus(ELoginPlatform.QQOpen, mgr);
+        }else{
+            proxy.getMemberStatus(ELoginPlatform.WX, mgr);
+        }
 
     }
 
@@ -165,10 +193,6 @@ public class LoginManger implements AuthorizeListener {
                 onRefreshListener.onSuccess();
             }
         }
-
-
-
-
 
     }
 
