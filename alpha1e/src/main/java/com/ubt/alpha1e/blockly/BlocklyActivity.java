@@ -671,6 +671,11 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     dismissLoading();
                 }
 
+                if(rlBlank != null){
+                    rlBlank.setVisibility(View.VISIBLE);
+                }
+                mWebView.setVisibility(View.INVISIBLE);
+
             }
 
             @Override
@@ -682,11 +687,16 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 isLoadFinish = true;
+                if(!loadError){
+                    if(rlBlank != null){
+                        rlBlank.setVisibility(View.GONE);
+                    }
+                    mWebView.setVisibility(View.VISIBLE);
+                }
                 dismissLoading();
-//                mWebView.loadUrl("javascript:loadWebViewDisplay()");
                 if(isBulueToothConnected()){
                     UbtLog.d(TAG, "do start infrared!");
-                    mSensorHelper.doReadInfraredSensor((byte)0x01);  //进入block如果连接蓝牙且是1E立马开始读取红外传感器数据
+                    mSensorHelper.doReadInfraredSensor((byte)0x01);  //进入block如果连接蓝牙立马开始读取红外传感器数据
 //                    mSensorHelper.doReadGyroData((byte)0x01);
 //                    mSensorHelper.doReadAcceleration((byte)0x01);
                     mSensorHelper.doRead6DState();
@@ -748,10 +758,12 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             @Override
             public void onClick(View view) {
                 UbtLog.d(TAG,"setHeadTaskShow = doHiddenTaskDetail ---");
-                if(LessonTaskView.getSimpleInstace() != null){
-                    LessonTaskView.getSimpleInstace().doHiddenTaskDetail();
-                }
-                rlBlank.setVisibility(View.GONE);
+//                if(LessonTaskView.getSimpleInstace() != null){
+//                    LessonTaskView.getSimpleInstace().doHiddenTaskDetail();
+//                }
+//                rlBlank.setVisibility(View.GONE);
+//                loadError = false;
+//                mWebView.loadUrl(URL);
             }
         });
     }
