@@ -36,6 +36,7 @@ import com.ubt.alpha1e.data.ISharedPreferensListenet;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.services.AutoScanConnectService;
+import com.ubt.alpha1e.services.GlobalMsgService;
 import com.ubt.alpha1e.ui.AboutUsActivity;
 import com.ubt.alpha1e.ui.ActionUnpublishedActivity;
 import com.ubt.alpha1e.ui.ActionsLibPreviewWebActivity;
@@ -148,6 +149,7 @@ public class AlphaApplication extends LoginApplication {
         initActivityLife();
         initSkin(this);
         initConnectClient();
+        startGlobalMsgService(); //处理全局消息，包括信鸽，必须在信鸽前初始化
         initXG();
         initLanguage();
         LitePal.initialize(this);
@@ -170,6 +172,10 @@ public class AlphaApplication extends LoginApplication {
 
     }
 
+    private void startGlobalMsgService(){
+        Intent mIntent = new Intent(this, GlobalMsgService.class);
+        startService(mIntent);
+    }
     private void initSmartRefresh() {
         SmartRefreshLayout.setDefaultRefreshHeaderCreater(new DefaultRefreshHeaderCreater() {
             @NonNull
@@ -566,15 +572,17 @@ public class AlphaApplication extends LoginApplication {
         cleanBluetoothConnectData();
 
         Activity mCurrentActivity = null;
-        for (int i = 0; i < mActivityList.size(); i++) {
-            try {
-                if (i == (mActivityList.size() - 1)) {
-                    mCurrentActivity = mActivityList.get(i);
-                } else {
-                    mActivityList.get(i).finish();
+        if(mActivityList != null) {
+            for (int i = 0; i < mActivityList.size(); i++) {
+                try {
+                    if (i == (mActivityList.size() - 1)) {
+                        mCurrentActivity = mActivityList.get(i);
+                    } else {
+                        mActivityList.get(i).finish();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         if (mCurrentActivity != null && !mCurrentActivity.isFinishing()) {
