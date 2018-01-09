@@ -27,7 +27,7 @@ public class mainActivityPresenter {
     private MainContract.Presenter mPresenter;
     private String TAG="mainActivityPresenter";
     @Before
-    private  void  setup() throws Exception{
+    public  void  setup() throws Exception{
            mPresenter=new MainPresenter();
            mTaskView=new MainContract.View() {
                @Override
@@ -52,7 +52,7 @@ public class mainActivityPresenter {
 
                @Override
                public void showGlobalButtonAnmiationEffect(boolean status) {
-                   assert(status=true);
+                   assert(status==true);
                }
 
                @Override
@@ -60,9 +60,10 @@ public class mainActivityPresenter {
                    return null;
                }
            };
+           mPresenter.setView(mTaskView);
     }
     @After
-    private void tearDown()throws Exception{
+    public void tearDown()throws Exception{
 
     }
 
@@ -83,7 +84,6 @@ public class mainActivityPresenter {
 
     @Test
     public void dealMessage() throws Exception {
-
         mTaskView.showBatteryCapacity(true,10);
         mTaskView.showBatteryCapacity(true,0);
         mTaskView.showBatteryCapacity(true,5);
@@ -103,7 +103,6 @@ public class mainActivityPresenter {
     @Test
     public void checkMyRobotState() throws Exception {
 
-
     }
 
     @Test
@@ -114,7 +113,6 @@ public class mainActivityPresenter {
     @Test
     public void exitGlocalControlCenter() throws Exception {
       mPresenter.requestGlobalButtonControl(true);
-
     }
 
 

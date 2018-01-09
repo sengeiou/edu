@@ -45,5 +45,7 @@ public class MainContract {
         void exitGlocalControlCenter();
         //全局按钮动画通知, status=true 动作执行，有动画 status=false 动画不执行，没有动画
         void requestGlobalButtonControl(boolean status);
+        //test usage
+        void setView(MainContract.View view);
     }
 }

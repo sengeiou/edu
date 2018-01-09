@@ -60,7 +60,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     private int powerThreshold[] = {5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
     private byte mChargeValue=0;
     private boolean IS_CHARGING=false;
-
     @Override
     public  int[] requestCartoonAction(int value ) {
             String actionName="";
@@ -432,6 +431,12 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         mView.showGlobalButtonAnmiationEffect(status);
     }
 
+    @Override
+    public void setView(MainContract.View view) {
+        mView=view;
+
+    }
+
     /**
      * 请求网络操作
      */
@@ -511,4 +516,5 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         UbtLog.d(TAG," notePlayChargingError");
 
     }
+
 }
