@@ -311,12 +311,28 @@
 
     <TextView
         android:id="@+id/top_icon3"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginRight="20dp"
         android:layout_alignParentRight="true"
-        android:drawableTop="@drawable/ic_alli_normal" />
+        android:drawableTop="@drawable/ic_alli_normal1" />
+    <ImageView
+        android:id="@+id/indicator0"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginRight="32dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/indicator0" />
+    <ImageView
+        android:id="@+id/indicator"
+    android:layout_width="25dp"
+    android:layout_height="25dp"
+    android:layout_marginTop="26dp"
+    android:layout_marginRight="32dp"
+    android:layout_alignParentRight="true"
+    android:background="@drawable/globalactionindicator_animation" />
 
     <RelativeLayout
         android:id="@+id/touch_control"

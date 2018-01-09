@@ -152,10 +152,14 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     RelativeLayout mainui;
     @BindView(R.id.buddle_text)
     TextView buddleText;
-    @BindView(R.id.charging_dot)
-    ImageView chargingDot;
+//    @BindView(R.id.charging_dot)
+//    ImageView chargingDot;
     @BindView(R.id.touch_control)
     RelativeLayout touchControl;
+    @BindView(R.id.indicator)
+    ImageView actionIndicator;
+    @BindView(R.id.indicator0)
+    ImageView indicator;
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
@@ -254,8 +258,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int ROBOT_CHARGING_ENOUGH_STATUS = 0x03;
     private int CURRENT_ACTION_NAME = 0;
     private boolean cartoon_enable = false;
-
     private static final int ROBOT_GOTO_BIND = 20;
+    AnimationDrawable  mActionIndicator=null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -274,6 +278,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         // 启动发送clientId服务
         SendClientIdService.startService(MainActivity.this);
 
+        mActionIndicator=(AnimationDrawable)actionIndicator.getBackground();
+        mActionIndicator.setOneShot(false);
+        mActionIndicator.setVisible(true,true);
     }
 
     @Override
@@ -860,10 +867,24 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
     @Override
-    public void showGlobalButtonAnmiationEffect(boolean status) {
-
+    public void showGlobalButtonAnmiationEffect(final boolean status) {
+            UbtLog.d(TAG,"ICON ANIMATION : "+status);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (status) {
+                    indicator.setVisibility(View.INVISIBLE);
+                    mActionIndicator.setOneShot(false);
+                    mActionIndicator.start();
+                    mActionIndicator.setVisible(true, true);
+                } else {
+                    mActionIndicator.stop();
+                    mActionIndicator.setVisible(false, false);
+                    indicator.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
-
 
     //若要使用此功能，需先绑定机器人！
     public void habitAdviceGotoBindDialog() {
@@ -1367,28 +1388,24 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
   private void recoveryBatteryUi(){
       if(charging!=null) {
           //charging.setBackground(getDrawableRes("charging_normal"));
-          chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+          //chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
           cartoonBodyTouchBg.setBackground(getDrawableRes("main_robot_background"));
       }
   }
   private void hiddenBattryUi(){
       if(charging!=null) {
           charging.setVisibility(View.INVISIBLE);
-          chargingDot.setVisibility(View.INVISIBLE);
       }
   }
  private void showBattryUi(){
      if(charging!=null) {
          charging.setVisibility(View.VISIBLE);
-         chargingDot.setVisibility(View.VISIBLE);
      }
  }
 
   private void showUserPicIcon(){
       UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
       UbtLog.d(TAG,"user image picture"+userModel.getHeadPic());
-//      if(topIcon!=null){
-//      }
   }
   private void hiddenDisconnectIcon(){
       if(topIcon2Disconnect!=null)

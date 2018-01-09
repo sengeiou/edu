@@ -116,7 +116,6 @@ public class Constant {
      */
     public final static String SP_CURRENT_BLOCK_COURSE_ID = "currentCourseId";
 
-<<<<<<< HEAD
 
     public final static int cartoon_action_swing_right_leg = 0;
     public final static int cartoon_action_swing_left_leg = 1;
