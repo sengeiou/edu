@@ -6,8 +6,8 @@
 
 <ImageView
     android:id="@+id/img_cancel"
-    android:layout_width="50dp"
-    android:layout_height="35dp"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
     android:layout_centerVertical="true"
     android:layout_marginLeft="25dp"
     android:src="@drawable/back_icon"
@@ -22,18 +22,37 @@
     android:textSize="18sp"
     android:visibility="invisible"
     />
-    <ImageView
-        android:id="@+id/btn_start_cycle"
-        android:layout_width="30dp"
-        android:layout_height="20dp"
+
+
+    <RelativeLayout
+        android:id="@+id/rl_cycle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@color/B5"
-        android:gravity="center"
-        android:text="@string/ui_action_cycle_start"
-        android:textColor="@color/T5"
-        android:textSize="18sp"
-        android:layout_marginRight="10dp"
-        android:src="@drawable/ic_circle_play"
-        />
+        android:layout_marginRight="10dp">
+
+        <ImageView
+            android:id="@+id/btn_start_cycle"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_circle_play"
+            />
+
+        <TextView
+            android:id="@+id/tv_start_cycle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/btn_start_cycle"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/tv_center_color"
+            android:textSize="18sp"
+            android:text="循环播放"/>
+
+    </RelativeLayout>
+
+
+
 </RelativeLayout>

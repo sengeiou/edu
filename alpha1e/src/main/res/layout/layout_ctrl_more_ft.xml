@@ -26,25 +26,37 @@
               android:src="@drawable/cc_poweroff"
               />
 
-            <TextView
-                android:id="@+id/text_playContentName"
-                android:layout_width="380.33dp"
-                android:layout_height="25dp"
-                android:background="@color/B5"
-                android:gravity="center"
-                android:text="暂无播放内容"
-                android:textColor="@color/T1"
+            <LinearLayout
+                android:id="@+id/Ll_play_content"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
                 android:layout_centerInParent="true"
-             />
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/gif_playing_control"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignLeft="@+id/text_playContentName"
-            android:layout_alignTop="@+id/text_playContentName"
-            android:layout_marginLeft="107dp"
-            android:src="@drawable/gif_overall_control"
-            android:visibility="visible" />
+                android:layout_toRightOf="@+id/btn_poweroff"
+                android:layout_toLeftOf="@+id/sensor_control"
+                android:background="@color/B5"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:id="@+id/playing_control"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/playindicator_animation"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/text_playContentName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="暂无播放内容"
+                    android:textColor="@color/T1"
+                    />
+            </LinearLayout>
+
             <ImageView
                 android:id="@+id/sensor_control"
                 android:layout_width="50dp"
@@ -58,7 +70,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         >
         <ImageView
@@ -89,6 +101,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-10dp"
         >
         <ImageView
             android:id="@+id/btn_vol_logo"

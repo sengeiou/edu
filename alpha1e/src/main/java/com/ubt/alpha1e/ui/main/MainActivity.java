@@ -22,7 +22,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -134,10 +133,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     TextView topIcon2Disconnect;
     @BindView(R.id.top_icon3)
     TextView topIcon3;
-    @BindView(R.id.habit_alert)
-    EditText habitAlert;
-    @BindView(R.id.bottom_icon)
-    TextView bottomIcon;
+
     @BindView(R.id.cartoon_head)
     ImageView cartoonHead;
     @BindView(R.id.cartoon_chest)
@@ -353,9 +349,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     };
 
 
-    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.right_icon, R.id.right_icon2, R.id.right_icon3,
-            R.id.right_icon4, R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
-            R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg,R.id.bottom_icon,R.id.habit_alert})
+    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.ll_remote, R.id.ll_action, R.id.ll_program,
+            R.id.ll_community, R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
+            R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg,R.id.rl_course_center,R.id.rl_hibits_event})
     protected void switchActivity(View view) {
         UbtLog.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
@@ -394,7 +390,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     showBluetoothConnectDialog();
             }
                 break;
-            case R.id.right_icon:
+            case R.id.ll_remote:
                 if(isBulueToothConnected()){
                     mLaunch.setClass(this, RemoteSelActivity.class);
                     //startActivity(new Intent(this, ActionTestActivity.class));
@@ -403,7 +399,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     showBluetoothConnectDialog();
                 }
                 break;
-            case R.id.right_icon2:
+            case R.id.ll_action:
                 if(isBulueToothConnected()){
                     APP_CURRENT_STATUS=ROBOT_default_gesture;
                     startActivity(new Intent(this, ActionTestActivity.class));
@@ -412,11 +408,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     showBluetoothConnectDialog();
                 }
                 break;
-            case R.id.right_icon3:
+            case R.id.ll_program:
                 startActivity(new Intent(this, BlocklyActivity.class));
                 this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 break;
-            case R.id.right_icon4:
+            case R.id.ll_community:
                 //BehaviorHabitsActivity.LaunchActivity(this);
                 ToastUtils.showShort("程序猿正在施工中！！！");
                 break;
@@ -450,7 +446,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 sendCommandToRobot(FilePath+waveLeftLeg);
                 showCartoonAction(cartoon_action_swing_right_leg);
                 break;
-            case R.id.bottom_icon:
+            case R.id.rl_course_center:
                 if (isBulueToothConnected()) {
                     startActivity(new Intent(this, MainCourseActivity.class));
                     this.overridePendingTransition(R.anim.activity_open_up_down, 0);
@@ -458,7 +454,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     showBluetoothConnectDialog();
                 }
                 break;
-            case R.id.habit_alert:
+            case R.id.rl_hibits_event:
 //                BehaviorHabitsActivity.LaunchActivity(this);
                 mPresenter.checkMyRobotState();
                 break;
@@ -921,7 +917,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     private void showBuddleText(String text) {
         if(buddleText!=null) {
-            buddleText.setText("\u3000" + text);
+            buddleText.setText(text);
             showBuddleTextView();
         }
     }
@@ -1121,20 +1117,21 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     protected void initUI() {
         //course center icon
-        int course_icon_margin_left = 22;
+        /*int course_icon_margin_left = 22;
         int course_icon_margin_top = 260;
         RelativeLayout.LayoutParams rlParams = (RelativeLayout.LayoutParams) bottomIcon.getLayoutParams();
         rlParams.leftMargin = getAdaptiveScreenX(course_icon_margin_left);
         rlParams.topMargin = getAdaptiveScreenY(course_icon_margin_top);
         bottomIcon.setLayoutParams(rlParams);
-        bottomIcon.setVisibility(View.VISIBLE);
+        bottomIcon.setVisibility(View.GONE);*/
+
         //Buddle Text
-        int buddle_text_margin_left = 388;
+        /*int buddle_text_margin_left = 388;
         int buddle_text_margin_top = 116;//height*0.31
         RelativeLayout.LayoutParams buddleParams = (RelativeLayout.LayoutParams) buddleText.getLayoutParams();
         buddleParams.leftMargin = getAdaptiveScreenX(buddle_text_margin_left);
         buddleParams.topMargin = getAdaptiveScreenY(buddle_text_margin_top);
-        buddleText.setLayoutParams(buddleParams);
+        buddleText.setLayoutParams(buddleParams);*/
 
     }
 
@@ -1150,7 +1147,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     public int getContentViewId() {
-        return R.layout.activity_main;
+        //return R.layout.activity_main;
+        return R.layout.activity_main_new;
     }
 
 
@@ -1337,9 +1335,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        showBuddleText(getString(R.string.buddle_text_init_status));
                        buddleTextAsynchronousTask();
                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
+                       cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
                        hiddenCartoonTouchView();
                        recoveryBatteryUi();
-                       hiddenBattryUi();
+                       //hiddenBattryUi();
                        //showCartoonAction(cartoon_action_sleep);
                    }
                });
@@ -1354,6 +1353,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        }
                        if(!cartoon_enable){
                            cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                           cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
                        }
                        showCartoonAction(cartoon_action_squat);
                        showBuddleText(getString(R.string.buddle_bluetoothConnection));
@@ -1371,6 +1371,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         showBuddleText(getString(R.string.buddle_text_init_status));
                        //showCartoonAction(cartoon_action_sleep);
                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
+                       cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
                        recoveryBatteryUi();
                        hiddenBattryUi();
                    }
@@ -1611,7 +1612,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
   private void recoveryBatteryUi(){
       if(charging!=null) {
-          charging.setBackground(getDrawableRes("charging_normal"));
+          //charging.setBackground(getDrawableRes("charging_normal"));
           chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
           cartoonBodyTouchBg.setBackground(getDrawableRes("main_robot_background"));
       }
@@ -1765,4 +1766,5 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
           hiddenBuddleTextView();
       }
   }
+
 }

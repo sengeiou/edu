@@ -201,7 +201,9 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                     if (level < totalLeavel) {
                         mActionCourseModels.get(i).setActionCourcesScore(0);
                     } else if (level == totalLeavel) {
-                        mActionCourseModels.get(i + 1).setActionLockType(1);
+                        if (i < 9) {
+                            mActionCourseModels.get(i + 1).setActionLockType(1);
+                        }
                     }
                 }
             }
@@ -249,19 +251,19 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class), REQUESTCODE);
                             } else if (position == 2) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelThreeActivity.class), REQUESTCODE);
-                            }else if (position == 3) {
+                            } else if (position == 3) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFourActivity.class), REQUESTCODE);
-                            }else if (position == 4) {
+                            } else if (position == 4) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFiveActivity.class), REQUESTCODE);
-                            }else if (position ==5) {
+                            } else if (position == 5) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelSixActivity.class), REQUESTCODE);
-                            }else if (position ==6) {
+                            } else if (position == 6) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelSevenActivity.class), REQUESTCODE);
-                            }else if (position ==7) {
+                            } else if (position == 7) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelEightActivity.class), REQUESTCODE);
-                            }else if (position ==8) {
+                            } else if (position == 8) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelNineActivity.class), REQUESTCODE);
-                            }else if (position ==9) {
+                            } else if (position == 9) {
                                 startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTenActivity.class), REQUESTCODE);
                             }
 //                            if (position == 0) {

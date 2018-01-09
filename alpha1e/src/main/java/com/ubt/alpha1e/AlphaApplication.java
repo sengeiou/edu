@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
-//import com.ant.country.CountryActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreater;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreater;
@@ -37,6 +36,7 @@ import com.ubt.alpha1e.data.ISharedPreferensListenet;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.services.AutoScanConnectService;
+import com.ubt.alpha1e.services.GlobalMsgService;
 import com.ubt.alpha1e.ui.AboutUsActivity;
 import com.ubt.alpha1e.ui.ActionUnpublishedActivity;
 import com.ubt.alpha1e.ui.ActionsLibPreviewWebActivity;
@@ -71,7 +71,8 @@ import com.ubt.alpha1e.utils.DynamicTimeFormat;
 import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
 import com.ubt.alpha1e.utils.crash.CrashHandler;
 import com.ubt.alpha1e.utils.log.UbtLog;
-import com.ubt.alpha1e.xingepush.XGUBTManager;
+import com.ubt.alpha1e.xingepush.XGListener;
+import com.ubt.xingemodule.XGUBTManager;
 import com.ubtechinc.base.BlueToothManager;
 import com.ubtechinc.sqlite.DBAlphaInfoManager;
 import com.umeng.analytics.MobclickAgent;
@@ -135,16 +136,20 @@ public class AlphaApplication extends LoginApplication {
 
     public static String currentRobotSN = "";
 
+    private static XGListener xgListener;
+
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
+        xgListener = new XGListener();
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(this);
 
         initActivityLife();
         initSkin(this);
         initConnectClient();
+        startGlobalMsgService(); //处理全局消息，包括信鸽，必须在信鸽前初始化
         initXG();
         initLanguage();
         LitePal.initialize(this);
@@ -167,6 +172,10 @@ public class AlphaApplication extends LoginApplication {
 
     }
 
+    private void startGlobalMsgService(){
+        Intent mIntent = new Intent(this, GlobalMsgService.class);
+        startService(mIntent);
+    }
     private void initSmartRefresh() {
         SmartRefreshLayout.setDefaultRefreshHeaderCreater(new DefaultRefreshHeaderCreater() {
             @NonNull
@@ -203,7 +212,8 @@ public class AlphaApplication extends LoginApplication {
         String accessId = SPUtils.getInstance().getString(Constant.SP_XG_ACCESSID);
         String accessKey = SPUtils.getInstance().getString(Constant.SP_XG_ACCESSKEY);
         if (!TextUtils.isEmpty(accessId) && !TextUtils.isEmpty(accessKey)) {
-            XGUBTManager.getInstance(mContext).initXG(Long.parseLong(accessId), accessKey);
+            XGUBTManager.getInstance().initXG(mContext,Long.parseLong(accessId), accessKey);
+            XGUBTManager.getInstance().setXGListener(xgListener);
             //  XGUBTManager.getInstance(this).initXG(2100270011, "A783M4PIM7JI");
         }
     }
@@ -562,15 +572,17 @@ public class AlphaApplication extends LoginApplication {
         cleanBluetoothConnectData();
 
         Activity mCurrentActivity = null;
-        for (int i = 0; i < mActivityList.size(); i++) {
-            try {
-                if (i == (mActivityList.size() - 1)) {
-                    mCurrentActivity = mActivityList.get(i);
-                } else {
-                    mActivityList.get(i).finish();
+        if(mActivityList != null) {
+            for (int i = 0; i < mActivityList.size(); i++) {
+                try {
+                    if (i == (mActivityList.size() - 1)) {
+                        mCurrentActivity = mActivityList.get(i);
+                    } else {
+                        mActivityList.get(i).finish();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         if (mCurrentActivity != null && !mCurrentActivity.isFinishing()) {

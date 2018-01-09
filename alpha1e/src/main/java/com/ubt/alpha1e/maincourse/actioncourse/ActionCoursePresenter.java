@@ -128,9 +128,9 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         courseModel10.setActionLockType(0);
         courseModel10.setSize(1);
         list.add(courseModel10);
-
-        ActionCourseModel courseModel13 = new ActionCourseModel();
-        list.add(courseModel13);
+//
+//        ActionCourseModel courseModel13 = new ActionCourseModel();
+//        list.add(courseModel13);
 
         if (isAttachView()) {
             mView.setActionCourseData(list);

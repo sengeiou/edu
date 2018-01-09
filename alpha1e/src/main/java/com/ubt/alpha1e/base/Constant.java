@@ -116,4 +116,10 @@ public class Constant {
      */
     public final static String SP_CURRENT_BLOCK_COURSE_ID = "currentCourseId";
 
+    /**
+     * 机器人productId 和DSN
+     */
+    public final static String SP_ROBOT_PRODUCT_ID = "sp_robot_product_id";
+    public final static String SP_ROBOT_DSN = "sp_robot_dsn";
+
 }

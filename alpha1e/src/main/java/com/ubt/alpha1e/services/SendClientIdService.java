@@ -242,21 +242,21 @@ public class SendClientIdService extends Service {
 								public void run() {
 									adviceBind();
 								}
-							},500);
+							},800);
 						}else if(state.equals("1002")){
 							mHandler.postDelayed(new Runnable() {
 								@Override
 								public void run() {
 									adviceRobotBinded();
 								}
-							},500);
+							},800);
 						}else if(state.equals("1001")){
 							mHandler.postDelayed(new Runnable() {
 								@Override
 								public void run() {
 									adviceBindedOtherRobot();
 								}
-							},500);
+							},800);
 						}else if(state.equals("1000")){
 
 						}

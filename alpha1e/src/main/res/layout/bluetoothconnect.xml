@@ -343,8 +343,8 @@
             android:layout_centerInParent="true">
             <ImageView
                 android:id="@+id/image1"
-                android:layout_width="43dp"
-                android:layout_height="55dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:background="@drawable/img_alpha_toconnect_fail"
                 android:layout_centerHorizontal="true"/>
             <TextView
