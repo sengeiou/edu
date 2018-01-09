@@ -130,8 +130,9 @@ public class LoginManger implements AuthorizeListener {
     //跳转到用户中心
     public void toUserCenter(){
         DeviceManager mgr = new DeviceManager();
-        mgr.productId = "sdggggg";
-        mgr.dsn = "sddfffdsssdf";
+        mgr.productId = SPUtils.getInstance().getString(Constant.SP_ROBOT_PRODUCT_ID);
+        mgr.dsn =  SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN);
+        UbtLog.d(TAG, "pid:"+ mgr.productId + "__dsn:" + mgr.dsn);
         mgr.deviceOEM = "UBT-Alpha1E";
         mgr.deviceType = "ROBOT";
         proxy.toUserCenter(EUserAttrType.HOMEPAGE, mgr);
@@ -139,10 +140,16 @@ public class LoginManger implements AuthorizeListener {
 
     public void getMemberStatus(){
         int type = SPUtils.getInstance().getInt(Constant.SP_LOGIN_TYPE);
+        DeviceManager mgr = new DeviceManager();
+        mgr.productId = SPUtils.getInstance().getString(Constant.SP_ROBOT_PRODUCT_ID);
+        mgr.dsn =  SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN);
+        UbtLog.d(TAG, "pid:"+ mgr.productId + "__dsn:" + mgr.dsn);
+        mgr.deviceOEM = "UBT-Alpha1E";
+        mgr.deviceType = "ROBOT";
         if(type == 1){
-            proxy.getMemberStatus(ELoginPlatform.QQOpen, new DeviceManager());
+            proxy.getMemberStatus(ELoginPlatform.QQOpen, mgr);
         }else{
-            proxy.getMemberStatus(ELoginPlatform.WX, new DeviceManager());
+            proxy.getMemberStatus(ELoginPlatform.WX, mgr);
         }
 
     }
