@@ -23,7 +23,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
-        android:background="@drawable/img_electricity_5"
+        android:background="@drawable/power5"
         android:visibility="visible" />
 
     <LinearLayout

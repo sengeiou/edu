@@ -24,6 +24,7 @@ import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.xingemodule.XGUBTManager;
 import com.ubtechinc.base.ConstValue;
 import com.ubtechinc.sqlite.UBXDataBaseHelper;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -56,7 +57,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     private final int LOW_BATTERY_FIVE_THRESHOLD=5;
     private  boolean ENTER_LOW_BATTERY_FIVE=false;
     private  boolean ENTER_LOW_BATTERY_TWENTY=false;
-    private int powerThreshold[] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100};
+    private int powerThreshold[] = {5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
     private byte mChargeValue=0;
     private boolean IS_CHARGING=false;
 
@@ -171,7 +172,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             if(mCmd<0){
                 mCmd=255+mCmd;
             }
-            //UbtLog.d(TAG,"CMD IS  "+mCmd);
+            UbtLog.d(TAG,"CMD IS  "+mCmd);
             if(mCmd==ConstValue.DV_TAP_HEAD) {
                 //looperThread.send(createMessage(ROBOT_HIT_HEAD));
             }else if(mCmd==ConstValue.DV_6D_GESTURE){
@@ -193,22 +194,23 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             } else if (mCmd == ConstValue.DV_READ_BATTERY) {
                 for (int i = 0; i < mParams.length; i++) {
                     // UbtLog.d(TAG, "index " + i + "value :" + mParams[i]);
-                    if (mParams[2] == ROBOT_CHARGING_STATUS&&mParams[2]!=mChargeValue) {
+                    if (mParams[2] == ROBOT_CHARGING_STATUS) {
                         IS_CHARGING=true;
                         UbtLog.d(TAG, " IS CHARGING ");
                         mView.dealMessage(Constant.ROBOT_CHARGING);
-                    } else if(mParams[2]==ROBOT_UNCHARGE_STATUS&&mParams[2]!=mChargeValue) {
+                        mView.showBatteryCapacity(true,getPowerCapacity(mParams[3]));
+                    } else if(mParams[2]==ROBOT_UNCHARGE_STATUS) {
                         IS_CHARGING=false;
                         mView.dealMessage(Constant.ROBOT_UNCHARGING);
                         lowBatteryFunction(mParams[3]);
+                        mView.showBatteryCapacity(false,getPowerCapacity(mParams[3]));
                         UbtLog.d(TAG,"NOT CHARGING");
-                    }else if(mParams[2]==ROBOT_CHARGING_ENOUGH_STATUS&&mParams[2]!=mChargeValue){
+                    }else if(mParams[2]==ROBOT_CHARGING_ENOUGH_STATUS){
                         UbtLog.d(TAG,"BATTERY ENOUGH AND PLUG IN CHARGING");
                         mView.dealMessage(Constant.ROBOT_CHARGING_ENOUGH);
+                        mView.showBatteryCapacity(true,getPowerCapacity(mParams[3]));
                     }
-                    mView.showBatteryCapacity(getPowerCapacity(mParams[3]));
-                    mChargeValue=mParams[2];
-
+                    //mChargeValue=mParams[2];
                 }
             } else if(mCmd==ConstValue.DV_COMMON_COMMAND) {
                 UbtLog.d(TAG,"DV COMMON COMMAND [0]: +"+mParams[0] +"index [1]: "+mParams[1]+"index [2]: " +mParams[2]);
@@ -423,6 +425,11 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     @Override
     public void exitGlocalControlCenter() {
         CommonCtrlView.exitGlocalControlCenter();
+    }
+
+    @Override
+    public void requestGlobalButtonControl(boolean status) {
+        mView.showGlobalButtonAnmiationEffect(status);
     }
 
     /**

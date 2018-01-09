@@ -12,18 +12,21 @@ import com.ubt.alpha1e.userinfo.model.MyRobotModel;
  */
 
 public class MainContract {
-    interface View extends BaseView {
+    public interface View extends BaseView {
         void showCartoonAction(int value);
 
         void dealMessage(byte cmd);
 
-        void showBatteryCapacity(int value);
+        void showBatteryCapacity(boolean isCharging, int value);
 
         void onGetRobotInfo(int result, MyRobotModel model);
 
+        void showGlobalButtonAnmiationEffect(boolean status);
+
+
     }
 
-    interface Presenter extends BasePresenter<View> {
+    public interface Presenter extends BasePresenter<View> {
         int[] requestCartoonAction(int value);
 
         String getBuddleText(int type);
@@ -40,5 +43,7 @@ public class MainContract {
 
         //收起全局控制按钮
         void exitGlocalControlCenter();
+        //全局按钮动画通知, status=true 动作执行，有动画 status=false 动画不执行，没有动画
+        void requestGlobalButtonControl(boolean status);
     }
 }

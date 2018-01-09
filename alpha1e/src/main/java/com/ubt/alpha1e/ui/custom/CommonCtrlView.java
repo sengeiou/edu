@@ -46,6 +46,7 @@ import com.ubt.alpha1e.ui.helper.IMainUI;
 import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
+import com.ubt.alpha1e.ui.main.MainPresenter;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
 
@@ -113,6 +114,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private boolean float_view_enable=true;
     private boolean enable_sensor=false;
     private AnimationDrawable radiologicalWaveAnim = null;
+    private MainPresenter mMainPresenter;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -132,12 +134,21 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         }
     };
 
-    public static CommonCtrlView getInstace(Context context){
-        if(commonCtrlView == null) {
+    public static CommonCtrlView getInstace(Context context) {
+        if (commonCtrlView == null) {
             commonCtrlView = new CommonCtrlView(context);
         }
         return commonCtrlView;
     }
+
+    /**
+     * 主界面全局按钮动画通知，在播放动作的时候，有动画效果
+     * @param mainPresenter
+     */
+    public void setPresenter(MainPresenter mainPresenter){
+          mMainPresenter=mainPresenter;
+    }
+
 
     public static void closeCommonCtrlView(){
         if(commonCtrlView != null){
@@ -741,7 +752,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     @Override
     public void notePlayStart(List<String> mSourceActionNameList, ActionInfo action, ActionPlayer.Play_type mCurrentPlayType) {
         UbtLog.d(TAG, "--wmma--notePlayStart callback!");
-        //btn_stop_m.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
+        //btn_stop_m.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"))
+
         if(action!=null){
             if(!action.actionName.contains(Constant.WakeUpActionName)){
                 btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
@@ -765,6 +777,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             radiologicalWaveAnim.start();
             gifImageView.setVisibility(View.VISIBLE);
             mBaseActivity.saveCurrentPlayingActionName(name);
+            mMainPresenter.requestGlobalButtonControl(true);
 
         }
     }
@@ -813,6 +826,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 gifImageView.setVisibility(View.INVISIBLE);
             }
         });
+        mMainPresenter.requestGlobalButtonControl(false);
     }
 
     @Override

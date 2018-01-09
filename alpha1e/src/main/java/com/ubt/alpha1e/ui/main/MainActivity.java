@@ -99,6 +99,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.litepal.util.Const;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
@@ -168,7 +169,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     RelativeLayout.LayoutParams params;
     private AnimationDrawable frameAnimation;
     FrameAnimation frameAnimationPro;
-    private int powerThreshold[] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100};
     int index = 0;
     private final int cartoon_action_swing_right_leg = 0;
     private final int cartoon_action_swing_left_leg = 1;
@@ -191,6 +191,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private TimerTask mBuddleTextTimeOutTask;
     private LooperThread looperThread;
     Timer mChargetimer;
+    private int tmp=-1;
     TimerTask mChargingTimeoutTask;
     private byte mChargeValue = 0;
     private int mPowerValue = 0;
@@ -385,7 +386,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.top_icon3:
                 if (isBulueToothConnected()) {
                     try {
-                        CommonCtrlView.getInstace(getContext());
+                        CommonCtrlView mCommonCtrlView=CommonCtrlView.getInstace(getContext());
+                        mCommonCtrlView.setPresenter(mPresenter);
                         UbtLog.d(TAG, "hasShowGuide = " + CommonGuideView.hasShowGuide());
                         if (!CommonGuideView.hasShowGuide()) {
                             new CommonGuideView(getContext());
@@ -770,7 +772,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
     }
 
-    public void chargeAsynchronousTask() {
+    /**
+     * value current Power value
+     * @param index
+     */
+
+    public void chargeAsynchronousTask(final int index ) {
         mChargetimer = new Timer();
         mChargingTimeoutTask = new TimerTask() {
             @Override
@@ -781,24 +788,23 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (IS_CHARGING) {
                                         if (charging != null) {
-                                            charging.setBackground(getDrawableRes("charging"));
-                                            chargingDot.setBackground(getDrawableRes("charging_dot"));
+                                            if(index!=(com.ubt.alpha1e.data.Constant.powerThreshold.length-1)) {
+                                                charging.setBackground(getDrawableRes("power" + com.ubt.alpha1e.data.Constant.powerThreshold[index + 1]));
+                                            }else {
+                                                //BATTERY ENOUGH
+                                                charging.setBackground(getDrawableRes("power" + com.ubt.alpha1e.data.Constant.powerThreshold[index]));
+                                            }
                                         }
-                                    }
                                 }
                             });
                             Thread.sleep(charging_shrink_interval);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (IS_CHARGING) {
                                         if (charging != null) {
-                                            charging.setBackground(getDrawableRes("charging"));
-                                            chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+                                            charging.setBackground(getDrawableRes("power" + com.ubt.alpha1e.data.Constant.powerThreshold[index]));
                                         }
-                                    }
                                 }
                             });
 
@@ -856,6 +862,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             UbtLog.d(TAG, "账户没有绑定 ");
             habitAdviceGotoBindDialog();
         }
+    }
+
+    @Override
+    public void showGlobalButtonAnmiationEffect(boolean status) {
+
     }
 
 
@@ -1117,24 +1128,23 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
 
 	    @Override
-    public void showBatteryCapacity(final int value) {
+    public void showBatteryCapacity(final boolean isCharging, final int value) {
         if(cartoonBodyTouchBg!=null) {
-            if(value==LOW_BATTERY_TWENTY_THRESHOLD){
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[value - 1]));
-                    }
-                });
-            }else {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        cartoonBodyTouchBg.setBackground(getDrawableRes("power" + powerThreshold[value]));
+                        if(isCharging) {
+                               if(mChargetimer==null||value!=tmp) {
+                                   chargeAsynchronousTask(value);
+                                   tmp=value;
+                               }
+                        }else {
+                            stopchargeAsynchronousTask();
+                            charging.setBackground(getDrawableRes("power" + com.ubt.alpha1e.data.Constant.powerThreshold[value]));
+                        }
                     }
                 });
             }
-        }
     }
 
 
