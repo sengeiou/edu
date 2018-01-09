@@ -109,7 +109,7 @@
         <service android:name=".services.SyncDataService"/>
         <service android:name=".services.HibitsAlertService"/>
         <service android:name=".services.SendClientIdService"/>
-        <!--<service android:name=".services.GlobalMsgService"/>-->
+        <service android:name=".services.GlobalMsgService"/>
 
         <!-- Facebook -->
         <meta-data
