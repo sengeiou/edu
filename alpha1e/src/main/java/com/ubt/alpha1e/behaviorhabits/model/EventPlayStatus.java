@@ -11,26 +11,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by Administrator on 2017/12/18.
+ * Created by Administrator on 2016/6/12.
  */
 @Parcelable
-public class HabitsEvent<T> extends BaseModel implements Serializable {
+public class EventPlayStatus extends BaseModel implements Serializable{
 
     public String eventId;
-    public String eventName;
-    public String eventTime;
-    public String eventType;
-    public String status;
-    public String score;
-    public T contents;
+    public String playAudioSeq;
+    public String audioState;
 
-    public HabitsEvent thiz;
+    public EventPlayStatus thiz;
 
     @Override
-    public HabitsEvent getThiz(String json) {
-
+    public EventPlayStatus getThiz(String json) {
         try {
-            thiz = mMapper.readValue(json, HabitsEvent.class);
+            thiz = mMapper.readValue(json, EventPlayStatus.class);
             return thiz;
         } catch (Exception e) {
             thiz = null;
@@ -38,12 +33,12 @@ public class HabitsEvent<T> extends BaseModel implements Serializable {
         }
     }
 
-    public static ArrayList<HabitsEvent> getModelList(String json) {
-        ArrayList<HabitsEvent> result = new ArrayList<HabitsEvent>();
+    public static ArrayList<EventPlayStatus> getModelList(String json) {
+        ArrayList<EventPlayStatus> result = new ArrayList<EventPlayStatus>();
         try {
             JSONArray j_list = new JSONArray(json);
             for (int i = 0; i < j_list.length(); i++) {
-                result.add(new HabitsEvent().getThiz(j_list.get(i).toString()));
+                result.add(new EventPlayStatus().getThiz(j_list.get(i).toString()));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -51,7 +46,7 @@ public class HabitsEvent<T> extends BaseModel implements Serializable {
         return result;
     }
 
-    public static String getModeslStr(ArrayList<HabitsEvent> infos) {
+    public static String getModeslStr(ArrayList<EventPlayStatus> infos) {
 
         try {
             return mMapper.writeValueAsString(infos);
@@ -61,7 +56,7 @@ public class HabitsEvent<T> extends BaseModel implements Serializable {
         }
     }
 
-    public static String getString(UserScore  info)
+    public static String getString(EventPlayStatus info)
     {
         try {
             return  GsonImpl.get().toJson(info);
@@ -74,13 +69,10 @@ public class HabitsEvent<T> extends BaseModel implements Serializable {
 
     @Override
     public String toString() {
-        return "HabitsEvent{" +
+        return "EventPlayStatus{" +
                 "eventId=" + eventId +
-                ", eventName='" + eventName + '\'' +
-                ", eventTime='" + eventTime + '\'' +
-                ", eventType='" + eventType + '\'' +
-                ", status='" + status + '\'' +
-                ", score='" + score + '\'' +
+                ", playAudioSeq='" + playAudioSeq + '\'' +
+                ", audioState='" + audioState + '\'' +
                 '}';
     }
 }

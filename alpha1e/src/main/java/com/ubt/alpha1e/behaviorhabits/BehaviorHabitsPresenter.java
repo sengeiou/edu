@@ -234,8 +234,8 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                             }.getType());//加上type转换，避免泛型擦除
                     switch (id) {
                         case GET_BEHAVIOURLIST_CMD:
-                            BaseResponseModel<UserScore<List<HabitsEvent>>> baseResponseModel = GsonImpl.get().toObject(response,
-                                    new TypeToken<BaseResponseModel<UserScore<List<HabitsEvent>>>>() {
+                            BaseResponseModel<UserScore<List<HabitsEvent<List<PlayContentInfo>>>>> baseResponseModel = GsonImpl.get().toObject(response,
+                                    new TypeToken<BaseResponseModel<UserScore<List<HabitsEvent<List<PlayContentInfo>>>>>>() {
                                     }.getType());//加上type转换，避免泛型擦除
                             if (!baseResponseModel.status) {
                                 mView.onRequestStatus(id,NETWORK_SERVER_EXCEPTION);
