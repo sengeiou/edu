@@ -58,10 +58,8 @@
     //上面大布局
     <RelativeLayout
         android:layout_marginTop="15dp"
-        android:layout_width="match_parent"
+        android:layout_width="370dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="110dp"
-        android:layout_marginRight="110dp"
         android:layout_marginBottom="25dp"
         android:layout_below="@id/line"
         android:id="@+id/rl_state1_up_big"
@@ -122,7 +120,7 @@
         <RelativeLayout
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
-            android:layout_height="75dp"
+            android:layout_height="78dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/rl_state1_robot"
             android:background="@drawable/bluetooth_connect_backgroud"
@@ -177,10 +175,8 @@
     //上面小布局
     <RelativeLayout
         android:layout_marginTop="15dp"
-        android:layout_width="match_parent"
+        android:layout_width="370dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="110dp"
-        android:layout_marginRight="110dp"
         android:layout_marginBottom="25dp"
         android:layout_below="@id/line"
         android:id="@+id/rl_state2_up_small"
