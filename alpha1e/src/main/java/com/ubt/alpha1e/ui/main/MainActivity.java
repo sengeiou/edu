@@ -1180,7 +1180,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
                        hiddenCartoonTouchView();
                        recoveryBatteryUi();
-                       //hiddenBattryUi();
+                       hiddenBattryUi();
                        //showCartoonAction(cartoon_action_sleep);
                    }
                });
