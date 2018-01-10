@@ -1,0 +1,156 @@
+-- Merging decision tree log ---
+manifest
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:2:1-44:12
+	package
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:3:5-34
+		INJECTED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml
+		INJECTED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml
+		INJECTED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:2:11-69
+	android:versionCode
+		INJECTED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml
+		INJECTED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml
+uses-permission#android.permission.BLUETOOTH
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:5:5-68
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:5:22-65
+uses-permission#android.permission.BLUETOOTH_ADMIN
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:6:5-74
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:6:22-71
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:7:5-78
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:7:22-76
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:8:5-80
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:8:22-78
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:9:5-80
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:9:22-78
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:10:5-79
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:10:22-77
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:12:5-78
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:12:22-76
+uses-permission#android.permission.INTERNET
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:13:5-66
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:13:22-64
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:14:5-74
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:14:22-72
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:15:5-75
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:15:22-73
+uses-permission#android.permission.CHANGE_WIFI_STATE
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:16:5-75
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:16:22-73
+uses-permission#android.permission.ACCESS_LOCATION_EXTRA_COMMANDS
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:17:5-88
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:17:22-86
+uses-permission#android.permission.CHANGE_NETWORK_STATE
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:18:5-78
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:18:22-76
+application
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:23:5-41:19
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] C:\Users\ubt\.android\build-cache\c834d43aa3ce775cc7261de96d6bf0a2be013367\output\AndroidManifest.xml:9:5-20
+MERGED from [com.android.support:design:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\07142e2a1f9113fcff066da21f1ea8ee41dd8595\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:transition:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\5a987d12d972ecc9b2d013f092dd04f344ea4ee3\output\AndroidManifest.xml:26:5-20
+MERGED from [me.yokeyword:fragmentation:1.1.8] C:\Users\ubt\.android\build-cache\c09fdb03c65fc2a3544e59a3ee91f0d0f45fd1c2\output\AndroidManifest.xml:9:5-20
+MERGED from [me.yokeyword:fragmentation-core:1.1.8] C:\Users\ubt\.android\build-cache\5124393cd992bd7b99d5d7d155945aa7827a5bbc\output\AndroidManifest.xml:9:5-20
+MERGED from [com.android.support:appcompat-v7:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\f209ca22be115b7ac0d960e6220db6ff6848aba5\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-v4:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\bb575a7ad393a39ee9fad15c7022d8db5d283e60\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-media-compat:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\593fa69ff25c90ad2fed2c8257e6edd0e6794eb0\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-fragment:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\fd0799fbe316668bda52caee389fb94c46369e54\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-core-ui:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\cceee85291400a0465d463b78ebd803224b5acde\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-core-utils:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\46ca997ed7d153b82e7cb4ed78f54a9d2ded27b4\output\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:animated-vector-drawable:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\d4953bd5bb5bf35f15c6df49a478b5fe6204a31b\output\AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:support-vector-drawable:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\712e7a45e868eaf16392f71ba12c2efebc7399ee\output\AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:support-compat:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\cdbd3e979e9817d238035fe6be3c9bc27197050b\output\AndroidManifest.xml:29:5-20
+	android:label
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:26:9-41
+	android:supportsRtl
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:28:9-35
+	android:roundIcon
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:27:9-54
+	android:allowBackup
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:24:9-35
+	android:icon
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:25:9-43
+	android:theme
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:29:9-52
+activity#com.ubt.factorytest.MainActivity
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:31:9-40:20
+	android:screenOrientation
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:32:13-49
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:31:19-47
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:34:13-38:29
+action#android.intent.action.MAIN
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:35:17-69
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:35:25-66
+category#android.intent.category.LAUNCHER
+ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:37:17-77
+	android:name
+		ADDED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml:37:27-74
+uses-sdk
+INJECTED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml reason: use-sdk injection requested
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] C:\Users\ubt\.android\build-cache\c834d43aa3ce775cc7261de96d6bf0a2be013367\output\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:design:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\07142e2a1f9113fcff066da21f1ea8ee41dd8595\output\AndroidManifest.xml:21:5-23:62
+MERGED from [com.android.support:transition:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\5a987d12d972ecc9b2d013f092dd04f344ea4ee3\output\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:recyclerview-v7:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\093643d56000cf6debd7a6c7324dceacbdc16cf5\output\AndroidManifest.xml:20:5-44
+MERGED from [me.yokeyword:fragmentation:1.1.8] C:\Users\ubt\.android\build-cache\c09fdb03c65fc2a3544e59a3ee91f0d0f45fd1c2\output\AndroidManifest.xml:5:5-7:41
+MERGED from [me.yokeyword:fragmentation-core:1.1.8] C:\Users\ubt\.android\build-cache\5124393cd992bd7b99d5d7d155945aa7827a5bbc\output\AndroidManifest.xml:5:5-7:41
+MERGED from [com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34] C:\Users\ubt\.android\build-cache\dba0550153a6f4ca03ba4527fe55e206590a7d61\output\AndroidManifest.xml:7:5-9:41
+MERGED from [com.jakewharton:butterknife:8.8.1] C:\Users\ubt\.android\build-cache\823c2545262f93fb2076fbac19c853c2489c4a7b\output\AndroidManifest.xml:5:5-43
+MERGED from [com.kyleduo.switchbutton:library:1.4.4] C:\Users\ubt\.android\build-cache\f8738a3858745b1aa916954a861c2124a7b7bf47\output\AndroidManifest.xml:8:5-10:41
+MERGED from [com.android.support:appcompat-v7:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\f209ca22be115b7ac0d960e6220db6ff6848aba5\output\AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:support-v4:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\bb575a7ad393a39ee9fad15c7022d8db5d283e60\output\AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:support-media-compat:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\593fa69ff25c90ad2fed2c8257e6edd0e6794eb0\output\AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-fragment:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\fd0799fbe316668bda52caee389fb94c46369e54\output\AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-core-ui:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\cceee85291400a0465d463b78ebd803224b5acde\output\AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-core-utils:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\46ca997ed7d153b82e7cb4ed78f54a9d2ded27b4\output\AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:animated-vector-drawable:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\d4953bd5bb5bf35f15c6df49a478b5fe6204a31b\output\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\712e7a45e868eaf16392f71ba12c2efebc7399ee\output\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\cdbd3e979e9817d238035fe6be3c9bc27197050b\output\AndroidManifest.xml:21:5-23:58
+	tools:overrideLibrary
+		ADDED from [com.android.support:design:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\07142e2a1f9113fcff066da21f1ea8ee41dd8595\output\AndroidManifest.xml:23:9-59
+	android:targetSdkVersion
+		INJECTED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml
+		INJECTED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml
+		INJECTED from E:\Alpha1E_project\alpha1e-android-app\factorytest\src\main\AndroidManifest.xml
+meta-data#android.support.VERSION
+ADDED from [com.android.support:design:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\07142e2a1f9113fcff066da21f1ea8ee41dd8595\output\AndroidManifest.xml:25:5-27:41
+MERGED from [com.android.support:transition:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\5a987d12d972ecc9b2d013f092dd04f344ea4ee3\output\AndroidManifest.xml:22:5-24:41
+MERGED from [com.android.support:recyclerview-v7:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\093643d56000cf6debd7a6c7324dceacbdc16cf5\output\AndroidManifest.xml:22:5-24:41
+MERGED from [com.android.support:appcompat-v7:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\f209ca22be115b7ac0d960e6220db6ff6848aba5\output\AndroidManifest.xml:25:5-27:41
+MERGED from [com.android.support:support-v4:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\bb575a7ad393a39ee9fad15c7022d8db5d283e60\output\AndroidManifest.xml:25:5-27:41
+MERGED from [com.android.support:support-media-compat:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\593fa69ff25c90ad2fed2c8257e6edd0e6794eb0\output\AndroidManifest.xml:25:5-27:41
+MERGED from [com.android.support:support-fragment:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\fd0799fbe316668bda52caee389fb94c46369e54\output\AndroidManifest.xml:25:5-27:41
+MERGED from [com.android.support:support-core-ui:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\cceee85291400a0465d463b78ebd803224b5acde\output\AndroidManifest.xml:25:5-27:41
+MERGED from [com.android.support:support-core-utils:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\46ca997ed7d153b82e7cb4ed78f54a9d2ded27b4\output\AndroidManifest.xml:25:5-27:41
+MERGED from [com.android.support:animated-vector-drawable:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\d4953bd5bb5bf35f15c6df49a478b5fe6204a31b\output\AndroidManifest.xml:22:5-24:41
+MERGED from [com.android.support:support-vector-drawable:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\712e7a45e868eaf16392f71ba12c2efebc7399ee\output\AndroidManifest.xml:22:5-24:41
+MERGED from [com.android.support:support-compat:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\cdbd3e979e9817d238035fe6be3c9bc27197050b\output\AndroidManifest.xml:25:5-27:41
+	android:value
+		ADDED from [com.android.support:design:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\07142e2a1f9113fcff066da21f1ea8ee41dd8595\output\AndroidManifest.xml:27:9-38
+	android:name
+		ADDED from [com.android.support:design:26.0.0-alpha1] C:\Users\ubt\.android\build-cache\07142e2a1f9113fcff066da21f1ea8ee41dd8595\output\AndroidManifest.xml:26:9-47

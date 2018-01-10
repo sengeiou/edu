@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi\\ic_launcher_round.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi\\bluetooth_net_connect_warming.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\mipmap-xhdpi\\bluetooth_net_connect_warming.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi\\ic_arrow_back_white_24dp.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\mipmap-xhdpi\\ic_arrow_back_white_24dp.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi\\click_head_img_0.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\mipmap-xhdpi\\click_head_img_0.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi\\click_head_img_1.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\mipmap-xhdpi\\click_head_img_1.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi\\ic_launcher.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+    }
+]

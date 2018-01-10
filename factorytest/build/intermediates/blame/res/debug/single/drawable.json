@@ -1,0 +1,318 @@
+[
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\sample_footer_loading.png",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\dba0550153a6f4ca03ba4527fe55e206590a7d61\\output\\res\\drawable\\sample_footer_loading.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_edit_text_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_edit_text_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_small_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_ratingbar_small_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_background_transition_holo_light.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_list_selector_background_transition_holo_light.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\thumb_drawable.xml",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\thumb_drawable.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\buletooth_wifi.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\buletooth_wifi.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\trans_bg.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\trans_bg.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\btn_alert_bg.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\btn_alert_bg.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_vector_test.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_vector_test.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_clear_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_ic_clear_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_holo_dark.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_list_selector_holo_dark.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_thumb_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_seekbar_thumb_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_ab_back_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_ic_ab_back_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\bluetooth_help.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\bluetooth_help.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_tick_mark_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_seekbar_tick_mark_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_tab_indicator_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_tab_indicator_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\network_wifi_select.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\network_wifi_select.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_item_background_holo_dark.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_item_background_holo_dark.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_cab_background_internal_bg.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_cab_background_internal_bg.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\alertdialog_right_selector.xml",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\alertdialog_right_selector.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_holo_light.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_list_selector_holo_light.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_colored_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\design_snackbar_background.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\07142e2a1f9113fcff066da21f1ea8ee41dd8595\\output\\res\\drawable\\design_snackbar_background.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\bg_bluetooth_devices.xml",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\bg_bluetooth_devices.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\network_wifi_signal_2.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\network_wifi_signal_2.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_go_search_api_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_ic_go_search_api_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_spinner_textfield_background_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_spinner_textfield_background_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\bluetooth_wifi_list.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\bluetooth_wifi_list.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_dialog_material_background.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_dialog_material_background.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\network_wifi_signal_3.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\network_wifi_signal_3.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\sample_footer_loading_progress.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\dba0550153a6f4ca03ba4527fe55e206590a7d61\\output\\res\\drawable\\sample_footer_loading_progress.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\touch_bg.xml",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\touch_bg.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_ratingbar_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_item_background_holo_light.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_item_background_holo_light.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\bluetooth_net_pwd.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\bluetooth_net_pwd.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_default_mtrl_shape.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_btn_default_mtrl_shape.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_check_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_btn_check_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\net_see_no_pwd.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\net_see_no_pwd.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\design_fab_background.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\07142e2a1f9113fcff066da21f1ea8ee41dd8595\\output\\res\\drawable\\design_fab_background.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\action_close.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\action_close.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\action_button_enable.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\action_button_enable.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\alert_btn_right_pressed.9.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\alert_btn_right_pressed.9.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\alert_btn_single_pressed.9.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\alert_btn_single_pressed.9.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_menu_overflow_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_ic_menu_overflow_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_track_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_seekbar_track_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\alertdialog_left_selector.xml",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\alertdialog_left_selector.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\design_bottom_navigation_item_background.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\07142e2a1f9113fcff066da21f1ea8ee41dd8595\\output\\res\\drawable\\design_bottom_navigation_item_background.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_text_cursor_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_text_cursor_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\alert_btn_left_pressed.9.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\alert_btn_left_pressed.9.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_radio_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_btn_radio_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\bg_bluetooth_and_net.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\bg_bluetooth_and_net.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\wifi_signal.xml",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\wifi_signal.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_bg_low.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\notification_bg_low.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_indicator_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_ratingbar_indicator_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_bg.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\notification_bg.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\alert_backgroud.xml",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\alert_backgroud.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\alertdialog_single_selector.xml",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\alertdialog_single_selector.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_textfield_search_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_textfield_search_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\shape_corner.xml",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\shape_corner.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_switch_thumb_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_switch_thumb_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\network_wifi_signal_1.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\network_wifi_signal_1.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\custom_text_state_color.xml",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\custom_text_state_color.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_borderless_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_btn_borderless_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\network_wifi_signal_4.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\network_wifi_signal_4.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_cab_background_top_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_cab_background_top_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\network_no_wifi.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\network_no_wifi.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_icon_background.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\notification_icon_background.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_voice_search_api_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_ic_voice_search_api_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\design_password_eye.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\07142e2a1f9113fcff066da21f1ea8ee41dd8595\\output\\res\\drawable\\design_password_eye.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_tile_bg.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\notification_tile_bg.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\net_see_pwd.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\net_see_pwd.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_search_api_material.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\drawable\\abc_ic_search_api_material.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\toast_filter_rect.xml",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\toast_filter_rect.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\network_wifi_logo_pwd.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\network_wifi_logo_pwd.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\ksw_md_thumb.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f8738a3858745b1aa916954a861c2124a7b7bf47\\output\\res\\drawable\\ksw_md_thumb.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\blutooth_retrun.png",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\drawable\\blutooth_retrun.png"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\drawable\\navigation_empty_icon.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\07142e2a1f9113fcff066da21f1ea8ee41dd8595\\output\\res\\drawable\\navigation_empty_icon.xml"
+    }
+]

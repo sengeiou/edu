@@ -1,0 +1,106 @@
+[
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_out.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\anim\\abc_fade_out.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\v_fragment_pop_exit.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\5124393cd992bd7b99d5d7d155945aa7827a5bbc\\output\\res\\anim\\v_fragment_pop_exit.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\dialog_exit.xml",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\anim\\dialog_exit.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\v_fragment_pop_enter.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\5124393cd992bd7b99d5d7d155945aa7827a5bbc\\output\\res\\anim\\v_fragment_pop_enter.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_exit.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\anim\\abc_popup_exit.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\v_fragment_exit.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\5124393cd992bd7b99d5d7d155945aa7827a5bbc\\output\\res\\anim\\v_fragment_exit.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_bottom.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\anim\\abc_slide_in_bottom.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\v_fragment_enter.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\5124393cd992bd7b99d5d7d155945aa7827a5bbc\\output\\res\\anim\\v_fragment_enter.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\design_bottom_sheet_slide_out.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\07142e2a1f9113fcff066da21f1ea8ee41dd8595\\output\\res\\anim\\design_bottom_sheet_slide_out.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_in.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\anim\\abc_fade_in.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\h_fragment_exit.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\5124393cd992bd7b99d5d7d155945aa7827a5bbc\\output\\res\\anim\\h_fragment_exit.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\design_snackbar_in.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\07142e2a1f9113fcff066da21f1ea8ee41dd8595\\output\\res\\anim\\design_snackbar_in.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\design_bottom_sheet_slide_in.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\07142e2a1f9113fcff066da21f1ea8ee41dd8595\\output\\res\\anim\\design_bottom_sheet_slide_in.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\h_fragment_pop_exit.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\5124393cd992bd7b99d5d7d155945aa7827a5bbc\\output\\res\\anim\\h_fragment_pop_exit.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\h_fragment_pop_enter.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\5124393cd992bd7b99d5d7d155945aa7827a5bbc\\output\\res\\anim\\h_fragment_pop_enter.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_top.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\anim\\abc_slide_in_top.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\no_anim.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\5124393cd992bd7b99d5d7d155945aa7827a5bbc\\output\\res\\anim\\no_anim.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\pop_exit_no_anim.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\5124393cd992bd7b99d5d7d155945aa7827a5bbc\\output\\res\\anim\\pop_exit_no_anim.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\dialog_enter.xml",
+        "source": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\src\\main\\res\\anim\\dialog_enter.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\design_snackbar_out.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\07142e2a1f9113fcff066da21f1ea8ee41dd8595\\output\\res\\anim\\design_snackbar_out.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_top.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\anim\\abc_slide_out_top.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_enter.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\anim\\abc_popup_enter.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\h_fragment_enter.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\5124393cd992bd7b99d5d7d155945aa7827a5bbc\\output\\res\\anim\\h_fragment_enter.xml"
+    },
+    {
+        "merged": "E:\\Alpha1E_project\\alpha1e-android-app\\factorytest\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_bottom.xml",
+        "source": "C:\\Users\\ubt\\.android\\build-cache\\f209ca22be115b7ac0d960e6220db6ff6848aba5\\output\\res\\anim\\abc_slide_out_bottom.xml"
+    }
+]
