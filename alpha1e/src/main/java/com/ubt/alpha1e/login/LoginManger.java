@@ -2,6 +2,7 @@ package com.ubt.alpha1e.login;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.tencent.ai.tvs.AuthorizeListener;
 import com.tencent.ai.tvs.LoginApplication;
@@ -128,10 +129,16 @@ public class LoginManger implements AuthorizeListener {
     }
 
     //跳转到用户中心
-    public void toUserCenter(){
+    public void toUserCenter(String dsn){
         DeviceManager mgr = new DeviceManager();
-        mgr.productId = SPUtils.getInstance().getString(Constant.SP_ROBOT_PRODUCT_ID);
-        mgr.dsn =  SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN);
+//        mgr.productId = /*SPUtils.getInstance().getString(Constant.SP_ROBOT_PRODUCT_ID)*/;
+        mgr.productId = "95518e46-af79-494e-b2fa-a6db6409ae6b:77022ec0a7614dbcb33c7ab73d4e2ceb";
+        if(TextUtils.isEmpty(dsn)){
+            mgr.dsn = "";
+        }else{
+            mgr.dsn = dsn/* SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN)*/;
+        }
+
         UbtLog.d(TAG, "pid:"+ mgr.productId + "__dsn:" + mgr.dsn);
         mgr.deviceOEM = "UBT-Alpha1E";
         mgr.deviceType = "ROBOT";
