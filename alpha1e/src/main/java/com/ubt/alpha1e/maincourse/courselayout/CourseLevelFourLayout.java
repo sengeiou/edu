@@ -70,7 +70,7 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
     RelativeLayout mRlInstruction;
     private TextView mTextView;
     private boolean isInstruction;
-
+    private ImageView ivBackInStruction;
     CourseMusicDialogUtil mMusicDialogUtil;//音乐对话框
 
     ActionCourseTwoUtil mActionCourseTwoUtil;//动作对话框
@@ -194,6 +194,10 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
         mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
         mTextView = (TextView) findViewById(R.id.tv_all_introduc);
         mTextView.setText("现在，让我们完整地添加一个有音乐的舞蹈动作吧！");
+        ivBackInStruction = findViewById(R.id.iv_back_instruction);
+        ivBackInStruction.setOnClickListener(this);
+
+
     }
 
     /**
@@ -243,7 +247,11 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
             case R.id.iv_play_arrow:
                 playAction();
                 break;
-
+            case R.id.iv_back_instruction:
+                if (null != courseProgressListener) {
+                    courseProgressListener.finishActivity();
+                }
+                break;
 
             default:
         }
@@ -382,7 +390,9 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
         ViewHolder viewHolder = new ViewHolder(contentView);
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
-        int width = (int) ((display.getWidth()) * 0.6); //设置宽度
+        int screenHeight = (int) (display.getHeight() * 0.6);
+        int screenWidth = (int) (display.getWidth() * 0.6);
+        int width = Math.max(screenWidth, screenHeight); //设置宽度
 
         DialogPlus.newDialog(mContext)
                 .setContentHolder(viewHolder)
@@ -395,8 +405,8 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
                         if (view.getId() == R.id.btn_pos) {
                             currentIndex = 0;
                             setLayoutByCurrentCourse();
+                            dialog.dismiss();
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setCancelable(false)

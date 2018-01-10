@@ -68,7 +68,7 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
     RelativeLayout mRlInstruction;
     private TextView mTextView;
     private boolean isInstruction;
-
+    private ImageView ivBackInStruction;
     CourseMusicDialogUtil mMusicDialogUtil;
 
     /**
@@ -183,6 +183,9 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         mTextView = (TextView) findViewById(R.id.tv_all_introduc);
         mTextView.setText("想不想自己创建一个机器人动作呢？点击手臂和腿，我身体对应的部位就会掉电。这时候掰动机器人，摆出你想要的动作，再点击时间轴的添加按钮就可以了。");
 
+        ivBackInStruction = findViewById(R.id.iv_back_instruction);
+        ivBackInStruction.setOnClickListener(this);
+
         ivRightLegArrow = findViewById(R.id.iv_right_leg_arrow);
         ivRightLegArrow.setOnClickListener(this);
         initRightLegArrow();
@@ -272,6 +275,11 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
 
             case R.id.iv_save_action:
                 saveAction();
+                break;
+            case R.id.iv_back_instruction:
+                if (null != courseProgressListener) {
+                    courseProgressListener.finishActivity();
+                }
                 break;
             default:
         }
@@ -494,7 +502,9 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         ViewHolder viewHolder = new ViewHolder(contentView);
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
-        int width = (int) ((display.getWidth()) * 0.6); //设置宽度
+        int screenHeight = (int) (display.getHeight() * 0.6);
+        int screenWidth = (int) (display.getWidth() * 0.6);
+        int width = Math.max(screenWidth, screenHeight); //设置宽度
 
         DialogPlus.newDialog(mContext)
                 .setContentHolder(viewHolder)
@@ -507,8 +517,8 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
                         if (view.getId() == R.id.btn_pos) {
                             currentIndex = 0;
                             setLayoutByCurrentCourse();
+                            dialog.dismiss();
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setCancelable(false)

@@ -183,7 +183,7 @@ public class DialogDub extends Dialog {
         llRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (type!=1) {
+                if (type != 1) {
                     UbtLog.d(TAG, "msg what 3");
 //                finish = false;
                     llMid.setVisibility(View.GONE);
@@ -208,7 +208,7 @@ public class DialogDub extends Dialog {
                 llMid.setVisibility(View.GONE);
                 rlEditName.setVisibility(View.VISIBLE);
                 llBottom.setVisibility(View.VISIBLE);
-                if (type==1) {
+                if (type == 1) {
                     CourseArrowAminalUtil.startViewAnimal(false, ivSaveArrow, 2);
                     if (null != mOnMusicDialogListener) {
                         mOnMusicDialogListener.onStopRecord(null, 3);
@@ -262,9 +262,9 @@ public class DialogDub extends Dialog {
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (type!=1){
-                deleteMP3RecordFile("");
-                dismiss();
+                if (type != 1) {
+                    deleteMP3RecordFile("");
+                    dismiss();
                 }
             }
         });
@@ -311,7 +311,9 @@ public class DialogDub extends Dialog {
         ivDao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CourseArrowAminalUtil.startViewAnimal(false, ivRecordArrow, 1);
+                if (type == 1&&null!=ivRecordArrow) {
+                    CourseArrowAminalUtil.startViewAnimal(false, ivRecordArrow, 1);
+                }
                 ivDao.setImageResource(R.drawable.countdown);
                 tvNumber.setVisibility(View.VISIBLE);
                 daoCountDown.start();
