@@ -114,9 +114,9 @@ public class SendClientIdHelper extends BaseHelper {
                 e.printStackTrace();
             }
         }else if(cmd == ConstValue.READ_SN_CODE){
-            UbtLog.d(TAG,"cmd = " + cmd + "    获取到序列号1: "+new String(param));
+            UbtLog.d(TAG,"cmd  = " + cmd + "    获取到序列号 1: "+new String(param));
             String sn = new String(param, 1, param.length - 1);
-            UbtLog.d(TAG,"cmd = " + cmd + "    获取到序列号2: "+sn);
+            UbtLog.d(TAG,"cmd = " + cmd + "    获取到序列号 2: "+sn);
             if(sn == null || sn.equals("")){
                 UbtLog.d(TAG,"序列号为空 " );
                 return;
