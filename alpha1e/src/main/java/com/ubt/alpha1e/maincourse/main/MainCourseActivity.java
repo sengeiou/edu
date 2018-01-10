@@ -76,8 +76,8 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
         super.onDestroy();
     }
 
-    public static void finishByMySelf(){
-        if(mainCourseInstance != null && !mainCourseInstance.isFinishing()){
+    public static void finishByMySelf() {
+        if (mainCourseInstance != null && !mainCourseInstance.isFinishing()) {
             mainCourseInstance.finish();
         }
     }
@@ -131,38 +131,55 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
         UbtLog.d("MainCourse", "list==" + list.toString());
     }
 
+    // 两次点击按钮之间的点击间隔不能少于1000毫秒
+    private static final int MIN_CLICK_DELAY_TIME = 1000;
+    private static long lastClickTime;
+
+    public static boolean isFastClick() {
+        boolean flag = false;
+        long curClickTime = System.currentTimeMillis();
+        if ((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME) {
+            flag = true;
+        }
+        lastClickTime = curClickTime;
+        UbtLog.d("dddd", "lastclickTime===" + lastClickTime + "         ++++flag==" + flag);
+        return flag;
+    }
+
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        if (position == 0) {
+        if (isFastClick()) {
+            if (position == 0) {
 
-            if (isBulueToothConnected()) {
-                String progressKey = Constant.PRINCIPLE_PROGRESS + SPUtils.getInstance().getString(Constant.SP_USER_ID);
-                int progress = SPUtils.getInstance().getInt(progressKey,0);
-                UbtLog.d("progress","progress = " + progress);
-                if(progress == 1){
-                    SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
-                    SplitActivity.launchActivity(this,false);
-                }else if(progress == 2){
-                    SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
-                    MergeActivity.launchActivity(this,false);
-                }else if(progress == 3){
-                    SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
-                    FeatureActivity.launchActivity(this,false);
-                }else {
-                    SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, 0);
-                    PrincipleActivity.launchActivity(this,false);
+                if (isBulueToothConnected()) {
+                    String progressKey = Constant.PRINCIPLE_PROGRESS + SPUtils.getInstance().getString(Constant.SP_USER_ID);
+                    int progress = SPUtils.getInstance().getInt(progressKey, 0);
+                    UbtLog.d("progress", "progress = " + progress);
+                    if (progress == 1) {
+                        SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
+                        SplitActivity.launchActivity(this, false);
+                    } else if (progress == 2) {
+                        SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
+                        MergeActivity.launchActivity(this, false);
+                    } else if (progress == 3) {
+                        SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
+                        FeatureActivity.launchActivity(this, false);
+                    } else {
+                        SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, 0);
+                        PrincipleActivity.launchActivity(this, false);
+                    }
+
+                } else {
+                    ToastUtils.showShort(getStringResources("ui_action_connect_robot"));
                 }
 
-            } else {
-                ToastUtils.showShort(getStringResources("ui_action_connect_robot"));
+            } else if (position == 1) {
+                startActivity(new Intent(this, ActionCourseActivity.class));
+
+            } else if (position == 2) {
+                startActivity(new Intent(this, CourseListActivity.class));
             }
-
-        } else if (position == 1) {
-            startActivity(new Intent(this, ActionCourseActivity.class));
-
-        } else if (position == 2) {
-            startActivity(new Intent(this, CourseListActivity.class));
+            this.overridePendingTransition(R.anim.activity_open_up_down, 0);
         }
-        this.overridePendingTransition(R.anim.activity_open_up_down, 0);
     }
 }
