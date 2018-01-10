@@ -2,10 +2,14 @@ package com.ubt.alpha1e.userinfo.dingdang;
 
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.login.LoginManger;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 
@@ -45,7 +49,12 @@ public class DingDangFragment extends MVPBaseFragment<DingDangContract.View, Din
         btnDingDang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginManger.getInstance().toUserCenter();
+                if(!TextUtils.isEmpty(SPUtils.getInstance().getString(Constant.SP_ROBOT_PRODUCT_ID))){
+                    LoginManger.getInstance().toUserCenter();
+                }else{
+                    ToastUtils.showShort("请先连接机器人");
+                }
+
             }
         });
     }

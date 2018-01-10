@@ -17,11 +17,11 @@ import com.scwang.smartrefresh.layout.api.RefreshFooter;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
-import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.tencent.ai.tvs.LoginApplication;
 import com.ubt.alpha1e.AlphaApplicationValues.Thrid_login_type;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.MyRefreshHead;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
@@ -172,17 +172,19 @@ public class AlphaApplication extends LoginApplication {
 
     }
 
-    private void startGlobalMsgService(){
+    private void startGlobalMsgService() {
         Intent mIntent = new Intent(this, GlobalMsgService.class);
         startService(mIntent);
     }
+
     private void initSmartRefresh() {
         SmartRefreshLayout.setDefaultRefreshHeaderCreater(new DefaultRefreshHeaderCreater() {
             @NonNull
             @Override
             public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
                 layout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.black);//全局设置主题颜色
-                return new ClassicsHeader(context).setTimeFormat(new DynamicTimeFormat("更新于 %s")).setEnableLastTime(false);
+                return new MyRefreshHead(context).setTimeFormat(new DynamicTimeFormat("更新于 %s")).setEnableLastTime(false)
+                        .setDrawableMarginRight(5);
             }
         });
         //设置全局的Footer构建器
@@ -190,7 +192,7 @@ public class AlphaApplication extends LoginApplication {
             @Override
             public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
                 //指定为经典Footer，默认是 BallPulseFooter
-                return new ClassicsFooter(context).setDrawableSize(20);
+                return new ClassicsFooter(context).setDrawableSize(20).setDrawableMarginRight(5);
             }
         });
     }
@@ -212,7 +214,7 @@ public class AlphaApplication extends LoginApplication {
         String accessId = SPUtils.getInstance().getString(Constant.SP_XG_ACCESSID);
         String accessKey = SPUtils.getInstance().getString(Constant.SP_XG_ACCESSKEY);
         if (!TextUtils.isEmpty(accessId) && !TextUtils.isEmpty(accessKey)) {
-            XGUBTManager.getInstance().initXG(mContext,Long.parseLong(accessId), accessKey);
+            XGUBTManager.getInstance().initXG(mContext, Long.parseLong(accessId), accessKey);
             XGUBTManager.getInstance().setXGListener(xgListener);
             //  XGUBTManager.getInstance(this).initXG(2100270011, "A783M4PIM7JI");
         }
@@ -572,7 +574,7 @@ public class AlphaApplication extends LoginApplication {
         cleanBluetoothConnectData();
 
         Activity mCurrentActivity = null;
-        if(mActivityList != null) {
+        if (mActivityList != null) {
             for (int i = 0; i < mActivityList.size(); i++) {
                 try {
                     if (i == (mActivityList.size() - 1)) {
