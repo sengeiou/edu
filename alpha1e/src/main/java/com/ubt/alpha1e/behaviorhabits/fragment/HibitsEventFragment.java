@@ -2,6 +2,7 @@ package com.ubt.alpha1e.behaviorhabits.fragment;
 
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baoyz.pg.PG;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
@@ -28,12 +31,18 @@ import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
+import com.ubt.alpha1e.course.feature.FeatureActivity;
+import com.ubt.alpha1e.course.merge.MergeActivity;
+import com.ubt.alpha1e.course.principle.PrincipleActivity;
+import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.Md5;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.custom.CircleBar;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
-import com.ubt.alpha1e.ui.dialog.HibitsAlertDialog;
+import com.ubt.alpha1e.ui.dialog.HibitsEventPlayDialog;
 import com.ubt.alpha1e.ui.dialog.InputPasswordDialog;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.ui.dialog.SetPasswordDialog;
@@ -61,6 +70,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     private static final String TAG = HibitsEventFragment.class.getSimpleName();
 
     private static final int UPDATE_UI_DATA = 1;
+    public static final int SHOW_PLAY_CONTROL = 2;
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -87,6 +97,8 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     private String mUserPassword = null;
 
     protected Dialog mCoonLoadingDia;
+    private HibitsEventPlayDialog mHibitsEventPlayDialog = null;
+
 
     private Handler mHandler = new Handler() {
         @Override
@@ -94,17 +106,32 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
             super.handleMessage(msg);
             switch (msg.what){
                 case UPDATE_UI_DATA:
-                    UserScore<List<HabitsEvent>> userScore = (UserScore<List<HabitsEvent>>) msg.obj;
+                    UserScore<List<HabitsEvent<List<PlayContentInfo>>>> userScore = (UserScore<List<HabitsEvent<List<PlayContentInfo>>>>) msg.obj;
                     if(userScore != null){
                         tvRatio.setText(getStringRes("ui_habits_has_finish") + userScore.percent+"%");
                         tvScore.setText(userScore.totalScore);
                         cbScore.setSweepAngle((Float.parseFloat(userScore.percent)*250)/100);
 
-                        List<HabitsEvent> habitsEventList = userScore.details;
+                        List<HabitsEvent<List<PlayContentInfo>>> habitsEventList = userScore.details;
                         mHabitsEventInfoDatas.clear();
                         mHabitsEventInfoDatas.addAll(habitsEventList);
                         mAdapter.notifyDataSetChanged();
                     }
+                    break;
+                case SHOW_PLAY_CONTROL:
+                    HabitsEvent<List<PlayContentInfo>> habitsEvent = mHabitsEventInfoDatas.get(msg.arg1);
+                    UbtLog.d(TAG,"habitsEvent = " + habitsEvent.eventName + "   contents = " + habitsEvent.contents);
+
+                    /*if(habitsEvent.contents != null && habitsEvent.contents.size() > 0){
+                        List<PlayContentInfo> playContentInfoList = habitsEvent.contents;
+                    }*/
+
+                    if(isBulueToothConnected()){
+                        showPlayEventDialog(habitsEvent.contents,habitsEvent.eventId);
+                    }else {
+                        showBluetoothConnectDialog();
+                    }
+
                     break;
             }
         }
@@ -157,6 +184,56 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
         mAdapter = new HabitsEventRecyclerAdapter(getContext(), mHabitsEventInfoDatas, true, mHandler);
         rvHabitsEvent.setAdapter(mAdapter);
+    }
+
+    /**
+     * 选择播放事项
+     */
+    private void showPlayEventDialog(List<PlayContentInfo> playContentInfoList,String eventId){
+        if(mHibitsEventPlayDialog == null){
+            mHibitsEventPlayDialog = new HibitsEventPlayDialog(getActivity())
+                    .builder()
+                    .setCancelable(true)
+                    .setPlayContent(playContentInfoList)
+                    .setCurrentEventId(eventId)
+                    .setCallbackListener(new HibitsEventPlayDialog.IHibitsEventPlayListener() {
+                        @Override
+                        public void onDismissCallback() {
+                            mHibitsEventPlayDialog = null;
+                        }
+                    });
+        }
+        mHibitsEventPlayDialog.show();
+    }
+
+    //显示蓝牙连接对话框
+    void showBluetoothConnectDialog(){
+        new ConfirmDialog(getContext()).builder()
+                .setTitle("提示")
+                .setMsg("请先连接蓝牙和Wi-Fi")
+                .setCancelable(true)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接蓝牙 ");
+                        gotoConnectBluetooth();
+                    }
+                }).show();
+    }
+
+    //去连接蓝牙
+    void gotoConnectBluetooth(){
+        boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
+        Intent bluetoothConnectIntent = new Intent();
+        if (isfirst) {
+            UbtLog.d(TAG, "第一次蓝牙连接");
+            SPUtils.getInstance().put("firstBluetoothConnect", false);
+            bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothguidestartrobotActivity.class);
+        } else {
+            UbtLog.d(TAG, "非第一次蓝牙连接 ");
+            bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothandnetconnectstateActivity.class);
+        }
+        startActivityForResult(bluetoothConnectIntent, 100);
     }
 
     @Override

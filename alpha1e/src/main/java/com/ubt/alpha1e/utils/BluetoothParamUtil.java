@@ -30,6 +30,11 @@ public class BluetoothParamUtil {
                         + "\",\"actionPath\":\"" + params[2]+ "\"}";
 
                 break;
+            case ConstValue.DV_CONTROL_HIBITS_PLAY:
+                params_str = "{\"eventId\":\"" + params[0]
+                        + "\",\"playAudioSeq\":\"" + params[1]
+                        + "\",\"cmd\":\"" + params[2]+ "\"}";
+                break;
             default:
                 break;
         }

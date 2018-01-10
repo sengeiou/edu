@@ -487,6 +487,11 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             @Override
             public void onStopTrackingTouch(SeekBar arg0) {
                 voluemeProgress=arg0.getProgress();
+                if(voluemeProgress==0){
+                    mHelper.mCurrentVoiceState=true;
+                }else{
+                    mHelper.mCurrentVoiceState=false;
+                }
                 if(!mHelper.mCurrentVoiceState){
                     //静音先解静音
                     mHelper.doTurnVol();

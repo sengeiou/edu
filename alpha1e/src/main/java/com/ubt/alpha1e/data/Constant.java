@@ -55,6 +55,7 @@ public class Constant {
     public static final String PLAY_CONTENT_INFO_LIST_KEY = "PLAY_CONTENT_INFO_LIST_KEY";
     public static final String PLAY_HIBITS_EVENT_WORKDAY_TYPE = "PLAY_HIBITS_EVENT_WORKDAY_TYPE";
     public static final String HIBITS_EVENT_DETAIL = "HIBITS_EVENT_DETAIL";
+    public static final String HIBITS_EVENT_ID = "HIBITS_EVENT_ID";
     public static final String WakeUpActionName="初始化";
 
     public static final int powerThreshold[] = {5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
