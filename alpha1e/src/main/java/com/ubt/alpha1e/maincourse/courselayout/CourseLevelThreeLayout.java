@@ -70,7 +70,7 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
     RelativeLayout mRlInstruction;
     private TextView mTextView;
     private boolean isInstruction;
-
+    private ImageView ivBackInStruction;
     CourseMusicDialogUtil mMusicDialogUtil;
 
     /**
@@ -178,6 +178,8 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
         mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
         mTextView = (TextView) findViewById(R.id.tv_all_introduc);
         mTextView.setText(ResourceManager.getInstance(mContext).getStringResources("action_course_card3_1_all"));
+        ivBackInStruction = findViewById(R.id.iv_back_instruction);
+        ivBackInStruction.setOnClickListener(this);
     }
 
     /**
@@ -227,6 +229,11 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
                 break;
             case R.id.iv_play_arrow:
                 playAction();
+                break;
+            case R.id.iv_back_instruction:
+                if (null != courseProgressListener) {
+                    courseProgressListener.finishActivity();
+                }
                 break;
             default:
         }
@@ -321,10 +328,10 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
      * Activity执行onPause方法
      */
     public void onPause() {
-        mHandler.removeMessages(1111);
-        mHandler.removeMessages(1112);
-        mHandler.removeMessages(1113);
-        mHandler.removeMessages(1115);
+        if (null != mMusicDialogUtil) {
+            mMusicDialogUtil.pause();
+        }
+        pause();
 
     }
 
@@ -421,7 +428,9 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
         ViewHolder viewHolder = new ViewHolder(contentView);
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
-        int width = (int) ((display.getWidth()) * 0.6); //设置宽度
+        int screenHeight = (int) (display.getHeight() * 0.6);
+        int screenWidth = (int) (display.getWidth() * 0.6);
+        int width = Math.max(screenWidth, screenHeight); //设置宽度
 
         DialogPlus.newDialog(mContext)
                 .setContentHolder(viewHolder)
@@ -434,8 +443,8 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
                         if (view.getId() == R.id.btn_pos) {
                             currentIndex = 0;
                             setLayoutByCurrentCourse();
+                            dialog.dismiss();
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setCancelable(false)

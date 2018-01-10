@@ -175,7 +175,7 @@ public class CourseLevelThreeActivity extends MVPBaseActivity<CourseOneContract.
     protected void onPause() {
         super.onPause();
         UbtLog.d(TAG, "------------onPause___________");
-
+        mActionEdit.onPause();
     }
 
 
@@ -195,7 +195,7 @@ public class CourseLevelThreeActivity extends MVPBaseActivity<CourseOneContract.
         super.onDestroy();
         UbtLog.d(TAG, "------------onDestroy------------");
         // ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
-        mActionEdit.onPause();
+
     }
 
 

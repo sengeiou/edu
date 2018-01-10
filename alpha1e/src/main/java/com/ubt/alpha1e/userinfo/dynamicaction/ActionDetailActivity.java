@@ -21,6 +21,7 @@ import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.TimeTools;
 import com.ubt.alpha1e.data.model.DownloadProgressInfo;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -127,15 +128,15 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
             mIvActionType1.setImageResource(R.drawable.mynew_publish_story);
 
         } else if (actionType == 3) {//运动
-            mTvActionType.setText("故事");
+            mTvActionType.setText("运动");
             mIvActionType1.setImageResource(R.drawable.myniew_publish_sport);
 
         } else if (actionType == 4) {//儿歌
-            mTvActionType.setText("故事");
+            mTvActionType.setText("儿歌");
             mIvActionType1.setImageResource(R.drawable.mynew_publish_childsong);
 
         } else if (actionType == 5) {//科普
-            mTvActionType.setText("故事");
+            mTvActionType.setText("科普");
             mIvActionType1.setImageResource(R.drawable.mynew_publish_science);
         } else {
             mTvActionType.setText("舞蹈");
@@ -154,8 +155,8 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
                 playAction();
                 break;
             case R.id.iv_delete:
-                mPresenter.deleteActionById(mDynamicActionModel.getActionId());
-                LoadingDialog.show(this);
+                showDeleteDialog();
+
                 break;
             default:
         }
@@ -309,5 +310,26 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
     protected void onDestroy() {
         super.onDestroy();
         DownLoadActionManager.getInstance(this).removeDownLoadActionListener(this);
+    }
+
+
+    //显示蓝牙连接对话框
+    private void showDeleteDialog() {
+        new ConfirmDialog(this).builder()
+                .setMsg("确定要删除这个内容吗？")
+                .setCancelable(true)
+                .setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mPresenter.deleteActionById(mDynamicActionModel.getActionId());
+                        LoadingDialog.show(ActionDetailActivity.this);
+                    }
+                })
+                .setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                }).show();
     }
 }

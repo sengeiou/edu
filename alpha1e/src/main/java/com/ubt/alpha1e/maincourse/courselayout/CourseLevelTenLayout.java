@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,6 +43,7 @@ public class CourseLevelTenLayout extends BaseActionEditLayout {
     RelativeLayout mRlInstruction;
     private TextView mTextView;
     CourseProgressListener courseProgressListener;
+    private ImageView ivBackInStruction;
     /**
      * 当前课时
      */
@@ -107,7 +109,8 @@ public class CourseLevelTenLayout extends BaseActionEditLayout {
         mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
         mTextView = (TextView) findViewById(R.id.tv_all_introduc);
         mTextView.setText("现在，你来独立设计一个动作给阿尔法吧。记得按保存才算通关哦。");
-
+        ivBackInStruction = findViewById(R.id.iv_back_instruction);
+        ivBackInStruction.setOnClickListener(this);
 
     }
 
@@ -179,6 +182,9 @@ public class CourseLevelTenLayout extends BaseActionEditLayout {
                 if (null != courseProgressListener) {
                     courseProgressListener.completeCurrentCourse(1);
                 }
+                break;
+            case R.id.iv_back_instruction:
+                showExitDialog();
                 break;
             default:
         }

@@ -182,7 +182,7 @@ public class AlphaApplication extends LoginApplication {
             @Override
             public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
                 layout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.black);//全局设置主题颜色
-                return new ClassicsHeader(context).setTimeFormat(new DynamicTimeFormat("更新于 %s"));
+                return new ClassicsHeader(context).setTimeFormat(new DynamicTimeFormat("更新于 %s")).setEnableLastTime(false);
             }
         });
         //设置全局的Footer构建器

@@ -300,7 +300,11 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
 
         }
     }
-
+    public void pause() {
+        if (player != null && player.isPlaying()) {
+            player.pause();
+        }
+    }
 
     private MediaPlayer player;
 
