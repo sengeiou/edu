@@ -11,6 +11,7 @@ import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.userinfo.dingdang.DingDangFragment;
 import com.ubt.alpha1e.userinfo.dynamicaction.DynamicActionFragment;
 import com.ubt.alpha1e.userinfo.notice.NoticeFragment;
 import com.ubt.alpha1e.userinfo.notice.NoticeFragment1;
@@ -59,12 +60,15 @@ public class UserCenterImpPresenter extends BasePresenterImpl<UserCenterContact.
             LeftMenuModel menuModel5 = new LeftMenuModel(ResourceManager.getInstance(context).getStringResources("user_center_download"));
             menuModel5.setImageId(R.drawable.radio_selector_main_left_download);
             leftMenuModels.add(menuModel5);
+            LeftMenuModel menuModel7 = new LeftMenuModel(ResourceManager.getInstance(context).getStringResources("user_center_dingdang"));
+            menuModel7.setImageId(R.drawable.radio_selector_main_left_dingdang);
+            leftMenuModels.add(menuModel7);
             LeftMenuModel menuModel6 = new LeftMenuModel(ResourceManager.getInstance(context).getStringResources("user_center_setting"));
             menuModel6.setImageId(R.drawable.radio_selector_main_left_setting);
             leftMenuModels.add(menuModel6);
 
             List<Fragment> fragmentList = new ArrayList<>();
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < 7; i++) {
                 if (i == 0) {
                     fragmentList.add(UserInfoFragment.newInstance(leftMenuModels.get(i).getNameString(), ""));
                 } else if (i == 1) {
@@ -76,6 +80,9 @@ public class UserCenterImpPresenter extends BasePresenterImpl<UserCenterContact.
                 } else if (i == 4) {
                     fragmentList.add(NoticeFragment1.newInstance("5", ""));
                 } else if (i == 5) {
+                    Fragment fragment = DingDangFragment.newInstance("", "");
+                    fragmentList.add(fragment);
+                }else if (i == 6) {
                     Fragment fragment = SettingFragment.newInstance(leftMenuModels.get(i).getNameString(), "");
                     fragmentList.add(fragment);
                 }

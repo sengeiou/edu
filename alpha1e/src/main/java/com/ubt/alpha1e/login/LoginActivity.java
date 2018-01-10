@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.google.gson.reflect.TypeToken;
@@ -59,6 +60,8 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
 
     RelativeLayout rlQQLgoin;
     RelativeLayout rlWXLogin;
+    ImageView ivPrivacy;
+    boolean select = true;
 
 //    private int loginType = 0; //默认 0 QQ， 1 WX;
 
@@ -81,6 +84,10 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
         setContentView(R.layout.activity_login_with_tvs);
         rlQQLgoin = (RelativeLayout) findViewById(R.id.rl_qq_login);
         rlWXLogin = (RelativeLayout) findViewById(R.id.rl_wx_login);
+        ivPrivacy = (ImageView) findViewById(R.id.iv_privacy);
+        select = true;
+        ivPrivacy.setSelected(select);
+
 
         boolean invalid = getIntent().getBooleanExtra(INVALID_TOKEN, false);
         if(invalid){
@@ -139,6 +146,20 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
 //                proxy.clearToken(ELoginPlatform.WX, LoginActivity.this);
 //                proxy.requestLogin(ELoginPlatform.WX, PID, DSN, LoginActivity.this);
                 LoginManger.getInstance().loginWX(LoginActivity.this);
+            }
+        });
+
+        ivPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UbtLog.d(TAG, "ivPrivacy onClick");
+                if(select){
+                    select = false;
+                    ivPrivacy.setSelected(select);
+                }else{
+                    select = true;
+                    ivPrivacy.setSelected(select);
+                }
             }
         });
     }

@@ -28,7 +28,7 @@ public class StartInitSkinActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
+        setContentView(R.layout.activity_start_new);
         //测试版本提交，删除数据库
         if (BasicSharedPreferencesOperator
                 .getInstance(this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD)
@@ -125,7 +125,7 @@ public class StartInitSkinActivity extends BaseActivity {
 
     private void startNextActivity() {
         Intent intent = new Intent();
-        intent.setClass(this, StartActivity.class);
+        intent.setClass(this, StartActivityNew.class);
         startActivity(intent);
         this.finish();
     }
