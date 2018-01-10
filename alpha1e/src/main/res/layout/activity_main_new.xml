@@ -23,7 +23,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60dp"
-        android:background="@drawable/img_electricity_5"
+        android:background="@drawable/power5"
         android:visibility="visible" />
 
     <LinearLayout
@@ -147,7 +147,7 @@
         android:layout_above="@+id/charging"
         android:layout_centerHorizontal="true"
         android:background="@drawable/img_hoem_robot"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="18dp"
         android:visibility="visible" />
 
     <TextView
@@ -157,7 +157,7 @@
         android:maxWidth="210dp"
         android:layout_toRightOf="@+id/cartoon_action"
         android:layout_marginLeft="-75dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:paddingRight="18dp"
         android:paddingBottom="20dp"
         android:paddingLeft="23dp"
@@ -183,7 +183,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/v_vertical_center"
-        android:layout_marginLeft="38dp"
+        android:layout_marginLeft="45dp"
         android:layout_marginBottom="-15dp"
         >
 
@@ -223,7 +223,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/v_vertical_center"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="52dp"
+        android:layout_marginRight="59dp"
         android:layout_marginBottom="-15dp"
         >
 
@@ -311,12 +311,28 @@
 
     <TextView
         android:id="@+id/top_icon3"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:layout_marginRight="20dp"
         android:layout_alignParentRight="true"
-        android:drawableTop="@drawable/ic_alli_normal" />
+        android:drawableTop="@drawable/ic_alli_normal1" />
+    <ImageView
+        android:id="@+id/indicator0"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginRight="32dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/indicator0" />
+    <ImageView
+        android:id="@+id/indicator"
+    android:layout_width="25dp"
+    android:layout_height="25dp"
+    android:layout_marginTop="26dp"
+    android:layout_marginRight="32dp"
+    android:layout_alignParentRight="true"
+    android:background="@drawable/globalactionindicator_animation" />
 
     <RelativeLayout
         android:id="@+id/touch_control"

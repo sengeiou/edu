@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+    <!--<item
+        android:id="@+id/action_stop_record"
+        android:orderInCategory="1"
+        android:title="@string/action_stop_record"
+        app:showAsAction="always|withText" />-->
+    <item
+        android:id="@+id/action_wifi_conf"
+        android:orderInCategory="1"
+        android:title="@string/action_wifi_conf"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/action_action_test"
+        android:orderInCategory="1"
+        android:title="@string/action_action_test"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/action_ageing_test"
+        android:orderInCategory="1"
+        android:title="@string/action_ageing_test"
+        app:showAsAction="withText" />
+    <item
+        android:id="@+id/action_wifi_status"
+        android:orderInCategory="1"
+        android:title="@string/action_wifi_status"
+        app:showAsAction="withText" />
+
+</menu>

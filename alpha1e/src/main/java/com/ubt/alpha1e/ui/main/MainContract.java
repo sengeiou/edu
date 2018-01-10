@@ -12,30 +12,40 @@ import com.ubt.alpha1e.userinfo.model.MyRobotModel;
  */
 
 public class MainContract {
-    interface View extends BaseView {
-        void showCartoonAction(int value );
+    public interface View extends BaseView {
+        void showCartoonAction(int value);
 
-        void showBluetoothStatus(String status);
+        void dealMessage(byte cmd);
 
-        void showCartoonText(String text);
+        void showBatteryCapacity(boolean isCharging, int value);
 
         void onGetRobotInfo(int result, MyRobotModel model);
 
+        void showGlobalButtonAnmiationEffect(boolean status);
+
+
     }
 
-    interface Presenter extends BasePresenter<View> {
-        void requestCartoonAction(String json);
+    public interface Presenter extends BasePresenter<View> {
+        int[] requestCartoonAction(int value);
 
-        void requestCartoonText(String text);
+        String getBuddleText(int type);
 
-        void requestBluetoothStatus(String status);
-
-        void commandRobotAction(byte cmd,byte[]params);
+        void commandRobotAction(byte cmd, byte[] params);
 
         void dealMessage(String json);
 
+        void setRobotStatus(int status);
+
+        int getRobotStatus();
+
         void checkMyRobotState();
+
         //收起全局控制按钮
         void exitGlocalControlCenter();
+        //全局按钮动画通知, status=true 动作执行，有动画 status=false 动画不执行，没有动画
+        void requestGlobalButtonControl(boolean status);
+        //test usage
+        void setView(MainContract.View view);
     }
 }

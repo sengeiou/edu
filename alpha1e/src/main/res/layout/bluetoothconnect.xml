@@ -219,7 +219,7 @@
         </RelativeLayout>
         <TextView
             android:id="@+id/tv_advice1"
-            android:text="  连接小提示：手机靠近我的后背，可以自动连接上哦！"
+            android:text="手机靠近我的后背，可以自动连接上哦！"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
             android:layout_width="wrap_content"
@@ -227,7 +227,7 @@
             android:textSize="12sp"
             android:textColor="#666666"
             android:gravity="center"
-            android:drawableLeft="@drawable/tips_icon"
+            android:drawableLeft="@drawable/img_tip"
             android:layout_centerInParent="true" />
         <ImageView
             android:id="@+id/ig_advice1"
