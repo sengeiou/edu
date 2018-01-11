@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.CheckIsBindRequest;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
@@ -91,7 +92,7 @@ public class DingDangFragment extends MVPBaseFragment<DingDangContract.View, Din
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "doRequest onError:" + e.getMessage());
                 LoadingDialog.dismiss(getActivity());
-                LoginManger.getInstance().toUserCenter("");
+                ToastUtils.showShort("获取绑定信息失败");
 
             }
 
@@ -105,10 +106,10 @@ public class DingDangFragment extends MVPBaseFragment<DingDangContract.View, Din
                                 new TypeToken<BaseResponseModel<ArrayList<MyRobotModel>>>() {
                                 }.getType());//加上type转换，避免泛型擦除
                         if(!baseResponseModel.status || baseResponseModel.models == null){
-                            LoginManger.getInstance().toUserCenter("");
+                            ToastUtils.showShort("获取绑定信息失败");
                         }else {
                             if(baseResponseModel.models.size() == 0){
-                                LoginManger.getInstance().toUserCenter("");
+                                ToastUtils.showShort("未绑定机器人");
                                 return;
                             }else {
                                 UbtLog.d(TAG, "size = "+baseResponseModel.models.size());
