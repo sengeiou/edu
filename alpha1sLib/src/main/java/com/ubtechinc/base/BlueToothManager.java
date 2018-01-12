@@ -174,6 +174,7 @@ public class BlueToothManager extends Thread implements ClentCallBack,
 	@Override
 	public void run() {
 		while (mRun) {
+			byte[] xtParams = null;
 			synchronized (this) {
 				BlueToothClientHandler remove = null;
 				for (BlueToothClientHandler s : mListClient) {
@@ -183,8 +184,11 @@ public class BlueToothManager extends Thread implements ClentCallBack,
 					} else {
 						ProtocolPacket packet = new ProtocolPacket();
 						packet.setmCmd(ConstValue.DV_XT);
-						packet.setmParam(null);
-						packet.setmParamLen(0);
+						//packet.setmParam(null);
+						//packet.setmParamLen(0);
+						xtParams = (System.currentTimeMillis()+"").getBytes();
+						packet.setmParam(xtParams);
+						packet.setmParamLen(xtParams.length);
 
 						byte[] rawDatas = packet.packetData();
 						s.sendXT(rawDatas, rawDatas.length);

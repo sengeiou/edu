@@ -963,6 +963,7 @@
     <string name="user_center_original">原创</string>
     <string name="user_center_download">下载</string>
     <string name="user_center_setting">设置</string>
+    <string name="user_center_dingdang">叮当</string>
 
     <string name="empty_no_noticedata">你目前没有任何消息</string>
     <string name="empty_no_dynamiaction">你目前没有任何原创动作</string>
@@ -1009,6 +1010,7 @@
     <string name="ui_habits_alert_title">#时间将在*开启</string>
     <string name="ui_habits_alert_set_success">设置提醒成功</string>
     <string name="ui_habits_alert_set_fail">设置提醒失败</string>
+    <string name="ui_habits_event_list">事项列表</string>
 
     <!--动作编辑课程 -->
     <string name="action_course_card1_1">1.了解时间轴</string>

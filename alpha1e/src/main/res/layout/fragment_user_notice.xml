@@ -10,14 +10,18 @@
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="5dp"
         app:srlEnableFooterFollowWhenLoadFinished="true"
         app:srlEnableScrollContentWhenLoaded="true">
-
+ 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview_notice"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never"
+            android:scrollbarSize="5dp"
+            android:fadeScrollbars="false"
+            android:scrollbarThumbVertical="@drawable/recyle_scroll_bar"
+            android:scrollbars="vertical"
             />
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>

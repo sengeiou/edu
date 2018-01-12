@@ -20,19 +20,21 @@ import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.GotoBindRequest;
 import com.ubt.alpha1e.base.RequstMode.SetAutoUpgradeRequest;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
+import com.ubt.alpha1e.login.LoginManger;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.UnbindConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
-import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -447,12 +449,14 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
         new RobotBindDialog(AppManager.getInstance().currentActivity()).builder()
                 .setTitle("绑定成功！")
                 .setMsg("可到“个人中心-设置-我的机器人”查看状态。")
-                .setCancelable(true)
+                .setCancelable(false)
                 .setPositiveButton("我知道了", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         UbtLog.d(TAG, "我知道了 ");
                         MyRobotActivity.this.finish();
+                        LoginManger.getInstance().toUserCenter(SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN));
+
                     }
                 })
                 .setTitlePicture(img_ok)

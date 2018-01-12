@@ -62,6 +62,8 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
     RelativeLayout mRlInstruction;
     private TextView mTextView;
     CourseProgressListener courseProgressListener;
+
+    private ImageView ivBackInStruction;
     /**
      * 当前课时
      */
@@ -140,13 +142,13 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             showLeftArrow(true);
             secondIndex = 1;
             ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor9.hts");
-           // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor9.mp3\",\"playcount\":1}");
+            // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor9.mp3\",\"playcount\":1}");
         } else if (currentCourse == 3) {
             ivActionLib.setEnabled(false);
             ivActionLibMore.setEnabled(true);
             showLeftArrow1(true);
             ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor12.hts");
-           // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor12.mp3\",\"playcount\":1}");
+            // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor12.mp3\",\"playcount\":1}");
             threeIndex = 1;
         }
     }
@@ -172,6 +174,8 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
         mRlInstruction = findViewById(R.id.rl_instruction);
         mTextView = findViewById(R.id.tv_all_introduc);
         mTextView.setText(ResourceManager.getInstance(mContext).getStringResources("action_course_card2_1_all"));
+        ivBackInStruction = findViewById(R.id.iv_back_instruction);
+        ivBackInStruction.setOnClickListener(this);
     }
 
     /**
@@ -277,6 +281,11 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             case R.id.iv_play_arrow:
                 playAction();
                 break;
+            case R.id.iv_back_instruction:
+                if (null != courseProgressListener) {
+                    courseProgressListener.finishActivity();
+                }
+                break;
             default:
         }
     }
@@ -313,7 +322,7 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
                 @Override
                 public void run() {
                     ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor10.hts");
-                   // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor10.mp3\",\"playcount\":1}");
+                    // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor10.mp3\",\"playcount\":1}");
                 }
             }, 1000);
             mActionCourseTwoUtil.showActionDialog(1, this);
@@ -429,7 +438,9 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
         ViewHolder viewHolder = new ViewHolder(contentView);
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
-        int width = (int) ((display.getWidth()) * 0.6); //设置宽度
+        int screenHeight = (int) (display.getHeight() * 0.6);
+        int screenWidth = (int) (display.getWidth() * 0.6);
+        int width = Math.max(screenWidth, screenHeight); //设置宽度
         DialogPlus.newDialog(mContext)
                 .setContentHolder(viewHolder)
                 .setGravity(Gravity.CENTER)
@@ -440,8 +451,8 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_pos) {
                             setLayoutByCurrentCourse();
+                            dialog.dismiss();
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setCancelable(false)
@@ -486,7 +497,7 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
                     mActionCourseTwoUtil.showAddAnimal();
                 }
                 ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor11.hts");
-               // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor11.mp3\",\"playcount\":1}");
+                // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor11.mp3\",\"playcount\":1}");
             }
         }, 1200);
 

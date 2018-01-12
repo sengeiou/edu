@@ -80,9 +80,11 @@ public class SendClientIdHelper extends BaseHelper {
             String  productAndDsn = new String(param);
             UbtLog.d(TAG,"productAndDsn = " + productAndDsn);
             String [] ss = productAndDsn.split(",");
-            if(productAndDsn != null && ss.length == 2){
-                UbtLog.d(TAG,"product =   "+ss[0]);
+            if(productAndDsn != null && ss.length >= 2){
+                UbtLog.d(TAG,"product ID=   "+ss[0]);
                 UbtLog.d(TAG,"dsn =  "+ss[1]);
+                SPUtils.getInstance().put(Constant.SP_ROBOT_PRODUCT_ID,ss[0]);
+                SPUtils.getInstance().put(Constant.SP_ROBOT_DSN,ss[1]);
             }else {
                 return;
             }
@@ -112,9 +114,9 @@ public class SendClientIdHelper extends BaseHelper {
                 e.printStackTrace();
             }
         }else if(cmd == ConstValue.READ_SN_CODE){
-            UbtLog.d(TAG,"cmd = " + cmd + "    获取到序列号1: "+new String(param));
+            UbtLog.d(TAG,"cmd  = " + cmd + "    获取到序列号 1: "+new String(param));
             String sn = new String(param, 1, param.length - 1);
-            UbtLog.d(TAG,"cmd = " + cmd + "    获取到序列号2: "+sn);
+            UbtLog.d(TAG,"cmd = " + cmd + "    获取到序列号 2: "+sn);
             if(sn == null || sn.equals("")){
                 UbtLog.d(TAG,"序列号为空 " );
                 return;
@@ -162,7 +164,7 @@ public class SendClientIdHelper extends BaseHelper {
 
     //获取机器人序列号
     public void sendCmdReadSN() {
-        UbtLog.d(TAG,"发送 给mac：  ");
+        UbtLog.d(TAG,"获取机器人序列号  ");
         doSendComm(ConstValue.READ_SN_CODE, new byte[] { 0 });
 
     }

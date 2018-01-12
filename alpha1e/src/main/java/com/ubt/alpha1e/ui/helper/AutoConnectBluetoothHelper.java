@@ -522,7 +522,7 @@ public class AutoConnectBluetoothHelper extends BaseHelper {
 
 
             SendClientIdService.send();
-            UbtLog.d(TAG, "蓝牙连接完成-");
+            UbtLog.d(TAG, "蓝牙连接完成 -");
             finishBluetoothConnect();
 
         } else if (cmd == ConstValue.DV_ADJUST_TIME) {

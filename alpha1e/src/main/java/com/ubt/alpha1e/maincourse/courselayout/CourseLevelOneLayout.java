@@ -72,6 +72,8 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
     private TextView mTextView;
     private boolean isInstruction;
 
+    private ImageView ivBackInStruction;
+
     /**
      * 高亮对话框的TextView显示
      */
@@ -190,6 +192,9 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
         mTextView = (TextView) findViewById(R.id.tv_all_introduc);
         mTextView.setText(ResourceManager.getInstance(mContext).getStringResources("action_course_card1_1_all"));
+
+        ivBackInStruction = findViewById(R.id.iv_back_instruction);
+        ivBackInStruction.setOnClickListener(this);
     }
 
     /**
@@ -281,6 +286,12 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                     }
                 }, 1000);
 
+                break;
+
+            case R.id.iv_back_instruction:
+                if (null != courseProgressListener) {
+                    courseProgressListener.finishActivity();
+                }
                 break;
             default:
         }
@@ -628,8 +639,10 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
 
         ViewHolder viewHolder = new ViewHolder(contentView);
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        int width = (int) ((display.getWidth()) * 0.6); //设置宽度
+         Display display = windowManager.getDefaultDisplay();
+        int screenHeight = (int) (display.getHeight() * 0.6);
+        int screenWidth = (int) (display.getWidth() * 0.6);
+        int width = Math.max(screenWidth, screenHeight); //设置宽度
 
         DialogPlus.newDialog(mContext)
                 .setContentHolder(viewHolder)
@@ -642,8 +655,8 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                         if (view.getId() == R.id.btn_pos) {
                             currentIndex = 0;
                             setLayoutByCurrentCourse();
+                            dialog.dismiss();
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setCancelable(false)

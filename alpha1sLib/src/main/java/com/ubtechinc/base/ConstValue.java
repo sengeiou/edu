@@ -407,4 +407,24 @@ public class ConstValue {
 	 */
 	public static final byte DV_CONTROL_ENGINE_COMMAND = (byte) 0x97;
 
+
+	/**
+	 * 获取行为事项播放状态
+	 * 回复：{
+	 *       "eventId": "123",
+	 *       "playAudioSeq": "0",
+	 *       "audioState": "" //no play,playing
+	 *       }
+	 */
+	public static final byte DV_READ_HIBITS_PLAY_STATUS = (byte) 0x9A;
+
+	/**
+	 * 获取行为事项播放状态
+	 * 回复：{"eventId": "123",
+	 		  "playAudioSeq": "0"
+	          "cmd": "start"    //stop,start,pause,unpause
+	         }
+	 */
+	public static final byte DV_CONTROL_HIBITS_PLAY = (byte) 0x99;
+
 }

@@ -216,73 +216,90 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         }
     }
 
+    // 两次点击按钮之间的点击间隔不能少于1000毫秒
+    private static final int MIN_CLICK_DELAY_TIME = 1000;
+    private static long lastClickTime;
+
+    public static boolean isFastClick() {
+        boolean flag = false;
+        long curClickTime = System.currentTimeMillis();
+        if ((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME) {
+            flag = true;
+        }
+        lastClickTime = curClickTime;
+        UbtLog.d(TAG,"lastclickTime==="+lastClickTime+"         ++++flag=="+flag);
+        return flag;
+    }
+
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, final int position) {
 
-        if (mActionCourseModels.get(position).getActionLockType() == 0) {
-            return;
-        }
+        if (isFastClick()) {
+            if (mActionCourseModels.get(position).getActionLockType() == 0) {
+                return;
+            }
 
-        View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_action_course_content, null);
-        TextView title = contentView.findViewById(R.id.tv_card_name);
-        title.setText(mActionCourseModels.get(position).getTitle());
-        RecyclerView mrecyle = contentView.findViewById(R.id.recyleview_content);
-        mrecyle.setLayoutManager(new LinearLayoutManager(this));
-        CourseItemAdapter itemAdapter = new CourseItemAdapter(R.layout.layout_action_course_dialog, ActionCourseDataManager.getCourseDataList(position, mActionCourseModels.get(position).getSize()));
-        mrecyle.setAdapter(itemAdapter);
-        ViewHolder viewHolder = new ViewHolder(contentView);
-        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
-        int width = (int) ((display.getWidth()) * 0.6); //设置宽度
+            View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_action_course_content, null);
+            TextView title = contentView.findViewById(R.id.tv_card_name);
+            title.setText(mActionCourseModels.get(position).getTitle());
+            RecyclerView mrecyle = contentView.findViewById(R.id.recyleview_content);
+            mrecyle.setLayoutManager(new LinearLayoutManager(this));
+            CourseItemAdapter itemAdapter = new CourseItemAdapter(R.layout.layout_action_course_dialog, ActionCourseDataManager.getCourseDataList(position, mActionCourseModels.get(position).getSize()));
+            mrecyle.setAdapter(itemAdapter);
+            ViewHolder viewHolder = new ViewHolder(contentView);
+            WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+            Display display = windowManager.getDefaultDisplay();
+            int width = (int) ((display.getWidth()) * 0.6); //设置宽度
 
-        DialogPlus.newDialog(this)
-                .setContentHolder(viewHolder)
-                .setGravity(Gravity.CENTER)
-                .setContentWidth(width)
-                .setContentBackgroundResource(R.drawable.action_dialog_filter_rect)
-                .setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(DialogPlus dialog, View view) {
-                        if (view.getId() == R.id.btn_pos) {
-                            int n = position + 1;
-                            if (position == 0) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class), REQUESTCODE);
-                            } else if (position == 1) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class), REQUESTCODE);
-                            } else if (position == 2) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelThreeActivity.class), REQUESTCODE);
-                            } else if (position == 3) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFourActivity.class), REQUESTCODE);
-                            } else if (position == 4) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFiveActivity.class), REQUESTCODE);
-                            } else if (position == 5) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelSixActivity.class), REQUESTCODE);
-                            } else if (position == 6) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelSevenActivity.class), REQUESTCODE);
-                            } else if (position == 7) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelEightActivity.class), REQUESTCODE);
-                            } else if (position == 8) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelNineActivity.class), REQUESTCODE);
-                            } else if (position == 9) {
-                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTenActivity.class), REQUESTCODE);
-                            }
+            DialogPlus.newDialog(this)
+                    .setContentHolder(viewHolder)
+                    .setGravity(Gravity.CENTER)
+                    .setContentWidth(width)
+                    .setContentBackgroundResource(R.drawable.action_dialog_filter_rect)
+                    .setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(DialogPlus dialog, View view) {
+                            if (view.getId() == R.id.btn_pos) {
+                                int n = position + 1;
+                                if (position == 0) {
+                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class), REQUESTCODE);
+                                } else if (position == 1) {
+                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class), REQUESTCODE);
+                                } else if (position == 2) {
+                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelThreeActivity.class), REQUESTCODE);
+                                } else if (position == 3) {
+                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFourActivity.class), REQUESTCODE);
+                                } else if (position == 4) {
+                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFiveActivity.class), REQUESTCODE);
+                                } else if (position == 5) {
+                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelSixActivity.class), REQUESTCODE);
+                                } else if (position == 6) {
+                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelSevenActivity.class), REQUESTCODE);
+                                } else if (position == 7) {
+                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelEightActivity.class), REQUESTCODE);
+                                } else if (position == 8) {
+                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelNineActivity.class), REQUESTCODE);
+                                } else if (position == 9) {
+                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTenActivity.class), REQUESTCODE);
+                                }
 //                            if (position == 0) {
 //                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseOneActivity.class), REQUESTCODE);
 //                            } else if (position == 1) {
 //                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseTwoActivity.class), REQUESTCODE);
 //                            }
-                            ActionCourseActivity.this.overridePendingTransition(R.anim.activity_open_up_down, 0);
-                            dialog.dismiss();
+                                ActionCourseActivity.this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                                dialog.dismiss();
+                            }
                         }
-                    }
-                })
-                .setOnDismissListener(new OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogPlus dialog) {
-                    }
-                })
-                .setCancelable(true)
-                .create().show();
+                    })
+                    .setOnDismissListener(new OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogPlus dialog) {
+                        }
+                    })
+                    .setCancelable(true)
+                    .create().show();
+        }
     }
 
     /**

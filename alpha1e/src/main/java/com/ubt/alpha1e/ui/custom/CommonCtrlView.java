@@ -46,6 +46,7 @@ import com.ubt.alpha1e.ui.helper.IMainUI;
 import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
+import com.ubt.alpha1e.ui.main.MainPresenter;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
 
@@ -113,6 +114,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private boolean float_view_enable=true;
     private boolean enable_sensor=false;
     private AnimationDrawable radiologicalWaveAnim = null;
+    private MainPresenter mMainPresenter;
+    private int voluemeProgress=0;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -132,12 +135,21 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         }
     };
 
-    public static CommonCtrlView getInstace(Context context){
-        if(commonCtrlView == null) {
+    public static CommonCtrlView getInstace(Context context) {
+        if (commonCtrlView == null) {
             commonCtrlView = new CommonCtrlView(context);
         }
         return commonCtrlView;
     }
+
+    /**
+     * 主界面全局按钮动画通知，在播放动作的时候，有动画效果
+     * @param mainPresenter
+     */
+    public void setPresenter(MainPresenter mainPresenter){
+          mMainPresenter=mainPresenter;
+    }
+
 
     public static void closeCommonCtrlView(){
         if(commonCtrlView != null){
@@ -432,6 +444,14 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                         mHelper.doActionCommand(
                         MyActionsHelper.Command_type.Do_pause_or_continue, "",
                         mCurrentActionType);
+                        if(radiologicalWaveAnim.isRunning()) {
+                            radiologicalWaveAnim.stop();
+                            mMainPresenter.requestGlobalButtonControl(false);
+                        }else {
+                            radiologicalWaveAnim.start();
+                            mMainPresenter.requestGlobalButtonControl(true);
+                        }
+
             }
         });
 
@@ -466,6 +486,12 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
             @Override
             public void onStopTrackingTouch(SeekBar arg0) {
+                voluemeProgress=arg0.getProgress();
+                if(voluemeProgress==0){
+                    mHelper.mCurrentVoiceState=true;
+                }else{
+                    mHelper.mCurrentVoiceState=false;
+                }
                 if(!mHelper.mCurrentVoiceState){
                     //静音先解静音
                     mHelper.doTurnVol();
@@ -635,7 +661,9 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 mHelper.doChangeVol(mHelper.mCurrentVolume);
             }
             onNoteVol(mHelper.mCurrentVolume);
-            btn_vol_log.setImageDrawable(mBaseActivity.getDrawableRes("cc_volumeicon"));
+            if(voluemeProgress!=0) {
+                btn_vol_log.setImageDrawable(mBaseActivity.getDrawableRes("cc_volumeicon"));
+            }
         } else {
             if (sek_vol_ctrl.getProgress() != 0){
                 mHelper.mCurrentVolume = -1 * sek_vol_ctrl.getProgress();
@@ -741,7 +769,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     @Override
     public void notePlayStart(List<String> mSourceActionNameList, ActionInfo action, ActionPlayer.Play_type mCurrentPlayType) {
         UbtLog.d(TAG, "--wmma--notePlayStart callback!");
-        //btn_stop_m.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
+        //btn_stop_m.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"))
+
         if(action!=null){
             if(!action.actionName.contains(Constant.WakeUpActionName)){
                 btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
@@ -765,6 +794,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             radiologicalWaveAnim.start();
             gifImageView.setVisibility(View.VISIBLE);
             mBaseActivity.saveCurrentPlayingActionName(name);
+            mMainPresenter.requestGlobalButtonControl(true);
 
         }
     }
@@ -774,10 +804,13 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         UbtLog.d(TAG, "--wmma--notePlayPause callback!");
        // btn_stop_m.setImageDrawable(mBaseActivity.getDrawableRes("cc_play"));
         btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
-        if (mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_download || mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_new) {
-            mHelper.doPauseMp3ForMyDownload();
-            radiologicalWaveAnim.stop();
+            if (mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_download || mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_new) {
+                mHelper.doPauseMp3ForMyDownload();
+                radiologicalWaveAnim.stop();
+                gifImageView.setVisibility(View.INVISIBLE);
+
         }
+
 //        if (mCurrentPlayType == ActionPlayer.Play_type.cycle_action) {
 //            btn_cycle.setBackground(mBaseActivity.getDrawableRes("action_control_cycle_icon_ft"));
 //            txt_cycle_num.setVisibility(View.GONE);
@@ -793,9 +826,10 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         if (mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_download ||mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_new) {
             mHelper.doPauseMp3ForMyDownload();
             radiologicalWaveAnim.start();
+            gifImageView.setVisibility(View.VISIBLE);
         }
         btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
-        gifImageView.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -813,6 +847,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 gifImageView.setVisibility(View.INVISIBLE);
             }
         });
+        mMainPresenter.requestGlobalButtonControl(false);
     }
 
     @Override
@@ -888,6 +923,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             radiologicalWaveAnim.setOneShot(false);
             radiologicalWaveAnim.setVisible(true,true);
             radiologicalWaveAnim.start();
+            mMainPresenter.requestGlobalButtonControl(true);
+
         }
 
     }

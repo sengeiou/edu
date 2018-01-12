@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by Administrator on 2017/12/18.
  */
 @Parcelable
-public class HabitsEvent extends BaseModel implements Serializable {
+public class HabitsEvent<T> extends BaseModel implements Serializable {
 
     public String eventId;
     public String eventName;
@@ -22,6 +22,7 @@ public class HabitsEvent extends BaseModel implements Serializable {
     public String eventType;
     public String status;
     public String score;
+    public T contents;
 
     public HabitsEvent thiz;
 

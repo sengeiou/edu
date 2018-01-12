@@ -26,8 +26,9 @@
             android:id="@+id/tv_robot_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ALPHA 1E"
+            android:text="Alpha Ebot"
             android:textColor="#fff"
+            android:textStyle="bold"
             android:gravity="center"
             android:textSize="27sp"
 
@@ -37,8 +38,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/ui_launch_dream"
-            android:textColor="#fff"
+            android:text="智能教育人形机器人"
+            android:textColor="#AFBFC8"
             android:textSize="16sp"
             />
 
@@ -49,7 +50,7 @@
             android:layout_width="154dp"
             android:layout_height="45.33dp"
             android:layout_gravity="center"
-            android:background="@drawable/bg_btn_login"
+            android:background="@drawable/bt_wechat"
             android:layout_marginTop="36dp"
             android:gravity="center"
             >
@@ -58,7 +59,7 @@
                 android:id="@+id/iv_wx_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/wx_icon"
+                android:src="@drawable/ic_log_wechat"
                 android:scaleType="fitCenter"
                 android:paddingLeft="8dp"
                 />
@@ -72,7 +73,7 @@
                 android:text="微信登录"
                 android:gravity="center"
                 android:textSize="16sp"
-                android:textColor="#289CDF"/>
+                android:textColor="#FFFFFF"/>
 
         </RelativeLayout>
 
@@ -82,7 +83,7 @@
             android:layout_height="45.33dp"
             android:layout_marginTop="16dp"
             android:layout_gravity="center"
-            android:background="@drawable/bg_btn_login"
+            android:background="@drawable/bt_qq"
             android:gravity="center"
             >
 
@@ -90,7 +91,7 @@
                 android:id="@+id/iv_qq_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/qq_icon"
+                android:src="@drawable/ic_log_qq"
                 android:scaleType="fitCenter"
                 android:visibility="visible"
                 />
@@ -104,7 +105,59 @@
                 android:gravity="center"
                 android:text="QQ登录"
                 android:textSize="16sp"
-                android:textColor="#289CDF"/>
+                android:textColor="#FFFFFF"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            >
+
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="QQ与微信账号的资产和权限不互通"
+                android:textColor="#AFBFC8"
+                android:gravity="center"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/tv1"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:id="@+id/iv_privacy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/login_privacy_selector"
+                    android:layout_centerVertical="true"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/iv_privacy"
+                    android:paddingLeft="3dp"
+                    android:text="同意《用户许可协议》《隐私政策》"
+                    android:textColor="#AFBFC8"
+                    android:textSize="10sp"
+                    />
+
+
+
+
+
+            </RelativeLayout>
+
+
+
 
         </RelativeLayout>
 

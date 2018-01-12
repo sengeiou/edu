@@ -354,7 +354,7 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         if (status == 1) {
             tvEmpty.setVisibility(View.VISIBLE);
             llError.setVisibility(View.GONE);
-            ivStatu.setImageResource(R.drawable.ic_setting_action_deafult);
+            ivStatu.setImageResource(R.drawable.ic_setting_push_deafult);
             String emptyMsg = "";
             if (mParam1.equals("1")) {
                 emptyMsg = "你目前没有任何成就";

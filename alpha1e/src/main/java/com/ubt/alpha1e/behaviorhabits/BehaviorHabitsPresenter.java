@@ -198,7 +198,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
             OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
                 @Override
                 public void onError(Call call, Exception e, int id) {
-                    UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage());
+                    UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage() + "  mView = " + mView);
                     switch (id) {
                         case GET_BEHAVIOURLIST_CMD:
                             // mView.showBehaviourList(false,null,"network error");
@@ -234,8 +234,8 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                             }.getType());//加上type转换，避免泛型擦除
                     switch (id) {
                         case GET_BEHAVIOURLIST_CMD:
-                            BaseResponseModel<UserScore<List<HabitsEvent>>> baseResponseModel = GsonImpl.get().toObject(response,
-                                    new TypeToken<BaseResponseModel<UserScore<List<HabitsEvent>>>>() {
+                            BaseResponseModel<UserScore<List<HabitsEvent<List<PlayContentInfo>>>>> baseResponseModel = GsonImpl.get().toObject(response,
+                                    new TypeToken<BaseResponseModel<UserScore<List<HabitsEvent<List<PlayContentInfo>>>>>>() {
                                     }.getType());//加上type转换，避免泛型擦除
                             if (!baseResponseModel.status) {
                                 mView.onRequestStatus(id,NETWORK_SERVER_EXCEPTION);

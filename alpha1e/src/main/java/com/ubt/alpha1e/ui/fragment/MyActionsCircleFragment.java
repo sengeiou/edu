@@ -819,6 +819,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 img_pause = (ImageView) view.findViewById(R.id.img_pause);
                 rl_info  = (RelativeLayout) view.findViewById(R.id.rl_logo_info);
                 txt_action_name = (TextView) view.findViewById(R.id.txt_action_name);
+                //时间隐藏
                 txt_time = (TextView) view.findViewById(R.id.txt_time);
                 txt_des = (TextView) view.findViewById(R.id.txt_disc);
                 txt_type_des = (TextView) view.findViewById(R.id.txt_type_des);
