@@ -100,7 +100,7 @@ public class HibitsEventPlayDialog {
                                         if("playing".equals(eventPlayStatus.audioState) ){
                                             currentPlaySeq = seqNo;
                                             currentPlayInfo = mPlayContentInfoList.get(seqNo);
-                                            String playContent = "正在播放：" + currentPlayInfo.contentName + "_" + currentPlaySeq;
+                                            String playContent = "正在播放：" + currentPlayInfo.contentName /*+ "_" + currentPlaySeq*/;
                                             SpannableString style = new SpannableString(playContent);
                                             style.setSpan(new ForegroundColorSpan(mActivity.getResources().getColor(R.color.T32)),0, "正在播放：".length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                                             tvPlayName.setText(style);
@@ -133,7 +133,7 @@ public class HibitsEventPlayDialog {
                     break;
                 case UPDATE_CURRENT_PLAY:
 
-                    String playContent = "正在播放：" + currentPlayInfo.contentName + "_" + currentPlaySeq;
+                    String playContent = "正在播放：" + currentPlayInfo.contentName /*+ "_" + currentPlaySeq*/;
                     SpannableString style = new SpannableString(playContent);
                     style.setSpan(new ForegroundColorSpan(mActivity.getResources().getColor(R.color.T32)),0, "正在播放：".length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     tvPlayName.setText(style);
