@@ -198,7 +198,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
             OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
                 @Override
                 public void onError(Call call, Exception e, int id) {
-                    UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage());
+                    UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage() + "  mView = " + mView);
                     switch (id) {
                         case GET_BEHAVIOURLIST_CMD:
                             // mView.showBehaviourList(false,null,"network error");

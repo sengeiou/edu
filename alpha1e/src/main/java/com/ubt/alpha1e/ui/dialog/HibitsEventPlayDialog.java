@@ -9,7 +9,10 @@ import android.content.DialogInterface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -53,6 +56,7 @@ public class HibitsEventPlayDialog {
     private RelativeLayout rlBg;
 
     private ImageView ivPlayStatus;
+    private ImageView ivPlayNone;
     private ImageView ivMusicList;
     private ImageView ivMusicLast;
     private ImageView ivMusicPlay;
@@ -75,7 +79,7 @@ public class HibitsEventPlayDialog {
     private boolean isChangeVol = false;
     private boolean isPlaying = false;
     private PlayContentInfo currentPlayInfo = null;
-    private int currentPlaySeq = 0;
+    private int currentPlaySeq = -1;
     private boolean isPause = false;
 
     private Handler mHandler = new Handler() {
@@ -85,46 +89,68 @@ public class HibitsEventPlayDialog {
             switch (msg.what) {
                 case UPDATE_PLAY_STATUS:
                     EventPlayStatus eventPlayStatus = (EventPlayStatus) msg.obj;
+                    UbtLog.d(TAG,"eventPlayStatus = " + eventPlayStatus + " currentEventId = " + currentEventId);
                     if(eventPlayStatus != null && mPlayContentInfoList != null){
-                        if("playing".equals(eventPlayStatus.audioState) && currentEventId.equals(eventPlayStatus.eventId)){
-                            if(isStringNumber(eventPlayStatus.playAudioSeq)){
-                                int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
-                                if(mPlayContentInfoList != null && seqNo < mPlayContentInfoList.size()){
-                                    isPlaying = true;
-                                    currentPlaySeq = seqNo;
-                                    currentPlayInfo = mPlayContentInfoList.get(seqNo);
-                                    tvPlayName.setText("正在播放：" + currentPlayInfo.contentName);
-                                    ivPlayStatus.setVisibility(View.VISIBLE);
-                                    playStatusAnim.start();
+                        if(isStringNumber(eventPlayStatus.playAudioSeq)){
+                            int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
+                            if(seqNo >= 0){
+                                if(currentEventId.equals(eventPlayStatus.eventId)){
+                                    if(mPlayContentInfoList != null && seqNo < mPlayContentInfoList.size() ){
+
+                                        if("playing".equals(eventPlayStatus.audioState) ){
+                                            currentPlaySeq = seqNo;
+                                            currentPlayInfo = mPlayContentInfoList.get(seqNo);
+                                            String playContent = "正在播放：" + currentPlayInfo.contentName + "_" + currentPlaySeq;
+                                            SpannableString style = new SpannableString(playContent);
+                                            style.setSpan(new ForegroundColorSpan(mActivity.getResources().getColor(R.color.T32)),0, "正在播放：".length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                            tvPlayName.setText(style);
+                                            ivPlayNone.setVisibility(View.GONE);
+                                            ivPlayStatus.setVisibility(View.VISIBLE);
+                                            playStatusAnim.start();
+                                        }else {
+                                            isPause = false;
+                                            currentPlaySeq = seqNo;
+                                            currentPlayInfo = mPlayContentInfoList.get(seqNo);
+                                            mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
+                                        }
+                                        isPlaying = true;
+                                    }
                                 }
                             }
                         }
                     }
-                    isPlaying = true;
+
                     if(!isPlaying){
                         isPlaying = false;
-                        currentPlaySeq = 0;
+                        currentPlaySeq = -1;
                         currentPlayInfo = null;
                         tvPlayName.setText("暂无播放内容");
-                        ivPlayStatus.setVisibility(View.INVISIBLE);
+                        ivPlayNone.setVisibility(View.VISIBLE);
+                        ivPlayStatus.setVisibility(View.GONE);
                         playStatusAnim.stop();
                     }
                     initState();
                     break;
                 case UPDATE_CURRENT_PLAY:
 
-                    tvPlayName.setText("正在播放：" + currentPlayInfo.contentName);
+                    String playContent = "正在播放：" + currentPlayInfo.contentName + "_" + currentPlaySeq;
+                    SpannableString style = new SpannableString(playContent);
+                    style.setSpan(new ForegroundColorSpan(mActivity.getResources().getColor(R.color.T32)),0, "正在播放：".length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    tvPlayName.setText(style);
+
+                    ivPlayNone.setVisibility(View.GONE);
                     ivPlayStatus.setVisibility(View.VISIBLE);
                     playStatusAnim.start();
                     break;
                 case STOP_CURRENT_PLAY:
-                    isPlaying = false;
-                    currentPlaySeq = 0;
-                    currentPlayInfo = null;
+                    //currentPlaySeq = -1;
+                    //currentPlayInfo = null;
                     tvPlayName.setText("暂无播放内容");
-                    ivPlayStatus.setVisibility(View.INVISIBLE);
+                    ivMusicPlay.setImageResource(R.drawable.ic_ct_play_usable);
+                    ivPlayNone.setVisibility(View.VISIBLE);
+                    ivPlayStatus.setVisibility(View.GONE);
                     playStatusAnim.stop();
-                    initState();
+                    //initState();
                     break;
                 default:
                     break;
@@ -186,6 +212,7 @@ public class HibitsEventPlayDialog {
 
         rlBg = view.findViewById(R.id.rl_hibits_event_play);
         ivPlayStatus = view.findViewById(R.id.iv_play_status);
+        ivPlayNone = view.findViewById(R.id.iv_play_status_none);
         ivMusicList = view.findViewById(R.id.iv_music_list);
         ivMusicLast = view.findViewById(R.id.iv_music_last);
         ivMusicPlay = view.findViewById(R.id.iv_music_play);
@@ -204,8 +231,6 @@ public class HibitsEventPlayDialog {
         ivMusicNext.setOnClickListener(mOnClickListener);
         ivMusicVolume.setOnClickListener(mOnClickListener);
 
-        //ivPlayStatus.setBackgroundResource(R.drawable.img_ct_playing_none);
-        ivPlayStatus.setVisibility(View.INVISIBLE);
         playStatusAnim = (AnimationDrawable)ivPlayStatus.getBackground();
         playStatusAnim.setOneShot(false);
         playStatusAnim.setVisible(true,true);
@@ -242,18 +267,20 @@ public class HibitsEventPlayDialog {
 
             @Override
             public void onProgressChanged(SeekBar arg0, int arg1,boolean arg2) {
-
+                if(!isPlaying){
+                    skbVolumeControl.setProgress(0);
+                }
             }
         });
     }
 
     @Subscribe
     public void onEventHibits(HibitsEvent event) {
-        UbtLog.d(TAG,"event = " + event);
+        //UbtLog.d(TAG,"event = " + event);
         if(event.getEvent() == HibitsEvent.Event.CONTROL_PLAY){
-            UbtLog.d(TAG,"event = " + event.getStatus());
+            UbtLog.d(TAG,"CONTROL_PLAY event = " + event.getStatus());
         }else if(event.getEvent() == HibitsEvent.Event.READ_EVENT_PLAY_STATUS){
-            UbtLog.d(TAG,"EventPlayStatus = " + event.getEventPlayStatus());
+            UbtLog.d(TAG,"READ_EVENT_PLAY_STATUS = EventPlayStatus = " + event.getEventPlayStatus());
             EventPlayStatus eventPlayStatus = event.getEventPlayStatus();
             Message msg = new Message();
             msg.what = UPDATE_PLAY_STATUS;
@@ -305,33 +332,46 @@ public class HibitsEventPlayDialog {
                     break;
                 case R.id.iv_music_last:
                     if(isPlaying){
-                        if((currentPlaySeq -1) > 0){
+                        if((currentPlaySeq -1) >= 0){
                             currentPlaySeq--;
                         }else {
                             currentPlaySeq = mPlayContentInfoList.size() -1;
                         }
-
+                        isPause = false;
                         currentPlayInfo = mPlayContentInfoList.get(currentPlaySeq);
                         mHelper.playEventSound(currentEventId,currentPlaySeq+"","start");
+                        ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
                         mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
                     }
                     break;
                 case R.id.iv_music_play:
                     if(isPlaying){
-                        if(isPause){
+
+                        if("暂无播放内容".equals(tvPlayName.getText().toString())){
+                            mHelper.playEventSound(currentEventId,currentPlaySeq+"","start");
                             isPause = false;
-                            mHelper.playEventSound(currentEventId,currentPlaySeq+"","unpause");
-                            ivMusicPlay.setBackgroundResource(R.drawable.ic_ct_play_usable);
+                            ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
+                            mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
                         }else {
-                            isPause = true;
-                            mHelper.playEventSound(currentEventId,currentPlaySeq+"","pause");
-                            ivMusicPlay.setBackgroundResource(R.drawable.ic_ct_pause);
+                            if(isPause){
+                                isPause = false;
+                                mHelper.playEventSound(currentEventId,currentPlaySeq+"","unpause");
+                                ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
+                                mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
+                            }else {
+                                isPause = true;
+                                mHelper.playEventSound(currentEventId,currentPlaySeq+"","pause");
+                                ivMusicPlay.setImageResource(R.drawable.ic_ct_play_usable);
+                                mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
+                            }
                         }
                     }
                     break;
                 case R.id.iv_music_stop:
-                    if(isPlaying){
+                    UbtLog.d(TAG,"doStop isPlaying = " + isPlaying + "  currentPlaySeq =" + currentPlaySeq );
+                    if(isPlaying && currentPlaySeq >= 0){
                         mHelper.playEventSound(currentEventId,currentPlaySeq+"","stop");
+                        isPause = false;
                         mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
                     }
                     break;
@@ -342,9 +382,10 @@ public class HibitsEventPlayDialog {
                         }else {
                             currentPlaySeq = 0;
                         }
-
+                        isPause = false;
                         currentPlayInfo = mPlayContentInfoList.get(currentPlaySeq);
                         mHelper.playEventSound(currentEventId,currentPlaySeq+"","start");
+                        ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
                         mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
                     }
                     break;
@@ -396,6 +437,9 @@ public class HibitsEventPlayDialog {
 
     public HibitsEventPlayDialog setPlayContent(List<PlayContentInfo> playContentInfoList) {
         mPlayContentInfoList = playContentInfoList;
+        for(int i = 0; i< mPlayContentInfoList.size();i++){
+            UbtLog.d(TAG,"i = " + i + "     url = " + mPlayContentInfoList.get(i).contentName + "/" + mPlayContentInfoList.get(i).contentUrl);
+        }
         return this;
     }
 
@@ -410,21 +454,29 @@ public class HibitsEventPlayDialog {
      */
     private void initState(){
         UbtLog.d(TAG,"initRobotState mCurrentVolume = " + mHelper.mCurrentVolume + "   mCurrentVoiceState " + mHelper.mCurrentVoiceState + "   mLightState = " + mHelper.mLightState);
+        //isPlaying = true;
         if(isPlaying){
-            ivMusicLast.setBackgroundResource(R.drawable.ic_music_last_usable);
-            ivMusicPlay.setBackgroundResource(R.drawable.ic_ct_play_usable);
-            ivMusicStop.setBackgroundResource(R.drawable.ic_ct_stop);
-            ivMusicNext.setBackgroundResource(R.drawable.ic_music_next_usable);
+            ivPlayNone.setVisibility(View.GONE);
+            ivPlayStatus.setVisibility(View.VISIBLE);
+            ivMusicLast.setImageResource(R.drawable.ic_music_last_usable);
+            if(isPause){
+                ivMusicPlay.setImageResource(R.drawable.ic_ct_play_usable);
+            }else {
+                ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
+            }
+            ivMusicStop.setImageResource(R.drawable.ic_ct_stop);
+            ivMusicNext.setImageResource(R.drawable.ic_music_next_usable);
             skbVolumeControl.setThumb(mActivity.getDrawable(R.drawable.ic_ct_sound_pro));
 
             onNoteVol(mHelper.mCurrentVolume);
             onNoteVolState(mHelper.mCurrentVoiceState);
         }else {
-
-            ivMusicLast.setBackgroundResource(R.drawable.ic_music_last_disable);
-            ivMusicPlay.setBackgroundResource(R.drawable.ic_ct_play_disable);
-            ivMusicStop.setBackgroundResource(R.drawable.ic_ct_stop_disable);
-            ivMusicNext.setBackgroundResource(R.drawable.ic_music_next_disable);
+            ivPlayNone.setVisibility(View.VISIBLE);
+            ivPlayStatus.setVisibility(View.GONE);
+            ivMusicLast.setImageResource(R.drawable.ic_music_last_disable);
+            ivMusicPlay.setImageResource(R.drawable.ic_ct_play_disable);
+            ivMusicStop.setImageResource(R.drawable.ic_ct_stop_disable);
+            ivMusicNext.setImageResource(R.drawable.ic_music_next_disable);
             skbVolumeControl.setThumb(mActivity.getDrawable(R.drawable.ic_ct_sound_pro_disable));
         }
     }

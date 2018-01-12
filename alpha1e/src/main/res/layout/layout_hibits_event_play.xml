@@ -28,6 +28,13 @@
                 android:layout_width="25dp"
                 android:layout_height="20dp"
                 android:background="@drawable/playindicator_animation"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/iv_play_status_none"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
+                android:background="@drawable/img_ct_playing_none"
                 android:visibility="visible" />
 
             <TextView
