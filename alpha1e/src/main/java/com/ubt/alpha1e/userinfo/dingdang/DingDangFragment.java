@@ -109,7 +109,7 @@ public class DingDangFragment extends MVPBaseFragment<DingDangContract.View, Din
                             ToastUtils.showShort("获取绑定信息失败");
                         }else {
                             if(baseResponseModel.models.size() == 0){
-                                ToastUtils.showShort("未绑定机器人");
+                                ToastUtils.showShort("当前账号未绑定机器人");
                                 return;
                             }else {
                                 UbtLog.d(TAG, "size = "+baseResponseModel.models.size());
