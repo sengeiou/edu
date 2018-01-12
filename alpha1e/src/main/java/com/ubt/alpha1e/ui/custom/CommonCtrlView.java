@@ -139,6 +139,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         if (commonCtrlView == null) {
             commonCtrlView = new CommonCtrlView(context);
         }
+        lay_ctrl_more.setVisibility(View.VISIBLE);
         return commonCtrlView;
     }
 
@@ -458,6 +459,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         btn_stop_m.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mHelper.setLooping(false);
                 mHelper.stopPlayAction();
             }
         });
@@ -1102,10 +1104,11 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 //       }
        if (lay_ctrl_more != null)
            lay_ctrl_more.setVisibility(View.GONE);
-       if (commonCtrlView != null) {
-           commonCtrlView.onDestroy();
-           commonCtrlView = null;
-       }
+//       if (commonCtrlView != null) {
+//           commonCtrlView.onDestroy();
+//           commonCtrlView = null;
+//       }
+
    }
 
 

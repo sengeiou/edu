@@ -204,6 +204,7 @@ public class MyActionsHelper extends BaseHelper implements
 
     private String mSchemeId = "";
     private String mSchemeName = "";
+    private boolean isLooping=false;
 
     public Action_type getCurrentPlayType() {
         return mCurrentPlayType;
@@ -2695,6 +2696,14 @@ public class MyActionsHelper extends BaseHelper implements
     }
 
 
-
+    public void setLooping(boolean flag){
+        isLooping=flag;
+        if(!flag){
+            mCurrentSeletedNameList.clear();
+        }
+    }
+    public boolean getLoopingFlag(){
+        return isLooping;
+    }
 
 }

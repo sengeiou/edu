@@ -12,6 +12,7 @@ import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.BlueToothManager;
 import com.ubtechinc.base.ConstValue;
 import com.ubtechinc.base.PublicInterface.BlueToothInteracter;
+import com.ubtechinc.sqlite.UBXDataBaseHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -589,6 +590,7 @@ public class ActionPlayer implements BlueToothInteracter {
         else if (cmd == ConstValue.SET_PALYING_CHARGING) {
             if (param[0] == 0 && thiz.mCurrentPlayState == Play_state.action_playing) {
                 if(mIsCycleContinuePlay){
+                    UbtLog.d(TAG,"SET_PALYING_CHARGING  ");
                     mIsCycleContinuePlay = false;
                 }
 
@@ -661,7 +663,7 @@ public class ActionPlayer implements BlueToothInteracter {
 
             int i = 0;
             while (mIsCycleContinuePlay && !isStopCycleThread ) {
-                UbtLog.d(TAG, "循环播放功能，播放动作：" + mActionNameList[i] + "   isShutDowm：" + isShutDowm);
+                UbtLog.d(TAG, "循环播放功能，播放动作：" + mActionNameList[i] + "   isShutDowm：" + isShutDowm+"    mIsCycleContinuePlay:   "+mIsCycleContinuePlay+"  isStopCycleThread:  "+isStopCycleThread);
                 if (!isShutDowm && thiz.mCurrentPlayState == Play_state.action_playing) {
                     String action_name = mActionNameList[i];
 

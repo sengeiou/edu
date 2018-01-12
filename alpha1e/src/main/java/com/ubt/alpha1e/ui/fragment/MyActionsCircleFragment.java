@@ -80,8 +80,16 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_my_actions_circle, container, false);
+        isStartLooping=mHelper.getLoopingFlag();
+        UbtLog.d(TAG,"isStartLooping flag"+isStartLooping);
         initViews();
         return mView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        UbtLog.d(TAG,"onDestroyView");
     }
 
     private void initViews()
@@ -119,6 +127,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     UbtLog.d(TAG,"BEGIN CIRCLE MOR ONE  ");
                     if(!isStartLooping) {
                         isStartLooping=true;
+                         mHelper.setLooping(isStartLooping);
                         ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
                         tvCircle.setText("停止播放");
                         tvCircle.setAlpha(1.0f);
@@ -145,6 +154,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                         tvCircle.setText("循环播放");
                         tvCircle.setAlpha(0.5f);
                         isStartLooping=false;
+                        mHelper.setLooping(isStartLooping);
                         mHelper.stopPlayAction();
                     }
                  //  setDatas(playActionMap);
@@ -163,11 +173,12 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 //        mSyncRecyclerview.getItemAnimator().setSupportsChangeAnimations(false);
         mAdapter = new ActionsCircleAdapter(getActivity(),type);
         mSyncRecyclerview.setAdapter(mAdapter);
-        if(mHelper!=null) {
-            mHelper.stopPlayAction();
-        }
-        MyActionsHelper.mCurrentSeletedNameList.clear();
-        MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+        //ACTION LIST ENTER AGAIN DONOT STOP THE PLAY FUNCTION
+//        if(mHelper!=null) {
+//            mHelper.stopPlayAction();
+//        }
+//        MyActionsHelper.mCurrentSeletedNameList.clear();
+//        MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
 
     }
 
@@ -175,6 +186,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     {
         mDatas = datas;
         removeDuplicate(mDatas);
+        //MyActionHelper trigger setDatas
         if(mAdapter!=null){
             mAdapter.notifyDataSetChanged();
         }
@@ -203,7 +215,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     @Override
     public void onResume() {
         super.onResume();
-        UbtLog.d("wilson","MyActionsCircleFragment----onResume--");
+        UbtLog.d(TAG,"MyActionsCircleFragment----onResume--");
 //        if(isStartLooping){
 //            if(mListener!=null) mListener.onHiddenLoopButton();
 //        }
@@ -255,7 +267,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed() {
-        if (mListener != null) {
+        if (mListener != null){
             mListener.onFragmentInteraction();
         }
     }
@@ -273,7 +285,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             UbtLog.e(TAG, "--firstLoadData MyActionsCircleFragment");
             mHelper.registerListeners(this);
 //            mHelper.addPlayerListeners(this);
-            mHelper.doReadActions();
+            //读取动作列表，向机器人发送指令，获取机器人动作列表
+                mHelper.doReadActions();
         }
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
@@ -411,6 +424,12 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
     }
 
+    /**
+     * 单曲播放或者多曲循环结束的回调接口
+     * @param mSourceActionNameList
+     * @param mCurrentPlayType
+     * @param hashCode
+     */
     @Override
     public void notePlayFinish(List<String> mSourceActionNameList, ActionPlayer.Play_type mCurrentPlayType, String hashCode) {
         UbtLog.d(TAG, "notePlayFinish clear data");
@@ -452,15 +471,16 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
-
                     Toast.makeText(
                             getActivity(), mActivity.getStringResources("ui_action_cycle_stop"), Toast.LENGTH_SHORT).show();
                 }
             });
+            isStartLooping=false;
+            mHelper.setLooping(isStartLooping);
         }
-
-        isStartLooping = false;
+//        //点击STOP按钮后的处理
+//        isStartLooping = false;
+//        mHelper.setLooping(isStartLooping);
         MyActionsHelper.mCurrentSeletedNameList.clear();
         MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
         for (Map<String, Object> item : mDatas) {
@@ -472,7 +492,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             @Override
             public void run() {
                 mAdapter.notifyDataSetChanged();
-
                 ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
                 tvCircle.setText("循环播放");
                 tvCircle.setAlpha(0.5f);
@@ -554,8 +573,10 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
     @Override
     public void onReadActionsFinish(List<String> names) {
+        //机器人端读取到的数据，
         mDatas = mHelper.loadDatas();
         setDatas(mDatas);
+
 //        sendMessage(1,UPDATE_VIEWS);
 //        mActivity.setmInsideDatas(mDatas);
     }
@@ -628,6 +649,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     @Override
     public void syncServerDataEnd(List<Map<String, Object>> data) {
         UbtLog.d(TAG, "wmma-syncServerDataEnd--" +data.size());
+        //Deal Server Reply result
         setDatas(data);
     }
 
@@ -860,7 +882,25 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             holder.txt_type_des.setText(actionList.get(MyActionsHelper.map_val_action_type_name) + "");
             holder.txt_time.setText(actionList.get(ActionsLibHelper.map_val_action_time) + "");
             UbtLog.d(TAG, "-->isStartLooping=" + isStartLooping);
-            //循环播放的选择框
+            //退出播放列表后，还能够继续播放开始
+            if(isStartLooping) {
+                for (int i = 0; i < MyActionsHelper.mCurrentSeletedNameList.size(); i++) {
+                    if (MyActionsHelper.mCurrentSeletedNameList.get(i).equals(action_name)) {
+                        UbtLog.d(TAG, "current select is looping:" + isStartLooping + "name :" + action_name + "size" + MyActionsHelper.mCurrentSeletedNameList.size());
+                        actionList.put(MyActionsHelper.map_val_action_selected, true);
+                        ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
+                        tvCircle.setText("停止播放");
+                        tvCircle.setAlpha(1.0f);
+                        if (mHelper.getCurrentPlayName().equals(action_name)) {
+                            actionList.put(MyActionsHelper.map_val_action_is_playing, true);
+                        }
+                        break;
+                    } else {
+                        // UbtLog.d(TAG, "current select is looping:" + isStartLooping+"name :"+action_name);
+                    }
+                    //退出播放列表后，还能够继续播放结束
+                }
+            }
             if ((Boolean) actionList.get(MyActionsHelper.map_val_action_selected)) {
                 holder.img_select.setImageResource(R.drawable.mynew_actions_selected);
             } else {
@@ -868,6 +908,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             }
             if(isStartLooping)
             {
+
                // holder.layout_img_select.setVisibility(View.GONE);
                 //重构后的UI始终显示选择按钮
                 holder.layout_img_select.setVisibility(View.VISIBLE);
@@ -888,6 +929,12 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 }
             }else
             {
+                //再次进入不停止开始
+                if(mHelper.getCurrentPlayName().equals(action_name)) {
+                    actionList.put(MyActionsHelper.map_val_action_is_playing, true);
+                }
+                //再次进入不停止结束
+
                 UbtLog.d(TAG, "is playing= " +  actionList.get(MyActionsHelper.map_val_action_is_playing));
                 holder.layout_img_select.setVisibility(View.VISIBLE);
                 //过去的播放按钮不显示
@@ -911,7 +958,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     @Override
                     public void onClick(View view) {
                         actionList.put(MyActionsHelper.map_val_action_selected, !(Boolean) actionList.get(MyActionsHelper.map_val_action_selected));
-                        mAdapter.notifyItemChanged(position);
                         String actionName = (String)actionList.get(MyActionsHelper.map_val_action_name);
                         if(!MyActionsHelper.mCurrentSeletedNameList.contains(actionName))
                         {
@@ -937,8 +983,10 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                             tvCircle.setText("循环播放");
                             tvCircle.setAlpha(1.0f);
                         }
+                        mAdapter.notifyItemChanged(position);
                     }
                 };
+                //动作播放的CHECKBOX点击事件
                 holder.layout_img_select.setOnClickListener(listener);
 
                 View.OnClickListener actioniconlistener  = new View.OnClickListener() {
@@ -946,8 +994,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     public void onClick(View view) {
                         //actionList.put(MyActionsHelper.map_val_action_selected,!(Boolean) actionList.get (MyActionsHelper.map_val_action_selected));
                         actionList.put(MyActionsHelper.map_val_action_is_playing,!(Boolean)actionList.get(MyActionsHelper.map_val_action_is_playing));
-                        mAdapter.notifyItemChanged(position);
                         String actionName = (String)actionList.get(MyActionsHelper.map_val_action_name);
+
                         if((Boolean)actionList.get(MyActionsHelper.map_val_action_is_playing))
                         {
                             mHelper.stopPlayAction();
@@ -960,9 +1008,10 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                         }else{
                             mHelper.stopPlayAction();
                         }
+                        mAdapter.notifyItemChanged(position);
                     }
                 };
-
+                //动作的图片点击事件
                 holder.rl_info.setOnClickListener(actioniconlistener);
 
             }
