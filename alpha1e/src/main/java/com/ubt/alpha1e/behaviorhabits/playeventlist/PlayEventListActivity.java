@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.baoyz.pg.PG;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.adapter.EventListRecyclerAdapter;
 import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
 import com.ubt.alpha1e.behaviorhabits.helper.HabitsHelper;
@@ -54,6 +55,7 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
     public EventListRecyclerAdapter mAdapter;
     private List<PlayContentInfo> mPlayContentInfoDatas = null;
     private String currentEventId = "";
+    private int currentPlaySeq = -1;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -61,34 +63,56 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
             super.handleMessage(msg);
             switch (msg.what){
                 case DO_PLAY_OR_PAUSE:
-                    int position = msg.arg1;
-                    PlayContentInfo playContentInfo = mPlayContentInfoDatas.get(position);
+                    if(currentPlaySeq >= 0){
+                        int position = msg.arg1;
+                        PlayContentInfo playContentInfo = mPlayContentInfoDatas.get(position);
 
-                    if("1".equals(playContentInfo.isSelect)){
-                        playContentInfo.isSelect = "0";
-                        mAdapter.notifyItemChanged(position);
-                        ((HabitsHelper)mHelper).playEventSound(currentEventId, position + "","pause");
-                    }else {
-                        for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
-                            mPlayContentInfo.isSelect = "0";
+                        if("1".equals(playContentInfo.isSelect)){
+                            playContentInfo.isSelect = "0";
+                            mAdapter.notifyItemChanged(position);
+                            ((HabitsHelper)mHelper).playEventSound(currentEventId, position + "","pause");
+                        }else {
+                            for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
+                                mPlayContentInfo.isSelect = "0";
+                            }
+
+                            playContentInfo.isSelect = "1";
+                            mAdapter.notifyDataSetChanged();
+
+                            if(currentPlaySeq == position){
+                                ((HabitsHelper)mHelper).playEventSound(currentEventId, position + "","unpause");
+                            }else {
+                                ((HabitsHelper)mHelper).playEventSound(currentEventId, position + "","start");
+                            }
+                            currentPlaySeq = position;
                         }
-                        playContentInfo.isSelect = "1";
-                        mAdapter.notifyDataSetChanged();
-                        ((HabitsHelper)mHelper).playEventSound(currentEventId, position + "","start");
+                    }else {
+                        ToastUtils.showShort("本事项播放提醒流程尚未开始！");
                     }
                     break;
                 case UPDATE_PLAY_STATUS:
                     EventPlayStatus eventPlayStatus = (EventPlayStatus) msg.obj;
                     if(eventPlayStatus != null && mPlayContentInfoDatas != null){
-                        if("playing".equals(eventPlayStatus.audioState) && currentEventId.equals(eventPlayStatus.eventId)){
-                            if(isStringNumber(eventPlayStatus.playAudioSeq)){
-                                int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
-                                if(mPlayContentInfoDatas != null && seqNo < mPlayContentInfoDatas.size()){
-                                    for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
-                                        mPlayContentInfo.isSelect = "0";
+                        if(isStringNumber(eventPlayStatus.playAudioSeq)){
+                            int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
+                            if(seqNo >= 0){
+                                if(currentEventId.equals(eventPlayStatus.eventId)){
+                                    currentPlaySeq = seqNo;
+                                    if("playing".equals(eventPlayStatus.audioState)){
+                                        if(mPlayContentInfoDatas != null && seqNo < mPlayContentInfoDatas.size()){
+                                            for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
+                                                mPlayContentInfo.isSelect = "0";
+                                            }
+
+                                            mPlayContentInfoDatas.get(seqNo).isSelect = "1";
+                                            mAdapter.notifyDataSetChanged();
+                                        }
+                                    }else if("noPlay".equals(eventPlayStatus.audioState)){
+                                        for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
+                                            mPlayContentInfo.isSelect = "0";
+                                        }
+                                        mAdapter.notifyDataSetChanged();
                                     }
-                                    mPlayContentInfoDatas.get(seqNo).isSelect = "1";
-                                    mAdapter.notifyDataSetChanged();
                                 }
                             }
                         }

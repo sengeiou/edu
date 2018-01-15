@@ -218,6 +218,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     private RelativeLayout rlGoVideo;
     private ImageView ivGoVideo;
     private ImageView ivShotAlbum;
+    private ImageView ivBack;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -308,6 +309,14 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         rlGoVideo = (RelativeLayout) findViewById(R.id.rl_go_video);
         ivGoVideo = (ImageView) findViewById(R.id.iv_go_video);
         ivShotAlbum = (ImageView) findViewById(R.id.iv_shot_album);
+        ivBack = (ImageView) findViewById(R.id.iv_block_back);
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(0, R.anim.activity_close_down_up);
+            }
+        });
         rlGoVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

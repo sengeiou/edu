@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 
 import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
-import com.ubt.alpha1e.data.model.NetworkInfo;
-import com.ubt.alpha1e.event.NetworkEvent;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -32,8 +30,9 @@ public class HabitsHelper extends BaseHelper {
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
 
-        UbtLog.d(TAG,"cmd = " + cmd + "    = " + param[0]);
+        //UbtLog.d(TAG,"cmd = " + cmd + "    = " + param[0]);
         if(cmd == ConstValue.DV_CONTROL_HIBITS_PLAY){
+            UbtLog.d(TAG,"cmd = " + cmd + "    param[0] = " + param[0]);
             HibitsEvent hibitsEvent = new HibitsEvent(HibitsEvent.Event.CONTROL_PLAY);
             hibitsEvent.setStatus(param[0]);
             EventBus.getDefault().post(hibitsEvent);
@@ -46,7 +45,7 @@ public class HabitsHelper extends BaseHelper {
 
             HibitsEvent playStatusEvent = new HibitsEvent(HibitsEvent.Event.READ_EVENT_PLAY_STATUS);
             playStatusEvent.setEventPlayStatus(eventPlayStatus);
-            EventBus.getDefault().post(eventPlayStatus);
+            EventBus.getDefault().post(playStatusEvent);
         }
 
     }
@@ -86,15 +85,15 @@ public class HabitsHelper extends BaseHelper {
 
     public void playEventSound(String eventId, String playAudioSeq, String audioState){
 
-        String params = BluetoothParamUtil.paramsToJsonString(new String[]{ eventId,playAudioSeq,audioState}, ConstValue.DV_DO_NETWORK_CONNECT);
+        String params = BluetoothParamUtil.paramsToJsonString(new String[]{ eventId,playAudioSeq,audioState}, ConstValue.DV_CONTROL_HIBITS_PLAY);
         UbtLog.d(TAG,"playEventSound = " + params);
         doSendComm(ConstValue.DV_CONTROL_HIBITS_PLAY, BluetoothParamUtil.stringToBytes(params));
     }
 
     public void readPlayStatus(){
 
-        UbtLog.d(TAG,"--readPlayStatus--");
-        doSendComm(ConstValue.DV_READ_NETWORK_STATUS, null);
+        UbtLog.d(TAG,"--readPlayStatus-->" + ConstValue.DV_READ_HIBITS_PLAY_STATUS);
+        doSendComm(ConstValue.DV_READ_HIBITS_PLAY_STATUS, null);
     }
 
     @Override

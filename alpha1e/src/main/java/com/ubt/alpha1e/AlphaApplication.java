@@ -30,8 +30,6 @@ import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.ActionsDownLoadManager;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
-import com.ubt.alpha1e.data.DB.ActionsOnlineCacheOperater;
-import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ISharedPreferensListenet;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
@@ -61,7 +59,6 @@ import com.ubt.alpha1e.ui.SettingActivity;
 import com.ubt.alpha1e.ui.StartInitSkinActivity;
 import com.ubt.alpha1e.ui.WebContentActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
-import com.ubt.alpha1e.ui.fragment.ActionsLibMainFragment3;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.main.MainActivity;
@@ -511,10 +508,8 @@ public class AlphaApplication extends LoginApplication {
     public void clearCacheData() {
         //清除在线缓存
         BaseHelper.hasGetScheme = false;
-        ActionsOnlineCacheOperater.getInstance(this, FileTools.db_log_cache, FileTools.db_log_name).cleanOnlineCache();
-        //ActionsOnlineCacheOperater.getInstance(this,FileTools.db_log_cache, FileTools.db_log_name).cleanOnlineCache();
         MyActionsHelper.mCacheActionsNames.clear();
-        ActionsLibMainFragment3.clearCacheDatas();
+//        ActionsLibMainFragment3.clearCacheDatas();
 
         //app 改版指引相关
         BasicSharedPreferencesOperator.getInstance(this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(BasicSharedPreferencesOperator.KEY_GUIDE_STEP, "0", null, -1);
