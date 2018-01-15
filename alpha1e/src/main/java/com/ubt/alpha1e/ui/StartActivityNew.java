@@ -55,7 +55,7 @@ public class StartActivityNew extends BaseActivity implements IStartUI, BaseDiaU
         ButterKnife.bind(this);
         mHelper = new StartHelper(this, this);
         UbtLog.d(TAG, "BUILD_TYPE = " + BuildConfig.BUILD_TYPE + "   DEBUG = " + BuildConfig.DEBUG);
-        initUI();
+//        initUI();
     }
 
     @Override
@@ -88,8 +88,9 @@ public class StartActivityNew extends BaseActivity implements IStartUI, BaseDiaU
         super.onResume();
         //首次启动，要重新再设一次
         doCheckLanguage();
-        clearAnimation();
-        initControlListener();
+//        clearAnimation();
+//        initControlListener();
+        initUI();
     }
 
     @Override
