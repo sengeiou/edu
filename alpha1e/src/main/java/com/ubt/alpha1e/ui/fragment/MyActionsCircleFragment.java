@@ -132,22 +132,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                         tvCircle.setText("停止播放");
                         tvCircle.setAlpha(1.0f);
                         JSONArray action_cyc_list = new JSONArray(MyActionsHelper.mCurrentSeletedNameList);
-                        mHelper.stopPlayAction();
-                        try {
-                            Thread.sleep(500);
-                        }catch(InterruptedException e){
-                            e.printStackTrace();
-                        }
                         mHelper.doCycle(action_cyc_list);
-//                        List<Map<String, Object>> playActionMap = new ArrayList<>();
-//                        for (Map<String, Object> actionMap : mActivity.mInsideDatas) {
-//                            UbtLog.e(TAG, "mInsideDatas size=" + mActivity.mInsideDatas.size());
-//                            if (MyActionsHelper.mCurrentSeletedActionInfoMap.get(actionMap.get(MyActionsHelper.map_val_action_name)) != null) {
-//                                actionMap.put(MyActionsHelper.map_val_action_is_playing, true);
-//                                actionMap.put(MyActionsHelper.map_val_action_selected, true);
-//                                playActionMap.add(actionMap);
-//                            }
-//                        }
                     }else {
                         UbtLog.d(TAG,"STOP CIRCLE PLAY");
                         ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
@@ -157,7 +142,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                         mHelper.setLooping(isStartLooping);
                         mHelper.stopPlayAction();
                     }
-                 //  setDatas(playActionMap);
                 }
             }
         });
@@ -170,15 +154,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
-//        mSyncRecyclerview.getItemAnimator().setSupportsChangeAnimations(false);
         mAdapter = new ActionsCircleAdapter(getActivity(),type);
         mSyncRecyclerview.setAdapter(mAdapter);
-        //ACTION LIST ENTER AGAIN DONOT STOP THE PLAY FUNCTION
-//        if(mHelper!=null) {
-//            mHelper.stopPlayAction();
-//        }
-//        MyActionsHelper.mCurrentSeletedNameList.clear();
-//        MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+
 
     }
 
@@ -884,13 +862,15 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             UbtLog.d(TAG, "-->isStartLooping=" + isStartLooping);
             //退出播放列表后，还能够继续播放开始
             if(isStartLooping) {
+                if(MyActionsHelper.mCurrentSeletedNameList.size()>=1){
+                    ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
+                    tvCircle.setText("停止播放");
+                    tvCircle.setAlpha(1.0f);
+                }
                 for (int i = 0; i < MyActionsHelper.mCurrentSeletedNameList.size(); i++) {
                     if (MyActionsHelper.mCurrentSeletedNameList.get(i).equals(action_name)) {
                         UbtLog.d(TAG, "current select is looping:" + isStartLooping + "name :" + action_name + "size" + MyActionsHelper.mCurrentSeletedNameList.size());
                         actionList.put(MyActionsHelper.map_val_action_selected, true);
-                        ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
-                        tvCircle.setText("停止播放");
-                        tvCircle.setAlpha(1.0f);
                         if (mHelper.getCurrentPlayName().equals(action_name)) {
                             actionList.put(MyActionsHelper.map_val_action_is_playing, true);
                         }
@@ -998,7 +978,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
                         if((Boolean)actionList.get(MyActionsHelper.map_val_action_is_playing))
                         {
-                            mHelper.stopPlayAction();
                             ActionInfo actionInfo = new ActionInfo();
                             actionInfo.actionName = actionName;
                             actionInfo.hts_file_name = (String)actionList.get(MyActionsHelper.map_val_action);
