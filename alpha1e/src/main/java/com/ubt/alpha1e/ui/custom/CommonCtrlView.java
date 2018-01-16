@@ -147,8 +147,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
      * 主界面全局按钮动画通知，在播放动作的时候，有动画效果
      * @param mainPresenter
      */
-    public void setPresenter(MainPresenter mainPresenter){
-          mMainPresenter=mainPresenter;
+      public void setPresenter(MainPresenter mainPresenter){
+        mMainPresenter=mainPresenter;
     }
 
 
@@ -296,12 +296,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         txt_action_name_m = (TextView) view.findViewById(R.id.text_playContentName);
         txt_cycle_num = (TextView) view.findViewById(R.id.action_test);
 
-        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
-        /*ColorMatrix matrix = new ColorMatrix();
-        matrix.setSaturation(0);
-        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
-        btn_actionList.setColorFilter(filter);*/
-        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
 
         UbtLog.d(TAG, "playingName=" + playingName);
         if(playingName.equals("NO_VALUE")){
@@ -314,16 +308,16 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             radiologicalWaveAnim.setOneShot(false);
             radiologicalWaveAnim.setVisible(true,true);
             radiologicalWaveAnim.start();
-            txt_action_name_m.setText("正在播放: " +playingName);
+            enablePlayStopButton(playingName);
         }else if((currentState == ActionPlayer.Play_state.action_pause || currentNewPlayState == NewActionPlayer.PlayerState.PAUSING) && playingName != ""){
             gifImageView.setVisibility(View.VISIBLE);
             radiologicalWaveAnim.setOneShot(false);
             radiologicalWaveAnim.setVisible(true,true);
             radiologicalWaveAnim.start();
-            txt_action_name_m.setText("正在播放: " +playingName);
+            enablePlayStopButton(playingName);
         }else{
             gifImageView.setVisibility(View.INVISIBLE);
-            txt_action_name_m.setText("暂无播放内容");
+            disablePlayStopButton();
         }
 
         guideLayout.setOnClickListener(new View.OnClickListener() {
@@ -400,7 +394,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
                 mHelper.doActionCommand(
                         MyActionsHelper.Command_type.Do_default, "", AlphaApplication.getActionType());
-                txt_action_name_m.setText("暂无播放内容");
+                disablePlayStopButton();
                 mBaseActivity.saveCurrentPlayingActionName("");
                 gifImageView.setVisibility(View.INVISIBLE);
                 //Toast.makeText(mBaseActivity,"机器人已经服务",Toast.LENGTH_SHORT).show();
@@ -788,8 +782,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                     && "#@%".contains(name.toCharArray()[0] + "")) {
                 name = name.substring(1);
             }
-//            txt_action_name_m.setText("正在播放:"+name);
-            txt_action_name_m.setText("正在播放: " + name);
+            enablePlayStopButton(name);
             gifImageView.setVisibility(View.VISIBLE);
             radiologicalWaveAnim.setOneShot(false);
             radiologicalWaveAnim.setVisible(true,true);
@@ -842,7 +835,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             public void run() {
 
                 mHelper.doStopMp3ForMyDownload();
-                txt_action_name_m.setText("暂无播放内容");
+                disablePlayStopButton();
                 mBaseActivity.saveCurrentPlayingActionName("");
                 btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
                 radiologicalWaveAnim.stop();
@@ -862,7 +855,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 String name = ((MyActionsHelper) mHelper).getNewPlayerName();
                 mBaseActivity.saveCurrentPlayingActionName(name);
                 //txt_action_name.setText(name);
-                txt_action_name_m.setText("正在播放: " +name);
+                enablePlayStopButton(name);
                 gifImageView.setVisibility(View.VISIBLE);
             }
         });
@@ -886,7 +879,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         mBaseActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txt_action_name_m.setText("暂无播放内容");
+                disablePlayStopButton();
                 btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
                 gifImageView.setVisibility(View.INVISIBLE);
                 mBaseActivity.saveCurrentPlayingActionName("");
@@ -918,7 +911,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                     && "#@%".contains(action_name.toCharArray()[0] + "")) {
                 action_name = action_name.substring(1);
             }
-            txt_action_name_m.setText("正在播放: " +action_name);
+            enablePlayStopButton(action_name);
             mBaseActivity.saveCurrentPlayingActionName(action_name);
             btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
             gifImageView.setVisibility(View.VISIBLE);
@@ -1110,7 +1103,30 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 //       }
 
    }
-
+   private void disablePlayStopButton(){
+       txt_action_name_m.setText("暂无播放内容");
+       btn_pause_or_continue.setEnabled(false);
+       btn_stop_m.setEnabled(false);
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+       btn_pause_or_continue.setColorFilter(filter);
+       btn_stop_m.setColorFilter(filter);
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+   }
+   private void enablePlayStopButton(String actionName){
+       txt_action_name_m.setText("正在播放: " +actionName);
+       btn_pause_or_continue.setEnabled(true);
+       btn_stop_m.setEnabled(true);
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+       ColorMatrix matrix = new ColorMatrix();
+       matrix.setSaturation(1);
+       ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+       btn_pause_or_continue.setColorFilter(filter);
+       btn_stop_m.setColorFilter(filter);
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+   }
 
 
 }

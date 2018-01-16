@@ -194,30 +194,33 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     public void onResume() {
         super.onResume();
         UbtLog.d(TAG,"MyActionsCircleFragment----onResume--");
+        if(mHelper!=null) {
+            mHelper.doReadActions();
+        }
 //        if(isStartLooping){
 //            if(mListener!=null) mListener.onHiddenLoopButton();
 //        }
 //        mHelper.stopPlayAction();
 
-        if(isStartLooping ){
-            List<Map<String,Object>> playActionMap = new ArrayList<>();
-            for(Map<String,Object> actionMap : mDatas){
-                UbtLog.e(TAG, "mInsideDatas size=" + mDatas.size());
-                if(MyActionsHelper.mCurrentSeletedActionInfoMap.get(actionMap.get(MyActionsHelper.map_val_action_name)) != null){
-                    if(actionMap.get(ActionsHelper.map_val_action_name).equals(currentCycleActionName)){
-                        actionMap.put(MyActionsHelper.map_val_action_is_playing,true);
-                    }else{
-                        actionMap.put(MyActionsHelper.map_val_action_is_playing,false);
-                    }
-
-                    actionMap.put(MyActionsHelper.map_val_action_selected,true);
-                    playActionMap.add(actionMap);
-                }
-            }
+//        if(isStartLooping ){
+//            List<Map<String,Object>> playActionMap = new ArrayList<>();
+//            for(Map<String,Object> actionMap : mDatas){
+//                UbtLog.e(TAG, "mInsideDatas size=" + mDatas.size());
+//                if(MyActionsHelper.mCurrentSeletedActionInfoMap.get(actionMap.get(MyActionsHelper.map_val_action_name)) != null){
+//                    if(actionMap.get(ActionsHelper.map_val_action_name).equals(currentCycleActionName)){
+//                        actionMap.put(MyActionsHelper.map_val_action_is_playing,true);
+//                    }else{
+//                        actionMap.put(MyActionsHelper.map_val_action_is_playing,false);
+//                    }
+//
+//                    actionMap.put(MyActionsHelper.map_val_action_selected,true);
+//                    playActionMap.add(actionMap);
+//                }
+//            }
           //  setDatas(playActionMap);
            // if(mListener!=null) mListener.onHiddenLoopButton();
-        }
 
+       // }
 
 //        mDatas = mActivity.mInsideDatas;
     }
@@ -1016,6 +1019,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 }
             }
         }
+
         System.out.println(list);
     }
 

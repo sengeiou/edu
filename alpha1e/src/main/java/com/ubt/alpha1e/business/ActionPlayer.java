@@ -386,16 +386,11 @@ public class ActionPlayer implements BlueToothInteracter {
             time=System.currentTimeMillis();
             mBtManager.sendCommand(mBtMac, ConstValue.DV_STOPPLAY, null, 0, false);
         }
-        //DEBUG
-        new Exception().printStackTrace();
         if(thiz == null){
             return;
         }
 
         UbtLog.d(TAG, "doStopSingleAction-->" + thiz.mCurrentPlayState + " to action_finish");
-
-       // notePlayFinish();
-
     }
 /**
  *  shit code
@@ -406,7 +401,6 @@ public class ActionPlayer implements BlueToothInteracter {
         if(mCyclePlayThread == null){
             return;
         }
-        //UbtLog.d(TAG,"thiz:"+thiz);
         if(thiz == null){
             return;
         }
@@ -419,8 +413,6 @@ public class ActionPlayer implements BlueToothInteracter {
         //发送给机器人停止播放
         UbtLog.d(TAG,"NOT NEED");
         doStopSingleAction(true);
-        //unblock the circle thread
-       // continueCycle();
     }
 
     private void notePlayFinish() {
@@ -557,8 +549,11 @@ public class ActionPlayer implements BlueToothInteracter {
                     // 插入
                 }
             }
-        } else if (cmd == ConstValue.DV_ACTION_FINISH)// 动作播放完毕
+        }else if(cmd==ConstValue.DV_TAP_HEAD){
+            UbtLog.d(TAG,"DV_TAP_HEAD");
+        }else  if (cmd == ConstValue.DV_ACTION_FINISH)// 动作播放完毕
         {
+            UbtLog.d(TAG,"DV_ACTION_FINISH");
             String finishPlayActionName = BluetoothParamUtil.bytesToString(param);
             UbtLog.d(TAG, "DV_ACTION_FINISH:   finishPlayActionName = " + finishPlayActionName + "    mCurrentPlayActionName = " + mCurrentPlayActionName);
 
@@ -624,9 +619,6 @@ public class ActionPlayer implements BlueToothInteracter {
                 return;
             }
             if (mCurrentPlayType == Play_type.cycle_action){
-                //DEBUG
-//                new Exception().printStackTrace();
-                //解决BLOCK在线程中
                 if(System.currentTimeMillis()-time<REMOVE_DUPLICATE_REPLY_TIMEOUT) {
                     continueCycle();
                     isStopCycleThread=true;
@@ -649,7 +641,6 @@ public class ActionPlayer implements BlueToothInteracter {
         }else if(cmd == ConstValue.DV_CURRENT_PLAY_NAME){
             String robotCurrentPlayName = BluetoothParamUtil.bytesToString(param);
             UbtLog.d(TAG, "robotCurrentPlayName : " + robotCurrentPlayName + "    mCurrentPlayActionName = " + mCurrentPlayActionName);
-
         }
     }
 
@@ -754,9 +745,7 @@ public class ActionPlayer implements BlueToothInteracter {
     }
 
     public void doDefault() {
-
         doInitDefaultAction();
-
         ActionInfo info = new ActionInfo();
         info.actionName = mCurrentDefaultAction;
         doPlayAction(info);
