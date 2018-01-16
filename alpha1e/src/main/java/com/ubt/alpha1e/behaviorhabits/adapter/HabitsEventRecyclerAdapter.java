@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.behaviorhabits.fragment.HibitsEventFragment;
 import com.ubt.alpha1e.behaviorhabits.fragment.ParentManageCenterFragment;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 
@@ -78,6 +79,16 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             }
 
             myHolder.tvScore.setText(habitsEventInfo.score + "分");
+
+            myHolder.rlHibitsEventInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Message msg = new Message();
+                    msg.what = HibitsEventFragment.SHOW_PLAY_CONTROL;
+                    msg.arg1 = position;
+                    mHandler.sendMessage(msg);
+                }
+            });
         }else {
             myHolder.ivEventSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override

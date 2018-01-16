@@ -653,6 +653,12 @@
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
+            android:name=".behaviorhabits.playeventlist.PlayEventListActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
             android:name=".action.actioncreate.ActionTestActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"

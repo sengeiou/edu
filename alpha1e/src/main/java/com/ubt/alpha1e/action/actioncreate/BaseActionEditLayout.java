@@ -945,7 +945,8 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 break;
             case R.id.iv_help:
                 String language = ResourceManager.getInstance(mContext).getStandardLocale(ResourceManager.getInstance(mContext).getAppCurrentLanguage());
-                String url = "https://services.ubtrobot.com/actionHelp/actionHelp.html?lang=" + language;  //暂时这样
+//                String url = "https://services.ubtrobot.com/actionHelp/actionHelp.html?lang=" + language;  //暂时这样
+                String url = "https://prodapi.ubtrobot.com/alpha1e/activeHelp.html";
                 UbtLog.d(TAG, "url:" + url);
                 Intent intent = new Intent();
                 intent.putExtra(WebContentActivity.SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);

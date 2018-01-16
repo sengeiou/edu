@@ -20,9 +20,11 @@ import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.GotoBindRequest;
 import com.ubt.alpha1e.base.RequstMode.SetAutoUpgradeRequest;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
@@ -453,7 +455,7 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
                     public void onClick(View view) {
                         UbtLog.d(TAG, "我知道了 ");
                         MyRobotActivity.this.finish();
-                        LoginManger.getInstance().toUserCenter();
+                        LoginManger.getInstance().toUserCenter(SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN));
 
                     }
                 })

@@ -18,6 +18,7 @@ public class PlayContentInfo extends BaseModel implements Serializable{
 
     public String contentId;
     public String contentName;
+    public String contentUrl;
     public String isSelect;
 
     public PlayContentInfo thiz;
@@ -69,9 +70,10 @@ public class PlayContentInfo extends BaseModel implements Serializable{
 
     @Override
     public String toString() {
-        return "HabitsEventInfo{" +
+        return "PlayContentInfo{" +
                 "contentId=" + contentId +
                 ", contentName='" + contentName + '\'' +
+                ", contentUrl='" + contentUrl + '\'' +
                 ", isSelect='" + isSelect + '\'' +
                 '}';
     }

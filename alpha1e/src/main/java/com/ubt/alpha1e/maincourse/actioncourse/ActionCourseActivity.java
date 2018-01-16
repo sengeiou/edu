@@ -227,7 +227,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
             flag = true;
         }
         lastClickTime = curClickTime;
-        UbtLog.d(TAG,"lastclickTime==="+lastClickTime+"         ++++flag=="+flag);
+        UbtLog.d(TAG, "lastclickTime===" + lastClickTime + "         ++++flag==" + flag);
         return flag;
     }
 
@@ -322,9 +322,12 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         UbtLog.d(TAG, "退出课程:" + 0);
         byte[] params = new byte[1];
         params[0] = 0;
-        ((AlphaApplication) this
-                .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) this.getApplicationContext())
-                .getCurrentBluetooth().getAddress(), ConstValue.DV_ENTER_COURSE, params, params.length, false);
+        if (null != ((AlphaApplication) this
+                .getApplicationContext()).getBlueToothManager()) {
+            ((AlphaApplication) this
+                    .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) this.getApplicationContext())
+                    .getCurrentBluetooth().getAddress(), ConstValue.DV_ENTER_COURSE, params, params.length, false);
+        }
     }
 
     // 为了获取结果
@@ -382,7 +385,9 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_retry) {//点击确定以后刷新列表并解锁下一关
-                            mActionCourseModels.get(course).setActionLockType(1);
+                            if (course < 10) {
+                                mActionCourseModels.get(course).setActionLockType(1);
+                            }
                             mActionCourseModels.get(course - 1).setActionCourcesScore(1);
                             mMainCoursedapter.notifyDataSetChanged();
                             dialog.dismiss();

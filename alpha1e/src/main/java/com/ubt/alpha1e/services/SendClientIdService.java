@@ -506,7 +506,7 @@ public class SendClientIdService extends Service {
 					@Override
 					public void onClick(View view) {
 						UbtLog.d(TAG, "我知道了 ");
-						LoginManger.getInstance().toUserCenter();
+						LoginManger.getInstance().toUserCenter(SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN));
 					}
 				})
 				.setTitlePicture(img_ok)

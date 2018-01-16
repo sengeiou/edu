@@ -103,7 +103,7 @@ public class BlueToothClientHandler extends Thread implements
 		if (SystemClock.uptimeMillis() - mLastSendTime < 1000) {
 			return;
 		}
-
+		MyLog.writeLog("发送",ByteHexHelper.bytesToHexString(data));
 		onSendData(data, nlen);
 	}
 
@@ -167,8 +167,11 @@ public class BlueToothClientHandler extends Thread implements
 					if (mPacketRead.setData_(buffer[i])) {
 						// 一帧数据接收完成
 						if (mCallBack != null) {
-							mPacketRead.setmParamLen(mPacketRead.getmParam().length);
 
+							MyLog.writeLog("接收",ByteHexHelper.byteToHexString(mPacketRead.getmCmd()) + " " +
+									ByteHexHelper.bytesToHexString(mPacketRead.getmParam()));
+
+							mPacketRead.setmParamLen(mPacketRead.getmParam().length);
 							mCallBack.onReceiveData(mMacAddress,
 									mPacketRead.getmCmd(),
 									mPacketRead.getmParam(),
@@ -179,11 +182,7 @@ public class BlueToothClientHandler extends Thread implements
 											+ mPacketRead.getmParam() + " len="
 											+ mPacketRead.getmParamLen());
 */
-							MyLog.writeLog(
-									ByteHexHelper.byteToHexString(mPacketRead
-											.getmCmd()) + "",
-									ByteHexHelper.bytesToHexString(mPacketRead
-											.getmParam()) + "");
+
 
 						}
 

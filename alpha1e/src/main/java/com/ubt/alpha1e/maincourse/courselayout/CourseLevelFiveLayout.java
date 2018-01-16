@@ -41,8 +41,6 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-import zhy.com.highlight.HighLight;
-
 
 /**
  * @author：liuhai
@@ -56,10 +54,10 @@ import zhy.com.highlight.HighLight;
 public class CourseLevelFiveLayout extends BaseActionEditLayout implements CourseMusicDialogUtil.OnMusicDialogListener {
     private String TAG = CourseLevelFiveLayout.class.getSimpleName();
     private ImageView ivMusicArror;
-    private ImageView ivRightArrow;
+    private ImageView ivAddFrameArrow;
     private ImageView playArrow;
 
-    private ImageView ivRightLegArrow;
+    private ImageView ivLeftLegArrow;
 
     private ImageView resetArrow;
 
@@ -69,7 +67,9 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
     private TextView mTextView;
     private boolean isInstruction;
     private ImageView ivBackInStruction;
-    CourseMusicDialogUtil mMusicDialogUtil;
+
+    private RelativeLayout rlCenterAnimal;
+    private ImageView ivCenterAnimal;
 
     /**
      * 高亮对话框的TextView显示
@@ -91,7 +91,8 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
     private int currentIndex = 0;
     //课时3顺序
     private int secondIndex = 0;
-    private HighLight mHightLight;
+
+    private boolean firstClick = true;
 
     public CourseLevelFiveLayout(Context context) {
         super(context);
@@ -151,7 +152,7 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
             ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor18.hts");
         } else if (currentCourse == 2) {
             ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor19.hts");
-            CourseArrowAminalUtil.startViewAnimal(true, ivRightLegArrow, 2);
+            CourseArrowAminalUtil.startViewAnimal(true, ivLeftLegArrow, 1);
         } else if (currentCourse == 3) {
             ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor21.hts");
             CourseArrowAminalUtil.startViewAnimal(true, saveArrow, 1);
@@ -176,7 +177,7 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         playArrow = findViewById(R.id.iv_play_arrow);
         playArrow.setOnClickListener(this);
 
-        ivRightArrow = findViewById(R.id.iv_add_frame_arrow);
+        ivAddFrameArrow = findViewById(R.id.iv_add_frame_arrow);
         resetArrow = findViewById(R.id.iv_reset_arrow);
         resetArrow.setOnClickListener(this);
         mRlInstruction = (RelativeLayout) findViewById(R.id.rl_instruction);
@@ -186,12 +187,15 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         ivBackInStruction = findViewById(R.id.iv_back_instruction);
         ivBackInStruction.setOnClickListener(this);
 
-        ivRightLegArrow = findViewById(R.id.iv_right_leg_arrow);
-        ivRightLegArrow.setOnClickListener(this);
+        ivLeftLegArrow = findViewById(R.id.iv_left_leg_arrow);
+        ivLeftLegArrow.setOnClickListener(this);
         initRightLegArrow();
 
         saveArrow = findViewById(R.id.iv_save_arrow);
         saveArrow.setOnClickListener(this);
+
+        rlCenterAnimal = findViewById(R.id.rl_center_animal);
+        ivCenterAnimal = findViewById(R.id.iv_center_animal);
     }
 
     /**
@@ -206,8 +210,9 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
         if (AlphaApplication.isPad()) {
             UbtLog.d(TAG, "Pad Robot 1");
         } else {
-            ivRightLegArrow.setLayoutParams(ActionConstant.getIvRobotParams(density, ivRightLegArrow));
-            UbtLog.d(TAG, "ivLeftArrow:" + ivRightLegArrow.getWidth() + "/" + ivRightLegArrow.getHeight());
+
+            ivLeftLegArrow.setLayoutParams(ActionConstant.getIvRobotParams(density, ivLeftLegArrow));
+
         }
     }
 
@@ -242,23 +247,43 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
                 playAction();
                 break;
 
-            case R.id.iv_right_leg_arrow:
-                startEditRightLeg();
+            case R.id.iv_left_leg_arrow:
 
+            case R.id.iv_leg_left:
+                if (firstClick) {
+                    CourseArrowAminalUtil.startViewAnimal(false, ivLeftLegArrow, 1);
+                    ivAddFrame.setEnabled(true);
+                    ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
+                    ivLegLeft.setSelected(true);
+                    CourseArrowAminalUtil.startViewAnimal(true, ivAddFrameArrow, 1);
+                }
                 break;
-            case R.id.iv_leg_right:
-                startEditRightLeg();
-                break;
+
+            case R.id.iv_add_frame_arrow:
+
             case R.id.iv_add_frame://课时二添加动作按钮完成课时二
-                autoRead = false;
-                addFrameOnClick();
-                lostLeftHand = false;
-                lostRightLeg = false;
-                ivLegRight.setSelected(false);
-                isCourseReading = false;
-                CourseArrowAminalUtil.startViewAnimal(false, ivRightArrow, 2);
-                CourseArrowAminalUtil.startViewAnimal(true, playArrow, 2);
-
+                if (firstClick) {
+                    ((ActionsEditHelper) mHelper).stopAction();
+                    rlCenterAnimal.setVisibility(View.VISIBLE);
+                    CourseArrowAminalUtil.startLegViewAnimal(true, ivCenterAnimal, 1);
+                    firstClick = false;
+                    startEditRightLeg();
+                } else {
+                    autoRead = false;
+                    addFrameOnClick();
+                    lostLeftHand = false;
+                    lostLeftLeg = false;
+                    ivLegLeft.setSelected(false);
+                    isCourseReading = false;
+                    CourseArrowAminalUtil.startViewAnimal(false, ivAddFrameArrow, 2);
+                    CourseArrowAminalUtil.startViewAnimal(true, playArrow, 2);
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            doReset();
+                        }
+                    }, 1000);
+                }
                 break;
 
             case R.id.iv_reset:
@@ -377,14 +402,6 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
                 mRlInstruction.setVisibility(View.GONE);
                 showNextDialog(2);
             }
-        } else if (currentCourse == 2) {
-            UbtLog.d(TAG, "playComplete==" + 2);
-            if (secondIndex == 1) {
-                lostLeftHand = true;
-                lostRightLeg();
-                CourseArrowAminalUtil.startViewAnimal(false, ivRightLegArrow, 2);
-                startEditRightLeg();
-            }
         }
     }
 
@@ -392,14 +409,15 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
      * 第二关卡摆动机器人手臂
      */
     public void startEditRightLeg() {
-        CourseArrowAminalUtil.startViewAnimal(false, ivRightLegArrow, 2);
+        CourseArrowAminalUtil.startViewAnimal(false, ivLeftLegArrow, 2);
+        CourseArrowAminalUtil.startViewAnimal(false, ivAddFrameArrow, 2);
         ((ActionsEditHelper) mHelper).stopAction();
         doReset();
         autoRead = true;
         mHandler.sendEmptyMessage(MSG_AUTO_READ);
         isCourseReading = true;
         lostLeftHand = true;
-        lostRightLeg();
+        lostLeftLeg();
         ivAddFrame.setEnabled(false);
         ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
     }
@@ -418,12 +436,13 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
             public void run() {
                 autoRead = false;
                 ((ActionsEditHelper) mHelper).stopSoundAudio();
-                CourseArrowAminalUtil.startViewAnimal(false, ivRightLegArrow, 2);
+                CourseArrowAminalUtil.startViewAnimal(false, ivLeftLegArrow, 2);
                 mHandler.removeMessages(MSG_AUTO_READ);
                 setButtonEnable(false);
+                rlCenterAnimal.setVisibility(View.GONE);
                 ivAddFrame.setEnabled(true);
                 ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
-                CourseArrowAminalUtil.startViewAnimal(true, ivRightArrow, 1);
+                CourseArrowAminalUtil.startViewAnimal(true, ivAddFrameArrow, 1);
             }
         }, 2000);
 
@@ -450,28 +469,7 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
      */
     public void clickKnown() {
         UbtLog.d(TAG, "currindex==" + currentIndex);
-        if (mHightLight.isShowing() && mHightLight.isNext())//如果开启next模式
-        {
-            mHightLight.next();
-        } else {
-            remove(null);
-            UbtLog.d(TAG, "=====remove=========");
-        }
-        if (currentCourse == 1) {
-            ((ActionsEditHelper) mHelper).stopAction();
 
-            showNextDialog(2);
-        } else if (currentCourse == 2) {
-            ((ActionsEditHelper) mHelper).stopAction();
-            doReset();
-            showNextDialog(3);
-
-        }
-    }
-
-
-    public void remove(View view) {
-        mHightLight.remove();
     }
 
 
