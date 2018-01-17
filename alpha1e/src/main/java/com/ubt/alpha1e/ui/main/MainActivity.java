@@ -558,8 +558,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             }
         } else if (event.getEvent() == RobotEvent.Event.DISCONNECT) {//Bluetooth Disconect
             UbtLog.d(TAG, "DISCONNECTED ");
+
             if (MainUiBtHelper.getInstance(getContext()).isLostCoon()) {
                 UbtLog.d(TAG, "mainactivity isLostCoon");
+                showGlobalButtonAnmiationEffect(false);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -886,6 +888,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         });
     }
 
+    @Override
+    public void hiddenBuddleText() {
+        hiddenBuddleTextView();
+    }
+
     //若要使用此功能，需先绑定机器人！
     public void habitAdviceGotoBindDialog() {
         new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
@@ -920,7 +927,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     //一键绑定
     public void gotoBind() {
         if (AlphaApplication.currentRobotSN == null || AlphaApplication.currentRobotSN.equals("")) {
-            ToastUtils.showShort("机器人序列号为空");
+            ToastUtils.showShort("未读到机器人序列号");
             return;
         }
         if (robotBindingDialog == null) {

@@ -22,6 +22,8 @@ public class MainContract {
         void onGetRobotInfo(int result, MyRobotModel model);
 
         void showGlobalButtonAnmiationEffect(boolean status);
+        //隐藏汽包文字
+        void hiddenBuddleText();
 
 
     }

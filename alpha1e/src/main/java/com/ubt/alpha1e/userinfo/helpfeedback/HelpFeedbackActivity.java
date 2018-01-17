@@ -34,7 +34,7 @@ import butterknife.OnClick;
  * 邮箱 784787081@qq.com
  */
 
-public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.View, HelpFeedbackPresenter> implements HelpFeedbackContract.View , AndroidAdjustResizeBugFix.OnKeyChangerListeler{
+public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.View, HelpFeedbackPresenter> implements HelpFeedbackContract.View {
 
     private static final String TAG = HelpFeedbackActivity.class.getSimpleName();
 
@@ -81,8 +81,6 @@ public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.V
             }
         }
     };
-
-    AndroidAdjustResizeBugFix assistActivity;
 
     public static void LaunchActivity(Context context) {
         Intent intent = new Intent(context, HelpFeedbackActivity.class);
@@ -144,9 +142,6 @@ public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.V
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
 
-        assistActivity = new AndroidAdjustResizeBugFix(this);
-        assistActivity.setOnKeyChangerListeler(this);
-
         initUI();
     }
 
@@ -203,8 +198,4 @@ public class HelpFeedbackActivity extends MVPBaseActivity<HelpFeedbackContract.V
         super.onDestroy();
     }
 
-    @Override
-    public void keyBoardOpen(boolean statu) {
-        UbtLog.e(TAG,"keyBoardOpen = " + statu);
-    }
 }

@@ -28,7 +28,29 @@ public class CourseArrowAminalUtil {
         AnimationDrawable animationDrawable = null;
         if (flag) {
             imageView.setVisibility(View.VISIBLE);
-            imageView.setImageResource(arrow==1?R.drawable.animal_right_arrow:R.drawable.animal_left_arrow);
+            imageView.setImageResource(arrow == 1 ? R.drawable.animal_right_arrow : R.drawable.animal_left_arrow);
+            animationDrawable = (AnimationDrawable) imageView.getDrawable();
+            animationDrawable.start();
+        } else {
+            imageView.setVisibility(View.GONE);
+            if (null != animationDrawable) {
+                animationDrawable.stop();
+            }
+        }
+    }
+
+    /**
+     * 执行指示动画
+     *
+     * @param flag
+     * @param imageView
+     * @param arrow
+     */
+    public static void startLegViewAnimal(boolean flag, ImageView imageView, int arrow) {
+        AnimationDrawable animationDrawable = null;
+        if (flag) {
+            imageView.setVisibility(View.VISIBLE);
+            imageView.setImageResource(arrow==1?R.drawable.animal_baitui:R.drawable.animal_baidongzuo);
             animationDrawable = (AnimationDrawable) imageView.getDrawable();
             animationDrawable.start();
         } else {
