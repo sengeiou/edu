@@ -9,6 +9,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.request.RequestCall;
 
 import java.io.File;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -74,6 +75,30 @@ public class OkHttpClientUtils {
                     .params(GsonImpl.get().getMap(request))//
                     .id(id)
                     .build();
+        }
+    }
+
+    /**
+     * 带多个文件请求
+     *
+     * @param url
+     * @param id
+     * @return
+     */
+    public static RequestCall getJsonByPostRequest(String url,BaseRequest request, Map<String,File> fileMap, int id) {
+        request.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
+        request.setToken(SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN));
+        String params = GsonImpl.get().toJson(request);
+        UbtLog.d("Request", "url = " + url + "  request = " + request + "   fileMap = " + fileMap);
+        if (null != fileMap && !fileMap.isEmpty()) {
+            return OkHttpUtils.post()
+                    .files("fileMap", fileMap)
+                    .url(url)
+                    .params(GsonImpl.get().getMap(request))//
+                    .id(id)
+                    .build();
+        } else {
+            return getJsonByPostRequest(url,request,id);
         }
     }
 
