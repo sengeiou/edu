@@ -128,8 +128,6 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
                 } else if (recordlevel == 1) {
                     level = 2;
                 } else if (recordlevel == 2) {
-                    level = 3;
-                } else if (recordlevel == 3) {
                     level = 1;
                 }
             }

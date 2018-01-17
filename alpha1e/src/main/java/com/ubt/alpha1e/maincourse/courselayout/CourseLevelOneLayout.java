@@ -571,6 +571,8 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
      * </p>
      */
     public void clickKnown() {
+        ((ActionsEditHelper) mHelper).stopAction();
+        doReset();
         UbtLog.d(TAG, "currindex==" + currentIndex);
         if (mHightLight.isShowing() && mHightLight.isNext())//如果开启next模式
         {
@@ -579,25 +581,22 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
             remove(null);
             UbtLog.d(TAG, "=====remove=========");
         }
+
         if (currentCourse == 1) {
             if (currentIndex == 4) {
-                ((ActionsEditHelper) mHelper).stopAction();
-                doReset();
                 showNextDialog(2);
                 if (courseProgressListener != null) {
                     courseProgressListener.completeCurrentCourse(1);
                 }
             }
         } else if (currentCourse == 2) {
-            ((ActionsEditHelper) mHelper).stopAction();
-            doReset();
+
             showNextDialog(3);
             if (courseProgressListener != null) {
                 courseProgressListener.completeCurrentCourse(2);
             }
         } else if (currentCourse == 3) {
-            ((ActionsEditHelper) mHelper).stopAction();
-            doReset();
+
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -639,7 +638,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
 
         ViewHolder viewHolder = new ViewHolder(contentView);
         WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-         Display display = windowManager.getDefaultDisplay();
+        Display display = windowManager.getDefaultDisplay();
         int screenHeight = (int) (display.getHeight() * 0.6);
         int screenWidth = (int) (display.getWidth() * 0.6);
         int width = Math.max(screenWidth, screenHeight); //设置宽度

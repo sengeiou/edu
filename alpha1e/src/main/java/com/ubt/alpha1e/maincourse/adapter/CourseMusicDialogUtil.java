@@ -29,6 +29,7 @@ import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.ui.dialog.DialogDub;
+import com.ubt.alpha1e.utils.TimeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.io.File;
@@ -204,28 +205,24 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
                 // dialog.dismiss();
 
                 break;
-            case R.id.tv_confirm:
-                if (selectDataModel == null) {
-                    return;
-                }
-                if (null != mDialogListener) {
-                    mDialogListener.onMusicConfirm(selectDataModel);
-                }
-                dialog.dismiss();
 
-                break;
             case R.id.iv_delete:
                 // isShowDelete = true;
                 //actionAdapter.notifyDataSetChanged();
                 break;
+
             case R.id.iv_add_action_arrow:
-                if (selectDataModel == null) {
-                    return;
+                 
+            case R.id.tv_confirm:
+                if (TimeUtils.isFastClick()) {
+                    if (selectDataModel == null) {
+                        return;
+                    }
+                    if (null != mDialogListener) {
+                        mDialogListener.onMusicConfirm(selectDataModel);
+                    }
+                    dialog.dismiss();
                 }
-                if (null != mDialogListener) {
-                    mDialogListener.onMusicConfirm(selectDataModel);
-                }
-                dialog.dismiss();
                 break;
             default:
                 break;
@@ -300,6 +297,7 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
 
         }
     }
+
     public void pause() {
         if (player != null && player.isPlaying()) {
             player.pause();
