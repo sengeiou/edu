@@ -85,6 +85,7 @@ public class SendClientIdHelper extends BaseHelper {
                 UbtLog.d(TAG,"dsn =  "+ss[1]);
                 SPUtils.getInstance().put(Constant.SP_ROBOT_PRODUCT_ID,ss[0]);
                 SPUtils.getInstance().put(Constant.SP_ROBOT_DSN,ss[1]);
+                AlphaApplication.currentRobotSN = ss[1];
             }else {
                 return;
             }
