@@ -113,6 +113,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
         videoPlayer.getBackButton().setVisibility(View.VISIBLE);
 
         videoPlayer.getStartButton().setVisibility(View.GONE);
+        videoPlayer.setHideKey(false); //设置全屏不隐藏虚拟按键
 
 
         //videoPlayer.setBottomProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_progress));
@@ -136,7 +137,6 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
             @Override
             public void onClick(View v) {
                 UbtLog.d(TAG, "back");
-//                onBackPressed();
                 onBackPressedSupport();
             }
         });

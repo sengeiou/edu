@@ -55,7 +55,7 @@
                 android:textSize="16sp"
                 android:gravity="center"
                 android:textColor="@android:color/white"
-                android:text="复位按键，结束机器人所有的程序，回复初始化。"
+                android:text="复位按键，结束机器人所有的程序，恢复初始化。"
                 />
 
         </RelativeLayout>

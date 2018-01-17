@@ -204,6 +204,7 @@ public class MyActionsHelper extends BaseHelper implements
 
     private String mSchemeId = "";
     private String mSchemeName = "";
+    private boolean isLooping=false;
 
     public Action_type getCurrentPlayType() {
         return mCurrentPlayType;
@@ -819,7 +820,6 @@ public class MyActionsHelper extends BaseHelper implements
 
         if(mCacheActionsNames.isEmpty()){
             MyLog.writeLog("命令发送", "DV_GETACTIONFILE");
-
             getDataType = Action_type.Unkown;
             Message msg = new Message();
             msg.what = MSG_DO_GETACTIONFILE;
@@ -2695,6 +2695,14 @@ public class MyActionsHelper extends BaseHelper implements
     }
 
 
-
+    public void setLooping(boolean flag){
+        isLooping=flag;
+        if(!flag){
+            mCurrentSeletedNameList.clear();
+        }
+    }
+    public boolean getLoopingFlag(){
+        return isLooping;
+    }
 
 }

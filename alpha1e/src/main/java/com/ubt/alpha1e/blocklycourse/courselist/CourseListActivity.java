@@ -178,9 +178,9 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
     private boolean download = false;
     private void downloadVideo(final CourseData courseData, final View view){
         download = true;
-        UbtLog.d(TAG, "path:" + BlocklyUtil.getVideoPath() + "_name:" + courseData.getName());
+        UbtLog.d(TAG, "path:" + BlocklyUtil.getVideoDir(this) + "_name:" + courseData.getName());
 //        FileTools.deleteFile(new File(BlocklyUtil.getVideoPath() + File.separator + courseData.getName()));
-        OkHttpClientUtils.getDownloadFile(courseData.getVideoUrl()).execute(new FileCallBack(BlocklyUtil.getVideoPath(), courseData.getName()+".mp4") {
+        OkHttpClientUtils.getDownloadFile(courseData.getVideoUrl()).execute(new FileCallBack(BlocklyUtil.getVideoDir(this), courseData.getName()+".mp4") {
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "downloadVideo onError:" + e.getMessage());

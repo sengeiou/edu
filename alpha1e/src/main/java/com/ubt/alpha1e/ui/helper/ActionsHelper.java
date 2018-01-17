@@ -619,12 +619,10 @@ public class ActionsHelper extends BaseHelper implements
             if (param[0] == 0) {
                 // 静音
                 if (param[1] == 1) {
-
                     mCurrentVolState = false;
                 }
                 // 有声音
                 else {
-
                     mCurrentVolState = true;
                 }
                 Message msg = new Message();

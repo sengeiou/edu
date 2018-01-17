@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.blocklycourse;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
 
@@ -28,7 +29,7 @@ public class BlocklyUtil {
             File file = new File(getPath(), name + ".jpg");
             OutputStream outputStream;
             outputStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, outputStream);
             bitmap.recycle();
         }
     }
@@ -59,6 +60,18 @@ public class BlocklyUtil {
             file.mkdirs();
         }
         return path;
+    }
+
+
+    public static String getVideoDir(Context context){
+        String cacheDir = Environment.getExternalStorageDirectory().getPath()
+                + File.separator + "Android"
+                + File.separator + "data"
+                + File.separator + context.getPackageName()
+                + File.separator + "files" + File.separator
+                + "data/videoCache";
+
+        return cacheDir;
     }
 
 
