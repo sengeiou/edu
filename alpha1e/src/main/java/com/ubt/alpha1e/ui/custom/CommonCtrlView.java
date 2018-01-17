@@ -139,6 +139,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         if (commonCtrlView == null) {
             commonCtrlView = new CommonCtrlView(context);
         }
+        lay_ctrl_more.setVisibility(View.VISIBLE);
         return commonCtrlView;
     }
 
@@ -146,8 +147,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
      * 主界面全局按钮动画通知，在播放动作的时候，有动画效果
      * @param mainPresenter
      */
-    public void setPresenter(MainPresenter mainPresenter){
-          mMainPresenter=mainPresenter;
+      public void setPresenter(MainPresenter mainPresenter){
+        mMainPresenter=mainPresenter;
     }
 
 
@@ -295,12 +296,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         txt_action_name_m = (TextView) view.findViewById(R.id.text_playContentName);
         txt_cycle_num = (TextView) view.findViewById(R.id.action_test);
 
-        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
-        /*ColorMatrix matrix = new ColorMatrix();
-        matrix.setSaturation(0);
-        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
-        btn_actionList.setColorFilter(filter);*/
-        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
 
         UbtLog.d(TAG, "playingName=" + playingName);
         if(playingName.equals("NO_VALUE")){
@@ -313,16 +308,16 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             radiologicalWaveAnim.setOneShot(false);
             radiologicalWaveAnim.setVisible(true,true);
             radiologicalWaveAnim.start();
-            txt_action_name_m.setText("正在播放: " +playingName);
+            enablePlayStopButton(playingName);
         }else if((currentState == ActionPlayer.Play_state.action_pause || currentNewPlayState == NewActionPlayer.PlayerState.PAUSING) && playingName != ""){
             gifImageView.setVisibility(View.VISIBLE);
             radiologicalWaveAnim.setOneShot(false);
             radiologicalWaveAnim.setVisible(true,true);
             radiologicalWaveAnim.start();
-            txt_action_name_m.setText("正在播放: " +playingName);
+            enablePlayStopButton(playingName);
         }else{
             gifImageView.setVisibility(View.INVISIBLE);
-            txt_action_name_m.setText("暂无播放内容");
+            disablePlayStopButton();
         }
 
         guideLayout.setOnClickListener(new View.OnClickListener() {
@@ -353,19 +348,21 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             @Override
             public void onClick(View view) {
                 byte[] papram = new byte[1];
-                if(enable_sensor) {
-                    //ENABLE SENSOR
-                    papram[0] = 0x01;
-                    mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
-                    Toast.makeText(mBaseActivity,"机器人传感器已经打开",Toast.LENGTH_SHORT).show();
-                    enable_sensor=false;
-                }else {
-                    //Disable Sensor
-                    papram[0] = 0x0;
-                    mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
-                    enable_sensor=true;
-                    Toast.makeText(mBaseActivity,"机器人传感器已经关闭",Toast.LENGTH_SHORT).show();
-                }
+                initDialogView(dialogLayout);
+                showDialog();
+//                if(enable_sensor) {
+//                    //ENABLE SENSOR
+//                    papram[0] = 0x01;
+//                    mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
+//                    Toast.makeText(mBaseActivity,"机器人传感器已经打开",Toast.LENGTH_SHORT).show();
+//                    enable_sensor=false;
+//                }else {
+//                    //Disable Sensor
+//                    papram[0] = 0x0;
+//                    mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
+//                    enable_sensor=true;
+//                    Toast.makeText(mBaseActivity,"机器人传感器已经关闭",Toast.LENGTH_SHORT).show();
+//                }
             }
         });
         btn_actionList.setOnClickListener(new View.OnClickListener() {
@@ -399,7 +396,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
                 mHelper.doActionCommand(
                         MyActionsHelper.Command_type.Do_default, "", AlphaApplication.getActionType());
-                txt_action_name_m.setText("暂无播放内容");
+                disablePlayStopButton();
                 mBaseActivity.saveCurrentPlayingActionName("");
                 gifImageView.setVisibility(View.INVISIBLE);
                 //Toast.makeText(mBaseActivity,"机器人已经服务",Toast.LENGTH_SHORT).show();
@@ -458,6 +455,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         btn_stop_m.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mHelper.setLooping(false);
                 mHelper.stopPlayAction();
             }
         });
@@ -560,14 +558,22 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         }else {
             noteLightOff();
         }
+        //摔倒传感器状态
+       if(mHelper.mSensorState){
+             disableSensorButton();
+       }
     }
 
+    /**
+     *  传感器防止摔倒功能需要弹出对话框，让用户选择
+     * @param view
+     */
     private void initDialogView(View view) {
         tvTips = (TextView) view.findViewById(R.id.txt_msg);
         btnCancle = (Button) view.findViewById(R.id.btn_neg);
         btnOk = (Button) view.findViewById(R.id.btn_pos);
-
-        tvTips.setText(AlphaApplication.getBaseActivity().getStringResources("ui_action_cutoff_warning"));
+        final byte[] papram=new byte[2];
+        tvTips.setText(AlphaApplication.getBaseActivity().getStringResources("ui_action_sensor_warning"));
         btnCancle.setText(AlphaApplication.getBaseActivity().getStringResources("ui_common_cancel"));
         btnOk.setText(AlphaApplication.getBaseActivity().getStringResources("ui_common_confirm"));
 
@@ -576,23 +582,38 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             public void onClick(View v) {
                 wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
                 wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                papram[0] = 0x1;
+                papram[1] = 0x0;
+                mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
                 mWindowManager.removeView(dialogLayout);
                 lay_ctrl_more.setVisibility(View.VISIBLE);
                 isShowDialog = false;
+                disableSensorButton();
             }
         });
 
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHelper.doActionCommand(
-                        MyActionsHelper.Command_type.Do_lost_power, "",
-                        mCurrentActionType);
+                byte[] papram=new byte[2];
+                papram[0] = 0x01;
+                papram[1] = 0x01;
+                mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
                 mWindowManager.removeView(dialogLayout);
                 isShowDialog = false;
+                enableSensorButton();
             }
         });
 
+    }
+  private void showDialog(){
+        wmParams.gravity = Gravity.CENTER;
+        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+//        ColorDrawable colorDrawable = new ColorDrawable(Color.argb(120, 0, 0, 0));
+//        dialogLayout.setBackground(colorDrawable);
+        mWindowManager.addView(dialogLayout, wmParams);
+        isShowDialog = true;
     }
 
 
@@ -786,8 +807,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                     && "#@%".contains(name.toCharArray()[0] + "")) {
                 name = name.substring(1);
             }
-//            txt_action_name_m.setText("正在播放:"+name);
-            txt_action_name_m.setText("正在播放: " + name);
+            enablePlayStopButton(name);
             gifImageView.setVisibility(View.VISIBLE);
             radiologicalWaveAnim.setOneShot(false);
             radiologicalWaveAnim.setVisible(true,true);
@@ -840,7 +860,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             public void run() {
 
                 mHelper.doStopMp3ForMyDownload();
-                txt_action_name_m.setText("暂无播放内容");
+                disablePlayStopButton();
                 mBaseActivity.saveCurrentPlayingActionName("");
                 btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
                 radiologicalWaveAnim.stop();
@@ -860,7 +880,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 String name = ((MyActionsHelper) mHelper).getNewPlayerName();
                 mBaseActivity.saveCurrentPlayingActionName(name);
                 //txt_action_name.setText(name);
-                txt_action_name_m.setText("正在播放: " +name);
+                enablePlayStopButton(name);
                 gifImageView.setVisibility(View.VISIBLE);
             }
         });
@@ -884,7 +904,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         mBaseActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txt_action_name_m.setText("暂无播放内容");
+                disablePlayStopButton();
                 btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
                 gifImageView.setVisibility(View.INVISIBLE);
                 mBaseActivity.saveCurrentPlayingActionName("");
@@ -916,7 +936,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                     && "#@%".contains(action_name.toCharArray()[0] + "")) {
                 action_name = action_name.substring(1);
             }
-            txt_action_name_m.setText("正在播放: " +action_name);
+            enablePlayStopButton(action_name);
             mBaseActivity.saveCurrentPlayingActionName(action_name);
             btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
             gifImageView.setVisibility(View.VISIBLE);
@@ -1102,12 +1122,50 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 //       }
        if (lay_ctrl_more != null)
            lay_ctrl_more.setVisibility(View.GONE);
-       if (commonCtrlView != null) {
-           commonCtrlView.onDestroy();
-           commonCtrlView = null;
-       }
-   }
+//       if (commonCtrlView != null) {
+//           commonCtrlView.onDestroy();
+//           commonCtrlView = null;
+//       }
 
+   }
+   private void disablePlayStopButton(){
+       txt_action_name_m.setText("暂无播放内容");
+       btn_pause_or_continue.setEnabled(false);
+       btn_stop_m.setEnabled(false);
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+       btn_pause_or_continue.setColorFilter(filter);
+       btn_stop_m.setColorFilter(filter);
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+   }
+   private void enablePlayStopButton(String actionName){
+       txt_action_name_m.setText("正在播放: " +actionName);
+       btn_pause_or_continue.setEnabled(true);
+       btn_stop_m.setEnabled(true);
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+       ColorMatrix matrix = new ColorMatrix();
+       matrix.setSaturation(1);
+       ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+       btn_pause_or_continue.setColorFilter(filter);
+       btn_stop_m.setColorFilter(filter);
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+   }
+   private void disableSensorButton(){
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+       ColorMatrix matrix = new ColorMatrix();
+       matrix.setSaturation(0);
+       ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+       btn_sensorControl.setColorFilter(filter);
+   }
+   private void enableSensorButton(){
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+       ColorMatrix matrix = new ColorMatrix();
+       matrix.setSaturation(1);
+       ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+       btn_sensorControl.setColorFilter(filter);
+   }
 
 
 }
