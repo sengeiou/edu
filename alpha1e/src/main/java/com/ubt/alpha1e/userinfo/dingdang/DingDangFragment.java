@@ -55,6 +55,9 @@ public class DingDangFragment extends MVPBaseFragment<DingDangContract.View, Din
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UbtLog.d(TAG, "onCreate");
+        UbtLog.d(TAG, "init LoginManger");
+        LoginManger.getInstance().init(getActivity(),null);
     }
 
     @Override
