@@ -566,6 +566,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     @Override
                     public void run() {
                         looperThread.send(createMessage(APP_BLUETOOTH_CLOSE));
+                        //隐藏全局控制按钮
+                        mPresenter.exitGlocalControlCenter();
 
                         if (AppManager.getInstance().currentActivity() != null) {
                             UbtLog.d(TAG, "onLostBtCoon " + "  不为空" + AppManager.getInstance().currentActivity());

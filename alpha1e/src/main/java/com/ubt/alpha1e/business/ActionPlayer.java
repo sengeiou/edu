@@ -624,26 +624,7 @@ public class ActionPlayer implements BlueToothInteracter {
                 continueCycle();
                 return;
             }
-            if (mCurrentPlayType == Play_type.cycle_action){
-                if(System.currentTimeMillis()-time<REMOVE_DUPLICATE_REPLY_TIMEOUT) {
-                    continueCycle();
-                    StopCycleThread(true);
-                    mIsCycleContinuePlay = false;
-                    notePlayFinish();
-                }else {
-                    UbtLog.d(TAG,"RECEIVE THE ERROR STOP,DISCARD" +(System.currentTimeMillis()-time));
-                    continueCycle();
-                }
-            }else {
-//                Date nowDate = new Date(System.currentTimeMillis());
-//                long mDiffTime = 1000;
-//                if(mLastPlayTime != null){
-//                    mDiffTime = nowDate.getTime() - mLastPlayTime.getTime();
-//                }
-//                UbtLog.d(TAG,"DV_STOPPLAY := " + cmd + "  mCurrentPlayType = " + mCurrentPlayType + " mDiffTime = " + mDiffTime);
-                UbtLog.d(TAG,"DV_STOPPLAY := " + cmd + "  mCurrentPlayType = " + mCurrentPlayType );
-                notePlayFinish();
-            }
+             recoveryPlayer(cmd);
 
         }else if(cmd == ConstValue.DV_CURRENT_PLAY_NAME){
             String robotCurrentPlayName = BluetoothParamUtil.bytesToString(param);
@@ -661,6 +642,8 @@ public class ActionPlayer implements BlueToothInteracter {
     public void onConnectState(boolean bsucceed, String mac) {
         // TODO Auto-generated method stub
         UbtLog.d(TAG, "---onConnectState");
+        //网络断开,CLEAR LIST
+
 
     }
 
@@ -781,6 +764,23 @@ public class ActionPlayer implements BlueToothInteracter {
     public static void StopCycleThread(boolean stop){
         UbtLog.d(TAG, "StopCycleThread -1");
         isStopCycleThread = stop;
+    }
+
+    private void recoveryPlayer(byte cmd){
+        if (mCurrentPlayType == Play_type.cycle_action){
+            if(System.currentTimeMillis()-time<REMOVE_DUPLICATE_REPLY_TIMEOUT) {
+                continueCycle();
+                StopCycleThread(true);
+                mIsCycleContinuePlay = false;
+                notePlayFinish();
+            }else {
+                UbtLog.d(TAG,"RECEIVE THE ERROR STOP,DISCARD" +(System.currentTimeMillis()-time));
+                continueCycle();
+            }
+        }else {
+            UbtLog.d(TAG,"DV_STOPPLAY := " + cmd + "  mCurrentPlayType = " + mCurrentPlayType );
+            notePlayFinish();
+        }
     }
 
 }
