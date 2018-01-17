@@ -13,10 +13,14 @@ import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Call;
 
@@ -32,7 +36,7 @@ public class FeedbackPresenter extends BasePresenterImpl<FeedbackContract.View> 
     private static final int DO_ADD_FEEDBACK = 1;
 
     @Override
-    public void doFeedBack(String content, String email, String phone) {
+    public void doFeedBack(String content, String email, String phone,Map<String,File> fileMap) {
 
         content = FileUtils.stringToUtf8(content);
 
@@ -44,15 +48,15 @@ public class FeedbackPresenter extends BasePresenterImpl<FeedbackContract.View> 
         feedbackRequest.setEmail(email);
 
         String url = HttpEntity.ADD_FEEDBACK;
-        doRequestFromWeb(url,feedbackRequest,DO_ADD_FEEDBACK);
+        doRequestFromWeb(url,feedbackRequest,fileMap,DO_ADD_FEEDBACK);
     }
 
     /**
      * 请求网络操作
      */
-    public void doRequestFromWeb(String url, BaseRequest baseRequest, int requestId) {
+    public void doRequestFromWeb(String url, BaseRequest baseRequest,Map<String,File> fileMap, int requestId) {
 
-        OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
+        OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, fileMap, requestId).execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage());
