@@ -820,7 +820,6 @@ public class MyActionsHelper extends BaseHelper implements
 
         if(mCacheActionsNames.isEmpty()){
             MyLog.writeLog("命令发送", "DV_GETACTIONFILE");
-
             getDataType = Action_type.Unkown;
             Message msg = new Message();
             msg.what = MSG_DO_GETACTIONFILE;

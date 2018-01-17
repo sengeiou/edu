@@ -251,7 +251,7 @@
     <string name="ui_action_type_custom">自定义</string>
     <string name="ui_action_mine">我的</string>
     <string name="ui_action_no_action">无动作</string>
-    <string name="ui_action_cutoff_warning">确定对您的机器人执行掉电操作?</string>
+    <string name="ui_action_sensor_warning">开启摔倒保护功能后，机器人跌倒或倾斜时会自主爬起，请不要手扶或拿起机器人，避免夹伤，夹手时可按急停键</string>
     <string name="ui_action_no_description">暂无描述</string>
     <string name="ui_action_no_play">暂无动作播放</string>
     <string name="ui_action_no_time">暂无时长</string>
