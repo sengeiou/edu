@@ -226,6 +226,9 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                     e.printStackTrace();
                 }
 
+            } else if(mCmd==ConstValue.DV_VOICE_WAIT){
+                UbtLog.d(TAG,"HIDDEN BUDDLE TEXT");
+                mView.hiddenBuddleText();
             } else {
                 //  UbtLog.d(TAG, "ROBOT OTHER SITUATION" + mCmd);
             }

@@ -558,8 +558,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             }
         } else if (event.getEvent() == RobotEvent.Event.DISCONNECT) {//Bluetooth Disconect
             UbtLog.d(TAG, "DISCONNECTED ");
+
             if (MainUiBtHelper.getInstance(getContext()).isLostCoon()) {
                 UbtLog.d(TAG, "mainactivity isLostCoon");
+                showGlobalButtonAnmiationEffect(false);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -884,6 +886,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
             }
         });
+    }
+
+    @Override
+    public void hiddenBuddleText() {
+        hiddenBuddleTextView();
     }
 
     //若要使用此功能，需先绑定机器人！

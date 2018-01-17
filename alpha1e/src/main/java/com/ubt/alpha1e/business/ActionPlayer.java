@@ -551,6 +551,13 @@ public class ActionPlayer implements BlueToothInteracter {
             }
         }else if(cmd==ConstValue.DV_TAP_HEAD){
             UbtLog.d(TAG,"DV_TAP_HEAD");
+            //解决拍头循环播放还进入下一首的问题，直接停止
+            if (mCurrentPlayType == Play_type.cycle_action){
+                    doStopPlay();
+                    StopCycleThread(true);
+                    mIsCycleContinuePlay = false;
+                    notePlayFinish();
+                }
         }else  if (cmd == ConstValue.DV_ACTION_FINISH)// 动作播放完毕
         {
             UbtLog.d(TAG,"DV_ACTION_FINISH");
@@ -572,21 +579,20 @@ public class ActionPlayer implements BlueToothInteracter {
                     continueCycle();
                     UbtLog.d(TAG,"DV_ACTION_FINISH");
                 }
-
             } else if (mCurrentPlayType == Play_type.single_action) {
                 UbtLog.d(TAG, "-->notePlayFinish Play_type.single_action");
-
+                doStopCurrentPlay(true);
                 // 防止暂停循环播放后点击普通动作
-                if (mCyclePlayThread == null) {
-                    UbtLog.d(TAG, "-->notePlayFinish onReceiveData");
-                    doStopCurrentPlay(true);
-                } else {
-                    if (!mCyclePlayThread.isShutDowm) {
-                        UbtLog.d(TAG, "-->notePlayFinish onReceiveData 2");
-                        doStopCurrentPlay(true);
-                    }
-                    doStopCurrentPlay(true);
-                }
+//                if (mCyclePlayThread == null) {
+//                    UbtLog.d(TAG, "-->notePlayFinish onReceiveData");
+//                    doStopCurrentPlay(true);
+//                } else {
+////                    if (!mCyclePlayThread.isShutDowm) {
+////                        UbtLog.d(TAG, "-->notePlayFinish onReceiveData 2");
+////                        doStopCurrentPlay(true);
+////                    }
+//                    doStopCurrentPlay(true);
+//                }
             }
 
         } else if (cmd == ConstValue.DV_PLAYACTION) {
@@ -612,7 +618,7 @@ public class ActionPlayer implements BlueToothInteracter {
             }
         }else if(cmd == ConstValue.DV_STOPPLAY){
             UbtLog.d(TAG,"DV_STOPPLAY :reply stop  time "+(System.currentTimeMillis()-time)+" mCurrentPlayType"+ mCurrentPlayType);
-            if(mSend_Stop_playType!=mCurrentPlayType){
+            if(mSend_Stop_playType!=mCurrentPlayType&&time!=0){
                 UbtLog.d(TAG,"IS DIFFERENT ");
                 UbtLog.d(TAG,"RECEIVE THE ERROR STOP,DISTOR          " +(System.currentTimeMillis()-time));
                 continueCycle();
@@ -621,7 +627,7 @@ public class ActionPlayer implements BlueToothInteracter {
             if (mCurrentPlayType == Play_type.cycle_action){
                 if(System.currentTimeMillis()-time<REMOVE_DUPLICATE_REPLY_TIMEOUT) {
                     continueCycle();
-                    isStopCycleThread=true;
+                    StopCycleThread(true);
                     mIsCycleContinuePlay = false;
                     notePlayFinish();
                 }else {
@@ -629,12 +635,13 @@ public class ActionPlayer implements BlueToothInteracter {
                     continueCycle();
                 }
             }else {
-                Date nowDate = new Date(System.currentTimeMillis());
-                long mDiffTime = 1000;
-                if(mLastPlayTime != null){
-                    mDiffTime = nowDate.getTime() - mLastPlayTime.getTime();
-                }
-                UbtLog.d(TAG,"DV_STOPPLAY := " + cmd + "  mCurrentPlayType = " + mCurrentPlayType + " mDiffTime = " + mDiffTime);
+//                Date nowDate = new Date(System.currentTimeMillis());
+//                long mDiffTime = 1000;
+//                if(mLastPlayTime != null){
+//                    mDiffTime = nowDate.getTime() - mLastPlayTime.getTime();
+//                }
+//                UbtLog.d(TAG,"DV_STOPPLAY := " + cmd + "  mCurrentPlayType = " + mCurrentPlayType + " mDiffTime = " + mDiffTime);
+                UbtLog.d(TAG,"DV_STOPPLAY := " + cmd + "  mCurrentPlayType = " + mCurrentPlayType );
                 notePlayFinish();
             }
 
@@ -654,6 +661,7 @@ public class ActionPlayer implements BlueToothInteracter {
     public void onConnectState(boolean bsucceed, String mac) {
         // TODO Auto-generated method stub
         UbtLog.d(TAG, "---onConnectState");
+
     }
 
     @Override
