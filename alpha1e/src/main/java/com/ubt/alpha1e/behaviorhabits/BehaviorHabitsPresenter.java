@@ -121,7 +121,6 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
         mBehaviourSaveUpdateRequest.setRemindFirst(content.remindFirst);
         mBehaviourSaveUpdateRequest.setRemindSecond(content.remindSecond);
         mBehaviourSaveUpdateRequest.setContentIds(content.contentIds);
-        mBehaviourSaveUpdateRequest.setStatus(content.status);
         mBehaviourSaveUpdateRequest.setType(String.valueOf(dayType));
         doRequestFromWeb(url+SaveModifyEventPath, mBehaviourSaveUpdateRequest,GET_BEHAVIOURSAVEUPDATE_CMD);
     }
