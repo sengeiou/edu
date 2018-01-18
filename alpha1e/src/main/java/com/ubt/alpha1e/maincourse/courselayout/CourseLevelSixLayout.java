@@ -105,11 +105,11 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
                 if (recordlevel == 0) {
                     level = 1;
                 } else if (recordlevel == 1) {
-                    level = 2;
-                } else if (recordlevel == 2) {
-                    level = 3;
-                } else if (recordlevel == 3) {
                     level = 1;
+                } else if (recordlevel == 2) {
+                    level = 2;
+                } else if (recordlevel == 3) {
+                    level = 3;
                 }
             }
 
@@ -142,7 +142,9 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
             CourseArrowAminalUtil.startViewAnimal(true, ivPlayArrow, 2);
             ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor25.hts");
         }
-
+        if (courseProgressListener != null) {
+            courseProgressListener.completeCurrentCourse(currentCourse);
+        }
     }
 
     /**
@@ -264,7 +266,7 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
                 ivReset.setEnabled(true);
                 ivReset.setImageResource(R.drawable.ic_reset);
                 if (courseProgressListener != null) {
-                    courseProgressListener.completeCurrentCourse(4);
+                    courseProgressListener.completeSuccess(true);
                 }
             }
         });
@@ -350,9 +352,7 @@ public class CourseLevelSixLayout extends BaseActionEditLayout implements Action
      * @param current 跳转课程
      */
     private void showNextDialog(int current) {
-        if (courseProgressListener != null) {
-            courseProgressListener.completeCurrentCourse(current - 1);
-        }
+
         currentCourse = current;
         UbtLog.d(TAG, "进入第二课时，弹出对话框");
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_action_course_content, null);

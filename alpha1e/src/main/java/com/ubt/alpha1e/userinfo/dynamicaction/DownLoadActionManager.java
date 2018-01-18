@@ -168,17 +168,22 @@ public class DownLoadActionManager {
                     } else if (cmd == ConstValue.DV_ACTION_FINISH) {
                         String finishPlayActionName = BluetoothParamUtil.bytesToString(param);
                         UbtLog.d(TAG, "finishPlayActionName = " + finishPlayActionName);
-                        if (null != playingInfo && finishPlayActionName.contains(playingInfo.getActionName())) {
+                        if (null != playingInfo && finishPlayActionName.contains(playingInfo.getActionOriginalId())) {
                             playingInfo = null;
-                        }
-                        if (!TextUtils.isEmpty(finishPlayActionName) && finishPlayActionName.contains("初始化")) {
-                        } else {
                             for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
                                 if (null != mActionListener) {
                                     mActionListener.playActionFinish(finishPlayActionName);
                                 }
                             }
                         }
+//                        if (!TextUtils.isEmpty(finishPlayActionName) && finishPlayActionName.contains("初始化")) {
+//                        } else {
+//                            for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
+//                                if (null != mActionListener) {
+//                                    mActionListener.playActionFinish(finishPlayActionName);
+//                                }
+//                            }
+//                        }
                     } else if (cmd == ConstValue.DV_TAP_HEAD) {
                         UbtLog.d("EditHelper", "TAP_HEAD = " + cmd);
                         for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
@@ -387,7 +392,9 @@ public class DownLoadActionManager {
         if (isFromDetail) {
             for (DownLoadActionListener mActionListener : mDownLoadActionListeners) {
                 if (null != mActionListener) {
-                    mActionListener.doActionPlay(playingInfo.getActionId(), 0);
+                    if (null != playingInfo) {
+                        mActionListener.doActionPlay(playingInfo.getActionId(), 0);
+                    }
                 }
             }
         }

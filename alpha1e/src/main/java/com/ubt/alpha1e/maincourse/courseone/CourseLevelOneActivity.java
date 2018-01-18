@@ -1,7 +1,6 @@
 package com.ubt.alpha1e.maincourse.courseone;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -25,15 +24,12 @@ import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
 import com.ubt.alpha1e.maincourse.courselayout.CourseLevelOneLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
-import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IEditActionUI;
 import com.ubt.alpha1e.utils.log.UbtLog;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -109,35 +105,9 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
     public void completeCurrentCourse(int current) {
         currentCourse = current;
         mPresenter.savaCourseDataToDB(1, current);
-        if (current == 3) {
-            returnCardActivity();
-        }
+
     }
 
-
-    /**
-     * 保存进度到数据库
-     *
-     * @param current
-     */
-    private void saveLastProgress(int current) {
-        UbtLog.d(TAG, "保存进度到数据库1" + current);
-        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
-        if (null != record) {
-            UbtLog.d(TAG, "保存进度到数据库2" + record.toString());
-            int course = record.getCourseLevel();
-            int level = record.getPeriodLevel();
-            if (course == 1 && level < current) {
-                UbtLog.d(TAG, "保存进度到数据库3" + "保存成功");
-                ContentValues values = new ContentValues();
-                values.put("CourseLevel", 1);
-                values.put("periodLevel", current);
-                values.put("isUpload", false);
-                DataSupport.updateAll(LocalActionRecord.class, values);
-                mPresenter.saveLastProgress(String.valueOf(1), String.valueOf(current));
-            }
-        }
-    }
 
     /**
      * 响应所有R.id.iv_known的控件的点击事件
@@ -154,6 +124,18 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     public void finishActivity() {
         showExitDialog();
+    }
+
+
+    /**
+     * 课程完成
+     *
+     * @param isSuccess
+     */
+    @Override
+    public void completeSuccess(boolean isSuccess) {
+        returnCardActivity();
+        mPresenter.savaCourseDataToDB(2, 1);
     }
 
     /**
@@ -336,7 +318,7 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (!isFinishing()&&!isHowHeadDialog) {
+                if (!isFinishing() && !isHowHeadDialog) {
                     showTapHeadDialog();
                 }
             }

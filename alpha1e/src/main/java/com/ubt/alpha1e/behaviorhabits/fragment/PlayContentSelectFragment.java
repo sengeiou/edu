@@ -85,11 +85,11 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
                 case UPDATE_UI_DATA:
                     mCoonLoadingDia.cancel();
                     List<PlayContentInfo> playContentInfoList = (List<PlayContentInfo>)msg.obj;
-                    List<PlayContentInfo> hasSelectList = mEventDetail.contents;
+                    List<String> hasSelectIdList = mEventDetail.contentIds;
                     for(PlayContentInfo playContentInfo1 :  playContentInfoList){
                         playContentInfo1.isSelect = "0";
-                        for(PlayContentInfo playContentInfo2 :  hasSelectList){
-                            if(playContentInfo1.contentId.equals(playContentInfo2.contentId)){
+                        for(String contentId :  hasSelectIdList){
+                            if(playContentInfo1.contentId.equals(contentId)){
                                 playContentInfo1.isSelect = "1";
                                 break;
                             }

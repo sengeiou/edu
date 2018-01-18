@@ -230,11 +230,12 @@ public class ActionCourseDataManager {
             int course = record.getCourseLevel();
             int recordlevel = record.getPeriodLevel();
             if (course == currentCourse) {//只有当最新记录跟position+1相等时才需要获取到课时
-                if (recordlevel < size) {
-                    level = ++recordlevel;
-                } else if (recordlevel == size) {
-                    level = 1;
-                }
+//                if (recordlevel < size) {
+//                    level = ++recordlevel;
+//                } else if (recordlevel == size) {
+//                    level = 1;
+//                }
+                level = recordlevel;
             }
         }
         return getCourseActionModel(currentCourse, level);

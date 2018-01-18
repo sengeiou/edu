@@ -200,20 +200,24 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         } else {
             if (null != record) {
                 int course = record.getCourseLevel();
-                int level = record.getPeriodLevel();//课时
+                int level = record.getPeriodLevel();//课时3
                 UbtLog.d(TAG, "getCourseScores==" + "course==" + course + "   leavel==" + level);
                 for (int i = 0; i < course; i++) {
                     mActionCourseModels.get(i).setActionLockType(1);
                     mActionCourseModels.get(i).setActionCourcesScore(1);
                     if (i == (course - 1)) {
-                        int totalLeavel = mActionCourseModels.get(i).getSize();//总的课时数
-                        if (level < totalLeavel) {
-                            mActionCourseModels.get(i).setActionCourcesScore(0);
-                        } else if (level == totalLeavel) {
-                            if (i < 9) {
-                                mActionCourseModels.get(i + 1).setActionLockType(1);
-                            }
-                        }
+                        mActionCourseModels.get(i).setActionCourcesScore(0);
+//                        int totalLeavel = mActionCourseModels.get(i).getSize();//总的课时数
+//                        if (level < totalLeavel) {
+//                            mActionCourseModels.get(i).setActionCourcesScore(0);
+//                        } else if (level == totalLeavel) {
+//                            if (i < 9) {
+//                                mActionCourseModels.get(i + 1).setActionLockType(1);
+//                            }
+//                        }
+                    }
+                    if (i==9){
+
                     }
                 }
             }
@@ -327,7 +331,8 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         byte[] params = new byte[1];
         params[0] = 0;
         if (null != ((AlphaApplication) this
-                .getApplicationContext()).getBlueToothManager()) {
+                .getApplicationContext()).getBlueToothManager()&&null!=((AlphaApplication) this.getApplicationContext())
+                .getCurrentBluetooth()) {
             ((AlphaApplication) this
                     .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) this.getApplicationContext())
                     .getCurrentBluetooth().getAddress(), ConstValue.DV_ENTER_COURSE, params, params.length, false);

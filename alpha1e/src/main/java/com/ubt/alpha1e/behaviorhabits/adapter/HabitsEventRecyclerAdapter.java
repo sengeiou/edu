@@ -63,7 +63,7 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         myHolder.tvEventName.setText(habitsEventInfo.eventName);
 
         if(isSinpleShow){
-            myHolder.ivEventSwitch.setVisibility(View.GONE);
+            myHolder.rlEventSwitch.setVisibility(View.GONE);
             myHolder.tvRight.setVisibility(View.GONE);
 
             myHolder.rlRight.setVisibility(View.VISIBLE);
@@ -90,7 +90,7 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 }
             });
         }else {
-            myHolder.ivEventSwitch.setOnClickListener(new View.OnClickListener() {
+            myHolder.rlEventSwitch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Message msg = new Message();
@@ -129,7 +129,7 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     public static class MyHabitsEventHolder extends RecyclerView.ViewHolder
     {
 
-        public RelativeLayout rlHibitsEventInfo,rlRight,rlEventLogo;
+        public RelativeLayout rlHibitsEventInfo,rlRight,rlEventLogo,rlEventSwitch;
         public ImageView ivEventSwitch,ivEventLogo,ivEventLogoWq,ivStar1,ivStar2;
         public TextView tvEventTime,tvEventName,tvScore,tvRight;
 
@@ -140,6 +140,7 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             rlHibitsEventInfo  = (RelativeLayout) view.findViewById(R.id.rl_hibits_event_info);
             rlEventLogo  = (RelativeLayout) view.findViewById(R.id.rl_event_logo);
             rlRight  = (RelativeLayout) view.findViewById(R.id.rl_right);
+            rlEventSwitch  = (RelativeLayout) view.findViewById(R.id.rl_event_switch);
             ivEventSwitch = (ImageView) view.findViewById(R.id.iv_event_switch);
             ivEventLogoWq = (ImageView) view.findViewById(R.id.iv_event_logo_wq);
             ivEventLogo = (ImageView) view.findViewById(R.id.iv_event_logo);
@@ -154,7 +155,7 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     /**
      *
-     * eventType 1：起床 2：午休 3：睡晚觉 4：洗漱 5：早餐 6：午餐 7：晚餐 8：上学 9：作业 10：阅读 11：编程 12：娱乐 13：洗澡
+     * eventType 1：起床 2：午休 3：睡晚觉 4：洗漱 5：早餐 6：中餐 7：晚餐 8：上学 9：作业 10：阅读 11：编程 12：娱乐 13：洗澡 14：散步
      * @param eventType
      * @param status
      * @return

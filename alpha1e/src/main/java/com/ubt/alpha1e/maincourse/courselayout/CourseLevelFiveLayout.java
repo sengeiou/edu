@@ -126,9 +126,9 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
             int course = record.getCourseLevel();
             int recordlevel = record.getPeriodLevel();
             if (course == 5) {
-                if (recordlevel == 0 || recordlevel == 2) {
+                if (recordlevel == 0 || recordlevel == 1) {
                     level = 1;
-                } else if (recordlevel == 1) {
+                } else if (recordlevel == 2) {
                     level = 2;
                 }
             }
@@ -159,7 +159,9 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
             ivSave.setEnabled(true);
 
         }
-
+        if (courseProgressListener != null) {
+            courseProgressListener.completeCurrentCourse(currentCourse);
+        }
     }
 
     /**
@@ -479,9 +481,7 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
      * @param current 跳转课程
      */
     private void showNextDialog(int current) {
-        if (courseProgressListener != null) {
-            courseProgressListener.completeCurrentCourse(current - 1);
-        }
+
         currentCourse = current;
         UbtLog.d(TAG, "进入第二课时，弹出对话框");
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_action_course_content, null);
