@@ -204,6 +204,11 @@ public class ActionPlayer implements BlueToothInteracter {
         mSourceActionNameList.clear();
     }
 
+    /**
+     * 单独播放内容，播放的动作路径取决于PLAYTYPE(GAMEPAD,默认NULL类型的话，认为DEFAULT路径
+     * @param info
+     */
+
     public void doPlayAction(ActionInfo info) {
         UbtLog.d(TAG, "---wmma mCurrentPlayState=" + mCurrentPlayState + " actionOriginalId =" + info.actionOriginalId);
         actionOriginalId = info.actionOriginalId;
