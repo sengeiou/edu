@@ -104,7 +104,7 @@ public class ConnectClientUtil {
                 .sslSocketFactory(sslParams.sSLSocketFactory, sslParams.trustManager)
                 .connectTimeout(15,TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
-                .writeTimeout(30,  TimeUnit.SECONDS)
+                .writeTimeout(40,  TimeUnit.SECONDS)
                 .hostnameVerifier(new HostnameVerifier() {
                     @Override
                     public boolean verify(String hostname, SSLSession session) {
