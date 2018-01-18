@@ -28,6 +28,7 @@ import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.LoadingDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IRemoteUI;
+import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.RemoteHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -507,6 +508,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
     @Override
     protected void onDestroy() {
+        MyActionsHelper.mCurrentLocalPlayType = null ;
         if(mCoonLoadingDia!=null)
         {
             if(mCoonLoadingDia.isShowing()&&!isFinishing()){

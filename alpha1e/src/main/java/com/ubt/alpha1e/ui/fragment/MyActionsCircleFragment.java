@@ -970,6 +970,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                             actionInfo.actionName = actionName;
                             actionInfo.hts_file_name = (String)actionList.get(MyActionsHelper.map_val_action);
                             actionInfo.actionSize = position;//zan cun
+                            recoveryPlayType();
                             mHelper.doPlay(actionInfo);
                             UbtLog.d(TAG,"REFACTOR lihai------actionName->"+actionName+"----position->"+position+"--"+actionList.get(MyActionsHelper.map_val_action));
                         }else{
@@ -1015,6 +1016,13 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             item.put(MyActionsHelper.map_val_action_is_playing, false);
             item.put(MyActionsHelper.map_val_action_selected, false);
         }
+    }
+
+    /**
+     *  防止进入遥控器后，状态没有复位，导致动作播放的路径不对
+     */
+    private void recoveryPlayType(){
+        MyActionsHelper.mCurrentLocalPlayType=null;
     }
 
 }
