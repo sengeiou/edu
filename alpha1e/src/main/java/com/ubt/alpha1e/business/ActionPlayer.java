@@ -647,7 +647,6 @@ public class ActionPlayer implements BlueToothInteracter {
     public void onConnectState(boolean bsucceed, String mac) {
         // TODO Auto-generated method stub
         UbtLog.d(TAG, "---onConnectState");
-        //网络断开,CLEAR LIST
 
 
     }

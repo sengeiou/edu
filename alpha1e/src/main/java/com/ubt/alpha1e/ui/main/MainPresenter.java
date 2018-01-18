@@ -302,7 +302,11 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         if(TextUtils.isEmpty(userId)||!userId.equals(SPUtils.getInstance().getString(Constant.SP_USER_ID))){
             if(!userId.equals(SPUtils.getInstance().getString(Constant.SP_USER_ID))){
                // UnBindXGServer();
-                UnBindXGServer("20002",userId);
+                if(!userId.equals("")) {
+                    UnBindXGServer("20002", userId);
+                }else{
+                    UbtLog.d(TAG,"USERID HASNOT CONTENT");
+                }
             }
             String Url = HttpEntity.getXGAppId + "?appName=ALPHA1E";
             UbtLog.d("XGREquest", "url===" + Url);
@@ -360,6 +364,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         request.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
         request.setToken(XGUBTManager.getInstance().getDeviceToken());
         UbtLog.d("XGREquest", "url===" + HttpEntity.bindXGServer);
+        UbtLog.d("XGREquest","BIND REQUEST "+GsonImpl.get().toJson(request));
         OkHttpUtils.postString()
                 .addHeader("authorization", SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN))
                 .url(HttpEntity.bindXGServer)

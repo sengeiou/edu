@@ -79,6 +79,7 @@ import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
+import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
@@ -299,6 +300,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mPresenter.getXGInfo();
         if (!isBulueToothConnected()) {
             showDisconnectIcon();
+            showGlobalButtonAnmiationEffect(false);
             looperThread.send(createMessage(Constant.APP_LAUNCH_STATUS));
             // looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_FIVE_STATUS));
             m_Handler.postDelayed(new Runnable() {
