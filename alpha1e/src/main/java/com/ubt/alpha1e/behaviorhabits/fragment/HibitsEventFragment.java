@@ -27,16 +27,15 @@ import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.adapter.HabitsEventRecyclerAdapter;
+import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
+import com.ubt.alpha1e.behaviorhabits.helper.HabitsHelper;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
+import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
-import com.ubt.alpha1e.course.feature.FeatureActivity;
-import com.ubt.alpha1e.course.merge.MergeActivity;
-import com.ubt.alpha1e.course.principle.PrincipleActivity;
-import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.Md5;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
@@ -48,12 +47,17 @@ import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.ui.dialog.SetPasswordDialog;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.psdmanage.PsdManageActivity;
+import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,6 +75,8 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
     private static final int UPDATE_UI_DATA = 1;
     public static final int SHOW_PLAY_CONTROL = 2;
+    public static final int DEAL_PLAY_STATUS = 3;
+    public static final int REFRESH_REQUEST_DATA = 4;
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -98,7 +104,9 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
     protected Dialog mCoonLoadingDia;
     private HibitsEventPlayDialog mHibitsEventPlayDialog = null;
-
+    private HabitsHelper mHelper = null;
+    private boolean hasShowPlayDialog = false;
+    private boolean needRefreshPassword = true;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -108,6 +116,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                 case UPDATE_UI_DATA:
                     UserScore<List<HabitsEvent<List<PlayContentInfo>>>> userScore = (UserScore<List<HabitsEvent<List<PlayContentInfo>>>>) msg.obj;
                     if(userScore != null){
+                        UbtLog.d(TAG,"userScore = " + userScore + "     = " + userScore.totalScore);
                         tvRatio.setText(getStringRes("ui_habits_has_finish") + userScore.percent+"%");
                         tvScore.setText(userScore.totalScore);
                         cbScore.setSweepAngle((Float.parseFloat(userScore.percent)*250)/100);
@@ -116,6 +125,10 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                         mHabitsEventInfoDatas.clear();
                         mHabitsEventInfoDatas.addAll(habitsEventList);
                         mAdapter.notifyDataSetChanged();
+
+                        if(isBulueToothConnected()){
+                            mHelper.readPlayStatus();
+                        }
                     }
                     break;
                 case SHOW_PLAY_CONTROL:
@@ -132,6 +145,29 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                         showBluetoothConnectDialog();
                     }
 
+                    break;
+                case DEAL_PLAY_STATUS:
+                    EventPlayStatus eventPlayStatus = (EventPlayStatus) msg.obj;
+                    UbtLog.d(TAG,"eventPlayStatus = " + eventPlayStatus);
+                    if(eventPlayStatus != null && mHabitsEventInfoDatas != null){
+                        if(StringUtils.isStringNumber(eventPlayStatus.playAudioSeq)){
+                            int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
+                            if(seqNo >= 0){
+                                for(HabitsEvent<List<PlayContentInfo>> event : mHabitsEventInfoDatas){
+                                    if(event.eventId.equals(eventPlayStatus.eventId)){
+
+                                        showPlayEventDialog(event.contents, event.eventId);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case REFRESH_REQUEST_DATA:
+                    UserModel userModel = (UserModel) SPUtils.getInstance().readObject(com.ubt.alpha1e.base.Constant.SP_USER_INFO);
+                    UbtLog.d(TAG,"userModel = " + userModel.getSex() + "    " + userModel.getGrade());
+                    mPresenter.getBehaviourList(userModel.getSex(), "1");
                     break;
             }
         }
@@ -158,11 +194,15 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
         mHabitsEventInfoDatas = new ArrayList<>();
         initRecyclerViews();
 
-        UserModel userModel = (UserModel) SPUtils.getInstance().readObject(com.ubt.alpha1e.base.Constant.SP_USER_INFO);
-        UbtLog.d(TAG,"userModel = " + userModel.getSex() + "    " + userModel.getGrade());
+        mHandler.sendEmptyMessage(REFRESH_REQUEST_DATA);
+    }
 
-        mPresenter.getUserPassword();
-        mPresenter.getBehaviourList(userModel.getSex(), "1");
+    private void readData(){
+
+        if(needRefreshPassword){
+            needRefreshPassword = false;
+            mPresenter.getUserPassword();
+        }
     }
 
     public void initRecyclerViews() {
@@ -203,6 +243,8 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                         }
                     });
         }
+
+        hasShowPlayDialog = true;
         mHibitsEventPlayDialog.show();
     }
 
@@ -237,6 +279,50 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        UbtLog.d(TAG,"-onResume->");
+        EventBus.getDefault().register(this);
+
+        if(mHelper != null){
+            mHelper.RegisterHelper();
+        }
+
+        readData();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        UbtLog.d(TAG,"-onPause-");
+        if(mHelper != null){
+            mHelper.UnRegisterHelper();
+        }
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onEventHibits(HibitsEvent event) {
+        if(event.getEvent() == HibitsEvent.Event.READ_EVENT_PLAY_STATUS && !hasShowPlayDialog){
+            UbtLog.d(TAG,"EventPlayStatus = " + event.getEventPlayStatus());
+
+            EventPlayStatus eventPlayStatus = event.getEventPlayStatus();
+            Message msg = new Message();
+            msg.what = DEAL_PLAY_STATUS;
+            msg.obj = eventPlayStatus;
+            mHandler.sendMessage(msg);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mHelper != null){
+            mHelper.DistoryHelper();
+        }
+        super.onDestroy();
+    }
+
+    @Override
     protected void initControlListener() {
 
     }
@@ -256,6 +342,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
         // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
+        mHelper = new HabitsHelper(getContext());
         return rootView;
     }
 
@@ -269,10 +356,9 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
         super.onFragmentResult(requestCode, resultCode, data);
         UbtLog.d(TAG, "requestCode = " + requestCode);
-        if (requestCode == Constant.HIBITS_EVENT_EDIT_REQUEST_CODE && resultCode == Constant.HIBITS_EVENT_EDIT_RESPONSE_CODE) {
-            UbtLog.d(TAG, "resultCode = " + resultCode + "   " + data.getParcelable(Constant.HABITS_EVENT_INFO_KEY));
+        if (requestCode == Constant.HIBITS_PARENT_CENTER_REQUEST_CODE) {
+            mHandler.sendEmptyMessage(REFRESH_REQUEST_DATA);
         }
-
     }
 
     @Override
@@ -329,7 +415,8 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     @Override
                     public void run() {
                         mCoonLoadingDia.cancel();
-                        ToastUtils.showShort(getStringRes("ui_setting_password_modify_success"));
+                        ToastUtils.showShort(getStringRes("ui_setting_password_setting_success"));
+                        startForResult(ParentManageCenterFragment.newInstance(), Constant.HIBITS_PARENT_CENTER_REQUEST_CODE);
                     }
                 });
             }else {
@@ -338,7 +425,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     public void run() {
                         mUserPassword = "";
                         mCoonLoadingDia.cancel();
-                        ToastUtils.showShort(getStringRes("ui_setting_password_modify_fail"));
+                        ToastUtils.showShort(getStringRes("ui_setting_password_setting_fail"));
                     }
                 });
             }
@@ -388,12 +475,18 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     .setCallbackListener(new InputPasswordDialog.IInputPasswordListener() {
                         @Override
                         public void onCorrectPassword() {
-                            startForResult(ParentManageCenterFragment.newInstance(), 0);
+                            startForResult(ParentManageCenterFragment.newInstance(), Constant.HIBITS_PARENT_CENTER_REQUEST_CODE);
                         }
 
                         @Override
                         public void onFindPassword() {
-                            PsdManageActivity.LaunchActivity(getContext(),true);
+                            PsdManageActivity.LaunchActivity(getActivity(),true);
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    needRefreshPassword = true;
+                                }
+                            }, 200);
                         }
                     })
                     .show();

@@ -98,6 +98,13 @@ public class SetPasswordDialog {
         edtPassword5.setOnKeyListener(onKeyListener);
         edtPassword6.setOnKeyListener(onKeyListener);
 
+        edtPassword1.setOnFocusChangeListener(onFocusChangeListener);
+        edtPassword2.setOnFocusChangeListener(onFocusChangeListener);
+        edtPassword3.setOnFocusChangeListener(onFocusChangeListener);
+        edtPassword4.setOnFocusChangeListener(onFocusChangeListener);
+        edtPassword5.setOnFocusChangeListener(onFocusChangeListener);
+        edtPassword6.setOnFocusChangeListener(onFocusChangeListener);
+
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,6 +174,65 @@ public class SetPasswordDialog {
             dialog.dismiss();
         }
     }
+
+    public View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener(){
+        @Override
+        public void onFocusChange(View view, boolean b) {
+            if(b){
+                UbtLog.d(TAG,"view.getId() = " + view.getId() );
+
+                switch (view.getId()){
+                    case R.id.edt_password_1:
+                        break;
+                    case R.id.edt_password_2:
+                        if(TextUtils.isEmpty(edtPassword1.getText().toString())){
+                            edtPassword1.requestFocus();
+                        }
+                        break;
+                    case R.id.edt_password_3:
+                        if(TextUtils.isEmpty(edtPassword1.getText().toString())){
+                            edtPassword1.requestFocus();
+                        }else if(TextUtils.isEmpty(edtPassword2.getText().toString())){
+                            edtPassword2.requestFocus();
+                        }
+                        break;
+                    case R.id.edt_password_4:
+                        if(TextUtils.isEmpty(edtPassword1.getText().toString())){
+                            edtPassword1.requestFocus();
+                        }else if(TextUtils.isEmpty(edtPassword2.getText().toString())){
+                            edtPassword2.requestFocus();
+                        }else if(TextUtils.isEmpty(edtPassword3.getText().toString())){
+                            edtPassword3.requestFocus();
+                        }
+                        break;
+                    case R.id.edt_password_5:
+                        if(TextUtils.isEmpty(edtPassword1.getText().toString())){
+                            edtPassword1.requestFocus();
+                        }else if(TextUtils.isEmpty(edtPassword2.getText().toString())){
+                            edtPassword2.requestFocus();
+                        }else if(TextUtils.isEmpty(edtPassword3.getText().toString())){
+                            edtPassword3.requestFocus();
+                        }else if(TextUtils.isEmpty(edtPassword4.getText().toString())){
+                            edtPassword4.requestFocus();
+                        }
+                        break;
+                    case R.id.edt_password_6:
+                        if(TextUtils.isEmpty(edtPassword1.getText().toString())){
+                            edtPassword1.requestFocus();
+                        }else if(TextUtils.isEmpty(edtPassword2.getText().toString())){
+                            edtPassword2.requestFocus();
+                        }else if(TextUtils.isEmpty(edtPassword3.getText().toString())){
+                            edtPassword3.requestFocus();
+                        }else if(TextUtils.isEmpty(edtPassword4.getText().toString())){
+                            edtPassword4.requestFocus();
+                        }else if(TextUtils.isEmpty(edtPassword5.getText().toString())){
+                            edtPassword5.requestFocus();
+                        }
+                        break;
+                }
+            }
+        }
+    };
 
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
@@ -246,18 +312,28 @@ public class SetPasswordDialog {
                     edtPassword5.requestFocus();
                     edtPassword5.setSelection(edtPassword5.getText().length());
                 }else if(view.getId() == R.id.edt_password_5){
+                    edtPassword6.setText("");
                     edtPassword5.setText("");
                     edtPassword4.requestFocus();
                     edtPassword4.setSelection(edtPassword4.getText().length());
                 }else if(view.getId() == R.id.edt_password_4){
+                    edtPassword6.setText("");
+                    edtPassword5.setText("");
                     edtPassword4.setText("");
                     edtPassword3.requestFocus();
                     edtPassword3.setSelection(edtPassword3.getText().length());
                 }else if(view.getId() == R.id.edt_password_3){
+                    edtPassword6.setText("");
+                    edtPassword5.setText("");
+                    edtPassword4.setText("");
                     edtPassword3.setText("");
                     edtPassword2.requestFocus();
                     edtPassword2.setSelection(edtPassword2.getText().length());
                 }else if(view.getId() == R.id.edt_password_2){
+                    edtPassword6.setText("");
+                    edtPassword5.setText("");
+                    edtPassword4.setText("");
+                    edtPassword3.setText("");
                     edtPassword2.setText("");
                     edtPassword1.requestFocus();
                     edtPassword1.setSelection(edtPassword1.getText().length());
