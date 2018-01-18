@@ -129,10 +129,12 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
             int course = record.getCourseLevel();
             int recordlevel = record.getPeriodLevel();
             if (course == 4) {
-                if (recordlevel == 0 || recordlevel == 2) {
+                if (recordlevel == 0 || recordlevel == 3) {
                     level = 1;
                 } else if (recordlevel == 1) {
                     level = 2;
+                } else if (recordlevel==2){
+                    level=3;
                 }
             }
         }

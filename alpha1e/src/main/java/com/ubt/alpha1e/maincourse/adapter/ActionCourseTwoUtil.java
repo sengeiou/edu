@@ -25,6 +25,7 @@ import com.ubt.alpha1e.action.model.PrepareDataModel;
 import com.ubt.alpha1e.action.model.PrepareMusicModel;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,7 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
      * @param type
      */
     public void showActionDialog(int type, OnCourseDialogListener mDialogListener) {
-        isShow=true;
+        isShow = true;
         selectDataModel = null;
         this.mDialogListener = mDialogListener;
         this.mType = type;
@@ -118,9 +119,9 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
             isShow = false;
             actionAdapter.notifyDataSetChanged();
 
-                if (null != mDialogListener) {
-                    mDialogListener.playCourseAction(selectDataModel,mType);
-                }
+            if (null != mDialogListener) {
+                mDialogListener.playCourseAction(selectDataModel, mType);
+            }
 
         }
 
@@ -129,7 +130,7 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
     /**
      * 显示添加动画
      */
-    public void showAddAnimal(){
+    public void showAddAnimal() {
         ivConfirmArrow.setVisibility(View.VISIBLE);
         ivConfirmArrow.setImageResource(R.drawable.animal_left_arrow);
         animation2 = (AnimationDrawable) ivConfirmArrow.getDrawable();
@@ -142,29 +143,21 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
             case R.id.tv_cancel:
 
                 break;
-            case R.id.tv_confirm:
-                if (null != mDialogListener) {
-                    if (null != selectDataModel) {
-                        if (null != animation2) {
-                            animation2.stop();
-                        }
-                        dialog.dismiss();
-                        mDialogListener.onCourseConfirm(selectDataModel);
-                    } else {
-                        ToastUtils.showShort("请选择动作");
-                    }
-                }
-                break;
+
             case R.id.iv_add_action_arrow:
-                if (null != mDialogListener) {
-                    if (null != selectDataModel) {
-                        if (null != animation2) {
-                            animation2.stop();
+
+            case R.id.tv_confirm:
+                if (TimeUtils.isFastClick()) {
+                    if (null != mDialogListener) {
+                        if (null != selectDataModel) {
+                            if (null != animation2) {
+                                animation2.stop();
+                            }
+                            mDialogListener.onCourseConfirm(selectDataModel);
+                            dialog.dismiss();
+                        } else {
+                            ToastUtils.showShort("请选择动作");
                         }
-                        mDialogListener.onCourseConfirm(selectDataModel);
-                        dialog.dismiss();
-                    } else {
-                        ToastUtils.showShort("请选择动作");
                     }
                 }
                 break;
@@ -209,7 +202,7 @@ public class ActionCourseTwoUtil implements BaseQuickAdapter.OnItemClickListener
 
         void onCourseConfirm(PrepareDataModel prepareDataModel);
 
-        void playCourseAction(PrepareDataModel prepareDataModel,int type);
+        void playCourseAction(PrepareDataModel prepareDataModel, int type);
 
         void onMusicConfirm(PrepareMusicModel prepareMusicModel);
     }

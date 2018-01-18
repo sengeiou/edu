@@ -40,7 +40,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
     public void getActionCourseData(Context context) {
         List<ActionCourseModel> list = new ArrayList<>();
         ActionCourseModel courseModel1 = new ActionCourseModel();
-        courseModel1.setActionCourcesName("第一关");
+        courseModel1.setActionCourcesName("第1关");
         courseModel1.setTitle("第一关 了解动作编辑器");
         courseModel1.setActionLockType(1);
         courseModel1.setDrawableId(R.drawable.ic_action_level1);
@@ -53,7 +53,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         list.add(courseModel1);
 
         ActionCourseModel courseModel2 = new ActionCourseModel();
-        courseModel2.setActionCourcesName("第二关");
+        courseModel2.setActionCourcesName("第2关");
         courseModel2.setTitle("第二关 创定指定动作");
         courseModel2.setDrawableId(R.drawable.ic_action_level2);
         courseModel2.setActionLockType(0);
@@ -66,7 +66,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         list.add(courseModel2);
 
         ActionCourseModel courseModel3 = new ActionCourseModel();
-        courseModel3.setActionCourcesName("第三关");
+        courseModel3.setActionCourcesName("第3关");
         courseModel3.setTitle("第三关 学习音乐库");
         courseModel3.setDrawableId(R.drawable.ic_action_level3);
         courseModel3.setActionLockType(0);
@@ -74,7 +74,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         list.add(courseModel3);
 
         ActionCourseModel courseModel4 = new ActionCourseModel();
-        courseModel4.setActionCourcesName("第四关");
+        courseModel4.setActionCourcesName("第4关");
         courseModel4.setTitle("第四关 添加动作音频");
         courseModel4.setDrawableId(R.drawable.ic_action_level4);
         courseModel4.setActionLockType(0);
@@ -82,7 +82,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         list.add(courseModel4);
 
         ActionCourseModel courseModel5 = new ActionCourseModel();
-        courseModel5.setActionCourcesName("第五关");
+        courseModel5.setActionCourcesName("第5关");
         courseModel5.setTitle("第五关 创定指定动作");
         courseModel5.setDrawableId(R.drawable.ic_action_level5);
         courseModel5.setActionLockType(0);
@@ -90,7 +90,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         list.add(courseModel5);
 
         ActionCourseModel courseModel6 = new ActionCourseModel();
-        courseModel6.setActionCourcesName("第六关");
+        courseModel6.setActionCourcesName("第6关");
         courseModel6.setTitle("第六关 创建音频");
         courseModel6.setDrawableId(R.drawable.ic_action_level6);
         courseModel6.setActionLockType(0);
@@ -98,7 +98,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         list.add(courseModel6);
 
         ActionCourseModel courseModel7 = new ActionCourseModel();
-        courseModel7.setActionCourcesName("第七关");
+        courseModel7.setActionCourcesName("第7关");
         courseModel7.setTitle("第七关 创定指定动作");
         courseModel7.setDrawableId(R.drawable.ic_action_level7);
         courseModel7.setActionLockType(0);
@@ -106,7 +106,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         list.add(courseModel7);
 
         ActionCourseModel courseModel8 = new ActionCourseModel();
-        courseModel8.setActionCourcesName("第八关");
+        courseModel8.setActionCourcesName("第8关");
         courseModel8.setTitle("第八关 连续动作");
         courseModel8.setDrawableId(R.drawable.ic_action_level8);
         courseModel8.setActionLockType(0);
@@ -114,7 +114,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         list.add(courseModel8);
 
         ActionCourseModel courseModel9 = new ActionCourseModel();
-        courseModel9.setActionCourcesName("第九关");
+        courseModel9.setActionCourcesName("第9关");
         courseModel9.setTitle("第九关 快速创建连续动作");
         courseModel9.setDrawableId(R.drawable.ic_action_level9);
         courseModel9.setActionLockType(0);
@@ -122,7 +122,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         list.add(courseModel9);
 
         ActionCourseModel courseModel10 = new ActionCourseModel();
-        courseModel10.setActionCourcesName("第十关");
+        courseModel10.setActionCourcesName("第10关");
         courseModel10.setTitle("第十关 自定义动作");
         courseModel10.setDrawableId(R.drawable.ic_action_level10);
         courseModel10.setActionLockType(0);
@@ -184,15 +184,15 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
                                 if (Integer.parseInt(courseLastProgressModule.getProgressOne()) > course) {
                                     ContentValues values = new ContentValues();
                                     values.put("CourseLevel", Integer.parseInt(courseLastProgressModule.getProgressOne()));
-                                    values.put("periodLevel", Integer.parseInt(courseLastProgressModule.getCourseTwo()));
+                                    values.put("periodLevel", Integer.parseInt(courseLastProgressModule.getProgressTwo()));
                                     values.put("isUpload", true);
                                     DataSupport.updateAll(LocalActionRecord.class, values);
                                 } else if (Integer.parseInt(courseLastProgressModule.getCourseOne()) == course) {
                                     //如果从后台取得的关卡跟本地一致则判断课程，如果后台的课程大于本地的课程则更新本地
-                                    if (Integer.parseInt(courseLastProgressModule.getCourseTwo()) > level) {
+                                    if (Integer.parseInt(courseLastProgressModule.getProgressTwo()) > level) {
                                         ContentValues values = new ContentValues();
                                         values.put("CourseLevel", Integer.parseInt(courseLastProgressModule.getProgressOne()));
-                                        values.put("periodLevel", Integer.parseInt(courseLastProgressModule.getCourseTwo()));
+                                        values.put("periodLevel", Integer.parseInt(courseLastProgressModule.getProgressTwo()));
                                         values.put("isUpload", true);
                                         DataSupport.updateAll(LocalActionRecord.class, values);
                                     }
@@ -256,8 +256,8 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         SaveCourseProQuest proQequest = new SaveCourseProQuest();
         proQequest.setCourseOne("1");
         proQequest.setProgressOne(progressOne);
-        proQequest.setCourseTwo(courseTwo);
-        proQequest.setProgressTwo("1");
+        proQequest.setProgressTwo(courseTwo);
+        proQequest.setCourseTwo("1");
         proQequest.setType(2);
         OkHttpClientUtils.getJsonByPostRequest(HttpEntity.SAVE_COURSE_PROGRESS, proQequest, 100)
                 .execute(new StringCallback() {

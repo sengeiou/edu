@@ -77,7 +77,8 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
      * 高亮对话框的TextView显示
      */
     TextView tv;
-
+    private TextView tvKnow;
+    private boolean isClicked;
 
     private List<CourseOne1Content> mOne1ContentList = new ArrayList<>();
 
@@ -357,6 +358,15 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
                             View tipView = hightLightView.findViewById(layoutId);
                             tv = tipView.findViewById(R.id.tv_content);
                             tv.setText("音乐库");
+                            tvKnow = tipView.findViewById(R.id.tv_know);
+                            isClicked = false;
+                            mHandler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    isClicked = true;
+                                    tvKnow.setTextColor(mContext.getResources().getColor(R.color.white));
+                                }
+                            }, 3000);
                             UbtLog.d(TAG, "======onShow====showMusicLight1");
                         }
                     }
@@ -374,6 +384,9 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
      * </p>
      */
     public void clickKnown() {
+        if (!isClicked) {
+            return;
+        }
         UbtLog.d(TAG, "currindex==" + currentIndex);
         if (mHightLight.isShowing() && mHightLight.isNext())//如果开启next模式
         {
@@ -382,15 +395,15 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
             remove(null);
             UbtLog.d(TAG, "=====remove=========");
         }
+        ((ActionsEditHelper) mHelper).stopAction();
+        doReset();
+
         if (currentCourse == 1) {
             showNextDialog(2);
-            ((ActionsEditHelper) mHelper).stopAction();
             if (courseProgressListener != null) {
                 courseProgressListener.completeCurrentCourse(1);
             }
         } else if (currentCourse == 2) {
-            ((ActionsEditHelper) mHelper).stopAction();
-            doReset();
             showNextDialog(3);
             if (courseProgressListener != null) {
                 courseProgressListener.completeCurrentCourse(2);

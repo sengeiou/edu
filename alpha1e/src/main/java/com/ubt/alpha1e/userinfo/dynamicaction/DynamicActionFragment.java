@@ -219,6 +219,9 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             if (mDynamicActionModels.size() == 0) {//如果请求失败切列表数据为0，则显示错误页面
                 showStatuLayout(2);
                 ToastUtils.showShort("加载失败");
+            }else{
+                mRefreshLayout.finishRefresh();
+                mRefreshLayout.finishLoadmore();
             }
         }
         LoadingDialog.dismiss(getActivity());

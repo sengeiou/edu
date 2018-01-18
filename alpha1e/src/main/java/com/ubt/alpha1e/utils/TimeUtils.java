@@ -1,5 +1,7 @@
 package com.ubt.alpha1e.utils;
 
+import com.ubt.alpha1e.utils.log.UbtLog;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -116,6 +118,20 @@ public class TimeUtils {
 		Date date = new Date(millisecond);
 		String timeStr = simpleDateFormat.format(date);
 		return timeStr;
+	}
+	// 两次点击按钮之间的点击间隔不能少于1000毫秒
+	private static final int MIN_CLICK_DELAY_TIME = 1000;
+	private static long lastClickTime;
+
+	public static boolean isFastClick() {
+		boolean flag = false;
+		long curClickTime = System.currentTimeMillis();
+		if ((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME) {
+			flag = true;
+		}
+		lastClickTime = curClickTime;
+		UbtLog.d("isFastClick", "lastclickTime===" + lastClickTime + "         ++++flag==" + flag);
+		return flag;
 	}
 
 }

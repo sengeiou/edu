@@ -317,7 +317,8 @@ public class ActionsEditHelper extends BaseHelper implements
         UbtLog.d("ActionEditHelper", " playAction actionName===" + actionName);
         byte[] actions = BluetoothParamUtil.stringToBytes(actionName);
         if (null != ((AlphaApplication) mContext
-                .getApplicationContext()).getBlueToothManager()) {
+                .getApplicationContext()).getBlueToothManager() && null != (((AlphaApplication) mContext.getApplicationContext())
+                .getCurrentBluetooth())) {
             ((AlphaApplication) mContext
                     .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) mContext.getApplicationContext())
                     .getCurrentBluetooth().getAddress(), ConstValue.DV_PLAYACTION, actions, actions.length, false);
@@ -328,9 +329,13 @@ public class ActionsEditHelper extends BaseHelper implements
      * 结束动作
      */
     public void stopAction() {
-        ((AlphaApplication) mContext
-                .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) mContext.getApplicationContext())
-                .getCurrentBluetooth().getAddress(), ConstValue.DV_STOPPLAY, null, 0, false);
+        if (null != ((AlphaApplication) mContext
+                .getApplicationContext()).getBlueToothManager() && null != (((AlphaApplication) mContext.getApplicationContext())
+                .getCurrentBluetooth())) {
+            ((AlphaApplication) mContext
+                    .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) mContext.getApplicationContext())
+                    .getCurrentBluetooth().getAddress(), ConstValue.DV_STOPPLAY, null, 0, false);
+        }
     }
 
     /**

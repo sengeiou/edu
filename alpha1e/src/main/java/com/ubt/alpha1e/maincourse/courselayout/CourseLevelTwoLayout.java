@@ -140,6 +140,7 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             ivActionLib.setEnabled(true);
             ivActionLibMore.setEnabled(false);
             showLeftArrow(true);
+            showPlayArrow1(false);
             secondIndex = 1;
             ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor9.hts");
             // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor9.mp3\",\"playcount\":1}");
@@ -204,6 +205,7 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             ivLeftArrow.setImageResource(R.drawable.animal_left_arrow);
             animation1 = (AnimationDrawable) ivLeftArrow.getDrawable();
             animation1.start();
+            playArrow.setVisibility(View.GONE);
         } else {
             ivLeftArrow.setVisibility(View.GONE);
             if (null != animation1) {
