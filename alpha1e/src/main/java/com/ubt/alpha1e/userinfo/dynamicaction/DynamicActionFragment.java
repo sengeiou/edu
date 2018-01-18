@@ -459,7 +459,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     @Override
     public void playActionFinish(String actionName) {
         for (int i = 0; i < mDynamicActionModels.size(); i++) {
-            if (actionName.contains(mDynamicActionModels.get(i).getActionName())) {
+            if (actionName.contains(mDynamicActionModels.get(i).getActionOriginalId())) {
                 mDynamicActionModels.get(i).setActionStatu(0);
                 break;
             }
