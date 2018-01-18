@@ -471,8 +471,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.rl_course_center:
                 if (isBulueToothConnected()) {
-                    startActivity(new Intent(this, MainCourseActivity.class));
-                    this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                    if(!removeDuplicateClickEvent()) {
+                        startActivity(new Intent(this, MainCourseActivity.class));
+                        this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                    }
                 } else {
                     showBluetoothConnectDialog();
                 }
@@ -875,7 +877,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             ToastUtils.showShort("获取机器人信息失败！");
         } else if (result == 1) {
             UbtLog.d(TAG, "账号已经绑定 ");
-            BehaviorHabitsActivity.LaunchActivity(this);
+            if(!removeDuplicateClickEvent()) {
+                BehaviorHabitsActivity.LaunchActivity(this);
+            }
         } else if (result == 2) {
             UbtLog.d(TAG, "账户没有绑定 ");
             habitAdviceGotoBindDialog();
