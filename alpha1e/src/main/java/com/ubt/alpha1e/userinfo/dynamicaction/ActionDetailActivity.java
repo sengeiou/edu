@@ -280,7 +280,8 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
 
     @Override
     public void playActionFinish(String actionName) {
-        if (actionName.contains(mDynamicActionModel.getActionName())) {
+        if (actionName.contains(mDynamicActionModel.getActionOriginalId())) {
+            mDynamicActionModel.setActionStatu(0);
             setPlaBtnAction(1);
         }
     }

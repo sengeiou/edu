@@ -124,6 +124,7 @@
                     android:layout_height="50dp">
 
                     <TextView
+                        android:id="@+id/tv_alert_one_title"
                         style="@style/text_left_style"
                         android:text="@string/ui_habits_alert_one"
                         />
@@ -146,6 +147,7 @@
                     android:layout_below="@+id/rl_alert_one">
 
                     <TextView
+                        android:id="@+id/tv_alert_two_title"
                         style="@style/text_left_style"
                         android:text="@string/ui_habits_alert_two"
                         />

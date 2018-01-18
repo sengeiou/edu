@@ -90,7 +90,7 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
      * 获取到课时列表后设置数据
      *
      * @param list
-     */ 
+     */
     @Override
     public void getCourseOneData(List<ActionCourseOneContent> list) {
 
@@ -105,12 +105,8 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
     public void completeCurrentCourse(int current) {
         currentCourse = current;
         mPresenter.savaCourseDataToDB(4, current);
-        if (current == 3) {
-            returnCardActivity();
-        }
+
     }
-
-
 
 
     /**
@@ -128,6 +124,12 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
     @Override
     public void finishActivity() {
         showExitDialog();
+    }
+
+    @Override
+    public void completeSuccess(boolean isSuccess) {
+        returnCardActivity();
+        mPresenter.savaCourseDataToDB(5, 1);
     }
 
     /**
@@ -310,13 +312,15 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (!isFinishing()&&!isHowHeadDialog) {
+                if (!isFinishing() && !isHowHeadDialog) {
                     showTapHeadDialog();
                 }
             }
         });
     }
+
     private boolean isHowHeadDialog;
+
     private void showTapHeadDialog() {
         isHowHeadDialog = true;
         new ConfirmDialog(this).builder()
@@ -329,12 +333,12 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
                         ActionCourseActivity.finishByMySelf();
                         CourseLevelFourActivity.this.finish();
                         CourseLevelFourActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
-                        isHowHeadDialog=false;
+                        isHowHeadDialog = false;
                     }
                 }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isHowHeadDialog=false;
+                isHowHeadDialog = false;
             }
         }).show();
     }

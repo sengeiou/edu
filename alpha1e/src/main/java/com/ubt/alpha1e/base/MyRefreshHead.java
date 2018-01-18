@@ -39,7 +39,6 @@ import com.scwang.smartrefresh.layout.internal.ProgressDrawable;
 import com.scwang.smartrefresh.layout.internal.pathview.PathsDrawable;
 import com.scwang.smartrefresh.layout.util.DensityUtil;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -83,7 +82,7 @@ public class MyRefreshHead extends RelativeLayout implements RefreshHeader {
     protected ProgressDrawable mProgressDrawable;
     protected SpinnerStyle mSpinnerStyle = SpinnerStyle.Translate;
     protected DateFormat mFormat = new SimpleDateFormat(REFRESH_HEADER_LASTTIME, Locale.CHINA);
-    protected int mFinishDuration = 200;
+    protected int mFinishDuration = 100;
     protected int mBackgroundColor;
     protected int mPaddingTop = 20;
     protected int mPaddingBottom = 20;
@@ -120,7 +119,7 @@ public class MyRefreshHead extends RelativeLayout implements RefreshHeader {
         layout.setOrientation(LinearLayout.VERTICAL);
         mTitleText = new TextView(context);
         mTitleText.setText(REFRESH_HEADER_PULLDOWN);
-        mTitleText.setTextColor(0xff666666);
+        mTitleText.setTextColor(context.getResources().getColor(R.color.tv_notice_title));
 
         mLastUpdateText = new TextView(context);
         mLastUpdateText.setTextColor(0xff7c7c7c);
@@ -176,19 +175,22 @@ public class MyRefreshHead extends RelativeLayout implements RefreshHeader {
         mLastUpdateText.setVisibility(mEnableLastTime ? VISIBLE : GONE);
 
         if (ta.hasValue(R.styleable.ClassicsHeader_srlDrawableArrow)) {
-            mArrowView.setImageDrawable(ta.getDrawable(R.styleable.ClassicsHeader_srlDrawableArrow));
+            mArrowView.setImageResource(R.drawable.img_refresh_normal);
+            // mArrowView.setImageDrawable(ta.getDrawable(R.styleable.ClassicsHeader_srlDrawableArrow));
         } else {
             mArrowDrawable = new PathsDrawable();
             mArrowDrawable.parserColors(0xff666666);
             mArrowDrawable.parserPaths("M20,12l-1.41,-1.41L13,16.17V4h-2v12.17l-5.58,-5.59L4,12l8,8 8,-8z");
-            mArrowView.setImageDrawable(mArrowDrawable);
+            // mArrowView.setImageDrawable(mArrowDrawable);
+            mArrowView.setImageResource(R.drawable.img_refresh_normal);
+
         }
 
         if (ta.hasValue(R.styleable.ClassicsHeader_srlDrawableProgress)) {
             mProgressView.setImageDrawable(ta.getDrawable(R.styleable.ClassicsHeader_srlDrawableProgress));
         } else {
             mProgressDrawable = new ProgressDrawable();
-            mProgressDrawable.setColor(0xff666666);
+            mProgressDrawable.setColor(context.getResources().getColor(R.color.tv_notice_title));
             mProgressView.setImageDrawable(mProgressDrawable);
         }
 
@@ -280,7 +282,15 @@ public class MyRefreshHead extends RelativeLayout implements RefreshHeader {
 
     @Override
     public void onPullingDown(float percent, int offset, int headHeight, int extendHeight) {
-        UbtLog.d("RefreshLayout","onPullingDown");
+    }
+
+    @Override
+    public void onReleasing(float percent, int offset, int headHeight, int extendHeight) {
+
+    }
+
+    @Override
+    public void onRefreshReleased(RefreshLayout layout, int headerHeight, int extendHeight) {
         if (mProgressDrawable != null) {
             mProgressDrawable.start();
         } else {
@@ -294,23 +304,12 @@ public class MyRefreshHead extends RelativeLayout implements RefreshHeader {
     }
 
     @Override
-    public void onReleasing(float percent, int offset, int headHeight, int extendHeight) {
-        UbtLog.d("RefreshLayout","onReleasing");
-    }
-
-    @Override
-    public void onRefreshReleased(RefreshLayout layout, int headerHeight, int extendHeight) {
-        UbtLog.d("RefreshLayout","onRefreshReleased");
-    }
-
-    @Override
     public void onStartAnimator(RefreshLayout layout, int headHeight, int extendHeight) {
-        UbtLog.d("RefreshLayout","onStartAnimator");
+
     }
 
     @Override
     public int onFinish(RefreshLayout layout, boolean success) {
-        UbtLog.d("RefreshLayout","onFinish");
         if (mProgressDrawable != null) {
             mProgressDrawable.stop();
         } else {
@@ -366,9 +365,9 @@ public class MyRefreshHead extends RelativeLayout implements RefreshHeader {
                 mLastUpdateText.setVisibility(mEnableLastTime ? VISIBLE : GONE);
             case PullDownToRefresh:
                 mTitleText.setText(REFRESH_HEADER_PULLDOWN);
-                mArrowView.setVisibility(GONE);
-                mProgressView.setVisibility(VISIBLE);
-               // mArrowView.animate().rotation(0);
+                mArrowView.setVisibility(VISIBLE);
+                mProgressView.setVisibility(GONE);
+                mArrowView.animate().rotation(0);
                 break;
             case Refreshing:
             case RefreshReleased:
@@ -378,23 +377,17 @@ public class MyRefreshHead extends RelativeLayout implements RefreshHeader {
                 break;
             case ReleaseToRefresh:
                 mTitleText.setText(REFRESH_HEADER_RELEASE);
-               // mArrowView.animate().rotation(180);
-                mProgressView.setVisibility(VISIBLE);
-                mArrowView.setVisibility(GONE);
+                mArrowView.animate().rotation(180);
                 break;
             case ReleaseToTwoLevel:
                 mTitleText.setText(REFRESH_HEADER_SECOND_FLOOR);
-               // mArrowView.animate().rotation(0);
-                mProgressView.setVisibility(VISIBLE);
-                mArrowView.setVisibility(GONE);
+                mArrowView.animate().rotation(0);
                 break;
             case Loading:
                 mArrowView.setVisibility(GONE);
-                mProgressView.setVisibility(VISIBLE);
+                mProgressView.setVisibility(GONE);
                 mLastUpdateText.setVisibility(GONE);
                 mTitleText.setText(REFRESH_HEADER_LOADING);
-                break;
-            default:
                 break;
         }
     }

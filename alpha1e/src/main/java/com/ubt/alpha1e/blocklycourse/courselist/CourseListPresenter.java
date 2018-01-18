@@ -3,6 +3,7 @@ package com.ubt.alpha1e.blocklycourse.courselist;
 import android.content.Context;
 
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.blocklycourse.model.BlocklyCourseListCallback;
 import com.ubt.alpha1e.blocklycourse.model.BlocklyCourseModel;
 import com.ubt.alpha1e.blocklycourse.model.CourseData;
@@ -39,6 +40,7 @@ public class CourseListPresenter extends BasePresenterImpl<CourseListContract.Vi
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "BLOCKLY_COURSE_LIST onError e:" + e.getMessage());
+                ToastUtils.showShort("网络出错,请检查是否开启网络");
                 if (isAttachView()) {
                     List<CourseData> courseDataList = DataSupport.findAll(CourseData.class);
                     UbtLog.d(TAG, "courseDataList:" + courseDataList.toString());

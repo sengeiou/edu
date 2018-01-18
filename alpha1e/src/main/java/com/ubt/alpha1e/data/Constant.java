@@ -37,6 +37,10 @@ public class Constant {
     public static final int PLAY_CONTENT_SELECT_REQUEST_CODE = 10015;
     public static final int PLAY_CONTENT_SELECT_RESPONSE_CODE = 10016;
 
+    //行为习惯家长中心
+    public static final int HIBITS_PARENT_CENTER_REQUEST_CODE = 10017;
+    public static final int HIBITS_PARENT_CENTER_RESPONSE_CODE = 10018;
+
     //定义字符串常量KEY
     public static final String SCREEN_ORIENTATION = "SCREEN_ORIENTATION";
     public static final String INSTRUCTION_INFO_KEY = "INSTRUCTION_INFO_KEY";

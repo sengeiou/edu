@@ -77,6 +77,8 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
      */
     private int currentCourse = 1;
 
+    private boolean isShowAddArrow;
+
 
     public CourseLevelNineLayout(Context context) {
         super(context);
@@ -112,11 +114,9 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
                 if (recordlevel == 0) {
                     level = 1;
                 } else if (recordlevel == 1) {
-                    level = 2;
-                } else if (recordlevel == 2) {
-                    level = 3;
-                } else if (recordlevel == 3) {
                     level = 1;
+                } else if (recordlevel == 2) {
+                    level = 2;
                 }
             }
 
@@ -142,7 +142,9 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
             ivPlay.setEnabled(true);
             CourseArrowAminalUtil.startViewAnimal(true, ivPlayArrow, 2);
         }
-
+        if (courseProgressListener != null) {
+            courseProgressListener.completeCurrentCourse(currentCourse);
+        }
     }
 
     /**
@@ -233,37 +235,29 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
             case R.id.iv_play_arrow:
                 playAction();
                 break;
+
+            case R.id.iv_left_arrow:
+
             case R.id.iv_hand_left:
                 lostRightLeg = true;
                 lostLeft();
                 CourseArrowAminalUtil.startViewAnimal(false, ivLeftHandArrow, 1);
                 CourseArrowAminalUtil.startViewAnimal(true, ivRightHandArrow, 2);
-                showAutoRead();
-                ivHandRight.setEnabled(true);
-                break;
-            case R.id.iv_left_arrow:
-                lostRightLeg = true;
-                lostLeft();
-                CourseArrowAminalUtil.startViewAnimal(false, ivLeftHandArrow, 1);
-                CourseArrowAminalUtil.startViewAnimal(true, ivRightHandArrow, 2);
                 ivAddFrame.setEnabled(false);
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
                 ivHandRight.setEnabled(true);
                 break;
+
+            case R.id.iv_right_arrow:
 
             case R.id.iv_hand_right:
                 lostLeftLeg = true;
                 lostRight();
                 CourseArrowAminalUtil.startViewAnimal(false, ivRightHandArrow, 1);
                 showAutoRead();
-                break;
-            case R.id.iv_right_arrow:
-                lostLeftLeg = true;
-                lostRight();
-                CourseArrowAminalUtil.startViewAnimal(false, ivRightHandArrow, 1);
                 ivAddFrame.setEnabled(false);
-                showAutoRead();
+                ivAddFrame.setImageResource(R.drawable.ic_addaction_disable);
                 break;
-
             case R.id.iv_add_frame_arrow:
                 addFrameClick();
                 break;
@@ -337,7 +331,7 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
             public void run() {
                 ivPlay.setEnabled(false);
                 if (courseProgressListener != null) {
-                    courseProgressListener.completeCurrentCourse(2);
+                    courseProgressListener.completeSuccess(true);
                 }
             }
         });
@@ -353,7 +347,8 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
         UbtLog.d(TAG, "addframe==========" + list_autoFrames.size());
         ivAddFrame.setEnabled(false);
         ivAddFrame.setImageResource(R.drawable.ic_stop);
-        if (list_autoFrames.size() > 4) {
+        if (list_autoFrames.size() > 4 && !isShowAddArrow) {
+            isShowAddArrow = true;
             CourseArrowAminalUtil.startViewAnimal(true, ivAddArrow, 1);
             ivAddFrame.setEnabled(true);
             ivAddFrame.setImageResource(R.drawable.ic_stop);
@@ -416,9 +411,7 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
      * @param current 跳转课程
      */
     private void showNextDialog(int current) {
-        if (courseProgressListener != null) {
-            courseProgressListener.completeCurrentCourse(current - 1);
-        }
+
         currentCourse = current;
         UbtLog.d(TAG, "进入第二课时，弹出对话框");
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_action_course_content, null);

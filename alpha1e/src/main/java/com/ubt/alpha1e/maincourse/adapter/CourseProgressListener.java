@@ -13,4 +13,6 @@ public interface CourseProgressListener {
     void completeCurrentCourse(int current);
 
     void finishActivity();
+
+    void completeSuccess(boolean isSuccess);
 }

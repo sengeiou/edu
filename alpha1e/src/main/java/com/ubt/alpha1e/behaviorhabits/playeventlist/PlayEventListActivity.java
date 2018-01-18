@@ -23,6 +23,7 @@ import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -52,10 +53,12 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
     @BindView(R.id.rv_event_list)
     RecyclerView rvEventList;
 
+    private LinearLayoutManager mLayoutManager = null;
     public EventListRecyclerAdapter mAdapter;
     private List<PlayContentInfo> mPlayContentInfoDatas = null;
     private String currentEventId = "";
     private int currentPlaySeq = -1;
+    private boolean isFirstPlay = true;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -93,7 +96,7 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
                 case UPDATE_PLAY_STATUS:
                     EventPlayStatus eventPlayStatus = (EventPlayStatus) msg.obj;
                     if(eventPlayStatus != null && mPlayContentInfoDatas != null){
-                        if(isStringNumber(eventPlayStatus.playAudioSeq)){
+                        if(StringUtils.isStringNumber(eventPlayStatus.playAudioSeq)){
                             int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
                             if(seqNo >= 0){
                                 if(currentEventId.equals(eventPlayStatus.eventId)){
@@ -106,6 +109,7 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
 
                                             mPlayContentInfoDatas.get(seqNo).isSelect = "1";
                                             mAdapter.notifyDataSetChanged();
+                                            moveToPosition(seqNo);
                                         }
                                     }else if("noPlay".equals(eventPlayStatus.audioState)){
                                         for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
@@ -139,7 +143,6 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mActivity.startActivity(intent);
-        mActivity.finish();
     }
 
     @Override
@@ -148,7 +151,7 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
 
         UbtLog.d(TAG, "rvHabitsEvent => " + rvEventList);
 
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvEventList.setLayoutManager(mLayoutManager);
         RecyclerView.ItemAnimator animator = rvEventList.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
@@ -180,12 +183,35 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
         }
     }
 
-    /***
-     * 判断字符串是否都是数字
+    /**
+     * 移动到某个下标
+     * @param playIndex
      */
-    public  boolean isStringNumber(String str){
-        Pattern pattern = Pattern.compile("[0-9]*");
-        return pattern.matcher(str).matches();
+    private void moveToPosition(int playIndex) {
+
+        if (playIndex == -1 || !isFirstPlay) {
+            return;
+        }
+
+        //先从RecyclerView的LayoutManager中获取第一项和最后一项的Position
+        int firstItem = mLayoutManager.findFirstVisibleItemPosition();
+        int lastItem = mLayoutManager.findLastVisibleItemPosition();
+        UbtLog.d(TAG, "moveToPosition firstItem = " + firstItem + "    lastItem = " + lastItem + "   playIndex = " + playIndex);
+        //然后区分情况
+        if (playIndex <= firstItem) {
+            //当要置顶的项在当前显示的第一个项的前面时
+            rvEventList.scrollToPosition(playIndex);
+        } else if (playIndex <= lastItem) {
+            //当要置顶的项已经在屏幕上显示时
+            int top = rvEventList.getChildAt(playIndex - firstItem).getTop();
+            rvEventList.scrollBy(0, top);
+        } else {
+            //当要置顶的项在当前显示的最后一项的后面时
+            rvEventList.scrollToPosition(playIndex);
+            //这里这个变量是用在RecyclerView滚动监听里面的
+            //move = true;
+        }
+        isFirstPlay = false;
     }
 
     @Override

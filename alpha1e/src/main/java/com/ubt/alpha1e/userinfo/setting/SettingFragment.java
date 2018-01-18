@@ -206,7 +206,7 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
                 CleanCacheActivity.LaunchActivity(getContext());
                 break;
             case R.id.rl_password_massage:
-                PsdManageActivity.LaunchActivity(getContext(),false);
+                PsdManageActivity.LaunchActivity(getActivity(),false);
                 break;
             case R.id.btn_wifi_download:
                 if (mPresenter.isOnlyWifiDownload(getContext())) {

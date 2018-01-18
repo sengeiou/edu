@@ -260,6 +260,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private boolean cartoon_enable = false;
     private static final int ROBOT_GOTO_BIND = 20;
     AnimationDrawable  mActionIndicator=null;
+    long mClickTime=0;
+    int CLICK_THRESHOLD_DUPLICATE=1000;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -367,23 +369,27 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         Intent mLaunch = new Intent();
         switch (view.getId()) {
             case R.id.top_icon:
-                Intent intent = new Intent();
-                UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
-                if (null == userModel) {
-                    intent.setClass(this, LoginActivity.class);
-                } else {
-                    if (TextUtils.isEmpty(userModel.getPhone())) {
-                        intent.setClass(this, LoginAuthActivity.class);
-                    } else if (TextUtils.isEmpty(userModel.getAge())) {
-                        intent.setClass(this, UserEditActivity.class);
+                if(!removeDuplicateClickEvent()) {
+                    Intent intent = new Intent();
+                    UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+                    if (null == userModel) {
+                        intent.setClass(this, LoginActivity.class);
                     } else {
-                        intent.setClass(this, UserCenterActivity.class);
+                        if (TextUtils.isEmpty(userModel.getPhone())) {
+                            intent.setClass(this, LoginAuthActivity.class);
+                        } else if (TextUtils.isEmpty(userModel.getAge())) {
+                            intent.setClass(this, UserEditActivity.class);
+                        } else {
+                            intent.setClass(this, UserCenterActivity.class);
+                        }
                     }
+                    startActivity(intent);
                 }
-                startActivity(intent);
                 break;
             case R.id.top_icon2:
-                gotoConnectBluetooth();
+                if(!removeDuplicateClickEvent()) {
+                    gotoConnectBluetooth();
+                }
                 break;
             case R.id.top_icon3:
                 if (isBulueToothConnected()) {
@@ -403,25 +409,31 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_remote:
                 if (isBulueToothConnected()) {
+                    if(!removeDuplicateClickEvent()) {
                     mLaunch.setClass(this, RemoteSelActivity.class);
                     //startActivity(new Intent(this, ActionTestActivity.class));
                     startActivity(mLaunch);
+                    }
                 } else {
-                    showBluetoothConnectDialog();
+                        showBluetoothConnectDialog();
                 }
                 break;
             case R.id.ll_action:
                 if (isBulueToothConnected()) {
+                    if(!removeDuplicateClickEvent()) {
                     APP_CURRENT_STATUS = ROBOT_default_gesture;
                     startActivity(new Intent(this, ActionTestActivity.class));
                     this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                    }
                 } else {
-                    showBluetoothConnectDialog();
+                        showBluetoothConnectDialog();
                 }
                 break;
             case R.id.ll_program:
-                startActivity(new Intent(this, BlocklyActivity.class));
-                this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                if(!removeDuplicateClickEvent()) {
+                    startActivity(new Intent(this, BlocklyActivity.class));
+                    this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                }
                 break;
             case R.id.ll_community:
                 //BehaviorHabitsActivity.LaunchActivity(this);
@@ -459,8 +471,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.rl_course_center:
                 if (isBulueToothConnected()) {
-                    startActivity(new Intent(this, MainCourseActivity.class));
-                    this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                    if(!removeDuplicateClickEvent()) {
+                        startActivity(new Intent(this, MainCourseActivity.class));
+                        this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                    }
                 } else {
                     showBluetoothConnectDialog();
                 }
@@ -558,12 +572,16 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             }
         } else if (event.getEvent() == RobotEvent.Event.DISCONNECT) {//Bluetooth Disconect
             UbtLog.d(TAG, "DISCONNECTED ");
+
             if (MainUiBtHelper.getInstance(getContext()).isLostCoon()) {
                 UbtLog.d(TAG, "mainactivity isLostCoon");
+                showGlobalButtonAnmiationEffect(false);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         looperThread.send(createMessage(APP_BLUETOOTH_CLOSE));
+                        //隐藏全局控制按钮
+                        mPresenter.exitGlocalControlCenter();
 
                         if (AppManager.getInstance().currentActivity() != null) {
                             UbtLog.d(TAG, "onLostBtCoon " + "  不为空" + AppManager.getInstance().currentActivity());
@@ -859,7 +877,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             ToastUtils.showShort("获取机器人信息失败！");
         } else if (result == 1) {
             UbtLog.d(TAG, "账号已经绑定 ");
-            BehaviorHabitsActivity.LaunchActivity(this);
+            if(!removeDuplicateClickEvent()) {
+                BehaviorHabitsActivity.LaunchActivity(this);
+            }
         } else if (result == 2) {
             UbtLog.d(TAG, "账户没有绑定 ");
             habitAdviceGotoBindDialog();
@@ -884,6 +904,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
             }
         });
+    }
+
+    @Override
+    public void hiddenBuddleText() {
+        hiddenBuddleTextView();
     }
 
     //若要使用此功能，需先绑定机器人！
@@ -920,7 +945,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     //一键绑定
     public void gotoBind() {
         if (AlphaApplication.currentRobotSN == null || AlphaApplication.currentRobotSN.equals("")) {
-            ToastUtils.showShort("机器人序列号为空");
+            ToastUtils.showShort("未读到机器人序列号");
             return;
         }
         if (robotBindingDialog == null) {
@@ -1442,7 +1467,17 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
           cartoonLeftLeg.setBackgroundColor(Color.YELLOW);
           cartoonRightLeg.setBackgroundColor(Color.YELLOW);
       }
+  }
 
+  private Boolean removeDuplicateClickEvent(){
+      UbtLog.d(TAG,"INTERVAL IS "+(System.currentTimeMillis()-mClickTime));
+      if(System.currentTimeMillis()-mClickTime<1000){
+          mClickTime=System.currentTimeMillis();
+          return true;
+      }else {
+          mClickTime = System.currentTimeMillis();
+          return false;
+      }
   }
 
 

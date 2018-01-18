@@ -188,30 +188,43 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
     @Override
     public void getCourseScores(List<CourseDetailScoreModule> list) {
         LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
-        if (null != record) {
-            int course = record.getCourseLevel();
-            int level = record.getPeriodLevel();//课时
-            UbtLog.d(TAG, "getCourseScores==" + "course==" + course + "   leavel==" + level);
-
-            for (int i = 0; i < course; i++) {
+        mActionCourseModels.get(0).setActionLockType(1);
+        if (null != list && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
                 mActionCourseModels.get(i).setActionLockType(1);
                 mActionCourseModels.get(i).setActionCourcesScore(1);
-                if (i == (course - 1)) {
-                    int totalLeavel = mActionCourseModels.get(i).getSize();//总的课时数
-                    if (level < totalLeavel) {
+                if (i == list.size() - 1 && i < 9) {
+                    mActionCourseModels.get(i + 1).setActionLockType(1);
+                }
+            }
+        } else {
+            if (null != record) {
+                int course = record.getCourseLevel();
+                int level = record.getPeriodLevel();//课时3
+                UbtLog.d(TAG, "getCourseScores==" + "course==" + course + "   leavel==" + level);
+                for (int i = 0; i < course; i++) {
+                    mActionCourseModels.get(i).setActionLockType(1);
+                    mActionCourseModels.get(i).setActionCourcesScore(1);
+                    if (i == (course - 1)) {
                         mActionCourseModels.get(i).setActionCourcesScore(0);
-                    } else if (level == totalLeavel) {
-                        if (i < 9) {
-                            mActionCourseModels.get(i + 1).setActionLockType(1);
-                        }
+//                        int totalLeavel = mActionCourseModels.get(i).getSize();//总的课时数
+//                        if (level < totalLeavel) {
+//                            mActionCourseModels.get(i).setActionCourcesScore(0);
+//                        } else if (level == totalLeavel) {
+//                            if (i < 9) {
+//                                mActionCourseModels.get(i + 1).setActionLockType(1);
+//                            }
+//                        }
+                    }
+                    if (i==9){
+
                     }
                 }
             }
         }
-
         mMainCoursedapter.notifyDataSetChanged();
         LoadingDialog.dismiss(this);
-        if (!record.isUpload()) {
+        if (null != record && !record.isUpload()) {
             mPresenter.saveLastProgress(String.valueOf(record.getCourseLevel()), String.valueOf(record.getPeriodLevel()));
         }
     }
@@ -227,7 +240,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
             flag = true;
         }
         lastClickTime = curClickTime;
-        UbtLog.d(TAG,"lastclickTime==="+lastClickTime+"         ++++flag=="+flag);
+        UbtLog.d(TAG, "lastclickTime===" + lastClickTime + "         ++++flag==" + flag);
         return flag;
     }
 
@@ -282,11 +295,6 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                                 } else if (position == 9) {
                                     startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTenActivity.class), REQUESTCODE);
                                 }
-//                            if (position == 0) {
-//                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseOneActivity.class), REQUESTCODE);
-//                            } else if (position == 1) {
-//                                startActivityForResult(new Intent(ActionCourseActivity.this, CourseTwoActivity.class), REQUESTCODE);
-//                            }
                                 ActionCourseActivity.this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                                 dialog.dismiss();
                             }
@@ -322,9 +330,13 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         UbtLog.d(TAG, "退出课程:" + 0);
         byte[] params = new byte[1];
         params[0] = 0;
-        ((AlphaApplication) this
-                .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) this.getApplicationContext())
-                .getCurrentBluetooth().getAddress(), ConstValue.DV_ENTER_COURSE, params, params.length, false);
+        if (null != ((AlphaApplication) this
+                .getApplicationContext()).getBlueToothManager()&&null!=((AlphaApplication) this.getApplicationContext())
+                .getCurrentBluetooth()) {
+            ((AlphaApplication) this
+                    .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) this.getApplicationContext())
+                    .getCurrentBluetooth().getAddress(), ConstValue.DV_ENTER_COURSE, params, params.length, false);
+        }
     }
 
     // 为了获取结果
@@ -382,7 +394,9 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                     @Override
                     public void onClick(DialogPlus dialog, View view) {
                         if (view.getId() == R.id.btn_retry) {//点击确定以后刷新列表并解锁下一关
-                            mActionCourseModels.get(course).setActionLockType(1);
+                            if (course < 10) {
+                                mActionCourseModels.get(course).setActionLockType(1);
+                            }
                             mActionCourseModels.get(course - 1).setActionCourcesScore(1);
                             mMainCoursedapter.notifyDataSetChanged();
                             dialog.dismiss();

@@ -230,7 +230,7 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
     public void gotoBind(){
 
         if(AlphaApplication.currentRobotSN == null || AlphaApplication.currentRobotSN.equals("")){
-            ToastUtils.showShort("机器人序列号为空");
+            ToastUtils.showShort("未读到机器人序列号");
             return;
         }
         if(robotBindingDialog == null){

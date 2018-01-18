@@ -106,9 +106,7 @@ public class CourseLevelEightActivity extends MVPBaseActivity<CourseOneContract.
     public void completeCurrentCourse(int current) {
         currentCourse = current;
         mPresenter.savaCourseDataToDB(8, current);
-        if (current == 2) {
-            returnCardActivity();
-        }
+
     }
 
 
@@ -127,6 +125,12 @@ public class CourseLevelEightActivity extends MVPBaseActivity<CourseOneContract.
     @Override
     public void finishActivity() {
         showExitDialog();
+    }
+
+    @Override
+    public void completeSuccess(boolean isSuccess) {
+        returnCardActivity();
+        mPresenter.savaCourseDataToDB(9, 1);
     }
 
     /**
@@ -309,15 +313,17 @@ public class CourseLevelEightActivity extends MVPBaseActivity<CourseOneContract.
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (!isFinishing()&&!isHowHeadDialog) {
+                if (!isFinishing() && !isHowHeadDialog) {
                     showTapHeadDialog();
                 }
             }
         });
     }
+
     private boolean isHowHeadDialog;
+
     private void showTapHeadDialog() {
-        isHowHeadDialog=true;
+        isHowHeadDialog = true;
         new ConfirmDialog(this).builder()
                 .setMsg(getStringResources("ui_course_principle_exit_tip"))
                 .setCancelable(false)
@@ -328,12 +334,12 @@ public class CourseLevelEightActivity extends MVPBaseActivity<CourseOneContract.
                         ActionCourseActivity.finishByMySelf();
                         CourseLevelEightActivity.this.finish();
                         CourseLevelEightActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
-                        isHowHeadDialog=false;
+                        isHowHeadDialog = false;
                     }
                 }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isHowHeadDialog=false;
+                isHowHeadDialog = false;
             }
         }).show();
     }

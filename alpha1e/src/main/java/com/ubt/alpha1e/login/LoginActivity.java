@@ -256,12 +256,14 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
                     + ",\n\"appId\":" + "\"" + appidQQOpen + "\""
                     + ",\n\"loginType\":" + "\"" + "QQ" + "\""
                     + ",\n\"openId\":" + "\"" + openID + "\""
+                    + ",\n\"ubtAppId\":"  + 100010011
                     + "}";
         } else {
             params = "{"
                     + "\"accessToken\":" + "\"" + accessToken + "\""
                     + ",\n\"loginType\":" + "\"" + "WX" + "\""
                     + ",\n\"openId\":" + "\"" + openID + "\""
+                    + ",\n\"ubtAppId\":"  + 100010011
                     + "}";
         }
 

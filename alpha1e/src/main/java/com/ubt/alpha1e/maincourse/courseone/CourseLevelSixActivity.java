@@ -105,9 +105,7 @@ public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.Vi
     public void completeCurrentCourse(int current) {
         currentCourse = current;
         mPresenter.savaCourseDataToDB(6, current);
-        if (current == 4) {
-            returnCardActivity();
-        }
+
     }
 
 
@@ -128,6 +126,13 @@ public class CourseLevelSixActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     public void finishActivity() {
         showExitDialog();
+    }
+
+    @Override
+    public void completeSuccess(boolean isSuccess) {
+
+            returnCardActivity();
+        mPresenter.savaCourseDataToDB(7, 1);
     }
 
     /**

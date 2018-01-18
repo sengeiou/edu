@@ -77,6 +77,11 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
     private TextView mTextView;
     CourseProgressListener courseProgressListener;
     private ImageView ivBackInStruction;
+    private boolean isCanClickAddFrame = false;
+
+    private RelativeLayout rlCenterAnimal;
+    private ImageView ivCenterAnimal;
+
     /**
      * 当前课时
      */
@@ -121,11 +126,9 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
                 if (recordlevel == 0) {
                     level = 1;
                 } else if (recordlevel == 1) {
-                    level = 2;
-                } else if (recordlevel == 2) {
-                    level = 3;
-                } else if (recordlevel == 3) {
                     level = 1;
+                } else if (recordlevel == 2) {
+                    level = 2;
                 }
             }
 
@@ -148,9 +151,12 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
             ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor26.hts");
         } else if (currentCourse == 2) {
             ivActionLib.setEnabled(false);
-            CourseArrowAminalUtil.startViewAnimal(true, ivLeftHandArrow, 1);
+            CourseArrowAminalUtil.startViewAnimal(true, ivUpdateArrow, 2);
+            isOnCourse = false;
         }
-
+        if (courseProgressListener != null) {
+            courseProgressListener.completeCurrentCourse(currentCourse);
+        }
     }
 
     /**
@@ -187,6 +193,9 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
 
         ivBackInStruction = findViewById(R.id.iv_back_instruction);
         ivBackInStruction.setOnClickListener(this);
+
+        rlCenterAnimal = findViewById(R.id.rl_center_animal);
+        ivCenterAnimal = findViewById(R.id.iv_center_animal);
     }
 
     /**
@@ -244,20 +253,28 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
                 playAction();
                 break;
             case R.id.iv_hand_left:
-                lostRightLeg = true;
-                lostLeft();
-                CourseArrowAminalUtil.startViewAnimal(false, ivLeftHandArrow, 1);
-                CourseArrowAminalUtil.startViewAnimal(true, ivUpdateArrow, 2);
-                ivAddFrame.setEnabled(false);
-                isOnCourse = false;
-                break;
+
             case R.id.iv_left_arrow:
+                rlCenterAnimal.setVisibility(View.VISIBLE);
                 lostRightLeg = true;
                 lostLeft();
                 CourseArrowAminalUtil.startViewAnimal(false, ivLeftHandArrow, 1);
-                CourseArrowAminalUtil.startViewAnimal(true, ivUpdateArrow, 2);
+                CourseArrowAminalUtil.startLegViewAnimal(true, ivCenterAnimal, 2);
                 ivAddFrame.setEnabled(false);
                 isOnCourse = false;
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((ActionsEditHelper) mHelper).stopAction();
+                        doChangeItem();
+                        autoRead = true;
+                        mHandler.sendEmptyMessage(MSG_AUTO_READ);
+                        isCourseReading = true;
+                        ivAddFrame.setEnabled(false);
+                        ivAddFrame.setImageResource(R.drawable.ic_confirm);
+                    }
+                }, 1500);
+
                 break;
 
             case R.id.iv_edit_arrow:
@@ -268,20 +285,16 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
                 editUpdate();
                 break;
             case R.id.iv_add_frame_arrow:
-                addFrameOnClick();
-                isOnCourse = true;
-                ivPlay.setEnabled(true);
-                ivPlay.setImageResource(R.drawable.ic_play_enable);
-                CourseArrowAminalUtil.startViewAnimal(true, ivPlayArrow, 2);
-                CourseArrowAminalUtil.startViewAnimal(false, ivAddArrow, 1);
-                break;
+
             case R.id.iv_add_frame:
-                addFrameOnClick();
-                isOnCourse = true;
-                ivPlay.setEnabled(true);
-                ivPlay.setImageResource(R.drawable.ic_play_enable);
-                CourseArrowAminalUtil.startViewAnimal(true, ivPlayArrow, 2);
-                CourseArrowAminalUtil.startViewAnimal(false, ivAddArrow, 1);
+                if (isCanClickAddFrame) {
+                    addFrameOnClick();
+                    isOnCourse = true;
+                    ivPlay.setEnabled(true);
+                    ivPlay.setImageResource(R.drawable.ic_play_enable);
+                    CourseArrowAminalUtil.startViewAnimal(true, ivPlayArrow, 2);
+                    CourseArrowAminalUtil.startViewAnimal(false, ivAddArrow, 1);
+                }
                 break;
             case R.id.iv_back_instruction:
                 if (null != courseProgressListener) {
@@ -322,17 +335,10 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
                         .get(ActionsEditHelper.MAP_FRAME)).getData());
 
         CourseArrowAminalUtil.startViewAnimal(false, ivEditArrow, 1);
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                doChangeItem();
-                autoRead = true;
-                mHandler.sendEmptyMessage(MSG_AUTO_READ);
-                isCourseReading = true;
-                ivAddFrame.setEnabled(false);
-                ivAddFrame.setImageResource(R.drawable.ic_confirm);
-            }
-        }, 1500);
+
+        rlEditFrame.setVisibility(View.GONE);
+        CourseArrowAminalUtil.startViewAnimal(true, ivLeftHandArrow, 1);
+        ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor27.hts");
 
     }
 
@@ -409,9 +415,12 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
         autoRead = false;
         mHandler.removeMessages(MSG_AUTO_READ);
         setButtonEnable(false);
+        isCanClickAddFrame = true;
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                rlCenterAnimal.setVisibility(View.GONE);
+                CourseArrowAminalUtil.startLegViewAnimal(false, ivCenterAnimal, 2);
                 ivAddFrame.setEnabled(true);
                 ivAddFrame.setImageResource(R.drawable.ic_confirm);
                 CourseArrowAminalUtil.startViewAnimal(true, ivAddArrow, 1);
@@ -422,11 +431,13 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
 
     @Override
     public void showEditFrameLayout() {
-        if (currentCourse==2) {
+        if (currentCourse == 2) {
+            isOnCourse = false;
+            ivAddFrame.setEnabled(false);
+            ivAddFrame.setImageResource(R.drawable.ic_confirm);
             rlEditFrame.setVisibility(View.VISIBLE);
             CourseArrowAminalUtil.startViewAnimal(true, ivEditArrow, 2);
             CourseArrowAminalUtil.startViewAnimal(false, ivUpdateArrow, 1);
-            ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor27.hts");
         }
     }
 
@@ -450,7 +461,7 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
             public void run() {
                 ivPlay.setEnabled(false);
                 if (courseProgressListener != null) {
-                    courseProgressListener.completeCurrentCourse(2);
+                    courseProgressListener.completeSuccess(true);
                 }
             }
         });
@@ -518,9 +529,7 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
      * @param current 跳转课程
      */
     private void showNextDialog(int current) {
-        if (courseProgressListener != null) {
-            courseProgressListener.completeCurrentCourse(current - 1);
-        }
+
         currentCourse = current;
         UbtLog.d(TAG, "进入第二课时，弹出对话框");
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_action_course_content, null);
@@ -569,6 +578,7 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
             @Override
             public void run() {
                 showNextDialog(2);
+                ivSave.setEnabled(false);
             }
         }, 1000);
     }

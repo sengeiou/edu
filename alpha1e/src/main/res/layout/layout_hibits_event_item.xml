@@ -11,23 +11,31 @@
         android:id="@+id/rl_hibits_event_item"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:paddingLeft="20dp"
+        android:paddingLeft="15dp"
         android:paddingRight="10dp"
         >
 
-        <ImageView
-            android:id="@+id/iv_event_switch"
-            android:layout_width="40dp"
-            android:layout_height="20dp"
-            android:layout_marginRight="15dp"
-            android:layout_centerVertical="true"
-            android:background="@drawable/icon_habits_switch_open"/>
+        <RelativeLayout
+            android:id="@+id/rl_event_switch"
+            android:layout_width="55dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_event_switch"
+                android:layout_width="40dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/icon_habits_switch_open"/>
+
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_event_logo"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_toRightOf="@+id/iv_event_switch"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/rl_event_switch"
             android:layout_centerVertical="true">
 
             <ImageView

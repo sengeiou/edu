@@ -68,6 +68,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     public static boolean mCurrentVoiceState = true;
     public static int mCurrentVolume = 0;
     public static boolean mLightState = true;
+    public static boolean mSensorState=true;
 
     public static String mCourseAccessToken = "";
     private int LOW_BATTERY_TWENTY=20;
@@ -201,11 +202,15 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
     public void doSendReadStateComm() {
 
-        //读机器人状态
+        //读机器人状态(音量，灯光状态）
         byte[] params = new byte[1];
         params[0] = 0;
         doSendComm(ConstValue.DV_READSTATUS, params);
-
+        //读取机器人加速度传感器是否开启（摔倒开启，关闭）状态
+        byte[] sensorParams = new byte[2];
+        sensorParams[0] = 1;
+        sensorParams[1] = 1;
+        doSendComm(ConstValue.DV_SENSOR_CONTROL, sensorParams);
         //定时读电量(10S读一次)
         if (read_battery_timer == null) {
             read_battery_timer = new Timer();
@@ -362,6 +367,14 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 hasConnectNetwork = false;
                 UbtLog.d(TAG, "base 网络没有连接" );
             }
+        }else if(cmd==ConstValue.DV_SENSOR_CONTROL){
+             UbtLog.d(TAG,"DV_SENSOR_CONTROL Status"+param[0]);
+             if(param[0]==0) {
+                 mSensorState = true;
+             }else {
+                 //CLOSE,SHOULD BE FALSE
+                 mSensorState=true;
+             }
         }
 
     }

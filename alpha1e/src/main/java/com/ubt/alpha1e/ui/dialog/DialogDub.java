@@ -25,11 +25,11 @@ import android.widget.Toast;
 import com.czt.mp3recorder.MP3Recorder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.adapter.CourseArrowAminalUtil;
 import com.ubt.alpha1e.maincourse.adapter.CourseMusicDialogUtil;
 import com.ubt.alpha1e.maincourse.adapter.NextDialog;
-import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.utils.NameLengthFilter;
 import com.ubt.alpha1e.utils.TimeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -240,7 +240,7 @@ public class DialogDub extends Dialog {
                     int after_length = s.length();// 输入内容后编辑框所有内容的总长度
                     // 如果字符添加后超过了限制的长度，那么就移除后面添加的那一部分，这个很关键
                     if (after_length > 1) {
-                        editText.setFocusable(false);
+                        //editText.setFocusable(false);
                         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0); //强制隐藏键盘
                         CourseArrowAminalUtil.startViewAnimal(true, ivAddArrow, 2);
@@ -279,14 +279,14 @@ public class DialogDub extends Dialog {
                 String str = stringFilter(input);
                 UbtLog.d(TAG, "input:" + input + "---str:" + str);
                 if (!input.equals(str)) {
-                    Toast.makeText(context, ((BaseActivity) context).getStringResources("ui_action_name_error"), Toast.LENGTH_SHORT).show();
+                    ToastUtils.showShort(ResourceManager.getInstance(context).getStringResources("ui_action_name_error"));
                     return;
                 }
 
                 if (name.length() > 0) {
                     saveRecord(name);
                 } else {
-                    Toast.makeText(context, ((BaseActivity) context).getStringResources("ui_create_record_empty_name"), Toast.LENGTH_SHORT).show();
+                    ToastUtils.showShort(ResourceManager.getInstance(context).getStringResources("ui_create_record_empty_name"));
                 }
 
             }
@@ -311,7 +311,7 @@ public class DialogDub extends Dialog {
         ivDao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (type == 1&&null!=ivRecordArrow) {
+                if (type == 1 && null != ivRecordArrow) {
                     CourseArrowAminalUtil.startViewAnimal(false, ivRecordArrow, 1);
                 }
                 ivDao.setImageResource(R.drawable.countdown);
