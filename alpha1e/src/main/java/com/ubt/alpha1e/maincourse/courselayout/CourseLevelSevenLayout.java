@@ -126,9 +126,9 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
                 if (recordlevel == 0) {
                     level = 1;
                 } else if (recordlevel == 1) {
-                    level = 2;
-                } else if (recordlevel == 2) {
                     level = 1;
+                } else if (recordlevel == 2) {
+                    level = 2;
                 }
             }
 
@@ -154,7 +154,9 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
             CourseArrowAminalUtil.startViewAnimal(true, ivUpdateArrow, 2);
             isOnCourse = false;
         }
-
+        if (courseProgressListener != null) {
+            courseProgressListener.completeCurrentCourse(currentCourse);
+        }
     }
 
     /**
@@ -459,7 +461,7 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
             public void run() {
                 ivPlay.setEnabled(false);
                 if (courseProgressListener != null) {
-                    courseProgressListener.completeCurrentCourse(2);
+                    courseProgressListener.completeSuccess(true);
                 }
             }
         });
@@ -527,9 +529,7 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
      * @param current 跳转课程
      */
     private void showNextDialog(int current) {
-        if (courseProgressListener != null) {
-            courseProgressListener.completeCurrentCourse(current - 1);
-        }
+
         currentCourse = current;
         UbtLog.d(TAG, "进入第二课时，弹出对话框");
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_action_course_content, null);

@@ -106,9 +106,7 @@ public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.V
     public void completeCurrentCourse(int current) {
         currentCourse = current;
         mPresenter.savaCourseDataToDB(5, current);
-        if (current == 3) {
-            returnCardActivity();
-        }
+
     }
 
 
@@ -127,6 +125,13 @@ public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.V
     @Override
     public void finishActivity() {
         showExitDialog();
+    }
+
+    @Override
+    public void completeSuccess(boolean isSuccess) {
+            returnCardActivity();
+        mPresenter.savaCourseDataToDB(6, 1);
+
     }
 
     /**
@@ -360,7 +365,7 @@ public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.V
             if (null != data) {
                 boolean isSaveSuccess = (Boolean) data.getExtras().get(ActionsEditHelper.SaveActionResult);
                 if (isSaveSuccess) {
-                    completeCurrentCourse(3);
+                    completeSuccess(true);
                 }
             }
         }

@@ -116,6 +116,11 @@ public class CourseLevelTenActivity extends MVPBaseActivity<CourseOneContract.Vi
         finish();
     }
 
+    @Override
+    public void completeSuccess(boolean isSuccess) {
+
+    }
+
     /**
      * 返回关卡页面
      */

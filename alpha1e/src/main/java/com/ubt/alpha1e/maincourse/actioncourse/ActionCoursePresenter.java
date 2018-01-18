@@ -187,7 +187,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
                                     values.put("periodLevel", Integer.parseInt(courseLastProgressModule.getProgressTwo()));
                                     values.put("isUpload", true);
                                     DataSupport.updateAll(LocalActionRecord.class, values);
-                                } else if (Integer.parseInt(courseLastProgressModule.getCourseOne()) == course) {
+                                } else if (Integer.parseInt(courseLastProgressModule.getProgressOne()) == course) {
                                     //如果从后台取得的关卡跟本地一致则判断课程，如果后台的课程大于本地的课程则更新本地
                                     if (Integer.parseInt(courseLastProgressModule.getProgressTwo()) > level) {
                                         ContentValues values = new ContentValues();
@@ -257,7 +257,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         proQequest.setCourseOne("1");
         proQequest.setProgressOne(progressOne);
         proQequest.setProgressTwo(courseTwo);
-        proQequest.setCourseTwo("1");
+        proQequest.setCourseTwo(progressOne);
         proQequest.setType(2);
         OkHttpClientUtils.getJsonByPostRequest(HttpEntity.SAVE_COURSE_PROGRESS, proQequest, 100)
                 .execute(new StringCallback() {

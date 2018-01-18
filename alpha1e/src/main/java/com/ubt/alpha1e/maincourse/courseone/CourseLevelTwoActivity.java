@@ -1,7 +1,6 @@
 package com.ubt.alpha1e.maincourse.courseone;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,15 +26,12 @@ import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
 import com.ubt.alpha1e.maincourse.courselayout.CourseLevelTwoLayout;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
-import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IEditActionUI;
 import com.ubt.alpha1e.utils.log.UbtLog;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
@@ -130,44 +126,9 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
     public void completeCurrentCourse(int current) {
         currentCourse = current;
         mPresenter.savaCourseDataToDB(2, current);
-        if (current == 3) {
-            returnCardActivity();
-        }
+
     }
 
-    /**
-     * 保存进度到数据库
-     *
-     * @param current
-     */
-    private void saveLastProgress(int current) {
-        UbtLog.d(TAG, "保存进度到数据库1" + current);
-        LocalActionRecord record = DataSupport.findFirst(LocalActionRecord.class);
-        if (null != record) {
-            UbtLog.d(TAG, "保存进度到数据库2" + record.toString());
-            int course = record.getCourseLevel();
-            int level = record.getPeriodLevel();
-            if (course < 2) {
-                UbtLog.d(TAG, "保存进度到数据库3" + "保存成功");
-                ContentValues values = new ContentValues();
-                values.put("CourseLevel", 2);
-                values.put("periodLevel", current);
-                values.put("isUpload", false);
-                DataSupport.updateAll(LocalActionRecord.class, values);
-                //  mPresenter.saveLastProgress("2", String.valueOf(current));
-            } else if (course == 2) {
-                if (level < current) {
-                    UbtLog.d(TAG, "保存进度到数据库3" + "保存成功");
-                    ContentValues values = new ContentValues();
-                    values.put("CourseLevel", 2);
-                    values.put("periodLevel", current);
-                    values.put("isUpload", false);
-                    DataSupport.updateAll(LocalActionRecord.class, values);
-                    //   mPresenter.saveLastProgress("2", String.valueOf(current));
-                }
-            }
-        }
-    }
 
     /**
      * 响应所有R.id.iv_known的控件的点击事件
@@ -184,6 +145,12 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     public void finishActivity() {
         showExitDialog();
+    }
+
+    @Override
+    public void completeSuccess(boolean isSuccess) {
+        returnCardActivity();
+        mPresenter.savaCourseDataToDB(3, 1);
     }
 
     /**
@@ -377,7 +344,7 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
     private boolean isHowHeadDialog;
 
     private void showTapHeadDialog() {
-        isHowHeadDialog=true;
+        isHowHeadDialog = true;
         new ConfirmDialog(this).builder()
                 .setMsg(getStringResources("ui_course_principle_exit_tip"))
                 .setCancelable(false)

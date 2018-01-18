@@ -129,11 +129,11 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
             int course = record.getCourseLevel();
             int recordlevel = record.getPeriodLevel();
             if (course == 4) {
-                if (recordlevel == 0 || recordlevel == 3) {
+                if (recordlevel == 0 || recordlevel == 1) {
                     level = 1;
-                } else if (recordlevel == 1) {
+                } else if (recordlevel == 2) {
                     level = 2;
-                } else if (recordlevel==2){
+                } else if (recordlevel==3){
                     level=3;
                 }
             }
@@ -164,7 +164,9 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
             CourseArrowAminalUtil.startViewAnimal(true,playArrow,2);
             ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor17.hts");
         }
-
+        if (courseProgressListener != null) {
+            courseProgressListener.completeCurrentCourse(currentCourse);
+        }
     }
 
     /**
@@ -306,7 +308,7 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
     @Override
     public void onPlayMusicComplete() {
         if (courseProgressListener != null) {
-            courseProgressListener.completeCurrentCourse(3);
+            courseProgressListener.completeSuccess(true);
         }
     }
 
@@ -423,9 +425,7 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (courseProgressListener != null) {
-                    courseProgressListener.completeCurrentCourse(1);
-                }
+
                 showNextDialog(2);
             }
         }, 1000);
@@ -450,9 +450,6 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
         mHandler.postDelayed(new Runnable() {//延迟一秒播放语音
             @Override
             public void run() {
-                if (courseProgressListener != null) {
-                    courseProgressListener.completeCurrentCourse(2);
-                }
                 showNextDialog(3);
             }
         }, 1000);

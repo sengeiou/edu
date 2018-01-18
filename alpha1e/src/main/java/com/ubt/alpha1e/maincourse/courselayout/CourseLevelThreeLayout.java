@@ -128,9 +128,9 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
             int course = record.getCourseLevel();
             int recordlevel = record.getPeriodLevel();
             if (course == 3) {
-                if (recordlevel == 0 || recordlevel == 2) {
+                if (recordlevel == 0 || recordlevel == 1) {
                     level = 1;
-                } else if (recordlevel == 1) {
+                } else if (recordlevel == 2) {
                     level = 2;
                 }
             }
@@ -155,7 +155,9 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
         } else if (currentCourse == 2) {
             CourseArrowAminalUtil.startViewAnimal(true, ivMusicArror, 2);
         }
-
+        if (courseProgressListener != null) {
+            courseProgressListener.completeCurrentCourse(currentCourse);
+        }
     }
 
     /**
@@ -279,7 +281,7 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
     @Override
     public void onPlayMusicComplete() {
         if (courseProgressListener != null) {
-            courseProgressListener.completeCurrentCourse(2);
+            courseProgressListener.completeSuccess(true);
         }
     }
 
@@ -400,14 +402,9 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
 
         if (currentCourse == 1) {
             showNextDialog(2);
-            if (courseProgressListener != null) {
-                courseProgressListener.completeCurrentCourse(1);
-            }
         } else if (currentCourse == 2) {
             showNextDialog(3);
-            if (courseProgressListener != null) {
-                courseProgressListener.completeCurrentCourse(2);
-            }
+
         }
     }
 

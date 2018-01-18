@@ -281,11 +281,11 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         } else {
             if (mNoticeModels.size() == 0) {//如果请求失败切列表数据为0，则显示错误页面
                 showStatuLayout(2);
-                mRefreshLayout.finishRefresh();
-                mRefreshLayout.finishLoadmore();
                 mRefreshLayout.setEnableRefresh(false);
                 mRefreshLayout.setEnableLoadmore(false);
             }
+            mRefreshLayout.finishRefresh();
+            mRefreshLayout.finishLoadmore();
         }
         dissLoding();
     }

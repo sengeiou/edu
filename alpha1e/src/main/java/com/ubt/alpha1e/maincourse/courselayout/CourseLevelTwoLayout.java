@@ -110,11 +110,11 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
                 if (recordlevel == 0) {
                     level = 1;
                 } else if (recordlevel == 1) {
-                    level = 2;
-                } else if (recordlevel == 2) {
-                    level = 3;
-                } else if (recordlevel == 3) {
                     level = 1;
+                } else if (recordlevel == 2) {
+                    level = 2;
+                } else if (recordlevel == 3) {
+                    level = 3;
                 }
             }
 
@@ -151,6 +151,10 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             ((ActionsEditHelper) mHelper).playAction(Constant.COURSE_ACTION_PATH + "AE_action editor12.hts");
             // ((ActionsEditHelper) mHelper).playSoundAudio("{\"filename\":\"AE_action editor12.mp3\",\"playcount\":1}");
             threeIndex = 1;
+        }
+
+        if (courseProgressListener != null) {
+            courseProgressListener.completeCurrentCourse(currentCourse);
         }
     }
 
@@ -302,7 +306,7 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             @Override
             public void run() {
                 if (courseProgressListener != null) {
-                    courseProgressListener.completeCurrentCourse(3);
+                    courseProgressListener.completeSuccess(true);
                 }
             }
         }, 4000);
@@ -402,16 +406,10 @@ public class CourseLevelTwoLayout extends BaseActionEditLayout implements Action
             ((ActionsEditHelper) mHelper).stopAction();
             doReset();
             showNextDialog(2);
-            if (courseProgressListener != null) {
-                courseProgressListener.completeCurrentCourse(1);
-            }
         } else if (currentCourse == 2) {
             ((ActionsEditHelper) mHelper).stopAction();
             doReset();
             showNextDialog(3);
-            if (courseProgressListener != null) {
-                courseProgressListener.completeCurrentCourse(2);
-            }
         }
     }
 

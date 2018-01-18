@@ -10,6 +10,7 @@
         android:id="@+id/rl_content"
         android:layout_width="120dp"
         android:layout_height="120dp"
+        android:padding="2dp"
         >
 
         <RelativeLayout
