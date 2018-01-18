@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.userinfo.psdmanage;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -46,11 +47,11 @@ public class PsdManageActivity extends MVPBaseActivity<PsdManageContract.View, P
     public MVPBaseFragment mCurrentFragment;
     private boolean mFindPassword = false;
 
-    public static void LaunchActivity(Context context, boolean isFindPassword) {
-        Intent intent = new Intent(context, PsdManageActivity.class);
+    public static void LaunchActivity(Activity activity, boolean isFindPassword) {
+        Intent intent = new Intent(activity, PsdManageActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("isFindPassword", isFindPassword);
-        context.startActivity(intent);
+        activity.startActivityForResult(intent, 1);
     }
 
     @Override

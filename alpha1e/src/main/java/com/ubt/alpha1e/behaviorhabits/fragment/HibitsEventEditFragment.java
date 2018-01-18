@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baoyz.pg.PG;
@@ -35,6 +36,7 @@ import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
+import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
 
@@ -75,10 +77,19 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     TextView tvAlertOne;
     @BindView(R.id.tv_alert_two)
     TextView tvAlertTwo;
+    @BindView(R.id.tv_alert_one_title)
+    TextView tvAlertOneTitle;
+    @BindView(R.id.tv_alert_two_title)
+    TextView tvAlertTwoTitle;
+    @BindView(R.id.rl_alert_one)
+    RelativeLayout rlAlertOne;
+    @BindView(R.id.rl_alert_two)
+    RelativeLayout rlAlertTwo;
     @BindView(R.id.iv_back)
     ImageView ivBack;
     @BindView(R.id.rv_play_content)
     DragRecyclerView rvPlayContent;
+
 
     private String[] mHourArr = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
                                 "10", "11","12","13","14","15","16","17","18","19",
@@ -122,7 +133,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
                     mCoonLoadingDia.cancel();
                     originEventDetail = (EventDetail<List<PlayContentInfo>>) msg.obj;
                     newEventDetail = EventDetail.cloneNewInstance(originEventDetail);
-                    UbtLog.d(TAG,"originEventDetail = " + originEventDetail);
+                    UbtLog.d(TAG,"originEventDetail = " + originEventDetail + "  mHabitsEvent.eventType = " + mHabitsEvent.eventType);
                     if(originEventDetail != null){
                         String[] eventTime = originEventDetail.eventTime.split(":");
                         if(eventTime.length == 2){
@@ -132,11 +143,22 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
                             lvMinute.setInitPosition(0);
                             lvMinute.setCurrentPosition(getMinuteIndex(eventTime[1]));
                         }
-                        mRemindFirstIndex = getAlertIndex(originEventDetail.remindFirst);
-                        mRemindSecondIndex = getAlertIndex(originEventDetail.remindSecond);
 
-                        tvAlertOne.setText(mAlertArr[mRemindFirstIndex] + getStringRes("ui_habits_minute_later"));
-                        tvAlertTwo.setText(mAlertArr[mRemindSecondIndex] + getStringRes("ui_habits_minute_later"));
+                        if("2".equals(mHabitsEvent.eventType) || "3".equals(mHabitsEvent.eventType)){
+                            //2：午休 3：睡晚觉 没有第一次第二次提醒
+                            tvAlertOne.setText("");
+                            tvAlertTwo.setText("");
+                            tvAlertOneTitle.setTextColor(getResources().getColor(R.color.T28));
+                            tvAlertTwoTitle.setTextColor(getResources().getColor(R.color.T28));
+                            rlAlertOne.setEnabled(false);
+                            rlAlertTwo.setEnabled(false);
+                        }else {
+                            mRemindFirstIndex = getAlertIndex(originEventDetail.remindFirst);
+                            mRemindSecondIndex = getAlertIndex(originEventDetail.remindSecond);
+
+                            tvAlertOne.setText(mAlertArr[mRemindFirstIndex] + getStringRes("ui_habits_minute_later"));
+                            tvAlertTwo.setText(mAlertArr[mRemindSecondIndex] + getStringRes("ui_habits_minute_later"));
+                        }
                         updatePlayContentData(originEventDetail.contents);
                     }
                     break;
@@ -162,7 +184,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     private int getHourIndex(String hour){
         int index = 0;
         for(String h : mHourArr){
-            if(Integer.parseInt(h) == Integer.parseInt(hour) ){
+            if(StringUtils.isStringNumber(hour) && Integer.parseInt(h) == Integer.parseInt(hour) ){
                 return index;
             }
             index++;
@@ -173,7 +195,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     private int getMinuteIndex(String minute){
         int index = 0;
         for(String m : mMinuteArr){
-            if(Integer.parseInt(m) == Integer.parseInt(minute) ){
+            if(StringUtils.isStringNumber(minute) && Integer.parseInt(m) == Integer.parseInt(minute) ){
                 return index;
             }
             index++;
@@ -184,7 +206,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     private int getAlertIndex(String alertTime){
         int index = 0;
         for(String a : mAlertArr){
-            if(Integer.parseInt(a) == Integer.parseInt(alertTime) ){
+            if(StringUtils.isStringNumber(alertTime) && Integer.parseInt(a) == Integer.parseInt(alertTime) ){
                 return index;
             }
             index++;
@@ -326,6 +348,15 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             mPlayContentInfoDatas.add(sampleEntity);
         }
         mAdapter.notifyDataSetChanged();
+
+        List<String> contentIds = new ArrayList<>();
+        for(int index = 0; index < mPlayContentInfoDatas.size();index++ ){
+            UbtLog.d(TAG,"contentId = " + mPlayContentInfoDatas.get(index).getPlayContentInfo().contentId);
+            contentIds.add(mPlayContentInfoDatas.get(index).getPlayContentInfo().contentId);
+        }
+        newEventDetail.contentIds = contentIds;
+
+        UbtLog.d(TAG,"newEventDetail => " + newEventDetail.contentIds);
     }
 
     @Override
@@ -412,7 +443,8 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
                 mPresenter.showAlertDialog(getContext(), mRemindSecondIndex, Arrays.asList(mAlertArr), 2);
                 break;
             case R.id.rl_play_content_tip:
-                startForResult(PlayContentSelectFragment.newInstance(originEventDetail), Constant.PLAY_CONTENT_SELECT_REQUEST_CODE);
+                UbtLog.d(TAG,"newEventDetail = " + newEventDetail.contentIds);
+                startForResult(PlayContentSelectFragment.newInstance(newEventDetail), Constant.PLAY_CONTENT_SELECT_REQUEST_CODE);
                 break;
         }
     }

@@ -32,6 +32,7 @@ import com.ubt.alpha1e.behaviorhabits.helper.HabitsHelper;
 import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.playeventlist.PlayEventListActivity;
+import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -91,7 +92,7 @@ public class HibitsEventPlayDialog {
                     EventPlayStatus eventPlayStatus = (EventPlayStatus) msg.obj;
                     UbtLog.d(TAG,"eventPlayStatus = " + eventPlayStatus + " currentEventId = " + currentEventId);
                     if(eventPlayStatus != null && mPlayContentInfoList != null){
-                        if(isStringNumber(eventPlayStatus.playAudioSeq)){
+                        if(StringUtils.isStringNumber(eventPlayStatus.playAudioSeq)){
                             int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
                             if(seqNo >= 0){
                                 if(currentEventId.equals(eventPlayStatus.eventId)){
@@ -157,14 +158,6 @@ public class HibitsEventPlayDialog {
             }
         }
     };
-
-    /***
-     * 判断字符串是否都是数字
-     */
-    public  boolean isStringNumber(String str){
-        Pattern pattern = Pattern.compile("[0-9]*");
-        return pattern.matcher(str).matches();
-    }
 
     /**
      * 类构造函数
@@ -326,7 +319,7 @@ public class HibitsEventPlayDialog {
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.iv_music_list:
-                    mDialog.cancel();
+                    //mDialog.cancel();
                     PlayEventListActivity.launchActivity(mActivity,mPlayContentInfoList,currentEventId);
 
                     break;
