@@ -50,17 +50,17 @@ public class GlobalMsgService extends Service {
     }
 
     @Subscribe
-    public void onDataSynEvent(XGPushTextMessage xgPushTextMessage) {
-        UbtLog.i(TAG,"onDataSynEvent event---->" + xgPushTextMessage.getContent());
+    public void onDataSynEvent(XGPushShowedResult xgPushShowedResult) {
+        UbtLog.i(TAG,"onDataSynEvent event---->" + xgPushShowedResult.getContent());
         try {
-            JSONObject mJson = new JSONObject(xgPushTextMessage.getCustomContent());
+            JSONObject mJson = new JSONObject(xgPushShowedResult.getCustomContent());
             if(  mJson.getString("category").equals(XGCmdConstract.BEHAVIOUR_HABIT)) {
                 if (mJson.get("eventId") != null) {
-                    Log.d("TPush"," contents"+xgPushTextMessage.getContent());
+                    Log.d("TPush"," contents"+xgPushShowedResult.getContent());
                     new HibitsAlertDialog(AppManager.getInstance().currentActivity()).builder()
                             .setCancelable(true)
                             .setEventId(mJson.get("eventId").toString())
-                            .setMsg(xgPushTextMessage.getContent())
+                            .setMsg(xgPushShowedResult.getContent())
                             .show();
 
                     //  new LowBatteryDialog(AppManager.getInstance().currentActivity()).setBatteryThresHold(1000000).builder().show();

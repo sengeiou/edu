@@ -58,7 +58,7 @@ public class XGListener implements IXGListener {
 
     @Override
     public void onNotifactionShowedResult(Context context, XGPushShowedResult xgPushShowedResult) {
-        Log.d(TAG,"onNotifactionShowedResult");
+        Log.d(TAG,"onNotifactionShowedResult"+xgPushShowedResult.getContent());
         EventBus.getDefault().post(xgPushShowedResult);
     }
 }
