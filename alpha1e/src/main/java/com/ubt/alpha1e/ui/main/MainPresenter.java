@@ -363,6 +363,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         request.setCreateTime(xgDeviceMode.getCreateTime());
         request.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
         request.setToken(XGUBTManager.getInstance().getDeviceToken());
+        UbtLog.d("XGREquest","TOKEN:  "+XGUBTManager.getInstance().getDeviceToken());
         UbtLog.d("XGREquest", "url===" + HttpEntity.bindXGServer);
         UbtLog.d("XGREquest","BIND REQUEST "+GsonImpl.get().toJson(request));
         OkHttpUtils.postString()

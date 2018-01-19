@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.tencent.android.tpush.XGPushShowedResult;
+import com.tencent.android.tpush.XGPushTextMessage;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.ui.dialog.HibitsAlertDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -14,6 +16,7 @@ import com.ubt.alpha1e.xingepush.XGCmdConstract;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,21 +45,22 @@ public class GlobalMsgService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        UbtLog.i(TAG,"onDestroy");
         EventBus.getDefault().unregister(this);
     }
 
     @Subscribe
-    public void onDataSynEvent(XGPushShowedResult xgPushShowedResult) {
-        UbtLog.i(TAG,"onDataSynEvent event---->" + xgPushShowedResult.getContent());
+    public void onDataSynEvent(XGPushTextMessage xgPushTextMessage) {
+        UbtLog.i(TAG,"onDataSynEvent event---->" + xgPushTextMessage.getContent());
         try {
-            JSONObject mJson = new JSONObject(xgPushShowedResult.getCustomContent());
+            JSONObject mJson = new JSONObject(xgPushTextMessage.getCustomContent());
             if(  mJson.getString("category").equals(XGCmdConstract.BEHAVIOUR_HABIT)) {
                 if (mJson.get("eventId") != null) {
-                    Log.d("TPush"," contents"+xgPushShowedResult.getContent());
+                    Log.d("TPush"," contents"+xgPushTextMessage.getContent());
                     new HibitsAlertDialog(AppManager.getInstance().currentActivity()).builder()
                             .setCancelable(true)
                             .setEventId(mJson.get("eventId").toString())
-                            .setMsg(xgPushShowedResult.getContent())
+                            .setMsg(xgPushTextMessage.getContent())
                             .show();
 
                     //  new LowBatteryDialog(AppManager.getInstance().currentActivity()).setBatteryThresHold(1000000).builder().show();

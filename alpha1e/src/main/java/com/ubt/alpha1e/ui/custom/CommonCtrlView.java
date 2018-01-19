@@ -115,7 +115,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private boolean enable_sensor=false;
     private AnimationDrawable radiologicalWaveAnim = null;
     private MainPresenter mMainPresenter;
-    private int voluemeProgress=0;
+    private int voluemeProgress=-1;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -551,6 +551,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
      */
     private void initRobotState(){
         UbtLog.d(TAG,"initRobotState mCurrentVolume = " + mHelper.mCurrentVolume + "   mCurrentVoiceState " + mHelper.mCurrentVoiceState + "   mLightState = " + mHelper.mLightState);
+        voluemeProgress=mHelper.mCurrentVolume;
         onNoteVol(mHelper.mCurrentVolume);
         onNoteVolState(mHelper.mCurrentVoiceState);
         if(mHelper.mLightState){
@@ -677,15 +678,20 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     @Override
     public void onNoteVolState(boolean vol_state) {
         if (vol_state) {
+            UbtLog.d(TAG,"cc_volumeicon");
             if (mHelper.mCurrentVolume < 0) {
                 mHelper.mCurrentVolume *= -1;
                 mHelper.doChangeVol(mHelper.mCurrentVolume);
             }
             onNoteVol(mHelper.mCurrentVolume);
+            UbtLog.d(TAG,"cc_volumeicon default or others situation" +voluemeProgress);
             if(voluemeProgress!=0) {
                 btn_vol_log.setImageDrawable(mBaseActivity.getDrawableRes("cc_volumeicon"));
+            }else{
+                btn_vol_log.setImageDrawable(mBaseActivity.getDrawableRes("cc_mute"));
             }
         } else {
+            UbtLog.d(TAG,"cc_mute");
             if (sek_vol_ctrl.getProgress() != 0){
                 mHelper.mCurrentVolume = -1 * sek_vol_ctrl.getProgress();
             }
