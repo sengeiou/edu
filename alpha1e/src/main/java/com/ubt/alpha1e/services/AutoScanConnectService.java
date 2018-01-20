@@ -107,7 +107,7 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 	Runnable scanRunable = new Runnable() {
 		@Override
 		public void run() {
-			if(instance.isManualConnectMode){
+			if(instance == null || instance.isManualConnectMode){
 				UbtLog.d(TAG, "2 instance.isManualConnectMode = true");
 				return;
 			}

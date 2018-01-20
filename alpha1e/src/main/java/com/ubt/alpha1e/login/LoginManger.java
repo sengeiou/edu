@@ -73,6 +73,7 @@ public class LoginManger implements AuthorizeListener {
     public void refreshLoginToken(String productId, String dsn, OnRefreshListener onRefreshListener){
 
         this.onRefreshListener = onRefreshListener;
+        onRefreshListener.onError(Constant.INVALID_TOKEN);
         int type = SPUtils.getInstance().getInt(Constant.SP_LOGIN_TYPE);
         UbtLog.d(TAG, "refreshLoginToken type:" + type);
         if(type == 0){
