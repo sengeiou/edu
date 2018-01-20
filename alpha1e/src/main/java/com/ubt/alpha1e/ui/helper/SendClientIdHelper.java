@@ -12,6 +12,7 @@ import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.LoginManger;
+import com.ubt.alpha1e.services.AutoScanConnectService;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.BlueToothManager;
@@ -210,6 +211,7 @@ public class SendClientIdHelper extends BaseHelper {
             clientIdSendWhich = 0 ;
             if(i == Constant.INVALID_TOKEN){
                 ((AlphaApplication) mContext.getApplicationContext()).doLostConnect();
+                AutoScanConnectService.doStopSelf();
                 ((AlphaApplication) mContext.getApplicationContext()).setmCurrentNetworkInfo(null);
                 SPUtils.getInstance().remove(Constant.SP_USER_INFO);
                 SPUtils.getInstance().remove(Constant.SP_USER_ID);

@@ -461,6 +461,8 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
 
                 mCoonLoadingDia.show();
                 mPresenter.saveBehaviourEvent(newEventDetail, mWorkdayMode);
+            }else {
+                pop();
             }
         }
     }

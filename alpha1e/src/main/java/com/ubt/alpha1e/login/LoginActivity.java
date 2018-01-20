@@ -217,6 +217,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
     @Override
     public void onError(int i) {
         UbtLog.d(TAG, "login onError:" + i);
+        ToastUtils.showShort("登录失败,请重新登录");
     }
 
     @Override
