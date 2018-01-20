@@ -172,7 +172,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             if(mCmd<0){
                 mCmd=255+mCmd;
             }
-            UbtLog.d(TAG,"CMD IS  "+mCmd);
+//            UbtLog.d(TAG,"CMD IS  "+mCmd);
             if(mCmd==ConstValue.DV_TAP_HEAD) {
                 //looperThread.send(createMessage(ROBOT_HIT_HEAD));
             }else if(mCmd==ConstValue.DV_6D_GESTURE){
