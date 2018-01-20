@@ -838,9 +838,9 @@
     <!--MAIN ui-->
 
     <string name="ui_main_right_icon">遥控器</string>
-    <string name="ui_main_right_icon2">动作</string>
-    <string name="ui_main_right_icon3">编程</string>
-    <string name="ui_main_right_icon4">社区</string>
+    <string name="ui_main_right_icon2">编动作</string>
+    <string name="ui_main_right_icon3">写程序</string>
+    <string name="ui_main_right_icon4">逛社区</string>
     <string name="ui_main_course_center">课程中心</string>
     <string name="control_center">关闭</string>
     <string name="lowpower_indicator">电量低于</string>
