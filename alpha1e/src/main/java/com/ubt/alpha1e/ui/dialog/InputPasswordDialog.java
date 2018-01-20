@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.Md5;
+import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 /**
@@ -132,8 +133,8 @@ public class InputPasswordDialog {
         dialog.setContentView(view);
 
         // 调整dialog背景大小
-        lLayout_bg.setLayoutParams(new FrameLayout.LayoutParams((int) (display
-                .getWidth() * 0.75), LinearLayout.LayoutParams.WRAP_CONTENT));
+        lLayout_bg.setLayoutParams(new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
 
         return this;
     }
@@ -238,38 +239,61 @@ public class InputPasswordDialog {
     public View.OnKeyListener onKeyListener = new View.OnKeyListener() {
         @Override
         public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-
+            UbtLog.d(TAG,"keyCode = " + keyCode + " KeyEvent = " + KeyEvent.KEYCODE_0 +"/" + KeyEvent.KEYCODE_1 + "/" + KeyEvent.KEYCODE_2);
             if (keyCode == KeyEvent.KEYCODE_DEL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                 if(view.getId() == R.id.edt_password_6){
-                    edtPassword6.setText("");
-                    edtPassword5.requestFocus();
-                    edtPassword5.setSelection(edtPassword5.getText().length());
+                    UbtLog.d(TAG,"edtPassword6 = " + edtPassword6.getText().toString());
+                    if(TextUtils.isEmpty(edtPassword6.getText().toString())){
+                        edtPassword5.setText("");
+                        edtPassword5.requestFocus();
+                        edtPassword5.setSelection(edtPassword5.getText().length());
+                    }else {
+                        edtPassword6.setText("");
+                    }
                 }else if(view.getId() == R.id.edt_password_5){
+                    UbtLog.d(TAG,"edtPassword5 = " + edtPassword5.getText().toString());
                     edtPassword6.setText("");
-                    edtPassword5.setText("");
-                    edtPassword4.requestFocus();
-                    edtPassword4.setSelection(edtPassword4.getText().length());
+                    if(TextUtils.isEmpty(edtPassword5.getText().toString())){
+                        edtPassword4.setText("");
+                        edtPassword4.requestFocus();
+                        edtPassword4.setSelection(edtPassword4.getText().length());
+                    }else {
+                        edtPassword5.setText("");
+                        UbtLog.d(TAG,"edtPassword5 =>> " + edtPassword5.getText().toString());
+                    }
                 }else if(view.getId() == R.id.edt_password_4){
                     edtPassword6.setText("");
                     edtPassword5.setText("");
-                    edtPassword4.setText("");
-                    edtPassword3.requestFocus();
-                    edtPassword3.setSelection(edtPassword3.getText().length());
+                    if(TextUtils.isEmpty(edtPassword4.getText().toString())){
+                        edtPassword3.setText("");
+                        edtPassword3.requestFocus();
+                        edtPassword3.setSelection(edtPassword3.getText().length());
+                    }else {
+                        edtPassword4.setText("");
+                    }
                 }else if(view.getId() == R.id.edt_password_3){
                     edtPassword6.setText("");
                     edtPassword5.setText("");
                     edtPassword4.setText("");
-                    edtPassword3.setText("");
-                    edtPassword2.requestFocus();
-                    edtPassword2.setSelection(edtPassword2.getText().length());
+                    if(TextUtils.isEmpty(edtPassword3.getText().toString())){
+                        edtPassword2.setText("");
+                        edtPassword2.requestFocus();
+                        edtPassword2.setSelection(edtPassword2.getText().length());
+                    }else {
+                        edtPassword3.setText("");
+                    }
                 }else if(view.getId() == R.id.edt_password_2){
                     edtPassword6.setText("");
                     edtPassword5.setText("");
                     edtPassword4.setText("");
                     edtPassword3.setText("");
-                    edtPassword2.setText("");
-                    edtPassword1.requestFocus();
-                    edtPassword1.setSelection(edtPassword1.getText().length());
+                    if(TextUtils.isEmpty(edtPassword2.getText().toString())){
+                        edtPassword1.setText("");
+                        edtPassword1.requestFocus();
+                        edtPassword1.setSelection(edtPassword1.getText().length());
+                    }else {
+                        edtPassword2.setText("");
+                    }
                 }else if(view.getId() == R.id.edt_password_1){
                     edtPassword1.setText("");
                 }
@@ -324,15 +348,15 @@ public class InputPasswordDialog {
                 }
             }else {
 
-                if(edtPassword1.isFocused() && !TextUtils.isEmpty(edtPassword1.getText().toString())){
+                if(edtPassword1.isFocused() && !TextUtils.isEmpty(editable.toString())){
                     edtPassword2.requestFocus();
-                }else if(edtPassword2.isFocused() && !TextUtils.isEmpty(edtPassword2.getText().toString())){
+                }else if(edtPassword2.isFocused() && !TextUtils.isEmpty(editable.toString())){
                     edtPassword3.requestFocus();
-                }else if(edtPassword3.isFocused() && !TextUtils.isEmpty(edtPassword3.getText().toString())){
+                }else if(edtPassword3.isFocused() && !TextUtils.isEmpty(editable.toString())){
                     edtPassword4.requestFocus();
-                }else if(edtPassword4.isFocused() && !TextUtils.isEmpty(edtPassword4.getText().toString())){
+                }else if(edtPassword4.isFocused() && !TextUtils.isEmpty(editable.toString())){
                     edtPassword5.requestFocus();
-                }else if(edtPassword5.isFocused() && !TextUtils.isEmpty(edtPassword5.getText().toString())){
+                }else if(edtPassword5.isFocused() && !TextUtils.isEmpty(editable.toString())){
                     edtPassword6.requestFocus();
                 }
             }
