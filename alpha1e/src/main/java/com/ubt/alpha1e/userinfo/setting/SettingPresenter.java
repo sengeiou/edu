@@ -12,13 +12,11 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.CheckIsBindRequest;
 import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
-import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
-import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.blockly.BlocklyProjectMode;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.ISharedPreferensListenet;
@@ -200,6 +198,7 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
         DataSupport.deleteAll(LocalActionRecord.class);
         DataSupport.deleteAll(BlocklyProjectMode.class);
         LoginManger.getInstance().loginOut();
+        AppManager.getInstance().finishAllActivity();
 
     }
 

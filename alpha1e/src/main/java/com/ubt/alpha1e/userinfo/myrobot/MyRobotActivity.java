@@ -455,6 +455,7 @@ public class MyRobotActivity extends MVPBaseActivity<MyRobotContract.View, MyRob
                     public void onClick(View view) {
                         UbtLog.d(TAG, "我知道了 ");
                         MyRobotActivity.this.finish();
+                        LoginManger.getInstance().init(AppManager.getInstance().currentActivity(),null);
                         LoginManger.getInstance().toUserCenter(SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN));
 
                     }

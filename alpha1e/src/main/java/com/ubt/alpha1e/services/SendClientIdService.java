@@ -506,6 +506,7 @@ public class SendClientIdService extends Service {
 					@Override
 					public void onClick(View view) {
 						UbtLog.d(TAG, "我知道了 ");
+						LoginManger.getInstance().init(AppManager.getInstance().currentActivity(), null);
 						LoginManger.getInstance().toUserCenter(SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN));
 					}
 				})

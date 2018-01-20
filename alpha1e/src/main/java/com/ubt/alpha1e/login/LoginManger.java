@@ -14,6 +14,7 @@ import com.tencent.ai.tvs.info.DeviceManager;
 import com.tencent.ai.tvs.info.LoginInfoManager;
 import com.tencent.ai.tvs.info.QQOpenInfoManager;
 import com.tencent.ai.tvs.info.WxInfoManager;
+import com.tencent.ai.tvs.ui.UserCenterStateListener;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
@@ -29,7 +30,7 @@ import com.ubt.alpha1e.utils.log.UbtLog;
  */
 
 
-public class LoginManger implements AuthorizeListener {
+public class LoginManger implements AuthorizeListener{
 
     private static final String TAG = "LoginManger";
 
@@ -51,6 +52,7 @@ public class LoginManger implements AuthorizeListener {
 
     public static LoginManger getInstance(){
         if(instance == null){
+            UbtLog.d(TAG, "instance LoginManger");
             instance = new LoginManger();
         }
         return  instance;
@@ -58,7 +60,7 @@ public class LoginManger implements AuthorizeListener {
 
     public LoginManger(){
         proxy = LoginProxy.getInstance(appidWx, appidQQOpen, AlphaApplication.getmContext());
-        proxy.setAuthorizeListener(this);
+//        proxy.setAuthorizeListener(this);
         proxy.setLoginEnv(ELoginEnv.FORMAL);
         wxInfoManager = (WxInfoManager) proxy.getInfoManager(ELoginPlatform.WX);
         qqOpenInfoManager = (QQOpenInfoManager) proxy.getInfoManager(ELoginPlatform.QQOpen);
@@ -66,7 +68,9 @@ public class LoginManger implements AuthorizeListener {
     }
 
     public void init(Activity activity, OnLoginListener onLoginListener){
+        UbtLog.d(TAG, "init LoginManger");
         proxy.setOwnActivity(activity);
+        proxy.setAuthorizeListener(this);
         this.onLoginListener = onLoginListener;
     }
 
@@ -142,7 +146,23 @@ public class LoginManger implements AuthorizeListener {
         UbtLog.d(TAG, "pid:"+ mgr.productId + "__dsn:" + mgr.dsn);
         mgr.deviceOEM = "UBT-Alpha1E";
         mgr.deviceType = "ROBOT";
-        proxy.toUserCenter(EUserAttrType.HOMEPAGE, mgr);
+        proxy.toUserCenter(EUserAttrType.HOMEPAGE, mgr, new UserCenterStateListener() {
+            @Override
+            public void onSuccess(ELoginPlatform eLoginPlatform, int i) {
+                UbtLog.d(TAG, "UserCenterStateListener onSuccess");
+            }
+
+            @Override
+            public void onError(int i) {
+                UbtLog.d(TAG, "UserCenterStateListener onError");
+                ToastUtils.showShort("跳转叮当用户中心失败");
+            }
+
+            @Override
+            public void onCancel(int i) {
+                UbtLog.d(TAG, "UserCenterStateListener onCancel");
+            }
+        });
     }
 
     public void getMemberStatus(){
@@ -202,6 +222,7 @@ public class LoginManger implements AuthorizeListener {
         }
 
     }
+
 
     @Override
     public void onError(int i) {
