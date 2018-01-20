@@ -136,9 +136,10 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     };
 
     public static CommonCtrlView getInstace(Context context) {
-        if (commonCtrlView == null) {
-            commonCtrlView = new CommonCtrlView(context);
+        if(commonCtrlView!=null){
+            commonCtrlView.onDestroy();
         }
+        commonCtrlView = new CommonCtrlView(context);
         lay_ctrl_more.setVisibility(View.VISIBLE);
         return commonCtrlView;
     }
@@ -165,7 +166,11 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         Log.d(TAG, "Float View  Created!");
         mContext = context;
         initHelper();
+        //读下灯光状态
+        mHelper.doSendReadStateComm();
         createFloatView();
+        //根据灯光状态，修改图标
+        initRobotState();
         rl_control.setVisibility(View.INVISIBLE);
         if(float_view_enable) {
             mWindowManager.removeView(mFloatLayout);
@@ -176,6 +181,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         if(float_view_enable) {
             mWindowManager.addView(mFloatLayout, wmParams);
         }
+
 //        //Alpha 1E from Brian
 //        rl_control.setVisibility(View.GONE);
 //        wmParams.y = 0;
@@ -235,7 +241,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         dialogLayout = (LinearLayout) inflater.inflate(R.layout.view_alertdialog, null);
         guideLayout = (RelativeLayout) inflater.inflate(R.layout.layout_float_guid, null);
         initView(mFloatLayout);
-        initRobotState();
         if(float_view_enable) {
             mFloatLayout.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -296,6 +301,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         txt_action_name_m = (TextView) view.findViewById(R.id.text_playContentName);
         txt_cycle_num = (TextView) view.findViewById(R.id.action_test);
 
+        virtualKeyboardDynamicRefresh.assistActivity(view.findViewById(R.id.lay_ctrl_more));
 
         UbtLog.d(TAG, "playingName=" + playingName);
         if(playingName.equals("NO_VALUE")){
@@ -549,7 +555,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     /**
      * 初始化机器人状态
      */
-    private void initRobotState(){
+    private  void initRobotState(){
         UbtLog.d(TAG,"initRobotState mCurrentVolume = " + mHelper.mCurrentVolume + "   mCurrentVoiceState " + mHelper.mCurrentVoiceState + "   mLightState = " + mHelper.mLightState);
         voluemeProgress=mHelper.mCurrentVolume;
         onNoteVol(mHelper.mCurrentVolume);
@@ -955,6 +961,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
     }
 
+
+
     @Override
     public void onReadCollocationRecordFinish(boolean isSuccess, String errorInfo, List<ActionColloInfo> history) {
 
@@ -1172,6 +1180,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
        btn_sensorControl.setColorFilter(filter);
    }
+
 
 
 }

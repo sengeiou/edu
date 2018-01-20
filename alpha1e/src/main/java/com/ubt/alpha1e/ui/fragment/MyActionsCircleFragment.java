@@ -163,6 +163,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     public void setDatas(List<Map<String,Object>> datas)
     {
         mDatas = datas;
+        if(mHelper!=null) {
+            mHelper.setPlayContent(mDatas);
+        }
         removeDuplicate(mDatas);
         //MyActionHelper trigger setDatas
         if(mAdapter!=null){
@@ -1008,6 +1011,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
         System.out.println(list);
     }
+
+
 
     private void clearPlayingInfoList(){
         MyActionsHelper.mCurrentSeletedNameList.clear();

@@ -75,6 +75,7 @@ import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.custom.CommonGuideView;
+import com.ubt.alpha1e.ui.custom.virtualKeyboardDynamicRefresh;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
@@ -337,6 +338,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if (mBroadcastReceiver1 != null) {
             getContext().unregisterReceiver(mBroadcastReceiver1);
         }
+        stopBuddleTextAsynchronousTask();
+        stopchargeAsynchronousTask();
         SendClientIdService.doStopSelf();
         AutoScanConnectService.doStopSelf();
     }
