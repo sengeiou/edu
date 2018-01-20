@@ -8,6 +8,7 @@
         android:id="@+id/layout_title"
         layout="@layout/layout_title_cancel_red"/>
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_circle"
         android:layout_below="@+id/layout_title"
