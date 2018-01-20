@@ -8,6 +8,7 @@
         android:id="@+id/layout_title"
         layout="@layout/layout_title_cancel_red"/>
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_circle"
         android:layout_below="@+id/layout_title"
@@ -15,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        android:scrollbarThumbVertical="@android:color/darker_gray"
+        android:scrollbarThumbVertical="@color/text_tab_color_select"
         android:scrollbarSize="5dp">
     </android.support.v7.widget.RecyclerView>
 
