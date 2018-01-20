@@ -107,7 +107,7 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 	Runnable scanRunable = new Runnable() {
 		@Override
 		public void run() {
-			if(instance == null || instance.isManualConnectMode){
+			if(instance.isManualConnectMode){
 				UbtLog.d(TAG, "2 instance.isManualConnectMode = true");
 				return;
 			}
@@ -382,7 +382,7 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 		UbtLog.d(TAG, "-onDestroy--");
 		if(instance != null && instance.mHandler.hasMessages(CHECK_IS_BACKGROUND)){
 			instance.mHandler.removeMessages(CHECK_IS_BACKGROUND);
-		}
+		}mHandler.removeCallbacks(scanRunable);
 
 		instance = null;
 		mHelper.DistoryHelper();
