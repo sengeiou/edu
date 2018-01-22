@@ -49,7 +49,6 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
 
     private static final String TAG = PlayContentSelectFragment.class.getSimpleName();
 
-    public static final int CLICK_SELECT = 1;
     private static final int UPDATE_UI_DATA = 2;
 
     Unbinder unbinder;
@@ -72,16 +71,6 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case CLICK_SELECT:
-                    //切换开关
-                    PlayContentInfo playContentInfo = mPlayContentInfoDatas.get(msg.arg1);
-                    if("1".equals(playContentInfo.isSelect)){
-                        playContentInfo.isSelect = "0";
-                    }else {
-                        playContentInfo.isSelect = "1";
-                    }
-                    mAdapter.notifyItemChanged(msg.arg1);
-                    break;
                 case UPDATE_UI_DATA:
                     mCoonLoadingDia.cancel();
                     List<PlayContentInfo> playContentInfoList = (List<PlayContentInfo>)msg.obj;
@@ -265,13 +254,10 @@ public class PlayContentSelectFragment extends MVPBaseFragment<BehaviorHabitsCon
             }
         }
         UbtLog.d(TAG,"selectList = " + selectList.size());
-        if(selectList.isEmpty()){
-            ToastUtils.showShort(getStringRes("ui_habits_play_content_empty_tip"));
-        }else {
-            Bundle resultBundle = new Bundle();
-            resultBundle.putParcelableArrayList(Constant.PLAY_CONTENT_INFO_LIST_KEY, selectList);
-            setFragmentResult(Constant.PLAY_CONTENT_SELECT_RESPONSE_CODE, resultBundle);
-            pop();
-        }
+
+        Bundle resultBundle = new Bundle();
+        resultBundle.putParcelableArrayList(Constant.PLAY_CONTENT_INFO_LIST_KEY, selectList);
+        setFragmentResult(Constant.PLAY_CONTENT_SELECT_RESPONSE_CODE, resultBundle);
+        pop();
     }
 }

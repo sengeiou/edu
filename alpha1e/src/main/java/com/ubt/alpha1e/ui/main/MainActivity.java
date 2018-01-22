@@ -75,10 +75,12 @@ import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.custom.CommonGuideView;
+import com.ubt.alpha1e.ui.custom.virtualKeyboardDynamicRefresh;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
+import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
@@ -299,6 +301,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mPresenter.getXGInfo();
         if (!isBulueToothConnected()) {
             showDisconnectIcon();
+            showGlobalButtonAnmiationEffect(false);
             looperThread.send(createMessage(Constant.APP_LAUNCH_STATUS));
             // looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_FIVE_STATUS));
             m_Handler.postDelayed(new Runnable() {
@@ -335,6 +338,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if (mBroadcastReceiver1 != null) {
             getContext().unregisterReceiver(mBroadcastReceiver1);
         }
+        stopBuddleTextAsynchronousTask();
+        stopchargeAsynchronousTask();
         SendClientIdService.doStopSelf();
         AutoScanConnectService.doStopSelf();
     }

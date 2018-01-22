@@ -157,13 +157,16 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         mAdapter = new ActionsCircleAdapter(getActivity(),type);
         mSyncRecyclerview.setAdapter(mAdapter);
 
-
     }
 
     public void setDatas(List<Map<String,Object>> datas)
     {
         mDatas = datas;
+        if(mHelper!=null) {
+            mHelper.setPlayContent(mDatas);
+        }
         removeDuplicate(mDatas);
+
         //MyActionHelper trigger setDatas
         if(mAdapter!=null){
             mAdapter.notifyDataSetChanged();
@@ -426,6 +429,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             for (Map<String, Object> item : mDatas) {
                 item.put(MyActionsHelper.map_val_action_is_playing, false);
             }
+            for(int i=0;i<mSourceActionNameList.size();i++){
+                UbtLog.d(TAG,"GET SOURCE "+mSourceActionNameList.get(i));
+            }
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -434,30 +440,30 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             });
         } else {
             //拍头执行到这里
-            if (mCurrentPlayType == ActionPlayer.Play_type.cycle_action) {
-                UbtLog.d(TAG, "---show toast  notePlayFinish cycle !");
-                UbtLog.d(TAG, "---isStartLooping = " + isStartLooping);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(
-                                getActivity(), mActivity.getStringResources("ui_action_cycle_stop"), Toast.LENGTH_SHORT).show();
-                    }
-                });
-                isStartLooping = false;
-                mHelper.setLooping(isStartLooping);
-            }
+//            if (mCurrentPlayType == ActionPlayer.Play_type.cycle_action) {
+//                UbtLog.d(TAG, "---show toast  notePlayFinish cycle !");
+//                UbtLog.d(TAG, "---isStartLooping = " + isStartLooping);
+//                getActivity().runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Toast.makeText(
+//                                getActivity(), mActivity.getStringResources("ui_action_cycle_stop"), Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//                isStartLooping = false;
+//                mHelper.setLooping(isStartLooping);
+//            }
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.notifyDataSetChanged();
-                    ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
-                    tvCircle.setText("循环播放");
-                    clearPlayingInfoList();
-                    tvCircle.setAlpha(0.5f);
-                }
-            });
+//            getActivity().runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mAdapter.notifyDataSetChanged();
+//                    ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
+//                    tvCircle.setText("循环播放");
+//                    clearPlayingInfoList();
+//                    tvCircle.setAlpha(0.5f);
+//                }
+//            });
         }
 
 
@@ -825,7 +831,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder mHolder, final int position) {
-           final MyCircleHolder holder = (MyCircleHolder)mHolder;
+            final MyCircleHolder holder = (MyCircleHolder)mHolder;
             final Map<String,Object> actionList =mDatas.get(position);
             Glide.with(mContext)
                     .load(R.drawable.sec_action_logo)
@@ -833,6 +839,10 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     .into(holder.img_action_logo);
 
             String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
+            //删除自己编译的动作文件,文字名字开头为数字15XXXXX 等
+            if(removeSelfCreationAction(action_name)){
+                return;
+            }
             if(action_name.startsWith("@") || action_name.startsWith("#") || action_name.startsWith("%")){
                 action_name = action_name.substring(1);
             }
@@ -961,6 +971,13 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     @Override
                     public void onClick(View view) {
                         //actionList.put(MyActionsHelper.map_val_action_selected,!(Boolean) actionList.get (MyActionsHelper.map_val_action_selected));
+                        for(int i=0;i<mDatas.size();i++){
+                            if(i != position){
+                                mDatas.get(i).put(MyActionsHelper.map_val_action_is_playing,false);
+                            }
+                            //mAdapter.notifyItemChanged();
+                        }
+                        mAdapter.notifyDataSetChanged();
                         actionList.put(MyActionsHelper.map_val_action_is_playing,!(Boolean)actionList.get(MyActionsHelper.map_val_action_is_playing));
                         String actionName = (String)actionList.get(MyActionsHelper.map_val_action_name);
 
@@ -995,19 +1012,41 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     }
 
 
-    private void removeDuplicate(List<Map<String, Object>> list) {
+    private void removeDuplicate() {
         UbtLog.d(TAG, "removeDuplicate");
-        for ( int i = 0 ; i < list.size() - 1 ; i ++ ) {
-            for ( int j = list.size() - 1 ; j > i; j -- ) {
-                if (list.get(j).get(ActionsHelper.map_val_action_name).equals(list.get(i).get(ActionsHelper.map_val_action_name))) {
-                    UbtLog.d(TAG, "removeDuplicate=" + list.get(j).toString());
-                    list.remove(j);
+        for ( int i = 0 ; i <mDatas.size() - 1 ; i ++ ) {
+            for ( int j = mDatas.size() - 1 ; j > i; j -- ) {
+                if (mDatas.get(j).get(ActionsHelper.map_val_action_name).equals(mDatas.get(i).get(ActionsHelper.map_val_action_name))) {
+                    UbtLog.d(TAG, "removeDuplicate=" + mDatas.get(j).toString());
+                        mDatas.remove(j);
                 }
             }
         }
-
-        System.out.println(list);
     }
+
+    private void removeDuplicate(List<Map<String, Object>> list) {
+            UbtLog.d(TAG, "removeDuplicate");
+                    for ( int i = 0 ; i < list.size() - 1 ; i ++ ) {
+                           for ( int j = list.size() - 1 ; j > i; j -- ) {
+                                   if (list.get(j).get(ActionsHelper.map_val_action_name).equals(list.get(i).get(ActionsHelper.map_val_action_name))) {
+                                       UbtLog.d(TAG, "removeDuplicate=" + list.get(j).toString());
+                                           list.remove(j);
+                                }
+                            }
+                        }
+
+            System.out.println(list);
+        }
+
+                private boolean removeSelfCreationAction(String name){
+            if(name.substring(0,1).equals("1")||name.substring(0,1).equals("")){
+                UbtLog.d(TAG,"remove selfCreationAction name :"+" position i  :");
+                return true;
+            }
+            return false;
+    }
+
+
 
     private void clearPlayingInfoList(){
         MyActionsHelper.mCurrentSeletedNameList.clear();

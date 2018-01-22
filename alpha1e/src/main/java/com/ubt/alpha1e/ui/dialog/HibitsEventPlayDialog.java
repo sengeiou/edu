@@ -38,6 +38,7 @@ import com.ubt.alpha1e.utils.log.UbtLog;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -82,6 +83,7 @@ public class HibitsEventPlayDialog {
     private PlayContentInfo currentPlayInfo = null;
     private int currentPlaySeq = -1;
     private boolean isPause = false;
+    private int volumeProgress = 0;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -151,7 +153,6 @@ public class HibitsEventPlayDialog {
                     ivPlayNone.setVisibility(View.VISIBLE);
                     ivPlayStatus.setVisibility(View.GONE);
                     playStatusAnim.stop();
-                    //initState();
                     break;
                 default:
                     break;
@@ -234,6 +235,13 @@ public class HibitsEventPlayDialog {
             @Override
             public void onStopTrackingTouch(SeekBar arg0) {
                 if(isPlaying){
+                    volumeProgress = arg0.getProgress();
+                    if(volumeProgress == 0){
+                        mHelper.mCurrentVoiceState = true;
+                    }else{
+                        mHelper.mCurrentVoiceState = false;
+                    }
+                    UbtLog.d(TAG,"mCurrentVoiceState = " + mHelper.mCurrentVoiceState + "   volumeProgress = " +volumeProgress);
                     if(!mHelper.mCurrentVoiceState){
                         //静音先解静音
                         mHelper.doTurnVol();
@@ -290,7 +298,9 @@ public class HibitsEventPlayDialog {
                 mHelper.doChangeVol(mHelper.mCurrentVolume);
             }
             onNoteVol(mHelper.mCurrentVolume);
-            ivMusicVolume.setImageDrawable(mActivity.getDrawable(R.drawable.ic_ct_sound_on));
+            if(volumeProgress != 0){
+                ivMusicVolume.setImageDrawable(mActivity.getDrawable(R.drawable.ic_ct_sound_on));
+            }
         } else {
             if (skbVolumeControl.getProgress() != 0){
                 mHelper.mCurrentVolume = -1 * skbVolumeControl.getProgress();
@@ -311,6 +321,7 @@ public class HibitsEventPlayDialog {
             value /= 255;
             value += add_val;
             skbVolumeControl.setProgress(value);
+            volumeProgress = value;
         }
     }
 
@@ -350,12 +361,12 @@ public class HibitsEventPlayDialog {
                                 isPause = false;
                                 mHelper.playEventSound(currentEventId,currentPlaySeq+"","unpause");
                                 ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
-                                mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
+                                playStatusAnim.start();
                             }else {
                                 isPause = true;
                                 mHelper.playEventSound(currentEventId,currentPlaySeq+"","pause");
                                 ivMusicPlay.setImageResource(R.drawable.ic_ct_play_usable);
-                                mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
+                                playStatusAnim.stop();
                             }
                         }
                     }
@@ -429,7 +440,12 @@ public class HibitsEventPlayDialog {
     }
 
     public HibitsEventPlayDialog setPlayContent(List<PlayContentInfo> playContentInfoList) {
-        mPlayContentInfoList = playContentInfoList;
+
+        if(playContentInfoList == null){
+            mPlayContentInfoList = new ArrayList<>();
+        }else {
+            mPlayContentInfoList = playContentInfoList;
+        }
         for(int i = 0; i< mPlayContentInfoList.size();i++){
             UbtLog.d(TAG,"i = " + i + "     url = " + mPlayContentInfoList.get(i).contentName + "/" + mPlayContentInfoList.get(i).contentUrl);
         }
@@ -447,7 +463,6 @@ public class HibitsEventPlayDialog {
      */
     private void initState(){
         UbtLog.d(TAG,"initRobotState mCurrentVolume = " + mHelper.mCurrentVolume + "   mCurrentVoiceState " + mHelper.mCurrentVoiceState + "   mLightState = " + mHelper.mLightState);
-        //isPlaying = true;
         if(isPlaying){
             ivPlayNone.setVisibility(View.GONE);
             ivPlayStatus.setVisibility(View.VISIBLE);

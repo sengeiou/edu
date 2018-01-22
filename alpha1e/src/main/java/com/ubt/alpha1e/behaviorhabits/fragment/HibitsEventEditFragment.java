@@ -132,6 +132,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
                 case UPDATE_UI_DATA:
                     mCoonLoadingDia.cancel();
                     originEventDetail = (EventDetail<List<PlayContentInfo>>) msg.obj;
+                    UbtLog.d(TAG,"originEventDetail = " + originEventDetail.contentIds + "   = " + originEventDetail.contents);
                     newEventDetail = EventDetail.cloneNewInstance(originEventDetail);
                     UbtLog.d(TAG,"originEventDetail = " + originEventDetail + "  mHabitsEvent.eventType = " + mHabitsEvent.eventType);
                     if(originEventDetail != null){
@@ -340,22 +341,27 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     private void updatePlayContentData(List<? extends PlayContentInfo> playContentInfList){
         mPlayContentInfoDatas.clear();
         SampleEntity sampleEntity = null;
-        for(PlayContentInfo playContentInfo : playContentInfList){
-            sampleEntity = new SampleEntity();
-            sampleEntity.setDragEnable(true);
-            sampleEntity.setDropEnable(true);
-            sampleEntity.setPlayContentInfo(playContentInfo);
-            mPlayContentInfoDatas.add(sampleEntity);
-        }
-        mAdapter.notifyDataSetChanged();
+        UbtLog.d(TAG,"updatePlayContentData playContentInfList = " + playContentInfList);
+        if(playContentInfList != null){
+            for(PlayContentInfo playContentInfo : playContentInfList){
+                sampleEntity = new SampleEntity();
+                sampleEntity.setDragEnable(true);
+                sampleEntity.setDropEnable(true);
+                sampleEntity.setPlayContentInfo(playContentInfo);
+                mPlayContentInfoDatas.add(sampleEntity);
+            }
+            mAdapter.notifyDataSetChanged();
 
-        List<String> contentIds = new ArrayList<>();
-        for(int index = 0; index < mPlayContentInfoDatas.size();index++ ){
-            UbtLog.d(TAG,"contentId = " + mPlayContentInfoDatas.get(index).getPlayContentInfo().contentId);
-            contentIds.add(mPlayContentInfoDatas.get(index).getPlayContentInfo().contentId);
-        }
-        newEventDetail.contentIds = contentIds;
+            List<String> contentIds = new ArrayList<>();
+            for(int index = 0; index < mPlayContentInfoDatas.size();index++ ){
+                UbtLog.d(TAG,"contentId = " + mPlayContentInfoDatas.get(index).getPlayContentInfo().contentId);
+                contentIds.add(mPlayContentInfoDatas.get(index).getPlayContentInfo().contentId);
+            }
+            newEventDetail.contentIds = contentIds;
 
+        }else {
+            newEventDetail.contentIds = new ArrayList<>();
+        }
         UbtLog.d(TAG,"newEventDetail => " + newEventDetail.contentIds);
     }
 
@@ -461,6 +467,8 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
 
                 mCoonLoadingDia.show();
                 mPresenter.saveBehaviourEvent(newEventDetail, mWorkdayMode);
+            }else {
+                pop();
             }
         }
     }
@@ -477,14 +485,21 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             if(!originEventDetail.remindSecond.equals(newEventDetail.remindSecond)){
                 return true;
             }
-            if(originEventDetail.contents.size() != (mPlayContentInfoDatas.size())){
-                return true;
+
+            if(originEventDetail.contents == null){
+                if(mPlayContentInfoDatas.size() > 0){
+                    return true;
+                }
             }else {
-                for(int index = 0; index < originEventDetail.contents.size();index++ ){
-                    PlayContentInfo originInfo = originEventDetail.contents.get(index);
-                    PlayContentInfo newInfo = mPlayContentInfoDatas.get(index).getPlayContentInfo();
-                    if(!originInfo.contentId.equals(newInfo.contentId)){
-                        return true;
+                if(originEventDetail.contents.size() != (mPlayContentInfoDatas.size())){
+                    return true;
+                }else {
+                    for(int index = 0; index < originEventDetail.contents.size();index++ ){
+                        PlayContentInfo originInfo = originEventDetail.contents.get(index);
+                        PlayContentInfo newInfo = mPlayContentInfoDatas.get(index).getPlayContentInfo();
+                        if(!originInfo.contentId.equals(newInfo.contentId)){
+                            return true;
+                        }
                     }
                 }
             }

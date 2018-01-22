@@ -822,6 +822,13 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     public void saveNewAction(int type) {
 
+        if (null != list_frames && list_frames.size() > 80) {
+            for (int i = list_frames.size()-1; i > 80; i--) {
+                UbtLog.d(TAG, "list_frames====remove" + i);
+                list_frames.remove(i);
+            }
+            adapter.notifyDataSetChanged();
+        }
         if (musicTimes == 0) {
             if (list_frames.size() < 1) {
                 MyAlertDialog.getInstance(

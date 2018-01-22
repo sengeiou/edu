@@ -311,7 +311,9 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                         }.getType());
                 if (baseResponseModel.status) {
                     UserAllModel userAllModel = baseResponseModel.models;
-                    mView.updateLoopData(userAllModel);
+                    if (isAttachView()) {
+                        mView.updateLoopData(userAllModel);
+                    }
                 }
             }
         });

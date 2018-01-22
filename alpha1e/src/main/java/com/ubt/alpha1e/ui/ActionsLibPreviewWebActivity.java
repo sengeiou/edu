@@ -935,6 +935,8 @@ public class ActionsLibPreviewWebActivity extends BaseActivity implements
 
     }
 
+
+
     @Override
     public void onReadCollocationRecordFinish(boolean isSuccess, String errorInfo, List<ActionColloInfo> history) {
 

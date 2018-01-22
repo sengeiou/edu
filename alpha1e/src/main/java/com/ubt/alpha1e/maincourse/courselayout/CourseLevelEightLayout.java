@@ -87,6 +87,11 @@ public class CourseLevelEightLayout extends BaseActionEditLayout implements Cour
     //课时3顺序
     private int secondIndex = 0;
 
+
+    private RelativeLayout rlCenterAnimal;
+    private ImageView ivCenterAnimal;
+
+
     public CourseLevelEightLayout(Context context) {
         super(context);
     }
@@ -178,7 +183,8 @@ public class CourseLevelEightLayout extends BaseActionEditLayout implements Cour
         initRightLegArrow();
         ivBackInStruction = findViewById(R.id.iv_back_instruction);
         ivBackInStruction.setOnClickListener(this);
-
+        rlCenterAnimal = findViewById(R.id.rl_center_animal);
+        ivCenterAnimal = findViewById(R.id.iv_center_animal);
     }
 
     /**
@@ -231,10 +237,13 @@ public class CourseLevelEightLayout extends BaseActionEditLayout implements Cour
 
             case R.id.iv_right_leg_arrow:
                 startEditRightLeg();
-
+                rlCenterAnimal.setVisibility(View.VISIBLE);
+                CourseArrowAminalUtil.startLegViewAnimal(true, ivCenterAnimal, 1);
                 break;
             case R.id.iv_leg_right:
                 startEditRightLeg();
+                rlCenterAnimal.setVisibility(View.VISIBLE);
+                CourseArrowAminalUtil.startLegViewAnimal(true, ivCenterAnimal, 1);
                 break;
             case R.id.iv_add_frame://课时二添加动作按钮完成课时二
                 autoRead = false;
@@ -349,6 +358,8 @@ public class CourseLevelEightLayout extends BaseActionEditLayout implements Cour
                 autoRead = false;
                 ((ActionsEditHelper) mHelper).stopSoundAudio();
                 CourseArrowAminalUtil.startViewAnimal(false, ivRightLegArrow, 2);
+                CourseArrowAminalUtil.startLegViewAnimal(false, ivCenterAnimal, 1);
+                rlCenterAnimal.setVisibility(View.GONE);
                 mHandler.removeMessages(MSG_AUTO_READ);
                 setButtonEnable(false);
                 ivAddFrame.setEnabled(true);

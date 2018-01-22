@@ -279,7 +279,8 @@ public class HttpAddress {
             "account.ubtrobot.com",
             "10.10.1.14",
             "10.10.1.12",
-            "test79.ubtrobot.com"};
+            "test79.ubtrobot.com",
+            "prodapi.ubtrobot.com"};
 
     public static final String WebDefaultAppLauncherAddress = "https://services.ubtrobot.com/userImage/ic_launcher.png";
     public static final String WebDefaultAppWechatAddress = "https://video.ubtrobot.com/alpha1/ubt_wechat.png";
