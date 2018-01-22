@@ -10,7 +10,6 @@ import com.google.gson.reflect.TypeToken;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
-import com.sina.weibo.sdk.api.BaseMediaObject;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.BehaviourControlRequest;
@@ -23,17 +22,16 @@ import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
-import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
 import com.zhy.http.okhttp.callback.StringCallback;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +58,9 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
     public static final int NETWORK_ERROR=1000;
     public static final int NETWORK_SUCCESS=2000;
     public static final int NETWORK_SERVER_EXCEPTION=3000;
-    String url = "http://10.10.1.14:8080";
+    String url = "http://10.10.1.14:8080";//测试环境
+    //String url ="https://prodapi.ubtrobot.com";//正式环境
+
     private String GetTemplatePath = "/alpha1e/event/getEventList";
     private String GetEventPath = "/alpha1e/event/getUserEvent";
     private String SaveModifyEventPath = "/alpha1e/event/updateUserEvent";
