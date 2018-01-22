@@ -38,6 +38,7 @@ import com.ubt.alpha1e.utils.log.UbtLog;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -439,7 +440,12 @@ public class HibitsEventPlayDialog {
     }
 
     public HibitsEventPlayDialog setPlayContent(List<PlayContentInfo> playContentInfoList) {
-        mPlayContentInfoList = playContentInfoList;
+
+        if(playContentInfoList == null){
+            mPlayContentInfoList = new ArrayList<>();
+        }else {
+            mPlayContentInfoList = playContentInfoList;
+        }
         for(int i = 0; i< mPlayContentInfoList.size();i++){
             UbtLog.d(TAG,"i = " + i + "     url = " + mPlayContentInfoList.get(i).contentName + "/" + mPlayContentInfoList.get(i).contentUrl);
         }

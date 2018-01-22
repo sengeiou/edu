@@ -252,7 +252,6 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                                 mView.onRequestStatus(id,NETWORK_SERVER_EXCEPTION);
                                 return;
                             }
-                            UbtLog.d(TAG, "GET_BEHAVIOUREVENT_CMD baseResponseModel = " + baseResponseModel1.models.contents.get(0).contentName);
                             mView.showBehaviourEventContent(true, (EventDetail) baseResponseModel1.models, "success");
                             break;
                         case GET_BEHAVIOURCONTROL_CMD:
@@ -286,7 +285,6 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                                 mView.onRequestStatus(id,NETWORK_SERVER_EXCEPTION);
                                 return;
                             }
-                            UbtLog.d(TAG,"GETPLAYCONTENT"+baseResponseModel3.models.get(0));
                             mView.showBehaviourPlayContent(true,baseResponseModel3.models,"success");
                             break;
                         case GET_BEHAVIOUERGETUSERPASSWORD_CMD:
