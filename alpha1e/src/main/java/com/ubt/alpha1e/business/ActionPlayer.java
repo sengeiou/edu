@@ -197,7 +197,8 @@ public class ActionPlayer implements BlueToothInteracter {
                 mCyclePlayThread = null;
                 thiz.doStopSingleAction(needSendComm);
             } else {
-                thiz.doStopSingleAction(true);
+                //thiz.doStopSingleAction(true);
+                  thiz.doStopCycle(false);
             }
         }
         if (mSourceActionNameList == null) {
@@ -396,7 +397,7 @@ public class ActionPlayer implements BlueToothInteracter {
         if(thiz == null){
             return;
         }
-
+        notePlayFinish();
         UbtLog.d(TAG, "doStopSingleAction-->" + thiz.mCurrentPlayState + " to action_finish");
     }
 /**
@@ -420,6 +421,7 @@ public class ActionPlayer implements BlueToothInteracter {
         //发送给机器人停止播放
         UbtLog.d(TAG,"NOT NEED");
         doStopSingleAction(true);
+        continueCycle();
     }
 
     private void notePlayFinish() {
@@ -629,6 +631,14 @@ public class ActionPlayer implements BlueToothInteracter {
             }
         }else if(cmd == ConstValue.DV_STOPPLAY){
             UbtLog.d(TAG,"DV_STOPPLAY :reply stop  time "+(System.currentTimeMillis()-time)+" mCurrentPlayType"+ mCurrentPlayType);
+//            if (mCurrentPlayType == Play_type.cycle_action) {
+//                UbtLog.d(TAG, "DV_STOPPLAY continueCycle");
+//                if (thiz != null) {
+//                    continueCycle();
+//                    UbtLog.d(TAG,"DV_ACTION_FINISH");
+//                }
+//            }
+
             if(mSend_Stop_playType!=mCurrentPlayType&&time!=0){
                 UbtLog.d(TAG,"IS DIFFERENT ");
                 UbtLog.d(TAG,"RECEIVE THE ERROR STOP,DISTOR          " +(System.currentTimeMillis()-time));
@@ -636,7 +646,7 @@ public class ActionPlayer implements BlueToothInteracter {
                 clearSinglePlayStatus();
                 return;
             }
-             recoveryPlayer(cmd);
+            // recoveryPlayer(cmd);
 
         }else if(cmd == ConstValue.DV_CURRENT_PLAY_NAME){
             String robotCurrentPlayName = BluetoothParamUtil.bytesToString(param);
@@ -790,7 +800,7 @@ public class ActionPlayer implements BlueToothInteracter {
             }
         }else {
             UbtLog.d(TAG,"DV_STOPPLAY := " + cmd + "  mCurrentPlayType = " + mCurrentPlayType );
-            notePlayFinish();
+           // notePlayFinish();
         }
     }
     private void clearPlayingInfoList(){

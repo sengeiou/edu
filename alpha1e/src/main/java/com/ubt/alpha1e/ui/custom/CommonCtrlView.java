@@ -453,6 +453,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             public void onClick(View v) {
                 mHelper.setLooping(false);
                 mHelper.stopPlayAction();
+
             }
         });
 
