@@ -275,6 +275,19 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             }
         }
         // UbtLog.d(TAG, "Current power is " + power_index);
+        //Prodcut manage rCONFIRM AGAIN modification
+        if(0<mParam&&mParam<=5){
+            power_index=0;
+        }
+        if(6<=mParam&&mParam<=10){
+            power_index=1;
+        }
+        if(11<=mParam&&mParam<=20){
+            power_index=2;
+        }
+        if(21<=mParam&&mParam<=30){
+            power_index=3;
+        }
         return power_index;
     }
 
