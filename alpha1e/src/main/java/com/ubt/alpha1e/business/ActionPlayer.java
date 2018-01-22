@@ -671,12 +671,13 @@ public class ActionPlayer implements BlueToothInteracter {
     @Override
     public void onDeviceDisConnected(String mac) {
         UbtLog.d(TAG, "---mCyclePlaylock.onDeviceDisConnected");
-        if(mHandler.hasMessages(UI_NOTE_PLAY_CYCLE_STOP)){
+             if(mHandler.hasMessages(UI_NOTE_PLAY_CYCLE_STOP)){
             mHandler.removeMessages(UI_NOTE_PLAY_CYCLE_STOP);
         }
         mIsCycleContinuePlay = false;
         mCurrentPlayType = null;
-
+        doStopPlay();
+        clearPlayingInfoList();
     }
 
 
