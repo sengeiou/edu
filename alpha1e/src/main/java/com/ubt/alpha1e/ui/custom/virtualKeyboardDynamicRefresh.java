@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 
+import com.ubt.alpha1e.ui.main.MainPresenter;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import static com.ubt.alpha1e.AlphaApplication.mContext;
@@ -24,19 +25,20 @@ public class virtualKeyboardDynamicRefresh {
 
     // For more information, see https://code.google.com/p/android/issues/detail?id=5497
     // To use this class, simply invoke assistActivity() on an Activity that already has its content view set.
-
+    static CommonCtrlView mCommonCtrlView;
     /**
      * 关联要监听的视图
      *
      * @param viewObserving
      */
-    public static void assistActivity(View viewObserving) {
+    public static void assistActivity(View viewObserving, CommonCtrlView commonCtrlView) {
         new virtualKeyboardDynamicRefresh(viewObserving);
+        mCommonCtrlView=commonCtrlView;
     }
 
     private View mViewObserved;//被监听的视图
 //    private int usableHeightPrevious;//视图变化前的可用高度
-private int usableWidthPrevious;//视图变化前的可用高度
+private int usableWidthPrevious=0;//视图变化前的可用高度
     private ViewGroup.LayoutParams frameLayoutParams;
 
     private virtualKeyboardDynamicRefresh(View viewObserving) {
@@ -66,12 +68,19 @@ private int usableWidthPrevious;//视图变化前的可用高度
         //比较布局变化前后的View的可用高度
         UbtLog.d("virtualKeyboardDynamicRefreshs","width "+usableWidthNow+"width before"+usableWidthPrevious);
         if (usableWidthNow != usableWidthPrevious) {
-            UbtLog.d("virtualKeyboardDynamicRefreshs","HEIGHT IS NOT EQUAL");
+            UbtLog.d("virtualKeyboardDynamicRefreshs","WIDTH IS NOT EQUAL");
             //如果两次高度不一致
             //将当前的View的可用高度设置成View的实际高度
-            frameLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+            frameLayoutParams.width =usableWidthNow;
             mViewObserved.requestLayout();//请求重新布局
-            usableWidthPrevious = WindowManager.LayoutParams.MATCH_PARENT;
+            usableWidthPrevious = usableWidthNow;
+//            if(usableWidthPrevious!=0) {
+//                if (mCommonCtrlView != null) {
+//                    UbtLog.d("virtualKeyboardDynamicRefreshs", "ADJUST THE SIZE");
+//                    mCommonCtrlView.dynamicAdjustWindowSize();
+//                }
+//            }
+
         }
     }
 

@@ -2709,4 +2709,11 @@ public class MyActionsHelper extends BaseHelper implements
         mPlayer.setPlayContent(nameList);
     }
 
+    public void setSensorStatus(boolean status){
+        mSensorState=status;
+    }
+    public boolean getSensorStatus(){
+        return mSensorState;
+    }
+
 }

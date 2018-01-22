@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baoyz.pg.PG;
@@ -89,6 +90,8 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     ImageView ivTitleRight;
     @BindView(R.id.rv_habits_event)
     RecyclerView rvHabitsEvent;
+    @BindView(R.id.rl_content_right)
+    RelativeLayout rlContentRight;
     @BindView(R.id.tv_today)
     TextView tvToday;
     @BindView(R.id.cb_score)
@@ -113,6 +116,8 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
             super.handleMessage(msg);
             switch (msg.what){
                 case UPDATE_UI_DATA:
+                    mCoonLoadingDia.cancel();
+                    rlContentRight.setVisibility(View.VISIBLE);
                     UserScore<List<HabitsEvent<List<PlayContentInfo>>>> userScore = (UserScore<List<HabitsEvent<List<PlayContentInfo>>>>) msg.obj;
                     if(userScore != null){
                         UbtLog.d(TAG,"userScore = " + userScore + "     = " + userScore.totalScore);
@@ -166,6 +171,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                 case REFRESH_REQUEST_DATA:
                     UserModel userModel = (UserModel) SPUtils.getInstance().readObject(com.ubt.alpha1e.base.Constant.SP_USER_INFO);
                     UbtLog.d(TAG,"userModel = " + userModel.getSex() + "    " + userModel.getGrade());
+                    mCoonLoadingDia.show();
                     mPresenter.getBehaviourList(userModel.getSex(), "1");
                     break;
             }
@@ -427,8 +433,14 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     }
                 });
             }
-        }else {
-
+        }else if(requestType == mPresenter.GET_BEHAVIOURLIST_CMD){
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mCoonLoadingDia.cancel();
+                    ToastUtils.showShort(getStringRes("ui_common_network_request_failed"));
+                }
+            });
         }
     }
 
