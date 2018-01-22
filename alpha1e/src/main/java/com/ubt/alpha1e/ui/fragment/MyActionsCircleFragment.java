@@ -157,7 +157,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         mAdapter = new ActionsCircleAdapter(getActivity(),type);
         mSyncRecyclerview.setAdapter(mAdapter);
 
-
     }
 
     public void setDatas(List<Map<String,Object>> datas)
@@ -166,7 +165,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         if(mHelper!=null) {
             mHelper.setPlayContent(mDatas);
         }
-        removeDuplicate(mDatas);
+        removeDuplicate();
+
         //MyActionHelper trigger setDatas
         if(mAdapter!=null){
             mAdapter.notifyDataSetChanged();
@@ -428,6 +428,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             UbtLog.d(TAG, "notePlayFinish clear data mListener");
             for (Map<String, Object> item : mDatas) {
                 item.put(MyActionsHelper.map_val_action_is_playing, false);
+            }
+            for(int i=0;i<mSourceActionNameList.size();i++){
+                UbtLog.d(TAG,"GET SOURCE "+mSourceActionNameList.get(i));
             }
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -828,7 +831,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder mHolder, final int position) {
-           final MyCircleHolder holder = (MyCircleHolder)mHolder;
+            final MyCircleHolder holder = (MyCircleHolder)mHolder;
             final Map<String,Object> actionList =mDatas.get(position);
             Glide.with(mContext)
                     .load(R.drawable.sec_action_logo)
@@ -836,6 +839,10 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     .into(holder.img_action_logo);
 
             String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
+            //删除自己编译的动作文件,文字名字开头为数字15XXXXX 等
+            if(removeSelfCreationAction(action_name)){
+                return;
+            }
             if(action_name.startsWith("@") || action_name.startsWith("#") || action_name.startsWith("%")){
                 action_name = action_name.substring(1);
             }
@@ -998,18 +1005,23 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     }
 
 
-    private void removeDuplicate(List<Map<String, Object>> list) {
+    private void removeDuplicate() {
         UbtLog.d(TAG, "removeDuplicate");
-        for ( int i = 0 ; i < list.size() - 1 ; i ++ ) {
-            for ( int j = list.size() - 1 ; j > i; j -- ) {
-                if (list.get(j).get(ActionsHelper.map_val_action_name).equals(list.get(i).get(ActionsHelper.map_val_action_name))) {
-                    UbtLog.d(TAG, "removeDuplicate=" + list.get(j).toString());
-                    list.remove(j);
+        for ( int i = 0 ; i <mDatas.size() - 1 ; i ++ ) {
+            for ( int j = mDatas.size() - 1 ; j > i; j -- ) {
+                if (mDatas.get(j).get(ActionsHelper.map_val_action_name).equals(mDatas.get(i).get(ActionsHelper.map_val_action_name))) {
+                    UbtLog.d(TAG, "removeDuplicate=" + mDatas.get(j).toString());
+                        mDatas.remove(j);
                 }
             }
         }
-
-        System.out.println(list);
+    }
+    private boolean removeSelfCreationAction(String name){
+            if(name.substring(0,1).equals("1")){
+                UbtLog.d(TAG,"remove selfCreationAction name :"+" position i  :");
+                return true;
+            }
+            return false;
     }
 
 

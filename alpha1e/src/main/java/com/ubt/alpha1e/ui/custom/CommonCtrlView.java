@@ -40,6 +40,7 @@ import com.ubt.alpha1e.data.model.ActionRecordInfo;
 import com.ubt.alpha1e.data.model.NewActionInfo;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.MyActionsActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IActionsUI;
 import com.ubt.alpha1e.ui.helper.IMainUI;
@@ -72,8 +73,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private static final String TAG = "CommonCtrlView";
     public final static String KEY_CURRENT_PLAYING_ACTION_NAME = "currentPlayingActionName";
     //定义浮动窗口布局
-    private LinearLayout mFloatLayout;
-    private LinearLayout  mPopWindowLayout;
+    private static LinearLayout mFloatLayout;
+    private  LinearLayout  mPopWindowLayout;
     private RelativeLayout guideLayout;
     private WindowManager.LayoutParams wmParams;
     //创建浮动窗口设置布局参数的对象
@@ -116,6 +117,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private AnimationDrawable radiologicalWaveAnim = null;
     private MainPresenter mMainPresenter;
     private int voluemeProgress=-1;
+    private boolean mSensorButtonStatus=true;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -241,6 +243,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         dialogLayout = (LinearLayout) inflater.inflate(R.layout.view_alertdialog, null);
         guideLayout = (RelativeLayout) inflater.inflate(R.layout.layout_float_guid, null);
         initView(mFloatLayout);
+        virtualKeyboardDynamicRefresh.assistActivity(mPopWindowLayout.findViewById(R.id.lay_ctrl_more),commonCtrlView);
         if(float_view_enable) {
             mFloatLayout.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -301,7 +304,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         txt_action_name_m = (TextView) view.findViewById(R.id.text_playContentName);
         txt_cycle_num = (TextView) view.findViewById(R.id.action_test);
 
-        virtualKeyboardDynamicRefresh.assistActivity(view.findViewById(R.id.lay_ctrl_more));
 
         UbtLog.d(TAG, "playingName=" + playingName);
         if(playingName.equals("NO_VALUE")){
@@ -353,22 +355,20 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         btn_sensorControl.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                byte[] papram = new byte[1];
-                initDialogView(dialogLayout);
-                showDialog();
-//                if(enable_sensor) {
-//                    //ENABLE SENSOR
-//                    papram[0] = 0x01;
-//                    mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
-//                    Toast.makeText(mBaseActivity,"机器人传感器已经打开",Toast.LENGTH_SHORT).show();
-//                    enable_sensor=false;
-//                }else {
-//                    //Disable Sensor
-//                    papram[0] = 0x0;
-//                    mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
-//                    enable_sensor=true;
-//                    Toast.makeText(mBaseActivity,"机器人传感器已经关闭",Toast.LENGTH_SHORT).show();
-//                }
+                if(mSensorButtonStatus) {
+                    //打开传感器
+                    initDialogView();
+                   // showDialog();
+                    mSensorButtonStatus=false;
+                }else {
+                    //关闭传感器
+                    byte[] papram=new byte[2];
+                    papram[0] = 0x1;
+                    papram[1] = 0x0;
+                    mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
+                    disableSensorButton();
+                   mSensorButtonStatus=true;
+                }
             }
         });
         btn_actionList.setOnClickListener(new View.OnClickListener() {
@@ -382,16 +382,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 if(AlphaApplication.isCycleActionFragment()){
                     return;
                 }
-//                mWindowManager.removeView(mFloatLayout);
-//                lay_ctrl_more.setVisibility(View.GONE);
-//                rl_control.setVisibility(View.VISIBLE);
-//                wmParams.y = paddingBottomHeight;
-//                wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-//                wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//                wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
-//                mWindowManager.addView(mFloatLayout, wmParams);
                 MyActionsActivity.launchActivity(mBaseActivity, 4);
-//                ((MyActionsActivity)AlphaApplication.getBaseActivity()).startCycleActionFragment();
             }
         });
 
@@ -399,7 +390,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             @Override
             public void onClick(View v) {
                 UbtLog.d(TAG, "--wmma--current Action Type=" + AlphaApplication.getActionType());
-
                 mHelper.doActionCommand(
                         MyActionsHelper.Command_type.Do_default, "", AlphaApplication.getActionType());
                 disablePlayStopButton();
@@ -573,44 +563,30 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
     /**
      *  传感器防止摔倒功能需要弹出对话框，让用户选择
-     * @param view
      */
-    private void initDialogView(View view) {
-        tvTips = (TextView) view.findViewById(R.id.txt_msg);
-        btnCancle = (Button) view.findViewById(R.id.btn_neg);
-        btnOk = (Button) view.findViewById(R.id.btn_pos);
-        final byte[] papram=new byte[2];
-        tvTips.setText(AlphaApplication.getBaseActivity().getStringResources("ui_action_sensor_warning"));
-        btnCancle.setText(AlphaApplication.getBaseActivity().getStringResources("ui_common_cancel"));
-        btnOk.setText(AlphaApplication.getBaseActivity().getStringResources("ui_common_confirm"));
+    private void initDialogView() {
+        new ConfirmDialog(mContext).builder()
+                .setTitle("提示")
+                .setMsg(AlphaApplication.getBaseActivity().getStringResources("ui_action_sensor_warning"))
+                .setNegativeButton(AlphaApplication.getBaseActivity().getStringResources("ui_common_cancel"), new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
 
-        btnCancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
-                wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                papram[0] = 0x1;
-                papram[1] = 0x0;
-                mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
-                mWindowManager.removeView(dialogLayout);
-                lay_ctrl_more.setVisibility(View.VISIBLE);
-                isShowDialog = false;
-                disableSensorButton();
-            }
-        });
-
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                byte[] papram=new byte[2];
-                papram[0] = 0x01;
-                papram[1] = 0x01;
-                mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
-                mWindowManager.removeView(dialogLayout);
-                isShowDialog = false;
-                enableSensorButton();
-            }
-        });
+                    }
+                })
+                .setPositiveButton(AlphaApplication.getBaseActivity().getStringResources("ui_common_confirm"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去打开SENSOR");
+                        byte[] papram=new byte[2];
+                        //开启传感器
+                        papram[0] = 0x01;
+                        papram[1] = 0x01;
+                        mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
+                        isShowDialog = false;
+                        enableSensorButton();
+                    }
+                }).show();
 
     }
   private void showDialog(){
@@ -1180,8 +1156,15 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
        btn_sensorControl.setColorFilter(filter);
    }
-
-
+  public void dynamicAdjustWindowSize(){
+      wmParams.y = 0;
+      wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+      lay_ctrl_more.setVisibility(View.VISIBLE);
+      if(float_view_enable) {
+          mWindowManager.removeView(mFloatLayout);
+          mWindowManager.addView(mFloatLayout, wmParams);
+      }
+  }
 
 }
 
