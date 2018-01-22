@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.tencent.android.tpush.XGPushShowedResult;
+import com.tencent.android.tpush.XGPushTextMessage;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.ui.dialog.HibitsAlertDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -14,6 +16,7 @@ import com.ubt.alpha1e.xingepush.XGCmdConstract;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,6 +45,7 @@ public class GlobalMsgService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        UbtLog.i(TAG,"onDestroy");
         EventBus.getDefault().unregister(this);
     }
 

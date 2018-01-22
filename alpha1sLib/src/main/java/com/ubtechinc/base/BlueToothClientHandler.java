@@ -152,24 +152,25 @@ public class BlueToothClientHandler extends Thread implements
 	public void run() {
 		byte[] buffer = new byte[1024];
 		int bytes;
-
 		while (mRun) {
 			try {
 				// Read from the InputStream
-				bytes = mmInStream.read(buffer);
+				bytes = mmInStream.read(buffer);////
 				byte[] pTemp = new byte[bytes];
 				System.arraycopy(buffer, 0, pTemp, 0, bytes);
 				if(!ByteHexHelper.bytesToHexString(pTemp).startsWith("fb bf 09 18")
 						&& !ByteHexHelper.bytesToHexString(pTemp).startsWith("fb bf 06 08")){
 					Log.d(TAG,"receive : " + ByteHexHelper.bytesToHexString(pTemp) + "	bytes = " + bytes);
 				}
+				MyLog.writeLog("接收",ByteHexHelper.bytesToHexString(pTemp));
+
 				for (int i = 0; i < bytes; i++) {
 					if (mPacketRead.setData_(buffer[i])) {
 						// 一帧数据接收完成
 						if (mCallBack != null) {
 
-							MyLog.writeLog("接收",ByteHexHelper.byteToHexString(mPacketRead.getmCmd()) + " " +
-									ByteHexHelper.bytesToHexString(mPacketRead.getmParam()));
+							/*MyLog.writeLog("接收",ByteHexHelper.byteToHexString(mPacketRead.getmCmd()) + " " +
+									ByteHexHelper.bytesToHexString(mPacketRead.getmParam()));*/
 
 							mPacketRead.setmParamLen(mPacketRead.getmParam().length);
 							mCallBack.onReceiveData(mMacAddress,
@@ -188,8 +189,7 @@ public class BlueToothClientHandler extends Thread implements
 
 						mLastRcvTime = SystemClock.uptimeMillis();
 
-						mProcessThread.removeFromListByCmdID(mPacketRead
-								.getmCmd());
+						mProcessThread.removeFromListByCmdID(mPacketRead.getmCmd());
 					}
 				}
 			} catch (IOException e) {
@@ -198,10 +198,13 @@ public class BlueToothClientHandler extends Thread implements
 				// connectionLost();
 				mRun = false;
 				break;
-			} catch (Exception e) {
+			}  catch (ArrayIndexOutOfBoundsException e) {
+				Log.e(TAG, "ArrayIndexOutOfBoundsException " + e.toString() );
+				MyLog.writeLog(TAG,"ArrayIndexOutOfBoundsException" + e.toString());
+				continue;
+			}catch (Exception e) {
 				Log.e(TAG, "read data Exception, disconnected", e);
 				MyLog.writeLog(TAG,"read data Exception, disconnected" + e.toString());
-
 				mRun = false;
 				break;
 			}

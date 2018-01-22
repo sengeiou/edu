@@ -15,7 +15,7 @@ public class BehaviourSaveUpdateRequest extends BaseRequest {
     List<String> contentIds;
     String remindFirst;
     String remindSecond;
-    String status;
+    String type;
 
     public String getType() {
         return type;
@@ -24,17 +24,6 @@ public class BehaviourSaveUpdateRequest extends BaseRequest {
     public void setType(String type) {
         this.type = type;
     }
-
-    String type;
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-
 
     public String getRemindFirst() {
         return remindFirst;

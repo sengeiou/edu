@@ -17,6 +17,7 @@ import com.ubtechinc.sqlite.UBXDataBaseHelper;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -58,6 +59,7 @@ public class ActionPlayer implements BlueToothInteracter {
 
     private Date mLastPlayTime = null;
     private long time=0;
+    private List<Map<String, Object>> mDatas = new ArrayList<>();
     private boolean isCycleLive=false;
     //private boolean syncCommand=false;
     private Handler mHandler = new Handler() {
@@ -437,6 +439,8 @@ public class ActionPlayer implements BlueToothInteracter {
         }
     }
 
+
+
     private void continueCycle() {
         try {
             synchronized (mCyclePlaylock) {
@@ -557,11 +561,13 @@ public class ActionPlayer implements BlueToothInteracter {
         }else if(cmd==ConstValue.DV_TAP_HEAD){
             UbtLog.d(TAG,"DV_TAP_HEAD");
             //解决拍头循环播放还进入下一首的问题，直接停止
+            clearPlayingInfoList();
             if (mCurrentPlayType == Play_type.cycle_action){
                     doStopPlay();
                     StopCycleThread(true);
                     mIsCycleContinuePlay = false;
                     notePlayFinish();
+                    //IDIOT
                 }
         }else  if (cmd == ConstValue.DV_ACTION_FINISH)// 动作播放完毕
         {
@@ -626,7 +632,8 @@ public class ActionPlayer implements BlueToothInteracter {
             if(mSend_Stop_playType!=mCurrentPlayType&&time!=0){
                 UbtLog.d(TAG,"IS DIFFERENT ");
                 UbtLog.d(TAG,"RECEIVE THE ERROR STOP,DISTOR          " +(System.currentTimeMillis()-time));
-                continueCycle();
+               // continueCycle();
+                clearSinglePlayStatus();
                 return;
             }
              recoveryPlayer(cmd);
@@ -647,7 +654,6 @@ public class ActionPlayer implements BlueToothInteracter {
     public void onConnectState(boolean bsucceed, String mac) {
         // TODO Auto-generated method stub
         UbtLog.d(TAG, "---onConnectState");
-        //网络断开,CLEAR LIST
 
 
     }
@@ -786,6 +792,22 @@ public class ActionPlayer implements BlueToothInteracter {
             UbtLog.d(TAG,"DV_STOPPLAY := " + cmd + "  mCurrentPlayType = " + mCurrentPlayType );
             notePlayFinish();
         }
+    }
+    private void clearPlayingInfoList(){
+        MyActionsHelper.mCurrentSeletedNameList.clear();
+        MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+        for (Map<String, Object> item : mDatas) {
+            item.put(MyActionsHelper.map_val_action_is_playing, false);
+            item.put(MyActionsHelper.map_val_action_selected, false);
+        }
+    }
+    private void clearSinglePlayStatus(){
+        for (Map<String, Object> item : mDatas) {
+            item.put(MyActionsHelper.map_val_action_is_playing, false);
+        }
+    }
+    public void setPlayContent(List<Map<String,Object>> nameList){
+        mDatas=nameList;
     }
 
 }

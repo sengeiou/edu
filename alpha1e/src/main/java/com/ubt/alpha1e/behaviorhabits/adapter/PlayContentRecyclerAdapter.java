@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.behaviorhabits.fragment.PlayContentSelectFragment;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 
 import java.util.ArrayList;
@@ -55,13 +54,16 @@ public class PlayContentRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
         myHolder.tvPlayContent.setText(playContentInfo.contentName);
 
-        myHolder.ivSelect.setOnClickListener(new View.OnClickListener() {
+        myHolder.rlPlayContentItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message msg = new Message();
-                msg.what = PlayContentSelectFragment.CLICK_SELECT;
-                msg.arg1 = position;
-                mHandler.sendMessage(msg);
+                //切换开关
+                if("1".equals(mDatas.get(position).isSelect)){
+                    mDatas.get(position).isSelect = "0";
+                }else {
+                    mDatas.get(position).isSelect = "1";
+                }
+                notifyItemChanged(position);
             }
         });
     }

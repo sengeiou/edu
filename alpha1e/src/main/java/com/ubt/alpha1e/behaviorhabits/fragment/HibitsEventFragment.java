@@ -105,7 +105,6 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     protected Dialog mCoonLoadingDia;
     private HibitsEventPlayDialog mHibitsEventPlayDialog = null;
     private HabitsHelper mHelper = null;
-    private boolean hasShowPlayDialog = false;
     private boolean needRefreshPassword = true;
 
     private Handler mHandler = new Handler() {
@@ -244,7 +243,6 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     });
         }
 
-        hasShowPlayDialog = true;
         mHibitsEventPlayDialog.show();
     }
 
@@ -303,7 +301,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
     @Subscribe
     public void onEventHibits(HibitsEvent event) {
-        if(event.getEvent() == HibitsEvent.Event.READ_EVENT_PLAY_STATUS && !hasShowPlayDialog){
+        if(event.getEvent() == HibitsEvent.Event.READ_EVENT_PLAY_STATUS && mHibitsEventPlayDialog == null){
             UbtLog.d(TAG,"EventPlayStatus = " + event.getEventPlayStatus());
 
             EventPlayStatus eventPlayStatus = event.getEventPlayStatus();

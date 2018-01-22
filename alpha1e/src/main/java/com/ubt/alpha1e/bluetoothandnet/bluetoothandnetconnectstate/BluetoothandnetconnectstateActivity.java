@@ -40,6 +40,7 @@ import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.BluetoothStateHelper;
 import com.ubt.alpha1e.ui.main.MainUiBtHelper;
+import com.ubt.alpha1e.utils.AviodTwoClicksUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.yanzhenjie.permission.Permission;
 
@@ -387,6 +388,9 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 BluetoothandnetconnectstateActivity.this.finish();
                 break;
             case R.id.ig_state1_get_bluetooth_list:
+                if(AviodTwoClicksUtils.isFastClick()){
+                    return;
+                }
                 if(!ig_state1_get_bluetooth_list.getText().toString().equals("连接")){
                     UbtLog.d(TAG,"点击断开连接1");
                     disconnectBluetoothDialog();
@@ -434,13 +438,22 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
                 break;
             case R.id.ig_state2_get_bluetooth_list:
+                if(AviodTwoClicksUtils.isFastClick()){
+                    return;
+                }
                 searchNet(false);
                 break;
             case R.id.ig_state1_goto_connect_net:
+                if(AviodTwoClicksUtils.isFastClick()){
+                    return;
+                }
                 searchNet(true);
                 break;
             case R.id.ig_state2_goto_connect_net:
                 UbtLog.d(TAG,"点击断开连接2");
+                if(AviodTwoClicksUtils.isFastClick()){
+                    return;
+                }
                 disconnectBluetoothDialog();
 //                BluetoothStateHelper.getInstance(getContext()).doCancelCoon();
 //                bluetoothDisconnect();

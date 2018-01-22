@@ -7,6 +7,7 @@ import android.util.Base64;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.CheckIsBindRequest;
@@ -141,13 +142,13 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         if(type==Constant.BUDDLE_LOW_BATTERY_TEXT){
             Random random = new Random();
             UbtLog.i(TAG, "LOW_POWER_LESS_TWENTY:   ");
-            String[] arrayText = mView.getContext().getResources().getStringArray(R.array.mainUi_buddle_lowpower);
+            String[] arrayText = AppManager.getInstance().currentActivity().getResources().getStringArray(R.array.mainUi_buddle_lowpower);
             int select = random.nextInt(arrayText.length);
              text = arrayText[select];
         }else if(type==Constant.BUDDLE_RANDOM_TEXT){
             Random random = new Random();
             // UbtLog.i(TAG, "randomBuddleText :   " + buddleTextTimeout + "main thread " );
-            String[] arrayText = mView.getContext().getResources().getStringArray(R.array.mainUi_buddle_text);
+            String[] arrayText = AppManager.getInstance().currentActivity().getResources().getStringArray(R.array.mainUi_buddle_text);
             int select = random.nextInt(arrayText.length);
             text = arrayText[select];
         }else if(type==Constant.BUDDLE_INIT_TEXT){
@@ -171,7 +172,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             if(mCmd<0){
                 mCmd=255+mCmd;
             }
-            UbtLog.d(TAG,"CMD IS  "+mCmd);
+//            UbtLog.d(TAG,"CMD IS  "+mCmd);
             if(mCmd==ConstValue.DV_TAP_HEAD) {
                 //looperThread.send(createMessage(ROBOT_HIT_HEAD));
             }else if(mCmd==ConstValue.DV_6D_GESTURE){
@@ -302,7 +303,11 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         if(TextUtils.isEmpty(userId)||!userId.equals(SPUtils.getInstance().getString(Constant.SP_USER_ID))){
             if(!userId.equals(SPUtils.getInstance().getString(Constant.SP_USER_ID))){
                // UnBindXGServer();
-                UnBindXGServer("20002",userId);
+                if(!userId.equals("")) {
+                    UnBindXGServer("20002", userId);
+                }else{
+                    UbtLog.d(TAG,"USERID HASNOT CONTENT");
+                }
             }
             String Url = HttpEntity.getXGAppId + "?appName=ALPHA1E";
             UbtLog.d("XGREquest", "url===" + Url);
@@ -359,7 +364,9 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         request.setCreateTime(xgDeviceMode.getCreateTime());
         request.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
         request.setToken(XGUBTManager.getInstance().getDeviceToken());
+        UbtLog.d("XGREquest","TOKEN:  "+XGUBTManager.getInstance().getDeviceToken());
         UbtLog.d("XGREquest", "url===" + HttpEntity.bindXGServer);
+        UbtLog.d("XGREquest","BIND REQUEST "+GsonImpl.get().toJson(request));
         OkHttpUtils.postString()
                 .addHeader("authorization", SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN))
                 .url(HttpEntity.bindXGServer)
@@ -519,5 +526,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         UbtLog.d(TAG," notePlayChargingError");
 
     }
+
 
 }

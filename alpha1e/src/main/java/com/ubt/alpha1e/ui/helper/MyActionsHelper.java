@@ -2705,4 +2705,8 @@ public class MyActionsHelper extends BaseHelper implements
         return isLooping;
     }
 
+    public void setPlayContent(List<Map<String,Object>> nameList){
+        mPlayer.setPlayContent(nameList);
+    }
+
 }

@@ -838,9 +838,9 @@
     <!--MAIN ui-->
 
     <string name="ui_main_right_icon">遥控器</string>
-    <string name="ui_main_right_icon2">动作</string>
-    <string name="ui_main_right_icon3">编程</string>
-    <string name="ui_main_right_icon4">社区</string>
+    <string name="ui_main_right_icon2">编动作</string>
+    <string name="ui_main_right_icon3">写程序</string>
+    <string name="ui_main_right_icon4">逛社区</string>
     <string name="ui_main_course_center">课程中心</string>
     <string name="control_center">关闭</string>
     <string name="lowpower_indicator">电量低于</string>
@@ -1063,7 +1063,7 @@
     <string name="ui_setting_principle_head_tip">我的头顶有触摸传感器，当你摸我的头顶，我会停止正在做的动作，乖乖地恢复原位。</string>
     <string name="ui_setting_principle_obstacle_tip">胸前的凹槽，可以接入各种传感器，让我变的更加智能。</string>
     <string name="ui_setting_principle_skip_tip">此关卡尚未完成，确定跳过此关卡？</string>
-    <string name="ui_setting_principle_end">结束</string>
+    <string name="ui_setting_principle_end">完成</string>
     <string name="ui_setting_principle_learn_finish">原理课程完成啦！</string>
     <string name="ui_setting_principle_learn_next">下一课程 动作编程</string>
     <string name="ui_setting_principle_tap_head">拍头退出课程</string>

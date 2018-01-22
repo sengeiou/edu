@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
 
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.event.RobotEvent;
@@ -14,6 +15,8 @@ import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2017/11/20.
@@ -47,9 +50,18 @@ public class MainUiBtHelper extends BaseHelper {
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
+        JSONObject mData=new JSONObject();
+        try {
+            mData.put("mac", mac);
+            mData.put("cmd", cmd);
+            mData.put("param", Base64.encodeToString(param,Base64.DEFAULT));
+            mData.put("len", len);
+            EventBus.getDefault().post(new MainActivity.MessageEvent(mData.toString()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         try {
             if(cmd == ConstValue.DV_READ_NETWORK_STATUS){
-
                 String networkInfoJson = BluetoothParamUtil.bytesToString(param);
                 UbtLog.d(TAG,"cmd = " + cmd + "    networkInfoJson = " + networkInfoJson);
                 NetworkInfo networkInfo = GsonImpl.get().toObject(networkInfoJson,NetworkInfo.class);
