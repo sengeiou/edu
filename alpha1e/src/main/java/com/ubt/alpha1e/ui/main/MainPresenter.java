@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import android.util.Base64;
 
 import com.google.gson.reflect.TypeToken;
+import com.squareup.haha.perflib.Main;
+import com.tencent.android.tpush.XGPushRegisterResult;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
@@ -31,6 +33,8 @@ import com.ubtechinc.sqlite.UBXDataBaseHelper;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,6 +65,16 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     private int powerThreshold[] = {5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
     private byte mChargeValue=0;
     private boolean IS_CHARGING=false;
+    XGDeviceMode xgDeviceMode;
+
+    public void registerEventBus() {
+        EventBus.getDefault().register(MainPresenter.this);
+    }
+
+    public void unregisterEventBus() {
+        EventBus.getDefault().unregister(MainPresenter.this);
+    }
+
     @Override
     public  int[] requestCartoonAction(int value ) {
             String actionName="";
@@ -249,7 +263,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     }
 
     private int getPowerCapacity(byte mParam) {
-        //UbtLog.d(TAG, "POWER VALUE " + mParam);
+      //  UbtLog.d(TAG, "POWER VALUE " + mParam);
         int power_index = 0;
         if (mParam < powerThreshold[powerThreshold.length / 2]) {
             for (int j = 0; j < powerThreshold.length / 2; j++) {
@@ -340,12 +354,13 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                     try {
                         JSONArray jsonArray = new JSONArray(response);
                         JSONObject object=jsonArray.getJSONObject(0);
-                        XGDeviceMode xgDeviceMode =GsonImpl.get().toObject(object.toString(),XGDeviceMode.class);
+                         xgDeviceMode =GsonImpl.get().toObject(object.toString(),XGDeviceMode.class);
                         UbtLog.d("XGREquest", "xgDeviceMode===" + xgDeviceMode.toString());
                         if (xgDeviceMode.getDevice().equals("a")) {
                             SPUtils.getInstance().put(Constant.SP_XG_ACCESSID, xgDeviceMode.getAccessId());
                             SPUtils.getInstance().put(Constant.SP_XG_ACCESSKEY, xgDeviceMode.getAccessKey());
-                            BindXGServer(xgDeviceMode);
+                            AlphaApplication.initXG();
+//
 
                         }
                     } catch (JSONException e) {
@@ -371,7 +386,12 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         }
     }
 
-    public void BindXGServer(XGDeviceMode xgDeviceMode) {
+    private void BindXGServer(XGDeviceMode xgDeviceMode) {
+        String userId = SPUtils.getInstance().getString(Constant.SP_XG_USERID);
+        if(!TextUtils.isEmpty(userId)&&userId.equals(SPUtils.getInstance().getString(Constant.SP_USER_ID))){
+            UbtLog.d(TAG,"BindXGServer failed  userId="+ userId);
+            return;
+        }
         XGGetAccessIdRequest request = new XGGetAccessIdRequest();
         request.setAppId(xgDeviceMode.getAppId());
         request.setCreateTime(xgDeviceMode.getCreateTime());
@@ -396,7 +416,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             public void onResponse(String response, int id) {
                 UbtLog.d("XGREquest", "response===" + response);
                 SPUtils.getInstance().put(Constant.SP_XG_USERID,SPUtils.getInstance().getString(Constant.SP_USER_ID));
-                AlphaApplication.initXG();
+
             }
         });
     }
@@ -446,7 +466,8 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     @Override
     public void exitGlocalControlCenter() {
-        CommonCtrlView.exitGlocalControlCenter();
+        //CommonCtrlView.exitGlocalControlCenter();
+        CommonCtrlView.closeCommonCtrlView();
     }
 
     @Override
@@ -540,5 +561,14 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     }
 
-
+    @Subscribe
+    public void onXGRegisterSyncEvent(XGPushRegisterResult xgPushRegisterResult) {
+        if (!TextUtils.isEmpty(xgPushRegisterResult.getToken())) {
+            if(xgDeviceMode!=null) {
+                BindXGServer(xgDeviceMode);
+            }else {
+                UbtLog.d(TAG,"xgDeviceMode==null");
+            }
+        }
+    }
 }

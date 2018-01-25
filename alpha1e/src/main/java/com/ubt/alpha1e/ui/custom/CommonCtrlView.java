@@ -78,7 +78,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private RelativeLayout guideLayout;
     private WindowManager.LayoutParams wmParams;
     //创建浮动窗口设置布局参数的对象
-    private WindowManager mWindowManager;
+    private static WindowManager mWindowManager;
     private int paddingBottomHeight ; //定义浮动按钮距离页面底部的高度
 
     private ImageView ivPop;
@@ -112,7 +112,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private ActionPlayer.Play_state currentState = ActionPlayer.Play_state.action_finish;
     private NewActionPlayer.PlayerState currentNewPlayState = NewActionPlayer.PlayerState.STOPING;
     private static final int CLOSE_VIEW = 1;
-    private boolean float_view_enable=true;
+    private static boolean float_view_enable=true;
     private boolean enable_sensor=false;
     private AnimationDrawable radiologicalWaveAnim = null;
     private MainPresenter mMainPresenter;
@@ -1111,13 +1111,14 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 //       if(float_view_enable) {
 //           mWindowManager.removeView(mFloatLayout);
 //       }
-       if (lay_ctrl_more != null)
+       if (lay_ctrl_more != null) {
+           UbtLog.d(TAG,"HIDDEN GLOBAL BUTTON");
            lay_ctrl_more.setVisibility(View.GONE);
+       }
 //       if (commonCtrlView != null) {
 //           commonCtrlView.onDestroy();
 //           commonCtrlView = null;
 //       }
-
    }
    private void disablePlayStopButton(){
        txt_action_name_m.setText("暂无播放内容");

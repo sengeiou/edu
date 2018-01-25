@@ -2,6 +2,7 @@ package com.ubt.alpha1e.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Handler;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 
 /**
  * Created by liuqiang on 10/23/15.
@@ -25,7 +27,8 @@ public class LowBatteryDialog {
     int power=0;
     private boolean showTitle = false;
     private boolean showMsg = false;
-
+    protected Handler mHandler = new Handler();
+    private int DIALOG_SHOW_TIMING=2000;//EQUAL SHORT TOAST 2000, LONG TOAST 3500
 
     public LowBatteryDialog(Context context) {
         this.context = context;
@@ -34,8 +37,8 @@ public class LowBatteryDialog {
     }
 
     public LowBatteryDialog setBatteryThresHold(int value){
-           power=value;
-           return this ;
+        power=value;
+        return this ;
     }
 
     public LowBatteryDialog builder() {
@@ -51,25 +54,31 @@ public class LowBatteryDialog {
         // 定义Dialog布局和参数
         dialog = new Dialog(context, R.style.AlertDialogStyle);
         dialog.setContentView(view);
-
-        // 调整dialog背景大小
-//        lLayout_bg.setLayoutParams(new FrameLayout.LayoutParams((int) (display
-//                .getWidth() * 0.75), LinearLayout.LayoutParams.WRAP_CONTENT));
-
+        //3秒后自动消失
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                     cancel();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        },DIALOG_SHOW_TIMING);
         return this;
     }
-
-
 
 
     public LowBatteryDialog setCancelable(boolean cancel) {
         dialog.setCancelable(cancel);
         return this;
     }
-
-
-
-
+    public boolean isShowing(){
+        return dialog.isShowing();
+    }
+   public void cancel(){
+        dialog.cancel();
+   }
     public void show() {
         dialog.show();
     }

@@ -263,7 +263,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private static final int ROBOT_GOTO_BIND = 20;
     AnimationDrawable  mActionIndicator=null;
     long mClickTime=0;
-    int CLICK_THRESHOLD_DUPLICATE=1000;
+    int CLICK_THRESHOLD_DUPLICATE=800;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -285,6 +285,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mActionIndicator=(AnimationDrawable)actionIndicator.getBackground();
         mActionIndicator.setOneShot(false);
         mActionIndicator.setVisible(true,true);
+        mPresenter.registerEventBus();
     }
 
     @Override
@@ -342,6 +343,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         stopchargeAsynchronousTask();
         SendClientIdService.doStopSelf();
         AutoScanConnectService.doStopSelf();
+        mPresenter.unregisterEventBus();
     }
 
     private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
@@ -442,6 +444,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_community:
                 //BehaviorHabitsActivity.LaunchActivity(this);
+                AlphaApplication.getBaseActivity().onNoteLowPower(30);
                 ToastUtils.showShort("程序猿正在施工中！！！");
                 break;
             case R.id.cartoon_head:
@@ -1476,7 +1479,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
   private Boolean removeDuplicateClickEvent(){
       UbtLog.d(TAG,"INTERVAL IS "+(System.currentTimeMillis()-mClickTime));
-      if(System.currentTimeMillis()-mClickTime<1000){
+      if(System.currentTimeMillis()-mClickTime<CLICK_THRESHOLD_DUPLICATE){
           mClickTime=System.currentTimeMillis();
           return true;
       }else {
