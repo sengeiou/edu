@@ -149,7 +149,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
             }
         });
 
-        ivPrivacy.setOnClickListener(new View.OnClickListener() {
+   /*     ivPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 UbtLog.d(TAG, "ivPrivacy onClick");
@@ -161,7 +161,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
                     ivPrivacy.setSelected(select);
                 }
             }
-        });
+        });*/
     }
 
     @Override
