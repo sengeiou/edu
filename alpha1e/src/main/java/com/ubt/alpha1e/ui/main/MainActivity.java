@@ -691,7 +691,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if (System.currentTimeMillis() - mCurrentTouchTime < noOperationTimeout) {
             hiddenBuddleTextView();
         }
-        mPresenter.exitGlocalControlCenter();
         return super.onTouchEvent(event);
     }
 
