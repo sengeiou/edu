@@ -63,7 +63,7 @@
         android:required="true"/>
 
     <application
-        android:name=".AlphaApplication"
+        android:name="com.ubt.alpha1e.AlphaApplication"
         android:allowBackup="true"
         android:debuggable="true"
         android:exported="true"
@@ -141,7 +141,7 @@
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreenuser"/>
         <activity
-            android:name=".ui.StartInitSkinActivity"
+            android:name="com.ubt.alpha1e.ui.StartInitSkinActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleThemeFullScreen">
@@ -163,11 +163,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.Introduction.IntroductionActivity"
+            android:name="com.ubt.alpha1e.ui.Introduction.IntroductionActivity"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
-            android:name=".ui.StartActivityNew"
+            android:name="com.ubt.alpha1e.ui.StartActivityNew"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"/>
