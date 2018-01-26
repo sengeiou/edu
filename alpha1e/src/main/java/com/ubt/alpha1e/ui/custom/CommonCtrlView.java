@@ -199,21 +199,19 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         //设置图片格式，效果为背景透明
         wmParams.format = PixelFormat.RGBA_8888;
         //设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
-        wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
         //调整悬浮窗显示的停靠位置为左侧置顶
         wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
 //        wmParams.x = 16;
         wmParams.y = paddingBottomHeight;
 
-        //设置悬浮窗口长宽数据
-        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        //获取浮动窗口视图所在布局
 
         mFloatLayout = (RelativeLayout) inflater.inflate(R.layout.view_play_page, null);
 
+        //获取浮动窗口视图所在布局
         initView(mFloatLayout);
         //virtualKeyboardDynamicRefresh.assistActivity(mPopWindowLayout.findViewById(R.id.lay_ctrl_more),commonCtrlView);
         mFloatLayout.setOnTouchListener(new View.OnTouchListener() {

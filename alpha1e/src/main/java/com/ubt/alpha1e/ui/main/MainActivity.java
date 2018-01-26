@@ -445,7 +445,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_community:
                 //BehaviorHabitsActivity.LaunchActivity(this);
-                AlphaApplication.getBaseActivity().onNoteLowPower(30);
                 ToastUtils.showShort("程序猿正在施工中！！！");
                 break;
             case R.id.cartoon_head:

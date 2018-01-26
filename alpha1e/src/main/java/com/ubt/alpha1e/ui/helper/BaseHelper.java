@@ -360,7 +360,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
         }else if(cmd==ConstValue.DV_SENSOR_CONTROL){
              UbtLog.d(TAG,"DV_SENSOR_CONTROL Status"+param[0]);
              if(param[0]==0) {
-                 mSensorState = true;
+                 mSensorState =false;
              }else {
                  //CLOSE,SHOULD BE FALSE
                  mSensorState=true;
