@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -32,6 +33,7 @@ import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.RemoteHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ConstValue;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -492,6 +494,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startOrStopRun((byte)0x06);
                 handler.sendEmptyMessage(EXEC_STOP_ACTION);
                 RemoteActivity.this.finish();
             }
@@ -520,7 +523,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         if(handler.hasMessages(EXEC_STOP_ACTION)){
             handler.removeMessages(EXEC_STOP_ACTION);
         }
-        startOrStopRun((byte)0x06);
+//        startOrStopRun((byte)0x06);
         super.onDestroy();
     }
     @Override
@@ -656,5 +659,14 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
     @Override
     public void noteWaitWebProcressShutDown() {
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startOrStopRun((byte)0x06);
+            handler.sendEmptyMessage(EXEC_STOP_ACTION);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
