@@ -1,5 +1,7 @@
 package com.ubt.alpha1e.utils;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -25,7 +27,11 @@ public class StringUtils {
      * @return
      */
     public static String getAgeStringBytype(String type) {
+
         String result = "";
+        if(TextUtils.isEmpty(type)){
+            return result;
+        }
         if (type.equals("5")) {
             result = "5岁及以下";
         } else if (type.equals("6")) {
@@ -51,6 +57,7 @@ public class StringUtils {
      */
     public static String getAgeByType(String str) {
         String result = "";
+
         if (str.equals("5岁及以下")) {
             result = "5";
         } else if (str.equals("6岁")) {
@@ -118,6 +125,9 @@ public class StringUtils {
      */
     public static String getGradeStringBytype(String type) {
         String result = "";
+        if(TextUtils.isEmpty(type)){
+            return result;
+        }
         if (type.equals("0")) {
             result = "幼儿园大班";
         } else if (type.equals("1")) {

@@ -257,6 +257,13 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(requestCountDown != null){
+            requestCountDown.cancel();
+        }
+    }
 
     /**
      * 类名
