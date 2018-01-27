@@ -41,6 +41,7 @@ import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.NameLengthFilter;
+import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -352,8 +353,8 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     @Override
     public void updateLoopData(UserAllModel userAllModel) {
         if (null != userAllModel) {
-            ageList = userAllModel.getAgeList();
-            gradeList = userAllModel.getGradeList();
+            ageList = StringUtils.getAgeList(userAllModel.getAgeList());
+            gradeList = StringUtils.getGradeList(userAllModel.getGradeList());
         } else {
 
         }
