@@ -260,15 +260,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public void init(Context context) {
         View.inflate(context, getLayoutId(), this);
         initUI();
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
 
-                ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x03);
-                doReset();
-
-            }
-        }, 1000);
     }
 
     public void setUp(BaseHelper baseHelper) {

@@ -11,7 +11,7 @@ import java.io.Serializable;
  * version
  */
 
-public class UserModel implements Serializable{
+public class UserModel implements Serializable {
     private String userId;
     private String nickName;
     private String sex;
@@ -19,7 +19,6 @@ public class UserModel implements Serializable{
     private String age;
     public String headPic;
     private String phone;
-
 
 
     public String getUserId() {
@@ -76,6 +75,55 @@ public class UserModel implements Serializable{
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    /**
+     * string转换为type
+     *
+     * @return
+     */
+    public String getGradeByType() {
+        String result = "";
+        if (grade.equals("幼儿园大班")) {
+            result = "0";
+        } else if (grade.equals("小学一年级")) {
+            result = "1";
+        } else if (grade.equals("小学二年级")) {
+            result = "2";
+        } else if (grade.equals("小学三年级")) {
+            result = "3";
+        } else if (grade.equals("小学四年级")) {
+            result = "4";
+        } else if (grade.equals("小学五年级以上")) {
+            result = "5";
+        }
+
+        return result;
+    }
+
+
+    /**
+     * string转换为type
+     *
+     * @return
+     */
+    public String getAgeByType() {
+        String result = "";
+        if (age.equals("5岁及以下")) {
+            result = "5";
+        } else if (age.equals("6岁")) {
+            result = "6";
+        } else if (age.equals("7岁")) {
+            result = "7";
+        } else if (age.equals("8岁")) {
+            result = "8";
+        } else if (age.equals("9岁")) {
+            result = "9";
+        } else if (age.equals("10岁及以上")) {
+            result = "10";
+        }
+
+        return result;
     }
 
     @Override

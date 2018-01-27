@@ -165,7 +165,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestCountDown.cancel();
+//                requestCountDown.cancel();
                 LoadingDialog.show(LoginAuthActivity.this);
                 String params = "{"
                         + "\"token\":" + "\"" + token + "\""
@@ -257,6 +257,13 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(requestCountDown != null){
+            requestCountDown.cancel();
+        }
+    }
 
     /**
      * 类名

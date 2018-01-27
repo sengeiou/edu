@@ -173,7 +173,7 @@ public class ActionsEditHelper extends BaseHelper implements
      * @param status 01表示进入 ，00表示离开
      */
     public void doEnterCourse(byte status) {
-        UbtLog.d("ActionsEditHelper", "doReadInfraredSensor status:" + status);
+        UbtLog.d("ActionsEditHelper", "doEnterActionCourse status:" + status);
         byte[] params = new byte[1];
         params[0] = status;
         doSendComm(ConstValue.DV_ENTER_COURSE, params);

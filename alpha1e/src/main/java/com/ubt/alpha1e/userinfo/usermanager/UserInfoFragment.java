@@ -40,6 +40,7 @@ import com.ubt.alpha1e.userinfo.useredit.UserEditContract;
 import com.ubt.alpha1e.userinfo.useredit.UserEditPresenter;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
 import com.ubt.alpha1e.utils.NameLengthFilter;
+import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.io.File;
@@ -52,8 +53,6 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * MVPPlugin
@@ -393,10 +392,10 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         LoadingDialog.dismiss(getActivity());
         if (null != userAllModel) {
             if (null != userAllModel.getAgeList() && userAllModel.getAgeList().size() > 0) {
-                ageList = userAllModel.getAgeList();
+                ageList = StringUtils.getAgeList(userAllModel.getAgeList());
             }
             if (null != userAllModel.getGradeList() && userAllModel.getGradeList().size() > 0) {
-                gradeList = userAllModel.getGradeList();
+                gradeList = StringUtils.getGradeList(userAllModel.getGradeList());
             }
 //            String headPic = userAllModel.getHeadPic();
 //            UbtLog.d(TAG, "headpic===" + headPic);
