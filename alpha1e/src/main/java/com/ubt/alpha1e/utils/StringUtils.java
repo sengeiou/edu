@@ -44,6 +44,8 @@ public class StringUtils {
             result = "9岁";
         } else if (type.equals("10")) {
             result = "10岁及以上";
+        }else {
+            result=type;
         }
 
         return result;
@@ -140,6 +142,8 @@ public class StringUtils {
             result = "小学四年级";
         } else if (type.equals("5")) {
             result = "小学五年级以上";
+        }else {
+            result=type;
         }
 
         return result;
