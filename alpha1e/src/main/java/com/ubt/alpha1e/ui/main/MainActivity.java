@@ -421,6 +421,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     mLaunch.setClass(this, RemoteSelActivity.class);
                     //startActivity(new Intent(this, ActionTestActivity.class));
                     startActivity(mLaunch);
+
                     }
                 } else {
                         showBluetoothConnectDialog();

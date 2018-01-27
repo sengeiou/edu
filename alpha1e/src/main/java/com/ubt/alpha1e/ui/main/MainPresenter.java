@@ -3,6 +3,7 @@ package com.ubt.alpha1e.ui.main;
 import android.content.res.TypedArray;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.squareup.haha.perflib.Main;
@@ -23,6 +24,7 @@ import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
+import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -58,6 +60,9 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     private int ROBOT_UNCHARGE_STATUS=0x0;
     private int ROBOT_CHARGING_STATUS=0x01;
     private int ROBOT_CHARGING_ENOUGH_STATUS=0x03;
+
+
+
     private final int LOW_BATTERY_TWENTY_THRESHOLD=20;
     private final int LOW_BATTERY_FIVE_THRESHOLD=5;
     private  boolean ENTER_LOW_BATTERY_FIVE=false;
@@ -479,6 +484,13 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     public void setView(MainContract.View view) {
         mView=view;
 
+    }
+
+    @Override
+    public void resetGlobalActionPlayer() {
+        MyActionsHelper.setLooping(false);
+        requestGlobalButtonControl(false);
+        ActionPlayer.getInstance().clearPlayingInfoList();
     }
 
     /**

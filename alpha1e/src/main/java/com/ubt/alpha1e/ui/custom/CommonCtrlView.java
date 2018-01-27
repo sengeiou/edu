@@ -283,11 +283,10 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         btn_sensorControl.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                if(mSensorButtonStatus) {
+                if(!mHelper.mSensorState) {
                     //打开传感器
                     initDialogView();
                    // showDialog();
-                    mSensorButtonStatus=false;
                 }else {
                     //关闭传感器
                     byte[] papram=new byte[2];
@@ -295,7 +294,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                     papram[1] = 0x0;
                     mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
                     disableSensorButton();
-                   mSensorButtonStatus=true;
                 }
             }
         });
@@ -323,6 +321,9 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 disablePlayStopButton();
                 mBaseActivity.saveCurrentPlayingActionName("");
                 gifImageView.setVisibility(View.INVISIBLE);
+                mHelper.setLooping(false);
+                mMainPresenter.requestGlobalButtonControl(false);
+                mHelper.clearPlayingInfo();
                 //Toast.makeText(mBaseActivity,"机器人已经服务",Toast.LENGTH_SHORT).show();
                // btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
                // gifImageView.setVisibility(View.INVISIBLE);
@@ -442,7 +443,9 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         }
         //摔倒传感器状态
        if(mHelper.mSensorState){
-             disableSensorButton();
+            enableSensorButton();
+       }else {
+           disableSensorButton();
        }
     }
 

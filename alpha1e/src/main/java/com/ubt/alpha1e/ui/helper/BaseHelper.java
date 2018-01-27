@@ -208,10 +208,14 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
         doSendComm(ConstValue.DV_READSTATUS, params);
         //读取机器人加速度传感器是否开启（摔倒开启，关闭）状态
         byte[] sensorParams = new byte[2];
-        sensorParams[0] = 1;
-        sensorParams[1] = 1;
+        sensorParams[0] = 0;
+        sensorParams[1] = 0;
         doSendComm(ConstValue.DV_SENSOR_CONTROL, sensorParams);
         //定时读电量(10S读一次)
+        byte[] param = new byte[1];
+        param[0] = 4;
+        doSendComm(ConstValue.DV_READ_BATTERY, param);
+
         if (read_battery_timer == null) {
             read_battery_timer = new Timer();
             read_battery_timer.schedule(new TimerTask() {
@@ -220,7 +224,6 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                     if (isLostCoon()) {
                         return;
                     }
-
                     byte[] param = new byte[1];
                     param[0] = 4;
                     doSendComm(ConstValue.DV_READ_BATTERY, param);
@@ -360,9 +363,10 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
         }else if(cmd==ConstValue.DV_SENSOR_CONTROL){
              UbtLog.d(TAG,"DV_SENSOR_CONTROL Status"+param[0]);
              if(param[0]==0) {
+                 //SENSOR DISABLE
                  mSensorState =false;
              }else {
-                 //CLOSE,SHOULD BE FALSE
+                //SENSOR ENABLE
                  mSensorState=true;
              }
         }
