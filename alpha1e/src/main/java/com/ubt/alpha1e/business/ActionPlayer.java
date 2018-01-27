@@ -2,9 +2,13 @@ package com.ubt.alpha1e.business;
 
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Toast;
 
+import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionInfo;
+import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.MyLog;
@@ -513,7 +517,6 @@ public class ActionPlayer implements BlueToothInteracter {
 
         byte[] actions = BluetoothParamUtil.stringToBytes(info);
         mBtManager.sendCommand(mBtMac, ConstValue.DV_PLAYACTION, actions,actions.length, false);
-
     }
 
     // ------------------------------------------------------------------------
@@ -563,14 +566,7 @@ public class ActionPlayer implements BlueToothInteracter {
         }else if(cmd==ConstValue.DV_TAP_HEAD){
             UbtLog.d(TAG,"DV_TAP_HEAD");
             //解决拍头循环播放还进入下一首的问题，直接停止
-            clearPlayingInfoList();
-            if (mCurrentPlayType == Play_type.cycle_action){
-                    doStopPlay();
-                    StopCycleThread(true);
-                    mIsCycleContinuePlay = false;
-                    notePlayFinish();
-                    //IDIOT
-                }
+            stopPlayingAndClearPlayingList();
         }else  if (cmd == ConstValue.DV_ACTION_FINISH)// 动作播放完毕
         {
             UbtLog.d(TAG,"DV_ACTION_FINISH");
@@ -630,7 +626,7 @@ public class ActionPlayer implements BlueToothInteracter {
                 }
             }
         }else if(cmd == ConstValue.DV_STOPPLAY){
-            UbtLog.d(TAG,"DV_STOPPLAY :reply stop  time "+(System.currentTimeMillis()-time)+" mCurrentPlayType"+ mCurrentPlayType);
+            UbtLog.d(TAG,"DV_STOPPLAY :reply stop  time "+(System.currentTimeMillis()-time)+" mCurrentPlayType:  "+ mCurrentPlayType+"MyActionsHelper.mCurrentLocalPlayType: "+MyActionsHelper.mCurrentLocalPlayType);
 //            if (mCurrentPlayType == Play_type.cycle_action) {
 //                UbtLog.d(TAG, "DV_STOPPLAY continueCycle");
 //                if (thiz != null) {
@@ -638,7 +634,6 @@ public class ActionPlayer implements BlueToothInteracter {
 //                    UbtLog.d(TAG,"DV_ACTION_FINISH");
 //                }
 //            }
-
             if(mSend_Stop_playType!=mCurrentPlayType&&time!=0){
                 UbtLog.d(TAG,"IS DIFFERENT ");
                 UbtLog.d(TAG,"RECEIVE THE ERROR STOP,DISTOR          " +(System.currentTimeMillis()-time));
@@ -663,20 +658,25 @@ public class ActionPlayer implements BlueToothInteracter {
     @Override
     public void onConnectState(boolean bsucceed, String mac) {
         // TODO Auto-generated method stub
-        UbtLog.d(TAG, "---onConnectState");
-
-
+        try {
+            UbtLog.d(TAG, "---onConnectState");
+            stopPlayingAndClearPlayingList();
+            MyActionsHelper.getInstance(AlphaApplication.getBaseActivity()).resetPlayer();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onDeviceDisConnected(String mac) {
         UbtLog.d(TAG, "---mCyclePlaylock.onDeviceDisConnected");
-        if(mHandler.hasMessages(UI_NOTE_PLAY_CYCLE_STOP)){
+             if(mHandler.hasMessages(UI_NOTE_PLAY_CYCLE_STOP)){
             mHandler.removeMessages(UI_NOTE_PLAY_CYCLE_STOP);
         }
         mIsCycleContinuePlay = false;
         mCurrentPlayType = null;
-
+        doStopPlay();
+        clearPlayingInfoList();
     }
 
 
@@ -820,4 +820,16 @@ public class ActionPlayer implements BlueToothInteracter {
         mDatas=nameList;
     }
 
+    private void stopPlayingAndClearPlayingList(){
+        clearPlayingInfoList();
+        if (mCurrentPlayType == Play_type.cycle_action){
+            doStopPlay();
+            StopCycleThread(true);
+            mIsCycleContinuePlay = false;
+            notePlayFinish();
+        }else if(mCurrentPlayType==Play_type.single_action){
+            doStopPlay();
+            notePlayFinish();
+        }
+    }
 }

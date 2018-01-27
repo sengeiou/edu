@@ -4,9 +4,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.tencent.android.tpush.XGPushRegisterResult;
 import com.tencent.android.tpush.XGPushShowedResult;
 import com.tencent.android.tpush.XGPushTextMessage;
 import com.ubt.alpha1e.base.AppManager;
@@ -70,4 +72,5 @@ public class GlobalMsgService extends Service {
             e.printStackTrace();
         }
     }
+
 }

@@ -253,7 +253,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private static final int ROBOT_GOTO_BIND = 20;
     AnimationDrawable  mActionIndicator=null;
     long mClickTime=0;
-    int CLICK_THRESHOLD_DUPLICATE=1000;
+    int CLICK_THRESHOLD_DUPLICATE=800;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -275,6 +275,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mActionIndicator=(AnimationDrawable)actionIndicator.getBackground();
         mActionIndicator.setOneShot(false);
         mActionIndicator.setVisible(true,true);
+        mPresenter.registerEventBus();
     }
 
     @Override
@@ -332,6 +333,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         stopchargeAsynchronousTask();
         SendClientIdService.doStopSelf();
         AutoScanConnectService.doStopSelf();
+        mPresenter.unregisterEventBus();
     }
 
     private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
@@ -433,6 +435,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_community:
                 //BehaviorHabitsActivity.LaunchActivity(this);
+                AlphaApplication.getBaseActivity().onNoteLowPower(30);
                 ToastUtils.showShort("程序猿正在施工中！！！");
                 break;
             case R.id.cartoon_head:
@@ -572,6 +575,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             if (MainUiBtHelper.getInstance(getContext()).isLostCoon()) {
                 UbtLog.d(TAG, "mainactivity isLostCoon");
                 showGlobalButtonAnmiationEffect(false);
+                stopchargeAsynchronousTask();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -679,7 +683,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if (System.currentTimeMillis() - mCurrentTouchTime < noOperationTimeout) {
             hiddenBuddleTextView();
         }
-        mPresenter.exitGlocalControlCenter();
         return super.onTouchEvent(event);
     }
 
@@ -1170,6 +1173,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        showBatteryUi();
                         if(isCharging) {
                                if(mChargetimer==null||value!=tmp) {
                                    chargeAsynchronousTask(value);
@@ -1200,8 +1204,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
                        cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
                        hiddenCartoonTouchView();
-                       recoveryBatteryUi();
-                       hiddenBattryUi();
+                       recoveryCartoonBodyUi();
+                       hiddenBatteryUi();
                        //showCartoonAction(cartoon_action_sleep);
                    }
                });
@@ -1220,7 +1224,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        }
                        showCartoonAction(cartoon_action_squat);
                        showBuddleText(getString(R.string.buddle_bluetoothConnection));
-                       showBattryUi();
+                      // showBattryUi();
                    }
                });
                break;
@@ -1235,8 +1239,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        //showCartoonAction(cartoon_action_sleep);
                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
                        cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
-                       recoveryBatteryUi();
-                       hiddenBattryUi();
+                       recoveryCartoonBodyUi();
+                       hiddenBatteryUi();
                    }
                });
                break;
@@ -1299,7 +1303,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    @Override
                    public void run() {
                        showCartoonAction(cartoon_action_sleep);
-                       recoveryBatteryUi();
+                       recoveryCartoonBodyUi();
                        showDisconnectIcon();
                        stopchargeAsynchronousTask();
                    }
@@ -1406,19 +1410,19 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
     }
 
-  private void recoveryBatteryUi(){
+  private void recoveryCartoonBodyUi(){
       if(charging!=null) {
           //charging.setBackground(getDrawableRes("charging_normal"));
           //chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
           cartoonBodyTouchBg.setBackground(getDrawableRes("main_robot_background"));
       }
   }
-  private void hiddenBattryUi(){
+  private void hiddenBatteryUi(){
       if(charging!=null) {
           charging.setVisibility(View.INVISIBLE);
       }
   }
- private void showBattryUi(){
+ private void showBatteryUi(){
      if(charging!=null) {
          charging.setVisibility(View.VISIBLE);
      }
@@ -1467,7 +1471,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
   private Boolean removeDuplicateClickEvent(){
       UbtLog.d(TAG,"INTERVAL IS "+(System.currentTimeMillis()-mClickTime));
-      if(System.currentTimeMillis()-mClickTime<1000){
+      if(System.currentTimeMillis()-mClickTime<CLICK_THRESHOLD_DUPLICATE){
           mClickTime=System.currentTimeMillis();
           return true;
       }else {

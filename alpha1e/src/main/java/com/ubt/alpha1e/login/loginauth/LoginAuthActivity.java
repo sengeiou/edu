@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.login.loginauth;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -8,8 +9,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.AlphaApplication;
@@ -52,6 +55,8 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
     TextView tvCountdown;
     @BindView(R.id.btn_confirm)
     Button btnConfirm;
+    @BindView(R.id.rl_layout)
+    RelativeLayout rlLayout;
 
     RequestCountDown requestCountDown;
     private static final long REQUEST_TIME = 61 * 1000;
@@ -202,6 +207,17 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                 });
 
 
+            }
+        });
+
+        rlLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UbtLog.d(TAG, "rlLayout");
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if(imm.isActive() ){
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
             }
         });
 

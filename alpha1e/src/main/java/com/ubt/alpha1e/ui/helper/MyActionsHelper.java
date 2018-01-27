@@ -2697,9 +2697,9 @@ public class MyActionsHelper extends BaseHelper implements
 
     public void setLooping(boolean flag){
         isLooping=flag;
-        if(!flag){
-            mCurrentSeletedNameList.clear();
-        }
+//        if(!flag){
+//            mCurrentSeletedNameList.clear();
+//        }
     }
     public boolean getLoopingFlag(){
         return isLooping;
