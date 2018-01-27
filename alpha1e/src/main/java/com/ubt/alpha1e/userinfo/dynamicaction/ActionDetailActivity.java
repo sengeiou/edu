@@ -206,7 +206,15 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
         } else if (type == 3) {
             mProgressDownload.setVisibility(View.VISIBLE);
             mTvPlay.setVisibility(View.GONE);
-            mProgressDownload.setProgress((int) mDynamicActionModel.getDownloadProgress());
+            if ((int) mDynamicActionModel.getDownloadProgress() == 0) {
+                mTvPlay.setVisibility(View.VISIBLE);
+                mTvPlay.setText("等待中");
+                mTvPlay.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            } else {
+                mTvPlay.setVisibility(View.GONE);
+                mProgressDownload.setProgress((int) mDynamicActionModel.getDownloadProgress());
+            }
+
         }
     }
 
