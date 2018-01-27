@@ -158,6 +158,9 @@ public class ActionPlayer implements BlueToothInteracter {
     }
 
     public static ActionPlayer getInstance() {
+            if (thiz == null){
+                thiz = new ActionPlayer();
+            }
         return thiz;
     }
 
@@ -803,7 +806,7 @@ public class ActionPlayer implements BlueToothInteracter {
            // notePlayFinish();
         }
     }
-    private void clearPlayingInfoList(){
+    public void clearPlayingInfoList(){
         MyActionsHelper.mCurrentSeletedNameList.clear();
         MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
         for (Map<String, Object> item : mDatas) {

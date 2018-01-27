@@ -204,7 +204,7 @@ public class MyActionsHelper extends BaseHelper implements
 
     private String mSchemeId = "";
     private String mSchemeName = "";
-    private boolean isLooping=false;
+    private static boolean isLooping=false;
 
     public Action_type getCurrentPlayType() {
         return mCurrentPlayType;
@@ -2695,11 +2695,13 @@ public class MyActionsHelper extends BaseHelper implements
     }
 
 
-    public void setLooping(boolean flag){
+    public static void setLooping(boolean flag){
         isLooping=flag;
-//        if(!flag){
-//            mCurrentSeletedNameList.clear();
-//        }
+    }
+    public void clearPlayingInfo(){
+        MyActionsHelper.mCurrentSeletedNameList.clear();
+        MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+        mCurrentSeletedNameList.clear();
     }
     public boolean getLoopingFlag(){
         return isLooping;
@@ -2709,10 +2711,11 @@ public class MyActionsHelper extends BaseHelper implements
         mPlayer.setPlayContent(nameList);
     }
 
-    public void setSensorStatus(boolean status){
-        mSensorState=status;
+    public void setSensorStatus(boolean status) {
+        mSensorState = status;
     }
-    public boolean getSensorStatus(){
+
+    public boolean getSensorStatus() {
         return mSensorState;
     }
 

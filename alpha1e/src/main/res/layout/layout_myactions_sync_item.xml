@@ -1,63 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="120dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
    >
 
     <RelativeLayout
         android:id="@+id/rl_logo_info"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         android:layout_marginLeft="40dp">
 
         <!--android:layout_toRightOf="@+id/layout_img_select"-->
         <com.ubt.alpha1e.ui.custom.ShapedImageView
             android:id="@+id/action_logo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             app:round_radius="16dp"
             app:shape_mode="round_rect"
             app:stroke_width="1dp"
         />
+
         <ImageView
             android:id="@+id/img_play"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_play"
-            android:layout_below="@+id/action_logo"
-            android:layout_marginBottom="-40dp"
-            android:layout_alignTop="@+id/action_logo"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignTop="@+id/img_pause"
+            android:layout_marginEnd="33dp"
+            android:layout_marginTop="4dp"
+            android:layout_toStartOf="@+id/lay_info"
+            android:src="@drawable/ic_play" />
+
         <ImageView
             android:id="@+id/img_pause"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignStart="@+id/gif_playing"
+            android:layout_alignTop="@+id/gif_playing"
             android:src="@drawable/ic_pro_pause"
-            android:layout_below="@+id/action_logo"
-            android:layout_marginBottom="-40dp"
-            android:layout_alignTop="@+id/action_logo"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            android:visibility="invisible"
-            />
+            android:visibility="invisible" />
         <!--android:background="#7fff0000"-->
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/gif_playing"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignStart="@+id/img_play"
+            android:layout_centerVertical="true"
             android:src="@drawable/action_play_volum_gif"
-            android:layout_below="@+id/action_logo"
-            android:layout_marginBottom="-40dp"
-            android:layout_alignTop="@+id/action_logo"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            android:visibility="invisible"
-            />
+            android:visibility="invisible" />
 
         <RelativeLayout
             android:id="@+id/lay_info"
@@ -74,6 +66,9 @@
                 android:id="@+id/txt_action_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="14dp"
                 android:text="@string/hello_world"
                 android:textColor="@color/txt_new_edtion"
                 android:textSize="16sp" />
@@ -97,8 +92,8 @@
 
                    <ImageView
                        android:id="@+id/img_select"
-                       android:layout_width="23dp"
-                       android:layout_height="23dp"
+                       android:layout_width="30dp"
+                       android:layout_height="30dp"
                        android:layout_marginBottom="10dp"
                        android:layout_gravity="bottom"
                        android:src="@drawable/myactions_normal" />
@@ -205,4 +200,5 @@
         android:layout_alignParentBottom="true"
         android:background="@color/A11"
         android:visibility="invisible"/>
+
 </RelativeLayout>
