@@ -517,7 +517,6 @@ public class ActionPlayer implements BlueToothInteracter {
 
         byte[] actions = BluetoothParamUtil.stringToBytes(info);
         mBtManager.sendCommand(mBtMac, ConstValue.DV_PLAYACTION, actions,actions.length, false);
-
     }
 
     // ------------------------------------------------------------------------
@@ -627,7 +626,7 @@ public class ActionPlayer implements BlueToothInteracter {
                 }
             }
         }else if(cmd == ConstValue.DV_STOPPLAY){
-            UbtLog.d(TAG,"DV_STOPPLAY :reply stop  time "+(System.currentTimeMillis()-time)+" mCurrentPlayType"+ mCurrentPlayType);
+            UbtLog.d(TAG,"DV_STOPPLAY :reply stop  time "+(System.currentTimeMillis()-time)+" mCurrentPlayType:  "+ mCurrentPlayType+"MyActionsHelper.mCurrentLocalPlayType: "+MyActionsHelper.mCurrentLocalPlayType);
 //            if (mCurrentPlayType == Play_type.cycle_action) {
 //                UbtLog.d(TAG, "DV_STOPPLAY continueCycle");
 //                if (thiz != null) {

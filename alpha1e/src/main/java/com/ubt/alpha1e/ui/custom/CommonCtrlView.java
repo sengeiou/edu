@@ -31,7 +31,6 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.NewActionPlayer;
-import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionColloInfo;
@@ -46,7 +45,6 @@ import com.ubt.alpha1e.ui.helper.IActionsUI;
 import com.ubt.alpha1e.ui.helper.IMainUI;
 import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
-import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.ui.main.MainPresenter;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
@@ -55,7 +53,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import pl.droidsonroids.gif.GifImageView;
 
 import static android.app.Service.START_NOT_STICKY;
 
@@ -73,26 +70,17 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private static final String TAG = "CommonCtrlView";
     public final static String KEY_CURRENT_PLAYING_ACTION_NAME = "currentPlayingActionName";
     //定义浮动窗口布局
-    private static LinearLayout mFloatLayout;
-    private  LinearLayout  mPopWindowLayout;
-    private RelativeLayout guideLayout;
+    private static RelativeLayout mFloatLayout;
     private WindowManager.LayoutParams wmParams;
     //创建浮动窗口设置布局参数的对象
     private static WindowManager mWindowManager;
     private int paddingBottomHeight ; //定义浮动按钮距离页面底部的高度
 
-    private ImageView ivPop;
-    private static LinearLayout lay_ctrl, lay_ctrl_more;
-    private Button btn_stop, btn_reset, btn_more;  //lay_ctrl btn
-    private ImageView btn_reset_m, btn_pause_or_continue, btn_lose_power, btn_stop_m, btn_vol_log, btn_actionList,btn_lig_logo,btn_sensorControl;
-    private TextView btn_exit;
-    private TextView txt_action_name, txt_action_name_m, txt_cycle_num;
+    private static LinearLayout lay_ctrl_more;
+    private ImageView btn_reset_m, btn_pause_or_continue, btn_stop_m, btn_vol_log, btn_actionList,btn_lig_logo,btn_sensorControl;
+    private TextView txt_action_name_m;
     private SeekBar sek_vol_ctrl;
-    private RelativeLayout rl_close_more, rl_control;
     private ImageView gifImageView;
-    private LinearLayout dialogLayout;
-    private TextView tvTips;
-    private Button btnCancle, btnOk;
 
     //control
     public MyActionsHelper mHelper;
@@ -102,8 +90,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
     private MainHelper mMainHelper;
 
-    private TextView tvFloatTips;
-    private boolean isShowDialog = false;
     private Context mContext;
     private static CommonCtrlView commonCtrlView = null;
     private Date lastTime_doPauseOrContinuePlay = null;
@@ -112,8 +98,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private ActionPlayer.Play_state currentState = ActionPlayer.Play_state.action_finish;
     private NewActionPlayer.PlayerState currentNewPlayState = NewActionPlayer.PlayerState.STOPING;
     private static final int CLOSE_VIEW = 1;
-    private static boolean float_view_enable=true;
-    private boolean enable_sensor=false;
     private AnimationDrawable radiologicalWaveAnim = null;
     private MainPresenter mMainPresenter;
     private int voluemeProgress=-1;
@@ -124,6 +108,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             super.handleMessage(msg);
             switch (msg.what){
                 case CLOSE_VIEW:
+
                     //Handler.post 会有延时，所以此处再判断一次是否为null
                     if(commonCtrlView != null){
                         commonCtrlView.onDestroy();
@@ -156,6 +141,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
 
     public static void closeCommonCtrlView(){
+        UbtLog.d(TAG,"closeCommonCtrlView  commonCtrlView = " + commonCtrlView );
         if(commonCtrlView != null){
             //蓝牙断开的时候，为非主线程调用关闭
             //android低版本的时候，直接调关闭会报,硬件加速只能在单个UI线程中使用,所以需放大handler主线线程中调用关闭
@@ -173,23 +159,12 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         createFloatView();
         //根据灯光状态，修改图标
         initRobotState();
-        rl_control.setVisibility(View.INVISIBLE);
-        if(float_view_enable) {
-            mWindowManager.removeView(mFloatLayout);
-        }
+        mWindowManager.removeView(mFloatLayout);
         wmParams.y = 0;
         wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         lay_ctrl_more.setVisibility(View.VISIBLE);
-        if(float_view_enable) {
-            mWindowManager.addView(mFloatLayout, wmParams);
-        }
+        mWindowManager.addView(mFloatLayout, wmParams);
 
-//        //Alpha 1E from Brian
-//        rl_control.setVisibility(View.GONE);
-//        wmParams.y = 0;
-//        wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-//        lay_ctrl_more.setVisibility(View.VISIBLE);
-//        mWindowManager.addView(mFloatLayout, wmParams);
     }
 
     private void initHelper() {
@@ -236,41 +211,29 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         //获取浮动窗口视图所在布局
-        if(float_view_enable) {
-            mFloatLayout = (LinearLayout) inflater.inflate(R.layout.view_float_control, null);
-        }
-        mPopWindowLayout = (LinearLayout) inflater.inflate(R.layout.layout_ctrl_more_ft, null);
-        dialogLayout = (LinearLayout) inflater.inflate(R.layout.view_alertdialog, null);
-        guideLayout = (RelativeLayout) inflater.inflate(R.layout.layout_float_guid, null);
+
+        mFloatLayout = (RelativeLayout) inflater.inflate(R.layout.view_play_page, null);
+
         initView(mFloatLayout);
-        virtualKeyboardDynamicRefresh.assistActivity(mPopWindowLayout.findViewById(R.id.lay_ctrl_more),commonCtrlView);
-        if(float_view_enable) {
-            mFloatLayout.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    Log.d(TAG, "---wmma---Float view onTouched!");
-                    return false;
+        //virtualKeyboardDynamicRefresh.assistActivity(mPopWindowLayout.findViewById(R.id.lay_ctrl_more),commonCtrlView);
+        mFloatLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(commonCtrlView != null){
+                    commonCtrlView.onDestroy();
+                    commonCtrlView = null;
                 }
-            });
-            mWindowManager.addView(mFloatLayout, wmParams);
-        }
+                return false;
+            }
+        });
+
+        ColorDrawable colorDrawable = new ColorDrawable(Color.argb(150, 0, 0, 0));
+        mFloatLayout.setBackground(colorDrawable);
+
+        mWindowManager.addView(mFloatLayout, wmParams);
 
 
-        //添加mFloatLayout
-//        if(!readShowState().equals("4")){
-//            ColorDrawable colorDrawable = new ColorDrawable(Color.argb(150, 0, 0, 0));
-//            guideLayout.setBackground(colorDrawable);
-//            wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-//            wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-//            wmParams.y = 0;
-//
-//            tvFloatTips =  (TextView)guideLayout.findViewById(R.id.tv_guide_controls);
-//            tvFloatTips.setText(AlphaApplication.getBaseActivity().getStringResources("ui_introduction_play_control"));
-//
-//            mWindowManager.addView(guideLayout, wmParams);
-//        }else{
-//            mWindowManager.addView(mFloatLayout, wmParams);
-//        }
+
     }
 
     /**
@@ -279,31 +242,21 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
      */
     private void initView(View view) {
         //View_float_control LAYOUT
-        if(float_view_enable) {
-            ivPop = (ImageView) view.findViewById(R.id.iv_pop);
-            lay_ctrl_more = (LinearLayout) view.findViewById(R.id.lay_ctrl_more);
-            rl_control = (RelativeLayout) view.findViewById(R.id.rl_control);
-            gifImageView = (ImageView) view.findViewById(R.id.playing_control);
-        }
+        lay_ctrl_more = (LinearLayout) view.findViewById(R.id.lay_ctrl_more);
+        gifImageView = (ImageView) view.findViewById(R.id.playing_control);
         radiologicalWaveAnim = (AnimationDrawable)gifImageView.getBackground();
         //init hide view
         btn_sensorControl=(ImageView)view.findViewById(R.id.sensor_control);
         btn_actionList = (ImageView) view.findViewById(R.id.btn_actionlist);
         btn_reset_m=(ImageView) view.findViewById(R.id.btn_poweroff);
-//        btn_lose_power = (ImageView) view.findViewById(R.id.btn_reset);
         btn_pause_or_continue = (ImageView) view.findViewById(R.id.btn_playaction);
         btn_stop_m = (ImageView) view.findViewById(R.id.btn_stopaction);
         btn_vol_log = (ImageView) view.findViewById(R.id.btn_vol_logo);
         btn_lig_logo = (ImageView) view.findViewById(R.id.btn_lig_logo);
         sek_vol_ctrl = (SeekBar) view.findViewById(R.id.skb_vol_control);
-        rl_close_more = (RelativeLayout) view.findViewById(R.id.lay_ctrl_more_close);
-        btn_exit=(TextView)view.findViewById(R.id.cc_exit);
 
         //view_alertdialog  layout
-        //txt_action_name = (TextView) view.findViewById(R.id.text_playContentName);
         txt_action_name_m = (TextView) view.findViewById(R.id.text_playContentName);
-        txt_cycle_num = (TextView) view.findViewById(R.id.action_test);
-
 
         UbtLog.d(TAG, "playingName=" + playingName);
         if(playingName.equals("NO_VALUE")){
@@ -328,30 +281,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             disablePlayStopButton();
         }
 
-        guideLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recordShowGuide("4");
-                showFloatView();
-            }
-        });
 
-        rl_control.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UbtLog.d(TAG, "iv pop onclick!");
-                if(float_view_enable) {
-                    mWindowManager.removeView(mFloatLayout);
-                }
-                rl_control.setVisibility(View.GONE);
-                wmParams.y = 0;
-                wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lay_ctrl_more.setVisibility(View.VISIBLE);
-                if(float_view_enable) {
-                    mWindowManager.addView(mFloatLayout, wmParams);
-                }
-            }
-        });
         btn_sensorControl.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -401,22 +331,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
             }
         });
-
-//        btn_lose_power.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                lay_ctrl_more.setVisibility(View.GONE);
-//                initDialogView(dialogLayout);
-//                wmParams.gravity = Gravity.CENTER;
-//                wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-//                wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-//                ColorDrawable colorDrawable = new ColorDrawable(Color.argb(120, 0, 0, 0));
-//                dialogLayout.setBackground(colorDrawable);
-//                mWindowManager.addView(dialogLayout, wmParams);
-//                isShowDialog = true;
-//
-//            }
-//        });
 
         btn_pause_or_continue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -513,34 +427,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 //mHelper.doChangeVol(arg1);
             }
         });
-
-        btn_exit.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                if(float_view_enable) {
-                    mWindowManager.removeView(mFloatLayout);
-                }
-                lay_ctrl_more.setVisibility(View.GONE);
-            }
-        });
-//        rl_close_more.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                mWindowManager.removeView(mFloatLayout);
-//                lay_ctrl_more.setVisibility(View.GONE);
-//                rl_control.setVisibility(View.VISIBLE);
-//                wmParams.y = paddingBottomHeight;
-//                wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-//                wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-//                wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
-//                mWindowManager.addView(mFloatLayout, wmParams);
-
-
-//            }
-//        });
-
-
     }
 
     /**
@@ -584,38 +470,19 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                         papram[0] = 0x01;
                         papram[1] = 0x01;
                         mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
-                        isShowDialog = false;
                         enableSensorButton();
                     }
                 }).show();
 
     }
-  private void showDialog(){
-        wmParams.gravity = Gravity.CENTER;
-        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-//        ColorDrawable colorDrawable = new ColorDrawable(Color.argb(120, 0, 0, 0));
-//        dialogLayout.setBackground(colorDrawable);
-        mWindowManager.addView(dialogLayout, wmParams);
-        isShowDialog = true;
-    }
+
 
 
     public void onDestroy() {
-//
-//        if(readShowState().equals("4")){
-//            if (mFloatLayout != null) {
-//                mWindowManager.removeView(mFloatLayout);
-//            }
-//        }else{
-//            if(guideLayout != null ){
-//                mWindowManager.removeView(guideLayout);
-//            }
-//        }
-//
-//        if(dialogLayout !=null && isShowDialog){
-//            mWindowManager.removeView(dialogLayout);
-//        }
+
+        if (mFloatLayout != null) {
+            mWindowManager.removeView(mFloatLayout);
+        }
 
         mHelper.unRegisterListeners(this);
         mHelper.UnRegisterHelper();
@@ -820,13 +687,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
         }
 
-//        if (mCurrentPlayType == ActionPlayer.Play_type.cycle_action) {
-//            btn_cycle.setBackground(mBaseActivity.getDrawableRes("action_control_cycle_icon_ft"));
-//            txt_cycle_num.setVisibility(View.GONE);
-//        }
-//        btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
-//        gifImageView.setVisibility(View.INVISIBLE);
-
     }
 
     @Override
@@ -868,7 +728,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
                 String name = ((MyActionsHelper) mHelper).getNewPlayerName();
                 mBaseActivity.saveCurrentPlayingActionName(name);
-                //txt_action_name.setText(name);
                 enablePlayStopButton(name);
                 gifImageView.setVisibility(View.VISIBLE);
             }
@@ -1070,56 +929,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     }
 
 
-    public void resetFloatView(){
-        UbtLog.d(TAG, "----resetFloatView！");
-        if(float_view_enable) {
-            mWindowManager.removeView(mFloatLayout);
-        }
-        lay_ctrl_more.setVisibility(View.GONE);
-        rl_control.setVisibility(View.VISIBLE);
-        wmParams.y = paddingBottomHeight;
-        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
-        if(float_view_enable) {
-            mWindowManager.addView(mFloatLayout, wmParams);
-        }
-    }
-
-    private void showFloatView() {
-        mWindowManager.removeView(guideLayout);
-        wmParams.y = paddingBottomHeight;
-        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
-        if(float_view_enable) {
-            mWindowManager.addView(mFloatLayout, wmParams);
-        }
-    }
-
-
-    private void recordShowGuide(String step) {
-        BasicSharedPreferencesOperator.getInstance(mBaseActivity, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(BasicSharedPreferencesOperator.KEY_HAS_FLOAT_SHOW,
-                step, null, -1);
-    }
-
-    private String readShowState() {
-        return BasicSharedPreferencesOperator.getInstance(mBaseActivity, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doReadSync(BasicSharedPreferencesOperator.KEY_HAS_FLOAT_SHOW);
-    }
-
-   public static void exitGlocalControlCenter(){
-//       if(float_view_enable) {
-//           mWindowManager.removeView(mFloatLayout);
-//       }
-       if (lay_ctrl_more != null) {
-           UbtLog.d(TAG,"HIDDEN GLOBAL BUTTON");
-           lay_ctrl_more.setVisibility(View.GONE);
-       }
-//       if (commonCtrlView != null) {
-//           commonCtrlView.onDestroy();
-//           commonCtrlView = null;
-//       }
-   }
    private void disablePlayStopButton(){
        txt_action_name_m.setText("暂无播放内容");
        btn_pause_or_continue.setEnabled(false);
@@ -1158,15 +967,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
        btn_sensorControl.setColorFilter(filter);
    }
-  public void dynamicAdjustWindowSize(){
-      wmParams.y = 0;
-      wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-      lay_ctrl_more.setVisibility(View.VISIBLE);
-      if(float_view_enable) {
-          mWindowManager.removeView(mFloatLayout);
-          mWindowManager.addView(mFloatLayout, wmParams);
-      }
-  }
+
 
 }
 

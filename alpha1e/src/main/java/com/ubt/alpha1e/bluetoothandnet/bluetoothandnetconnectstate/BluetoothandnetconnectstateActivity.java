@@ -29,6 +29,7 @@ import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity;
+import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
@@ -473,8 +474,11 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                     @Override
                     public void onClick(View view) {
                         UbtLog.d(TAG, "断开 ");
+                        ActionPlayer.getInstance().doStopPlay();
+                        ActionPlayer.StopCycleThread(true);
                         BluetoothStateHelper.getInstance(getContext()).doCancelCoon();
                         bluetoothDisconnect();
+
                     }
                 })
                 .setNegativeButton("暂不", new View.OnClickListener() {
