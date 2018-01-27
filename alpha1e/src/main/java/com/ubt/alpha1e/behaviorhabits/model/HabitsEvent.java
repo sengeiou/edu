@@ -19,6 +19,7 @@ public class HabitsEvent<T> extends BaseModel implements Serializable {
     public String eventId;
     public String eventName;
     public String eventTime;
+    public String finishTime;
     public String eventType;
     public String status;
     public String score;
@@ -78,6 +79,7 @@ public class HabitsEvent<T> extends BaseModel implements Serializable {
                 "eventId=" + eventId +
                 ", eventName='" + eventName + '\'' +
                 ", eventTime='" + eventTime + '\'' +
+                ", finishTime='" + finishTime + '\'' +
                 ", eventType='" + eventType + '\'' +
                 ", status='" + status + '\'' +
                 ", score='" + score + '\'' +

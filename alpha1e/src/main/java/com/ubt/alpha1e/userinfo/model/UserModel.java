@@ -83,7 +83,7 @@ public class UserModel implements Serializable {
      * @return
      */
     public String getGradeByType() {
-        String result = "";
+        String result = "0";
         if (grade.equals("幼儿园大班")) {
             result = "0";
         } else if (grade.equals("小学一年级")) {
@@ -108,7 +108,7 @@ public class UserModel implements Serializable {
      * @return
      */
     public String getAgeByType() {
-        String result = "";
+        String result = "5";
         if (age.equals("5岁及以下")) {
             result = "5";
         } else if (age.equals("6岁")) {

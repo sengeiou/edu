@@ -170,9 +170,9 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     break;
                 case REFRESH_REQUEST_DATA:
                     UserModel userModel = (UserModel) SPUtils.getInstance().readObject(com.ubt.alpha1e.base.Constant.SP_USER_INFO);
-                    UbtLog.d(TAG,"userModel = " + userModel.getSex() + "    " + userModel.getGrade());
+                    UbtLog.d(TAG,"userModel = " + userModel.getSex() + "    " + userModel.getGrade() + "/" + userModel.getGradeByType() );
                     mCoonLoadingDia.show();
-                    mPresenter.getBehaviourList(userModel.getSex(), "1");
+                    mPresenter.getBehaviourList(userModel.getSex(), userModel.getGradeByType());
                     break;
             }
         }
@@ -285,7 +285,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     @Override
     public void onResume() {
         super.onResume();
-        UbtLog.d(TAG,"-onResume->");
+        UbtLog.d(TAG,"-onResume->>");
         EventBus.getDefault().register(this);
 
         if(mHelper != null){
@@ -478,7 +478,9 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     .setMsg("起床时间将在07:00开启")
                     .show();*/
         }else {
-            new InputPasswordDialog(getContext()).builder()
+            startForResult(ParentManageCenterFragment.newInstance(), Constant.HIBITS_PARENT_CENTER_REQUEST_CODE);
+
+            /*new InputPasswordDialog(getContext()).builder()
                     .setMsg(getStringRes("ui_habits_password_input_tip"))
                     .setCancelable(true)
                     .setPassword(mUserPassword)
@@ -499,7 +501,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                             }, 200);
                         }
                     })
-                    .show();
+                    .show();*/
 
         }
 
