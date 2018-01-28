@@ -3,6 +3,7 @@ package com.ubt.alpha1e.ui.main;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -265,6 +266,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         initUI();
         mHelper = MainUiBtHelper.getInstance(getContext());
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        filter1.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        filter1.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         registerReceiver(mBroadcastReceiver1, filter1);
         looperThread = new LooperThread(this);
         looperThread.start();
@@ -352,6 +355,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     case BluetoothAdapter.STATE_ON:
                         break;
                 }
+
+            } else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                UbtLog.d(TAG, device.getName() + " ACTION_ACL_CONNECTED");
+            } else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                UbtLog.d(TAG, device.getName() + " ACTION_ACL_DISCONNECTED");
+                //电池动画停止
+                stopchargeAsynchronousTask();
 
             }
         }
