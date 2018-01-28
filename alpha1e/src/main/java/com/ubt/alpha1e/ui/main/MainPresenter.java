@@ -6,7 +6,6 @@ import android.util.Base64;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
-import com.squareup.haha.perflib.Main;
 import com.tencent.android.tpush.XGPushRegisterResult;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
@@ -483,14 +482,16 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     @Override
     public void setView(MainContract.View view) {
         mView=view;
-
     }
 
     @Override
     public void resetGlobalActionPlayer() {
+        UbtLog.d(TAG,"resetGlobalActionPlayer");
         MyActionsHelper.setLooping(false);
         requestGlobalButtonControl(false);
+        ActionPlayer.getInstance().doStopPlay();
         ActionPlayer.getInstance().clearPlayingInfoList();
+
     }
 
     /**

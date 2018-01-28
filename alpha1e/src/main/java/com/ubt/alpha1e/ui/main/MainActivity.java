@@ -407,25 +407,29 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_remote:
                 if (isBulueToothConnected()) {
-                    if(!removeDuplicateClickEvent()) {
-                    mLaunch.setClass(this, RemoteSelActivity.class);
-                    //startActivity(new Intent(this, ActionTestActivity.class));
-                    startActivity(mLaunch);
+                    if (!removeDuplicateClickEvent()) {
+                        mPresenter.resetGlobalActionPlayer();
+                        mLaunch.setClass(this, RemoteSelActivity.class);
+                        //startActivity(new Intent(this, ActionTestActivity.class));
+                        startActivity(mLaunch);
+
 
                     }
                 } else {
-                        showBluetoothConnectDialog();
+                    showBluetoothConnectDialog();
                 }
                 break;
             case R.id.ll_action:
                 if (isBulueToothConnected()) {
-                    if(!removeDuplicateClickEvent()) {
-                    APP_CURRENT_STATUS = ROBOT_default_gesture;
-                    startActivity(new Intent(this, ActionTestActivity.class));
-                    this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                    if (!removeDuplicateClickEvent()) {
+                        mPresenter.resetGlobalActionPlayer();
+                        APP_CURRENT_STATUS = ROBOT_default_gesture;
+                        startActivity(new Intent(this, ActionTestActivity.class));
+                        this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+
                     }
                 } else {
-                        showBluetoothConnectDialog();
+                    showBluetoothConnectDialog();
                 }
                 break;
             case R.id.ll_program:
