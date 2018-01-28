@@ -34,6 +34,7 @@ import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.ui.fragment.BaseRegisterFragment;
 import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.utils.DateUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.webcontent.WebContentActivity;
@@ -97,7 +98,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
     public HabitsEventRecyclerAdapter mAdapter;
     private List<HabitsEvent> mHabitsEventInfoDatas = null;
     private UserScore<List<HabitsEvent>> mUserScore = null;
-    private int mWorkdayMode = 2;//workday=1; holiday=2
+    private int mWorkdayMode = 1;//workday=1; holiday=2
     private HabitsEvent switchHabitsEvent = null;//
     private UserModel userModel = null;
     protected Dialog mCoonLoadingDia;
@@ -201,7 +202,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
         userModel = (UserModel) SPUtils.getInstance().readObject(com.ubt.alpha1e.base.Constant.SP_USER_INFO);
 
         mCoonLoadingDia = SLoadingDialog.getInstance(getContext());
-
+        mWorkdayMode = DateUtils.isHolidayOfToday() ? 2 : 1;
         tvBaseTitleName.setText(getStringRes("ui_habits_parent_management_center"));
         ivTitleRight.setBackgroundResource(R.drawable.icon_habits_statistics);
         ivTitleRight.setVisibility(View.GONE);

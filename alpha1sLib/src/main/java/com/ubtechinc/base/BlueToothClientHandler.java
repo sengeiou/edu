@@ -159,7 +159,7 @@ public class BlueToothClientHandler extends Thread implements
 				byte[] pTemp = new byte[bytes];
 				System.arraycopy(buffer, 0, pTemp, 0, bytes);
 				if(!ByteHexHelper.bytesToHexString(pTemp).startsWith("fb bf 09 18")
-						&& !ByteHexHelper.bytesToHexString(pTemp).startsWith("fb bf 06 08")){
+						&& !ByteHexHelper.bytesToHexString(pTemp).startsWith("fb bf 12 08")){
 					Log.d(TAG,"receive : " + ByteHexHelper.bytesToHexString(pTemp) + "	bytes = " + bytes);
 				}
 				MyLog.writeLog("接收",ByteHexHelper.bytesToHexString(pTemp));
@@ -216,10 +216,9 @@ public class BlueToothClientHandler extends Thread implements
 			//is upgade bluetooth
 
 			if(!ByteHexHelper.bytesToHexString(data).startsWith("fb bf 06 18")
-					&& !ByteHexHelper.bytesToHexString(data).startsWith("fb bf 06 08")){
+					&& !ByteHexHelper.bytesToHexString(data).startsWith("fb bf 12 08")){
 				Log.d(TAG,"send : "+ByteHexHelper.bytesToHexString(data));
 			}
-
 
 			if(mUpgrage){
 				return;
