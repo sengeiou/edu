@@ -263,7 +263,6 @@ public abstract class BaseActivity extends
             @Override
             public void run() {
                 try {
-                    //LowPowerDialog.getInstance(BaseActivity.this).show();
                     new LowBatteryDialog(AppManager.getInstance().currentActivity()).setBatteryThresHold(value).builder().show();
                 } catch (Exception e) {
                     e.printStackTrace();

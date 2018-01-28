@@ -101,6 +101,7 @@ public class HibitsEventPlayDialog {
                                     if(mPlayContentInfoList != null && seqNo < mPlayContentInfoList.size() ){
 
                                         if("playing".equals(eventPlayStatus.audioState) ){
+                                            isPlaying = true;
                                             currentPlaySeq = seqNo;
                                             currentPlayInfo = mPlayContentInfoList.get(seqNo);
                                             String playContent = "正在播放：" + currentPlayInfo.contentName /*+ "_" + currentPlaySeq*/;
@@ -111,12 +112,12 @@ public class HibitsEventPlayDialog {
                                             ivPlayStatus.setVisibility(View.VISIBLE);
                                             playStatusAnim.start();
                                         }else {
-                                            isPause = false;
+                                            isPlaying = false;
+                                            /*isPause = false;
                                             currentPlaySeq = seqNo;
                                             currentPlayInfo = mPlayContentInfoList.get(seqNo);
-                                            mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
+                                            mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);*/
                                         }
-                                        isPlaying = true;
                                     }
                                 }
                             }
@@ -486,6 +487,8 @@ public class HibitsEventPlayDialog {
             ivMusicStop.setImageResource(R.drawable.ic_ct_stop_disable);
             ivMusicNext.setImageResource(R.drawable.ic_music_next_disable);
             skbVolumeControl.setThumb(mActivity.getDrawable(R.drawable.ic_ct_sound_pro_disable));
+            skbVolumeControl.setProgress(0);
+            ivMusicVolume.setImageDrawable(mActivity.getDrawable(R.drawable.ic_ct_sound_disable));
         }
     }
 

@@ -191,6 +191,9 @@ public class DownLoadActionManager {
                                 mActionListener.doTapHead();
                             }
                         }
+                        if (playingInfo != null) {
+                            playingInfo = null;
+                        }
                     } else if (cmd == ConstValue.DV_READ_NETWORK_STATUS) {
                         String networkInfoJson = BluetoothParamUtil.bytesToString(param);
                         UbtLog.d(TAG, "base cmd = " + cmd + "    networkInfoJson = " + networkInfoJson);

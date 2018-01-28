@@ -48,7 +48,7 @@ public class BlocklyCourseAdapter extends BaseQuickAdapter<CourseData, BaseViewH
             ivPlayVideo.setVisibility(View.GONE);
         }
 
-        Glide.with(context).load(item.getThumbnailUrl()).placeholder(R.drawable.ic_course).fitCenter().into(ivCourse);
+        Glide.with(context).load(item.getThumbnailUrl()).placeholder(R.drawable.ic_course).override(360, 255).fitCenter().into(ivCourse);
 
 //        ((ImageView) helper.getView(R.id.iv_cources)).setImageResource(item.getDrawableId());
         TextView tvActionName = helper.getView(R.id.tv_action_cources_name);

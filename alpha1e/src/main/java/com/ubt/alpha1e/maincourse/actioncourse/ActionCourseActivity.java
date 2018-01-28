@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -112,6 +114,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        myHandler.removeMessages(HANDLER_EXIT_COURSE);
         mainCourseInstance = null;
         UbtLog.d(TAG, "------------------onDestroy-----------------");
         exitCourse();
@@ -297,6 +300,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                                 }
                                 ActionCourseActivity.this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                                 dialog.dismiss();
+                                myHandler.removeMessages(HANDLER_EXIT_COURSE);
                             }
                         }
                     })
@@ -327,7 +331,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
      * 播放动作
      */
     public void exitCourse() {
-        UbtLog.d(TAG, "退出课程:" + 0);
+        UbtLog.d("ActionsEditHelper", "ActionCourseActivity 退出课程:" + 0);
         byte[] params = new byte[1];
         params[0] = 0;
         if (null != ((AlphaApplication) this
@@ -356,16 +360,27 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 UbtLog.d(TAG, "course==" + course + "   leavel==" + leavel + "  isComplete==" + isComplete + "  socre===" + score);
                 mPresenter.saveCourseProgress(String.valueOf(course), isComplete ? "1" : "0");
                 playAction(Constant.COURSE_ACTION_PATH + "AE_victory editor.hts");
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        exitCourse();
-                    }
-                }, 4000);
+//                mHandler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        exitCourse();
+//                    }
+//                }, 3500);
+                myHandler.sendEmptyMessageDelayed(HANDLER_EXIT_COURSE,4000);
             }
         }
     }
 
+    private static  int HANDLER_EXIT_COURSE =11111;
+    Handler myHandler= new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what==HANDLER_EXIT_COURSE){
+                exitCourse();
+            }
+        }
+    };
 
     /**
      * 显示完成结果

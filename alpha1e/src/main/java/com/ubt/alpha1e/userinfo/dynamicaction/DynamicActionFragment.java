@@ -493,7 +493,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
                 mDynamicActionModels.get(i).setActionStatu(statu);
                 if (statu == 1) {
                     DynamicActionModel model = DownLoadActionManager.getInstance(getActivity()).getPlayingInfo();
-                    if (null != model) {
+                    if (null != model&&model.getActionId()!=actionid) {
                         int postion = mPresenter.getPositionById(model.getActionId(), mDynamicActionModels);
                         mDynamicActionModels.get(postion).setActionStatu(0);
                     }

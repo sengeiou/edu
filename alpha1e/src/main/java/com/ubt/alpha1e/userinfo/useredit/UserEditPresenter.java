@@ -23,6 +23,7 @@ import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.userinfo.model.UserAllModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
@@ -185,10 +186,10 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                 request.setSex(value);
                 break;
             case Constant.KEY_NICK_AGE:
-                request.setAge(value);
+                request.setAge(StringUtils.getAgeByType(value));
                 break;
             case Constant.KEY_NICK_GRADE:
-                request.setGrade(value);
+                request.setGrade(StringUtils.getGradeByType(value));
                 break;
             case Constant.KEY_NICK_HEAD:
 
@@ -196,7 +197,7 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
             default:
                 break;
         }
-        UbtLog.d("UpdateHead--------", "request====" + request + "  headPath===" + value);
+        UbtLog.d("UpdateHead--------", "request====" + request.toString() + "  headPath===" + value);
         OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, request, key)
                 .execute(new StringCallback() {
                     @Override
@@ -216,11 +217,11 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                             if (null != baseResponseModel.models) {
                                 UserModel model = baseResponseModel.models;
                                 UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
-                                userModel.setAge(model.getAge());
+                                userModel.setAge(StringUtils.getAgeStringBytype(model.getAge()));
                                 userModel.setSex(model.getSex());
                                 userModel.setPhone(model.getPhone());
                                 userModel.setHeadPic(model.getHeadPic());
-                                userModel.setGrade(model.getGrade());
+                                userModel.setGrade(StringUtils.getGradeStringBytype(model.getGrade()));
                                 userModel.setNickName(model.getNickName());
                                 SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
                             }
@@ -272,11 +273,11 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
                             if (null != baseResponseModel.models) {
                                 UserModel model = baseResponseModel.models;
                                 UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
-                                userModel.setAge(model.getAge());
+                                userModel.setAge(StringUtils.getAgeStringBytype(model.getAge()));
                                 userModel.setSex(model.getSex());
                                 userModel.setPhone(model.getPhone());
                                 userModel.setHeadPic(model.getHeadPic());
-                                userModel.setGrade(model.getGrade());
+                                userModel.setGrade(StringUtils.getGradeStringBytype(model.getGrade()));
                                 userModel.setNickName(model.getNickName());
                                 SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
                             }
@@ -335,5 +336,6 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
         }
         return position;
     }
+
 
 }
