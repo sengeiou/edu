@@ -3,12 +3,12 @@ package com.ubt.alpha1e.ui.main;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -45,7 +44,6 @@ import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.Bluetoothandn
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity;
-import com.ubt.alpha1e.business.ActionPlayerListener;
 import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
@@ -75,7 +73,6 @@ import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.custom.CommonGuideView;
-import com.ubt.alpha1e.ui.custom.virtualKeyboardDynamicRefresh;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
@@ -95,12 +92,7 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.litepal.util.Const;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -264,7 +256,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private static final int ROBOT_GOTO_BIND = 20;
     AnimationDrawable  mActionIndicator=null;
     long mClickTime=0;
-    int CLICK_THRESHOLD_DUPLICATE=1000;
+    int CLICK_THRESHOLD_DUPLICATE=800;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -276,6 +268,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         initUI();
         mHelper = MainUiBtHelper.getInstance(getContext());
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        filter1.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        filter1.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         registerReceiver(mBroadcastReceiver1, filter1);
         looperThread = new LooperThread(this);
         looperThread.start();
@@ -286,6 +280,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mActionIndicator=(AnimationDrawable)actionIndicator.getBackground();
         mActionIndicator.setOneShot(false);
         mActionIndicator.setVisible(true,true);
+        mPresenter.registerEventBus();
     }
 
     @Override
@@ -345,6 +340,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         stopchargeAsynchronousTask();
         SendClientIdService.doStopSelf();
         AutoScanConnectService.doStopSelf();
+        mPresenter.unregisterEventBus();
     }
 
     private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
@@ -363,6 +359,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     case BluetoothAdapter.STATE_ON:
                         break;
                 }
+
+            } else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                UbtLog.d(TAG, device.getName() + " ACTION_ACL_CONNECTED");
+            } else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                UbtLog.d(TAG, device.getName() + " ACTION_ACL_DISCONNECTED");
+                //电池动画停止
+                stopchargeAsynchronousTask();
 
             }
         }
@@ -392,6 +397,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         }
                     }
                     startActivity(intent);
+                    mClickTime=0;
                 }
                 break;
             case R.id.top_icon2:
@@ -417,24 +423,29 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_remote:
                 if (isBulueToothConnected()) {
-                    if(!removeDuplicateClickEvent()) {
-                    mLaunch.setClass(this, RemoteSelActivity.class);
-                    //startActivity(new Intent(this, ActionTestActivity.class));
-                    startActivity(mLaunch);
+                    if (!removeDuplicateClickEvent()) {
+                        mPresenter.resetGlobalActionPlayer();
+                        mLaunch.setClass(this, RemoteSelActivity.class);
+                        //startActivity(new Intent(this, ActionTestActivity.class));
+                        startActivity(mLaunch);
+
+
                     }
                 } else {
-                        showBluetoothConnectDialog();
+                    showBluetoothConnectDialog();
                 }
                 break;
             case R.id.ll_action:
                 if (isBulueToothConnected()) {
-                    if(!removeDuplicateClickEvent()) {
-                    APP_CURRENT_STATUS = ROBOT_default_gesture;
-                    startActivity(new Intent(this, ActionTestActivity.class));
-                    this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                    if (!removeDuplicateClickEvent()) {
+                        mPresenter.resetGlobalActionPlayer();
+                        APP_CURRENT_STATUS = ROBOT_default_gesture;
+                        startActivity(new Intent(this, ActionTestActivity.class));
+                        this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+
                     }
                 } else {
-                        showBluetoothConnectDialog();
+                    showBluetoothConnectDialog();
                 }
                 break;
             case R.id.ll_program:
@@ -584,6 +595,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             if (MainUiBtHelper.getInstance(getContext()).isLostCoon()) {
                 UbtLog.d(TAG, "mainactivity isLostCoon");
                 showGlobalButtonAnmiationEffect(false);
+                stopchargeAsynchronousTask();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -691,7 +703,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if (System.currentTimeMillis() - mCurrentTouchTime < noOperationTimeout) {
             hiddenBuddleTextView();
         }
-        mPresenter.exitGlocalControlCenter();
         return super.onTouchEvent(event);
     }
 
@@ -1182,6 +1193,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        showBatteryUi();
                         if(isCharging) {
                                if(mChargetimer==null||value!=tmp) {
                                    chargeAsynchronousTask(value);
@@ -1212,8 +1224,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
                        cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
                        hiddenCartoonTouchView();
-                       recoveryBatteryUi();
-                       hiddenBattryUi();
+                       recoveryCartoonBodyUi();
+                       hiddenBatteryUi();
                        //showCartoonAction(cartoon_action_sleep);
                    }
                });
@@ -1232,7 +1244,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        }
                        showCartoonAction(cartoon_action_squat);
                        showBuddleText(getString(R.string.buddle_bluetoothConnection));
-                       showBattryUi();
+                      // showBattryUi();
                    }
                });
                break;
@@ -1247,8 +1259,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                        //showCartoonAction(cartoon_action_sleep);
                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
                        cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
-                       recoveryBatteryUi();
-                       hiddenBattryUi();
+                       recoveryCartoonBodyUi();
+                       hiddenBatteryUi();
                    }
                });
                break;
@@ -1311,7 +1323,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    @Override
                    public void run() {
                        showCartoonAction(cartoon_action_sleep);
-                       recoveryBatteryUi();
+                       recoveryCartoonBodyUi();
                        showDisconnectIcon();
                        stopchargeAsynchronousTask();
                    }
@@ -1418,19 +1430,19 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
     }
 
-  private void recoveryBatteryUi(){
+  private void recoveryCartoonBodyUi(){
       if(charging!=null) {
           //charging.setBackground(getDrawableRes("charging_normal"));
           //chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
           cartoonBodyTouchBg.setBackground(getDrawableRes("main_robot_background"));
       }
   }
-  private void hiddenBattryUi(){
+  private void hiddenBatteryUi(){
       if(charging!=null) {
           charging.setVisibility(View.INVISIBLE);
       }
   }
- private void showBattryUi(){
+ private void showBatteryUi(){
      if(charging!=null) {
          charging.setVisibility(View.VISIBLE);
      }
@@ -1479,7 +1491,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
   private Boolean removeDuplicateClickEvent(){
       UbtLog.d(TAG,"INTERVAL IS "+(System.currentTimeMillis()-mClickTime));
-      if(System.currentTimeMillis()-mClickTime<1000){
+      if(System.currentTimeMillis()-mClickTime<CLICK_THRESHOLD_DUPLICATE){
           mClickTime=System.currentTimeMillis();
           return true;
       }else {

@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,33 +119,31 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             public void onClick(View view) {
                 //循环播放
                 UbtLog.d(TAG,"BEGIN CIRCLE");
-                if (MyActionsHelper.mCurrentSeletedNameList.size() < 1) {
-                    UbtLog.d(TAG,"BEGIN CIRCLE LESS ONE  ");
-                    ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
-                    tvCircle.setText("循环播放");
-                    tvCircle.setAlpha(0.5f);
-                }else
-                {
-                    if(!isStartLooping) {
-                        isStartLooping=true;
-                         mHelper.setLooping(isStartLooping);
-                        ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
-                        tvCircle.setText("停止播放");
-                        tvCircle.setAlpha(1.0f);
-                        JSONArray action_cyc_list = new JSONArray(MyActionsHelper.mCurrentSeletedNameList);
-                        mHelper.doCycle(action_cyc_list);
-                    }else {
+                if (!isStartLooping) {
+                    isStartLooping = true;
+                    mHelper.setLooping(isStartLooping);
+                    JSONArray action_cyc_list = new JSONArray(MyActionsHelper.mCurrentSeletedNameList);
+                    try {
+                        if(MyActionsHelper.mCurrentSeletedNameList.size()>0) {
+                            mHelper.doCycle(action_cyc_list);
+                        }else {
+                            UbtLog.d(TAG,"BLUETOOTH DISCONNECT");
+                        }
+                    }catch(RuntimeException e){
+                        e.printStackTrace();
+                    }
+                } else {
                         UbtLog.d(TAG,"STOP CIRCLE PLAY");
-                        ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
-                        tvCircle.setText("循环播放");
-                        clearPlayingInfoList();
-                        tvCircle.setAlpha(0.5f);
+                        //先复位标志isStartLooping
                         isStartLooping=false;
                         mHelper.setLooping(isStartLooping);
+                        //在调用STOP，然后回调到notePlayFinish
                         mHelper.stopPlayAction();
                     }
+                updateCircleButton();
                 }
-            }
+
+
         });
         mSyncRecyclerview = (RecyclerView) mView.findViewById(R.id.recyclerview_circle);
         //修改LAYOUT格式，有LinearLayoutManager到GridLayoutManager样式，一行3个图标
@@ -170,6 +170,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         //MyActionHelper trigger setDatas
         if(mAdapter!=null){
             mAdapter.notifyDataSetChanged();
+            updateCircleButton();
         }
     }
 
@@ -361,7 +362,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 break;
             }
             mAdapter.notifyDataSetChanged();
-
         }
 
     }
@@ -384,7 +384,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         }
 
         mAdapter.notifyDataSetChanged();
-
 
     }
 
@@ -438,21 +437,23 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     mAdapter.notifyDataSetChanged();
                 }
             });
+            clearPlayingInfoList();
+            updateCircleButton();
         } else {
             //拍头执行到这里
-//            if (mCurrentPlayType == ActionPlayer.Play_type.cycle_action) {
-//                UbtLog.d(TAG, "---show toast  notePlayFinish cycle !");
-//                UbtLog.d(TAG, "---isStartLooping = " + isStartLooping);
-//                getActivity().runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Toast.makeText(
-//                                getActivity(), mActivity.getStringResources("ui_action_cycle_stop"), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//                isStartLooping = false;
-//                mHelper.setLooping(isStartLooping);
-//            }
+            if (mCurrentPlayType == ActionPlayer.Play_type.cycle_action) {
+                UbtLog.d(TAG, "---show toast  notePlayFinish cycle !");
+                UbtLog.d(TAG, "---isStartLooping = " + isStartLooping);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(
+                                getActivity(), mActivity.getStringResources("ui_action_cycle_stop"), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                isStartLooping = false;
+                mHelper.setLooping(isStartLooping);
+            }
 
 //            getActivity().runOnUiThread(new Runnable() {
 //                @Override
@@ -853,20 +854,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             holder.txt_type_des.setText(actionList.get(MyActionsHelper.map_val_action_type_name) + "");
             holder.txt_time.setText(actionList.get(ActionsLibHelper.map_val_action_time) + "");
             //UbtLog.d(TAG, "-->isStartLooping=" + isStartLooping);
-            //刚进入列表的时候，循环播放按钮状态，退出播放列表后，还能够继续播放开始
-            if (isStartLooping) {
-                if (MyActionsHelper.mCurrentSeletedNameList.size() >= 1) {
-                    ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
-                    tvCircle.setText("停止播放");
-                    tvCircle.setAlpha(1.0f);
-                }
-            }else {
-                if (MyActionsHelper.mCurrentSeletedNameList.size() >= 1) {
-                    ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play"));
-                    tvCircle.setText("循环播放");
-                    tvCircle.setAlpha(1.0f);
-                }
-            }
                 for (int i = 0; i < MyActionsHelper.mCurrentSeletedNameList.size(); i++) {
                     if (MyActionsHelper.mCurrentSeletedNameList.get(i).equals(action_name)) {
                         UbtLog.d(TAG, "current select is looping:" + isStartLooping + "name :" + action_name + "size" + MyActionsHelper.mCurrentSeletedNameList.size());
@@ -952,16 +939,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                         }
                         //循环播放的控制按钮
                         UbtLog.d(TAG,"MyActionsHelper.mCurrentSeletedNameList.size() = " +MyActionsHelper.mCurrentSeletedNameList.size());
-                        if(MyActionsHelper.mCurrentSeletedNameList.size()<1){
-                            ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
-                            tvCircle.setText("循环播放");
-                            tvCircle.setAlpha(0.5f);
-                        }else {
-                        ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play"));
-                        tvCircle.setText("循环播放");
-                        tvCircle.setAlpha(1.0f);
-                    }
                         mAdapter.notifyItemChanged(position);
+                        updateCircleButton();
                     }
                 };
                 //动作播放的CHECKBOX点击事件
@@ -1064,4 +1043,39 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         MyActionsHelper.mCurrentLocalPlayType=null;
     }
 
+    /**
+     * 循环播放按钮刷新
+     */
+    private void updateCircleButton(){
+        //刚进入列表的时候，循环播放按钮状态，退出播放列表后，还能够继续播放开始
+        if (isStartLooping) {
+            //正在播放，并且大小大于1
+            if (MyActionsHelper.mCurrentSeletedNameList.size() >= 1) {
+                ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
+                ivCircle.setAlpha(1.0f);
+                tvCircle.setText("停止播放");
+                tvCircle.setAlpha(1.0f);
+            }else {
+                //没播放，大小小于1
+                ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
+                ivCircle.setAlpha(0.5f);
+                tvCircle.setText("循环播放");
+                tvCircle.setAlpha(0.5f);
+            }
+        }else {
+            //HIGHLIGHT
+            if (MyActionsHelper.mCurrentSeletedNameList.size() >=1) {
+                ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play"));
+                ivCircle.setAlpha(1.0f);
+                tvCircle.setText("循环播放");
+                tvCircle.setAlpha(1.0f);
+            }else{
+                //MASK
+                ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play"));
+                ivCircle.setAlpha(0.5f);
+                tvCircle.setText("循环播放");
+                tvCircle.setAlpha(0.5f);
+            }
+        }
+    }
 }

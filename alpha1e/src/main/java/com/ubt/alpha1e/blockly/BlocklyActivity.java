@@ -288,8 +288,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 case DO_PLAY_SOUND_EFFECT_FINISH:
                     if(mWebView != null){
                         UbtLog.d(TAG, "play sound or emoji finish!");
-//                        mWebView.loadUrl("javascript:continueSteps()");
-                        mWebView.loadUrl("javascript:playSoundEffectFinish()");
+                        mWebView.loadUrl("javascript:continueSteps()");
+//                        mWebView.loadUrl("javascript:playSoundEffectFinish()");
                     }
                     break;
                 default:

@@ -41,6 +41,7 @@ import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.util.MyTextWatcher;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.NameLengthFilter;
+import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -209,8 +210,8 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
 
                 LoadingDialog.show(UserEditActivity.this);
                 UpdateUserInfoRequest request = new UpdateUserInfoRequest();
-                request.setAge(age);
-                request.setGrade(grade);
+                request.setAge(StringUtils.getAgeByType(age));
+                request.setGrade(StringUtils.getGradeByType(grade));
                 request.setNickName(FileUtils.stringToUtf8(mTvUserName.getText().toString()));
                 request.setSex(sex);
                 File file = null;
@@ -234,7 +235,17 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                                 }.getType());
                         if (baseResponseModel.status) {
                             UbtLog.d("userEdit", "userModel:" + baseResponseModel.models);
-                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
+
+                            UserModel model = baseResponseModel.models;
+                            UserModel userModel = new UserModel();
+                            userModel.setAge(StringUtils.getAgeStringBytype(model.getAge()));
+                            userModel.setSex(model.getSex());
+                            userModel.setPhone(model.getPhone());
+                            userModel.setHeadPic(model.getHeadPic());
+                            userModel.setGrade(StringUtils.getGradeStringBytype(model.getGrade()));
+                            userModel.setNickName(model.getNickName());
+                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
+//                            SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, baseResponseModel.models);
                             Intent intent = new Intent();
                             intent.setClass(UserEditActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -352,8 +363,8 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     @Override
     public void updateLoopData(UserAllModel userAllModel) {
         if (null != userAllModel) {
-            ageList = userAllModel.getAgeList();
-            gradeList = userAllModel.getGradeList();
+            ageList = StringUtils.getAgeList(userAllModel.getAgeList());
+            gradeList = StringUtils.getGradeList(userAllModel.getGradeList());
         } else {
 
         }
@@ -373,16 +384,25 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                         return;
                     }
 
-                    String type = cr.getType(data.getData());
-                    if (type == null) {
+                    //android gao ban ben
+                    String h_type = cr.getType(data.getData());
+                    //android di ban ben
+                    String l_type = data.getType();
+                    UbtLog.d(TAG,"h_type:"+h_type  + "   l_type:"+l_type);
+                    if (h_type == null && l_type == null){
                         return;
                     }
                     mImageUri = data.getData();
                 }
                 try {
                     Bitmap bitmap = FileUtils.getBitmapFormUri(this, mImageUri);
-                    mImgHead.setImageBitmap(bitmap);
+                   // mImgHead.setImageBitmap(bitmap);
                     path = FileUtils.SaveImage(this, "head", bitmap);
+                    File file = new File(path);
+                    Glide
+                            .with(this)
+                            .load(file)
+                            .into(mImgHead);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

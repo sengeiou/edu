@@ -99,19 +99,20 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
                         if(StringUtils.isStringNumber(eventPlayStatus.playAudioSeq)){
                             int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
                             if(seqNo >= 0){
-                                if(currentEventId.equals(eventPlayStatus.eventId)){
+                                if(currentEventId.equals(eventPlayStatus.eventId) && "playing".equals(eventPlayStatus.audioState)){
                                     currentPlaySeq = seqNo;
-                                    if("playing".equals(eventPlayStatus.audioState)){
-                                        if(mPlayContentInfoDatas != null && seqNo < mPlayContentInfoDatas.size()){
-                                            for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
-                                                mPlayContentInfo.isSelect = "0";
-                                            }
-
-                                            mPlayContentInfoDatas.get(seqNo).isSelect = "1";
-                                            mAdapter.notifyDataSetChanged();
-                                            moveToPosition(seqNo);
+                                    if(mPlayContentInfoDatas != null && seqNo < mPlayContentInfoDatas.size()){
+                                        for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
+                                            mPlayContentInfo.isSelect = "0";
                                         }
-                                    }else if("noPlay".equals(eventPlayStatus.audioState)){
+
+                                        mPlayContentInfoDatas.get(seqNo).isSelect = "1";
+                                        mAdapter.notifyDataSetChanged();
+                                        moveToPosition(seqNo);
+                                    }
+                                }else {
+                                    currentPlaySeq = -1;
+                                    if(mPlayContentInfoDatas != null && seqNo < mPlayContentInfoDatas.size()){
                                         for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
                                             mPlayContentInfo.isSelect = "0";
                                         }

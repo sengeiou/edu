@@ -32,6 +32,7 @@ import com.ubt.alpha1e.userinfo.model.UserAllModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -88,9 +89,8 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
         select = true;
         ivPrivacy.setSelected(select);
 
-
         boolean invalid = getIntent().getBooleanExtra(INVALID_TOKEN, false);
-        if(invalid){
+        if (invalid) {
             ToastUtils.showLong("叮当登录异常，请重新登录");
         }
 
@@ -149,7 +149,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
             }
         });
 
-        ivPrivacy.setOnClickListener(new View.OnClickListener() {
+   /*     ivPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 UbtLog.d(TAG, "ivPrivacy onClick");
@@ -161,7 +161,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
                     ivPrivacy.setSelected(select);
                 }
             }
-        });
+        });*/
     }
 
     @Override
@@ -257,14 +257,14 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
                     + ",\n\"appId\":" + "\"" + appidQQOpen + "\""
                     + ",\n\"loginType\":" + "\"" + "QQ" + "\""
                     + ",\n\"openId\":" + "\"" + openID + "\""
-                    + ",\n\"ubtAppId\":"  + 100010011
+                    + ",\n\"ubtAppId\":" + 100010011
                     + "}";
         } else {
             params = "{"
                     + "\"accessToken\":" + "\"" + accessToken + "\""
                     + ",\n\"loginType\":" + "\"" + "WX" + "\""
                     + ",\n\"openId\":" + "\"" + openID + "\""
-                    + ",\n\"ubtAppId\":"  + 100010011
+                    + ",\n\"ubtAppId\":" + 100010011
                     + "}";
         }
 
@@ -371,7 +371,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
                         }
                     } else {
                         //手机号码绑定流程
-                         intent.setClass(LoginActivity.this, LoginAuthActivity.class);
+                        intent.setClass(LoginActivity.this, LoginAuthActivity.class);
                     }
 
                     startActivity(intent);
@@ -382,15 +382,14 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
     }
 
 
-
-    private void saveUserInfo(UserAllModel userAllModel){
+    private void saveUserInfo(UserAllModel userAllModel) {
         UserModel userModel = new UserModel();
         userModel.setNickName(userAllModel.getNickName());
         userModel.setHeadPic(userAllModel.getHeadPic());
         userModel.setPhone(userAllModel.getPhone());
-        userModel.setAge(userAllModel.getAge());
+        userModel.setAge(StringUtils.getAgeStringBytype(userAllModel.getAge()));
         userModel.setSex(userAllModel.getSex());
-        userModel.setGrade(userAllModel.getGrade());
+        userModel.setGrade(StringUtils.getGradeStringBytype(userAllModel.getGrade()));
         SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
     }
 

@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 /**
  * @author：liuhai
@@ -43,5 +45,15 @@ public class ActionEditsStandard extends BaseActionEditLayout {
     @Override
     public void init(Context context) {
         super.init(context);
+        UbtLog.d("ActionEditsStandard","执行init方法 111");
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x03);
+                doReset();
+
+            }
+        }, 1000);
     }
 }

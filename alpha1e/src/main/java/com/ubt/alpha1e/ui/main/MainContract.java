@@ -49,5 +49,7 @@ public class MainContract {
         void requestGlobalButtonControl(boolean status);
         //test usage
         void setView(MainContract.View view);
+        //循环播放正在播放的情况下，清楚播放状态
+        void resetGlobalActionPlayer();
     }
 }

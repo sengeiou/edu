@@ -170,9 +170,9 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     break;
                 case REFRESH_REQUEST_DATA:
                     UserModel userModel = (UserModel) SPUtils.getInstance().readObject(com.ubt.alpha1e.base.Constant.SP_USER_INFO);
-                    UbtLog.d(TAG,"userModel = " + userModel.getSex() + "    " + userModel.getGrade());
+                    UbtLog.d(TAG,"userModel = " + userModel.getSex() + "    " + userModel.getGrade() + "/" + userModel.getGradeByType());
                     mCoonLoadingDia.show();
-                    mPresenter.getBehaviourList(userModel.getSex(), "1");
+                    mPresenter.getBehaviourList(userModel.getSex(), userModel.getGradeByType());
                     break;
             }
         }
@@ -285,7 +285,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     @Override
     public void onResume() {
         super.onResume();
-        UbtLog.d(TAG,"-onResume->");
+        UbtLog.d(TAG,"-onResume->>");
         EventBus.getDefault().register(this);
 
         if(mHelper != null){
@@ -308,13 +308,15 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     @Subscribe
     public void onEventHibits(HibitsEvent event) {
         if(event.getEvent() == HibitsEvent.Event.READ_EVENT_PLAY_STATUS && mHibitsEventPlayDialog == null){
-            UbtLog.d(TAG,"EventPlayStatus = " + event.getEventPlayStatus());
-
-            EventPlayStatus eventPlayStatus = event.getEventPlayStatus();
-            Message msg = new Message();
-            msg.what = DEAL_PLAY_STATUS;
-            msg.obj = eventPlayStatus;
-            mHandler.sendMessage(msg);
+            UbtLog.d(TAG,"EventPlayStatus = " + event.getEventPlayStatus() + "/"+ getTopFragment() + "  = " +(getTopFragment() instanceof HibitsEventFragment));
+            //当前Fragment才需要弹
+            if(getTopFragment() != null && (getTopFragment() instanceof HibitsEventFragment)){
+                EventPlayStatus eventPlayStatus = event.getEventPlayStatus();
+                Message msg = new Message();
+                msg.what = DEAL_PLAY_STATUS;
+                msg.obj = eventPlayStatus;
+                mHandler.sendMessage(msg);
+            }
         }
     }
 
@@ -478,6 +480,9 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     .setMsg("起床时间将在07:00开启")
                     .show();*/
         }else {
+
+            //startForResult(ParentManageCenterFragment.newInstance(), Constant.HIBITS_PARENT_CENTER_REQUEST_CODE);
+
             new InputPasswordDialog(getContext()).builder()
                     .setMsg(getStringRes("ui_habits_password_input_tip"))
                     .setCancelable(true)
