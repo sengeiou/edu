@@ -651,11 +651,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             AppManager.getInstance().finishActivity();
                             return;
                         }
-
                         showBluetoothDisconnect();
-                    } else {
-                        UbtLog.d(TAG, "onLostBtCoon " + "  为空");
-                    }
+                        } else {
+                            UbtLog.d(TAG, "onLostBtCoon " + "  为空");
+                        }
                 }
             });
         } else if (event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS) {

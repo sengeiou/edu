@@ -20,10 +20,12 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
 import com.ubt.alpha1e.maincourse.courselayout.CourseLevelFiveLayout;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
@@ -78,6 +80,9 @@ public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.V
     protected void onResume() {
         super.onResume();
         UbtLog.d(TAG, "------------onResume------");
+        if (!isBulueToothConnected()) {
+            showLoasBleDiaog();
+        }
     }
 
     @Override
@@ -304,9 +309,15 @@ public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.V
 
     @Override
     public void onDisconnect() {
-        finish();
-        //关闭窗体动画显示
-        this.overridePendingTransition(0, R.anim.activity_close_down_up);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                UbtLog.d("onLostBtCoon", "蓝牙掉线");
+                if (!isFinishing() && !isShowBleDialog) {
+                    showLoasBleDiaog();
+                }
+            }
+        });
     }
 
     @Override
@@ -371,5 +382,31 @@ public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.V
         }
 
     }
+    private boolean isShowBleDialog;
+    private void showLoasBleDiaog() {
+        isShowBleDialog = true;
+        new ConfirmDialog(this).builder()
+                .setTitle("提示")
+                .setMsg("请先连接机器人蓝牙")
+                .setCancelable(true)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接蓝牙 ");
+                        Intent intent = new Intent();
+                        intent.setClass(CourseLevelFiveActivity.this, BluetoothconnectActivity.class);
+                        startActivity(intent);
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                MainCourseActivity.finishByMySelf();
+                ActionCourseActivity.finishByMySelf();
+                CourseLevelFiveActivity.this.finish();
+                //关闭窗体动画显示
+                CourseLevelFiveActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            }
+        }).show();
+    }
 }
