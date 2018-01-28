@@ -279,7 +279,7 @@ public class BlocklyVideoPlayer extends StandardGSYVideoPlayer {
 
         super.onSeekComplete();
         int time = mProgressBar.getProgress() * getDuration() / 100;
-        UbtLog.d(TAG, "onSeekComplete:" + time);
+        UbtLog.d(TAG, "onSeekComplete:" + time + "---:" +  getDuration());
 //        resolveDanmakuSeek(this, time);
 
     }
@@ -291,7 +291,7 @@ public class BlocklyVideoPlayer extends StandardGSYVideoPlayer {
     }
 
 
-        @Override
+    @Override
     public void onVideoResume() {
         UbtLog.d(TAG, "onVideoResume");
         super.onVideoResume();
