@@ -80,6 +80,7 @@ import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
+import com.ubt.alpha1e.ui.helper.BluetoothStateHelper;
 import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.MyRobotModel;
@@ -335,9 +336,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        UbtLog.d(TAG, "mainactivity onDestroy ..... ");
         if (mBroadcastReceiver1 != null) {
             getContext().unregisterReceiver(mBroadcastReceiver1);
         }
+        BluetoothStateHelper.getInstance(getContext()).doCancelCoon();
         stopBuddleTextAsynchronousTask();
         stopchargeAsynchronousTask();
         SendClientIdService.doStopSelf();
