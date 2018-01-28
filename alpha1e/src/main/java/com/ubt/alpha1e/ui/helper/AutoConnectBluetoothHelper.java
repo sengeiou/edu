@@ -719,8 +719,7 @@ public class AutoConnectBluetoothHelper extends BaseHelper {
                 .getCurrentBluetooth() != null
                 && ((AlphaApplication) mContext.getApplicationContext())
                 .getCurrentBluetooth().getAddress().equals(mac)) {
-            ((AlphaApplication) mContext.getApplicationContext())
-                    .setCurrentBluetooth(null);
+            ((AlphaApplication) mContext.getApplicationContext()).doLostConnect();
         }
 
         Message msg = new Message();
