@@ -156,7 +156,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     if(eventPlayStatus != null && mHabitsEventInfoDatas != null){
                         if(StringUtils.isStringNumber(eventPlayStatus.playAudioSeq)){
                             int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
-                            if(seqNo >= 0){
+                            if(seqNo >= 0 && "playing".equals(eventPlayStatus.audioState)){
                                 for(HabitsEvent<List<PlayContentInfo>> event : mHabitsEventInfoDatas){
                                     if(event.eventId.equals(eventPlayStatus.eventId)){
 
