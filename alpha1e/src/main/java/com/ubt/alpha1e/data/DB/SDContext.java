@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
 import com.ubt.alpha1e.data.FileTools;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.io.File;
 
@@ -31,8 +32,7 @@ public class SDContext extends ContextWrapper {
 
         boolean isFileCreateSuccess = false;
 
-        isFileCreateSuccess = FileTools.writeAssetsToSd("DB/" + db_name, this, mDbPath + "/" + db_name);
-
+        isFileCreateSuccess = FileTools.writeAssetsToSd("DB/UbtLogs_20160506001", this, mDbPath + "/" + db_name);
 
         if (isFileCreateSuccess)
             return db_file;
