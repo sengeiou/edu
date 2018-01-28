@@ -20,6 +20,7 @@ import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
 import com.ubt.alpha1e.services.AutoScanConnectService;
 import com.ubt.alpha1e.services.SendClientIdService;
 import com.ubt.alpha1e.ui.BaseActivity;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.update.BluetoothUpdateManager;
 import com.ubt.alpha1e.update.EngineUpdateManager;
 import com.ubt.alpha1e.update.RobotSoftUpdateManager;
@@ -755,8 +756,7 @@ public class BluetoothHelper extends BaseHelper {
                 .getCurrentBluetooth() != null
                 && ((AlphaApplication) mContext.getApplicationContext())
                 .getCurrentBluetooth().getAddress().equals(mac)) {
-            ((AlphaApplication) mContext.getApplicationContext())
-                    .setCurrentBluetooth(null);
+            ((AlphaApplication) mContext.getApplicationContext()).doLostConnect();
         }
 
         Message msg = new Message();
