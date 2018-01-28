@@ -58,16 +58,14 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
     public static final int NETWORK_ERROR=1000;
     public static final int NETWORK_SUCCESS=2000;
     public static final int NETWORK_SERVER_EXCEPTION=3000;
-    String url = "http://10.10.1.14:8080";//测试环境
-    //String url ="https://prodapi.ubtrobot.com";//正式环境
 
-    private String GetTemplatePath = "/alpha1e/event/getEventList";
-    private String GetEventPath = "/alpha1e/event/getUserEvent";
-    private String SaveModifyEventPath = "/alpha1e/event/updateUserEvent";
-    private String DelayAlert = "/alpha1e/event/remindReply";
-    private String ControlEventPath = "/alpha1e/event/updateUserEvent"; //the same SaveModifyEventPath
-    private String GetPlayContentPath = "/alpha1e/event/getContents";
-    private String GetUserPassword = "/alpha1e/user/getUserPwd";
+    private String GetTemplatePath = "event/getEventList";
+    private String GetEventPath = "event/getUserEvent";
+    private String SaveModifyEventPath = "event/updateUserEvent";
+    private String DelayAlert = "event/remindReply";
+    private String ControlEventPath = "event/updateUserEvent"; //the same SaveModifyEventPath
+    private String GetPlayContentPath = "event/getContents";
+    private String GetUserPassword = "user/getUserPwd";
 
     @Override
     public void doTest() {
@@ -79,7 +77,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
         BehaviourListRequest mBehaviourListRequest = new BehaviourListRequest();
         mBehaviourListRequest.setSex(sex);
         mBehaviourListRequest.setGrade(grade);
-        doRequestFromWeb(url+GetTemplatePath, mBehaviourListRequest, GET_BEHAVIOURLIST_CMD);
+        doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+GetTemplatePath, mBehaviourListRequest, GET_BEHAVIOURLIST_CMD);
     }
 
     @Override
@@ -88,21 +86,21 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
         mBehaviourListRequest.setSex(sex);
         mBehaviourListRequest.setGrade(grade);
         mBehaviourListRequest.setType(type);
-        doRequestFromWeb(url+GetTemplatePath, mBehaviourListRequest, GET_BEHAVIOURPARENTEVENTLIST_CMD);
+        doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+GetTemplatePath, mBehaviourListRequest, GET_BEHAVIOURPARENTEVENTLIST_CMD);
     }
 
     @Override
     public void getBehaviourEvent(String eventId) {
         BehaviourEventRequest mBehaviourEventRequest=new BehaviourEventRequest();
         mBehaviourEventRequest.setEventId(eventId);
-        doRequestFromWeb(url+GetEventPath, mBehaviourEventRequest, GET_BEHAVIOUREVENT_CMD);
+        doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+GetEventPath, mBehaviourEventRequest, GET_BEHAVIOUREVENT_CMD);
     }
 
     @Override
     public void getBehaviourPlayContent(String eventId) {
         BehaviourEventRequest mBehaviourEventRequest = new BehaviourEventRequest();
         mBehaviourEventRequest.setEventId(eventId);
-        doRequestFromWeb(url+GetPlayContentPath, mBehaviourEventRequest, GET_BEHAVIOURPLAYCONTENT_CMD);
+        doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+GetPlayContentPath, mBehaviourEventRequest, GET_BEHAVIOURPLAYCONTENT_CMD);
     }
 
     @Override
@@ -110,7 +108,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
         BehaviourControlRequest mBehaviourControlRequest=new BehaviourControlRequest();
         mBehaviourControlRequest.setEventId(eventId);
         mBehaviourControlRequest.setStatus(new Integer(status).toString());
-        doRequestFromWeb(url+ControlEventPath, mBehaviourControlRequest,GET_BEHAVIOURCONTROL_CMD);
+        doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+ControlEventPath, mBehaviourControlRequest,GET_BEHAVIOURCONTROL_CMD);
     }
 
     @Override
@@ -122,7 +120,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
         mBehaviourSaveUpdateRequest.setRemindSecond(content.remindSecond);
         mBehaviourSaveUpdateRequest.setContentIds(content.contentIds);
         mBehaviourSaveUpdateRequest.setType(String.valueOf(dayType));
-        doRequestFromWeb(url+SaveModifyEventPath, mBehaviourSaveUpdateRequest,GET_BEHAVIOURSAVEUPDATE_CMD);
+        doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+SaveModifyEventPath, mBehaviourSaveUpdateRequest,GET_BEHAVIOURSAVEUPDATE_CMD);
     }
 
     @Override
@@ -130,13 +128,13 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
         BehaviourDelayAlertRequest  mBehaviourDelayAlertRequest=new BehaviourDelayAlertRequest();
         mBehaviourDelayAlertRequest.setEventId(eventId);
         mBehaviourDelayAlertRequest.setDelayTime(delayTime);
-        doRequestFromWeb(url+DelayAlert, mBehaviourDelayAlertRequest,GET_BEHAVIOURDELAYALERT_CMD);
+        doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+DelayAlert, mBehaviourDelayAlertRequest,GET_BEHAVIOURDELAYALERT_CMD);
     }
 
     @Override
     public void getUserPassword() {
         BaseRequest mBaseRequest=new BaseRequest();
-        doRequestFromWeb(url+GetUserPassword,mBaseRequest,GET_BEHAVIOUERGETUSERPASSWORD_CMD);
+        doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+GetUserPassword,mBaseRequest,GET_BEHAVIOUERGETUSERPASSWORD_CMD);
     }
 
     @Override

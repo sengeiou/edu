@@ -44,34 +44,22 @@ android {
     }
 
     productFlavors {
-        ubt_debug {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ubt_debug"]
-            buildConfigField 'String', 'WebServiceAdderss', '"https://10.10.1.14:8443/ubx"'
-            buildConfigField 'String', 'WebCourseAdderss', '"http://10.10.20.30:8039/course-rest"'
-            buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"http://10.10.1.12:8030/alpha1/zip?versionId="'
-            buildConfigField 'String', 'WebServiceAdderssFor1E', '"https://api.ubtrobot.com/ubx"'
-        }
+
         ubt_test {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ubt_test"]
-            buildConfigField 'String', 'WebServiceAdderss', '"https://10.10.1.14:8443/ubx"'
-            buildConfigField 'String', 'WebCourseAdderss', '"http://10.10.20.30:8039/course-rest"'
-            buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"http://10.10.1.12:8030/alpha1/zip?versionId="'
-            buildConfigField 'String', 'WebServiceAdderssFor1E', '"https://api.ubtrobot.com/ubx"'
+            buildConfigField 'String', 'WebServiceXG', '"https://test79.ubtrobot.com/xinge-push-rest/"'
+            buildConfigField 'String', 'WebServiceThirdLogin', '"http://10.10.20.71:8010/user-service-rest/v2/"'
+            buildConfigField 'String', 'WebServiceUbx', '"http://10.10.1.14:8080/alpha1e/"'
+            buildConfigField 'String', 'WebServiceBind', '"http://10.10.1.12:8085/equipment/"'
         }
         ubt_robot {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ubt_robot"]
-            buildConfigField 'String', 'WebServiceAdderss', '"https://services.ubtrobot.com/ubx"'
-            buildConfigField 'String', 'WebCourseAdderss', '"https://account.ubtrobot.com/course-rest"'
-            buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"https://account.ubtrobot.com/alpha1e-rest/alpha1/zip?versionId="'
-            buildConfigField 'String', 'WebServiceAdderssFor1E', '"https://api.ubtrobot.com/ubx"'
+            buildConfigField 'String', 'WebServiceXG', '"https://account.ubtrobot.com/xinge-push-rest/"'
+            buildConfigField 'String', 'WebServiceThirdLogin', '"https://account.ubtrobot.com/user-service-rest/v2/"'
+            buildConfigField 'String', 'WebServiceUbx', '"https://prodapi.ubtrobot.com/alpha1e/"'
+            buildConfigField 'String', 'WebServiceBind', '"https://prodapi.ubtrobot.com/equipment/"'
         }
-        google {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "google"]
-            buildConfigField 'String', 'WebServiceAdderss', '"https://services.ubtrobot.com/ubx"'
-            buildConfigField 'String', 'WebCourseAdderss', '"https://account.ubtrobot.com/course-rest"'
-            buildConfigField 'String', 'WebBlocklyUpdateAdderss', '"https://account.ubtrobot.com/alpha1e-rest/alpha1/zip?versionId="'
-            buildConfigField 'String', 'WebServiceAdderssFor1E', '"https://api.ubtrobot.com/ubx"'
-        }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
