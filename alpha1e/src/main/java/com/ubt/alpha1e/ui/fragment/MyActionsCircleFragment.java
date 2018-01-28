@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,12 +119,20 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             public void onClick(View view) {
                 //循环播放
                 UbtLog.d(TAG,"BEGIN CIRCLE");
-                if(!isStartLooping) {
-                        isStartLooping=true;
-                         mHelper.setLooping(isStartLooping);
-                        JSONArray action_cyc_list = new JSONArray(MyActionsHelper.mCurrentSeletedNameList);
-                        mHelper.doCycle(action_cyc_list);
-                    }else {
+                if (!isStartLooping) {
+                    isStartLooping = true;
+                    mHelper.setLooping(isStartLooping);
+                    JSONArray action_cyc_list = new JSONArray(MyActionsHelper.mCurrentSeletedNameList);
+                    try {
+                        if(MyActionsHelper.mCurrentSeletedNameList.size()>0) {
+                            mHelper.doCycle(action_cyc_list);
+                        }else {
+                            UbtLog.d(TAG,"BLUETOOTH DISCONNECT");
+                        }
+                    }catch(RuntimeException e){
+                        e.printStackTrace();
+                    }
+                } else {
                         UbtLog.d(TAG,"STOP CIRCLE PLAY");
                         //先复位标志isStartLooping
                         isStartLooping=false;

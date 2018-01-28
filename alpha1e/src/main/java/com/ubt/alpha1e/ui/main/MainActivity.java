@@ -3,6 +3,7 @@ package com.ubt.alpha1e.ui.main;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -265,6 +266,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         initUI();
         mHelper = MainUiBtHelper.getInstance(getContext());
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        filter1.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        filter1.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         registerReceiver(mBroadcastReceiver1, filter1);
         looperThread = new LooperThread(this);
         looperThread.start();
@@ -353,6 +356,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         break;
                 }
 
+            } else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                UbtLog.d(TAG, device.getName() + " ACTION_ACL_CONNECTED");
+            } else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                UbtLog.d(TAG, device.getName() + " ACTION_ACL_DISCONNECTED");
+                //电池动画停止
+                stopchargeAsynchronousTask();
+
             }
         }
     };
@@ -407,25 +419,29 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_remote:
                 if (isBulueToothConnected()) {
-                    if(!removeDuplicateClickEvent()) {
-                    mLaunch.setClass(this, RemoteSelActivity.class);
-                    //startActivity(new Intent(this, ActionTestActivity.class));
-                    startActivity(mLaunch);
+                    if (!removeDuplicateClickEvent()) {
+                        mPresenter.resetGlobalActionPlayer();
+                        mLaunch.setClass(this, RemoteSelActivity.class);
+                        //startActivity(new Intent(this, ActionTestActivity.class));
+                        startActivity(mLaunch);
+
 
                     }
                 } else {
-                        showBluetoothConnectDialog();
+                    showBluetoothConnectDialog();
                 }
                 break;
             case R.id.ll_action:
                 if (isBulueToothConnected()) {
-                    if(!removeDuplicateClickEvent()) {
-                    APP_CURRENT_STATUS = ROBOT_default_gesture;
-                    startActivity(new Intent(this, ActionTestActivity.class));
-                    this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+                    if (!removeDuplicateClickEvent()) {
+                        mPresenter.resetGlobalActionPlayer();
+                        APP_CURRENT_STATUS = ROBOT_default_gesture;
+                        startActivity(new Intent(this, ActionTestActivity.class));
+                        this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+
                     }
                 } else {
-                        showBluetoothConnectDialog();
+                    showBluetoothConnectDialog();
                 }
                 break;
             case R.id.ll_program:
