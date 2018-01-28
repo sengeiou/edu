@@ -6,10 +6,13 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -39,9 +42,13 @@ import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
+import com.weigan.loopview.OnItemSelectedListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -99,9 +106,11 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
             "30", "31", "32", "33", "34", "35", "36", "37", "38", "39",
             "40", "41", "42", "43", "44", "45", "46", "47", "48", "49",
-            "50", "51", "52", "53", "54", "55", "56", "57", "58", "59",};
+            "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"};
 
     private String[] mAlertArr = {"5", "10", "15", "20"};
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
     private HabitsEvent mHabitsEvent = null;
 
@@ -111,14 +120,22 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     private int mRemindSecondIndex = 0;
     private EventDetail<List<PlayContentInfo>> originEventDetail = null;
     private EventDetail<List<PlayContentInfo>> newEventDetail = null;
+
+    private ArrayList<? extends HabitsEvent> mHabitsEventInfoDatas = null;
     private int mWorkdayMode = 1;
 
     protected Dialog mCoonLoadingDia;
 
-    public static HibitsEventEditFragment newInstance(HabitsEvent habitsEvent,int dayType) {
+    public static HibitsEventEditFragment newInstance(List<HabitsEvent> habitsEventList, int editIndex,int dayType) {
+        ArrayList<Parcelable> mHabitsEventList = new ArrayList<>();
+        for(HabitsEvent mHabitsEvent : habitsEventList){
+            mHabitsEventList.add(PG.convertParcelable(mHabitsEvent));
+        }
+
         HibitsEventEditFragment eventEditFragment = new HibitsEventEditFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constant.HABITS_EVENT_INFO_KEY, PG.convertParcelable(habitsEvent));
+        bundle.putParcelableArrayList(Constant.HABITS_EVENT_INFO_LIST_KEY, mHabitsEventList);
+        bundle.putInt(Constant.INDEX_KEY, editIndex);
         bundle.putInt(Constant.PLAY_HIBITS_EVENT_WORKDAY_TYPE, dayType);
         eventEditFragment.setArguments(bundle);
         return eventEditFragment;
@@ -234,6 +251,24 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         lvHour.setInitPosition(0);
         lvHour.setCurrentPosition(2);
 
+        lvHour.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    UbtLog.d(TAG,"hour select start ...");
+                }
+                return false;
+            }
+        });
+
+        lvHour.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                UbtLog.d(TAG,"index = " + index);
+                UbtLog.d(TAG,"hour select end ...");
+            }
+        });
+
         // 设置原始数据
         lvMinute.setCenterTextColor(getResources().getColor(R.color.tv_center_color));
         lvMinute.setItems(Arrays.asList(mMinuteArr));
@@ -310,8 +345,10 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO: inflate a fragment view
         if (getArguments() != null) {
-            mHabitsEvent = getArguments().getParcelable(Constant.HABITS_EVENT_INFO_KEY);
+            mHabitsEventInfoDatas = getArguments().getParcelableArrayList(Constant.HABITS_EVENT_INFO_LIST_KEY);
+            mHabitsEvent = mHabitsEventInfoDatas.get(getArguments().getInt(Constant.INDEX_KEY,0));
             mWorkdayMode = getArguments().getInt(Constant.PLAY_HIBITS_EVENT_WORKDAY_TYPE,1);
+            UbtLog.d(TAG,"mHabitsEventInfoDatas = " + mHabitsEventInfoDatas.size() + "  mHabitsEvent = " + mHabitsEvent);
         }
 
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
@@ -443,10 +480,10 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
                 saveHibitsEvent();
                 break;
             case R.id.rl_alert_one:
-                mPresenter.showAlertDialog(getContext(), mRemindFirstIndex, Arrays.asList(mAlertArr), 1);
+                //mPresenter.showAlertDialog(getContext(), mRemindFirstIndex, Arrays.asList(mAlertArr), 1);
                 break;
             case R.id.rl_alert_two:
-                mPresenter.showAlertDialog(getContext(), mRemindSecondIndex, Arrays.asList(mAlertArr), 2);
+                //mPresenter.showAlertDialog(getContext(), mRemindSecondIndex, Arrays.asList(mAlertArr), 2);
                 break;
             case R.id.rl_play_content_tip:
                 UbtLog.d(TAG,"newEventDetail = " + newEventDetail.contentIds);
@@ -457,19 +494,43 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
 
     private void saveHibitsEvent(){
         if(originEventDetail != null && newEventDetail != null){
-            if(isHasEdit()){
-                List<String> contentIds = new ArrayList<>();
-                for(int index = 0; index < mPlayContentInfoDatas.size();index++ ){
-                    UbtLog.d(TAG,"contentId = " + mPlayContentInfoDatas.get(index).getPlayContentInfo().contentId);
-                    contentIds.add(mPlayContentInfoDatas.get(index).getPlayContentInfo().contentId);
-                }
-                newEventDetail.contentIds = contentIds;
+            HabitsEvent overlapEvent = getOverlapEvent();
+            if(overlapEvent != null){
+                String msg = "与" + overlapEvent.eventName + "事项时间("+overlapEvent.eventTime + "-" + overlapEvent.finishTime + ")冲突，是否继续修改？" ;
+                new ConfirmDialog(getContext()).builder()
+                        .setMsg(msg)
+                        .setCancelable(false)
+                        .setPositiveButton(getStringRes("ui_common_continue"), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                doSave();
+                            }
+                        }).setNegativeButton(getStringRes("ui_common_cancel"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                mCoonLoadingDia.show();
-                mPresenter.saveBehaviourEvent(newEventDetail, mWorkdayMode);
+                    }
+                }).show();
+
             }else {
-                pop();
+                doSave();
             }
+        }
+    }
+
+    private void doSave(){
+        if(isHasEdit()){
+            List<String> contentIds = new ArrayList<>();
+            for(int index = 0; index < mPlayContentInfoDatas.size();index++ ){
+                UbtLog.d(TAG,"contentId = " + mPlayContentInfoDatas.get(index).getPlayContentInfo().contentId);
+                contentIds.add(mPlayContentInfoDatas.get(index).getPlayContentInfo().contentId);
+            }
+            newEventDetail.contentIds = contentIds;
+
+            mCoonLoadingDia.show();
+            mPresenter.saveBehaviourEvent(newEventDetail, mWorkdayMode);
+        }else {
+            pop();
         }
     }
 
@@ -503,6 +564,41 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
                     }
                 }
             }
+        }
+        return false;
+    }
+
+    private HabitsEvent getOverlapEvent(){
+        String eventTime = mHourArr[lvHour.getSelectedItem()] + ":" + mMinuteArr[lvMinute.getSelectedItem()];
+        UbtLog.d(TAG,"eventTime = " + eventTime);
+        boolean isOverlap = false;
+        HabitsEvent overlapEvent = null;
+        for(HabitsEvent habitsEvent : mHabitsEventInfoDatas){
+            if(!newEventDetail.eventId.equals(habitsEvent.eventId) && "1".equals(habitsEvent.status)){
+                isOverlap = isOverlapTime(eventTime,habitsEvent.eventTime,habitsEvent.finishTime);
+                UbtLog.d(TAG,"eventTime = " + habitsEvent.eventTime + "_"+habitsEvent.finishTime + " isOverlap = " + isOverlap);
+                if(isOverlap){
+                    overlapEvent = habitsEvent;
+                    break;
+                }
+            }
+        }
+        return overlapEvent;
+    }
+
+    private boolean isOverlapTime(String eventTime, String startTime,String endTime){
+        Date date;
+        Date startDate ;
+        Date endDate ;
+        try {
+            date  = sdf.parse(eventTime);
+            startDate = sdf.parse(startTime);
+            endDate = sdf.parse(endTime);
+            if(date.getTime() >= startDate.getTime() && date.getTime() <= endDate.getTime()){
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         return false;
     }

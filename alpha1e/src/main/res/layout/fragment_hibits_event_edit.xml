@@ -131,6 +131,7 @@
 
                     <TextView
                         style="@style/text_right_style"
+                        android:drawableRight="@color/trans"
                         android:id="@+id/tv_alert_one"/>
 
                     <View
@@ -154,7 +155,9 @@
 
                     <TextView
                         style="@style/text_right_style"
-                        android:id="@+id/tv_alert_two"/>
+                        android:drawableRight="@color/trans"
+                        android:id="@+id/tv_alert_two"
+                        />
 
                 </RelativeLayout>
 
