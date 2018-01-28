@@ -19,10 +19,12 @@ import android.widget.TextView;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
 import com.ubt.alpha1e.maincourse.courselayout.CourseLevelOneLayout;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
@@ -77,6 +79,14 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
     protected void onResume() {
         super.onResume();
         UbtLog.d(TAG, "------------onResume------");
+        if (!isBulueToothConnected()) {
+            showLoasBleDiaog();
+        } else {
+//            if (isShowBleDialog && mActionEdit.getCurrentCourse() == 1) {
+//                mActionEdit.setLayoutByCurrentCourse();
+//            }
+            isShowBleDialog = false;
+        }
     }
 
     @Override
@@ -308,9 +318,16 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
 
     @Override
     public void onDisconnect() {
-        finish();
-        //关闭窗体动画显示
-        this.overridePendingTransition(0, R.anim.activity_close_down_up);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                UbtLog.d("onLostBtCoon", "蓝牙掉线");
+                if (!isFinishing() && !isShowBleDialog) {
+                    showLoasBleDiaog();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -353,7 +370,38 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
     public void onLostBtCoon() {
         super.onLostBtCoon();
 //        ToastUtils.showShort("蓝牙掉线！！");
+        UbtLog.d("onLostBtCoon", "丢失蓝牙");
 //        finish();
 
+    }
+
+
+    private boolean isShowBleDialog;
+
+    private void showLoasBleDiaog() {
+        isShowBleDialog = true;
+        new ConfirmDialog(this).builder()
+                .setTitle("提示")
+                .setMsg("请先连接机器人蓝牙")
+                .setCancelable(true)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接蓝牙 ");
+                        Intent intent = new Intent();
+                        intent.setClass(CourseLevelOneActivity.this, BluetoothconnectActivity.class);
+                        startActivity(intent);
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                MainCourseActivity.finishByMySelf();
+                ActionCourseActivity.finishByMySelf();
+                CourseLevelOneActivity.this.finish();
+                //关闭窗体动画显示
+                CourseLevelOneActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            }
+        }).show();
     }
 }

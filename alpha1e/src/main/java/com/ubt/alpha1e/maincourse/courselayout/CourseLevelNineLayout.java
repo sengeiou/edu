@@ -78,7 +78,8 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
     private int currentCourse = 1;
 
     private boolean isShowAddArrow;
-
+    private RelativeLayout rlCenterAnimal;
+    private ImageView ivCenterAnimal;
 
     public CourseLevelNineLayout(Context context) {
         super(context);
@@ -183,6 +184,8 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
 
         ivBackInStruction = findViewById(R.id.iv_back_instruction);
         ivBackInStruction.setOnClickListener(this);
+        rlCenterAnimal = findViewById(R.id.rl_center_animal);
+        ivCenterAnimal = findViewById(R.id.iv_center_animal);
     }
 
     /**
@@ -352,6 +355,8 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
             CourseArrowAminalUtil.startViewAnimal(true, ivAddArrow, 1);
             ivAddFrame.setEnabled(true);
             ivAddFrame.setImageResource(R.drawable.ic_stop);
+            rlCenterAnimal.setVisibility(View.GONE);
+            CourseArrowAminalUtil.startTwoLegViewAnimal(false, ivCenterAnimal, 1);
         }
     }
 
@@ -459,6 +464,9 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
                 autoRead = true;
                 ivAddFrame.setImageResource(R.drawable.ic_stop);
                 mHandler.sendEmptyMessage(MSG_AUTO_READ);
+                rlCenterAnimal.setVisibility(View.VISIBLE);
+                CourseArrowAminalUtil.startTwoLegViewAnimal(true, ivCenterAnimal, 1);
+
             }
         }, 1000);
     }
