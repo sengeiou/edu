@@ -396,8 +396,13 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                 }
                 try {
                     Bitmap bitmap = FileUtils.getBitmapFormUri(this, mImageUri);
-                    mImgHead.setImageBitmap(bitmap);
+                   // mImgHead.setImageBitmap(bitmap);
                     path = FileUtils.SaveImage(this, "head", bitmap);
+                    File file = new File(path);
+                    Glide
+                            .with(this)
+                            .load(file)
+                            .into(mImgHead);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
