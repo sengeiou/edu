@@ -1,5 +1,7 @@
 package com.ubt.alpha1e.login;
 
+import com.ubt.alpha1e.BuildConfig;
+
 /**
  * @author admin
  * @className
@@ -16,7 +18,8 @@ public class HttpEntity {
     /**
      * 信鸽获取
      */
-    public static final String XG_URL = "https://test79.ubtrobot.com/xinge-push-rest/";
+    public static final String XG_URL = BuildConfig.WebServiceXG;
+    //public static final String XG_URL = "https://test79.ubtrobot.com/xinge-push-rest/";
     //public static final String XG_URL = "https://account.ubtrobot.com/xinge-push-rest/";
     /**
      * 获取XG AppaccessId AppaccessKey
@@ -26,20 +29,16 @@ public class HttpEntity {
     public static final String bindXGServer = XG_URL + "push/userToken";
     public static final String unbindXGServer = XG_URL + "push/unbindToken";
 
-
-    //http://10.10.32.52:8080/ubx/sys/register  http://10.10.20.71:8010
-     public static final String BASIC_THIRD_LOGIN_URL = "http://10.10.20.71:8010/user-service-rest/v2/"; //测试环境后续上线需要修改正式环境
-//    public static final String BASIC_THIRD_LOGIN_URL = "http://210.75.21.107:8010/user-service-rest/v2/"; //外网
-   // public static final String BASIC_THIRD_LOGIN_URL = "https://account.ubtrobot.com/user-service-rest/v2/"; //正式环境
+    public static final String BASIC_THIRD_LOGIN_URL = BuildConfig.WebServiceThirdLogin; //测试环境后续上线需要修改正式环境
+    //public static final String BASIC_THIRD_LOGIN_URL = "http://10.10.20.71:8010/user-service-rest/v2/"; //测试环境后续上线需要修改正式环境
+    // public static final String BASIC_THIRD_LOGIN_URL = "https://account.ubtrobot.com/user-service-rest/v2/"; //正式环境
 
 
     public static final String THRID_LOGIN_URL = BASIC_THIRD_LOGIN_URL + "user/login/third";
 
-    //  http://10.10.1.14:8080
-//    public static final String BASIC_UBX_SYS = "http://10.10.1.14:8080/ubx/sys/"; //测试环境
-     public static final String BASIC_UBX_SYS = "http://10.10.1.14:8080/alpha1e/"; //测试环境
-//    public static final String BASIC_UBX_SYS = "http://210.75.21.106:8080/alpha1e/"; //外网
-   // public static final String BASIC_UBX_SYS = "https://prodapi.ubtrobot.com/alpha1e/";//正式环境
+     public static final String BASIC_UBX_SYS = BuildConfig.WebServiceUbx; //测试环境
+     //public static final String BASIC_UBX_SYS = "http://10.10.1.14:8080/alpha1e/"; //测试环境
+     //public static final String BASIC_UBX_SYS = "https://prodapi.ubtrobot.com/alpha1e/";//正式环境
 
 
     public static final String REQUEST_SMS_CODE = BASIC_UBX_SYS + "user/register";
@@ -55,8 +54,8 @@ public class HttpEntity {
     public static final String GET_COURSE_PROGRESS = BASIC_UBX_SYS + "course/getCourseProgress";
 
 
-    public static final String BASIC_UBX_SYS_BIND = "http://10.10.1.12:8085/equipment/"; //绑定相关 测试环境
-//    public static final String BASIC_UBX_SYS_BIND = "http://210.75.21.107:8085/equipment/"; //外网
+    public static final String BASIC_UBX_SYS_BIND = BuildConfig.WebServiceBind; //绑定相关 测试环境
+    //public static final String BASIC_UBX_SYS_BIND = "http://10.10.1.12:8085/equipment/"; //绑定相关 测试环境
     //public static final String BASIC_UBX_SYS_BIND = "https://prodapi.ubtrobot.com/equipment/";//正式环境
 
     //查询绑定关系
