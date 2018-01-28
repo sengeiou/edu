@@ -11,6 +11,7 @@ import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
@@ -275,11 +276,22 @@ public class BlocklyVideoPlayer extends StandardGSYVideoPlayer {
 
     @Override
     public void onSeekComplete() {
-        UbtLog.d(TAG, "onSeekComplete");
+
         super.onSeekComplete();
+        int time = mProgressBar.getProgress() * getDuration() / 100;
+        UbtLog.d(TAG, "onSeekComplete:" + time);
+//        resolveDanmakuSeek(this, time);
+
     }
 
-    @Override
+    private void resolveDanmakuSeek(BlocklyVideoPlayer gsyVideoPlayer, long time) {
+        if (GSYVideoManager.instance().getMediaPlayer() != null && mHadPlay) {
+            gsyVideoPlayer.seekTo(time);
+        }
+    }
+
+
+        @Override
     public void onVideoResume() {
         UbtLog.d(TAG, "onVideoResume");
         super.onVideoResume();
