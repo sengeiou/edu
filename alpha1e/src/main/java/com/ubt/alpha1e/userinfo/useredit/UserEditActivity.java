@@ -384,8 +384,12 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                         return;
                     }
 
-                    String type = cr.getType(data.getData());
-                    if (type == null) {
+                    //android gao ban ben
+                    String h_type = cr.getType(data.getData());
+                    //android di ban ben
+                    String l_type = data.getType();
+                    UbtLog.d(TAG,"h_type:"+h_type  + "   l_type:"+l_type);
+                    if (h_type == null && l_type == null){
                         return;
                     }
                     mImageUri = data.getData();

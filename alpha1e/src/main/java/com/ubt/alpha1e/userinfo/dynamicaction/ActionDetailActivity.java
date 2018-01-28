@@ -206,7 +206,15 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
         } else if (type == 3) {
             mProgressDownload.setVisibility(View.VISIBLE);
             mTvPlay.setVisibility(View.GONE);
-            mProgressDownload.setProgress((int) mDynamicActionModel.getDownloadProgress());
+            if ((int) mDynamicActionModel.getDownloadProgress() == 0) {
+                mTvPlay.setVisibility(View.VISIBLE);
+                mTvPlay.setText("等待中");
+                mTvPlay.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            } else {
+                mTvPlay.setVisibility(View.GONE);
+                mProgressDownload.setProgress((int) mDynamicActionModel.getDownloadProgress());
+            }
+
         }
     }
 
@@ -263,7 +271,6 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
                 UbtLog.d("praseDownloadData", "progress=====" + progress);
             } else if (downloadProgressInfo.status == 2) {//下载成功后立即播放
                 mDynamicActionModel.setActionStatu(1);
-                mDynamicActionModel.setActionName("音乐轴");
                 DownLoadActionManager.getInstance(this).playAction(true, mDynamicActionModel);
                 setPlaBtnAction(2);
             } else if (downloadProgressInfo.status == 3) {//机器人未联网

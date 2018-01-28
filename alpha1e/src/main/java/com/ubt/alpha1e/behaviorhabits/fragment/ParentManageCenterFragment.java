@@ -23,19 +23,25 @@ import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsPresenter;
 import com.ubt.alpha1e.behaviorhabits.adapter.HabitsEventRecyclerAdapter;
+import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
+import com.ubt.alpha1e.ui.fragment.BaseRegisterFragment;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.webcontent.WebContentActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -59,6 +65,9 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
     private static final int UPDATE_SWITCH_RESULT = 4;
     private static final int NETWORK_EXCEPTION = 5;
     private static final int EDIT_UPDATE = 6;
+    private static final int REFRECH_DATA = 7;
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
     Unbinder unbinder;
     @BindView(R.id.ll_base_back)
@@ -87,7 +96,8 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
 
     public HabitsEventRecyclerAdapter mAdapter;
     private List<HabitsEvent> mHabitsEventInfoDatas = null;
-    private int mWorkdayMode = 1;//workday=1; holiday=2
+    private UserScore<List<HabitsEvent>> mUserScore = null;
+    private int mWorkdayMode = 2;//workday=1; holiday=2
     private HabitsEvent switchHabitsEvent = null;//
     private UserModel userModel = null;
     protected Dialog mCoonLoadingDia;
@@ -100,10 +110,32 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
                 case CLICK_SWITCH_EVENT:
                     //切换开关
                     switchHabitsEvent = mHabitsEventInfoDatas.get(msg.arg1);
+                    final int status = "0".equals(switchHabitsEvent.status) ? 1 : 0;
+                    UbtLog.d(TAG,"switchHabitsEvent.status = " + status );
+                    if(status == 1){
+                        HabitsEvent overlapEvent = getOverlapEvent(switchHabitsEvent);
+                        if(overlapEvent != null){
+                            String showMsg = "与" + overlapEvent.eventName + "事项时间("+overlapEvent.eventTime + "-" + overlapEvent.finishTime + ")冲突，是否继续修改？" ;
+                            new ConfirmDialog(getContext()).builder()
+                                    .setMsg(showMsg)
+                                    .setCancelable(false)
+                                    .setPositiveButton(getStringRes("ui_common_continue"), new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            doSwitchEvent(switchHabitsEvent.eventId,status);
+                                        }
+                                    }).setNegativeButton(getStringRes("ui_common_cancel"), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
-                    int status = "0".equals(switchHabitsEvent.status) ? 1 : 0;
-                    mCoonLoadingDia.show();
-                    mPresenter.enableBehaviourEvent(switchHabitsEvent.eventId, status);
+                                }
+                            }).show();
+                        }else {
+                            doSwitchEvent(switchHabitsEvent.eventId,status);
+                        }
+                    }else {
+                        doSwitchEvent(switchHabitsEvent.eventId,status);
+                    }
                     break;
                 case UPDATE_SWITCH_RESULT:
 
@@ -116,13 +148,13 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
                     break;
                 case SHOW_EVENT_INFO:
                     //编辑
-                    startForResult(HibitsEventEditFragment.newInstance(mHabitsEventInfoDatas.get(msg.arg1),mWorkdayMode), Constant.HIBITS_EVENT_EDIT_REQUEST_CODE);
+                    startForResult(HibitsEventEditFragment.newInstance(mHabitsEventInfoDatas, msg.arg1, mWorkdayMode), Constant.HIBITS_EVENT_EDIT_REQUEST_CODE);
                     break;
                 case UPDATE_UI_DATA:
                     mCoonLoadingDia.cancel();
-                    UserScore<List<HabitsEvent>> userScore = (UserScore<List<HabitsEvent>>) msg.obj;
-                    if(userScore != null){
-                        List<HabitsEvent> habitsEventList = userScore.details;
+                    mUserScore = (UserScore<List<HabitsEvent>>) msg.obj;
+                    if(mUserScore != null){
+                        List<HabitsEvent> habitsEventList = mUserScore.details;
                         mHabitsEventInfoDatas.clear();
                         mHabitsEventInfoDatas.addAll(habitsEventList);
                         mAdapter.notifyDataSetChanged();
@@ -133,8 +165,13 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
                     if(habitsEvent != null){
                         for(int index = 0 ;index < mHabitsEventInfoDatas.size();index++){
                             if(habitsEvent.eventId == mHabitsEventInfoDatas.get(index).eventId){
-                                mHabitsEventInfoDatas.get(index).eventTime = habitsEvent.eventTime;
-                                mAdapter.notifyItemChanged(index);
+                                if(mHabitsEventInfoDatas.get(index).eventTime.equals(habitsEvent.eventTime)){
+                                    mHabitsEventInfoDatas.get(index).eventTime = habitsEvent.eventTime;
+                                    mAdapter.notifyItemChanged(index);
+                                }else {
+                                    // 如果改了时间，则刷新数据
+                                    mHandler.sendEmptyMessage(REFRECH_DATA);
+                                }
                                 break;
                             }
                         }
@@ -143,6 +180,9 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
                 case NETWORK_EXCEPTION:
                     mCoonLoadingDia.cancel();
                     ToastUtils.showShort(getStringRes("ui_common_network_request_failed"));
+                    break;
+                case REFRECH_DATA:
+                    switchMode(mWorkdayMode);
                     break;
             }
         }
@@ -164,13 +204,14 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
 
         tvBaseTitleName.setText(getStringRes("ui_habits_parent_management_center"));
         ivTitleRight.setBackgroundResource(R.drawable.icon_habits_statistics);
-        ivTitleRight.setVisibility(View.VISIBLE);
+        ivTitleRight.setVisibility(View.GONE);
 
         mHabitsEventInfoDatas = new ArrayList<>();
 
         initRecyclerViews();
 
-        switchMode(1);
+        mHandler.sendEmptyMessage(REFRECH_DATA);
+
     }
 
     public void initRecyclerViews() {
@@ -192,6 +233,46 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
 
         mAdapter = new HabitsEventRecyclerAdapter(getContext(), mHabitsEventInfoDatas,false, mHandler);
         rvHabitsEvent.setAdapter(mAdapter);
+    }
+
+    private void doSwitchEvent(String eventId,int status){
+        mCoonLoadingDia.show();
+        mPresenter.enableBehaviourEvent(eventId, status);
+    }
+
+    private HabitsEvent getOverlapEvent(HabitsEvent switchHabitsEvent){
+        String eventTime = switchHabitsEvent.eventTime;
+        UbtLog.d(TAG,"eventTime = " + eventTime);
+        boolean isOverlap = false;
+        HabitsEvent overlapEvent = null;
+        for(HabitsEvent habitsEvent : mHabitsEventInfoDatas){
+            if(!switchHabitsEvent.eventId.equals(habitsEvent.eventId) && "1".equals(habitsEvent.status)){
+                isOverlap = isOverlapTime(eventTime,habitsEvent.eventTime,habitsEvent.finishTime);
+                UbtLog.d(TAG,"eventTime = " + habitsEvent.eventTime + "_"+habitsEvent.finishTime + " isOverlap = " + isOverlap);
+                if(isOverlap){
+                    overlapEvent = habitsEvent;
+                    break;
+                }
+            }
+        }
+        return overlapEvent;
+    }
+
+    private boolean isOverlapTime(String eventTime, String startTime,String endTime){
+        Date date;
+        Date startDate ;
+        Date endDate ;
+        try {
+            date  = sdf.parse(eventTime);
+            startDate = sdf.parse(startTime);
+            endDate = sdf.parse(endTime);
+            if(date.getTime() >= startDate.getTime() && date.getTime() <= endDate.getTime()){
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
@@ -229,6 +310,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
         UbtLog.d(TAG,"requestCode = " + requestCode);
         if(requestCode == Constant.HIBITS_EVENT_EDIT_REQUEST_CODE && resultCode == Constant.HIBITS_EVENT_EDIT_RESPONSE_CODE ){
             UbtLog.d(TAG,"resultCode = " + resultCode + "   " + data.getParcelable(Constant.HABITS_EVENT_INFO_KEY));
+
             Message msg = new Message();
             msg.what = EDIT_UPDATE;
             msg.obj = data.getParcelable(Constant.HABITS_EVENT_INFO_KEY);
@@ -347,8 +429,9 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
             ivHolidaysSelect.setVisibility(View.VISIBLE);
         }
 
+        UserModel userModel = (UserModel) SPUtils.getInstance().readObject(com.ubt.alpha1e.base.Constant.SP_USER_INFO);
         mCoonLoadingDia.show();
-        mPresenter.getParentBehaviourList(userModel.getSex(),"1",String.valueOf(workdayMode));
+        mPresenter.getParentBehaviourList(userModel.getSex(),userModel.getGradeByType(),String.valueOf(workdayMode));
     }
 
 }
