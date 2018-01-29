@@ -131,7 +131,7 @@ public class CourseLevelEightLayout extends BaseActionEditLayout implements Cour
                 }
             }
         }
-        this.currentCourse = level;
+        this.currentCourse = 1;
         this.courseProgressListener = courseProgressListener;
         setLayoutByCurrentCourse();
         isSaveAction = true;

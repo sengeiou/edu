@@ -135,7 +135,7 @@ public class CourseLevelThreeLayout extends BaseActionEditLayout implements Cour
                 }
             }
         }
-        this.currentCourse = level;
+        this.currentCourse = 1;
         this.courseProgressListener = courseProgressListener;
         setLayoutByCurrentCourse();
         isSaveAction = true;

@@ -238,7 +238,7 @@ public class ActionCourseDataManager {
                 level = recordlevel;
             }
         }
-        return getCourseActionModel(currentCourse, level);
+        return getCourseActionModel(currentCourse, 1);
     }
 
 

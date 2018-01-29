@@ -133,7 +133,7 @@ public class CourseLevelSevenLayout extends BaseActionEditLayout implements Acti
             }
 
         }
-        this.currentCourse = level;
+        this.currentCourse = 1;
         this.courseProgressListener = courseProgressListener;
         setLayoutByCurrentCourse();
         isSaveAction = true;
