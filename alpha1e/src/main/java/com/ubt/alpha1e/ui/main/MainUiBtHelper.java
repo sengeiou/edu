@@ -50,16 +50,16 @@ public class MainUiBtHelper extends BaseHelper {
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
-        JSONObject mData=new JSONObject();
-        try {
-            mData.put("mac", mac);
-            mData.put("cmd", cmd);
-            mData.put("param", Base64.encodeToString(param,Base64.DEFAULT));
-            mData.put("len", len);
-            EventBus.getDefault().post(new MainActivity.MessageEvent(mData.toString()));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        JSONObject mData=new JSONObject();
+//        try {
+//            mData.put("mac", mac);
+//            mData.put("cmd", cmd);
+//            mData.put("param", Base64.encodeToString(param,Base64.DEFAULT));
+//            mData.put("len", len);
+//            EventBus.getDefault().post(new MainActivity.MessageEvent(mData.toString()));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
         try {
             if(cmd == ConstValue.DV_READ_NETWORK_STATUS){
                 String networkInfoJson = BluetoothParamUtil.bytesToString(param);

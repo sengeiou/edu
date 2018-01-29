@@ -214,7 +214,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                     // UbtLog.d(TAG, "index " + i + "value :" + mParams[i]);
                     if (mParams[2] == ROBOT_CHARGING_STATUS) {
                         IS_CHARGING=true;
-                        UbtLog.d(TAG, " IS CHARGING ");
+                       // UbtLog.d(TAG, " IS CHARGING ");
                         mView.dealMessage(Constant.ROBOT_CHARGING);
                         mView.showBatteryCapacity(true,getPowerCapacity(mParams[3]));
                     } else if(mParams[2]==ROBOT_UNCHARGE_STATUS) {
@@ -222,9 +222,9 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                         mView.dealMessage(Constant.ROBOT_UNCHARGING);
                         lowBatteryFunction(mParams[3]);
                         mView.showBatteryCapacity(false,getPowerCapacity(mParams[3]));
-                        UbtLog.d(TAG,"NOT CHARGING");
+                      //  UbtLog.d(TAG,"NOT CHARGING");
                     }else if(mParams[2]==ROBOT_CHARGING_ENOUGH_STATUS){
-                        UbtLog.d(TAG,"BATTERY ENOUGH AND PLUG IN CHARGING");
+                      //  UbtLog.d(TAG,"BATTERY ENOUGH AND PLUG IN CHARGING");
                         mView.dealMessage(Constant.ROBOT_CHARGING_ENOUGH);
                         mView.showBatteryCapacity(true,getPowerCapacity(mParams[3]));
                     }
