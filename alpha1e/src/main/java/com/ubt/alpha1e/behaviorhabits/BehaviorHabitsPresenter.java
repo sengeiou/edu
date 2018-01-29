@@ -196,7 +196,7 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                 @Override
                 public void onError(Call call, Exception e, int id) {
                     UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage() + "  mView = " + mView);
-                    if(mView==null){
+                    if(mView == null){
                         return;
                     }
                     switch (id) {
@@ -229,6 +229,10 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
                 @Override
                 public void onResponse(String response, int id) {
                     UbtLog.d(TAG, "response = " + response);
+                    if(mView == null){
+                        return;
+                    }
+
                     BaseResponseModel mbaseResponseModel = GsonImpl.get().toObject(response,
                             new TypeToken<BaseResponseModel>() {
                             }.getType());//加上type转换，避免泛型擦除

@@ -133,7 +133,7 @@ public class CourseLevelFiveLayout extends BaseActionEditLayout implements Cours
                 }
             }
         }
-        this.currentCourse = level;
+        this.currentCourse = 1;
         this.courseProgressListener = courseProgressListener;
         setLayoutByCurrentCourse();
         isSaveAction = true;

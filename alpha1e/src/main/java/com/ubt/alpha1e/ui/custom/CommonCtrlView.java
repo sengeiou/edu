@@ -9,17 +9,14 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -140,6 +137,11 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
      */
       public void setPresenter(MainPresenter mainPresenter){
         mMainPresenter=mainPresenter;
+          //WORKAROUND Main ACTIVITY GLOBAL INDICATOR ANIMATION NOT STOP, BECAUSE THE CommonCTRL DESTROY
+          if(currentState.equals(ActionPlayer.Play_state.action_finish)){
+              UbtLog.d(TAG,"CommonCtrlView windows destroy, so notify the global button stop animation");
+              mMainPresenter.requestGlobalButtonControl(false);
+          }
     }
 
 
