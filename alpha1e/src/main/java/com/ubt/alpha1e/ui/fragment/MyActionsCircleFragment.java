@@ -435,10 +435,11 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 @Override
                 public void run() {
                     mAdapter.notifyDataSetChanged();
+                    updateCircleButton();
                 }
             });
             clearPlayingInfoList();
-            updateCircleButton();
+
         } else {
             //拍头执行到这里
             if (mCurrentPlayType == ActionPlayer.Play_type.cycle_action) {
