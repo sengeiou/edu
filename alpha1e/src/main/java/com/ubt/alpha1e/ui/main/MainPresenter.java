@@ -248,6 +248,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             } else if(mCmd==ConstValue.DV_VOICE_WAIT){
                 UbtLog.d(TAG,"HIDDEN BUDDLE TEXT");
                 mView.hiddenBuddleText();
+                resetGlobalActionPlayer();
             } else {
                 //  UbtLog.d(TAG, "ROBOT OTHER SITUATION" + mCmd);
             }
