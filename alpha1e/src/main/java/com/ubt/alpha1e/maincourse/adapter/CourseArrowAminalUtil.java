@@ -60,4 +60,27 @@ public class CourseArrowAminalUtil {
             }
         }
     }
+    /**
+     * 执行指示动画
+     *
+     * @param flag
+     * @param imageView
+     * @param arrow
+     */
+    public static void startTwoLegViewAnimal(boolean flag, ImageView imageView, int arrow) {
+        AnimationDrawable animationDrawable = null;
+        if (flag) {
+            imageView.setVisibility(View.VISIBLE);
+            imageView.setImageResource( R.drawable.animal_baidongleg);
+            animationDrawable = (AnimationDrawable) imageView.getDrawable();
+            animationDrawable.start();
+        } else {
+            imageView.setVisibility(View.GONE);
+            if (null != animationDrawable) {
+                animationDrawable.stop();
+            }
+        }
+    }
+
+
 }

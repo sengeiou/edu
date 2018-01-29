@@ -148,6 +148,10 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         isSaveAction = true;
     }
 
+    public int getCurrentCourse() {
+        return currentCourse;
+    }
+
     /**
      * 根据当前是第几个关卡显示对应的提示
      * 根据当前课时显示界面

@@ -19,7 +19,6 @@ import com.ubt.alpha1e.business.ThemeManagerLitener;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator.DataType;
 import com.ubt.alpha1e.data.DB.ActionsRecordOperater;
-import com.ubt.alpha1e.data.DB.ActionsRecordOperaterOld;
 import com.ubt.alpha1e.data.DB.UpgradeOperater;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ISharedPreferensListenet;

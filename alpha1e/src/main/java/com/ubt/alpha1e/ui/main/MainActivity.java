@@ -77,6 +77,8 @@ import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
+import com.ubt.alpha1e.ui.helper.BluetoothStateHelper;
+import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
@@ -329,9 +331,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        UbtLog.d(TAG, "mainactivity onDestroy ..... ");
         if (mBroadcastReceiver1 != null) {
             getContext().unregisterReceiver(mBroadcastReceiver1);
         }
+        BluetoothStateHelper.getInstance(getContext()).doCancelCoon();
         stopBuddleTextAsynchronousTask();
         stopchargeAsynchronousTask();
         SendClientIdService.doStopSelf();
@@ -364,6 +368,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 UbtLog.d(TAG, device.getName() + " ACTION_ACL_DISCONNECTED");
                 //电池动画停止
                 stopchargeAsynchronousTask();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        looperThread.send(createMessage(APP_BLUETOOTH_CLOSE));
+                    }
+                });
 
             }
         }
@@ -587,66 +597,66 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             }
         } else if (event.getEvent() == RobotEvent.Event.DISCONNECT) {//Bluetooth Disconect
             UbtLog.d(TAG, "DISCONNECTED ");
+            if (MainActivity.this != null) {
+                ((AlphaApplication) MainActivity.this.getApplicationContext()).doLostConnect();
+            }else {
+                return;
+            }
+            showGlobalButtonAnmiationEffect(false);
+            stopchargeAsynchronousTask();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    looperThread.send(createMessage(APP_BLUETOOTH_CLOSE));
+                    //隐藏全局控制按钮
+                    mPresenter.exitGlocalControlCenter();
 
-            if (MainUiBtHelper.getInstance(getContext()).isLostCoon()) {
-                UbtLog.d(TAG, "mainactivity isLostCoon");
-                showGlobalButtonAnmiationEffect(false);
-                stopchargeAsynchronousTask();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        looperThread.send(createMessage(APP_BLUETOOTH_CLOSE));
-                        //隐藏全局控制按钮
-                        mPresenter.exitGlocalControlCenter();
-
-                        if (AppManager.getInstance().currentActivity() != null) {
-                            UbtLog.d(TAG, "onLostBtCoon " + "  不为空" + AppManager.getInstance().currentActivity());
-                            Activity mActivity = AppManager.getInstance().currentActivity();
-                            if (!(mActivity instanceof RemoteActivity
-                                    || mActivity instanceof RemoteSelActivity
-                                    || mActivity instanceof MainCourseActivity
-                                    || mActivity instanceof PrincipleActivity
-                                    || mActivity instanceof SplitActivity
-                                    || mActivity instanceof MergeActivity
-                                    || mActivity instanceof FeatureActivity
-                                    /*|| mActivity instanceof MainCourseActivity
-                                    || mActivity instanceof PrincipleActivity
-                                    || mActivity instanceof SplitActivity
-                                    || mActivity instanceof MergeActivity
-                                    || mActivity instanceof FeatureActivity*/
-                                    || mActivity instanceof ActionTestActivity
-                                    || mActivity instanceof ActionCourseActivity
-                                    || mActivity instanceof NetconnectActivity
-                                    || mActivity instanceof NetSearchResultActivity
-                                    || mActivity instanceof CourseLevelOneActivity
-                                    || mActivity instanceof CourseLevelTwoActivity
-                                    || mActivity instanceof CourseLevelThreeActivity
-                                    || mActivity instanceof CourseLevelFourActivity
-                                    || mActivity instanceof CourseLevelFiveActivity
-                                    || mActivity instanceof CourseLevelSixActivity
-                                    || mActivity instanceof CourseLevelSevenActivity
-                                    || mActivity instanceof CourseLevelEightActivity
-                                    || mActivity instanceof CourseLevelNineActivity
-                                    || mActivity instanceof CourseLevelTenActivity
-                            )) {
-                                return;
-                            }
-                            if (dialog != null) {
-                                dialog.dismiss();
-                                dialog = null;
-                            }
-                            if (AppManager.getInstance().currentActivity() instanceof NetconnectActivity || AppManager.getInstance().currentActivity() instanceof NetSearchResultActivity) {
-                                AppManager.getInstance().finishActivity();
-                                return;
-                            }
-
-                            showBluetoothDisconnect();
+                    if (AppManager.getInstance().currentActivity() != null) {
+                        UbtLog.d(TAG, "onLostBtCoon " + "  不为空" + AppManager.getInstance().currentActivity());
+                        Activity mActivity = AppManager.getInstance().currentActivity();
+                        if (!(mActivity instanceof RemoteActivity
+                                || mActivity instanceof RemoteSelActivity
+                                || mActivity instanceof MainCourseActivity
+                                || mActivity instanceof PrincipleActivity
+                                || mActivity instanceof SplitActivity
+                                || mActivity instanceof MergeActivity
+                                || mActivity instanceof FeatureActivity
+                                /*|| mActivity instanceof MainCourseActivity
+                                || mActivity instanceof PrincipleActivity
+                                || mActivity instanceof SplitActivity
+                                || mActivity instanceof MergeActivity
+                                || mActivity instanceof FeatureActivity*/
+                                || mActivity instanceof ActionTestActivity
+                                || mActivity instanceof ActionCourseActivity
+                                || mActivity instanceof NetconnectActivity
+                                || mActivity instanceof NetSearchResultActivity
+                                || mActivity instanceof CourseLevelOneActivity
+                                || mActivity instanceof CourseLevelTwoActivity
+                                || mActivity instanceof CourseLevelThreeActivity
+                                || mActivity instanceof CourseLevelFourActivity
+                                || mActivity instanceof CourseLevelFiveActivity
+                                || mActivity instanceof CourseLevelSixActivity
+                                || mActivity instanceof CourseLevelSevenActivity
+                                || mActivity instanceof CourseLevelEightActivity
+                                || mActivity instanceof CourseLevelNineActivity
+                                || mActivity instanceof CourseLevelTenActivity
+                        )) {
+                            return;
+                        }
+                        if (dialog != null) {
+                            dialog.dismiss();
+                            dialog = null;
+                        }
+                        if (AppManager.getInstance().currentActivity() instanceof NetconnectActivity || AppManager.getInstance().currentActivity() instanceof NetSearchResultActivity) {
+                            AppManager.getInstance().finishActivity();
+                            return;
+                        }
+                        showBluetoothDisconnect();
                         } else {
                             UbtLog.d(TAG, "onLostBtCoon " + "  为空");
                         }
-                    }
-                });
-            }
+                }
+            });
         } else if (event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS) {
             UbtLog.d(TAG, "mainactivity CONNECT_SUCCESS 1");
             if (!MainUiBtHelper.getInstance(getContext()).isLostCoon()) {

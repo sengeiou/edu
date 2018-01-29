@@ -262,10 +262,10 @@ public class HttpAddress {
 
     //public static final String WebServiceAdderss = "http://10.10.1.12:8080/ubx";//测试部测试环境
     //public static final String WebServiceAdderss = "http://10.10.1.14:8080/ubx";//研发测试环境
-    //public static final String WebServiceAdderss = "https://services.ubtrobot.com/ubx";//正式环境
+    public static final String WebServiceAdderss = "https://services.ubtrobot.com/ubx";//正式环境
     //public static final String WebServiceAdderss = "https://10.10.1.14:8443/ubx";//研发测试环境
 
-    public static final String WebServiceAdderss = BuildConfig.WebServiceAdderss;
+    //public static final String WebServiceAdderss = BuildConfig.WebServiceAdderss;
     public static final String WebServiceAdderss_Image = "https://services.ubtrobot.com/ubx";
     public static final String WebServiceAdderss_Video = "https://services.ubtrobot.com";
     public static final String[] WebHostnames = {"services.ubtrobot.com",
@@ -290,13 +290,13 @@ public class HttpAddress {
 
     //课程
     //public static final String WebCourseAdderss = "http://10.10.20.30:8039/course-rest";//研发测试环境
-    //public static final String WebCourseAdderss = "https://account.ubtrobot.com/course-rest";//正式测试环境
-    public static final String WebCourseAdderss = BuildConfig.WebCourseAdderss;
+    public static final String WebCourseAdderss = "https://account.ubtrobot.com/course-rest";//正式测试环境
+    //public static final String WebCourseAdderss = BuildConfig.WebCourseAdderss;
 
     //Blockly更新URL
     //public static final String WebBlocklyUpdateAdderss = "http://10.10.1.12:8030/alpha1/zip?versionId=";
-    //public static final String WebBlocklyUpdateAdderss = "https://account.ubtrobot.com/alpha1e-rest/alpha1/zip?versionId=";
-    public static final String WebBlocklyUpdateAdderss = BuildConfig.WebBlocklyUpdateAdderss;
+    public static final String WebBlocklyUpdateAdderss = "https://account.ubtrobot.com/alpha1e-rest/alpha1/zip?versionId=";
+    //public static final String WebBlocklyUpdateAdderss = BuildConfig.WebBlocklyUpdateAdderss;
 
     //用户注册登录
     //public static final String WebUserDataPlatformAdderss = "http://10.10.1.52:8010";//研发测试环境
@@ -304,7 +304,8 @@ public class HttpAddress {
 
 
     /***********************Alpha 1E*********************************/
-    public static final String WebServiceAdderssFor1E = BuildConfig.WebServiceAdderssFor1E;
+    //public static final String WebServiceAdderssFor1E = BuildConfig.WebServiceAdderssFor1E;
+    public static final String WebServiceAdderssFor1E = "https://api.ubtrobot.com/ubx";
 
 
     // -----------------------------------------------------------------------------------------
