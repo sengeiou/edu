@@ -111,7 +111,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
                     //Handler.post 会有延时，所以此处再判断一次是否为null
                     if(commonCtrlView != null){
-                        commonCtrlView.onDestroy();
+                       commonCtrlView.onDestroy();
                         commonCtrlView = null;
                     }
                     break;
@@ -123,11 +123,11 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     };
 
     public static CommonCtrlView getInstace(Context context) {
-        if(commonCtrlView!=null){
-            commonCtrlView.onDestroy();
+        if(commonCtrlView==null) {
+            commonCtrlView = new CommonCtrlView(context);
         }
-        commonCtrlView = new CommonCtrlView(context);
         lay_ctrl_more.setVisibility(View.VISIBLE);
+        mFloatLayout.setVisibility(View.VISIBLE);
         return commonCtrlView;
     }
 
@@ -177,11 +177,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         mMainHelper.doRegisterListenerUI(this);
         mHelper.RegisterHelper();
 
-        playingName = mBaseActivity.readCurrentPlayingActionName();
-        currentState = mHelper.getPlayerState();
-        currentNewPlayState = mHelper.getNewPlayerState();
-        UbtLog.d(TAG, "currentState=" + currentState);
-
     }
 
     private void createFloatView() {
@@ -218,7 +213,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(commonCtrlView != null){
-                    commonCtrlView.onDestroy();
+                   commonCtrlView.onDestroy();
                     commonCtrlView = null;
                 }
                 return false;
@@ -255,6 +250,11 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
         //view_alertdialog  layout
         txt_action_name_m = (TextView) view.findViewById(R.id.text_playContentName);
+        playingName = mBaseActivity.readCurrentPlayingActionName();
+        UbtLog.d(TAG,"mHelper getPlayerName"+mHelper.getPlayerName()+"sharepreference "+playingName);
+        currentState=mHelper.getPlayerState();
+        currentNewPlayState = mHelper.getNewPlayerState();
+        UbtLog.d(TAG, "currentState=" + currentState +"currentName: "+playingName);
 
         UbtLog.d(TAG, "playingName=" + playingName);
         if(playingName.equals("NO_VALUE")){
@@ -484,7 +484,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         if (mFloatLayout != null) {
             mWindowManager.removeView(mFloatLayout);
         }
-
         mHelper.unRegisterListeners(this);
         mHelper.UnRegisterHelper();
         mMainHelper.doUnRegisterListenerUI(this);

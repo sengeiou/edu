@@ -858,10 +858,10 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     if (MyActionsHelper.mCurrentSeletedNameList.get(i).equals(action_name)) {
                         UbtLog.d(TAG, "current select is looping:" + isStartLooping + "name :" + action_name + "size" + MyActionsHelper.mCurrentSeletedNameList.size());
                         actionList.put(MyActionsHelper.map_val_action_selected, true);
-                        if (mHelper.getCurrentPlayName().equals(action_name)) {
-                            actionList.put(MyActionsHelper.map_val_action_is_playing, true);
-                        }
-                        break;
+                    }
+                   // if (mHelper.getCurrentPlayName().equals(action_name)) {
+                    if(AlphaApplication.getBaseActivity().readCurrentPlayingActionName().equals(action_name)){
+                        actionList.put(MyActionsHelper.map_val_action_is_playing, true);
                     }
                     //退出播放列表后，还能够继续播放结束
                 }
@@ -1030,6 +1030,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private void clearPlayingInfoList(){
         MyActionsHelper.mCurrentSeletedNameList.clear();
         MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+        AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
         for (Map<String, Object> item : mDatas) {
             item.put(MyActionsHelper.map_val_action_is_playing, false);
             item.put(MyActionsHelper.map_val_action_selected, false);

@@ -56,7 +56,7 @@ public class GlobalMsgService extends Service {
         UbtLog.i(TAG,"onDataSynEvent event---->" + xgPushShowedResult.getContent());
         try {
             JSONObject mJson = new JSONObject(xgPushShowedResult.getCustomContent());
-            if(  mJson.getString("category").equals(XGCmdConstract.BEHAVIOUR_HABIT)) {
+            if( mJson.getString("category").equals(XGCmdConstract.BEHAVIOUR_HABIT)) {
                 if (mJson.get("eventId") != null) {
                     Log.d("TPush"," contents"+xgPushShowedResult.getContent());
                     new HibitsAlertDialog(AppManager.getInstance().currentActivity()).builder()
@@ -64,7 +64,6 @@ public class GlobalMsgService extends Service {
                             .setEventId(mJson.get("eventId").toString())
                             .setMsg(xgPushShowedResult.getContent())
                             .show();
-
                     //  new LowBatteryDialog(AppManager.getInstance().currentActivity()).setBatteryThresHold(1000000).builder().show();
                 }
             }
