@@ -123,11 +123,14 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     };
 
     public static CommonCtrlView getInstace(Context context) {
+        if(commonCtrlView!=null){
+            commonCtrlView.onDestroy();
+            commonCtrlView=null;
+        }
         if(commonCtrlView==null) {
             commonCtrlView = new CommonCtrlView(context);
         }
         lay_ctrl_more.setVisibility(View.VISIBLE);
-        mFloatLayout.setVisibility(View.VISIBLE);
         return commonCtrlView;
     }
 
