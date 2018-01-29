@@ -252,6 +252,7 @@ public class ActionPlayer implements BlueToothInteracter {
             mSourceActionNameList = new ArrayList<>();
         }
         mSourceActionNameList.add(action_name);
+        AlphaApplication.getBaseActivity().saveCurrentPlayingActionName(action_name);
         MyActionsHelper.Action_type mCurrentActionType= MyActionsHelper.mCurrentLocalPlayType;
         if(action_name.equals(mCurrentDefaultAction)){
             MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.Unkown;
@@ -709,6 +710,8 @@ public class ActionPlayer implements BlueToothInteracter {
                             //线上友盟crash报null,但是找不到规律，判null处理
                             continue;
                         }
+//                        //全局控制按钮消失DESTROY后，需要通过这个变量来获取正在播放的
+                        AlphaApplication.getBaseActivity().saveCurrentPlayingActionName(action_name);
                         int pos = actionInfo.actionSize;
                         if(pos < MyActionsHelper.localSize){
                             action_name = FileTools.action_robot_file_path + "/"+action_name+".hts";
@@ -809,6 +812,7 @@ public class ActionPlayer implements BlueToothInteracter {
     public void clearPlayingInfoList(){
         MyActionsHelper.mCurrentSeletedNameList.clear();
         MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+        AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
         for (Map<String, Object> item : mDatas) {
             item.put(MyActionsHelper.map_val_action_is_playing, false);
             item.put(MyActionsHelper.map_val_action_selected, false);

@@ -142,7 +142,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
                 }
             }
         }
-        this.currentCourse = level;
+        this.currentCourse = 1;
         this.courseProgressListener = courseProgressListener;
         setLayoutByCurrentCourse();
         isSaveAction = true;

@@ -138,7 +138,7 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
                 }
             }
         }
-        this.currentCourse = level;
+        this.currentCourse = 1;
         this.courseProgressListener = courseProgressListener;
         setLayoutByCurrentCourse();
         isSaveAction = true;

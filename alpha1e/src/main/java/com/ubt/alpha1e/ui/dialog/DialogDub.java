@@ -343,6 +343,10 @@ public class DialogDub extends Dialog {
 
     public void saveRecord(final String name) {
         if (FileTools.checkFile(mDir + File.separator + name + ".mp3")) {
+            if (type == 1) {
+                ToastUtils.showShort("音频名字重复");
+                return;
+            }
             MyAlertDialog.getInstance(
                     context,
                     ResourceManager.getInstance(context).getStringResources("ui_resave_tip"),
