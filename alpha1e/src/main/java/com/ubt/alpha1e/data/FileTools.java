@@ -74,7 +74,7 @@ public class FileTools {
     public static final String actions_new_log_name = "actions_new_logs";
     public static final String package_name = "com.ubt.alpha1e";
     public static final String db_log_cache = file_path + "/logs";
-    public static final String db_log_name = "Alpha1E_20180111001";
+    public static final String db_log_name = "Alpha1E_20180128001";
     public static final String db_log_version = "UbtLogs_version.txt";
     public static final String tmp_file_cache = file_path + "/tmps";
 
