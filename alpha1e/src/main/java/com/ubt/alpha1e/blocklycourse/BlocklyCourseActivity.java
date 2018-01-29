@@ -25,7 +25,9 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoShotListener;
+import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.ubt.alpha1e.R;
@@ -48,9 +50,12 @@ import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import okhttp3.Call;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 import static com.ubt.alpha1e.base.Constant.SP_CURRENT_BLOCK_COURSE_ID;
 
@@ -114,6 +119,11 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
 
         videoPlayer.getStartButton().setVisibility(View.GONE);
         videoPlayer.setHideKey(false); //设置全屏不隐藏虚拟按键
+
+        VideoOptionModel videoOptionModel = new VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
+        List<VideoOptionModel> list = new ArrayList<>();
+        list.add(videoOptionModel);
+        GSYVideoManager.instance().setOptionModelList(list);
 
 
         //videoPlayer.setBottomProgressBarDrawable(getResources().getDrawable(R.drawable.video_new_progress));
