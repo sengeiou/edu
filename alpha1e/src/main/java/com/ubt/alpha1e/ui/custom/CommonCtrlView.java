@@ -272,7 +272,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             gifImageView.setVisibility(View.VISIBLE);
             radiologicalWaveAnim.setOneShot(false);
             radiologicalWaveAnim.setVisible(true,true);
-            radiologicalWaveAnim.start();
+            //radiologicalWaveAnim.start();
             enablePlayStopButton(playingName);
         }else{
             gifImageView.setVisibility(View.INVISIBLE);
