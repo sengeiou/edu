@@ -20,7 +20,6 @@ import com.tencent.ai.tvs.info.WxInfoManager;
 import com.tencent.connect.common.Constants;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.action.help.HelpActivity;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.SPUtils;
@@ -99,8 +98,19 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
             ToastUtils.showLong("叮当登录异常，请重新登录");
         }
 
-        initTVS();
+//        initTVS();
         initControlListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initTVS();
+            }
+        }, 200);
     }
 
     private void initTVS() {
