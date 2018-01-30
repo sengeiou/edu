@@ -137,11 +137,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
      */
       public void setPresenter(MainPresenter mainPresenter){
         mMainPresenter=mainPresenter;
-          //WORKAROUND Main ACTIVITY GLOBAL INDICATOR ANIMATION NOT STOP, BECAUSE THE CommonCTRL DESTROY
-          if(currentState.equals(ActionPlayer.Play_state.action_finish)){
-              UbtLog.d(TAG,"CommonCtrlView windows destroy, so notify the global button stop animation");
-              mMainPresenter.requestGlobalButtonControl(false);
-          }
     }
 
 

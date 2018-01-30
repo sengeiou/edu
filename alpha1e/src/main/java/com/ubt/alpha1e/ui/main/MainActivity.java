@@ -326,7 +326,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     showDisconnectIcon();
                 }
             }
+            getCurrentPower();
         }
+    }
+
+    private void getCurrentPower() {
+        int indexPower=mPresenter.getPowerCapacity(MainUiBtHelper.getInstance(getContext()).getPowerValue());
+        showBatteryCapacity(MainUiBtHelper.getInstance(getContext()).getChargingState(),indexPower);
     }
 
     @Override
@@ -364,6 +370,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             } else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 UbtLog.d(TAG, device.getName() + " ACTION_ACL_CONNECTED");
+                getCurrentPower();
             } else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 UbtLog.d(TAG, device.getName() + " ACTION_ACL_DISCONNECTED");
@@ -1211,7 +1218,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
 	    @Override
     public void showBatteryCapacity(final boolean isCharging, final int value) {
-        if(cartoonBodyTouchBg!=null) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -1227,7 +1233,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         }
                     }
                 });
-            }
     }
 
 

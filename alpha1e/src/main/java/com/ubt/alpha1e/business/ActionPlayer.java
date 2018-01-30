@@ -824,22 +824,6 @@ public class ActionPlayer implements BlueToothInteracter {
         isStopCycleThread = stop;
     }
 
-    private void recoveryPlayer(byte cmd){
-        if (mCurrentPlayType == Play_type.cycle_action){
-            if(System.currentTimeMillis()-time<REMOVE_DUPLICATE_REPLY_TIMEOUT) {
-                continueCycle();
-                StopCycleThread(true);
-                mIsCycleContinuePlay = false;
-                notePlayFinish();
-            }else {
-                UbtLog.d(TAG,"RECEIVE THE ERROR STOP,DISCARD" +(System.currentTimeMillis()-time));
-                continueCycle();
-            }
-        }else {
-            UbtLog.d(TAG,"DV_STOPPLAY := " + cmd + "  mCurrentPlayType = " + mCurrentPlayType );
-           // notePlayFinish();
-        }
-    }
     public void clearPlayingInfoList(){
         MyActionsHelper.mCurrentSeletedNameList.clear();
         MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
@@ -865,6 +849,8 @@ public class ActionPlayer implements BlueToothInteracter {
             StopCycleThread(true);
             mIsCycleContinuePlay = false;
             notePlayFinish();
+            MyActionsHelper.setLooping(false);
+            AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
         }else if(mCurrentPlayType==Play_type.single_action){
             doStopPlay();
             notePlayFinish();
