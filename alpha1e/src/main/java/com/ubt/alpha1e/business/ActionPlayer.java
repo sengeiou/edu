@@ -828,15 +828,17 @@ public class ActionPlayer implements BlueToothInteracter {
         MyActionsHelper.mCurrentSeletedNameList.clear();
         MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
         AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
-        for (Map<String, Object> item : mDatas) {
+        /*for (Map<String, Object> item : mDatas) {
             item.put(MyActionsHelper.map_val_action_is_playing, false);
             item.put(MyActionsHelper.map_val_action_selected, false);
-        }
+        }*/
+        mDatas.clear();
     }
     private void clearSinglePlayStatus(){
-        for (Map<String, Object> item : mDatas) {
+        /*for (Map<String, Object> item : mDatas) {
             item.put(MyActionsHelper.map_val_action_is_playing, false);
-        }
+        }*/
+        mDatas.clear();
     }
     public void setPlayContent(List<Map<String,Object>> nameList){
         mDatas=nameList;

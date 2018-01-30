@@ -505,6 +505,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.rl_course_center:
                 if (isBulueToothConnected()) {
                     if(!removeDuplicateClickEvent()) {
+                        mPresenter.resetGlobalActionPlayer();
                         startActivity(new Intent(this, MainCourseActivity.class));
                         this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                     }
