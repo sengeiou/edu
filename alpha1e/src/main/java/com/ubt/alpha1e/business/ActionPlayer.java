@@ -282,8 +282,12 @@ public class ActionPlayer implements BlueToothInteracter {
             }
         }
 
-        if(EventBus.getDefault().hasSubscriberForEvent(ActionEvent.class)){
-            ActionEvent actionEvent = new ActionEvent(ActionEvent.Event.ACTION_PLAY_START);
+        notifyMainActivityEvent(action_name, ActionEvent.Event.ACTION_PLAY_START);
+    }
+
+    private void notifyMainActivityEvent(String action_name, ActionEvent.Event actionPlayStart) {
+        if (EventBus.getDefault().hasSubscriberForEvent(ActionEvent.class)) {
+            ActionEvent actionEvent = new ActionEvent(actionPlayStart);
             actionEvent.setActionName(action_name);
             EventBus.getDefault().post(actionEvent);
         }
@@ -537,7 +541,7 @@ public class ActionPlayer implements BlueToothInteracter {
         mCurrentPlayActionName = info;
         UbtLog.d(TAG,"play action = " + info);
         mLastPlayTime = new Date(System.currentTimeMillis());
-
+        notifyMainActivityEvent(info, ActionEvent.Event.ACTION_PLAY_START);
         byte[] actions = BluetoothParamUtil.stringToBytes(info);
         mBtManager.sendCommand(mBtMac, ConstValue.DV_PLAYACTION, actions,actions.length, false);
     }
@@ -591,11 +595,7 @@ public class ActionPlayer implements BlueToothInteracter {
             //解决拍头循环播放还进入下一首的问题，直接停止
             stopPlayingAndClearPlayingList();
 
-            if(EventBus.getDefault().hasSubscriberForEvent(ActionEvent.class)){
-                ActionEvent actionEvent = new ActionEvent(ActionEvent.Event.ACTION_PLAY_FINISH);
-                actionEvent.setActionName(mCurrentPlayActionName);
-                EventBus.getDefault().post(actionEvent);
-            }
+            notifyMainActivityEvent(mCurrentPlayActionName, ActionEvent.Event.ACTION_PLAY_FINISH);
         }else  if (cmd == ConstValue.DV_ACTION_FINISH)// 动作播放完毕
         {
             UbtLog.d(TAG,"DV_ACTION_FINISH");
@@ -633,11 +633,7 @@ public class ActionPlayer implements BlueToothInteracter {
 //                }
             }
 
-            if(EventBus.getDefault().hasSubscriberForEvent(ActionEvent.class)){
-                ActionEvent actionEvent = new ActionEvent(ActionEvent.Event.ACTION_PLAY_FINISH);
-                actionEvent.setActionName(finishPlayActionName);
-                EventBus.getDefault().post(actionEvent);
-            }
+            notifyMainActivityEvent(finishPlayActionName, ActionEvent.Event.ACTION_PLAY_FINISH);
 
         } else if (cmd == ConstValue.DV_PLAYACTION) {
             UbtLog.d(TAG, "-->notePlay ConstValue.DV_PLAYACTION " + param[0] + "    = " + mCurrentPlayType);

@@ -668,11 +668,19 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             });
         } else if (event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS) {
             UbtLog.d(TAG, "mainactivity CONNECT_SUCCESS 1");
+            if(mHelper != null){
+                mHelper.RegisterHelper();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getCurrentPower();
+                    }
+                });
+            }
             if (!MainUiBtHelper.getInstance(getContext()).isLostCoon()) {
                 UbtLog.d(TAG, "mainactivity CONNECT_SUCCESS 2");
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
                 looperThread.send(createMessage(Constant.APP_BLUETOOTH_CONNECTED));
-
             }
         }
 
