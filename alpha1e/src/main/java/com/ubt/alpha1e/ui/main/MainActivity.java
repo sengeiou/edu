@@ -1233,6 +1233,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         showBatteryUi();
                         if(isCharging) {
                                if(mChargetimer==null||value!=tmp) {
+                                   stopchargeAsynchronousTask();
                                    chargeAsynchronousTask(value);
                                    tmp=value;
                                }
@@ -1505,14 +1506,24 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
   }
   private void hiddenBuddleTextView(){
-      if(buddleText != null) {
-          buddleText.setVisibility(View.INVISIBLE);
-      }
+      runOnUiThread(new Runnable() {
+          @Override
+          public void run(){
+              if(buddleText != null) {
+                  buddleText.setVisibility(View.INVISIBLE);
+              }
+          }
+      });
   }
   private void showBuddleTextView(){
-      if(buddleText != null){
-          buddleText.setVisibility(View.VISIBLE);
-      }
+      runOnUiThread(new Runnable() {
+          @Override
+          public void run(){
+              if(buddleText != null){
+                  buddleText.setVisibility(View.VISIBLE);
+              }
+          }
+      });
   }
   private void debugClickRegion(){
       if(cartoonHead!=null) {
