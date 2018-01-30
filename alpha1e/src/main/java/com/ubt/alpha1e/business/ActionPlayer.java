@@ -8,6 +8,7 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionInfo;
+import com.ubt.alpha1e.event.ActionEvent;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
@@ -17,6 +18,8 @@ import com.ubtechinc.base.BlueToothManager;
 import com.ubtechinc.base.ConstValue;
 import com.ubtechinc.base.PublicInterface.BlueToothInteracter;
 import com.ubtechinc.sqlite.UBXDataBaseHelper;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -279,6 +282,11 @@ public class ActionPlayer implements BlueToothInteracter {
             }
         }
 
+        if(EventBus.getDefault().hasSubscriberForEvent(ActionEvent.class)){
+            ActionEvent actionEvent = new ActionEvent(ActionEvent.Event.ACTION_PLAY_START);
+            actionEvent.setActionName(action_name);
+            EventBus.getDefault().post(actionEvent);
+        }
     }
 
     /*******************************add for block*****************************************/
@@ -447,6 +455,7 @@ public class ActionPlayer implements BlueToothInteracter {
                         thiz.mListeners.get(i).hashCode() + "");
             }
         }
+
     }
 
 
@@ -510,6 +519,16 @@ public class ActionPlayer implements BlueToothInteracter {
             UbtLog.d(TAG, "doPauseOrContinueAction-->" + thiz.mCurrentPlayState + " to action_playing");
             thiz.mCurrentPlayState = Play_state.action_playing;
         }
+
+        if(EventBus.getDefault().hasSubscriberForEvent(ActionEvent.class)){
+            ActionEvent actionEvent = new ActionEvent(ActionEvent.Event.ACTION_PLAY_PAUSE);
+            if(thiz.mCurrentPlayState == Play_state.action_playing){
+                actionEvent.setStatus(1);
+            }else {
+                actionEvent.setStatus(0);
+            }
+            EventBus.getDefault().post(actionEvent);
+        }
     }
 
     // ------------------------------------------------------------------------
@@ -571,6 +590,12 @@ public class ActionPlayer implements BlueToothInteracter {
             UbtLog.d(TAG,"DV_TAP_HEAD");
             //解决拍头循环播放还进入下一首的问题，直接停止
             stopPlayingAndClearPlayingList();
+
+            if(EventBus.getDefault().hasSubscriberForEvent(ActionEvent.class)){
+                ActionEvent actionEvent = new ActionEvent(ActionEvent.Event.ACTION_PLAY_FINISH);
+                actionEvent.setActionName(mCurrentPlayActionName);
+                EventBus.getDefault().post(actionEvent);
+            }
         }else  if (cmd == ConstValue.DV_ACTION_FINISH)// 动作播放完毕
         {
             UbtLog.d(TAG,"DV_ACTION_FINISH");
@@ -606,6 +631,12 @@ public class ActionPlayer implements BlueToothInteracter {
 ////                    }
 //                    doStopCurrentPlay(true);
 //                }
+            }
+
+            if(EventBus.getDefault().hasSubscriberForEvent(ActionEvent.class)){
+                ActionEvent actionEvent = new ActionEvent(ActionEvent.Event.ACTION_PLAY_FINISH);
+                actionEvent.setActionName(finishPlayActionName);
+                EventBus.getDefault().post(actionEvent);
             }
 
         } else if (cmd == ConstValue.DV_PLAYACTION) {
