@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.tencent.ai.tvs.LoginProxy;
@@ -35,6 +36,7 @@ import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.alpha1e.webcontent.WebContentActivity;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.json.JSONException;
@@ -62,6 +64,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
     RelativeLayout rlQQLgoin;
     RelativeLayout rlWXLogin;
     ImageView ivPrivacy;
+    TextView tvPrivacy;
     boolean select = true;
 
 //    private int loginType = 0; //默认 0 QQ， 1 WX;
@@ -86,6 +89,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
         rlQQLgoin = (RelativeLayout) findViewById(R.id.rl_qq_login);
         rlWXLogin = (RelativeLayout) findViewById(R.id.rl_wx_login);
         ivPrivacy = (ImageView) findViewById(R.id.iv_privacy);
+        tvPrivacy = (TextView) findViewById(R.id.tv_privacy);
         select = true;
         ivPrivacy.setSelected(select);
 
@@ -94,8 +98,19 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
             ToastUtils.showLong("叮当登录异常，请重新登录");
         }
 
-        initTVS();
+//        initTVS();
         initControlListener();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initTVS();
+            }
+        }, 200);
     }
 
     private void initTVS() {
@@ -135,7 +150,12 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
 //                loginType = 0;
 //                proxy.clearToken(ELoginPlatform.QQOpen, LoginActivity.this);
 //                proxy.requestLogin(ELoginPlatform.QQOpen, PID, DSN, LoginActivity.this);
-                LoginManger.getInstance().loginQQ(LoginActivity.this);
+                if(select){
+                    LoginManger.getInstance().loginQQ(LoginActivity.this);
+                }else{
+                    ToastUtils.showShort("请先确认并同意《用户许可协议》与《隐私政策》");
+                }
+
             }
         });
 
@@ -145,11 +165,16 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
 //                loginType = 1;
 //                proxy.clearToken(ELoginPlatform.WX, LoginActivity.this);
 //                proxy.requestLogin(ELoginPlatform.WX, PID, DSN, LoginActivity.this);
-                LoginManger.getInstance().loginWX(LoginActivity.this);
+                if(select){
+                    LoginManger.getInstance().loginWX(LoginActivity.this);
+                }else{
+                    ToastUtils.showShort("请先确认并同意《用户许可协议》与《隐私政策》");
+                }
+
             }
         });
 
-   /*     ivPrivacy.setOnClickListener(new View.OnClickListener() {
+        ivPrivacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 UbtLog.d(TAG, "ivPrivacy onClick");
@@ -161,7 +186,19 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
                     ivPrivacy.setSelected(select);
                 }
             }
-        });*/
+        });
+
+        tvPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.putExtra(WebContentActivity.WEB_TITLE, "《用户许可协议》与《隐私政策》");
+                intent.putExtra(WebContentActivity.WEB_URL, HttpEntity.USER_PRIVACY);
+                intent.setClass(LoginActivity.this, PrivacyActivity.class);
+                startActivity(intent);
+//                WebContentActivity.launchActivity(LoginActivity.this, HttpEntity.USER_PRIVACY,"");
+            }
+        });
     }
 
     @Override

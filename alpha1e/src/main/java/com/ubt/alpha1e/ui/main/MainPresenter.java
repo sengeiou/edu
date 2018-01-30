@@ -170,7 +170,9 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             int select = random.nextInt(arrayText.length);
             text = arrayText[select];
         }else if(type==Constant.BUDDLE_INIT_TEXT){
-           text=mView.getContext().getResources().getString(R.string.buddle_text_init_status);
+            if(mView!=null) {
+                text = mView.getContext().getResources().getString(R.string.buddle_text_init_status);
+            }
         }
         return text;
     }
@@ -222,9 +224,9 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                         mView.dealMessage(Constant.ROBOT_UNCHARGING);
                         lowBatteryFunction(mParams[3]);
                         mView.showBatteryCapacity(false,getPowerCapacity(mParams[3]));
-                      //  UbtLog.d(TAG,"NOT CHARGING");
+                       // UbtLog.d(TAG,"NOT CHARGING");
                     }else if(mParams[2]==ROBOT_CHARGING_ENOUGH_STATUS){
-                      //  UbtLog.d(TAG,"BATTERY ENOUGH AND PLUG IN CHARGING");
+                       // UbtLog.d(TAG,"BATTERY ENOUGH AND PLUG IN CHARGING");
                         mView.dealMessage(Constant.ROBOT_CHARGING_ENOUGH);
                         mView.showBatteryCapacity(true,getPowerCapacity(mParams[3]));
                     }
@@ -248,6 +250,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             } else if(mCmd==ConstValue.DV_VOICE_WAIT){
                 UbtLog.d(TAG,"HIDDEN BUDDLE TEXT");
                 mView.hiddenBuddleText();
+                resetGlobalActionPlayer();
             } else {
                 //  UbtLog.d(TAG, "ROBOT OTHER SITUATION" + mCmd);
             }
@@ -266,7 +269,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         return APP_CURRENT_STATUS;
     }
 
-    private int getPowerCapacity(byte mParam) {
+    public int getPowerCapacity(byte mParam) {
       //  UbtLog.d(TAG, "POWER VALUE " + mParam);
         int power_index = 0;
         if (mParam < powerThreshold[powerThreshold.length / 2]) {

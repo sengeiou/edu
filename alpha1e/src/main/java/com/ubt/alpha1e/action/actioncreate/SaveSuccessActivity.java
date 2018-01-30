@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.action.actioncreate;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -28,6 +30,7 @@ public class SaveSuccessActivity extends Activity implements View.OnClickListene
     ImageView ivClose;
     Button btn_to_other;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +49,9 @@ public class SaveSuccessActivity extends Activity implements View.OnClickListene
                 UbtLog.d(TAG, "img_cancel");
                 finish();
                 this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                if(isBulueToothConnected()){
+                    startActivity(new Intent(this, ActionTestActivity.class));
+                }
                 break;
             case R.id.btn_to_other:
                 ToastUtils.showShort("社区暂未开放");
@@ -62,7 +68,23 @@ public class SaveSuccessActivity extends Activity implements View.OnClickListene
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             setResult(RESULT_OK);
             finish();
+            if(isBulueToothConnected()){
+                startActivity(new Intent(this, ActionTestActivity.class));
+            }
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    public boolean isBulueToothConnected() {
+
+        if (((AlphaApplication) this.getApplicationContext())
+                .getCurrentBluetooth() == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+
 }

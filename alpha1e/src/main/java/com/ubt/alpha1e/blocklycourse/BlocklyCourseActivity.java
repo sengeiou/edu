@@ -32,6 +32,7 @@ import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.blocklycourse.model.CourseData;
 import com.ubt.alpha1e.blocklycourse.model.UpdateCourseRequest;
@@ -209,6 +210,14 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
                 showResultDialog(1, true);
             }
 
+            @Override
+            public void onPlayError(String s, Object... objects) {
+                super.onPlayError(s, objects);
+                ToastUtils.showShort("视频播放错误，即将退出");
+                courseData.setLocalVideoPath("");
+                courseData.updateAll("cid = ?", ""+courseData.getCid());
+                finish();
+            }
         });
 
         ivPause.setOnClickListener(new View.OnClickListener() {
