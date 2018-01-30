@@ -76,6 +76,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
 
     private static boolean isCharging = false; //用来判断机器人当前是否在充电中,false 表示没有充电中,true表示充电中.
+    private static byte mPowerValue=0;
     /*public BaseHelper(BaseActivity _baseActivity) {
         mBaseActivity = _baseActivity;
     }*/
@@ -234,16 +235,6 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
-        JSONObject mData=new JSONObject();
-        try {
-            mData.put("mac", mac);
-            mData.put("cmd", cmd);
-            mData.put("param", Base64.encodeToString(param,Base64.DEFAULT));
-            mData.put("len", len);
-            EventBus.getDefault().post(new MainActivity.MessageEvent(mData.toString()));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         if (cmd == ConstValue.DV_READ_BATTERY) {
             Date curDate = new Date(System.currentTimeMillis());
             float time_difference = 500;
@@ -262,12 +253,15 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 if (charge == 0x01) {
                     //UbtLog.d("BaseHelper", "charging" + "   power = " + param[3]);
                     setChargingState(true);
-                } else {
+                } else if(charge==0x0) {
                     //UbtLog.d("BaseHelper", "not charging" + "   power = " + param[3]);
                     setChargingState(false);
+                }else if(charge==0x03){
+                    setChargingState(true);
                 }
 
                 int power = param[3];
+                setPowerValue((byte)power);
                 if (power <= 10 && isNeedNoteLowPower) {
                     isNeedNoteLowPower = false;
                    // AlphaApplication.getBaseActivity().onNoteLowPower();
@@ -614,6 +608,12 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     //获取当前是否充电中
     public boolean getChargingState() {
         return isCharging;
+    }
+    private void setPowerValue(byte value){
+        mPowerValue=value;
+    }
+    public byte  getPowerValue(){
+       return  mPowerValue;
     }
 
 

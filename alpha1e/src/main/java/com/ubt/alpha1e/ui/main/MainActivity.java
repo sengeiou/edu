@@ -50,6 +50,7 @@ import com.ubt.alpha1e.course.principle.PrincipleActivity;
 import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.data.model.NetworkInfo;
+import com.ubt.alpha1e.event.ActionEvent;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.login.LoginActivity;
@@ -325,7 +326,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     showDisconnectIcon();
                 }
             }
+            getCurrentPower();
         }
+    }
+
+    private void getCurrentPower() {
+        int indexPower=mPresenter.getPowerCapacity(MainUiBtHelper.getInstance(getContext()).getPowerValue());
+        showBatteryCapacity(MainUiBtHelper.getInstance(getContext()).getChargingState(),indexPower);
     }
 
     @Override
@@ -363,6 +370,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             } else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 UbtLog.d(TAG, device.getName() + " ACTION_ACL_CONNECTED");
+                getCurrentPower();
             } else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 UbtLog.d(TAG, device.getName() + " ACTION_ACL_DISCONNECTED");
@@ -497,6 +505,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.rl_course_center:
                 if (isBulueToothConnected()) {
                     if(!removeDuplicateClickEvent()) {
+                        mPresenter.resetGlobalActionPlayer();
                         startActivity(new Intent(this, MainCourseActivity.class));
                         this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                     }
@@ -667,6 +676,21 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             }
         }
 
+    }
+
+    @Subscribe
+    public void onEventAction(ActionEvent event) {
+        if(event.getEvent() == ActionEvent.Event.ACTION_PLAY_START){
+            showGlobalButtonAnmiationEffect(true);
+        }else if(event.getEvent() == ActionEvent.Event.ACTION_PLAY_PAUSE){
+            if(event.getStatus() == 1){
+                showGlobalButtonAnmiationEffect(true);
+            }else {
+                showGlobalButtonAnmiationEffect(false);
+            }
+        }else if(event.getEvent() == ActionEvent.Event.ACTION_PLAY_FINISH){
+            showGlobalButtonAnmiationEffect(false);
+        }
     }
 
     void showBluetoothDisconnect() {
@@ -1195,7 +1219,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
 	    @Override
     public void showBatteryCapacity(final boolean isCharging, final int value) {
-        if(cartoonBodyTouchBg!=null) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -1211,7 +1234,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         }
                     }
                 });
-            }
     }
 
 

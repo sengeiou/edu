@@ -267,7 +267,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         return APP_CURRENT_STATUS;
     }
 
-    private int getPowerCapacity(byte mParam) {
+    public int getPowerCapacity(byte mParam) {
       //  UbtLog.d(TAG, "POWER VALUE " + mParam);
         int power_index = 0;
         if (mParam < powerThreshold[powerThreshold.length / 2]) {
