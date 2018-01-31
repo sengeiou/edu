@@ -371,7 +371,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                                     }
                                 }).show();
                     } else {
-                        if (getLearnCount() < 5) {
+                        if (getLearnCount() < 5 && mCurrentProgress < 4) {
                             setViewEnable(tvNext, false, 0.3f);
                         } else {
                             setViewEnable(tvNext, true, 1f);
@@ -463,7 +463,6 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         mFloatAnimator.setDistance(20F);
         mFloatAnimator.clear();
         mCurrentProgress = SPUtils.getInstance().getInt(Constant.PRINCIPLE_PROGRESS + SPUtils.getInstance().getString(Constant.SP_USER_ID), 0);
-
         if (mCurrentProgress < 4) {
             setViewEnable(tvNext, false, 0.5f);
         }

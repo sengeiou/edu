@@ -56,16 +56,6 @@ import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.login.LoginActivity;
 import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseLevelEightActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseLevelFiveActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseLevelFourActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseLevelNineActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseLevelSevenActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseLevelSixActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseLevelTenActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseLevelThreeActivity;
-import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.services.AutoScanConnectService;
@@ -79,7 +69,6 @@ import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
 import com.ubt.alpha1e.ui.helper.BluetoothStateHelper;
-import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
@@ -639,16 +628,16 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                 || mActivity instanceof ActionCourseActivity
                                 || mActivity instanceof NetconnectActivity
                                 || mActivity instanceof NetSearchResultActivity
-                                || mActivity instanceof CourseLevelOneActivity
-                                || mActivity instanceof CourseLevelTwoActivity
-                                || mActivity instanceof CourseLevelThreeActivity
-                                || mActivity instanceof CourseLevelFourActivity
-                                || mActivity instanceof CourseLevelFiveActivity
-                                || mActivity instanceof CourseLevelSixActivity
-                                || mActivity instanceof CourseLevelSevenActivity
-                                || mActivity instanceof CourseLevelEightActivity
-                                || mActivity instanceof CourseLevelNineActivity
-                                || mActivity instanceof CourseLevelTenActivity
+//                                || mActivity instanceof CourseLevelOneActivity
+//                                || mActivity instanceof CourseLevelTwoActivity
+//                                || mActivity instanceof CourseLevelThreeActivity
+//                                || mActivity instanceof CourseLevelFourActivity
+//                                || mActivity instanceof CourseLevelFiveActivity
+//                                || mActivity instanceof CourseLevelSixActivity
+//                                || mActivity instanceof CourseLevelSevenActivity
+//                                || mActivity instanceof CourseLevelEightActivity
+//                                || mActivity instanceof CourseLevelNineActivity
+//                                || mActivity instanceof CourseLevelTenActivity
                         )) {
                             return;
                         }
@@ -668,11 +657,19 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             });
         } else if (event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS) {
             UbtLog.d(TAG, "mainactivity CONNECT_SUCCESS 1");
+            if(mHelper != null){
+                mHelper.RegisterHelper();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getCurrentPower();
+                    }
+                });
+            }
             if (!MainUiBtHelper.getInstance(getContext()).isLostCoon()) {
                 UbtLog.d(TAG, "mainactivity CONNECT_SUCCESS 2");
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
                 looperThread.send(createMessage(Constant.APP_BLUETOOTH_CONNECTED));
-
             }
         }
 
@@ -1225,6 +1222,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         showBatteryUi();
                         if(isCharging) {
                                if(mChargetimer==null||value!=tmp) {
+                                   stopchargeAsynchronousTask();
                                    chargeAsynchronousTask(value);
                                    tmp=value;
                                }
@@ -1497,14 +1495,24 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
   }
   private void hiddenBuddleTextView(){
-      if(buddleText != null) {
-          buddleText.setVisibility(View.INVISIBLE);
-      }
+      runOnUiThread(new Runnable() {
+          @Override
+          public void run(){
+              if(buddleText != null) {
+                  buddleText.setVisibility(View.INVISIBLE);
+              }
+          }
+      });
   }
   private void showBuddleTextView(){
-      if(buddleText != null){
-          buddleText.setVisibility(View.VISIBLE);
-      }
+      runOnUiThread(new Runnable() {
+          @Override
+          public void run(){
+              if(buddleText != null){
+                  buddleText.setVisibility(View.VISIBLE);
+              }
+          }
+      });
   }
   private void debugClickRegion(){
       if(cartoonHead!=null) {

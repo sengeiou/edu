@@ -50,6 +50,7 @@ public class MainUiBtHelper extends BaseHelper {
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
+       // UbtLog.d(TAG,"cmd is "+cmd);
         JSONObject mData=new JSONObject();
         try {
             mData.put("mac", mac);
