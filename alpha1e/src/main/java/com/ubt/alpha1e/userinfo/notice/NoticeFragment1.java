@@ -118,8 +118,7 @@ public class NoticeFragment1 extends MVPBaseFragment<NoticeContract.View, Notice
         mNoticeAdapter.setOnItemLongClickListener(this);
         mNoticeAdapter.setOnItemClickListener(this);
         emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_empty, null);
-        emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_empty, null);
-        tvEmpty = (TextView) emptyView.findViewById(R.id.tv_no_data);
+         tvEmpty = (TextView) emptyView.findViewById(R.id.tv_no_data);
         tvRetry = emptyView.findViewById(R.id.tv_retry);
         llError = emptyView.findViewById(R.id.ll_error_layout);
         ivStatu = emptyView.findViewById(R.id.iv_no_data);
@@ -146,7 +145,7 @@ public class NoticeFragment1 extends MVPBaseFragment<NoticeContract.View, Notice
 //                mPresenter.getNoticeData(1, page, offset);
 //            }
 //        });
-        mRefreshLayout.setEnableRefresh(true);
+        mRefreshLayout.setEnableRefresh(false);
         mRefreshLayout.setEnableLoadmore(false);
         showStatuLayout(1);
         //触发自动刷新
@@ -354,6 +353,7 @@ public class NoticeFragment1 extends MVPBaseFragment<NoticeContract.View, Notice
             } else if (mParam1.equals("3")) {
                 emptyMsg = "你目前没有任何动态";
             } else if (mParam1.equals("5")) {
+                ivStatu.setImageResource(R.drawable.ic_download_none);
                 emptyMsg = "你目前没有任何下载";
             }
             tvEmpty.setText(emptyMsg);
