@@ -41,7 +41,7 @@ import com.ubt.alpha1e.blockly.sensor.SensorHelper;
 import com.ubt.alpha1e.blockly.sensor.SensorObservable;
 import com.ubt.alpha1e.blockly.sensor.SensorObserver;
 import com.ubt.alpha1e.blocklycourse.BlocklyUtil;
-import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.NewActionPlayer;
 import com.ubt.alpha1e.business.thrid_party.IWeiXinListener;
@@ -1188,7 +1188,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         lastTime_doPauseOrContinuePlay = curDate;
         Intent intent = new Intent();
         intent.putExtra(com.ubt.alpha1e.base.Constant.BLUETOOTH_REQUEST, true);
-        intent.setClass(BlocklyActivity.this, BluetoothconnectActivity.class);
+        intent.setClass(BlocklyActivity.this, BluetoothandnetconnectstateActivity.class);
         startActivityForResult(intent, REQUEST_CODE);
     }
 
@@ -1199,6 +1199,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         if(resultCode == RESULT_OK){
             if (requestCode == REQUEST_CODE){
 //               showLoading();
+                UbtLog.d(TAG, "onActivityResult BlockActivity  REQUEST_CODE");
                 initHelper();
                 initActionData();
 
