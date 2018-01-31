@@ -171,11 +171,11 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
                             rlAlertOne.setEnabled(false);
                             rlAlertTwo.setEnabled(false);
                         }else {
-                            mRemindFirstIndex = getAlertIndex(originEventDetail.remindFirst);
-                            mRemindSecondIndex = getAlertIndex(originEventDetail.remindSecond);
+                            //mRemindFirstIndex = getAlertIndex(originEventDetail.remindFirst);
+                            //mRemindSecondIndex = getAlertIndex(originEventDetail.remindSecond);
 
-                            tvAlertOne.setText(mAlertArr[mRemindFirstIndex] + getStringRes("ui_habits_minute_later"));
-                            tvAlertTwo.setText(mAlertArr[mRemindSecondIndex] + getStringRes("ui_habits_minute_later"));
+                            tvAlertOne.setText(originEventDetail.remindFirst + getStringRes("ui_habits_minute_later"));
+                            tvAlertTwo.setText(originEventDetail.remindSecond + getStringRes("ui_habits_minute_later"));
                         }
                         updatePlayContentData(originEventDetail.contents);
                     }

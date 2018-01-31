@@ -498,7 +498,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
     @Override
     public void notePlayCycleNext(String action_name) {
-        if("初始化".equals(action_name)){
+        if("初始化".equals(action_name) || "default".equals(action_name)){
             return;
         }
 
