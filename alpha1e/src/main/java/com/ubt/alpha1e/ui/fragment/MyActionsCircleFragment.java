@@ -951,29 +951,30 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     @Override
                     public void onClick(View view) {
                         //actionList.put(MyActionsHelper.map_val_action_selected,!(Boolean) actionList.get (MyActionsHelper.map_val_action_selected));
-                        for(int i=0;i<mDatas.size();i++){
-                            if(i != position){
-                                mDatas.get(i).put(MyActionsHelper.map_val_action_is_playing,false);
+                        if (!isStartLooping) {
+                            for (int i = 0; i < mDatas.size(); i++) {
+                                if (i != position) {
+                                    mDatas.get(i).put(MyActionsHelper.map_val_action_is_playing, false);
+                                }
+                                //mAdapter.notifyItemChanged();
                             }
-                            //mAdapter.notifyItemChanged();
-                        }
-                        mAdapter.notifyDataSetChanged();
-                        actionList.put(MyActionsHelper.map_val_action_is_playing,!(Boolean)actionList.get(MyActionsHelper.map_val_action_is_playing));
-                        String actionName = (String)actionList.get(MyActionsHelper.map_val_action_name);
+                            mAdapter.notifyDataSetChanged();
+                            actionList.put(MyActionsHelper.map_val_action_is_playing, !(Boolean) actionList.get(MyActionsHelper.map_val_action_is_playing));
+                            String actionName = (String) actionList.get(MyActionsHelper.map_val_action_name);
 
-                        if((Boolean)actionList.get(MyActionsHelper.map_val_action_is_playing))
-                        {
-                            ActionInfo actionInfo = new ActionInfo();
-                            actionInfo.actionName = actionName;
-                            actionInfo.hts_file_name = (String)actionList.get(MyActionsHelper.map_val_action);
-                            actionInfo.actionSize = position;//zan cun
-                            recoveryPlayType();
-                            mHelper.doPlay(actionInfo);
-                            UbtLog.d(TAG,"REFACTOR lihai------actionName->"+actionName+"----position->"+position+"--"+actionList.get(MyActionsHelper.map_val_action));
-                        }else{
-                            mHelper.stopPlayAction();
+                            if ((Boolean) actionList.get(MyActionsHelper.map_val_action_is_playing)) {
+                                ActionInfo actionInfo = new ActionInfo();
+                                actionInfo.actionName = actionName;
+                                actionInfo.hts_file_name = (String) actionList.get(MyActionsHelper.map_val_action);
+                                actionInfo.actionSize = position;//zan cun
+                                recoveryPlayType();
+                                mHelper.doPlay(actionInfo);
+                                UbtLog.d(TAG, "REFACTOR lihai------actionName->" + actionName + "----position->" + position + "--" + actionList.get(MyActionsHelper.map_val_action));
+                            } else {
+                                mHelper.stopPlayAction();
+                            }
+                            mAdapter.notifyItemChanged(position);
                         }
-                        mAdapter.notifyItemChanged(position);
                     }
                 };
                 //动作的图片点击事件
