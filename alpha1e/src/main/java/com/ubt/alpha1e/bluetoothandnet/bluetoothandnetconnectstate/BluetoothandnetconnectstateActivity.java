@@ -25,7 +25,6 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.PermissionUtils;
-import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity;
@@ -162,6 +161,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                     ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(null);
                     break;
                 case CLOSED_ACTIVITY:
+                    BluetoothandnetconnectstateActivity.this.setResult(RESULT_OK);
                     BluetoothandnetconnectstateActivity.this.finish();
                     break;
                 default:
@@ -371,8 +371,10 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
             UbtLog.d(TAG, "onActivityResult RESULT_OK!");
             if (requestCode == REQUEST_CODE){
                 dealUI();
+                BluetoothandnetconnectstateActivity.this.setResult(RESULT_OK);
                 BluetoothandnetconnectstateActivity.this.finish();
             }else if(requestCode == REQUEST_CODE_ENTER_NETSEARCHRESULT){
+                BluetoothandnetconnectstateActivity.this.setResult(RESULT_OK);
                 BluetoothandnetconnectstateActivity.this.finish();
             }
         }
@@ -386,6 +388,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                 break;
             case R.id.ib_close:
                 dealUI();
+                BluetoothandnetconnectstateActivity.this.setResult(RESULT_OK);
                 BluetoothandnetconnectstateActivity.this.finish();
                 break;
             case R.id.ig_state1_get_bluetooth_list:
@@ -545,6 +548,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() ==KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            BluetoothandnetconnectstateActivity.this.setResult(RESULT_OK);
             onBack();
         }
         return super.onKeyDown(keyCode, event);
