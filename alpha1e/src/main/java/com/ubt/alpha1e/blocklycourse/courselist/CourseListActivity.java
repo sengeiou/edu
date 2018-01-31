@@ -206,10 +206,17 @@ public class CourseListActivity extends MVPBaseActivity<CourseListContract.View,
                     Pair pair = new Pair<>(view, BlocklyCourseActivity.IMG_TRANSITION);
                     ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
                             CourseListActivity.this, pair);
-                    ActivityCompat.startActivity(CourseListActivity.this, intent, activityOptions.toBundle());
+                    if(!isFinishing()){
+                        ActivityCompat.startActivity(CourseListActivity.this, intent, activityOptions.toBundle());
+                    }
+
                 } else {
-                    CourseListActivity.this.startActivity(intent);
-                    CourseListActivity.this.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+                    if(!isFinishing()){
+                        CourseListActivity.this.startActivity(intent);
+                        CourseListActivity.this.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+                    }
+
+
                 }
             }
 
