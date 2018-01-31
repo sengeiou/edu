@@ -39,6 +39,7 @@ import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
+import com.ubt.alpha1e.utils.DateUtils;
 import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
@@ -594,6 +595,9 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             date  = sdf.parse(eventTime);
             startDate = sdf.parse(startTime);
             endDate = sdf.parse(endTime);
+            if(startDate.getTime() > endDate.getTime()){
+                endDate = DateUtils.getSpecifiedDayAfter(endDate);
+            }
             if(date.getTime() >= startDate.getTime() && date.getTime() <= endDate.getTime()){
                 return true;
             }

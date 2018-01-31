@@ -39,7 +39,7 @@ public class HibitsAlertService extends Service {
 
 	private static final int SAVE_HIBITS_EVENT_ALERT  = 1;
 
-	String url = "http://10.10.1.14:8080/alpha1e/event/remindReply";
+	String url = HttpEntity.BASIC_UBX_SYS + "event/remindReply";
 
 	private Handler mHandler = new Handler();
 
