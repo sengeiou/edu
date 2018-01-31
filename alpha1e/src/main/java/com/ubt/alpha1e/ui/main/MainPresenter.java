@@ -212,6 +212,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 UbtLog.d(TAG,"LOW BATTERY +"+mParams[0]);
                 // lowBatteryFunction(mParams[0]);
             } else if (mCmd == ConstValue.DV_READ_BATTERY) {
+                // UbtLog.d(TAG,"LENGTH :"+mParams.length);
                 for (int i = 0; i < mParams.length; i++) {
                     // UbtLog.d(TAG, "index " + i + "value :" + mParams[i]);
                     if (mParams[2] == ROBOT_CHARGING_STATUS) {
