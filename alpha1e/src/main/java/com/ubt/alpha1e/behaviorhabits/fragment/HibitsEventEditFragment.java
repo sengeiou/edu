@@ -39,6 +39,7 @@ import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
+import com.ubt.alpha1e.utils.DateUtils;
 import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
@@ -171,11 +172,11 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
                             rlAlertOne.setEnabled(false);
                             rlAlertTwo.setEnabled(false);
                         }else {
-                            mRemindFirstIndex = getAlertIndex(originEventDetail.remindFirst);
-                            mRemindSecondIndex = getAlertIndex(originEventDetail.remindSecond);
+                            //mRemindFirstIndex = getAlertIndex(originEventDetail.remindFirst);
+                            //mRemindSecondIndex = getAlertIndex(originEventDetail.remindSecond);
 
-                            tvAlertOne.setText(mAlertArr[mRemindFirstIndex] + getStringRes("ui_habits_minute_later"));
-                            tvAlertTwo.setText(mAlertArr[mRemindSecondIndex] + getStringRes("ui_habits_minute_later"));
+                            tvAlertOne.setText(originEventDetail.remindFirst + getStringRes("ui_habits_minute_later"));
+                            tvAlertTwo.setText(originEventDetail.remindSecond + getStringRes("ui_habits_minute_later"));
                         }
                         updatePlayContentData(originEventDetail.contents);
                     }
@@ -594,6 +595,9 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             date  = sdf.parse(eventTime);
             startDate = sdf.parse(startTime);
             endDate = sdf.parse(endTime);
+            if(startDate.getTime() > endDate.getTime()){
+                endDate = DateUtils.getSpecifiedDayAfter(endDate);
+            }
             if(date.getTime() >= startDate.getTime() && date.getTime() <= endDate.getTime()){
                 return true;
             }
