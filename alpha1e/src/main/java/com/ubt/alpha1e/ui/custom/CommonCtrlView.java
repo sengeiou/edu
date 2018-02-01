@@ -108,7 +108,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
                     //Handler.post 会有延时，所以此处再判断一次是否为null
                     if(commonCtrlView != null){
-                       commonCtrlView.onDestroy();
+                        mHelper.doSendReadStateComm();
+                        commonCtrlView.onDestroy();
                         commonCtrlView = null;
                     }
                     break;
@@ -213,6 +214,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(commonCtrlView != null){
+                    mHelper.doSendReadStateComm();
                    commonCtrlView.onDestroy();
                     commonCtrlView = null;
                 }

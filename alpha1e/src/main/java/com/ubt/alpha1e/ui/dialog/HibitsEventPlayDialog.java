@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -230,7 +231,7 @@ public class HibitsEventPlayDialog {
         playStatusAnim.setOneShot(false);
         playStatusAnim.setVisible(true,true);
 
-        skbVolumeControl.setThumb(mActivity.getDrawable(R.drawable.ic_ct_sound_pro_disable));
+        skbVolumeControl.setThumb(ContextCompat.getDrawable(mActivity,R.drawable.ic_ct_sound_pro_disable));
         skbVolumeControl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
@@ -300,14 +301,14 @@ public class HibitsEventPlayDialog {
             }
             onNoteVol(mHelper.mCurrentVolume);
             if(volumeProgress != 0){
-                ivMusicVolume.setImageDrawable(mActivity.getDrawable(R.drawable.ic_ct_sound_on));
+                ivMusicVolume.setImageDrawable(ContextCompat.getDrawable(mActivity,R.drawable.ic_ct_sound_on));
             }
         } else {
             if (skbVolumeControl.getProgress() != 0){
                 mHelper.mCurrentVolume = -1 * skbVolumeControl.getProgress();
             }
             skbVolumeControl.setProgress(0);
-            ivMusicVolume.setImageDrawable(mActivity.getDrawable(R.drawable.ic_ct_sound_mute));
+            ivMusicVolume.setImageDrawable(ContextCompat.getDrawable(mActivity,R.drawable.ic_ct_sound_mute));
         }
     }
 
@@ -475,7 +476,7 @@ public class HibitsEventPlayDialog {
             }
             ivMusicStop.setImageResource(R.drawable.ic_ct_stop);
             ivMusicNext.setImageResource(R.drawable.ic_music_next_usable);
-            skbVolumeControl.setThumb(mActivity.getDrawable(R.drawable.ic_ct_sound_pro));
+            skbVolumeControl.setThumb(ContextCompat.getDrawable(mActivity, R.drawable.ic_ct_sound_pro));
 
             onNoteVol(mHelper.mCurrentVolume);
             onNoteVolState(mHelper.mCurrentVoiceState);
@@ -486,9 +487,9 @@ public class HibitsEventPlayDialog {
             ivMusicPlay.setImageResource(R.drawable.ic_ct_play_disable);
             ivMusicStop.setImageResource(R.drawable.ic_ct_stop_disable);
             ivMusicNext.setImageResource(R.drawable.ic_music_next_disable);
-            skbVolumeControl.setThumb(mActivity.getDrawable(R.drawable.ic_ct_sound_pro_disable));
+            skbVolumeControl.setThumb(ContextCompat.getDrawable(mActivity, R.drawable.ic_ct_sound_pro_disable));
             skbVolumeControl.setProgress(0);
-            ivMusicVolume.setImageDrawable(mActivity.getDrawable(R.drawable.ic_ct_sound_disable));
+            ivMusicVolume.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_ct_sound_disable));
         }
     }
 

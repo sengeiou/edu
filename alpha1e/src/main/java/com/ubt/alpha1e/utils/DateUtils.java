@@ -34,4 +34,19 @@ public class DateUtils {
     public static boolean isHolidayOfToday(){
         return isHoliday(new Date());
     }
+
+    /**
+     * 获得指定日期的后一天
+     *
+     * @param date
+     * @return
+     */
+    public static Date getSpecifiedDayAfter(Date date) {
+        Calendar c = Calendar.getInstance();
+
+        c.setTime(date);
+        int day = c.get(Calendar.DATE);
+        c.set(Calendar.DATE, day + 1);
+        return c.getTime();
+    }
 }
