@@ -123,8 +123,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 if (MyActionsHelper.mCurrentSeletedNameList.size() > 0) {
                     if (!isStartLooping) {
                         UbtLog.d(TAG, "BEGIN CIRCLE PLAY");
-                        isStartLooping = true;
-                        mHelper.setLooping(isStartLooping);
+                        setActionPlayType(true);
+                        clearPlayingStatusList();
                         JSONArray action_cyc_list = new JSONArray(MyActionsHelper.mCurrentSeletedNameList);
                         try {
                             mHelper.doCycle(action_cyc_list);
@@ -134,8 +134,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     } else {
                         UbtLog.d(TAG, "STOP CIRCLE PLAY");
                         //先复位标志isStartLooping
-                        isStartLooping = false;
-                        mHelper.setLooping(isStartLooping);
+                        setActionPlayType(false);
                         //在调用STOP，然后回调到notePlayFinish
                         mHelper.stopPlayAction();
                     }
@@ -424,7 +423,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
      */
     @Override
     public void notePlayFinish(List<String> mSourceActionNameList, ActionPlayer.Play_type mCurrentPlayType, String hashCode) {
-        UbtLog.d(TAG, "notePlayFinish clear data");
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -437,8 +435,11 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             for (Map<String, Object> item : mDatas) {
                 item.put(MyActionsHelper.map_val_action_is_playing, false);
             }
+            for(int i=0;i<mSourceActionNameList.size();i++){
+                UbtLog.d(TAG,"GET SOURCE "+mSourceActionNameList.get(i));
+            }
             //first clear the data
-            clearPlayingInfoList();
+            clearActionInfoList();
             //second notify the recycle view to update
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -459,8 +460,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                                 getActivity(), mActivity.getStringResources("ui_action_cycle_stop"), Toast.LENGTH_SHORT).show();
                     }
                 });
-                isStartLooping = false;
-                mHelper.setLooping(isStartLooping);
+                setActionPlayType(false);
             }
 
         }
@@ -1018,10 +1018,13 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
 
 
-    private void clearPlayingInfoList(){
+    private void clearActionInfoList(){
         MyActionsHelper.mCurrentSeletedNameList.clear();
         MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
         AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
+        clearPlayingStatusList();
+    }
+    private void clearPlayingStatusList(){
         for (Map<String, Object> item : mDatas) {
             item.put(MyActionsHelper.map_val_action_is_playing, false);
             item.put(MyActionsHelper.map_val_action_selected, false);
@@ -1069,5 +1072,15 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 tvCircle.setAlpha(0.5f);
             }
         }
+    }
+
+    /**
+     * @param status
+     *  status=true ：进入循环播放
+     *  status=false ：单独动作播放
+     */
+    private void setActionPlayType(boolean status ){
+        isStartLooping = status;
+        mHelper.setLooping(status);
     }
 }

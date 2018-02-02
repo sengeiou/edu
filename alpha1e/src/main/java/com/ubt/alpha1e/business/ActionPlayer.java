@@ -657,13 +657,13 @@ public class ActionPlayer implements BlueToothInteracter {
             }
         }else if(cmd == ConstValue.DV_STOPPLAY){
             UbtLog.d(TAG,"DV_STOPPLAY :reply stop  time "+(System.currentTimeMillis()-time)+" mCurrentPlayType:  "+ mCurrentPlayType+"MyActionsHelper.mCurrentLocalPlayType: "+MyActionsHelper.mCurrentLocalPlayType);
-            if(mSend_Stop_playType!=mCurrentPlayType&&time!=0){
-                UbtLog.d(TAG,"IS DIFFERENT ");
-                UbtLog.d(TAG,"RECEIVE THE ERROR STOP,DISTOR          " +(System.currentTimeMillis()-time));
-               // continueCycle();
-                clearSinglePlayStatus();
-                return;
-            }
+//            if(mSend_Stop_playType!=mCurrentPlayType&&time!=0){
+//                UbtLog.d(TAG,"IS DIFFERENT ");
+//                UbtLog.d(TAG,"RECEIVE THE ERROR STOP,DISTOR          " +(System.currentTimeMillis()-time));
+//               // continueCycle();
+//                clearSinglePlayStatus();
+//                return;
+//            }
 
         }else if(cmd == ConstValue.DV_CURRENT_PLAY_NAME){
             String robotCurrentPlayName = BluetoothParamUtil.bytesToString(param);
