@@ -590,11 +590,10 @@ public class ActionPlayer implements BlueToothInteracter {
                     // 插入
                 }
             }
-        }else if(cmd==ConstValue.DV_TAP_HEAD){
+        }else if(cmd==ConstValue.DV_TAP_HEAD||cmd==ConstValue.DV_VOICE_WAIT){
             UbtLog.d(TAG,"DV_TAP_HEAD");
             //解决拍头循环播放还进入下一首的问题，直接停止
             stopPlayingAndClearPlayingList();
-
             notifyMainActivityEvent(mCurrentPlayActionName, ActionEvent.Event.ACTION_PLAY_FINISH);
         }else  if (cmd == ConstValue.DV_ACTION_FINISH)// 动作播放完毕
         {
@@ -658,13 +657,6 @@ public class ActionPlayer implements BlueToothInteracter {
             }
         }else if(cmd == ConstValue.DV_STOPPLAY){
             UbtLog.d(TAG,"DV_STOPPLAY :reply stop  time "+(System.currentTimeMillis()-time)+" mCurrentPlayType:  "+ mCurrentPlayType+"MyActionsHelper.mCurrentLocalPlayType: "+MyActionsHelper.mCurrentLocalPlayType);
-//            if (mCurrentPlayType == Play_type.cycle_action) {
-//                UbtLog.d(TAG, "DV_STOPPLAY continueCycle");
-//                if (thiz != null) {
-//                    continueCycle();
-//                    UbtLog.d(TAG,"DV_ACTION_FINISH");
-//                }
-//            }
             if(mSend_Stop_playType!=mCurrentPlayType&&time!=0){
                 UbtLog.d(TAG,"IS DIFFERENT ");
                 UbtLog.d(TAG,"RECEIVE THE ERROR STOP,DISTOR          " +(System.currentTimeMillis()-time));
@@ -672,7 +664,6 @@ public class ActionPlayer implements BlueToothInteracter {
                 clearSinglePlayStatus();
                 return;
             }
-            // recoveryPlayer(cmd);
 
         }else if(cmd == ConstValue.DV_CURRENT_PLAY_NAME){
             String robotCurrentPlayName = BluetoothParamUtil.bytesToString(param);
@@ -847,7 +838,6 @@ public class ActionPlayer implements BlueToothInteracter {
             doStopPlay();
             StopCycleThread(true);
             mIsCycleContinuePlay = false;
-            //notePlayFinish();
             MyActionsHelper.setLooping(false);
             AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
         }else if(mCurrentPlayType==Play_type.single_action){
