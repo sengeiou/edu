@@ -15,9 +15,11 @@
         android:background="@color/B6"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
         android:scrollbars="vertical"
         android:scrollbarThumbVertical="@color/text_tab_color_select"
-        android:scrollbarSize="5dp">
+        android:scrollbarSize="3dp">
     </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>
