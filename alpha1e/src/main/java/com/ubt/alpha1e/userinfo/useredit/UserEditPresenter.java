@@ -175,21 +175,41 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
      * @param value
      */
     public void updateUserInfo(int key, String value) {
-
+        UserModel mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
         File file = null;
         UpdateUserInfoRequest request = new UpdateUserInfoRequest();
         switch (key) {
             case Constant.KEY_NICK_NAME:
                 request.setNickName(value);
+                if (mUserModel != null) {
+                    request.setAge(StringUtils.getAgeByType(mUserModel.getAge()));
+                    request.setSex(mUserModel.getSex());
+                    request.setGrade(StringUtils.getGradeByType(mUserModel.getGrade()));
+                }
                 break;
             case Constant.KEY_NICK_SEX:
                 request.setSex(value);
+                if (mUserModel != null) {
+                    request.setNickName(mUserModel.getNickName());
+                    request.setAge(StringUtils.getAgeByType(mUserModel.getAge()));
+                    request.setGrade(StringUtils.getGradeByType(mUserModel.getGrade()));
+                }
                 break;
             case Constant.KEY_NICK_AGE:
                 request.setAge(StringUtils.getAgeByType(value));
+                if (mUserModel != null) {
+                    request.setNickName(mUserModel.getNickName());
+                    request.setSex(mUserModel.getSex());
+                    request.setGrade(StringUtils.getGradeByType(mUserModel.getGrade()));
+                }
                 break;
             case Constant.KEY_NICK_GRADE:
                 request.setGrade(StringUtils.getGradeByType(value));
+                if (mUserModel != null) {
+                    request.setNickName(mUserModel.getNickName());
+                    request.setSex(mUserModel.getSex());
+                    request.setAge(StringUtils.getAgeByType(mUserModel.getAge()));
+                }
                 break;
             case Constant.KEY_NICK_HEAD:
 

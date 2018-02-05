@@ -365,12 +365,14 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
     public void ageSelectItem(int type, String item) {
         if (type == 0) {
             mTvUserAge.setText(item);
-            if (!mUserModel.getAge().equals(item)) {
+            String age = StringUtils.getAgeByType(item);
+            if (!mUserModel.getAge().equals(age)) {
                 updateUserInfo(Constant.KEY_NICK_AGE, item);
             }
         } else if (type == 1) {
             mTvUserGrade.setText(item);
-            if (!mUserModel.getGrade().equals(item)) {
+            String grade = StringUtils.getGradeByType(item);
+            if (!mUserModel.getGrade().equals(grade)) {
                 updateUserInfo(Constant.KEY_NICK_GRADE, item);
             }
         }
