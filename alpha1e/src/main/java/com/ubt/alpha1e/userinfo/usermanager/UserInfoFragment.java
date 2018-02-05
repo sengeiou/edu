@@ -171,7 +171,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         UbtLog.d(TAG, "usermode===" + mUserModel.toString());
         InputFilter[] filters = {new NameLengthFilter(20)};
         mTvUserName.setFilters(filters);
-        mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
+        mTvUserName.addTextChangedListener(new MyTextWatcher(                                                                                                                              mTvUserName, this));
         String name = FileUtils.utf8ToString(mUserModel.getNickName());
         UbtLog.d(TAG, "name===" + name);
         mTvUserName.setText(name);
@@ -485,9 +485,10 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         Log.d("string==", "editText==" + editText);
         if (!statu && !TextUtils.isEmpty(editText)) {
 //            if (TVUtils.isCorrectStr(editText)) {
-            if (!mUserModel.getNickName().equals(editText)) {
-                String unicode = FileUtils.stringToUtf8(editText);
+            String unicode = FileUtils.stringToUtf8(editText);
+            if (!mUserModel.getNickName().equals(unicode)) {
                 updateUserInfo(Constant.KEY_NICK_NAME, unicode);
+                UbtLog.d(TAG,unicode);
             }
 //            }
         }
