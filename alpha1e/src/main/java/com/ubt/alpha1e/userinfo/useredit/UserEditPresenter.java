@@ -271,9 +271,19 @@ public class UserEditPresenter extends BasePresenterImpl<UserEditContract.View> 
      */
     public void updateHead(String path) {
         File file = new File(path);
-        BaseRequest baseRequest = new BaseRequest();
-        UbtLog.d("UpdateHead--------", "request====" + baseRequest + "  headPath===" + path);
-        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, baseRequest, key)
+
+
+        UserModel mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+
+        UpdateUserInfoRequest request = new UpdateUserInfoRequest();
+        if (mUserModel != null) {
+            request.setNickName(mUserModel.getNickName());
+            request.setSex(mUserModel.getSex());
+            request.setGrade(StringUtils.getGradeByType(mUserModel.getGrade()));
+            request.setAge(StringUtils.getAgeByType(mUserModel.getAge()));
+        }
+        UbtLog.d("UpdateHead--------", "request====" + request + "  headPath===" + path);
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.UPDATE_USERINFO, file, request, key)
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
