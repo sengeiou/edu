@@ -9,7 +9,7 @@
         android:id="@+id/rl_logo_info"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_marginLeft="40dp">
+        >
 
         <!--android:layout_toRightOf="@+id/layout_img_select"-->
         <com.ubt.alpha1e.ui.custom.ShapedImageView
@@ -157,6 +157,7 @@
             </RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/lay_state"
         android:layout_width="60dp"

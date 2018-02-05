@@ -689,7 +689,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             showGlobalButtonAnmiationEffect(false);
         }
     }
-
     void showBluetoothDisconnect() {
         dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
                 .setTitle("提示")

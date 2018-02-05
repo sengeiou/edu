@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ubt.alpha1e"
           android:versionCode="1"
-          android:versionName="V1.0.1.6">
+          android:versionName="V1.0.1.7">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -523,7 +523,6 @@
         <activity
             android:name=".login.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_login"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"

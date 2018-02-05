@@ -251,7 +251,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             } else if(mCmd==ConstValue.DV_VOICE_WAIT){
                 UbtLog.d(TAG,"HIDDEN BUDDLE TEXT");
                 mView.hiddenBuddleText();
-                resetGlobalActionPlayer();
+               // resetGlobalActionPlayer();
             } else {
                 //  UbtLog.d(TAG, "ROBOT OTHER SITUATION" + mCmd);
             }
@@ -495,7 +495,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         requestGlobalButtonControl(false);
         ActionPlayer.getInstance().doStopPlay();
         ActionPlayer.getInstance().clearPlayingInfoList();
-
     }
 
     /**
