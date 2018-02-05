@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+   >
+
+    <RelativeLayout
+        android:id="@+id/rl_logo_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <com.ubt.alpha1e.ui.custom.ShapedImageView
+            android:id="@+id/action_logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            app:round_radius="16dp"
+            app:shape_mode="round_rect"
+            app:stroke_width="1dp"
+        />
+
+        <ImageView
+            android:id="@+id/img_play"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="35dp"
+            android:src="@drawable/ic_play" />
+
+        <ImageView
+            android:id="@+id/img_pause"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="35dp"
+            android:src="@drawable/ic_pro_pause"
+            android:visibility="invisible" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gif_playing"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="35dp"
+            android:src="@drawable/action_play_volum_gif"
+            android:visibility="invisible" />
+
+        <RelativeLayout
+            android:id="@+id/lay_info"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:gravity="center_vertical"
+            android:layout_toRightOf="@+id/action_logo"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:id="@+id/txt_action_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/hello_world"
+                android:lines="2"
+                android:ellipsize="end"
+                android:textColor="@color/txt_new_edtion"
+                android:textSize="16sp" />
+
+           <LinearLayout
+                android:id="@+id/ll_select"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="bottom"
+                android:layout_alignParentBottom="true"
+                android:visibility="visible">
+
+               <ImageView
+                   android:id="@+id/img_select"
+                   android:layout_width="30dp"
+                   android:layout_height="30dp"
+                   android:layout_marginLeft="5dp"
+                   android:src="@drawable/myactions_normal" />
+
+           </LinearLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -65,7 +65,8 @@ public class FeedbackSearchFragment extends MVPBaseFragment<FeedbackSearchContra
                                                 "如何唤醒机器人？",
                                                 "机器人可以添加新的动作吗？",
                                                 "机器人充电需要多久，充一次电可以玩多久？",
-                                                "机器人可以边玩边充电吗？"
+                                                "机器人可以边玩边充电吗？",
+                                                "为什么有时我的APP搜索不到机器人？"
     };
 
     private String[] mFeedBackContent = new String[]{"通过蓝牙在app内与机器人建立连接。如无法连接，可尝试重启机器人与app，多次失败可拨打售后电话进行详细咨询。",
@@ -81,7 +82,8 @@ public class FeedbackSearchFragment extends MVPBaseFragment<FeedbackSearchContra
                                                 "连接蓝牙与网络后，通过“你好，阿尔法。”即可语音唤醒机器人。",
                                                 "在动作编辑页面自行创建，或在app社区内下载动作，皆可。",
                                                 "充满电需1.5小时，待机状态可持续约4个小时，运动状态可续航约2个小时。",
-                                                "可以。机器人充电适用电压220V，且必须使用机器人的原装充电器充电。"
+                                                "可以。机器人充电适用电压220V，且必须使用机器人的原装充电器充电。",
+                                                "请重启机器人，或将手机蓝牙重新打开，再次搜索即可。"
     };
 
     private Handler mHandler = new Handler() {

@@ -20,7 +20,7 @@ public class UbtLog {
     public static final int ERROR = 5;
     public static final int NOTHING = 6;
 
-    public static final int LEVEL = VERBOSE;
+    public static final int LEVEL = NOTHING;
 
     public static void v(String tag, String msg) {
         if (LEVEL <= VERBOSE) {

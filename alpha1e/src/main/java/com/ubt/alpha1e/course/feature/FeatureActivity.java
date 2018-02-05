@@ -36,6 +36,8 @@ import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -176,6 +178,8 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
 
     private boolean isClickable = true;
     private final int OVER_TIME = 15 * 1000;//(15S音频等播放时间)超时
+
+    private Date startTime = null;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -507,6 +511,8 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     @Override
     protected void onResume() {
         super.onResume();
+        startTime = new Date(System.currentTimeMillis());
+
         ((PrincipleHelper) mHelper).doInit();
         ((PrincipleHelper) mHelper).doEnterCourse((byte) 1);
         showView(bzvPrincipleSteeringEngine, 100);
@@ -1080,6 +1086,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() ==KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
             onBack();
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -1088,6 +1095,15 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
      * 返回
      */
     public void onBack() {
+
+        Date curDate = new Date(System.currentTimeMillis());
+        long diffTime = (curDate.getTime() - startTime.getTime());
+        UbtLog.d(TAG,"onBack diffTime = " + diffTime);
+        if(startTime != null && diffTime < 2200 ){
+            UbtLog.d(TAG,"onBack = " + diffTime);
+            return;
+        }
+
         if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 2 ){
             ((PrincipleHelper) mHelper).doInit();
             ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
