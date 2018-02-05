@@ -92,6 +92,10 @@ public class AboutUsPresenter extends BasePresenterImpl<AboutUsContract.View> im
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage());
+                if(mView == null){
+                    return;
+                }
+
                 switch (id){
                     case DO_CHECK_UPDATE:
                         mView.noteApkUpsateFail(((MVPBaseActivity)mView.getContext()).getStringResources("ui_common_network_request_failed"));
@@ -102,6 +106,10 @@ public class AboutUsPresenter extends BasePresenterImpl<AboutUsContract.View> im
             @Override
             public void onResponse(String response, int id) {
                 UbtLog.d(TAG,"response = " + response);
+                if(mView == null){
+                    return;
+                }
+
                 switch (id){
                     case DO_CHECK_UPDATE:
                     {
