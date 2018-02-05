@@ -89,17 +89,20 @@
                         android:id="@+id/tv_note_update"
                         android:text="@string/ui_about_update" />
 
+                    <ImageView
+                        android:id="@+id/iv_update"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/tv_note_update"
+                        android:background="@drawable/icon_update"
+                        android:visibility="invisible" />
+
                     <TextView
                         style="@style/text_right_style"/>
 
-                    <ImageView
-                        android:id="@+id/iv_update"
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/tv_note_update"
-                        android:background="@drawable/read_point"
-                        android:visibility="gone" />
+
 
                 </RelativeLayout>
 
