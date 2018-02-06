@@ -476,7 +476,7 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
         }else if(event.getEvent() == NetworkEvent.Event.DO_CONNECT_WIFI){
             updateNetworkConnectStatus(event);
         }else if(event.getEvent() == NetworkEvent.Event.NETWORK_STATUS){
-            updateNetworkConnectName(event);
+//            updateNetworkConnectName(event);
         }
     }
 

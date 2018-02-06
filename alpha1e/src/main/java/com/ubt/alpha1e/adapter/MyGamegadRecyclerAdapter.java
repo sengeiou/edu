@@ -123,7 +123,7 @@ public class MyGamegadRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             remoteLogoId = R.drawable.icon_fighter;
         }else {
             holder.ivRemote.setAlpha(0.5f);
-            holder.tvRemoteName.setTextColor(Color.rgb(192, 192, 192));
+            holder.tvRemoteName.setTextColor(Color.rgb(0, 0, 0));
         }
         holder.ivRemote.setImageResource(remoteLogoId);
 

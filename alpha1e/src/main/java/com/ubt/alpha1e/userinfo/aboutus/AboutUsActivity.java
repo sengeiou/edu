@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,7 +15,6 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
-import com.ubt.alpha1e.ui.dialog.IUpdateListener;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.update.ApkUpdateManager;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -37,8 +38,13 @@ public class AboutUsActivity extends MVPBaseActivity<AboutUsContract.View, About
     RelativeLayout rlAppUpdate;
     @BindView(R.id.tv_base_title_name)
     TextView tvBaseTitleName;
+    @BindView(R.id.iv_update)
+    ImageView ivUpdate;
 
     private String version = "";
+    private String newVersionPath = "";
+    private boolean isAutoRequest = true;
+    private ConfirmDialog confirmDialog = null;
 
     public static void LaunchActivity(Context context) {
         Intent intent = new Intent(context, AboutUsActivity.class);
@@ -61,9 +67,17 @@ public class AboutUsActivity extends MVPBaseActivity<AboutUsContract.View, About
             version = "";
         }
 
-        UbtLog.d(TAG,"version = " + version);
+        UbtLog.d(TAG, "version = " + version);
+
         tvVersion.setText(getStringResources("ui_about_version") + version);
         tvBaseTitleName.setText(getStringResources("ui_leftmenu_about"));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isAutoRequest = true;
+        mPresenter.doUpdateApk(version);
     }
 
     @Override
@@ -81,7 +95,7 @@ public class AboutUsActivity extends MVPBaseActivity<AboutUsContract.View, About
         return R.layout.activity_about_us_mvp;
     }
 
-    @OnClick({R.id.ll_base_back,R.id.rl_app_update})
+    @OnClick({R.id.ll_base_back, R.id.rl_app_update})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_back:
@@ -97,12 +111,17 @@ public class AboutUsActivity extends MVPBaseActivity<AboutUsContract.View, About
                         && (!mPresenter.isWifiCoon(getContext()))) {
                     ToastUtils.showShort(getStringResources("ui_about_update_wifi_need"));
                 } else {
-                    mPresenter.doUpdateApk(version);
-                    if (mCoonLoadingDia != null) {
-                        mCoonLoadingDia.cancel();
+                    if (TextUtils.isEmpty(newVersionPath)) {
+                        isAutoRequest = false;
+                        mPresenter.doUpdateApk(version);
+                        if (mCoonLoadingDia != null) {
+                            mCoonLoadingDia.cancel();
+                        }
+                        mCoonLoadingDia = SLoadingDialog.getInstance(AboutUsActivity.this);
+                        mCoonLoadingDia.show();
+                    } else {
+                        showUpdateDialog();
                     }
-                    mCoonLoadingDia = SLoadingDialog.getInstance(AboutUsActivity.this);
-                    mCoonLoadingDia.show();
                 }
             }
             break;
@@ -120,7 +139,9 @@ public class AboutUsActivity extends MVPBaseActivity<AboutUsContract.View, About
                 }
                 //mCoonLoadingDia = SLoadingDialog.getInstance(getContext());
                 //((SLoadingDialog) mCoonLoadingDia).show(getStringResources("ui_about_update_already_latest"));
-                ToastUtils.showShort(getStringResources("ui_about_update_already_latest"));
+                if (!isAutoRequest) {
+                    ToastUtils.showShort(getStringResources("ui_about_update_already_latest"));
+                }
             }
         });
     }
@@ -133,7 +154,10 @@ public class AboutUsActivity extends MVPBaseActivity<AboutUsContract.View, About
                 if (mCoonLoadingDia != null) {
                     mCoonLoadingDia.cancel();
                 }
-                ToastUtils.showShort(info);
+
+                if (!isAutoRequest) {
+                    ToastUtils.showShort(info);
+                }
             }
         });
     }
@@ -146,22 +170,33 @@ public class AboutUsActivity extends MVPBaseActivity<AboutUsContract.View, About
                 if (mCoonLoadingDia != null) {
                     mCoonLoadingDia.cancel();
                 }
-
-                new ConfirmDialog(getContext()).builder().setMsg(getStringResources("ui_setting_app_update_tips"))
-                        .setCancelable(true)
-                        .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                ApkUpdateManager.getInstance(AboutUsActivity.this, versionPath).Update();
-                            }
-                        }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                }).show();
-
+                newVersionPath = versionPath;
+                if (isAutoRequest) {
+                    ivUpdate.setVisibility(View.VISIBLE);
+                } else {
+                    showUpdateDialog();
+                }
             }
         });
+    }
+
+    private void showUpdateDialog() {
+        if (confirmDialog == null) {
+            confirmDialog = new ConfirmDialog(getContext()).builder().setMsg(getStringResources("ui_setting_app_update_tips"))
+                    .setCancelable(true)
+                    .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            ApkUpdateManager.getInstance(AboutUsActivity.this, newVersionPath).Update();
+                        }
+                    }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+        }
+
+        confirmDialog.show();
     }
 }

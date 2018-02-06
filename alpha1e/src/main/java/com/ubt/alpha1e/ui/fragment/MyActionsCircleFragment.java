@@ -30,6 +30,7 @@ import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.ActionRecordInfo;
 import com.ubt.alpha1e.data.model.NewActionInfo;
 import com.ubt.alpha1e.ui.MyActionsActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.ActionsHelper;
 import com.ubt.alpha1e.ui.helper.ActionsLibHelper;
 import com.ubt.alpha1e.ui.helper.IActionsUI;
@@ -826,6 +827,11 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder mHolder, final int position) {
+
+            if(!isBulueToothConnected()){
+                showBluetoothConnectDialog();
+                return;
+            }
             final MyCircleHolder holder = (MyCircleHolder)mHolder;
             final Map<String,Object> actionList =mDatas.get(position);
             Glide.with(mContext)
@@ -1068,5 +1074,23 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private void setActionPlayType(boolean status ){
         isStartLooping = status;
         mHelper.setLooping(status);
+    }
+    public boolean isBulueToothConnected() {
+
+        if (((AlphaApplication) getActivity().getApplicationContext())
+                .getCurrentBluetooth() == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    //显示蓝牙连接对话框
+    void showBluetoothConnectDialog() {
+        new ConfirmDialog(getContext()).builder()
+                .setTitle("提示")
+                .setMsg("请先连接蓝牙和Wi-Fi")
+                .setCancelable(true)
+                .show();
     }
 }

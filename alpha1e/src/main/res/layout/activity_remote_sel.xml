@@ -29,12 +29,12 @@
 
         <ImageView
             android:id="@+id/iv_close_publish"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="9dp"
+            android:layout_height="9dp"
             android:src="@drawable/icon_close_publish"
             android:layout_toRightOf="@+id/tv_publish_title"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="6dp"
+            android:layout_centerVertical="true"
             />
 
     </RelativeLayout>
