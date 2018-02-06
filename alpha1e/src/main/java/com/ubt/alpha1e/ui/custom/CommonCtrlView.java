@@ -956,7 +956,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
        txt_action_name_m.setText("正在播放: " +actionName);
        btn_pause_or_continue.setEnabled(true);
        btn_stop_m.setEnabled(true);
-       btn_pause_or_continue.setImageDrawable(mContext.getDrawable(R.drawable.cc_playaction));
+       btn_pause_or_continue.setImageDrawable(mContext.getDrawable(R.drawable.cc_pause));
        btn_stop_m.setImageDrawable(mContext.getDrawable(R.drawable.cc_stop));
        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
 //       ColorMatrix matrix = new ColorMatrix();

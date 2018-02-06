@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -45,7 +46,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import pl.droidsonroids.gif.GifImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,6 +75,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private TextView tvCircle;
     private ImageView ivCircle;
 
+    public ImageView gif;
 
     public MyActionsCircleFragment() {
         // Required empty public constructor
@@ -794,7 +795,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             public RelativeLayout rl_info;
             public ImageView img_action_logo,img_select,img_pause,img_play;
             public TextView txt_action_name;
-            public GifImageView gif;
+           // public ImageView gif;
             public LinearLayout ll_select;
             public MyCircleHolder(View view) {
                 super(view);
@@ -811,7 +812,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 txt_action_name = (TextView) view.findViewById(R.id.txt_action_name);
 
                 //循环播放的时候在动作图标上的动画效果
-                gif = (GifImageView) view.findViewById(R.id.gif_playing);
+                gif = (ImageView) view.findViewById(R.id.gif_playing);
                 ll_select = (LinearLayout)view.findViewById(R.id.ll_select);
             }
 
@@ -874,11 +875,11 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 if(actionList.get(MyActionsHelper.map_val_action_is_playing)!=null)
                 {
                     if ((Boolean) actionList.get(MyActionsHelper.map_val_action_is_playing)) {
-                        holder.gif.setVisibility(View.VISIBLE);
+                        startWaveAnimation();
                         holder.img_pause.setVisibility(View.INVISIBLE);
                         holder.img_play.setVisibility(View.INVISIBLE);
                     } else {
-                        holder.gif.setVisibility(View.INVISIBLE);
+                        stopWaveAnimation();
                         holder.img_pause.setVisibility(View.INVISIBLE);
                         holder.img_play.setVisibility(View.VISIBLE);
                     }
@@ -894,11 +895,11 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 if(actionList.get(MyActionsHelper.map_val_action_is_playing)!=null)
                 {
                     if ((Boolean) actionList.get(MyActionsHelper.map_val_action_is_playing)) {
-                        holder.gif.setVisibility(View.INVISIBLE);
+                        stopWaveAnimation();
                         holder.rl_info.findViewById(R.id.img_pause).setVisibility(View.VISIBLE);
                         holder.rl_info.findViewById(R.id.img_play).setVisibility(View.INVISIBLE);
                     } else {
-                        holder.gif.setVisibility(View.INVISIBLE);
+                        stopWaveAnimation();
                         holder.rl_info.findViewById(R.id.img_pause).setVisibility(View.INVISIBLE);
                         holder.rl_info.findViewById(R.id.img_play).setVisibility(View.VISIBLE);
                     }
@@ -1092,5 +1093,18 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 .setMsg("请先连接蓝牙和Wi-Fi")
                 .setCancelable(true)
                 .show();
+    }
+    private void startWaveAnimation(){
+        UbtLog.d(TAG,"startWaveAnimation");
+        AnimationDrawable waveShapingAnim = null;
+        waveShapingAnim= (AnimationDrawable)gif.getBackground();
+        waveShapingAnim.setOneShot(false);
+        waveShapingAnim.setVisible(true,true);
+        waveShapingAnim.start();
+
+    }
+    private void stopWaveAnimation(){
+        UbtLog.d(TAG,"stopWaveAnimation");
+        gif.setVisibility(View.INVISIBLE);
     }
 }

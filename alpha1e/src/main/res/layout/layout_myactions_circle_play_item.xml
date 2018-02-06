@@ -39,14 +39,15 @@
             android:src="@drawable/ic_pro_pause"
             android:visibility="invisible" />
 
-        <pl.droidsonroids.gif.GifImageView
+        <ImageView
             android:id="@+id/gif_playing"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="35dp"
-            android:src="@drawable/action_play_volum_gif"
-            android:visibility="invisible" />
+            android:background="@drawable/playindicator_animation"
+            android:visibility="visible"
+           />
 
         <RelativeLayout
             android:id="@+id/lay_info"
