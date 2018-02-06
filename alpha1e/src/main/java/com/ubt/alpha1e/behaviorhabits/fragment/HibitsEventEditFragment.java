@@ -332,9 +332,11 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     HoldTouchHelper.OnItemTouchEvent onItemTouchEvent = new HoldTouchHelper.OnItemTouchEvent() {
         @Override
         public void onLongPress(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int position) {
-            if (((SampleAdapter) recyclerView.getAdapter()).onItemDrag(position)) {
+            UbtLog.e(TAG,"onLongPress position = " + position);
+            //暂时屏蔽不给拖
+            /*if (((SampleAdapter) recyclerView.getAdapter()).onItemDrag(position)) {
                 ((DragRecyclerView) recyclerView).startDrag(position);
-            }
+            }*/
         }
 
         @Override
