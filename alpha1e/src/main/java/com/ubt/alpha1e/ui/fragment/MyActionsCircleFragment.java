@@ -828,10 +828,10 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder mHolder, final int position) {
 
-            if(!isBulueToothConnected()){
-                showBluetoothConnectDialog();
-                return;
-            }
+//            if(!isBulueToothConnected()){
+//                showBluetoothConnectDialog();
+//                return;
+//            }
             final MyCircleHolder holder = (MyCircleHolder)mHolder;
             final Map<String,Object> actionList =mDatas.get(position);
             Glide.with(mContext)
