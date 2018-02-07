@@ -75,7 +75,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private TextView tvCircle;
     private ImageView ivCircle;
 
-    public ImageView gif;
+
 
     public MyActionsCircleFragment() {
         // Required empty public constructor
@@ -795,7 +795,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             public RelativeLayout rl_info;
             public ImageView img_action_logo,img_select,img_pause,img_play;
             public TextView txt_action_name;
-           // public ImageView gif;
+            public ImageView gif;
+            AnimationDrawable waveShapingAnim = null;
             public LinearLayout ll_select;
             public MyCircleHolder(View view) {
                 super(view);
@@ -813,6 +814,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
                 //循环播放的时候在动作图标上的动画效果
                 gif = (ImageView) view.findViewById(R.id.gif_playing);
+                waveShapingAnim= (AnimationDrawable)gif.getBackground();
                 ll_select = (LinearLayout)view.findViewById(R.id.ll_select);
             }
 
@@ -870,16 +872,22 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             }
             if(isStartLooping)
             {
-
                 //循环播放的时候
                 if(actionList.get(MyActionsHelper.map_val_action_is_playing)!=null)
                 {
                     if ((Boolean) actionList.get(MyActionsHelper.map_val_action_is_playing)) {
-                        startWaveAnimation();
+                        holder.gif.setVisibility(View.VISIBLE);
+//                        startWaveAnimation();
+                        holder.waveShapingAnim.setOneShot(false);
+                        holder.waveShapingAnim.setVisible(true,true);
+                        holder.waveShapingAnim.start();
                         holder.img_pause.setVisibility(View.INVISIBLE);
                         holder.img_play.setVisibility(View.INVISIBLE);
                     } else {
-                        stopWaveAnimation();
+                        holder.gif.setVisibility(View.INVISIBLE);
+                        //stopWaveAnimation();
+                        holder.waveShapingAnim.setVisible(false,false);
+                        holder.waveShapingAnim.stop();
                         holder.img_pause.setVisibility(View.INVISIBLE);
                         holder.img_play.setVisibility(View.VISIBLE);
                     }
@@ -895,11 +903,17 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 if(actionList.get(MyActionsHelper.map_val_action_is_playing)!=null)
                 {
                     if ((Boolean) actionList.get(MyActionsHelper.map_val_action_is_playing)) {
-                        stopWaveAnimation();
+                        holder.gif.setVisibility(View.INVISIBLE);
+//                        stopWaveAnimation();
+                        holder.waveShapingAnim.setVisible(false,false);
+                        holder.waveShapingAnim.stop();
                         holder.rl_info.findViewById(R.id.img_pause).setVisibility(View.VISIBLE);
                         holder.rl_info.findViewById(R.id.img_play).setVisibility(View.INVISIBLE);
                     } else {
-                        stopWaveAnimation();
+                        holder.gif.setVisibility(View.INVISIBLE);
+//                        stopWaveAnimation();
+                        holder.waveShapingAnim.setVisible(false,false);
+                        holder.waveShapingAnim.stop();
                         holder.rl_info.findViewById(R.id.img_pause).setVisibility(View.INVISIBLE);
                         holder.rl_info.findViewById(R.id.img_play).setVisibility(View.VISIBLE);
                     }
@@ -1094,17 +1108,18 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 .setCancelable(true)
                 .show();
     }
-    private void startWaveAnimation(){
-        UbtLog.d(TAG,"startWaveAnimation");
-        AnimationDrawable waveShapingAnim = null;
-        waveShapingAnim= (AnimationDrawable)gif.getBackground();
-        waveShapingAnim.setOneShot(false);
-        waveShapingAnim.setVisible(true,true);
-        waveShapingAnim.start();
-
-    }
-    private void stopWaveAnimation(){
-        UbtLog.d(TAG,"stopWaveAnimation");
-        gif.setVisibility(View.INVISIBLE);
-    }
+//    private void startWaveAnimation(){
+//        UbtLog.d(TAG,"startWaveAnimation");
+//        holder.waveShapingAnim.setOneShot(false);
+//        waveShapingAnim.setVisible(true,true);
+//        waveShapingAnim.start();
+//
+//    }
+//    private void stopWaveAnimation(){
+//        UbtLog.d(TAG,"stopWaveAnimation");
+//        if(waveShapingAnim!=null) {
+//            waveShapingAnim.setVisible(false,false);
+//            waveShapingAnim.stop();
+//        }
+//    }
 }
