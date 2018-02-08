@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.ui.main;
 
 import android.content.res.TypedArray;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
@@ -70,6 +71,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     private byte mChargeValue=0;
     private boolean IS_CHARGING=false;
     XGDeviceMode xgDeviceMode;
+    private int xgCnt = 0;
 
     public void registerEventBus() {
         EventBus.getDefault().register(MainPresenter.this);
@@ -366,7 +368,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             });
     }
 
-    private void BindXGServer(XGDeviceMode xgDeviceMode) {
+    private void BindXGServer(final XGDeviceMode xgDeviceMode) {
         String userId = SPUtils.getInstance().getString(Constant.SP_XG_USERID);
         if(TextUtils.isEmpty(userId)){
      //   if(!TextUtils.isEmpty(userId)&&userId.equals(SPUtils.getInstance().getString(Constant.SP_USER_ID))){
@@ -390,7 +392,18 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 .build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                UbtLog.d("XGREquest", "onError===" + e.getMessage());
+                UbtLog.d("XGREquest", "onError===" + e.getMessage()+"  xgCntxgCnt="+xgCnt);
+                mView.getHandler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(xgCnt < 2) {
+                            BindXGServer(xgDeviceMode);
+                            xgCnt++;
+                        }else{
+                            xgCnt = 0;
+                        }
+                    }
+                },2000);
             }
 
             @Override

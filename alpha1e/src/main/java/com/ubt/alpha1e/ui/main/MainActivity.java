@@ -956,6 +956,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         hiddenBuddleTextView();
     }
 
+    @Override
+    public Handler getHandler() {
+        return m_Handler;
+    }
+
     //若要使用此功能，需先绑定机器人！
     public void habitAdviceGotoBindDialog() {
         new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
