@@ -127,6 +127,7 @@ public class FlowLayoutManager extends RecyclerView.LayoutManager {
         for (int i = 0; i < getItemCount(); i++) {
             Log.d(TAG, "index:" + i);
             View childAt = recycler.getViewForPosition(i);
+
             if (View.GONE == childAt.getVisibility()) {
                 continue;
             }
@@ -195,8 +196,10 @@ public class FlowLayoutManager extends RecyclerView.LayoutManager {
             Row row = lineRows.get(j);
             float lineTop = row.cuTop;
             float lineBottom = lineTop + row.maxHeight;
+            //必须每次都重新画,不能放到缓冲中，不然会出现获取ITEM的位置为-1问题 flag = true
+            boolean flag = true;
             //如果该行在屏幕中，进行放置item
-            if (lineTop < displayFrame.bottom && displayFrame.top < lineBottom) {
+            if (flag || (lineTop < displayFrame.bottom && displayFrame.top < lineBottom)) {
                 List<Item> views = row.views;
                 for (int i = 0; i < views.size(); i++) {
                     View scrap = views.get(i).view;
