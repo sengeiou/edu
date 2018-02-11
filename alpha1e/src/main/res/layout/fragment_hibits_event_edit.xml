@@ -194,6 +194,7 @@
                         android:textColor="@color/T28"
                         android:layout_toRightOf="@+id/tv_play_content"
                         android:text="@string/ui_habits_play_content_tip"
+                        android:visibility="visible"
                         />
 
                     <TextView
