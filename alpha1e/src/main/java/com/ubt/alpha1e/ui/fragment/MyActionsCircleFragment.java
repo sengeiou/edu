@@ -831,22 +831,23 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder mHolder, final int position) {
 
-            if(!isBulueToothConnected()){
-                showBluetoothConnectDialog();
-                return;
-            }
+//            if(!isBulueToothConnected()){
+//                showBluetoothConnectDialog();
+//                return;
+//            }
             final MyCircleHolder holder = (MyCircleHolder)mHolder;
             final Map<String,Object> actionList =mDatas.get(position);
+            String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
+            //删除自己编译的动作文件,文字名字开头为数字15XXXXX 等
+            if(removeSelfCreationAction(action_name)){
+                //从队列中移除元素
+                mDatas.remove(position);
+                return;
+            }
             Glide.with(mContext)
                     .load(R.drawable.sec_action_logo)
                     .fitCenter()
                     .into(holder.img_action_logo);
-
-            String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
-            //删除自己编译的动作文件,文字名字开头为数字15XXXXX 等
-            if(removeSelfCreationAction(action_name)){
-                return;
-            }
             if(action_name.startsWith("@") || action_name.startsWith("#") || action_name.startsWith("%")){
                 action_name = action_name.substring(1);
             }
@@ -1018,6 +1019,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private boolean removeSelfCreationAction(String name){
         if(name.substring(0,1).equals("1")||name.substring(0,1).equals("")){
             UbtLog.d(TAG,"remove selfCreationAction name :"+" position i  :");
+
             return true;
         }
         return false;

@@ -556,7 +556,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             UbtLog.d(TAG,"cc_volumeicon default or others situation" +voluemeProgress);
             if(voluemeProgress!=0) {
                 btn_vol_log.setImageDrawable(mBaseActivity.getDrawableRes("cc_volumeicon"));
-              //  mHelper.doChangeVol(voluemeProgress);
             }else{
                 btn_vol_log.setImageDrawable(mBaseActivity.getDrawableRes("cc_mute"));
             }

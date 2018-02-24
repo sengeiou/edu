@@ -271,6 +271,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mActionIndicator.setOneShot(false);
         mActionIndicator.setVisible(true,true);
         mPresenter.registerEventBus();
+        mPresenter.getXGInfo();
     }
 
     @Override
@@ -284,7 +285,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         super.onResume();
         UbtLog.d(TAG, "onResume");
         initUI();
-        mPresenter.getXGInfo();
         if (!isBulueToothConnected()) {
             showDisconnectIcon();
             showGlobalButtonAnmiationEffect(false);
@@ -954,6 +954,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public void hiddenBuddleText() {
         hiddenBuddleTextView();
+    }
+
+    @Override
+    public Handler getHandler() {
+        return m_Handler;
     }
 
     //若要使用此功能，需先绑定机器人！
