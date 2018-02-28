@@ -282,21 +282,21 @@
             android:textSize="12sp" />
     </LinearLayout>
 
-    <TextView
+    <com.ubt.alpha1e.ui.custom.RoundImageView
         android:id="@+id/top_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="21dp"
-        android:layout_marginTop="16dp"
-        android:drawableTop="@drawable/main_center" />
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignTop="@+id/top_icon2"
+        android:layout_toLeftOf="@+id/ll_remote"
+        android:layout_toStartOf="@+id/ll_remote"
+        android:src="@drawable/main_center" />
 
     <TextView
         android:id="@+id/top_icon2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/top_icon"
-        android:layout_marginStart="12dp"
-        android:layout_toEndOf="@+id/top_icon"
+        android:layout_alignEnd="@+id/ll_remote"
+        android:layout_alignTop="@+id/top_icon2_disconnect"
         android:drawableTop="@drawable/main_connect" />
 
     <TextView
