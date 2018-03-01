@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
@@ -75,6 +76,7 @@ import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.RoundAngleImageView;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
@@ -113,7 +115,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @BindView(R.id.right_icon4)
     TextView rightIcon4;
     @BindView(R.id.top_icon)
-    TextView topIcon;
+    ImageView topIcon;
     @BindView(R.id.top_icon2)
     TextView topIcon2;
     @BindView(R.id.top_icon2_disconnect)
@@ -285,6 +287,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         super.onResume();
         UbtLog.d(TAG, "onResume");
         initUI();
+        showUserPicIcon();
         if (!isBulueToothConnected()) {
             showDisconnectIcon();
             showGlobalButtonAnmiationEffect(false);
@@ -689,6 +692,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             showGlobalButtonAnmiationEffect(false);
         }
     }
+
     void showBluetoothDisconnect() {
         dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
                 .setTitle("提示")
@@ -1479,8 +1483,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
  }
 
   private void showUserPicIcon(){
-      UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
-      UbtLog.d(TAG,"user image picture"+userModel.getHeadPic());
+      UserModel mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+      UbtLog.d(TAG,"user image picture"+mUserModel.getHeadPic());
+      Glide.with(this).load(mUserModel.getHeadPic()).asBitmap().into(topIcon);
   }
   private void hiddenDisconnectIcon(){
       if(topIcon2Disconnect!=null)
