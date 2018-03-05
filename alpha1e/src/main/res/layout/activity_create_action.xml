@@ -36,6 +36,7 @@
             android:id="@+id/iv_save_action"
             android:layout_width="45dp"
             android:layout_height="45dp"
+            android:layout_marginRight="6dp"
             android:scaleType="fitXY"
             android:src="@drawable/actions_edit_save_selector"
             android:layout_toLeftOf="@+id/iv_help"
@@ -45,6 +46,7 @@
             android:id="@+id/iv_auto_read"
             android:layout_width="45dp"
             android:layout_height="45dp"
+            android:layout_marginRight="6dp"
             android:src="@drawable/actions_edit_auto_selector"
             android:scaleType="fitXY"
             android:layout_toLeftOf="@id/iv_save_action"
@@ -54,6 +56,7 @@
             android:id="@+id/iv_reset"
             android:layout_width="45dp"
             android:layout_height="45dp"
+            android:layout_marginRight="6dp"
             android:src="@drawable/actions_edit_reset_selector"
             android:scaleType="fitXY"
             android:layout_toLeftOf="@+id/iv_auto_read"
@@ -175,7 +178,7 @@
     <RelativeLayout
         android:id="@+id/rl_action_line"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="140dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/img_bg_bottom"
         android:visibility="visible"
@@ -270,6 +273,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/iv_play_music"
                     android:gravity="center"
+                    android:textColor="#fff"
 
                     />
 
@@ -285,6 +289,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/rl_play_music"
                 android:layout_toLeftOf="@+id/iv_add_frame"
+                android:layout_marginRight="16dp"
                 android:orientation="vertical"
                 android:gravity="center_vertical"
                 >

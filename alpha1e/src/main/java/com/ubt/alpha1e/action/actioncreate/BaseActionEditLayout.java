@@ -755,6 +755,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 if (mediaPlayer != null) {
                     mediaPlayer.stop();
                     playFinish = true;
+                    mediaPlayer = null;
                 }
                 ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x04);
                 ((Activity) mContext).finish();
@@ -766,6 +767,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 if (mediaPlayer != null) {
                     mediaPlayer.stop();
                     playFinish = true;
+                    mediaPlayer = null;
                 }
                 ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x04);
                 ((Activity) mContext).finish();
@@ -778,6 +780,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             if (mediaPlayer != null) {
                 mediaPlayer.stop();
                 playFinish = true;
+                mediaPlayer = null;
             }
             ((Activity) mContext).finish();
             return true;
@@ -802,6 +805,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                             if (mediaPlayer != null) {
                                 mediaPlayer.stop();
                                 playFinish = true;
+                                mediaPlayer = null;
                             }
                             ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x04);
                             ((Activity) mContext).finish();
@@ -1273,7 +1277,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     return;
                 }
             }
-            isFinishFramePlay = false;
+//            isFinishFramePlay = false;
             if (mDir != "" && mediaPlayer != null) {
                 UbtLog.d(TAG, "current pos:" + mediaPlayer.getCurrentPosition());
                 if (mediaPlayer.getCurrentPosition() == 0) {
@@ -2445,7 +2449,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     public void onPlaying() {
         UbtLog.d(TAG, "onPlaying");
-
+        isFinishFramePlay = false;
     }
 
 
