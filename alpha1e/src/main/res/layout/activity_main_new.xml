@@ -291,21 +291,21 @@
         android:layout_toStartOf="@+id/ll_remote"
         android:src="@drawable/main_center" />
 
-    <TextView
+    <ImageView
         android:id="@+id/top_icon2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/ll_remote"
         android:layout_alignTop="@+id/top_icon2_disconnect"
-        android:drawableTop="@drawable/main_connect" />
+        android:src="@drawable/main_connect" />
 
-    <TextView
+    <ImageView
         android:id="@+id/top_icon2_disconnect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/top_icon2"
         android:layout_marginTop="16dp"
-        android:drawableTop="@drawable/main_disconnected"
+        android:src="@drawable/main_disconnected"
         android:visibility="visible" />
 
     <TextView

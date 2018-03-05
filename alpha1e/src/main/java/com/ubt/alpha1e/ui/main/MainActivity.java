@@ -21,6 +21,8 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -117,9 +119,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @BindView(R.id.top_icon)
     ImageView topIcon;
     @BindView(R.id.top_icon2)
-    TextView topIcon2;
+    ImageView topIcon2;
     @BindView(R.id.top_icon2_disconnect)
-    TextView topIcon2Disconnect;
+    ImageView topIcon2Disconnect;
     @BindView(R.id.top_icon3)
     TextView topIcon3;
 
@@ -249,7 +251,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     AnimationDrawable  mActionIndicator=null;
     long mClickTime=0;
     int CLICK_THRESHOLD_DUPLICATE=800;
-
+    Animation hyperspaceJump;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -258,6 +260,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mCurrentTouchTime = System.currentTimeMillis();
         getScreenInch();
         initUI();
+
         mHelper = MainUiBtHelper.getInstance(getContext());
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         filter1.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
@@ -274,6 +277,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mActionIndicator.setVisible(true,true);
         mPresenter.registerEventBus();
         mPresenter.getXGInfo();
+
     }
 
     @Override
@@ -288,6 +292,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG, "onResume");
         initUI();
         showUserPicIcon();
+       // new CommonGuideView(getContext());
         if (!isBulueToothConnected()) {
             showDisconnectIcon();
             showGlobalButtonAnmiationEffect(false);
@@ -1488,12 +1493,38 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
       Glide.with(this).load(mUserModel.getHeadPic()).asBitmap().into(topIcon);
   }
   private void hiddenDisconnectIcon(){
-      if(topIcon2Disconnect!=null)
-      topIcon2Disconnect.setVisibility(View.INVISIBLE);
+      if(topIcon2Disconnect!=null) {
+          topIcon2Disconnect.setVisibility(View.INVISIBLE);
+          topIcon2Disconnect.clearAnimation();
+          topIcon2.clearAnimation();
+      }
   }
     private void showDisconnectIcon(){
-        if(topIcon2Disconnect!=null)
-        topIcon2Disconnect.setVisibility(View.VISIBLE);
+        if(topIcon2Disconnect!=null) {
+            topIcon2Disconnect.setVisibility(View.VISIBLE);
+            hyperspaceJump = AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump);
+            hyperspaceJump.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    topIcon2Disconnect.startAnimation(hyperspaceJump);
+                    topIcon2.startAnimation(hyperspaceJump);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+
+            topIcon2Disconnect.startAnimation(hyperspaceJump);
+            topIcon2.startAnimation(hyperspaceJump);
+        }
+
     }
   private void sendCommandToRobot(String absouteActionPath){
         if(cartoon_enable) {
