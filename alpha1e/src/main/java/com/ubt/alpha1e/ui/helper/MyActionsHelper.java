@@ -745,23 +745,23 @@ public class MyActionsHelper extends BaseHelper implements
         mCurrentVolume = pow;
 
         MyLog.writeLog("音量检测", "发送调整指令" + pow);
-
         byte[] param = new byte[1];
         param[0] = (byte) (pow & 0xff);
-        doSendComm(ConstValue.DV_VOLUME, param);
+        UbtLog.d(TAG,"调整之前"+_pow+"发送调整指令"+(byte)param[0]);
+         doSendComm(ConstValue.DV_VOLUME, param);
         ChangeMisucVol(_pow);
     }
 
     public void doTurnVol() {
         byte[] papram = new byte[1];
         if (mCurrentVoiceState) {
+            //MUTE
             papram[0] = 0;
             ChangeMisucVol(0);
-            //有声音
             mCurrentVoiceState = false;
         } else {
+            //UNMUTE
             papram[0] = 1;
-            //无声音
             mCurrentVoiceState = true;
         }
 

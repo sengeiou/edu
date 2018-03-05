@@ -33,7 +33,7 @@ public class ActionCoursedapter extends BaseQuickAdapter<ActionCourseModel, Base
     @Override
     protected void convert(BaseViewHolder helper, ActionCourseModel item) {
         ImageView ivCourse = helper.getView(R.id.iv_cources);
-        ((ImageView) helper.getView(R.id.iv_cources)).setAlpha(item.getActionLockType() == 1 ? 1.0f : 0.5f);
+       // ((ImageView) helper.getView(R.id.iv_cources)).setAlpha(item.getActionLockType() == 1 ? 1.0f : 0.5f);
  
         ImageView imageView = (ImageView) helper.getView(R.id.iv_cources);
         Glide.with(mContext).load(item.getDrawableId()).placeholder(R.drawable.ic_action_level1).into(imageView);
@@ -42,6 +42,9 @@ public class ActionCoursedapter extends BaseQuickAdapter<ActionCourseModel, Base
         tvActionName.setTextColor(item.getActionLockType() == 1 ? mContext.getResources().getColorStateList(R.color.tv_black_color) : mContext.getResources().getColorStateList(R.color.login_line_color));
         ImageView ivLock = helper.getView(R.id.iv_action_lock);
         ivLock.setVisibility(item.getActionLockType() == 1 ? View.GONE : View.VISIBLE);
+        View mView = helper.getView(R.id.view_background);
+        mView.setVisibility(item.getActionLockType() == 1 ? View.GONE : View.VISIBLE);
+
 
         ImageView ivStar = helper.getView(R.id.iv_action_complete);
         ivStar.setImageResource(item.getActionCourcesScore() == 0 ? R.drawable.img_action_incomplete : R.drawable.img_action_completed);

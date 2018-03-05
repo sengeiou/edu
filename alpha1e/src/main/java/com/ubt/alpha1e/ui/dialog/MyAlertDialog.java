@@ -69,7 +69,7 @@ public class MyAlertDialog extends BaseDialog {
         Window dialogWindow = this.getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         // 设置窗口宽度
-        lp.width = (int) DataTools.dip2px(mContext, 250);
+        lp.width = (int) DataTools.dip2px(mContext, 300);
         dialogWindow.setAttributes(lp);
         initControlListener();
         super.show();

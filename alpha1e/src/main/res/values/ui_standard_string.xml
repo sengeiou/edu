@@ -6,6 +6,7 @@
     <string name="ui_common_edit">编辑</string>
     <string name="ui_common_save">保存</string>
     <string name="ui_common_confirm">确定</string>
+    <string name="ui_common_add">添加</string>
     <string name="ui_common_search">搜索</string>
     <string name="ui_common_check">查看</string>
     <string name="ui_common_close">关闭</string>

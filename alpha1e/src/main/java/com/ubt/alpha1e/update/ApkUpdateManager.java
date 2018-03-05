@@ -34,6 +34,13 @@ public class ApkUpdateManager {
     private String mFile_name = "";
     private final int UPDATE_NOTIFICATION_ID = 1001;
 
+    private Notification.Builder notifyBuilder = null;
+    //private Notification notification = null;
+    private CharSequence contentTitle = null;
+    private CharSequence contentText = null;
+    private String updateProgessContent = "";
+    private int previousProgess = 0;
+
     private ApkUpdateManager() {
 
     }
@@ -43,12 +50,12 @@ public class ApkUpdateManager {
             thiz = new ApkUpdateManager();
             isUpdate = false;
         }
-        thiz.mContext = cont;
+        thiz.mContext = cont.getApplicationContext();
         thiz.mNotificationManager = (NotificationManager) thiz.mContext
                 .getSystemService(thiz.mContext.NOTIFICATION_SERVICE);
         thiz.mUrl = url;
         String[] strs = thiz.mUrl.split("/");
-        UbtLog.d(TAG,"url = " + url);
+        UbtLog.d(TAG,"url = " + url + "     cont = " + cont);
         thiz.mFile_name = strs[strs.length - 1];
         return thiz;
     }
@@ -71,35 +78,20 @@ public class ApkUpdateManager {
 
     private void startDownloadAPK() {
 
-        Notification notification = null;
-        CharSequence contentTitle = mContext.getResources().getString(
-                (R.string.ui_robot_info_upgrading));
-        CharSequence contentText = mContext.getResources().getString(
-                (R.string.ui_about_update_progress)) + "0%";
-        if(Build.VERSION.SDK_INT <16) {
-            notification = new Notification();
-            notification.icon = R.drawable.ic_launcher;
-            notification.flags = Notification.FLAG_NO_CLEAR;
+        contentTitle = mContext.getResources().getString((R.string.ui_robot_info_upgrading));
+        updateProgessContent = mContext.getResources().getString((R.string.ui_about_update_progress));
+        previousProgess = 0;
+        contentText = updateProgessContent + "0%";
 
-            Class clazz = notification.getClass();
-            try {
-                Method m2 = clazz.getDeclaredMethod("setLatestEventInfo", Context.class,CharSequence.class,CharSequence.class,PendingIntent.class);
-                m2.invoke(notification, mContext, contentTitle,
-                        contentText, null);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-//            notification.setLatestEventInfo(mContext, contentTitle, contentText, null);
-        }else{
-            notification = new Notification.Builder(mContext)
-                    .setAutoCancel(false)
-                    .setContentTitle(contentTitle)
-                    .setContentText(contentText)
-                    .setSmallIcon(R.drawable.ic_launcher)
-                    .build();
+        if(notifyBuilder == null){
+            notifyBuilder = new Notification.Builder(mContext);
+            notifyBuilder.setAutoCancel(false);
+            notifyBuilder.setSmallIcon(R.drawable.ic_launcher);
+            notifyBuilder.setContentTitle(contentTitle);
+            notifyBuilder.setContentText(contentText);
         }
 
-        mNotificationManager.notify(this.UPDATE_NOTIFICATION_ID, notification);
+        mNotificationManager.notify(this.UPDATE_NOTIFICATION_ID, notifyBuilder.build());
 
         GetDataFromWeb.getFileFromHttp(-1, mUrl, FileTools.update_cache + "/"
                 + mFile_name, new FileDownloadListener() {
@@ -118,47 +110,29 @@ public class ApkUpdateManager {
 
             @Override
             public void onReportProgress(long request_code, double progess) {
-                Notification notification = null;
-                CharSequence contentTitle = mContext.getResources().getString(
-                        (R.string.ui_robot_info_upgrading));
-                CharSequence contentText = mContext.getResources().getString(
-                        (R.string.ui_about_update_progress))
-                        + ((int) progess + "%");
-                if(Build.VERSION.SDK_INT <16) {
-                    notification = new Notification();
-                    notification.icon = R.drawable.ic_launcher;
-                    notification.flags = Notification.FLAG_NO_CLEAR;
+                if(notifyBuilder == null){
+                    contentTitle = mContext.getResources().getString((R.string.ui_robot_info_upgrading));
+                    updateProgessContent = mContext.getResources().getString((R.string.ui_about_update_progress));
+                    previousProgess = (int) progess;
+                    contentText = updateProgessContent + (previousProgess + "%");
 
-                    Class clazz = notification.getClass();
-                    try {
-                        Method m2 = clazz.getDeclaredMethod("setLatestEventInfo", Context.class,CharSequence.class,CharSequence.class,PendingIntent.class);
-                        m2.invoke(notification, mContext, contentTitle,
-                                contentText, null);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-//                    notification.setLatestEventInfo(mContext, contentTitle, contentText, null);
+                    notifyBuilder = new Notification.Builder(mContext);
+                    notifyBuilder.setAutoCancel(false);
+                    notifyBuilder.setSmallIcon(R.drawable.ic_launcher);
+                    notifyBuilder.setContentTitle(contentTitle);
+                    notifyBuilder.setContentText(contentText);
                 }else {
-                    notification = new Notification.Builder(mContext)
-                            .setAutoCancel(false)
-                            .setContentTitle(contentTitle)
-                            .setContentText(contentText)
-                            .setSmallIcon(R.drawable.ic_launcher)
-                            .build();
+                    UbtLog.d(TAG,"contentText progess = " + progess);
+                    if(previousProgess == (int) progess){
+                        return;
+                    }
+                    previousProgess = (int) progess;
+                    contentText = updateProgessContent + (previousProgess + "%");
+                    UbtLog.d(TAG,"contentText = " + contentText);
+                    notifyBuilder.setContentText(contentText);
                 }
 
-//                Notification notification = new Notification();
-//                notification.icon = R.drawable.ic_launcher;
-//                notification.flags = Notification.FLAG_NO_CLEAR;
-//                CharSequence contentTitle = mContext.getResources().getString(
-//                        (R.string.ui_robot_info_upgrading));
-//                CharSequence contentText = mContext.getResources().getString(
-//                        (R.string.ui_about_update_progress))
-//                        + ((int) progess + "%");
-//                notification.setLatestEventInfo(mContext, contentTitle,
-//                        contentText, null);
-                mNotificationManager.notify(UPDATE_NOTIFICATION_ID,
-                        notification);
+                mNotificationManager.notify(UPDATE_NOTIFICATION_ID, notifyBuilder.build());
             }
 
             @Override
@@ -168,45 +142,16 @@ public class ApkUpdateManager {
                     isUpdate = false;
 
                     Notification notification = null;
-                    CharSequence contentTitle = mContext.getResources()
-                            .getString((R.string.ui_robot_info_upgrading));
-                    CharSequence contentText = mContext.getResources()
-                            .getString((R.string.ui_about_update_fail));
-                    if(Build.VERSION.SDK_INT <16) {
-                        notification = new Notification();
-                        notification.icon = R.drawable.ic_launcher;
-                        notification.flags = Notification.FLAG_NO_CLEAR;
+                    CharSequence contentTitle = mContext.getResources().getString((R.string.ui_robot_info_upgrading));
+                    CharSequence contentText = mContext.getResources().getString((R.string.ui_about_update_fail));
+                    notification = new Notification.Builder(mContext)
+                            .setAutoCancel(false)
+                            .setContentTitle(contentTitle)
+                            .setContentText(contentText)
+                            .setSmallIcon(R.drawable.ic_launcher)
+                            .build();
 
-                        Class clazz = notification.getClass();
-                        try {
-                            Method m2 = clazz.getDeclaredMethod("setLatestEventInfo", Context.class,CharSequence.class,CharSequence.class,PendingIntent.class);
-                            m2.invoke(notification, mContext, contentTitle,
-                                    contentText, null);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-//            notification.setLatestEventInfo(mContext, contentTitle, contentText, null);
-                    }else{
-                        notification = new Notification.Builder(mContext)
-                                .setAutoCancel(false)
-                                .setContentTitle(contentTitle)
-                                .setContentText(contentText)
-                                .setSmallIcon(R.drawable.ic_launcher)
-                                .build();
-                    }
-
-
-
-//                    Notification notification = new Notification();
-//                    notification.icon = R.drawable.ic_launcher;
-//                    CharSequence contentTitle = mContext.getResources()
-//                            .getString((R.string.ui_robot_info_upgrading));
-//                    CharSequence contentText = mContext.getResources()
-//                            .getString((R.string.ui_about_update_fail));
-//                    notification.setLatestEventInfo(mContext, contentTitle,
-//                            contentText, null);
-                    mNotificationManager.notify(UPDATE_NOTIFICATION_ID,
-                            notification);
+                    mNotificationManager.notify(UPDATE_NOTIFICATION_ID, notification);
                 } else {
                     isUpdate = false;
                     mNotificationManager.cancel(UPDATE_NOTIFICATION_ID);

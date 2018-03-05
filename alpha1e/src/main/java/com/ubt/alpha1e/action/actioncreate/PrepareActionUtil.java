@@ -72,6 +72,8 @@ public class PrepareActionUtil implements BaseQuickAdapter.OnItemClickListener, 
         tvTitle.setText(title);
         tvCancle = contentView.findViewById(R.id.tv_cancel);
         tvConfirm = contentView.findViewById(R.id.tv_confirm);
+        tvConfirm.setText(mContext.getResources().getString(R.string.ui_common_add));
+        tvCancle.setVisibility(View.VISIBLE);
         RecyclerView recyclerView = contentView.findViewById(R.id.rv_actions);
         GridLayoutManager layoutManager = new GridLayoutManager(mContext, 5);
         recyclerView.setLayoutManager(layoutManager);
@@ -83,6 +85,7 @@ public class PrepareActionUtil implements BaseQuickAdapter.OnItemClickListener, 
         int width = (int) ((display.getWidth()) * 0.8); //设置宽度
         DialogPlus.newDialog(mContext)
                 .setContentHolder(viewHolder)
+                .setContentBackgroundResource(R.drawable.action_dialog_filter_rect)
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(width)
                 .setOnClickListener(this)
@@ -101,7 +104,7 @@ public class PrepareActionUtil implements BaseQuickAdapter.OnItemClickListener, 
                 list.get(i).setSelected(false);
             }
         }
-        tvConfirm.setTextColor(mContext.getResources().getColor(R.color.text_confirm_color));
+        tvConfirm.setTextColor(mContext.getResources().getColor(R.color.tv_user_edit_color));
         tvConfirm.setEnabled(true);
         actionAdapter.notifyDataSetChanged();
         if (mType == 1 || mType == 2) {

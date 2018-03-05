@@ -58,7 +58,7 @@ public class StringUtils {
      * @return
      */
     public static String getAgeByType(String str) {
-        String result = "";
+        String result = "5";
 
         if (str.equals("5岁及以下")) {
             result = "5";
@@ -156,7 +156,7 @@ public class StringUtils {
      * @return
      */
     public static String getGradeByType(String str) {
-        String result = "";
+        String result = "0";
         if (str.equals("幼儿园大班")) {
             result = "0";
         } else if (str.equals("小学一年级")) {

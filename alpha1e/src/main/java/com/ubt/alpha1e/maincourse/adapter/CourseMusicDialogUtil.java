@@ -212,7 +212,7 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
                 break;
 
             case R.id.iv_add_action_arrow:
-                 
+
             case R.id.tv_confirm:
                 if (TimeUtils.isFastClick()) {
                     if (selectDataModel == null) {
@@ -267,7 +267,7 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
                 ivDelete.setVisibility(View.GONE);
                 textView.setVisibility(View.INVISIBLE);
             } else {
-                ivSelect.setImageResource(R.drawable.bg_dottedline);
+                 ivSelect.setVisibility(View.GONE);
                 textView.setVisibility(View.VISIBLE);
                 textView.setText(item.getMusicName());
                 gifView.setVisibility(View.VISIBLE);

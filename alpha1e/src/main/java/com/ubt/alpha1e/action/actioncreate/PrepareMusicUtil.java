@@ -79,6 +79,8 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
         ivDelete.setVisibility(View.VISIBLE);
         tvCancle = contentView.findViewById(R.id.tv_cancel);
         tvConfirm = contentView.findViewById(R.id.tv_confirm);
+        tvConfirm.setText(mContext.getResources().getString(R.string.ui_common_add));
+        tvCancle.setVisibility(View.VISIBLE);
         RecyclerView recyclerView = contentView.findViewById(R.id.rv_actions);
         GridLayoutManager layoutManager = new GridLayoutManager(mContext, 5);
         recyclerView.setLayoutManager(layoutManager);
@@ -91,6 +93,7 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
         int width = (int) ((display.getWidth()) * 0.8); //设置宽度
         mDialogPlus = DialogPlus.newDialog(mContext)
                 .setContentHolder(viewHolder)
+                .setContentBackgroundResource(R.drawable.action_dialog_filter_rect)
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(width)
                 .setOnClickListener(this)
@@ -159,7 +162,7 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
                     list.get(i).setPlaying(false);
                 }
             }
-            tvConfirm.setTextColor(mContext.getResources().getColor(R.color.text_confirm_color));
+            tvConfirm.setTextColor(mContext.getResources().getColor(R.color.tv_user_edit_color));
             tvConfirm.setEnabled(true);
             actionAdapter.notifyDataSetChanged();
         }
@@ -189,7 +192,7 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
                 }
                 if(isShowDelete){
                     isShowDelete = false;
-                    ivDelete.setImageResource(R.drawable.icon_delete);
+                    ivDelete.setImageResource(R.drawable.ic_delete_grey);
                 }else{
                     isShowDelete = true;
                     ivDelete.setImageResource(R.drawable.icon_save);
@@ -245,7 +248,7 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
                 ivDelete.setVisibility(View.GONE);
                 textView.setVisibility(View.INVISIBLE);
             } else {
-                ivSelect.setImageResource(R.drawable.bg_dottedline);
+                ivSelect.setVisibility(View.GONE);
                 textView.setVisibility(View.VISIBLE);
                 textView.setText(item.getMusicName());
                 gifView.setVisibility(View.VISIBLE);

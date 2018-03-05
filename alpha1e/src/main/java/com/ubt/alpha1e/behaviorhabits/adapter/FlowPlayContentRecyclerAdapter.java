@@ -27,13 +27,11 @@ public class FlowPlayContentRecyclerAdapter extends SampleAdapter<FlowPlayConten
     private Context mContext;
     public List<SampleEntity> mDatas = new ArrayList<>();
     private View mView;
-    private Handler mHandler = null;
 
-    public FlowPlayContentRecyclerAdapter(Context mContext, List<SampleEntity> list, Handler handler) {
+    public FlowPlayContentRecyclerAdapter(Context mContext, List<SampleEntity> list) {
         super(mContext,list);
         this.mContext = mContext;
         this.mDatas = list;
-        this.mHandler = handler;
     }
 
     @Override
@@ -63,14 +61,12 @@ public class FlowPlayContentRecyclerAdapter extends SampleAdapter<FlowPlayConten
     public static class MyPlayContentHolder extends RecyclerView.ViewHolder
     {
 
-        //public RelativeLayout rlPlayContentItem;
         public TextView tvPlayContent;
 
         public MyPlayContentHolder(View view)
         {
             super(view);
 
-            //rlPlayContentItem  = (RelativeLayout) view.findViewById(R.id.rl_play_content_info);
             tvPlayContent = (TextView) view.findViewById(R.id.tv_play_content);
         }
     }
