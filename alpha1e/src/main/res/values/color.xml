@@ -152,4 +152,7 @@
     <color name="action_dilog_title">#16A4E3</color>
     <color name="action_guid_text_color">#36ACF0</color>
     <color name="action_edit_filter_color">#C4EDFF</color>
+
+    <color name="background_gray">#AA000000</color>
+
 </resources>
