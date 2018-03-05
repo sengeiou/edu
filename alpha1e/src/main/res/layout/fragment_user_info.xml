@@ -75,7 +75,7 @@
                     android:paddingTop="5dp"
                     android:textColor="@color/tv_blue_color"
                     android:textCursorDrawable="@null"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     />
 
                 <View
@@ -115,7 +115,7 @@
                         android:drawablePadding="10dp"
                         android:text="男"
                         android:textColor="@drawable/color_radiobutton"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         />
 
                     <RadioButton
@@ -128,7 +128,7 @@
                         android:drawablePadding="10dp"
                         android:text="女"
                         android:textColor="@drawable/color_radiobutton"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         />
                 </RadioGroup>
 

@@ -245,7 +245,6 @@ public class BlueToothManager extends Thread implements ClentCallBack,
 			for (int i = 0; i < mBlueToothInteractions.size(); i++) {
 				mBlueToothInteractions.get(i).onConnectState(true, mac);
 			}
-
 		}
 	}
 

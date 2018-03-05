@@ -30,7 +30,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingRight="16dp"
-            android:src="@drawable/icon_delete"
+            android:src="@drawable/ic_delete_grey"
             android:visibility="invisible"
             />
 
