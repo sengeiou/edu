@@ -51,7 +51,7 @@
             android:layout_toRightOf="@+id/iv_action_icon"
             android:scaleType="fitXY"
             android:src="@drawable/btn_delete"
-            android:visibility="gone"
+            android:visibility="visible"
             />
 
     </RelativeLayout>

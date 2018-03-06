@@ -28,6 +28,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResponseMode.CourseDetailScoreModule;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.maincourse.adapter.ActionCoursedapter;
 import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
 import com.ubt.alpha1e.maincourse.courselayout.ActionCourseDataManager;
@@ -41,9 +42,11 @@ import com.ubt.alpha1e.maincourse.courseone.CourseLevelSixActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelTenActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelThreeActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
@@ -74,6 +77,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
 
     private static final int REQUESTCODE = 10000;
     private static ActionCourseActivity mainCourseInstance = null;
+    private boolean isShowBleDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +156,9 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
     protected void onResume() {
         super.onResume();
         UbtLog.d(TAG, "------------------onResume-----------------");
+        if (!isBulueToothConnected()) {
+            showLoasBleDiaog();
+        }
     }
 
 
@@ -219,7 +226,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
 //                            }
 //                        }
                     }
-                    if (i==9){
+                    if (i == 9) {
 
                     }
                 }
@@ -335,7 +342,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         byte[] params = new byte[1];
         params[0] = 0;
         if (null != ((AlphaApplication) this
-                .getApplicationContext()).getBlueToothManager()&&null!=((AlphaApplication) this.getApplicationContext())
+                .getApplicationContext()).getBlueToothManager() && null != ((AlphaApplication) this.getApplicationContext())
                 .getCurrentBluetooth()) {
             ((AlphaApplication) this
                     .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) this.getApplicationContext())
@@ -366,17 +373,17 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
 //                        exitCourse();
 //                    }
 //                }, 3500);
-                myHandler.sendEmptyMessageDelayed(HANDLER_EXIT_COURSE,4000);
+                myHandler.sendEmptyMessageDelayed(HANDLER_EXIT_COURSE, 4000);
             }
         }
     }
 
-    private static  int HANDLER_EXIT_COURSE =11111;
-    Handler myHandler= new Handler(){
+    private static int HANDLER_EXIT_COURSE = 11111;
+    Handler myHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what==HANDLER_EXIT_COURSE){
+            if (msg.what == HANDLER_EXIT_COURSE) {
                 exitCourse();
             }
         }
@@ -427,4 +434,30 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 .create().show();
     }
 
+    private void showLoasBleDiaog() {
+        isShowBleDialog = true;
+        new ConfirmDialog(this).builder()
+                .setTitle("提示")
+                .setMsg("请先连接机器人蓝牙")
+                .setCancelable(false)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接蓝牙 ");
+                        Intent intent = new Intent();
+                        intent.setClass(ActionCourseActivity.this, BluetoothconnectActivity.class);
+                        startActivity(intent);
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                MainCourseActivity.finishByMySelf();
+                ActionCourseActivity.finishByMySelf();
+                ActionCourseActivity.this.finish();
+                //关闭窗体动画显示
+                ActionCourseActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            }
+        }).show();
+    }
 }

@@ -97,9 +97,7 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
     protected void onResume() {
         super.onResume();
         UbtLog.d(TAG, "------------onResume------");
-        if (!isBulueToothConnected()) {
-            showLoasBleDiaog();
-        }
+
     }
 
     @Override
@@ -333,8 +331,10 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
             @Override
             public void run() {
                 UbtLog.d("onLostBtCoon", "蓝牙掉线");
-                if (!isFinishing() && !isShowBleDialog) {
-                    showLoasBleDiaog();
+                if (!isFinishing()) {
+                    CourseLevelTwoActivity.this.finish();
+                    //关闭窗体动画显示
+                    CourseLevelTwoActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
                 }
             }
         });

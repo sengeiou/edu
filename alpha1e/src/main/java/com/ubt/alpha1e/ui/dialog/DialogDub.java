@@ -151,7 +151,7 @@ public class DialogDub extends Dialog {
         lp.width = (int) ((display.getWidth()) * 0.8); //设置宽度
         dialogDub.getWindow().setAttributes(lp);
         dialogDub.setCanceledOnTouchOutside(false);
-
+        dialogDub.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.action_dialog_filter_rect));
         initUI();
         initRecord();
 
