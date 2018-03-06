@@ -308,6 +308,15 @@
         android:src="@drawable/main_disconnected"
         android:visibility="visible" />
 
+    <ImageView
+        android:id="@+id/top_icon4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/top_icon2"
+        android:layout_toRightOf="@id/top_icon2"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/main_voice_cmd" />
+
     <TextView
         android:id="@+id/top_icon3"
         android:layout_width="wrap_content"
