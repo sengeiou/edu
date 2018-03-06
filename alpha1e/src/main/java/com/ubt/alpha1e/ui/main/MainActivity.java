@@ -67,6 +67,7 @@ import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.custom.CommonGuideView;
+import com.ubt.alpha1e.ui.custom.MainActivityGuideView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
@@ -86,6 +87,8 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
+import org.json.JSONString;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -149,6 +152,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     ImageView actionIndicator;
     @BindView(R.id.indicator0)
     ImageView indicator;
+    @BindView(R.id.tv_habits_event_time)
+    TextView  habitsTime;
+    @BindView(R.id.tv_hibits_event_name)
+    TextView  habitsName;
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
@@ -292,7 +299,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG, "onResume");
         initUI();
         showUserPicIcon();
-       // new CommonGuideView(getContext());
+        requireBehaviourNextEvent();
+        new MainActivityGuideView(getContext());
         if (!isBulueToothConnected()) {
             showDisconnectIcon();
             showGlobalButtonAnmiationEffect(false);
@@ -1576,5 +1584,35 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
       }
   }
 
+  private void setBehaviourHabitNextEvent(String eventName,String eventTime){
+      habitsTime.setText(eventTime);
+      habitsName.setText(eventName);
+  }
+
+    public void requireBehaviourNextEvent() {
+        BaseRequest mBehaviourControlRequest = new BaseRequest();
+        doRequestFromServer("http://10.10.1.14:8080/"+HttpEntity.GET_BEHAVIOURHABIT_NEXTEVENT,mBehaviourControlRequest);
+    }
+    public void doRequestFromServer(String url, BaseRequest baseRequest) {
+        synchronized (this) {
+            OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, 999).execute(new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                }
+                @Override
+                public void onResponse(String response, int id) {
+                    UbtLog.d(TAG, "response = " + response);
+                    if(id==999){
+                        BaseResponseModel<behaviourHabitModel> baseResponseModel1 = GsonImpl.get().toObject(response, new TypeToken<BaseResponseModel<behaviourHabitModel>>() {
+                        }.getType());
+                        if(baseResponseModel1.models!=null) {
+                            UbtLog.d(TAG, "GET RESOPNSE " + baseResponseModel1.models.eventName );
+                            setBehaviourHabitNextEvent(baseResponseModel1.models.eventName,baseResponseModel1.models.eventTime);
+                        }
+                    }
+                }
+            });
+        }
+    }
 
 }

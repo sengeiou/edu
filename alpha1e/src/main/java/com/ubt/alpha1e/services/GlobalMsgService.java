@@ -8,19 +8,33 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
 import com.tencent.android.tpush.XGPushRegisterResult;
 import com.tencent.android.tpush.XGPushShowedResult;
 import com.tencent.android.tpush.XGPushTextMessage;
 import com.ubt.alpha1e.base.AppManager;
+import com.ubt.alpha1e.base.RequstMode.BaseRequest;
+import com.ubt.alpha1e.base.RequstMode.BehaviourControlRequest;
+import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.ui.dialog.HibitsAlertDialog;
+import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.xingepush.XGCmdConstract;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
+
+import okhttp3.Call;
 
 /**
  * @作者：bin.zhang@ubtrobot.com
@@ -30,6 +44,7 @@ import org.json.JSONObject;
 
 public class GlobalMsgService extends Service {
     public static final String TAG = "GloabalMsgService";
+    private int GET_HABITEVENT=999;
 
     @Nullable
     @Override
@@ -64,7 +79,8 @@ public class GlobalMsgService extends Service {
                             .setEventId(mJson.get("eventId").toString())
                             .setMsg(xgPushShowedResult.getContent())
                             .show();
-                    //  new LowBatteryDialog(AppManager.getInstance().currentActivity()).setBatteryThresHold(1000000).builder().show();
+                    requireBehaviourNextEvent();
+
                 }
             }
         } catch (JSONException e) {
@@ -72,4 +88,31 @@ public class GlobalMsgService extends Service {
         }
     }
 
+    /**
+     * Get the behaviour habit next event
+     */
+    public void requireBehaviourNextEvent() {
+        BaseRequest mBehaviourControlRequest = new BaseRequest();
+        doRequestFromServer(HttpEntity.BASIC_UBX_SYS+HttpEntity.GET_BEHAVIOURHABIT_NEXTEVENT,mBehaviourControlRequest);
+    }
+    public void doRequestFromServer(String url, BaseRequest baseRequest) {
+        synchronized (this) {
+            OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, GET_HABITEVENT).execute(new StringCallback() {
+
+                @Override
+                public void onError(Call call, Exception e, int id) {
+
+                }
+
+                @Override
+                public void onResponse(String response, int id) {
+                     if(id==GET_HABITEVENT){
+                         BaseResponseModel baseResponseModel1 = GsonImpl.get().toObject(response, new TypeToken<BaseResponseModel>() {
+                         }.getType());
+                        UbtLog.d(TAG, "GET RESOPNSE "+baseResponseModel1.models.toString());
+                     }
+                }
+            });
+       }
+    }
 }

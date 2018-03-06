@@ -148,5 +148,8 @@ public class HttpEntity {
      */
     public static final String UPDATE_BLOCKLY_COURSE = BASIC_UBX_SYS + "graph/update";
 
-
+    /**
+     * 获取行为习惯下一次提醒
+     */
+    public static final String GET_BEHAVIOURHABIT_NEXTEVENT="alpha1e/event/getUserRemindEvent";
 }
