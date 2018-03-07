@@ -20,6 +20,15 @@ public class StringUtils {
         return pattern.matcher(str).matches();
     }
 
+    //判断整数（int）
+    public static boolean isInteger(String str) {
+        if (null == str || "".equals(str)) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        return pattern.matcher(str).matches();
+    }
+
     /**
      * 年龄int转为 String
      *
