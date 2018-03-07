@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.BuildConfig;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.animator.FrameAnimation;
@@ -42,6 +43,7 @@ import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loopHandler.HandlerCallback;
 import com.ubt.alpha1e.base.loopHandler.LooperThread;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsActivity;
+import com.ubt.alpha1e.behaviorhabits.model.behaviourHabitModel;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
@@ -79,7 +81,6 @@ import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
-import com.ubt.alpha1e.utils.RoundAngleImageView;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
@@ -87,8 +88,6 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.json.JSONObject;
-import org.json.JSONString;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -687,6 +686,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
                 looperThread.send(createMessage(Constant.APP_BLUETOOTH_CONNECTED));
             }
+        }else if(event.getEvent()==RobotEvent.Event.ENTER_CONNECT_DEVICE){
+            gotoConnectBluetooth();
         }
 
     }
@@ -1260,7 +1261,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void handleMessage(Bundle bundle) {
 
       Byte status= bundle.getByte(STATUS_MACHINE);
-        UbtLog.d(TAG,"STATE MACHINE IS "+status);
+      //  UbtLog.d(TAG,"STATE MACHINE IS "+status);
         switch (status){
            case Constant.APP_LAUNCH_STATUS:  //启动应用,虚拟形象睡觉姿势
              runOnUiThread(new Runnable() {
@@ -1591,7 +1592,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     public void requireBehaviourNextEvent() {
         BaseRequest mBehaviourControlRequest = new BaseRequest();
-        doRequestFromServer("http://10.10.1.14:8080/"+HttpEntity.GET_BEHAVIOURHABIT_NEXTEVENT,mBehaviourControlRequest);
+        doRequestFromServer(BuildConfig.WebServiceUbx+HttpEntity.GET_BEHAVIOURHABIT_NEXTEVENT,mBehaviourControlRequest);
     }
     public void doRequestFromServer(String url, BaseRequest baseRequest) {
         synchronized (this) {

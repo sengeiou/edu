@@ -1,6 +1,5 @@
-package com.ubt.alpha1e.ui.main;
+package com.ubt.alpha1e.behaviorhabits.model;
 
-import com.ubt.alpha1e.behaviorhabits.model.UserScore;
 import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.utils.GsonImpl;
 

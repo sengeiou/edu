@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_main"
+    android:background="#8F8F8F"
     android:orientation="vertical"
     >
     <ImageView
@@ -175,7 +175,7 @@
             android:layout_height="107dp"
             android:layout_marginLeft="50dp"
             android:gravity="center"
-            android:text="点这里可以控制机器人做动作。"
+            android:text="点这里可以给机器人编动作。"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -225,7 +225,7 @@
             android:layout_height="107dp"
             android:layout_marginLeft="50dp"
             android:gravity="center"
-            android:text="点这里可以控制机器人做动作。"
+            android:text="点这里可以给机器人写程序。"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -274,7 +274,7 @@
             android:layout_height="107dp"
             android:layout_marginLeft="50dp"
             android:gravity="center"
-            android:text="点这里可以控制机器人做动作。"
+            android:text="点这里可以在社区内分享作品，参与互动。"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -289,6 +289,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="59dp"
         android:layout_marginBottom="-15dp"
+        android:visibility="invisible"
         >
         <ImageView
             android:id="@+id/iv_course"
@@ -317,7 +318,7 @@
             android:layout_height="107dp"
             android:layout_marginLeft="50dp"
             android:gravity="center"
-            android:text="点这里可以控制机器人做动作。"
+            android:text="给机器人编动作，写程序太难了？先来课程中心学习一下"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -358,9 +359,9 @@
         android:id="@+id/top_icon2_guides"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/top_icon2"
         android:layout_toRightOf="@+id/top_icon2"
-        android:layout_marginLeft="-50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
         android:visibility="invisible"
         >
         <ImageView
@@ -372,7 +373,7 @@
             android:layout_height="107dp"
             android:layout_marginLeft="50dp"
             android:gravity="center"
-            android:text="点这里可以控制机器人做动作。"
+            android:text="最关键的第一步：点这里可以给机器人写程序。"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold" />

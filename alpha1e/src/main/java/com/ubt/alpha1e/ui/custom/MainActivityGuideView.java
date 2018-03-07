@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.ui.custom;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.ColorDrawable;
@@ -14,10 +15,21 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
+import com.ubt.alpha1e.course.feature.FeatureActivity;
+import com.ubt.alpha1e.course.merge.MergeActivity;
+import com.ubt.alpha1e.course.principle.PrincipleActivity;
+import com.ubt.alpha1e.course.split.SplitActivity;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.utils.log.UbtLog;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * CommonGuideView
@@ -115,6 +127,15 @@ public class MainActivityGuideView {
         rlBookCenter=(RelativeLayout)view.findViewById(R.id.rl_course_center);
         rlGuideBookCenter=(RelativeLayout)view.findViewById(R.id.rl_course_center_guides);
         top_icon2=(ImageView)view.findViewById(R.id.top_icon2);
+        top_icon2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                closeGuideView();
+                recordGuideState();
+                RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.ENTER_CONNECT_DEVICE);
+                EventBus.getDefault().post(robotEvent);
+            }
+        });
         rlGuideTopIcon2=(RelativeLayout)view.findViewById(R.id.top_icon2_guides);
         jump_exit=(TextView)view.findViewById(R.id.jump_exit);
         jump_exit.setOnClickListener(new View.OnClickListener() {

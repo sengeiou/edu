@@ -151,5 +151,5 @@ public class HttpEntity {
     /**
      * 获取行为习惯下一次提醒
      */
-    public static final String GET_BEHAVIOURHABIT_NEXTEVENT="alpha1e/event/getUserRemindEvent";
+    public static final String GET_BEHAVIOURHABIT_NEXTEVENT="event/getUserRemindEvent";
 }
