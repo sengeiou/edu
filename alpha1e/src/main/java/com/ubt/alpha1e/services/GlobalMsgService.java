@@ -79,40 +79,12 @@ public class GlobalMsgService extends Service {
                             .setEventId(mJson.get("eventId").toString())
                             .setMsg(xgPushShowedResult.getContent())
                             .show();
-                    requireBehaviourNextEvent();
+                    //requireBehaviourNextEvent();
 
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Get the behaviour habit next event
-     */
-    public void requireBehaviourNextEvent() {
-        BaseRequest mBehaviourControlRequest = new BaseRequest();
-        doRequestFromServer(HttpEntity.BASIC_UBX_SYS+HttpEntity.GET_BEHAVIOURHABIT_NEXTEVENT,mBehaviourControlRequest);
-    }
-    public void doRequestFromServer(String url, BaseRequest baseRequest) {
-        synchronized (this) {
-            OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, GET_HABITEVENT).execute(new StringCallback() {
-
-                @Override
-                public void onError(Call call, Exception e, int id) {
-
-                }
-
-                @Override
-                public void onResponse(String response, int id) {
-                     if(id==GET_HABITEVENT){
-                         BaseResponseModel baseResponseModel1 = GsonImpl.get().toObject(response, new TypeToken<BaseResponseModel>() {
-                         }.getType());
-                        UbtLog.d(TAG, "GET RESOPNSE "+baseResponseModel1.models.toString());
-                     }
-                }
-            });
-       }
     }
 }
