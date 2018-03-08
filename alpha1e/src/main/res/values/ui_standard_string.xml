@@ -1072,5 +1072,6 @@
 
 
     <string name="ui_resave_tip">当前名称文件已存在，确定覆盖当前文件吗?</string>
+    <string name="ui_recording_txt">动作记录中...</string>
 
 </resources>
