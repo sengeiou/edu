@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.alertview.OnItemClickListener;
 import com.ubt.alpha1e.ui.dialog.alertview.SheetAlertView;
@@ -46,8 +47,6 @@ public class ContactUsActivity extends MVPBaseActivity<ContactUsContract.View, C
     RelativeLayout rlCustEmail;
     @BindView(R.id.rl_cust_website)
     RelativeLayout rlCustWebsite;
-    @BindView(R.id.iv_title_right)
-    ImageView ivTitleRight;
 
     private static final int CALL_PHONE = 1;
     private static final int SEND_EMAIL = 2;
@@ -63,8 +62,6 @@ public class ContactUsActivity extends MVPBaseActivity<ContactUsContract.View, C
     @Override
     protected void initUI() {
         tvBaseTitleName.setText(getStringResources("ui_contact_title"));
-        ivTitleRight.setBackgroundResource(R.drawable.icon_title_search);
-        ivTitleRight.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -90,7 +87,7 @@ public class ContactUsActivity extends MVPBaseActivity<ContactUsContract.View, C
         initUI();
     }
 
-    @OnClick({R.id.ll_base_back, R.id.tv_base_title_name, R.id.rl_cust_phone, R.id.rl_cust_email, R.id.rl_cust_website, R.id.iv_ubt_wechat,R.id.iv_title_right})
+    @OnClick({R.id.ll_base_back, R.id.tv_base_title_name, R.id.rl_cust_phone, R.id.rl_cust_email, R.id.rl_cust_website, R.id.iv_ubt_wechat})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_back:
@@ -112,7 +109,7 @@ public class ContactUsActivity extends MVPBaseActivity<ContactUsContract.View, C
                 menuStyle.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.T24)), startIndex, menuStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 alertDialog(SEND_EMAIL, menuStyle);*/
 
-                WebContentActivity.launchActivity(this, "https://m.ubtrobot.com/cn/after-sale/email-report", "", true);
+                WebContentActivity.launchActivity(this, HttpEntity.EMAIL_REPORT, getStringResources("ui_setting_email_report"), true);
             }
             break;
             case R.id.rl_cust_website: {
@@ -125,9 +122,6 @@ public class ContactUsActivity extends MVPBaseActivity<ContactUsContract.View, C
             break;
             case R.id.iv_ubt_wechat:
                 PhotoShowActivity.LaunchActivity(getContext());
-                break;
-            case R.id.iv_title_right:
-                WebContentActivity.launchActivity(this, "http://e.echatsoft.com/visitor/mobile/chat.html?companyId=49&routeEntranceId=5&lan=zh-cn", "", true);
                 break;
         }
     }

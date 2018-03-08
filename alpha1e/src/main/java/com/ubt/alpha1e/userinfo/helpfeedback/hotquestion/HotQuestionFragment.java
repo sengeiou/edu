@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.adapter.FeedbackRecyclerAdapter;
 import com.ubt.alpha1e.data.model.FeedbackInfo;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.userinfo.helpfeedback.feedback.FeedbackActivity;
@@ -163,7 +164,7 @@ public class HotQuestionFragment extends MVPBaseFragment<HotQuestionContract.Vie
         switch (view.getId()) {
             case R.id.rl_feedback:
                 //FeedbackActivity.LaunchActivity(getContext());
-                WebContentActivity.launchActivity(getActivity(), "https://m.ubtrobot.com/cn/after-sale/email-report", "", true);
+                WebContentActivity.launchActivity(getActivity(), HttpEntity.EMAIL_REPORT, getStringRes("ui_setting_email_report"), true);
 
                 break;
         }
