@@ -13,7 +13,20 @@ import com.ubt.alpha1e.BuildConfig;
 
 public class HttpEntity {
 
+    /**
+     * 行为习惯统计
+     */
     public static final String HIBITS_STATISTICS = "http://10.10.1.14:8080/alpha1e/index.html?";
+
+    /**
+     * 邮件反馈
+     */
+    public static final String EMAIL_REPORT = "https://m.ubtrobot.com/cn/after-sale/email-report";
+
+    /**
+     * 在线咨询
+     */
+    public static final String ONLINE_CHAT = "http://e.echatsoft.com/visitor/mobile/chat.html?companyId=49&routeEntranceId=5&lan=zh-cn";
 
     /**
      * 信鸽获取
@@ -75,6 +88,15 @@ public class HttpEntity {
     //更新机器人自动升级状态
     public static final String UPDATE_AUTO_UPGRADE = BASIC_UBX_SYS_BIND + "relation/updateAutoUpgrade";
 
+    /**
+     * 获取通知开关状态
+     */
+    public static final String GET_NOTICE_STATUS = BASIC_UBX_SYS + "user/getPushStatus";
+
+    /**
+     * 设置通知开关状态
+     */
+    public static final String SET_NOTICE_STATUS = BASIC_UBX_SYS + "user/updatePushStatus";
 
     public static final String COURSE_SAVE_STATU = BASIC_UBX_SYS + "course/addCourseStatus";
 
@@ -149,5 +171,8 @@ public class HttpEntity {
      */
     public static final String UPDATE_BLOCKLY_COURSE = BASIC_UBX_SYS + "graph/update";
 
-
+    /**
+     * 获取行为习惯下一次提醒
+     */
+    public static final String GET_BEHAVIOURHABIT_NEXTEVENT="event/getUserRemindEvent";
 }
