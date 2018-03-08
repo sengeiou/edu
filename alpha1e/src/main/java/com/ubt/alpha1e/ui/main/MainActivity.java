@@ -283,7 +283,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mActionIndicator.setVisible(true,true);
         mPresenter.registerEventBus();
         mPresenter.getXGInfo();
-
+        if(!MainActivityGuideView.hasShowGuide()) {
+            MainActivityGuideView.getInstant(this);
+        }
     }
 
     @Override
@@ -299,7 +301,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         initUI();
         showUserPicIcon();
         requireBehaviourNextEvent();
-        new MainActivityGuideView(getContext());
         if (!isBulueToothConnected()) {
             showDisconnectIcon();
             showGlobalButtonAnmiationEffect(false);

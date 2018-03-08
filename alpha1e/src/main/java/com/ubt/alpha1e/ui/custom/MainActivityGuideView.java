@@ -66,12 +66,21 @@ public class MainActivityGuideView {
     private ImageView top_icon2;
     private RelativeLayout rlGuideTopIcon2;
     private TextView jump_exit;
+    static MainActivityGuideView  mMainActivityGuideView;
 
+
+
+    public static MainActivityGuideView  getInstant(Context mContext){
+          if(mMainActivityGuideView==null){
+               mMainActivityGuideView=new MainActivityGuideView(mContext);
+          }
+          return mMainActivityGuideView;
+    }
 
     public MainActivityGuideView(Context context) {
         mContext = context;
         createGuideView();
-
+        recordGuideState();
     }
 
     private void createGuideView() {
@@ -176,10 +185,10 @@ public class MainActivityGuideView {
                 }else if(rlGuideCommunity.getVisibility()==View.VISIBLE){
                     rlGuideCommunity.setVisibility(View.INVISIBLE);
                     LlCommunity.setVisibility(View.INVISIBLE);
-                    rlGuideBookCenter.setVisibility(View.VISIBLE);
+                    rlBookCenter.setVisibility(View.VISIBLE);
                     rlGuideBookCenter.setVisibility(View.VISIBLE);
                 }else if(rlGuideBookCenter.getVisibility()==View.VISIBLE){
-                    rlGuideBookCenter.setVisibility(View.INVISIBLE);
+                    rlBookCenter.setVisibility(View.INVISIBLE);
                     rlGuideBookCenter.setVisibility(View.INVISIBLE);
                     top_icon2.setVisibility(View.VISIBLE);
                     rlGuideTopIcon2.setVisibility(View.VISIBLE);
@@ -202,10 +211,10 @@ public class MainActivityGuideView {
     }
 
     public void recordGuideState() {
-        SPUtils.getInstance().put(Constant.SP_SHOW_COMMON_GUIDE, true);
+        SPUtils.getInstance().put(Constant.SP_SHOW_MAINUI_GUIDE, true);
     }
 
     public static boolean hasShowGuide() {
-        return SPUtils.getInstance().getBoolean(Constant.SP_SHOW_COMMON_GUIDE,false);
+        return SPUtils.getInstance().getBoolean(Constant.SP_SHOW_MAINUI_GUIDE,false);
     }
 }
