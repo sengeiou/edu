@@ -13,6 +13,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
@@ -37,6 +38,7 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
     private static final String TAG = WebContentActivity.class.getSimpleName();
     public static final String WEB_TITLE = "WEB_TITLE";
     public static final String WEB_URL = "WEB_URL";
+    public static final String SHOW_BACK = "SHOW_BACK";
 
     @BindView(R.id.ll_base_back)
     LinearLayout llBaseBack;
@@ -44,22 +46,33 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
     TextView tvBaseTitleName;
     @BindView(R.id.web_content)
     WebView webContent;
+    @BindView(R.id.rl_title)
+    RelativeLayout rlTitle;
 
     private String mTitle = "";
     private String mUrl;
+    private boolean isShowBack = false;
     private Stack<String> mUrls;
 
     public static void launchActivity(Activity activity, String url, String mTitle) {
+        launchActivity(activity,url,mTitle,false);
+    }
+
+    public static void launchActivity(Activity activity, String url, String mTitle,boolean isShowBack){
         Intent intent = new Intent();
         intent.setClass(activity, WebContentActivity.class);
         intent.putExtra(WebContentActivity.WEB_URL, url);
         intent.putExtra(WebContentActivity.WEB_TITLE, mTitle);
+        intent.putExtra(WebContentActivity.SHOW_BACK, isShowBack);
         activity.startActivity(intent);
-
     }
 
     @Override
     protected void initUI() {
+
+        if(isShowBack){
+            rlTitle.setVisibility(View.VISIBLE);
+        }
 
         tvBaseTitleName.setText(mTitle);
 
@@ -77,7 +90,7 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
         WebViewClient webViewClient = new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                UbtLog.d(TAG,"url = " + url);
+                UbtLog.d(TAG, "url = " + url);
                 doGotoPage(url);
                 return true;
             }
@@ -91,17 +104,23 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
                     super.onReceivedSslError(view, handler, error);
                 }
             }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                UbtLog.d(TAG,"onPageFinished url = " + url);
+                super.onPageFinished(view, url);
+            }
         };
-        UbtLog.d(TAG,"mUrl = " + mUrl);
+        UbtLog.d(TAG, "mUrl = " + mUrl);
         webContent.setWebViewClient(webViewClient);
         webContent.loadUrl(mUrl);
     }
 
     private void doGotoPage(String url) {
         UbtLog.d(TAG, "url:" + url + "  mTitle:" + mTitle);
-        if(url.startsWith("alpha1e:goBack")){//
+        if (url.startsWith("alpha1e:goBack")) {//
             this.finish();
-        }else {
+        } else {
             mUrls.push(url);
             webContent.loadUrl(url);
         }
@@ -150,6 +169,7 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
 
         mTitle = (String) getIntent().getExtras().get(WebContentActivity.WEB_TITLE);
         mUrl = (String) getIntent().getExtras().get(WebContentActivity.WEB_URL);
+        isShowBack = getIntent().getExtras().getBoolean(WebContentActivity.SHOW_BACK, false);
 
         mUrls = new Stack<String>();
         if (!mUrl.toLowerCase().contains("http")) {

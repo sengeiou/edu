@@ -176,6 +176,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     private boolean hasLearnHeadIng = false;
     private ConfirmDialog mTapHeadDialog = null;
 
+    private boolean isDoBack = false;
     private boolean isClickable = true;
     private final int OVER_TIME = 15 * 1000;//(15S音频等播放时间)超时
 
@@ -527,7 +528,9 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     @Override
     protected void onStop() {
         super.onStop();
-        reset();
+        if(!isDoBack){
+            reset();
+        }
         showView(tvMsgShow, false, null);
         showView(rlPrincipleSteeringEngineIntro,false,null);
         showView(rlPrincipleInfraredSensorIntro,false,null);
@@ -1104,12 +1107,14 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
             return;
         }
 
+        isDoBack = true;
         if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 2 ){
             ((PrincipleHelper) mHelper).doInit();
             ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
             this.finish();
             this.overridePendingTransition(0, R.anim.activity_close_down_up);
         }else {
+            ((PrincipleHelper) mHelper).doInit();
             MergeActivity.launchActivity(this, true);
             this.finish();
         }

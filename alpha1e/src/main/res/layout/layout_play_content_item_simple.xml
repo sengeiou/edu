@@ -16,7 +16,7 @@
         android:paddingRight="10dp"
         android:paddingLeft="10dp"
         android:gravity="center"
-        android:textColor="@color/tv_center_color"
+        android:textColor="#C91D3740"
         android:textSize="14sp"
         />
 
