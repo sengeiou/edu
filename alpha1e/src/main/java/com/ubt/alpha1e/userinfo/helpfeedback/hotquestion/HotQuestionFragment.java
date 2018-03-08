@@ -20,6 +20,7 @@ import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.userinfo.helpfeedback.feedback.FeedbackActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.alpha1e.webcontent.WebContentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,7 +162,9 @@ public class HotQuestionFragment extends MVPBaseFragment<HotQuestionContract.Vie
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_feedback:
-                FeedbackActivity.LaunchActivity(getContext());
+                //FeedbackActivity.LaunchActivity(getContext());
+                WebContentActivity.launchActivity(getActivity(), "https://m.ubtrobot.com/cn/after-sale/email-report", "", true);
+
                 break;
         }
     }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#8F8F8F"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#8F8F8F"
     >
 
     <RelativeLayout
@@ -24,20 +24,20 @@
             android:id="@+id/iv_reset"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_above="@+id/v_bottom_reset"
             android:layout_alignParentLeft="true"
+            android:layout_marginBottom="130dp"
             android:layout_marginLeft="40dp"
             android:scaleType="fitXY"
             android:src="@drawable/cc_poweroff"
-            android:visibility="visible"
-            android:layout_marginBottom="130dp"
-            android:layout_above="@+id/v_bottom_reset"/>
+            android:visibility="visible"/>
 
         <RelativeLayout
             android:layout_width="243dp"
             android:layout_height="107dp"
-            android:layout_marginLeft="65dp"
-            android:layout_marginBottom="5dp"
             android:layout_above="@+id/iv_reset"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="65dp"
             >
 
             <ImageView
@@ -48,14 +48,14 @@
             <TextView
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
-                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:gravity="center"
-                android:textColor="@android:color/white"
                 android:text="复位按键，结束机器人所有的程序，恢复初始化。"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 />
 
         </RelativeLayout>
@@ -81,21 +81,21 @@
             android:id="@+id/iv_protection"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_above="@+id/v_bottom_protection"
             android:layout_alignParentRight="true"
+            android:layout_marginBottom="130dp"
             android:layout_marginRight="40dp"
             android:scaleType="fitXY"
-            android:src="@drawable/cc_sensorcontorl"
-            android:visibility="visible"
-            android:layout_marginBottom="130dp"
-            android:layout_above="@+id/v_bottom_protection"/>
+            android:src="@drawable/cc_lightoff"
+            android:visibility="visible"/>
 
         <RelativeLayout
             android:layout_width="218dp"
             android:layout_height="97dp"
-            android:layout_marginRight="65dp"
-            android:layout_marginBottom="5dp"
-            android:layout_alignParentRight="true"
             android:layout_above="@+id/iv_protection"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="65dp"
             >
 
             <ImageView
@@ -106,14 +106,15 @@
             <TextView
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
-                android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="18dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:gravity="center"
+                android:text="开启或关闭机器人关节LED指示灯。"
                 android:textColor="@android:color/white"
-                android:text="开启或关闭机器人摔倒自我保护功能。"
+                android:textSize="16sp"
+                android:textStyle="bold"
+
                 />
 
         </RelativeLayout>
@@ -139,17 +140,17 @@
             android:id="@+id/iv_volumeicon"
             android:layout_width="70dp"
             android:layout_height="70dp"
+            android:layout_above="@+id/v_bottom_volume"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="30dp"
             android:scaleType="fitXY"
-            android:src="@drawable/cc_volumeicon"
-            android:layout_above="@+id/v_bottom_volume"/>
+            android:src="@drawable/cc_volumeicon"/>
 
         <RelativeLayout
             android:layout_width="196dp"
             android:layout_height="85dp"
-            android:layout_marginLeft="65dp"
             android:layout_above="@+id/iv_volumeicon"
+            android:layout_marginLeft="65dp"
             >
 
             <ImageView
@@ -160,14 +161,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="5dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:gravity="center"
-                android:textColor="@android:color/white"
                 android:text="开启或禁止声音。"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 />
 
         </RelativeLayout>
@@ -185,26 +186,27 @@
             android:layout_width="1dp"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="18dp"
             android:visibility="invisible">
 
         </View>
 
         <ImageView
             android:id="@+id/iv_light"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_above="@+id/v_bottom_light"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="75dp"
             android:scaleType="fitXY"
-            android:src="@drawable/cc_lightoff"
-            android:layout_above="@+id/v_bottom_light"/>
+            android:src="@drawable/cc_sensorcontorl"/>
 
         <RelativeLayout
             android:layout_width="218dp"
             android:layout_height="97dp"
-            android:layout_marginRight="65dp"
-            android:layout_alignParentRight="true"
             android:layout_above="@+id/iv_light"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="95dp"
             >
 
             <ImageView
@@ -217,15 +219,69 @@
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="18dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:gravity="center"
+                android:text="开启或关闭机器人摔倒自我保护功能。"
                 android:textColor="@android:color/white"
-                android:text="开启或关闭机器人关节LED指示灯。"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 />
 
         </RelativeLayout>
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_guide_greet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/v_bottom_greet"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="18dp"
+            android:visibility="invisible">
+
+        </View>
+
+        <ImageView
+            android:id="@+id/iv_greet"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_above="@+id/v_bottom_greet"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="19dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_redhi"/>
+
+        <RelativeLayout
+            android:layout_width="218dp"
+            android:layout_height="97dp"
+            android:layout_above="@+id/iv_greet"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="55dp"
+            >
+
+            <ImageView
+                android:layout_width="218dp"
+                android:layout_height="97dp"
+                android:src="@drawable/img_guide_light"/>
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="18dp"
+                android:gravity="center"
+                android:text="开启或关闭机器人打招呼功能。"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 </RelativeLayout>

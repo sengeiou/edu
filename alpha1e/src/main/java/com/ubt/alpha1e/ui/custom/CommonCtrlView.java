@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -50,7 +48,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-
 import static android.app.Service.START_NOT_STICKY;
 
 /**
@@ -74,7 +71,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private int paddingBottomHeight ; //定义浮动按钮距离页面底部的高度
 
     private static LinearLayout lay_ctrl_more;
-    private ImageView btn_reset_m, btn_pause_or_continue, btn_stop_m, btn_vol_log, btn_actionList,btn_lig_logo,btn_sensorControl;
+    private ImageView btn_reset_m, btn_pause_or_continue, btn_stop_m, btn_vol_log, btn_actionList,btn_lig_logo,btn_sensorControl,btnSensorGreeting;
     private TextView txt_action_name_m;
     private SeekBar sek_vol_ctrl;
     private ImageView gifImageView;
@@ -242,6 +239,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         radiologicalWaveAnim = (AnimationDrawable)gifImageView.getBackground();
         //init hide view
         btn_sensorControl=(ImageView)view.findViewById(R.id.sensor_control);
+        btnSensorGreeting = (ImageView)view.findViewById(R.id.sensor_greeting);
+
         btn_actionList = (ImageView) view.findViewById(R.id.btn_actionlist);
         btn_reset_m=(ImageView) view.findViewById(R.id.btn_poweroff);
         btn_pause_or_continue = (ImageView) view.findViewById(R.id.btn_playaction);
@@ -289,6 +288,27 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 }
             }
         });
+
+
+        btnSensorGreeting.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if(!mHelper.mSensorGreetingState) {
+                    //打开传感器
+                    initGreetingDialogView();
+                    // showDialog();
+                }else {
+                    //关闭传感器
+                    byte[] papram=new byte[2];
+                    papram[0] = 0x1;
+                    papram[1] = 0x0;
+                    mMainHelper.doSendComm(ConstValue.DV_SENSOR_GREETING,papram);
+                    disableGreetingSensorButton();
+                }
+            }
+        });
+
+
         btn_actionList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -466,6 +486,12 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
        }else {
            disableSensorButton();
        }
+
+       if (mHelper.mSensorGreetingState){
+           enableGreetingSensorButton();
+       }else{
+           disableGreetingSensorButton();
+       }
     }
 
     /**
@@ -491,6 +517,34 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                         papram[1] = 0x01;
                         mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
                         enableSensorButton();
+                    }
+                }).show();
+
+    }
+
+    /**
+     *  传感器防止摔倒功能需要弹出对话框，让用户选择
+     */
+    private void initGreetingDialogView() {
+        new ConfirmDialog(mContext).builder()
+                .setTitle("提示")
+                .setMsg(AlphaApplication.getBaseActivity().getStringResources("ui_action_sensor_greeting"))
+                .setNegativeButton(AlphaApplication.getBaseActivity().getStringResources("ui_common_cancel"), new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setPositiveButton(AlphaApplication.getBaseActivity().getStringResources("ui_common_confirm"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去打开SENSOR");
+                        byte[] papram=new byte[2];
+                        //开启传感器
+                        papram[0] = 0x01;
+                        papram[1] = 0x01;
+                        mMainHelper.doSendComm(ConstValue.DV_SENSOR_GREETING,papram);
+                        enableGreetingSensorButton();
                     }
                 }).show();
 
@@ -983,6 +1037,15 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
    }
 
+    private void disableGreetingSensorButton(){
+
+        btnSensorGreeting.setImageDrawable(mContext.getDrawable(R.drawable.ic_redhi_off));
+    }
+    private void enableGreetingSensorButton(){
+
+        btnSensorGreeting.setImageDrawable(mContext.getDrawable(R.drawable.ic_redhi));
+
+    }
 
 }
 

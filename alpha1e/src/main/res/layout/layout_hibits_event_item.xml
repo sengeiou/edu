@@ -10,7 +10,7 @@
     <RelativeLayout
         android:id="@+id/rl_hibits_event_item"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="90dp"
         android:paddingLeft="15dp"
         android:paddingRight="10dp"
         >
@@ -32,22 +32,22 @@
 
         <RelativeLayout
             android:id="@+id/rl_event_logo"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/rl_event_switch"
             android:layout_centerVertical="true">
 
             <ImageView
                 android:id="@+id/iv_event_logo_wq"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="68dp"
+                android:layout_height="68dp"
                 android:background="@drawable/img_waiquan_undo"/>
 
             <ImageView
                 android:id="@+id/iv_event_logo"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_centerInParent="true"
                 android:background="@drawable/icon_habits_awake_highlight"/>
 

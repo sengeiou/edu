@@ -11,12 +11,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
-import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
-import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 /**
@@ -42,6 +39,7 @@ public class CommonGuideView {
     private RelativeLayout rlGuideReset;
     private RelativeLayout rlGuideVolume;
     private RelativeLayout rlGuideLight;
+    private RelativeLayout rlGreeting;
     private RelativeLayout rlGuideProtection;
 
     public CommonGuideView(Context context) {
@@ -92,6 +90,7 @@ public class CommonGuideView {
         rlGuideReset = (RelativeLayout) view.findViewById(R.id.rl_guide_reset);
         rlGuideVolume = (RelativeLayout) view.findViewById(R.id.rl_guide_volume);
         rlGuideLight = (RelativeLayout) view.findViewById(R.id.rl_guide_light);
+        rlGreeting =  (RelativeLayout) view.findViewById(R.id.rl_guide_greet);
         rlGuideProtection = (RelativeLayout) view.findViewById(R.id.rl_guide_protection);
     }
 
@@ -108,6 +107,9 @@ public class CommonGuideView {
                     rlGuideLight.setVisibility(View.VISIBLE);
                 }else if(rlGuideLight.getVisibility() == View.VISIBLE){
                     rlGuideLight.setVisibility(View.GONE);
+                    rlGreeting.setVisibility(View.VISIBLE);
+                }else if(rlGreeting.getVisibility() == View.VISIBLE){
+                    rlGreeting.setVisibility(View.GONE);
                     rlGuideProtection.setVisibility(View.VISIBLE);
                 }else if(rlGuideProtection.getVisibility() == View.VISIBLE){
                     rlGuideProtection.setVisibility(View.GONE);
