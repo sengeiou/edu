@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="1"
-                android:textColor="@color/sec_txt_main"
+                android:textColor="#076F9D"
                 android:visibility="visible"
                 android:gravity="center"
                 android:singleLine="true"
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="100ms"
-                android:textColor="@color/sec_txt_disc"
+                android:textColor="@color/white"
                 android:gravity="center"
                 android:singleLine="true"
                 >

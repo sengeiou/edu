@@ -236,6 +236,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public boolean isOnCourse;//是否正在课程页面
     public boolean isCourseReading;//课程里面正在读取机器人角度变化
 
+    private RelativeLayout rlRecordingState;
+    private TextView tvRecordIndex;
+    private TextView tvRecordTime;
+
     public BaseActionEditLayout(Context context) {
         super(context);
         mContext = context;
@@ -602,6 +606,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         initMediaPlayer();
 
         changeSaveAndPlayState();
+
+        rlRecordingState = (RelativeLayout) findViewById(R.id.rl_recording_state);
+        tvRecordTime = (TextView) findViewById(R.id.tv_recoding_time);
+        tvRecordIndex = (TextView) findViewById(R.id.tv_recoding_index);
     }
 
 
@@ -637,7 +645,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 onPlayMusicComplete();
                 playFinish = true;
                 mHandler.removeMessages(0);
-                if (isFinishFramePlay) {
+                if (isFinishFramePlay && mediaPlayer != null) {
                     mediaPlayer.seekTo(0);
                     sbVoice.setProgress(0);
                     tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
@@ -1574,6 +1582,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         if (autoRead) {
             mHandler.removeMessages(MSG_AUTO_READ);
             autoRead = false;
+            ivAutoRead.setImageResource(R.drawable.actions_edit_auto_selector);
+            tvRecordIndex.setText("");
+            tvRecordTime.setText("");
+            rlRecordingState.setVisibility(View.INVISIBLE);
             needAdd = false;
             autoAng = "";
             ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
@@ -1720,6 +1732,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             mediaPlayer.prepareAsync();//数据缓冲
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
                 public void onPrepared(MediaPlayer mp) {
 //                    mp.start();
                     mp.seekTo(0);
@@ -1745,8 +1758,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         setButtonEnable(false);
 
         autoRead = true;
+        ivAutoRead.setImageResource(R.drawable.ic_auto_disable);
         ivAddFrame.setImageResource(R.drawable.ic_stop);
         mHandler.sendEmptyMessage(MSG_AUTO_READ);
+        rlRecordingState.setVisibility(View.VISIBLE);
     }
 
     private void initTimeFrame() {
@@ -2249,6 +2264,12 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                             }
                             UbtLog.d(TAG, "need added");
                             list_autoFrames.add(map);
+                            tvRecordIndex.setText(list_autoFrames.size()+ "");
+                            if(list_autoFrames.size() < 5){
+                                tvRecordTime.setText("00:01");
+                            }else{
+                                tvRecordTime.setText(""+TimeUtils.getTimeFromMillisecond((long)list_autoFrames.size()*200));
+                            }
                         }
                     }
 

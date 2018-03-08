@@ -64,12 +64,12 @@
             android:layout_weight="1.0"
             android:background="@null"
             android:max="100"
-            android:maxHeight="6dp"
-            android:minHeight="6dp"
+            android:maxHeight="4dp"
+            android:minHeight="4dp"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
             android:progressDrawable="@drawable/progress_video"
-            android:thumb="@drawable/video_seek_thumb" />
+            android:thumb="@drawable/blockly_video_thumb" />
         <TextView
             android:id="@+id/current"
             android:layout_width="wrap_content"

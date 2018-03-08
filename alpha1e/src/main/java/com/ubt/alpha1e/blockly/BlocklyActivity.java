@@ -220,6 +220,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     private ImageView ivShotAlbum;
     private ImageView ivBack;
 
+    private RelativeLayout rlLoading;
+
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -229,7 +231,9 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     if(isBulueToothConnected()){
 //                    ((RemoteHelper)mHelper).sendWalkFiles(unSyncFileNames);
                     }
-                    dismissLoading();
+                    if(isLoadFinish){
+                        dismissLoading();
+                    }
                     break;
                 case STOP_WALK_CONTINUE_CODE :
                     stopPlay();
@@ -256,10 +260,10 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     dealLessonTaskUI((List<LessonTaskInfo>) msg.obj);
                     break;
                 case DO_DOWNLOAD_UPDATE_PROGRESS:
-                    if(mSyncAlertDialog != null && msg.arg1 < 100){
-                        mSyncAlertDialog.setProgress(msg.arg1);
-                    }
-                    break;
+//                    if(mSyncAlertDialog != null && msg.arg1 < 100){
+//                        mSyncAlertDialog.setProgress(msg.arg1);
+//                    }
+//                    break;
                 case DO_DOWNLOAD_FAIL:
                     dismissLoading();
                     break;
@@ -281,9 +285,9 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     break;
                 case DO_DOWNLOAD_LESSON_TASK:
                 case DO_DOWNLOAD_BLOCKLY:
-                    if(mSyncAlertDialog != null && mSyncAlertDialog.isShowing()){
-                        mSyncAlertDialog.setCancelable(false);
-                    }
+//                    if(mSyncAlertDialog != null && mSyncAlertDialog.isShowing()){
+//                        mSyncAlertDialog.setCancelable(false);
+//                    }
                     break;
                 case DO_PLAY_SOUND_EFFECT_FINISH:
                     if(mWebView != null){
@@ -346,6 +350,9 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 .setMsg(getStringResources("ui_init_blockly"))
                 .setImageResoure(R.drawable.data_loading)
                 .setCancelable(true,20);
+
+
+        rlLoading = (RelativeLayout) findViewById(R.id.rl_loading);
 
         requestUpdate();
         init();
@@ -549,20 +556,27 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
     private void showLoading() {
 
-        if(mSyncAlertDialog != null && !mSyncAlertDialog.isShowing())
-        {
-            mSyncAlertDialog.show();
-        }
+        rlLoading.setVisibility(View.VISIBLE);
+
+//        if(mSyncAlertDialog != null && !mSyncAlertDialog.isShowing())
+//        {
+//            mSyncAlertDialog.show();
+//        }
 
     }
 
     public void dismissLoading() {
 
-        if(mSyncAlertDialog != null && mSyncAlertDialog.isShowing() && !this.isFinishing())
-        {
-            mSyncAlertDialog.display();
-        }
+        rlLoading.setVisibility(View.GONE);
+
+//        if(mSyncAlertDialog != null && mSyncAlertDialog.isShowing() && !this.isFinishing())
+//        {
+//            mSyncAlertDialog.display();
+//        }
+
+
     }
+
 
     private void initActionData(){
 
