@@ -231,7 +231,7 @@
     <RelativeLayout
         android:id="@+id/rl_action_line"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="140dp"
         android:layout_alignParentBottom="true"
         android:visibility="visible"
         android:layout_marginTop="-60dp"
@@ -374,17 +374,17 @@
                             <TextView
                                 android:id="@+id/tv_frame"
                                 android:layout_width="100dp"
-                                android:layout_height="50dp"
+                                android:layout_height="38dp"
                                 android:background="@drawable/buttonstyle_ba_on"
-                                android:layout_marginTop="24dp"
+                                android:layout_marginTop="30dp"
                                 />
                             <ImageView
                                 android:id="@+id/iv_drag"
                                 android:layout_width="20dp"
-                                android:layout_height="50dp"
+                                android:layout_height="38dp"
                                 android:src="@drawable/bg_edit_drag"
                                 android:layout_toRightOf="@+id/tv_frame"
-                                android:layout_marginTop="24dp"
+                                android:layout_marginTop="30dp"
                                 />
 
                             <TextView

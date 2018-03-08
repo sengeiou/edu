@@ -31,7 +31,7 @@
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
                 android:text="@string/ui_habits_time_setting"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textColor="@color/tv_center_color"
                 />
 
@@ -63,7 +63,7 @@
                     android:visibility="visible"
                     android:paddingTop="3dp"
                     android:textColor="@color/tv_center_color"
-                    android:textSize="18sp"/>
+                    android:textSize="16sp"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -95,7 +95,7 @@
                     android:visibility="visible"
                     android:paddingTop="3dp"
                     android:textColor="@color/tv_center_color"
-                    android:textSize="18sp"/>
+                    android:textSize="16sp"/>
             </RelativeLayout>
 
         </RelativeLayout>
@@ -127,12 +127,14 @@
                         android:id="@+id/tv_alert_one_title"
                         style="@style/text_left_style"
                         android:text="@string/ui_habits_alert_one"
+                        android:textSize="16sp"
                         />
 
                     <TextView
                         style="@style/text_right_style"
                         android:drawableRight="@color/trans"
-                        android:id="@+id/tv_alert_one"/>
+                        android:id="@+id/tv_alert_one"
+                        android:textColor="@color/T28"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -151,12 +153,14 @@
                         android:id="@+id/tv_alert_two_title"
                         style="@style/text_left_style"
                         android:text="@string/ui_habits_alert_two"
+                        android:textSize="16sp"
                         />
 
                     <TextView
                         style="@style/text_right_style"
                         android:drawableRight="@color/trans"
                         android:id="@+id/tv_alert_two"
+                        android:textColor="@color/T28"
                         />
 
                 </RelativeLayout>

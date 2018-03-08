@@ -230,7 +230,7 @@ public class FrameRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.V
         String  index = String.valueOf(datas.get(position).get(ActionsEditHelper.MAP_FRAME_NAME));
         UbtLog.d(TAG, "index:" + index);
 
-        viewHolder.tv_frame_time.setText(time);
+        viewHolder.tv_frame_time.setText(time+"ms");
         viewHolder.tv_frame_index.setText(index);
         viewHolder.tvTime.setText(time);
 

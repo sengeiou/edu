@@ -23,6 +23,7 @@ import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.HibitsEventPlayDialog;
 import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -56,6 +57,7 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
     private LinearLayoutManager mLayoutManager = null;
     public EventListRecyclerAdapter mAdapter;
     private List<PlayContentInfo> mPlayContentInfoDatas = null;
+    private boolean isStartPlayProcess = false;//是否开启播放流程
     private String currentEventId = "";
     private int currentPlaySeq = -1;
     private boolean isFirstPlay = true;
@@ -66,7 +68,7 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
             super.handleMessage(msg);
             switch (msg.what){
                 case DO_PLAY_OR_PAUSE:
-                    if(currentPlaySeq >= 0){
+                    if(isStartPlayProcess){
                         int position = msg.arg1;
                         PlayContentInfo playContentInfo = mPlayContentInfoDatas.get(position);
 
@@ -96,28 +98,38 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
                 case UPDATE_PLAY_STATUS:
                     EventPlayStatus eventPlayStatus = (EventPlayStatus) msg.obj;
                     if(eventPlayStatus != null && mPlayContentInfoDatas != null){
-                        if(StringUtils.isStringNumber(eventPlayStatus.playAudioSeq)){
+                        if(StringUtils.isInteger(eventPlayStatus.playAudioSeq)){
                             int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
-                            if(seqNo >= 0){
-                                if(currentEventId.equals(eventPlayStatus.eventId) && "playing".equals(eventPlayStatus.audioState)){
-                                    currentPlaySeq = seqNo;
+                            currentPlaySeq = seqNo;
+                            if(currentEventId.equals(eventPlayStatus.eventId)){
+                                isStartPlayProcess = true;
+                                if("playing".equals(eventPlayStatus.audioState) || "pause".equals(eventPlayStatus.audioState)){
                                     if(mPlayContentInfoDatas != null && seqNo < mPlayContentInfoDatas.size()){
                                         for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
                                             mPlayContentInfo.isSelect = "0";
                                         }
 
-                                        mPlayContentInfoDatas.get(seqNo).isSelect = "1";
+                                        if("playing".equals(eventPlayStatus.audioState)){
+                                            mPlayContentInfoDatas.get(seqNo).isSelect = "1";
+                                        }
                                         mAdapter.notifyDataSetChanged();
                                         moveToPosition(seqNo);
                                     }
                                 }else {
-                                    currentPlaySeq = -1;
-                                    if(mPlayContentInfoDatas != null && seqNo < mPlayContentInfoDatas.size()){
+                                    if(mPlayContentInfoDatas != null){
                                         for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
                                             mPlayContentInfo.isSelect = "0";
                                         }
                                         mAdapter.notifyDataSetChanged();
                                     }
+                                }
+                            }else {
+                                isStartPlayProcess = false;
+                                if(mPlayContentInfoDatas != null){
+                                    for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
+                                        mPlayContentInfo.isSelect = "0";
+                                    }
+                                    mAdapter.notifyDataSetChanged();
                                 }
                             }
                         }
@@ -252,7 +264,9 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_back:
+
                 PlayEventListActivity.this.finish();
+                HibitsEventPlayDialog.refreshStatus();
                 break;
             case R.id.tv_base_title_name:
                 break;

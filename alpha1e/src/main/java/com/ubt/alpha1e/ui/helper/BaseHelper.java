@@ -2,11 +2,9 @@ package com.ubt.alpha1e.ui.helper;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
@@ -24,8 +22,6 @@ import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.dialog.AlertDialog;
-import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
-import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -35,8 +31,6 @@ import com.ubtechinc.base.PublicInterface.BlueToothInteracter;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -69,6 +63,8 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     public static int mCurrentVolume = 0;
     public static boolean mLightState = true;
     public static boolean mSensorState=true;
+
+    public static boolean mSensorGreetingState=true;
 
     public static String mCourseAccessToken = "";
     private int LOW_BATTERY_TWENTY=20;
@@ -212,6 +208,13 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
         sensorParams[0] = 0;
         sensorParams[1] = 0;
         doSendComm(ConstValue.DV_SENSOR_CONTROL, sensorParams);
+
+        //读取机器人加速度传感器是否开启（摔倒开启，关闭）状态
+        byte[] sensorGreetingParams = new byte[2];
+        sensorParams[0] = 0;
+        sensorParams[1] = 0;
+        doSendComm(ConstValue.DV_SENSOR_GREETING, sensorParams);
+
         //定时读电量(10S读一次)
         byte[] param = new byte[1];
         param[0] = 4;
@@ -372,7 +375,17 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 //SENSOR ENABLE
                  mSensorState=true;
              }
+        }else if(cmd==ConstValue.DV_SENSOR_GREETING){
+            UbtLog.d(TAG,"DV_SENSOR_GREETING Status"+param[0]);
+            if(param[0]==0) {
+                //SENSOR DISABLE
+                mSensorGreetingState =false;
+            }else {
+                //SENSOR ENABLE
+                mSensorGreetingState=true;
+            }
         }
+
 
     }
 

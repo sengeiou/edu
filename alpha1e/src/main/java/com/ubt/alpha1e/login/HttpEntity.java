@@ -53,6 +53,7 @@ public class HttpEntity {
     public static final String SAVE_COURSE_PROGRESS = BASIC_UBX_SYS + "course/addCourseProgress";
     public static final String GET_COURSE_PROGRESS = BASIC_UBX_SYS + "course/getCourseProgress";
     public static final String USER_PRIVACY = BASIC_UBX_SYS + "privacy.html";
+    public static final String VOICE_CMD = BASIC_UBX_SYS + "voiceCommand.html"; //语音指令
 
 
     public static final String BASIC_UBX_SYS_BIND = BuildConfig.WebServiceBind; //绑定相关 测试环境

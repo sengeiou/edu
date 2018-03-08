@@ -253,6 +253,7 @@
     <string name="ui_action_mine">我的</string>
     <string name="ui_action_no_action">无动作</string>
     <string name="ui_action_sensor_warning">开启摔倒保护功能后，机器人跌倒或倾斜时会自主爬起，请不要手扶或拿起机器人，避免夹伤，夹手时可按急停键</string>
+    <string name="ui_action_sensor_greeting">打开打招呼功能后，当机器人处于空闲状态并且检测到前方有障碍物时，会主动跟你打招呼哦。</string>
     <string name="ui_action_no_description">暂无描述</string>
     <string name="ui_action_no_play">暂无动作播放</string>
     <string name="ui_action_no_time">暂无时长</string>
@@ -1071,5 +1072,6 @@
 
 
     <string name="ui_resave_tip">当前名称文件已存在，确定覆盖当前文件吗?</string>
+    <string name="ui_recording_txt">动作记录中...</string>
 
 </resources>

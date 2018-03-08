@@ -373,7 +373,7 @@
             android:layout_height="107dp"
             android:layout_marginLeft="50dp"
             android:gravity="center"
-            android:text="最关键的第一步：点这里可以给机器人写程序。"
+            android:text="最最关键的第一步：点这里连接机器人并给它联网。"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold" />

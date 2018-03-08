@@ -78,6 +78,7 @@ import com.ubt.alpha1e.ui.helper.BluetoothStateHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.userinfo.notice.WebActivity;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -155,6 +156,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     TextView  habitsTime;
     @BindView(R.id.tv_hibits_event_name)
     TextView  habitsName;
+    @BindView(R.id.top_icon4)
+    ImageView voiceCmd;
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
@@ -393,7 +396,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     };
 
 
-    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.ll_remote, R.id.ll_action, R.id.ll_program,
+    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.top_icon4,R.id.ll_remote, R.id.ll_action, R.id.ll_program,
             R.id.ll_community, R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
             R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg, R.id.rl_course_center, R.id.rl_hibits_event})
     protected void switchActivity(View view) {
@@ -438,6 +441,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     }
                 } else {
                     showBluetoothConnectDialog();
+                }
+                break;
+            case R.id.top_icon4:
+                if(!removeDuplicateClickEvent()) {
+                    WebActivity.launchActivity(this,HttpEntity.VOICE_CMD,"语音指令");
                 }
                 break;
             case R.id.ll_remote:
@@ -1499,8 +1507,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
   private void showUserPicIcon(){
       UserModel mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
-      UbtLog.d(TAG,"user image picture"+mUserModel.getHeadPic());
-      Glide.with(this).load(mUserModel.getHeadPic()).asBitmap().into(topIcon);
+      if(mUserModel != null) {
+          UbtLog.d(TAG, "user image picture" + mUserModel.getHeadPic());
+          Glide.with(this).load(mUserModel.getHeadPic()).asBitmap().into(topIcon);
+      }
   }
   private void hiddenDisconnectIcon(){
       if(topIcon2Disconnect!=null) {
