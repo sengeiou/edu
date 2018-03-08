@@ -1278,8 +1278,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    public void run() {
                        showBuddleText(getString(R.string.buddle_text_init_status));
                        buddleTextAsynchronousTask();
-                       cartoonAction.setBackgroundResource(R.drawable.sleep21);
-                       cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
+                       if(cartoonAction!=null) {
+                           cartoonAction.setBackgroundResource(R.drawable.sleep21);
+                           cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
+                       }
                        hiddenCartoonTouchView();
                        recoveryCartoonBodyUi();
                        hiddenBatteryUi();
