@@ -19,6 +19,9 @@ public class EventPlayStatus extends BaseModel implements Serializable{
     public String eventId;
     public String playAudioSeq;
     public String audioState;
+    public String eventState;
+    public String startTime;
+    public String finishTime;
 
     public EventPlayStatus thiz;
 
@@ -73,6 +76,9 @@ public class EventPlayStatus extends BaseModel implements Serializable{
                 "eventId=" + eventId +
                 ", playAudioSeq='" + playAudioSeq + '\'' +
                 ", audioState='" + audioState + '\'' +
+                ", eventState='" + eventState + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", finishTime='" + finishTime + '\'' +
                 '}';
     }
 }

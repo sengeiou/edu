@@ -54,6 +54,7 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
 
     private static final int REFRESH_LANGUAGE = 100;
     private static final int REFRESH_LANGUAGE_FINISH = 101;
+    private static final int SHOW_NOTICE_STATUS = 102;
 
     @BindView(R.id.rl_clear_cache)
     RelativeLayout rlClearCache;
@@ -87,6 +88,7 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
     private List<String> mLanguageUpList = null;
     private List<String> mLanguageTitleList = null;
     private int mCurrentLanguageIndex = -1;
+    private int mNoticeStatus = 1;
 
     long lastClickTime = System.currentTimeMillis();
 
@@ -109,6 +111,13 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
                     SkinManager.getInstance().changeSkin(FileTools.theme_pkg_file, FileTools.package_name, null);
                 }
                 break;
+                case SHOW_NOTICE_STATUS:
+                    if (mNoticeStatus == 1) {
+                        btnMessageNote.setBackgroundResource(R.drawable.menu_setting_select);
+                    } else {
+                        btnMessageNote.setBackgroundResource(R.drawable.menu_setting_unselect);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -162,11 +171,9 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
             btnWifiDownload.setBackgroundResource(R.drawable.menu_setting_unselect);
         }
 
-        if (mPresenter.isMessageNote(getContext())) {
-            btnMessageNote.setBackgroundResource(R.drawable.menu_setting_select);
-        } else {
-            btnMessageNote.setBackgroundResource(R.drawable.menu_setting_unselect);
-        }
+
+
+        mPresenter.doGetMessageNote();
         mPresenter.doReadCurrentLanguage();
     }
 
@@ -218,12 +225,30 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
                 }
                 break;
             case R.id.btn_message_note:
-                if (mPresenter.isMessageNote(getContext())) {
-                    btnMessageNote.setBackgroundResource(R.drawable.menu_setting_unselect);
-                    mPresenter.doSetMessageNote(getContext(), false);
+                if (mNoticeStatus == 1) {
+                    new ConfirmDialog(getContext()).builder()
+                            .setMsg(getStringRes("ui_setting_close_notice_tip"))
+                            .setCancelable(true)
+                            .setPositiveButton(getStringRes("ui_common_confirm"), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    //btnMessageNote.setBackgroundResource(R.drawable.menu_setting_unselect);
+                                    com.ubt.alpha1e.base.loading.LoadingDialog.show(getActivity());
+                                    mPresenter.doSetMessageNote(false);
+
+                                }
+                            }).setNegativeButton(getStringRes("ui_common_cancel"), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    }).show();
+
                 } else {
-                    btnMessageNote.setBackgroundResource(R.drawable.menu_setting_select);
-                    mPresenter.doSetMessageNote(getContext(), true);
+                    //btnMessageNote.setBackgroundResource(R.drawable.menu_setting_select);
+                    com.ubt.alpha1e.base.loading.LoadingDialog.show(getActivity());
+                    mPresenter.doSetMessageNote(true);
                 }
                 break;
             case R.id.btn_auto_upgrade:
@@ -326,6 +351,33 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
             Intent intent = new Intent(getActivity(),MyRobotActivity.class);
             intent.putExtra("isBinded",2);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onGetMessageNote(boolean isSuccess, String msg) {
+        UbtLog.d(TAG,"onGetMessageNote isSuccess = " + isSuccess + " msg = " + msg);
+        if(isSuccess){
+            if("0".equals(msg)){
+                mNoticeStatus = 0;
+            }
+        }
+        mHandler.sendEmptyMessage(SHOW_NOTICE_STATUS);
+    }
+
+    @Override
+    public void onSetMessageNote(boolean isSuccess, String msg) {
+        com.ubt.alpha1e.base.loading.LoadingDialog.dismiss(getActivity());
+        UbtLog.d(TAG,"onSetMessageNote isSuccess = " + isSuccess);
+        if(isSuccess){
+            if(mNoticeStatus == 1){
+                mNoticeStatus = 0;
+            }else {
+                mNoticeStatus = 1;
+            }
+            mHandler.sendEmptyMessage(SHOW_NOTICE_STATUS);
+        }else {
+            ToastUtils.showShort(getStringRes("ui_common_operate_fail"));
         }
     }
 

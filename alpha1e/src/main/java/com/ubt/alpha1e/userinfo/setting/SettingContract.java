@@ -23,6 +23,9 @@ public class SettingContract {
 
         void onGetRobotInfo(int result, MyRobotModel model);
 
+        void onGetMessageNote(boolean isSuccess,String msg);
+
+        void onSetMessageNote(boolean isSuccess,String msg);
     }
 
     interface  Presenter extends BasePresenter<View> {
@@ -31,11 +34,11 @@ public class SettingContract {
 
         void doSetOnlyWifiDownload(Context context, boolean isOnly);
 
-        boolean isMessageNote(Context context);
+        void doGetMessageNote();
 
         boolean isAutoUpgrade();
 
-        void doSetMessageNote(Context context, boolean isNote);
+        void doSetMessageNote(boolean isNote);
 
         void doSetAutoUpgrade(boolean isAutoUpgrade);
 
