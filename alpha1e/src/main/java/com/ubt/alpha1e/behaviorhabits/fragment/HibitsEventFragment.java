@@ -211,7 +211,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     }
 
     public void initRecyclerViews() {
-        UbtLog.d(TAG, "rvHabitsEvent = " + rvHabitsEvent);
+        UbtLog.d(TAG, "rvHabitsEvent => " + rvHabitsEvent);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvHabitsEvent.setLayoutManager(mLayoutManager);
         RecyclerView.ItemAnimator animator = rvHabitsEvent.getItemAnimator();
