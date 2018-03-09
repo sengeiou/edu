@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
 
     <RelativeLayout
         android:id="@+id/rl_control"
@@ -20,7 +21,7 @@
             />
 
         <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/gif_playing_control"
+            android:id="@+id/gif_playing_control1"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/gif_overall_control"

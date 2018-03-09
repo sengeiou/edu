@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
@@ -14,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,7 +28,7 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.NewActionPlayer;
-import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
+import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionColloInfo;
 import com.ubt.alpha1e.data.model.ActionInfo;
@@ -34,55 +36,48 @@ import com.ubt.alpha1e.data.model.ActionRecordInfo;
 import com.ubt.alpha1e.data.model.NewActionInfo;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.MyActionsActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IActionsUI;
 import com.ubt.alpha1e.ui.helper.IMainUI;
 import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
-import com.ubt.alpha1e.ui.helper.SettingHelper;
+import com.ubt.alpha1e.ui.main.MainPresenter;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ConstValue;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import pl.droidsonroids.gif.GifImageView;
 
 import static android.app.Service.START_NOT_STICKY;
 
 /**
  *
- *CommonCtrlView
+ *ControlCenterActivity
  * @author wmma
  * @description 全局浮动控制窗口
  * @date 2016/10/25
  */
 
 
-public class CommonCtrlView  implements IActionsUI, IMainUI {
+public class CommonCtrlView implements IActionsUI, IMainUI {
 
     private static final String TAG = "CommonCtrlView";
     public final static String KEY_CURRENT_PLAYING_ACTION_NAME = "currentPlayingActionName";
     //定义浮动窗口布局
-    private LinearLayout mFloatLayout;
-    private LinearLayout  mPopWindowLayout;
-    private RelativeLayout guideLayout;
+    private static RelativeLayout mFloatLayout;
     private WindowManager.LayoutParams wmParams;
     //创建浮动窗口设置布局参数的对象
-    private WindowManager mWindowManager;
+    private static WindowManager mWindowManager;
     private int paddingBottomHeight ; //定义浮动按钮距离页面底部的高度
 
-    private ImageView ivPop;
-    private LinearLayout lay_ctrl, lay_ctrl_more;
-    private Button btn_stop, btn_reset, btn_more;  //lay_ctrl btn
-    private Button btn_cycle, btn_reset_m, btn_pause_or_continue, btn_lose_power, btn_stop_m, btn_vol_log, btn_lig_logo;
-    private TextView txt_action_name, txt_action_name_m, txt_cycle_num;
+    private static LinearLayout lay_ctrl_more;
+    private ImageView btn_reset_m, btn_pause_or_continue, btn_stop_m, btn_vol_log, btn_actionList,btn_lig_logo,btn_sensorControl;
+    private TextView txt_action_name_m;
     private SeekBar sek_vol_ctrl;
-    private RelativeLayout rl_close_more, rl_control;
-    private GifImageView gifImageView;
-    private LinearLayout dialogLayout;
-    private TextView tvTips;
-    private Button btnCancle, btnOk;
+    private ImageView gifImageView;
 
     //control
     public MyActionsHelper mHelper;
@@ -92,8 +87,6 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
 
     private MainHelper mMainHelper;
 
-    private TextView tvFloatTips;
-    private boolean isShowDialog = false;
     private Context mContext;
     private static CommonCtrlView commonCtrlView = null;
     private Date lastTime_doPauseOrContinuePlay = null;
@@ -102,15 +95,20 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
     private ActionPlayer.Play_state currentState = ActionPlayer.Play_state.action_finish;
     private NewActionPlayer.PlayerState currentNewPlayState = NewActionPlayer.PlayerState.STOPING;
     private static final int CLOSE_VIEW = 1;
-
+    private AnimationDrawable radiologicalWaveAnim = null;
+    private MainPresenter mMainPresenter;
+    private int voluemeProgress=-1;
+    private boolean mSensorButtonStatus=true;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
                 case CLOSE_VIEW:
+
                     //Handler.post 会有延时，所以此处再判断一次是否为null
                     if(commonCtrlView != null){
+                        mHelper.doSendReadStateComm();
                         commonCtrlView.onDestroy();
                         commonCtrlView = null;
                     }
@@ -122,16 +120,29 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
         }
     };
 
-    public static CommonCtrlView getInstace(Context context){
-        if(commonCtrlView != null){
+    public static CommonCtrlView getInstace(Context context) {
+        if(commonCtrlView!=null){
             commonCtrlView.onDestroy();
-            commonCtrlView = null;
+            commonCtrlView=null;
         }
-        commonCtrlView = new CommonCtrlView(context);
+        if(commonCtrlView==null) {
+            commonCtrlView = new CommonCtrlView(context);
+        }
+        lay_ctrl_more.setVisibility(View.VISIBLE);
         return commonCtrlView;
     }
 
+    /**
+     * 主界面全局按钮动画通知，在播放动作的时候，有动画效果
+     * @param mainPresenter
+     */
+      public void setPresenter(MainPresenter mainPresenter){
+        mMainPresenter=mainPresenter;
+    }
+
+
     public static void closeCommonCtrlView(){
+        UbtLog.d(TAG,"closeCommonCtrlView  commonCtrlView = " + commonCtrlView );
         if(commonCtrlView != null){
             //蓝牙断开的时候，为非主线程调用关闭
             //android低版本的时候，直接调关闭会报,硬件加速只能在单个UI线程中使用,所以需放大handler主线线程中调用关闭
@@ -140,11 +151,20 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
         }
     }
 
-    public  CommonCtrlView(Context context) {
+    public CommonCtrlView(Context context) {
         Log.d(TAG, "Float View  Created!");
         mContext = context;
         initHelper();
+        //读下灯光状态
+        mHelper.doSendReadStateComm();
         createFloatView();
+        //根据灯光状态，修改图标
+        initRobotState();
+        mWindowManager.removeView(mFloatLayout);
+        wmParams.y = 0;
+        wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lay_ctrl_more.setVisibility(View.VISIBLE);
+        mWindowManager.addView(mFloatLayout, wmParams);
 
     }
 
@@ -157,11 +177,6 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
         mMainHelper = new MainHelper(mBaseActivity);
         mMainHelper.doRegisterListenerUI(this);
         mHelper.RegisterHelper();
-
-        playingName = mBaseActivity.readCurrentPlayingActionName();
-        currentState = mHelper.getPlayerState();
-        currentNewPlayState = mHelper.getNewPlayerState();
-        UbtLog.d(TAG, "currentState=" + currentState);
 
     }
 
@@ -180,49 +195,40 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
         //设置图片格式，效果为背景透明
         wmParams.format = PixelFormat.RGBA_8888;
         //设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
-        wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
         //调整悬浮窗显示的停靠位置为左侧置顶
         wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
 //        wmParams.x = 16;
         wmParams.y = paddingBottomHeight;
 
-        //设置悬浮窗口长宽数据
-        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
         LayoutInflater inflater = LayoutInflater.from(mContext);
+
+        mFloatLayout = (RelativeLayout) inflater.inflate(R.layout.view_play_page, null);
+
         //获取浮动窗口视图所在布局
-        mFloatLayout = (LinearLayout) inflater.inflate(R.layout.view_float_control, null);
-        mPopWindowLayout = (LinearLayout) inflater.inflate(R.layout.layout_ctrl_more_ft, null);
-        dialogLayout = (LinearLayout) inflater.inflate(R.layout.view_alertdialog, null);
-        guideLayout = (RelativeLayout) inflater.inflate(R.layout.layout_float_guid, null);
-
         initView(mFloatLayout);
-        initRobotState();
-
+        //virtualKeyboardDynamicRefresh.assistActivity(mPopWindowLayout.findViewById(R.id.lay_ctrl_more),commonCtrlView);
         mFloatLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Log.d(TAG, "---wmma---Float view onTouched!");
+                if(commonCtrlView != null){
+                    mHelper.doSendReadStateComm();
+                   commonCtrlView.onDestroy();
+                    commonCtrlView = null;
+                }
                 return false;
             }
         });
 
-        //添加mFloatLayout
-        if(!readShowState().equals("4")){
-            ColorDrawable colorDrawable = new ColorDrawable(Color.argb(150, 0, 0, 0));
-            guideLayout.setBackground(colorDrawable);
-            wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-            wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-            wmParams.y = 0;
+        ColorDrawable colorDrawable = new ColorDrawable(Color.argb(150, 0, 0, 0));
+        mFloatLayout.setBackground(colorDrawable);
 
-            tvFloatTips =  (TextView)guideLayout.findViewById(R.id.tv_guide_controls);
-            tvFloatTips.setText(AlphaApplication.getBaseActivity().getStringResources("ui_introduction_play_control"));
+        mWindowManager.addView(mFloatLayout, wmParams);
 
-            mWindowManager.addView(guideLayout, wmParams);
-        }else{
-            mWindowManager.addView(mFloatLayout, wmParams);
-        }
+
+
     }
 
     /**
@@ -230,25 +236,27 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
      * @param view
      */
     private void initView(View view) {
-        ivPop = (ImageView) view.findViewById(R.id.iv_pop);
+        //View_float_control LAYOUT
         lay_ctrl_more = (LinearLayout) view.findViewById(R.id.lay_ctrl_more);
-        rl_control = (RelativeLayout) view.findViewById(R.id.rl_control);
-        gifImageView = (GifImageView) view.findViewById(R.id.gif_playing_control);
-
+        gifImageView = (ImageView) view.findViewById(R.id.playing_control);
+        radiologicalWaveAnim = (AnimationDrawable)gifImageView.getBackground();
         //init hide view
-        btn_cycle = (Button) view.findViewById(R.id.btn_cycle);
-        btn_reset_m = (Button) view.findViewById(R.id.btn_do_default_m);
-        btn_lose_power = (Button) view.findViewById(R.id.btn_lost_power_m);
-        btn_pause_or_continue = (Button) view.findViewById(R.id.btn_pause_or_continue_m);
-        btn_stop_m = (Button) view.findViewById(R.id.btn_stop_m);
-        btn_vol_log = (Button) view.findViewById(R.id.btn_vol_logo);
-        btn_lig_logo = (Button) view.findViewById(R.id.btn_lig_logo);
+        btn_sensorControl=(ImageView)view.findViewById(R.id.sensor_control);
+        btn_actionList = (ImageView) view.findViewById(R.id.btn_actionlist);
+        btn_reset_m=(ImageView) view.findViewById(R.id.btn_poweroff);
+        btn_pause_or_continue = (ImageView) view.findViewById(R.id.btn_playaction);
+        btn_stop_m = (ImageView) view.findViewById(R.id.btn_stopaction);
+        btn_vol_log = (ImageView) view.findViewById(R.id.btn_vol_logo);
+        btn_lig_logo = (ImageView) view.findViewById(R.id.btn_lig_logo);
         sek_vol_ctrl = (SeekBar) view.findViewById(R.id.skb_vol_control);
-        rl_close_more = (RelativeLayout) view.findViewById(R.id.lay_ctrl_more_close);
 
-        txt_action_name = (TextView) view.findViewById(R.id.txt_action_name);
-        txt_action_name_m = (TextView) view.findViewById(R.id.txt_action_name_m);
-        txt_cycle_num = (TextView) view.findViewById(R.id.txt_cycle_num);
+        //view_alertdialog  layout
+        txt_action_name_m = (TextView) view.findViewById(R.id.text_playContentName);
+        playingName = mBaseActivity.readCurrentPlayingActionName();
+        UbtLog.d(TAG,"mHelper getPlayerName"+mHelper.getPlayerName()+"sharepreference "+playingName);
+        currentState=mHelper.getPlayerState();
+        currentNewPlayState = mHelper.getNewPlayerState();
+        UbtLog.d(TAG, "currentState=" + currentState +"currentName: "+playingName);
 
         UbtLog.d(TAG, "playingName=" + playingName);
         if(playingName.equals("NO_VALUE")){
@@ -256,40 +264,44 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
         }
 
         if((currentState == ActionPlayer.Play_state.action_playing || currentNewPlayState == NewActionPlayer.PlayerState.PLAYING) && playingName != ""){
-            btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_pause_icon_ft"));
+            btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
             gifImageView.setVisibility(View.VISIBLE);
-            txt_action_name_m.setText(playingName);
+            radiologicalWaveAnim.setOneShot(false);
+            radiologicalWaveAnim.setVisible(true,true);
+            radiologicalWaveAnim.start();
+            enablePlayStopButton(playingName);
         }else if((currentState == ActionPlayer.Play_state.action_pause || currentNewPlayState == NewActionPlayer.PlayerState.PAUSING) && playingName != ""){
-            txt_action_name_m.setText(playingName);
+            gifImageView.setVisibility(View.VISIBLE);
+            radiologicalWaveAnim.setOneShot(false);
+            radiologicalWaveAnim.setVisible(true,true);
+            //radiologicalWaveAnim.start();
+            enablePlayStopButton(playingName);
         }else{
             gifImageView.setVisibility(View.INVISIBLE);
-            txt_action_name_m.setText("");
+            disablePlayStopButton();
         }
 
-        guideLayout.setOnClickListener(new View.OnClickListener() {
+
+        btn_sensorControl.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                recordShowGuide("4");
-                showFloatView();
+            public void onClick(View view) {
+                if(!mHelper.mSensorState) {
+                    //打开传感器
+                    initDialogView();
+                   // showDialog();
+                }else {
+                    //关闭传感器
+                    byte[] papram=new byte[2];
+                    papram[0] = 0x1;
+                    papram[1] = 0x0;
+                    mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
+                    disableSensorButton();
+                }
             }
         });
-
-        rl_control.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UbtLog.d(TAG, "iv pop onclick!");
-                mWindowManager.removeView(mFloatLayout);
-                rl_control.setVisibility(View.GONE);
-                wmParams.y = 0;
-                wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-                lay_ctrl_more.setVisibility(View.VISIBLE);
-                mWindowManager.addView(mFloatLayout, wmParams);
-            }
-        });
-
-        btn_cycle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btn_actionList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                 if(!BaseHelper.hasSdcard){
                     Toast.makeText(mBaseActivity,mBaseActivity.getStringResources("ui_remote_synchoronize_no_sd"),Toast.LENGTH_SHORT).show();
                     return;
@@ -298,16 +310,7 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
                 if(AlphaApplication.isCycleActionFragment()){
                     return;
                 }
-                mWindowManager.removeView(mFloatLayout);
-                lay_ctrl_more.setVisibility(View.GONE);
-                rl_control.setVisibility(View.VISIBLE);
-                wmParams.y = paddingBottomHeight;
-                wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-                wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
-                mWindowManager.addView(mFloatLayout, wmParams);
                 MyActionsActivity.launchActivity(mBaseActivity, 4);
-//                ((MyActionsActivity)AlphaApplication.getBaseActivity()).startCycleActionFragment();
             }
         });
 
@@ -315,35 +318,17 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
             @Override
             public void onClick(View v) {
                 UbtLog.d(TAG, "--wmma--current Action Type=" + AlphaApplication.getActionType());
-                //检测是否在充电状态和边充边玩状态是否打开
-                if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)){
-                    Toast.makeText(mContext, mContext.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
                 mHelper.doActionCommand(
                         MyActionsHelper.Command_type.Do_default, "", AlphaApplication.getActionType());
-                txt_action_name_m.setText("");
+                disablePlayStopButton();
                 mBaseActivity.saveCurrentPlayingActionName("");
-                btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
                 gifImageView.setVisibility(View.INVISIBLE);
-
-            }
-        });
-
-        btn_lose_power.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                lay_ctrl_more.setVisibility(View.GONE);
-
-                initDialogView(dialogLayout);
-                wmParams.gravity = Gravity.CENTER;
-                wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-                wmParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-                ColorDrawable colorDrawable = new ColorDrawable(Color.argb(120, 0, 0, 0));
-                dialogLayout.setBackground(colorDrawable);
-                mWindowManager.addView(dialogLayout, wmParams);
-                isShowDialog = true;
+                mHelper.setLooping(false);
+                mMainPresenter.requestGlobalButtonControl(false);
+                mHelper.clearPlayingInfo();
+                //Toast.makeText(mBaseActivity,"机器人已经服务",Toast.LENGTH_SHORT).show();
+               // btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
+               // gifImageView.setVisibility(View.INVISIBLE);
 
             }
         });
@@ -367,13 +352,23 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
                         mHelper.doActionCommand(
                         MyActionsHelper.Command_type.Do_pause_or_continue, "",
                         mCurrentActionType);
+                        if(radiologicalWaveAnim.isRunning()) {
+                            radiologicalWaveAnim.stop();
+                            mMainPresenter.requestGlobalButtonControl(false);
+                        }else {
+                            radiologicalWaveAnim.start();
+                            mMainPresenter.requestGlobalButtonControl(true);
+                        }
+
             }
         });
 
         btn_stop_m.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mHelper.setLooping(false);
                 mHelper.stopPlayAction();
+
             }
         });
 
@@ -401,10 +396,21 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
 
             @Override
             public void onStopTrackingTouch(SeekBar arg0) {
+                voluemeProgress=arg0.getProgress();
+                if(voluemeProgress==0){
+                    mHelper.mCurrentVoiceState=true;
+                }else{
+                    mHelper.mCurrentVoiceState=false;
+                }
                 if(!mHelper.mCurrentVoiceState){
                     //静音先解静音
                     mHelper.doTurnVol();
                     onNoteVolState(mHelper.mCurrentVoiceState);
+                }else {
+                    if(arg0.getProgress()==0) {
+                        mHelper.doTurnVol();
+                        onNoteVolState(mHelper.mCurrentVoiceState);
+                    }
                 }
                 //修改为，移动停之后，再发送改变音量
                 mHelper.doChangeVol(arg0.getProgress());
@@ -422,32 +428,14 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
                 //mHelper.doChangeVol(arg1);
             }
         });
-
-        rl_close_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                mWindowManager.removeView(mFloatLayout);
-                lay_ctrl_more.setVisibility(View.GONE);
-                rl_control.setVisibility(View.VISIBLE);
-                wmParams.y = paddingBottomHeight;
-                wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-                wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
-                mWindowManager.addView(mFloatLayout, wmParams);
-
-
-            }
-        });
-
-
     }
 
     /**
      * 初始化机器人状态
      */
-    private void initRobotState(){
+    private  void initRobotState(){
         UbtLog.d(TAG,"initRobotState mCurrentVolume = " + mHelper.mCurrentVolume + "   mCurrentVoiceState " + mHelper.mCurrentVoiceState + "   mLightState = " + mHelper.mLightState);
+        voluemeProgress=mHelper.mCurrentVolume;
         onNoteVol(mHelper.mCurrentVolume);
         onNoteVolState(mHelper.mCurrentVoiceState);
         if(mHelper.mLightState){
@@ -455,58 +443,49 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
         }else {
             noteLightOff();
         }
+        //摔倒传感器状态
+       if(mHelper.mSensorState){
+            enableSensorButton();
+       }else {
+           disableSensorButton();
+       }
     }
 
-    private void initDialogView(View view) {
-        tvTips = (TextView) view.findViewById(R.id.txt_msg);
-        btnCancle = (Button) view.findViewById(R.id.btn_neg);
-        btnOk = (Button) view.findViewById(R.id.btn_pos);
+    /**
+     *  传感器防止摔倒功能需要弹出对话框，让用户选择
+     */
+    private void initDialogView() {
+        new ConfirmDialog(mContext).builder()
+                .setTitle("提示")
+                .setMsg(AlphaApplication.getBaseActivity().getStringResources("ui_action_sensor_warning"))
+                .setNegativeButton(AlphaApplication.getBaseActivity().getStringResources("ui_common_cancel"), new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
 
-        tvTips.setText(AlphaApplication.getBaseActivity().getStringResources("ui_action_cutoff_warning"));
-        btnCancle.setText(AlphaApplication.getBaseActivity().getStringResources("ui_common_cancel"));
-        btnOk.setText(AlphaApplication.getBaseActivity().getStringResources("ui_common_confirm"));
-
-        btnCancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
-                wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                mWindowManager.removeView(dialogLayout);
-                lay_ctrl_more.setVisibility(View.VISIBLE);
-                isShowDialog = false;
-            }
-        });
-
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mHelper.doActionCommand(
-                        MyActionsHelper.Command_type.Do_lost_power, "",
-                        mCurrentActionType);
-                mWindowManager.removeView(dialogLayout);
-                isShowDialog = false;
-            }
-        });
+                    }
+                })
+                .setPositiveButton(AlphaApplication.getBaseActivity().getStringResources("ui_common_confirm"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去打开SENSOR");
+                        byte[] papram=new byte[2];
+                        //开启传感器
+                        papram[0] = 0x01;
+                        papram[1] = 0x01;
+                        mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
+                        enableSensorButton();
+                    }
+                }).show();
 
     }
+
 
 
     public void onDestroy() {
 
-        if(readShowState().equals("4")){
-            if (mFloatLayout != null) {
-                mWindowManager.removeView(mFloatLayout);
-            }
-        }else{
-            if(guideLayout != null ){
-                mWindowManager.removeView(guideLayout);
-            }
+        if (mFloatLayout != null) {
+            mWindowManager.removeView(mFloatLayout);
         }
-
-        if(dialogLayout !=null && isShowDialog){
-            mWindowManager.removeView(dialogLayout);
-        }
-
         mHelper.unRegisterListeners(this);
         mHelper.UnRegisterHelper();
         mMainHelper.doUnRegisterListenerUI(this);
@@ -551,18 +530,26 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
     @Override
     public void onNoteVolState(boolean vol_state) {
         if (vol_state) {
+            UbtLog.d(TAG,"cc_volumeicon");
             if (mHelper.mCurrentVolume < 0) {
                 mHelper.mCurrentVolume *= -1;
                 mHelper.doChangeVol(mHelper.mCurrentVolume);
             }
             onNoteVol(mHelper.mCurrentVolume);
-            btn_vol_log.setBackground(mBaseActivity.getDrawableRes("action_control_sound_icon_ft"));
+            UbtLog.d(TAG,"cc_volumeicon default or others situation" +voluemeProgress);
+            if(voluemeProgress!=0) {
+                btn_vol_log.setImageDrawable(mBaseActivity.getDrawableRes("cc_volumeicon"));
+                //mHelper.doChangeVol(voluemeProgress);
+            }else{
+                btn_vol_log.setImageDrawable(mBaseActivity.getDrawableRes("cc_mute"));
+            }
         } else {
+            UbtLog.d(TAG,"cc_mute");
             if (sek_vol_ctrl.getProgress() != 0){
                 mHelper.mCurrentVolume = -1 * sek_vol_ctrl.getProgress();
             }
             sek_vol_ctrl.setProgress(0);
-            btn_vol_log.setBackground(mBaseActivity.getDrawableRes("action_control_silence_icon_ft"));
+            btn_vol_log.setImageDrawable(mBaseActivity.getDrawableRes("cc_mute"));
             mHelper.ChangeMisucVol(0);
         }
     }
@@ -626,12 +613,12 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
 
     @Override
     public void noteLightOn() {
-        btn_lig_logo.setBackground(mBaseActivity.getDrawableRes("action_control_light_sel_icon_ft"));
+        btn_lig_logo.setImageDrawable(mBaseActivity.getDrawableRes("cc_lighton"));
     }
 
     @Override
     public void noteLightOff() {
-        btn_lig_logo.setBackground(mBaseActivity.getDrawableRes("action_control_light_icon_ft"));
+        btn_lig_logo.setImageDrawable(mBaseActivity.getDrawableRes("cc_lightoff"));
     }
 
     @Override
@@ -662,31 +649,46 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
     @Override
     public void notePlayStart(List<String> mSourceActionNameList, ActionInfo action, ActionPlayer.Play_type mCurrentPlayType) {
         UbtLog.d(TAG, "--wmma--notePlayStart callback!");
-        btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_pause_icon_ft"));
-        gifImageView.setVisibility(View.VISIBLE);
+        //btn_stop_m.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"))
+
+        if(action!=null){
+            if(!action.actionName.contains(Constant.WakeUpActionName)){
+                btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
+            }
+            UbtLog.d(TAG, "--wmma--notePlayStart callback!" +action.actionName);
+        }else {
+            btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
+        }
+
         if (action != null) {
             String name = action.actionName;
             if (!name.equals("")
                     && "#@%".contains(name.toCharArray()[0] + "")) {
                 name = name.substring(1);
             }
-            txt_action_name_m.setText(name);
+            enablePlayStopButton(name);
+            gifImageView.setVisibility(View.VISIBLE);
+            radiologicalWaveAnim.setOneShot(false);
+            radiologicalWaveAnim.setVisible(true,true);
+            radiologicalWaveAnim.start();
+            gifImageView.setVisibility(View.VISIBLE);
             mBaseActivity.saveCurrentPlayingActionName(name);
+            mMainPresenter.requestGlobalButtonControl(true);
+
         }
     }
 
     @Override
     public void notePlayPause(List<String> mSourceActionNameList, ActionPlayer.Play_type mCurrentPlayType) {
         UbtLog.d(TAG, "--wmma--notePlayPause callback!");
-        if (mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_download || mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_new) {
-            mHelper.doPauseMp3ForMyDownload();
+       // btn_stop_m.setImageDrawable(mBaseActivity.getDrawableRes("cc_play"));
+        btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
+            if (mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_download || mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_new) {
+                mHelper.doPauseMp3ForMyDownload();
+                radiologicalWaveAnim.stop();
+                gifImageView.setVisibility(View.INVISIBLE);
+
         }
-        if (mCurrentPlayType == ActionPlayer.Play_type.cycle_action) {
-            btn_cycle.setBackground(mBaseActivity.getDrawableRes("action_control_cycle_icon_ft"));
-            txt_cycle_num.setVisibility(View.GONE);
-        }
-        btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
-        gifImageView.setVisibility(View.INVISIBLE);
 
     }
 
@@ -695,9 +697,11 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
         UbtLog.d(TAG, "--wmma--notePlayContinue callback!");
         if (mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_download ||mHelper.getCurrentPlayType() == MyActionsHelper.Action_type.My_new) {
             mHelper.doPauseMp3ForMyDownload();
+            radiologicalWaveAnim.start();
+            gifImageView.setVisibility(View.VISIBLE);
         }
-        btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_pause_icon_ft"));
-        gifImageView.setVisibility(View.VISIBLE);
+        btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
+
     }
 
     @Override
@@ -708,12 +712,14 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
             public void run() {
 
                 mHelper.doStopMp3ForMyDownload();
-                txt_action_name_m.setText("");
+                disablePlayStopButton();
                 mBaseActivity.saveCurrentPlayingActionName("");
-                btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
+                btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
+                radiologicalWaveAnim.stop();
                 gifImageView.setVisibility(View.INVISIBLE);
             }
         });
+        mMainPresenter.requestGlobalButtonControl(false);
     }
 
     @Override
@@ -722,12 +728,10 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
         mBaseActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_pause_icon_ft"));
-
+                btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
                 String name = ((MyActionsHelper) mHelper).getNewPlayerName();
                 mBaseActivity.saveCurrentPlayingActionName(name);
-                txt_action_name.setText(name);
-                txt_action_name_m.setText(name);
+                enablePlayStopButton(name);
                 gifImageView.setVisibility(View.VISIBLE);
             }
         });
@@ -739,7 +743,7 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
         mBaseActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
+                btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
                 gifImageView.setVisibility(View.INVISIBLE);
             }
         });
@@ -751,8 +755,8 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
         mBaseActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txt_action_name_m.setText("");
-                btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
+                disablePlayStopButton();
+                btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
                 gifImageView.setVisibility(View.INVISIBLE);
                 mBaseActivity.saveCurrentPlayingActionName("");
             }
@@ -783,13 +787,20 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
                     && "#@%".contains(action_name.toCharArray()[0] + "")) {
                 action_name = action_name.substring(1);
             }
-            txt_action_name_m.setText(action_name);
+            enablePlayStopButton(action_name);
             mBaseActivity.saveCurrentPlayingActionName(action_name);
-            btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_pause_icon_ft"));
+            btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
             gifImageView.setVisibility(View.VISIBLE);
+            radiologicalWaveAnim.setOneShot(false);
+            radiologicalWaveAnim.setVisible(true,true);
+            radiologicalWaveAnim.start();
+            mMainPresenter.requestGlobalButtonControl(true);
+
         }
 
     }
+
+
 
     @Override
     public void onReadCollocationRecordFinish(boolean isSuccess, String errorInfo, List<ActionColloInfo> history) {
@@ -897,7 +908,7 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 
@@ -921,39 +932,44 @@ public class CommonCtrlView  implements IActionsUI, IMainUI {
     }
 
 
-    public void resetFloatView(){
-        UbtLog.d(TAG, "----resetFloatView！");
-        mWindowManager.removeView(mFloatLayout);
-        lay_ctrl_more.setVisibility(View.GONE);
-        rl_control.setVisibility(View.VISIBLE);
-        wmParams.y = paddingBottomHeight;
-        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
-        mWindowManager.addView(mFloatLayout, wmParams);
-    }
-
-    private void showFloatView() {
-        mWindowManager.removeView(guideLayout);
-        wmParams.y = paddingBottomHeight;
-        wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
-        mWindowManager.addView(mFloatLayout, wmParams);
-    }
-
-
-    private void recordShowGuide(String step) {
-        BasicSharedPreferencesOperator.getInstance(mBaseActivity, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(BasicSharedPreferencesOperator.KEY_HAS_FLOAT_SHOW,
-                step, null, -1);
-    }
-
-    private String readShowState() {
-        return BasicSharedPreferencesOperator.getInstance(mBaseActivity, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doReadSync(BasicSharedPreferencesOperator.KEY_HAS_FLOAT_SHOW);
-    }
-
-
-
+   private void disablePlayStopButton(){
+       txt_action_name_m.setText("暂无播放内容");
+       btn_pause_or_continue.setEnabled(false);
+       btn_stop_m.setEnabled(false);
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+       btn_pause_or_continue.setColorFilter(filter);
+       btn_stop_m.setColorFilter(filter);
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+   }
+   private void enablePlayStopButton(String actionName){
+       txt_action_name_m.setText("正在播放: " +actionName);
+       btn_pause_or_continue.setEnabled(true);
+       btn_stop_m.setEnabled(true);
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+       ColorMatrix matrix = new ColorMatrix();
+       matrix.setSaturation(1);
+       ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+       btn_pause_or_continue.setColorFilter(filter);
+       btn_stop_m.setColorFilter(filter);
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+   }
+   private void disableSensorButton(){
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+       ColorMatrix matrix = new ColorMatrix();
+       matrix.setSaturation(0);
+       ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+       btn_sensorControl.setColorFilter(filter);
+   }
+   private void enableSensorButton(){
+       //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
+       ColorMatrix matrix = new ColorMatrix();
+       matrix.setSaturation(1);
+       ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+       btn_sensorControl.setColorFilter(filter);
+   }
 
 
 }

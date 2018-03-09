@@ -29,6 +29,18 @@ public class Constant {
     public static final int USER_LOGIN_REQUEST_CODE = 10011;
     public static final int USER_LOGIN_RESPONSE_CODE = 10012;
 
+    //行为习惯编辑
+    public static final int HIBITS_EVENT_EDIT_REQUEST_CODE = 10013;
+    public static final int HIBITS_EVENT_EDIT_RESPONSE_CODE = 10014;
+
+    //行为习惯播放内容编辑
+    public static final int PLAY_CONTENT_SELECT_REQUEST_CODE = 10015;
+    public static final int PLAY_CONTENT_SELECT_RESPONSE_CODE = 10016;
+
+    //行为习惯家长中心
+    public static final int HIBITS_PARENT_CENTER_REQUEST_CODE = 10017;
+    public static final int HIBITS_PARENT_CENTER_RESPONSE_CODE = 10018;
+
     //定义字符串常量KEY
     public static final String SCREEN_ORIENTATION = "SCREEN_ORIENTATION";
     public static final String INSTRUCTION_INFO_KEY = "INSTRUCTION_INFO_KEY";
@@ -42,4 +54,15 @@ public class Constant {
     public static final String SHARE_IMAGE_PATH = "SHARE_IMAGE_PATH";
     public static final String SHARE_BLOCKLY_CHAllANGE = "SHARE_BLOCKLY_CHAllANGE";
 
+    public static final String FEEDBACK_INFO_KEY = "FEEDBACK_INFO_KEY";
+    public static final String HABITS_EVENT_INFO_KEY = "HABITS_EVENT_INFO_KEY";
+    public static final String HABITS_EVENT_INFO_LIST_KEY = "HABITS_EVENT_INFO_LIST_KEY";
+    public static final String PLAY_CONTENT_INFO_LIST_KEY = "PLAY_CONTENT_INFO_LIST_KEY";
+    public static final String PLAY_HIBITS_EVENT_WORKDAY_TYPE = "PLAY_HIBITS_EVENT_WORKDAY_TYPE";
+    public static final String HIBITS_EVENT_DETAIL = "HIBITS_EVENT_DETAIL";
+    public static final String HIBITS_EVENT_ID = "HIBITS_EVENT_ID";
+    public static final String INDEX_KEY = "INDEX_KEY";
+    public static final String WakeUpActionName="初始化";
+
+    public static final int powerThreshold[] = {5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 }

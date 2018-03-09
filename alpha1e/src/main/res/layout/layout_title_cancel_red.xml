@@ -6,24 +6,53 @@
 
 <ImageView
     android:id="@+id/img_cancel"
-    android:layout_width="75dp"
-    android:layout_height="match_parent"
-    android:paddingLeft="15dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:paddingRight="45dp"
-    android:src="@drawable/mynew_publish_close"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="25dp"
+    android:src="@drawable/back_icon"
+    />
+    <TextView
+    android:id="@+id/txt_base_title_name"
+    android:layout_centerInParent="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/ui_cycle_title"
+    android:textColor="@color/T1"
+    android:textSize="18sp"
+    android:visibility="invisible"
     />
 
-    <TextView
-        android:id="@+id/txt_base_title_name"
-        android:layout_centerInParent="true"
+
+    <RelativeLayout
+        android:id="@+id/rl_cycle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ui_cycle_title"
-        android:textColor="@color/T1"
-        android:textSize="18sp"
-        />
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp">
+
+        <ImageView
+            android:id="@+id/btn_start_cycle"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_circle_play"
+            />
+
+        <TextView
+            android:id="@+id/tv_start_cycle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/btn_start_cycle"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/tv_center_color"
+            android:textSize="18sp"
+            android:text="循环播放"/>
+
+    </RelativeLayout>
+
 
 
 </RelativeLayout>

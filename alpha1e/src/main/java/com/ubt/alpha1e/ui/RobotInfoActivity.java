@@ -174,7 +174,7 @@ public class RobotInfoActivity extends BaseActivity implements BaseDiaUI {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		UbtLog.d(TAG,"--onCreate-- " );
 		mScreenOrientation = getIntent().getIntExtra(Constant.SCREEN_ORIENTATION,ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		//mScreenOrientation = 0;
 		if(mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
@@ -458,6 +458,11 @@ public class RobotInfoActivity extends BaseActivity implements BaseDiaUI {
 	 */
 	private void onBluetoothDisconnect(RobotEvent event){
 		mHandler.sendEmptyMessage(MSG_DO_BLUETOOTH_DISCONNECT);
+	}
+
+	@Override
+	protected void onPostResume() {
+		super.onPostResume();
 	}
 
 	/**

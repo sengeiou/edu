@@ -126,4 +126,30 @@
     <color name="text_confirm_color">#2c87f1</color>
 
 
+
+    <color name="bg_user_main">#E4F2F7</color>
+    <color name="bg_line_color">#CFDDE3</color>
+    <color name="tv_blue_color">#00A4E6</color>
+    <color name="tv_black_color">#000000</color>
+    <color name="tv_center_color">#3B6176</color>
+    <color name="tv_center_title_color">#1D3740</color>
+    <color name="tv_notice_title">#AFBFC8</color>
+    <color name="tv_no_data_color">#85B4C9</color>
+    <color name="transparent">#00000000</color>
+    <color name="tv_content_color">#62717A</color>
+    <color name="background_delete_coor">#F5F7F7</color>
+    <!--2017/11/1-->
+    <color name="tel_auth_rectangle_color">#EDF7FA</color>
+    <color name="login_line_color">#979797</color>
+    <color name="btn_get_code_color">#ffffff</color>
+    <color name="tv_user_edit_color">#1D3740</color>
+    <color name="action_filter_color">#0B4E75</color>
+    <color name="action_frame_color">#076F9D</color>
+    <color name="action_save_text_rect_color">#F9F9F9</color>
+    <color name="action_save_text_border_color">#E4E4E4</color>
+    <color name="action_save_text_color">#9F9FA3</color>
+    <color name="action_dialog_filter_color">#E7E8E9</color>
+    <color name="action_dilog_title">#16A4E3</color>
+    <color name="action_guid_text_color">#36ACF0</color>
+    <color name="action_edit_filter_color">#C4EDFF</color>
 </resources>

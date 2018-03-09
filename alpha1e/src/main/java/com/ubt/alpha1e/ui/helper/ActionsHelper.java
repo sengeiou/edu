@@ -613,19 +613,16 @@ public class ActionsHelper extends BaseHelper implements
             Message msg = new Message();
             msg.what = MSG_DO_READ_ACTIONS;
             mHandler.sendMessage(msg);
-
         } else if ((cmd & 0xff) == (ConstValue.DV_READSTATUS & 0xff)) {
             // MyLog.writeLog("定时器测试", "_ActionsHelper-->收到状态信息");
             // 声音状态
             if (param[0] == 0) {
                 // 静音
                 if (param[1] == 1) {
-
                     mCurrentVolState = false;
                 }
                 // 有声音
                 else {
-
                     mCurrentVolState = true;
                 }
                 Message msg = new Message();

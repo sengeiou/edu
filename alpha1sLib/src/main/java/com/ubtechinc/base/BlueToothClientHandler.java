@@ -103,7 +103,7 @@ public class BlueToothClientHandler extends Thread implements
 		if (SystemClock.uptimeMillis() - mLastSendTime < 1000) {
 			return;
 		}
-
+		MyLog.writeLog("发送",ByteHexHelper.bytesToHexString(data));
 		onSendData(data, nlen);
 	}
 
@@ -113,7 +113,7 @@ public class BlueToothClientHandler extends Thread implements
 	 * @return
 	 */
 	public boolean tryToReleaseConnection() {
-		boolean bTimeOut = SystemClock.uptimeMillis() - mLastRcvTime > 6000;
+		boolean bTimeOut = SystemClock.uptimeMillis() - mLastRcvTime > 10000;
 		if (mRun == false || this.isAlive() == false || bTimeOut){
 			Log.e(TAG,"tryToReleaseConnection  mRun:"+mRun + "		isAlive():" + this.isAlive() + "	bTimeOut:" + bTimeOut);
 			MyLog.writeLog(TAG,"tryToReleaseConnection  mRun:"+mRun + "		isAlive():" + this.isAlive() + "	bTimeOut:" + bTimeOut);
@@ -152,24 +152,27 @@ public class BlueToothClientHandler extends Thread implements
 	public void run() {
 		byte[] buffer = new byte[1024];
 		int bytes;
-
 		while (mRun) {
 			try {
 				// Read from the InputStream
-				bytes = mmInStream.read(buffer);
+				bytes = mmInStream.read(buffer);////
 				byte[] pTemp = new byte[bytes];
 				System.arraycopy(buffer, 0, pTemp, 0, bytes);
 				if(!ByteHexHelper.bytesToHexString(pTemp).startsWith("fb bf 09 18")
-						&& !ByteHexHelper.bytesToHexString(pTemp).startsWith("fb bf 06 08")){
+						&& !ByteHexHelper.bytesToHexString(pTemp).startsWith("fb bf 12 08")){
 					Log.d(TAG,"receive : " + ByteHexHelper.bytesToHexString(pTemp) + "	bytes = " + bytes);
 				}
+				MyLog.writeLog("接收",ByteHexHelper.bytesToHexString(pTemp));
 
 				for (int i = 0; i < bytes; i++) {
 					if (mPacketRead.setData_(buffer[i])) {
 						// 一帧数据接收完成
 						if (mCallBack != null) {
-							mPacketRead.setmParamLen(mPacketRead.getmParam().length);
 
+							/*MyLog.writeLog("接收",ByteHexHelper.byteToHexString(mPacketRead.getmCmd()) + " " +
+									ByteHexHelper.bytesToHexString(mPacketRead.getmParam()));*/
+
+							mPacketRead.setmParamLen(mPacketRead.getmParam().length);
 							mCallBack.onReceiveData(mMacAddress,
 									mPacketRead.getmCmd(),
 									mPacketRead.getmParam(),
@@ -180,18 +183,13 @@ public class BlueToothClientHandler extends Thread implements
 											+ mPacketRead.getmParam() + " len="
 											+ mPacketRead.getmParamLen());
 */
-							MyLog.writeLog(
-									ByteHexHelper.byteToHexString(mPacketRead
-											.getmCmd()) + "",
-									ByteHexHelper.bytesToHexString(mPacketRead
-											.getmParam()) + "");
+
 
 						}
 
 						mLastRcvTime = SystemClock.uptimeMillis();
 
-						mProcessThread.removeFromListByCmdID(mPacketRead
-								.getmCmd());
+						mProcessThread.removeFromListByCmdID(mPacketRead.getmCmd());
 					}
 				}
 			} catch (IOException e) {
@@ -200,10 +198,13 @@ public class BlueToothClientHandler extends Thread implements
 				// connectionLost();
 				mRun = false;
 				break;
-			} catch (Exception e) {
+			}  catch (ArrayIndexOutOfBoundsException e) {
+				Log.e(TAG, "ArrayIndexOutOfBoundsException " + e.toString() );
+				MyLog.writeLog(TAG,"ArrayIndexOutOfBoundsException" + e.toString());
+				continue;
+			}catch (Exception e) {
 				Log.e(TAG, "read data Exception, disconnected", e);
 				MyLog.writeLog(TAG,"read data Exception, disconnected" + e.toString());
-
 				mRun = false;
 				break;
 			}
@@ -215,7 +216,7 @@ public class BlueToothClientHandler extends Thread implements
 			//is upgade bluetooth
 
 			if(!ByteHexHelper.bytesToHexString(data).startsWith("fb bf 06 18")
-					&& !ByteHexHelper.bytesToHexString(data).startsWith("fb bf 06 08")){
+					&& !ByteHexHelper.bytesToHexString(data).startsWith("fb bf 12 08")){
 				Log.d(TAG,"send : "+ByteHexHelper.bytesToHexString(data));
 			}
 
@@ -248,6 +249,8 @@ public class BlueToothClientHandler extends Thread implements
 				return;
 			}
 			mmOutStream.write(data, 0, len);
+//			Thread.sleep(10);
+//            Log.d(TAG,"ccy test :4 ");
 			mLastSendTime = SystemClock.uptimeMillis();
 		} catch (IOException e) {
 			Log.e(TAG, "write data IOException, disconnected", e);

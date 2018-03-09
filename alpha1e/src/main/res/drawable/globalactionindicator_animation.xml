@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="true">
+    <item android:drawable="@drawable/indicator0" android:duration='50' />
+    <item android:drawable="@drawable/indicator1" android:duration='50' />
+    <item android:drawable="@drawable/indicator2" android:duration='50' />
+    <item android:drawable="@drawable/indicator3" android:duration='50' />
+    <item android:drawable="@drawable/indicator4" android:duration='50' />
+    <item android:drawable="@drawable/indicator5" android:duration='50' />
+    <item android:drawable="@drawable/indicator6" android:duration='50' />
+    <item android:drawable="@drawable/indicator7" android:duration='50' />
+    <item android:drawable="@drawable/indicator8" android:duration='50' />
+    <item android:drawable="@drawable/indicator9" android:duration='50' />
+    <item android:drawable="@drawable/indicator10" android:duration='50' />
+    <item android:drawable="@drawable/indicator11" android:duration='50' />
+    <item android:drawable="@drawable/indicator12" android:duration='50' />
+    <item android:drawable="@drawable/indicator13" android:duration='50' />
+    <item android:drawable="@drawable/indicator14" android:duration='50' />
+    <item android:drawable="@drawable/indicator15" android:duration='50' />
+    <item android:drawable="@drawable/indicator16" android:duration='50' />
+    <item android:drawable="@drawable/indicator17" android:duration='50' />
+    <item android:drawable="@drawable/indicator18" android:duration='50' />
+    <item android:drawable="@drawable/indicator19" android:duration='50' />
+</animation-list>
+

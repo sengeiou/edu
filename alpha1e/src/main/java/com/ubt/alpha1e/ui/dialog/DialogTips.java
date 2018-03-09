@@ -10,7 +10,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.ui.ActionsNewEditActivity;
+import com.ubt.alpha1e.action.ActionsCreateActivity;
+import com.ubt.alpha1e.ui.BaseActivity;
 
 /**
  * @author wmma
@@ -31,9 +32,10 @@ public class DialogTips extends Dialog {
 
     private String content = "";
     private int type = 0;
-    private ActionsNewEditActivity activity;
+    private BaseActivity activity;
+    OnLostClickListener onLostClickListener;
 
-    public DialogTips(Context context, String content, int type, ActionsNewEditActivity activity) {
+    public DialogTips(Context context, String content, int type, BaseActivity activity) {
         super(context);
         this.context = context;
         dialogTips = this;
@@ -42,6 +44,15 @@ public class DialogTips extends Dialog {
         this.activity = activity;
     }
 
+    public DialogTips(Context context, String content, int type, BaseActivity activity, OnLostClickListener onLostClickListener) {
+        super(context);
+        this.context = context;
+        dialogTips = this;
+        this.content = content;
+        this.type = type;
+        this.activity = activity;
+        this.onLostClickListener = onLostClickListener;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +62,8 @@ public class DialogTips extends Dialog {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         final Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = dialogTips.getWindow().getAttributes();
-        lp.width = (int)((display.getWidth())*0.6); //设置宽度
+        lp.width = (int) ((display.getWidth()) * 0.6); //设置宽度
         dialogTips.getWindow().setAttributes(lp);
-
 
         tvContent = (TextView) findViewById(R.id.tv_content);
         tvConfirm = (TextView) findViewById(R.id.tv_confirm);
@@ -64,12 +74,28 @@ public class DialogTips extends Dialog {
             @Override
             public void onClick(View v) {
                 dismiss();
-                if(type == 1) {
-                    activity.lostLeftLeg();
-                }else if(type == 2){
-                    activity.lostRightLeg();
+                if (type == 1) {
+                    if (null != onLostClickListener) {
+                        onLostClickListener.lostLeftLeg();
+                    }
+                    if (null != activity) {
+                        ((ActionsCreateActivity) activity).lostLeftLeg();
+                    }
+                } else if (type == 2) {
+                    if (null != onLostClickListener) {
+                        onLostClickListener.lostRightLeg();
+                    }
+                    if (null != activity) {
+                        ((ActionsCreateActivity) activity).lostRightLeg();
+                    }
                 }
             }
         });
+    }
+
+    public interface OnLostClickListener {
+        void lostLeftLeg();
+
+        void lostRightLeg();
     }
 }

@@ -12,17 +12,17 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
-import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.model.AlphaStatics;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.event.RobotEvent;
-import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IMainUI;
 import com.ubt.alpha1e.ui.helper.LoginHelper;
 import com.ubt.alpha1e.ui.helper.MainHelper;
+import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.umeng.analytics.MobclickAgent;
 
@@ -210,10 +210,12 @@ public class RobotControlActivity extends BaseActivity implements View.OnClickLi
                     return;
                 }
                 if(checkLoginState()){
-                    intent.putExtra(ActionsEditHelper.StartTypeStr,
-                            ActionsEditHelper.StartType.new_type);
-                    intent.setClass(this, ActionsNewEditActivity.class);
-                    startActivity(intent);
+//                    intent.putExtra(ActionsEditHelper.StartTypeStr,
+//                            ActionsEditHelper.StartType.new_type);
+//                    intent.setClass(this, ActionsNewEditActivity.class);
+//                    intent.setClass(this, ActionsCreateActivity.class);
+//                    startActivity(intent);
+                    startActivity(new Intent(this, ActionTestActivity.class));
                 }else{
                     intent.putExtra(LoginHelper.IS_LOGIN_SIGLE, true);
                     intent.setClass(this, LoginActivity.class);
@@ -244,7 +246,7 @@ public class RobotControlActivity extends BaseActivity implements View.OnClickLi
 
     private void gotoBlocklyCourse(){
         Intent intent = new Intent();
-        intent.setClass(this, BlocklyCourseActivity.class);
+        intent.setClass(this, UserCenterActivity.class);
         startActivity(intent);
     }
 

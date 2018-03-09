@@ -298,7 +298,7 @@ public class ActionsLibMainFragment3 extends BaseFragment implements
 
         UbtLog.d(TAG,"mUbtBanner = " + mUbtBanner + "   mHelper = " + mHelper);
         if(mHelper != null){
-            showDialog();
+//            showDialog();
             mHelper.doReadDownLoadHistory();
         }
     }
@@ -727,7 +727,7 @@ public class ActionsLibMainFragment3 extends BaseFragment implements
                         break;
                     //单图
                     case 2:
-                        //动作
+                        //main_action
                     case 3:
 
                         BannerDetailActivity.launchActivity(activity, PG.convertParcelable(info));
@@ -825,7 +825,7 @@ public class ActionsLibMainFragment3 extends BaseFragment implements
     public void showDialog() {
         if(mLoadingDialog!=null&&!mLoadingDialog.isShowing())
         {
-            mLoadingDialog.show();
+         //   mLoadingDialog.show();
         }
     }
 

@@ -22,7 +22,7 @@ public class ProtocolPacket {
 	//字头（2B）
 	private byte[] mHeader;
 	// 长度（1B）
-	private byte mLen;
+	private int mLen;
 	// SessionID（1B）
 	//private byte mID;
 	// 包序号(1B)
@@ -130,7 +130,7 @@ public class ProtocolPacket {
 			break;
 			
 		case LENGHT:
-			mLen = data;
+			mLen = data&0xff;
 			mBufferDecode.put(data);
 			mState = PROTOCOL_STATE.CMD;
 			break;
@@ -279,7 +279,7 @@ public class ProtocolPacket {
 	public void setmHeader(byte[] mHeader) {
 		this.mHeader = mHeader;
 	}
-	public byte getmLen() {
+	public int getmLen() {
 		return mLen;
 	}
 	public void setmLen(byte mLen) {

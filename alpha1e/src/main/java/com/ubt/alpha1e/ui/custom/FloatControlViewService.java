@@ -229,7 +229,7 @@ public class FloatControlViewService extends Service implements IActionsUI, IMai
         ivPop = (ImageView) view.findViewById(R.id.iv_pop);
         lay_ctrl_more = (LinearLayout) view.findViewById(R.id.lay_ctrl_more);
         rl_control = (RelativeLayout) view.findViewById(R.id.rl_control);
-        gifImageView = (GifImageView) view.findViewById(R.id.gif_playing_control);
+     //   gifImageView = (GifImageView) view.findViewById(R.id.gif_playing_control);
 
         //init hide view
         btn_cycle = (Button) view.findViewById(R.id.btn_cycle);
@@ -857,7 +857,7 @@ public class FloatControlViewService extends Service implements IActionsUI, IMai
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

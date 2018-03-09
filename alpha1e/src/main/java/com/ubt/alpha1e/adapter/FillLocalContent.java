@@ -388,10 +388,10 @@ public class FillLocalContent {
         }
 
         //检测是否在充电状态和边充边玩状态是否打开
-        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)){
-            Toast.makeText(mContext, mContext.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)){
+//            Toast.makeText(mContext, mContext.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         if(isFirstPlayAction(mHelper)){
             return;
@@ -603,10 +603,10 @@ public class FillLocalContent {
         }
 
         //检测是否在充电状态和边充边玩状态是否打开
-        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)){
-            Toast.makeText(mContext, mContext.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(mContext)){
+//            Toast.makeText(mContext, mContext.getResources().getString(R.string.ui_settings_play_during_charging_tips), Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         if(isFirstPlayAction(mHelper)){
             return;

@@ -21,4 +21,5 @@ public interface ActionPlayerListener {
     void notePlayChargingError();
 
     void notePlayCycleNext(String action_name);
+
 }

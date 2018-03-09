@@ -1082,7 +1082,7 @@ public class ActionsEditActivity extends BaseActivity implements IEditActionUI,
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
         // TODO Auto-generated method stub
 
     }

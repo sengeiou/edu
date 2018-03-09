@@ -15,7 +15,7 @@ public class HttpAddress {
 
     public enum Request_type {
         login,
-        
+
         new_phone_login,
 
         new_email_login,
@@ -131,71 +131,126 @@ public class HttpAddress {
          */
         detailById,
 
-        /**获取七牛存储token*/
+        /**
+         * 获取七牛存储token
+         */
         getQiniuToken,
 
-        /**上传新建动作*/
+        /**
+         * 上传新建动作
+         */
         uploadAction,
 
-        /**根据动作类型获取列表*/
+        /**
+         * 根据动作类型获取列表
+         */
         getListByPage,
 
-        /**H5页面详情*/
+        /**
+         * H5页面详情
+         */
         getDetailIos,
 
-        /**取消动作发布*/
+        /**
+         * 取消动作发布
+         */
         cancelPublish,
 
-        /**删除我的创建后取消发布*/
+        /**
+         * 删除我的创建后取消发布
+         */
         deleteCreationPublish,
 
-        /**获取活动主题*/
+        /**
+         * 获取活动主题
+         */
         getScheme,
 
-        /**获取活动主题信息*/
+        /**
+         * 获取活动主题信息
+         */
         getSchemeInfo,
 
-        /**服务条款*/
+        /**
+         * 服务条款
+         */
         getServiceRule,
 
-        /**记录固件版本*/
+        /**
+         * 记录固件版本
+         */
         doRecordSoftVersion,
 
-        /**获取IShow列表*/
+        /**
+         * 获取IShow列表
+         */
         getIshowList,
 
-        /** 获取我发布的IShow列表*/
+        /**
+         * 获取我发布的IShow列表
+         */
         getMyShow,
 
-        /** 删除我发布的ishow数据*/
+        /**
+         * 删除我发布的ishow数据
+         */
         deleteMyShow,
 
-        /** 获取热门推荐动作*/
+        /**
+         * 获取热门推荐动作
+         */
         get_popular_actions_on_line,
 
-        /** 获取主题推荐*/
+        /**
+         * 获取主题推荐
+         */
         get_theme_recommend,
 
-        /** 获取主题推荐动作详细*/
+        /**
+         * 获取主题推荐动作详细
+         */
         get_theme_recommend_detail,
 
-        /** 获取公共数据平台访问token*/
+        /**
+         * 获取公共数据平台访问token
+         */
         get_access_token,
 
-        /** 获取机器人本体软件更新信息*/
+        /**
+         * 获取机器人本体软件更新信息
+         */
         check_robot_soft_version_info,
 
-        /** 保存课程任务结果 */
+        /**
+         * 保存课程任务结果
+         */
         save_user_task,
 
-        /** 批量保存课程任务结果 */
+        /**
+         * 批量保存课程任务结果
+         */
         save_batch_user_task,
 
-        /** 获取课程任务结果列表 */
+        /**
+         * 获取课程任务结果列表
+         */
         query_user_tasks,
 
-        /** 获取课时 */
-        query_user_lessons
+        /**
+         * 获取课时
+         */
+        query_user_lessons,
+
+        /*************************Alpha 1E***********************************/
+
+        /**
+         * 获取用户信息
+         */
+        getUserInfo,
+        updateUserInfo //更新用户新
+
+        /*************************Alpha 1E***********************************/
+
     }
 
     public static final String NO_URL = "NO_URL";
@@ -207,23 +262,25 @@ public class HttpAddress {
 
     //public static final String WebServiceAdderss = "http://10.10.1.12:8080/ubx";//测试部测试环境
     //public static final String WebServiceAdderss = "http://10.10.1.14:8080/ubx";//研发测试环境
-    //public static final String WebServiceAdderss = "https://services.ubtrobot.com/ubx";//正式环境
+    public static final String WebServiceAdderss = "https://services.ubtrobot.com/ubx";//正式环境
     //public static final String WebServiceAdderss = "https://10.10.1.14:8443/ubx";//研发测试环境
 
-    public static final String WebServiceAdderss = BuildConfig.WebServiceAdderss;
+    //public static final String WebServiceAdderss = BuildConfig.WebServiceAdderss;
     public static final String WebServiceAdderss_Image = "https://services.ubtrobot.com/ubx";
     public static final String WebServiceAdderss_Video = "https://services.ubtrobot.com";
     public static final String[] WebHostnames = {"services.ubtrobot.com",
-                                                "video.ubtrobot.com",
-                                                "www.qq.com",
-                                                "api.weixin.qq.com",
-                                                "api.twitter.com",
-                                                "www.facebook.com",
-                                                "graph.facebook.com",
-                                                "twitter.com",
-                                                "account.ubtrobot.com",
-                                                "10.10.1.14",
-                                                "10.10.1.12"};
+            "video.ubtrobot.com",
+            "www.qq.com",
+            "api.weixin.qq.com",
+            "api.twitter.com",
+            "www.facebook.com",
+            "graph.facebook.com",
+            "twitter.com",
+            "account.ubtrobot.com",
+            "10.10.1.14",
+            "10.10.1.12",
+            "test79.ubtrobot.com",
+            "prodapi.ubtrobot.com"};
 
     public static final String WebDefaultAppLauncherAddress = "https://services.ubtrobot.com/userImage/ic_launcher.png";
     public static final String WebDefaultAppWechatAddress = "https://video.ubtrobot.com/alpha1/ubt_wechat.png";
@@ -233,17 +290,23 @@ public class HttpAddress {
 
     //课程
     //public static final String WebCourseAdderss = "http://10.10.20.30:8039/course-rest";//研发测试环境
-    //public static final String WebCourseAdderss = "https://account.ubtrobot.com/course-rest";//正式测试环境
-    public static final String WebCourseAdderss = BuildConfig.WebCourseAdderss;
+    public static final String WebCourseAdderss = "https://account.ubtrobot.com/course-rest";//正式测试环境
+    //public static final String WebCourseAdderss = BuildConfig.WebCourseAdderss;
 
     //Blockly更新URL
     //public static final String WebBlocklyUpdateAdderss = "http://10.10.1.12:8030/alpha1/zip?versionId=";
-    //public static final String WebBlocklyUpdateAdderss = "https://account.ubtrobot.com/alpha1e-rest/alpha1/zip?versionId=";
-    public static final String WebBlocklyUpdateAdderss = BuildConfig.WebBlocklyUpdateAdderss;
+    public static final String WebBlocklyUpdateAdderss = "https://account.ubtrobot.com/alpha1e-rest/alpha1/zip?versionId=";
+    //public static final String WebBlocklyUpdateAdderss = BuildConfig.WebBlocklyUpdateAdderss;
 
     //用户注册登录
     //public static final String WebUserDataPlatformAdderss = "http://10.10.1.52:8010";//研发测试环境
     public static final String WebUserDataPlatformAdderss = "http://202.170.139.168:8087/user-service-rest";//研发测试环境
+
+
+    /***********************Alpha 1E*********************************/
+    //public static final String WebServiceAdderssFor1E = BuildConfig.WebServiceAdderssFor1E;
+    public static final String WebServiceAdderssFor1E = "https://api.ubtrobot.com/ubx";
+
 
     // -----------------------------------------------------------------------------------------
     public static final String APP_TYPE_KEY = "appType";
@@ -315,7 +378,7 @@ public class HttpAddress {
             case scan_robot_gest:
                 return WebServiceAdderss + "/system/guide";
             case action_help:
-                return  WebServiceAdderss + "/actionHelp/actionHelp.html";
+                return WebServiceAdderss + "/actionHelp/actionHelp.html";
             case ubt_web_sit:
                 return "http://www.ubtrobot.com";
             case get_bana_imgs:
@@ -369,23 +432,23 @@ public class HttpAddress {
             case uploadAction:
                 return WebServiceAdderss + "/action/uploadAction";
             case getListByPage:
-                return WebServiceAdderss +  "/action/getListByPage";
+                return WebServiceAdderss + "/action/getListByPage";
             case getDetailIos:
-                return WebServiceAdderss +  "/action/detailIos";
+                return WebServiceAdderss + "/action/detailIos";
             case cancelPublish:
-                return WebServiceAdderss +  "/action/cancle";
+                return WebServiceAdderss + "/action/cancle";
             case deleteCreationPublish:
-                return WebServiceAdderss +  "/createaction/deleteMyCreate";
+                return WebServiceAdderss + "/createaction/deleteMyCreate";
             case getScheme:
-                return WebServiceAdderss +  "/action/getScheme";
+                return WebServiceAdderss + "/action/getScheme";
             case getSchemeInfo:
-                return WebServiceAdderss +  "/scheme.html";
+                return WebServiceAdderss + "/scheme.html";
             case getServiceRule:
-                return WebServiceAdderss +  "/service_rule.html";
+                return WebServiceAdderss + "/service_rule.html";
             case doRecordSoftVersion:
-                return WebServiceAdderss +  "/equipment/sumVersion";
+                return WebServiceAdderss + "/equipment/sumVersion";
             case getIshowList:
-                return WebServiceAdderss +  "/action/findShowList";
+                return WebServiceAdderss + "/action/findShowList";
             case getMyShow:
                 return WebServiceAdderss + "/action/getMyShow";
             case deleteMyShow:
@@ -406,6 +469,10 @@ public class HttpAddress {
                 return WebCourseAdderss + "/course/queryUserTasks";
             case query_user_lessons:
                 return WebCourseAdderss + "/course/queryUserLessons";
+
+            case getUserInfo:
+                return WebServiceAdderssFor1E + "/getUserInfo";
+
             default:
                 break;
         }
@@ -443,19 +510,19 @@ public class HttpAddress {
             case action_help:
                 return "?lang=" + params[0];
             case get_access_token:
-                return "?client_id=" + params[0] + "&client_secret=" + params[1] + "&grant_type="+ params[2]
+                return "?client_id=" + params[0] + "&client_secret=" + params[1] + "&grant_type=" + params[2]
                         + "&username=" + params[3] + "&password=" + params[4];
             case check_robot_soft_version_info:
-                return "?access_token=" + params[0] + "&model=" + params[1] + "&robot_id="+ params[2]
-                        + "&robot_type=" + params[3] ;
+                return "?access_token=" + params[0] + "&model=" + params[1] + "&robot_id=" + params[2]
+                        + "&robot_type=" + params[3];
             case query_user_tasks:
                 String param = "?courseId=" + params[0];
-                if(params.length > 1){
+                if (params.length > 1) {
                     param += "&lessonId=" + params[1];
                 }
                 return param;
             case query_user_lessons:
-                return "?current=" + params[0] + "&size=" + params[1] + "&courseId="+ params[2]
+                return "?current=" + params[0] + "&size=" + params[1] + "&courseId=" + params[2]
                         + "&language=" + params[3] + "&timeMillis=" + params[4];
             default:
                 return "";
@@ -515,37 +582,37 @@ public class HttpAddress {
             return NO_URL;
         }
     }
+
     // 基本接口，不需要额外传参数
     public static String getBasicParamsForPost(Context context) {
-            String basicParams = "";
-            String[] req = getRequestInfo();
-            String REQUEST_TIME_VALUE = req[0];
-            String REQUEST_VALUE = req[1];
-            basicParams = "{\""+
-                      APP_TYPE_KEY
-                    + "\":\""
-                    + APP_TYPE_VALUE
-                    + "\",\""
-                    + SERVICE_VERSION_KEY
-                    + "\":\""
-                    + SERVICE_VERSION_VALUE
-                    + "\",\""
-                    + REQUEST_TIME_KEY
-                    + "\":\""
-                    + REQUEST_TIME_VALUE
-                    + "\",\""
-                    + SYSTEM_CIG_LANGUAGE
-                    + "\":\""
-                    //+ context.getResources().getConfiguration().locale.getCountry()
-                    + AlphaApplication.getBaseActivity().getStandardLocale(AlphaApplication.getBaseActivity().getAppCurrentLanguage())
-                    + "\",\"" + REQUEST_KEY + "\":\""
-                    + REQUEST_VALUE + "\"}";
-            return basicParams;
+        String basicParams = "";
+        String[] req = getRequestInfo();
+        String REQUEST_TIME_VALUE = req[0];
+        String REQUEST_VALUE = req[1];
+        basicParams = "{\"" +
+                APP_TYPE_KEY
+                + "\":\""
+                + APP_TYPE_VALUE
+                + "\",\""
+                + SERVICE_VERSION_KEY
+                + "\":\""
+                + SERVICE_VERSION_VALUE
+                + "\",\""
+                + REQUEST_TIME_KEY
+                + "\":\""
+                + REQUEST_TIME_VALUE
+                + "\",\""
+                + SYSTEM_CIG_LANGUAGE
+                + "\":\""
+                //+ context.getResources().getConfiguration().locale.getCountry()
+                + AlphaApplication.getBaseActivity().getStandardLocale(AlphaApplication.getBaseActivity().getAppCurrentLanguage())
+                + "\",\"" + REQUEST_KEY + "\":\""
+                + REQUEST_VALUE + "\"}";
+        return basicParams;
     }
 
-    public static Map<String,String> getBasicParamsMap(Context context)
-    {
-        Map<String,String> basicMap = new HashMap<>();
+    public static Map<String, String> getBasicParamsMap(Context context) {
+        Map<String, String> basicMap = new HashMap<>();
         String[] req = getRequestInfo();
         String REQUEST_TIME_VALUE = req[0];
         String REQUEST_VALUE = req[1];
@@ -555,7 +622,7 @@ public class HttpAddress {
         //basicMap.put(SYSTEM_CIG_LANGUAGE, context.getResources().getConfiguration().locale.getCountry());
         basicMap.put(SYSTEM_CIG_LANGUAGE, AlphaApplication.getBaseActivity().getStandardLocale(AlphaApplication.getBaseActivity().getAppCurrentLanguage()));
         basicMap.put(REQUEST_KEY, REQUEST_VALUE);
-        return  basicMap;
+        return basicMap;
 
 
     }
@@ -574,12 +641,12 @@ public class HttpAddress {
             case new_phone_login:
                 params_str = "{\"appType\":\"10"
                         + "\",\"userPhone\":\"" + params[0]
-                        + "\",\"userPassword\":\"" + params[1]+ "\"}";
+                        + "\",\"userPassword\":\"" + params[1] + "\"}";
                 break;
             case new_email_login:
                 params_str = "{\"appType\":\"10"
                         + "\",\"userEmail\":\"" + params[0]
-                        + "\",\"userPassword\":\"" + params[1]+ "\"}";
+                        + "\",\"userPassword\":\"" + params[1] + "\"}";
                 break;
             case register:
                 params_str = "{\"userName\":\"" + params[0]
@@ -591,13 +658,13 @@ public class HttpAddress {
                 params_str = "{\"appType\":\"10"
                         + "\",\"userPhone\":\"" + params[0]
                         + "\",\"userPassword\":\"" + params[1]
-                        + "\",\"verificationCode\":\"" + params[2]+ "\"}";
+                        + "\",\"verificationCode\":\"" + params[2] + "\"}";
                 break;
             case new_email_register:
                 params_str = "{\"appType\":\"10"
                         + "\",\"userEmail\":\"" + params[0]
                         + "\",\"userPassword\":\"" + params[1]
-                        + "\",\"verificationCode\":\"" + params[2]+ "\"}";
+                        + "\",\"verificationCode\":\"" + params[2] + "\"}";
                 break;
 
             case edit_private_info:
@@ -613,7 +680,7 @@ public class HttpAddress {
             case get_popular_actions_on_line:
                 params_str = "{\"page\":\"" + params[0]
                         + "\",\"pageSize\":\"" + params[1]
-                        + "\",\"countryCode\":\""+ params[2]
+                        + "\",\"countryCode\":\"" + params[2]
                         + "\",\"actionResource\":\"" + params[3]
                         + "\",\"actionSonType\":\"" + params[4] + "\"}";
                 break;
@@ -733,10 +800,10 @@ public class HttpAddress {
             //    actionName 动作名称
             //    actionHeadUrl 服务器动作缩略图路径
             case uploadAction:
-                params_str =  "{\"actionUser\":\"" + params[0]
+                params_str = "{\"actionUser\":\"" + params[0]
                         + "\",\"actionDesciber\":\"" + params[1]
                         + "\",\"actionType\":\"" + params[2]
-                        + "\",\"actionVideoPath\":\""+ params[3]
+                        + "\",\"actionVideoPath\":\"" + params[3]
                         + "\",\"actionOriginalId\":\"" + params[4]
                         + "\",\"actionPath\":\"" + params[5]
                         + "\",\"actionPath\":\"" + params[6]
@@ -744,10 +811,10 @@ public class HttpAddress {
                         + "\"}";
                 break;
             case getListByPage:
-                params_str =  "{\"page\":\"" + params[0]
+                params_str = "{\"page\":\"" + params[0]
                         + "\",\"pageSize\":\"" + params[1]
                         + "\",\"actionSortType\":\"" + params[2]
-                        + "\",\"actionSonType\":\""+ params[3]
+                        + "\",\"actionSonType\":\"" + params[3]
                         + "\",\"countryCode\":\"" + params[4]
                         + "\",\"token\":\"" + params[5]
                         + "\",\"userId\":\"" + params[5]
@@ -770,10 +837,10 @@ public class HttpAddress {
                 params_str = "{\"equipmentVersion\":\"" + params[0] + "\",\"equipmentUid\":\"" + params[1] + "\",\"serialNumber\":\"" + params[2] + "\"}";
                 break;
             case getIshowList:
-                params_str =  "{\"page\":\"" + params[0]
+                params_str = "{\"page\":\"" + params[0]
                         + "\",\"pageSize\":\"" + params[1]
                         + "\",\"actionSortType\":\"" + params[2]
-                        + "\",\"actionSonType\":\""+ params[3]
+                        + "\",\"actionSonType\":\"" + params[3]
                         + "\",\"countryCode\":\"" + params[4]
                         + "\",\"token\":\"" + params[5]
                         + "\",\"userId\":\"" + params[5]
@@ -784,7 +851,7 @@ public class HttpAddress {
                 params_str = "{\"page\":\"" + params[0]
                         + "\",\"pageSize\":\"" + params[1]
                         + "\",\"actionSortType\":\"" + params[2]
-                        + "\",\"actionSonType\":\""+ params[3]
+                        + "\",\"actionSonType\":\"" + params[3]
                         + "\",\"countryCode\":\"" + params[4]
                         + "\",\"token\":\"" + params[5]
                         + "\",\"actionUser\":\"" + params[5]
@@ -801,7 +868,7 @@ public class HttpAddress {
                 params_str = "{\"courseId\":\"" + params[0]
                         + "\",\"lessonId\":\"" + params[1]
                         + "\",\"taskId\":\"" + params[2]
-                        + "\",\"efficiencyStar\":\""+ params[3]
+                        + "\",\"efficiencyStar\":\"" + params[3]
                         + "\",\"qualityStar\":\"" + params[4]
                         + "\"}";
                 break;

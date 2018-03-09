@@ -111,6 +111,11 @@ public class ConstValue {
 	 */
 	public static final byte DV_ACTION_FINISH = (byte) 0x31;
 
+    /**
+     * 控制16个舵机
+     */
+    public static final byte CTRL_ONE_ENGINE_ON = (byte) 0x22;
+
 	/**
 	 * 控制16个舵机
 	 */
@@ -200,6 +205,10 @@ public class ConstValue {
 
 	/**
 	 * 升级本体软件.
+	 * 手动升级： 0x43 {小端模式}
+	 参数1: 0未知，　１请求升级，２确定升级（进入升级），　３暂时不升级，４永不升级
+	 回复：
+	 应答：0
 	 */
 	public static final byte DV_DO_UPGRADE_SOFT = (byte) 0x43;
 
@@ -322,8 +331,100 @@ public class ConstValue {
 	 * 1E机器人跌倒事件，该事件是机器人主动上报
 	 */
 	public static final byte DV_FALL_DOWN = (byte) 0x71;
+	/**
+	 *  1E 机器人机器人6D方位变化事件上报  1. 站立 2.倒立  3.左卧 4.右卧 5.躺着 6.趴着
+	 *
+	 */
+    public static final byte DV_6D_GESTURE=(byte)0x72;
+	/**
+	 *  1E机器人 进入到休眠事件 （机器人 通知客户端）
+	 */
+	public static final byte DV_SLEEP_EVENT=(byte)0x73;
+
+	/**
+	 *  1E机器人进入到 低电量模式（机器人 通知客户端）
+	 */
+	public static final byte DV_LOW_BATTERY=(byte)0x74;
+	/**
+	 * 1E进入课程
+	 */
+	public static final byte DV_ENTER_COURSE = (byte) 0x75;
+
+	/**
+	 * 步态算法行走
+	 */
+	public static final byte DV_WALK = (byte) 0x76;
+
+	public static final byte DV_STOP_WALK = (byte) 0x77;
 
 
+	/**
+	 * 语音唤醒
+	 */
+	public static final byte DV_VOICE_WAIT = (byte) 0x78;
 
+	/**
+	 * 1E启用禁用拍头课程
+	 */
+	public static final byte DV_CAN_CLICK_HEAD = (byte) 0x79;
+
+	/**
+	 * 1E机器人获取产品productID和DSN
+	 */
+	public static final byte DV_PRODUCT_AND_DSN = (byte) 0x82;
+
+
+	/**
+	 * 1E机器人发送CLIENT ID
+	 */
+	public static final byte DV_CLIENT_ID = (byte) 0x83;
+
+	/**
+	 * 1E机器人发送CLIENT ID 分两段
+	 */
+//	public static final byte DV_CLIENT_ID2 = (byte) 0x82;
+
+
+	/**
+	 *  1E 机器人通用命令
+	 */
+	public static final int DV_COMMON_COMMAND=0x93;
+
+
+	/**
+	 * 进入动作编辑状态和退出  状态切换类型：0:未知状态，１进入动作编缉状态，２退出动作编缉状态
+	 */
+	public static final byte  DV_INTO_EDIT = (byte)0x95;
+
+	/**
+	 *  传感器控制命令 0 禁止 1 启用
+	 */
+	public static final byte DV_SENSOR_CONTROL=(byte)0x96;
+	/**
+	 *  1E 机器人控制舵机命令
+	 *  参数1 1B: 1.掉电；2.上电
+	 *  参数2 1B：1.左手；2.右手 3.双脚。
+	 */
+	public static final byte DV_CONTROL_ENGINE_COMMAND = (byte) 0x97;
+
+
+	/**
+	 * 获取行为事项播放状态
+	 * 回复：{
+	 *       "eventId": "123",
+	 *       "playAudioSeq": "0",
+	 *       "audioState": "" //no play,playing
+	 *       }
+	 */
+	public static final byte DV_READ_HIBITS_PLAY_STATUS = (byte) 0x9A;
+
+	/**
+	 * 获取行为事项播放状态
+	 * 回复：{"eventId": "123",
+	 		  "playAudioSeq": "0"
+	          "cmd": "start"    //stop,start,pause,unpause
+	         }
+	 */
+	public static final byte DV_CONTROL_HIBITS_PLAY = (byte) 0x99;
 
 }

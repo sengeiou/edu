@@ -3,6 +3,7 @@ package com.ubt.alpha1e.ui;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -18,14 +19,17 @@ import android.widget.Toast;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator.DataType;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ThemeInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.event.RobotEvent;
-import com.ubt.alpha1e.ui.custom.CommonCtrlView;
-import com.ubt.alpha1e.ui.dialog.LowPowerDialog;
+import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IUI;
 import com.ubt.alpha1e.utils.StatusBarUtils;
@@ -78,14 +82,15 @@ public abstract class BaseActivity extends
 
     private String currentActivityLable;
 
-//    public CommonCtrlView commonCtrlView;
+//    public ControlCenterActivity commonCtrlView;
     private resetFloatViewListener resetFloatViewListener;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ((AlphaApplication) this.getApplication()).addToActivityList(this);
+        //((AlphaApplication) this.getApplication()).addToActivityList(this);
         ((AlphaApplication) this.getApplication()).setBaseActivity(this);
+        AppManager.getInstance().addActivity(this);
         initSkin();
         super.onCreate(savedInstanceState);
         initWindowStatusBarColor();
@@ -253,12 +258,12 @@ public abstract class BaseActivity extends
         back.setOnClickListener(listener);
     }
 
-    public void onNoteLowPower() {
+    public void onNoteLowPower(final int value ) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 try {
-                    LowPowerDialog.getInstance(BaseActivity.this).show();
+                    new LowBatteryDialog(AppManager.getInstance().currentActivity()).setBatteryThresHold(value).builder().show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -275,38 +280,42 @@ public abstract class BaseActivity extends
 
         //此Activity销毁后，取消Eventbus监听
         EventBus.getDefault().unregister(this);
-        ((AlphaApplication) this.getApplication()).removeActivityList(this);
+//        ((AlphaApplication) this.getApplication()).removeActivityList(this);
+        AppManager.getInstance().finishActivity(this);
         super.onDestroy();
 
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
-        ((AlphaApplication) this.getApplication()).setBaseActivity(this);
-        MobclickAgent.onResume(this);
 
-        doCheckLanguage();
-
+//        ((AlphaApplication) this.getApplication()).setBaseActivity(this);
+//        MobclickAgent.onResume(this);
+//
+//        doCheckLanguage();
+//
         if (mHelper != null){
             mHelper.RegisterHelper();
         }
-
-        UbtLog.d(TAG, "--wmma--onResume!");
-
-        if (((AlphaApplication) this.getApplicationContext())
-                .getCurrentBluetooth() != null){
-            UbtLog.d(TAG, "--wmma--bluetooth ssss");
-            if(stopFloatService() /*&& isServiceRun(getApplicationContext(), "com.ubt.alpha1e.ui.custom.FloatControlViewService")*/){
-                CommonCtrlView.closeCommonCtrlView();
-            }else{
-                CommonCtrlView.getInstace(this);
-            }
-        }else{
-            CommonCtrlView.closeCommonCtrlView();
-        }
+//
+//        UbtLog.d(TAG, "--wmma--onResume!");
+//
+//        if (((AlphaApplication) this.getApplicationContext())
+//                .getCurrentBluetooth() != null){
+//            UbtLog.d(TAG, "--wmma--bluetooth ssss");
+//            if(stopFloatService() /*&& isServiceRun(getApplicationContext(), "com.ubt.alpha1e.ui.custom.FloatControlViewService")*/){
+//                ControlCenterActivity.closeCommonCtrlView();
+//            }else{
+//                ControlCenterActivity.getInstace(this);
+//            }
+//        }else{
+//            ControlCenterActivity.closeCommonCtrlView();
+//        }
 
     }
 
+    @Override
     protected void onPause() {
         super.onPause();
         if (mHelper != null) {
@@ -324,12 +333,12 @@ public abstract class BaseActivity extends
 
     @Subscribe
     public void onEventRobot(RobotEvent event) {
-        if(event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS){
-            UbtLog.d(TAG,"--CONNECT_SUCCESS--");
-            if (!stopFloatService()){
-                CommonCtrlView.getInstace(this);
-            }
-        }
+//        if(event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS){
+//            UbtLog.d(TAG,"--CONNECT_SUCCESS--");
+//            if (!stopFloatService()){
+//                ControlCenterActivity.getInstace(this);
+//            }
+//        }
     }
 
     public void doCheckLanguage() {
@@ -374,16 +383,16 @@ public abstract class BaseActivity extends
         /*if (mHelper != null) {
             mHelper.UnRegisterHelper();
         }*/
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                Toast.makeText(
-                        BaseActivity.this,getStringResources("ui_home_conn_lost"), Toast.LENGTH_SHORT).show();
-            }
-        });
-        MyLog.writeLog("蓝牙掉线", this.getClass().getName() + "-->onLostBtCoon");
-        ((AlphaApplication) this.getApplication()).doLostConn(this);
+//        mHandler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                // TODO Auto-generated method stub
+//                Toast.makeText(
+//                        BaseActivity.this,getStringResources("ui_home_conn_lost"), Toast.LENGTH_SHORT).show();
+//                MyLog.writeLog("蓝牙掉线", this.getClass().getName() + "-->onLostBtCoon");
+////                ((AlphaApplication) BaseActivity.this.getApplication()).doLostConn(BaseActivity.this);
+//            }
+//        });
 
     }
 
@@ -712,6 +721,11 @@ public abstract class BaseActivity extends
         if(currentActivityLable.equals("ActionsNewEditActivity")){
             return true;
         }
+        if(currentActivityLable.equals("ActionTestActivity")){
+            return true;
+        }
+
+
 
         return false;
     }

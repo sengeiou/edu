@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.business.ActionsCollocationManager;
@@ -25,7 +24,6 @@ import com.ubt.alpha1e.data.model.ActionRecordInfo;
 import com.ubt.alpha1e.data.model.BannerInfo;
 import com.ubt.alpha1e.data.model.CommentInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
-
 import com.ubt.alpha1e.net.http.basic.FileDownloadListener;
 import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.net.http.basic.HttpAddress.Request_type;
@@ -37,8 +35,9 @@ import com.ubt.alpha1e.utils.connect.ActionInfoCallback;
 import com.ubt.alpha1e.utils.connect.ActionInfoListCallback;
 import com.ubt.alpha1e.utils.connect.BannerInfoListCallback;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
-import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.utils.log.MyLog;
+import com.ubt.alpha1e.utils.log.UbtLog;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +48,8 @@ import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
+
+//import com.tencent.mm.sdk.modelmsg.SendAuth;
 
 public class ActionsLibHelper extends BaseHelper implements IJsonListener,
 		IFileListener {
@@ -499,17 +500,17 @@ public class ActionsLibHelper extends BaseHelper implements IJsonListener,
 		@Override
 		public void onReceive(Context arg0, Intent arg1) {
 
-			SendAuth.Resp resp = MyWeiXin.handleIntent(arg1, mBaseActivity);
-			int error_code;
-			if (resp != null)
-				error_code = resp.errCode;
-			else
-				error_code = -2;
-
-			Message msg = new Message();
-			msg.what = MSG_DO_SHARE_WEIXIN;
-			msg.obj = new Integer(error_code);
-			mHandler.sendMessage(msg);
+//			SendAuth.Resp resp = MyWeiXin.handleIntent(arg1, mBaseActivity);
+//			int error_code;
+//			if (resp != null)
+//				error_code = resp.errCode;
+//			else
+//				error_code = -2;
+//
+//			Message msg = new Message();
+//			msg.what = MSG_DO_SHARE_WEIXIN;
+//			msg.obj = new Integer(error_code);
+//			mHandler.sendMessage(msg);
 
 		}
 	};
@@ -596,7 +597,7 @@ public class ActionsLibHelper extends BaseHelper implements IJsonListener,
 	}
 
 	@Override
-	public void onClaerCache() {
+	public void onClearCache() {
 		// TODO Auto-generated method stub
 
 	}

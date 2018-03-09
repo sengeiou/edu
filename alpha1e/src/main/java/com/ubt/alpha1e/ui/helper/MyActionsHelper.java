@@ -204,6 +204,7 @@ public class MyActionsHelper extends BaseHelper implements
 
     private String mSchemeId = "";
     private String mSchemeName = "";
+    private static boolean isLooping=false;
 
     public Action_type getCurrentPlayType() {
         return mCurrentPlayType;
@@ -744,22 +745,23 @@ public class MyActionsHelper extends BaseHelper implements
         mCurrentVolume = pow;
 
         MyLog.writeLog("音量检测", "发送调整指令" + pow);
-
         byte[] param = new byte[1];
         param[0] = (byte) (pow & 0xff);
-        doSendComm(ConstValue.DV_VOLUME, param);
+        UbtLog.d(TAG,"调整之前"+_pow+"发送调整指令"+(byte)param[0]);
+         doSendComm(ConstValue.DV_VOLUME, param);
         ChangeMisucVol(_pow);
     }
 
     public void doTurnVol() {
-
         byte[] papram = new byte[1];
         if (mCurrentVoiceState) {
             papram[0] = 0;
             ChangeMisucVol(0);
+            //有声音
             mCurrentVoiceState = false;
         } else {
             papram[0] = 1;
+            //无声音
             mCurrentVoiceState = true;
         }
 
@@ -818,7 +820,6 @@ public class MyActionsHelper extends BaseHelper implements
 
         if(mCacheActionsNames.isEmpty()){
             MyLog.writeLog("命令发送", "DV_GETACTIONFILE");
-
             getDataType = Action_type.Unkown;
             Message msg = new Message();
             msg.what = MSG_DO_GETACTIONFILE;
@@ -826,7 +827,6 @@ public class MyActionsHelper extends BaseHelper implements
             mHandler.sendMessage(msg);
         }else{
             mActionsNames.addAll(mCacheActionsNames);
-
             Message msg = new Message();
             msg.what = MSG_DO_READ_ACTIONS;
             mHandler.sendMessage(msg);
@@ -903,7 +903,7 @@ public class MyActionsHelper extends BaseHelper implements
 
             String name = BluetoothParamUtil.bytesToString(param);
 
-            if(!"UBT工厂测试动作2016.11.25".equals(name)){
+            if(!"初始化".equals(name) && !"default".equals(name)){
                 mActionsNames.add(name);
             }
 
@@ -1343,8 +1343,8 @@ public class MyActionsHelper extends BaseHelper implements
             }
         }
         mPlayer.doCycle(actions);
-
     }
+
 
     public void doTurnLight() {
         byte[] papram = new byte[1];
@@ -2690,8 +2690,33 @@ public class MyActionsHelper extends BaseHelper implements
     public void doPlayForBlockly(String name, boolean isWalk){
         mPlayer.doPlayActionForBlockly(name, isWalk);
     }
+    public void doPlay(ActionInfo name){
+        mPlayer.doPlayAction(name);
+    }
 
 
+    public static void setLooping(boolean flag){
+        isLooping=flag;
+    }
+    public void clearPlayingInfo(){
+        MyActionsHelper.mCurrentSeletedNameList.clear();
+        MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+        mCurrentSeletedNameList.clear();
+    }
+    public boolean getLoopingFlag(){
+        return isLooping;
+    }
 
+    public void setPlayContent(List<Map<String,Object>> nameList){
+        mPlayer.setPlayContent(nameList);
+    }
+
+    public void setSensorStatus(boolean status) {
+        mSensorState = status;
+    }
+
+    public boolean getSensorStatus() {
+        return mSensorState;
+    }
 
 }

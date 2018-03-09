@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import cn.jpush.android.api.JPushInterface;
 
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator.DataType;
 import com.ubt.alpha1e.ui.MyMainActivity;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
 public class IntroductionActivity extends FragmentActivity implements
@@ -27,15 +27,13 @@ public class IntroductionActivity extends FragmentActivity implements
 	public void onResume() {
 		super.onResume();
 		MobclickAgent.onResume(this);
-		JPushInterface.onResume(this);
 
 	}
 
 	public void onPause() {
 		super.onPause();
 		MobclickAgent.onPause(this);
-		JPushInterface.onPause(this);
-	}
+ 	}
 
 	private static int[] mBackgroundRes = new int[] {
 			R.drawable.introduction_1, R.drawable.introduction_2,
@@ -64,7 +62,7 @@ public class IntroductionActivity extends FragmentActivity implements
 		setContentView(R.layout.activity_introduction);
 		IntroductionViewPager start_pager = new IntroductionViewPager(
 				R.id.pager, this, this);
-		start_pager.setNextActivity(MyMainActivity.class);
+		start_pager.setNextActivity(MainActivity.class);
 
 	}
 

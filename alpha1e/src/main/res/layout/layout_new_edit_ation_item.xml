@@ -6,7 +6,6 @@
     android:clickable="true"
     android:visibility="gone">
 
-    <!--android:background="@color/sec_new_frame_bg"-->
 
     <RelativeLayout
         android:id="@+id/lay_frame_data"
@@ -34,6 +33,7 @@
                     android:minHeight="2dp"
                     android:progress="10"
                     android:thumb="@null"
+                    android:progressDrawable="@null"
                     android:thumbOffset="0dp" />
 
 
@@ -41,10 +41,12 @@
                     android:id="@+id/vew_play_frame_time_long"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:background="#2c87f1" />
+                    android:background="@color/action_dilog_title" />
+
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="60dp"
+                    android:layout_marginLeft="-2dp"
                     android:layout_toRightOf="@+id/vew_play_frame_time_long"
                     android:src="@drawable/bg_edit_drag"
                     />

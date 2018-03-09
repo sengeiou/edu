@@ -87,6 +87,9 @@
     <color name="A12">#CCD0D6</color>
     <color name="A13">#3CCBED</color>
     <color name="A14">#FFB936</color>
+    <color name="A15">#C8D8DF</color>
+    <color name="A16">#CFDDE3</color>
+    <color name="A20">#2BAFE2</color>
 
     <!--Text colors-->
 
@@ -110,6 +113,18 @@
     <color name="T18">#3CCBED</color>
     <color name="T19">#FFB936</color>
     <color name="T20">#BE4502</color>
+    <color name="T21">#1D3740</color>
+    <color name="T22">#00A4E6</color>
+    <color name="T23">#85B4C9</color>
+    <color name="T24">#14A9FB</color>
+    <color name="T25">#2CAFE2</color>
+    <color name="T26">#839AA5</color>
+    <color name="T27">#434D51</color>
+    <color name="T28">#9F9FA3</color>
+    <color name="T29">#44A62E</color>
+    <color name="T30">#E4F2F7</color>
+    <color name="T31">#5DDBED</color>
+    <color name="T32">#62717A</color>
     <color name="DT5">#3498DB</color>
     <color name="LT1">#2c3e50</color>
     <color name="LT2">#2c3e50</color>
@@ -132,11 +147,11 @@
     <color name="B12">#A5B8CD</color>
     <color name="B13">#7B9ECB</color>
     <color name="B14">#E1EAF4</color>
+    <color name="B15">#E4F2F7</color>
     <color name="LB1">#FFFFFF</color>
     <color name="DB1">#FFFFFF</color>
     <color name="GB1">#FFFFFF</color>
     <color name="GB2">#E7EAEA</color>
-
 
 
     <color name="colorPrimary">#F0F3F3</color>

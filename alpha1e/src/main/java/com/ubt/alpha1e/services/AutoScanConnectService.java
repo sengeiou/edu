@@ -14,8 +14,8 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
+import com.ubt.alpha1e.ui.helper.AutoConnectBluetoothHelper;
 import com.ubt.alpha1e.ui.helper.IScanUI;
-import com.ubt.alpha1e.ui.helper.ScanHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.AlphaInfo;
@@ -50,7 +50,7 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 	private static AutoScanConnectService instance = null;
 	public static boolean isScaning = false;
 
-	private ScanHelper mHelper;
+	private AutoConnectBluetoothHelper mHelper;
 	private AlphaInfo mLastConnectRobot = null;
 	private boolean isScanSuccess = false;
 	private boolean isAutoConnect = true;
@@ -58,6 +58,9 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 	private boolean isManualDisConnect = false;
 	private boolean isUgradeing = false;
 
+	private long lastScanTime = System.currentTimeMillis();
+
+	int event = 0;
 	private Handler mHandler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
@@ -73,8 +76,13 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 				case OPEN_AUTO_CONNECT:
 				case BLUETOOTH_TURN_ON:
 				case APP_OUT_BACKGROUND:
-					UbtLog.d(TAG,"doScan = " + msg.what);
-					doScan();
+					event = msg.what ;
+					mHandler.removeCallbacks(scanRunable);
+					if(instance == null || instance.isManualConnectMode){
+						UbtLog.d(TAG, "1 instance.isManualConnectMode = true");
+						return;
+					}
+					mHandler.postDelayed(scanRunable,2000);
 					break;
 				case CHECK_IS_BACKGROUND:
 					if(AlphaApplication.isBackground()){
@@ -94,12 +102,33 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 		}
 	};
 
+    static Context mContext = null ;
+
+	Runnable scanRunable = new Runnable() {
+		@Override
+		public void run() {
+			if(instance == null || instance.isManualConnectMode){
+				UbtLog.d(TAG, "2 instance.isManualConnectMode = true");
+				return;
+			}
+			UbtLog.d(TAG,"doScan = " + event);
+			if (((AlphaApplication) mContext.getApplicationContext())
+					.getCurrentBluetooth() != null) {
+				UbtLog.d(TAG, "-蓝牙已经连上，停止搜索--");
+				return;
+			}
+			doScan();
+		}
+	};
 	/**
 	 * 启动自动扫描连接服务
 	 * @param context
      */
 	public static void startService(Context context){
+
 		if(instance == null){
+			//add by dicy.cheng
+            mContext = context;
 			Intent mIntent = new Intent(context,AutoScanConnectService.class);
 			context.startService(mIntent);
 		}
@@ -128,6 +157,7 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
+		//add by dicy.cheng
 		UbtLog.d(TAG, "-onStartCommand-");
 		instance = this;
 		isAutoConnect = SettingHelper.isAutoConnect(this);
@@ -144,7 +174,7 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 	}
 
 	private void initHelper() {
-		mHelper = new ScanHelper(this, this);
+		mHelper = new AutoConnectBluetoothHelper(this, mContext);
 		mHelper.RegisterHelper();
 	}
 
@@ -193,9 +223,9 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 			mLastConnectRobot = getLastConnectRobot();
 			if(mLastConnectRobot != null){
 				Map<String, Object> robotInfo = new HashMap<>();
-				robotInfo.put(ScanHelper.map_val_robot_name, AlphaApplicationValues.dealBluetoothName(mLastConnectRobot.getName()));
-				robotInfo.put(ScanHelper.map_val_robot_mac, mLastConnectRobot.getMacAddr());
-				robotInfo.put(ScanHelper.map_val_robot_connect_state, false);
+				robotInfo.put(AutoConnectBluetoothHelper.map_val_robot_name, AlphaApplicationValues.dealBluetoothName(mLastConnectRobot.getName()));
+				robotInfo.put(AutoConnectBluetoothHelper.map_val_robot_mac, mLastConnectRobot.getMacAddr());
+				robotInfo.put(AutoConnectBluetoothHelper.map_val_robot_connect_state, false);
 				UbtLog.d(TAG, "-mLastConnectRobot-" + mLastConnectRobot.getName());
 				mHelper.doReCoonect(robotInfo);
 			}
@@ -221,6 +251,7 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 			if(event.getEvent() == RobotEvent.Event.SCAN_ROBOT){
 				dealScanResult(event.getBluetoothDevice());
 			}else if(event.getEvent() == RobotEvent.Event.SCAN_ROBOT_FINISH){
+				UbtLog.d(TAG," ccy SCAN_ROBOT_FINISH  1" );
 				UbtLog.d(TAG,"isScanSuccess = " + isScanSuccess);
 				if(!isScanSuccess){
 					mHandler.sendEmptyMessage(SCAN_FAIL);
@@ -271,7 +302,7 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 		if(instance != null){
 			UbtLog.d(TAG,"isManualConnectMode = " + isManualConnectMode);
 			instance.isManualConnectMode = isManualConnectMode;
-			if(isManualConnectMode){
+			if(isManualConnectMode && ((AlphaApplication) instance.getApplicationContext()).getCurrentBluetooth() == null){
 				instance.mHelper.doCancelCoon();
 			}else {
 				if (((AlphaApplication) instance.getApplicationContext()).getCurrentBluetooth() == null) {
@@ -351,7 +382,7 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 		UbtLog.d(TAG, "-onDestroy--");
 		if(instance != null && instance.mHandler.hasMessages(CHECK_IS_BACKGROUND)){
 			instance.mHandler.removeMessages(CHECK_IS_BACKGROUND);
-		}
+		}mHandler.removeCallbacks(scanRunable);
 
 		instance = null;
 		mHelper.DistoryHelper();
@@ -431,7 +462,7 @@ public class AutoScanConnectService extends Service implements BlueToothInteract
 			RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.CONNECT_SUCCESS);
 			EventBus.getDefault().post(robotEvent);
 
-			AlphaApplication.getBaseActivity().showToast("ui_home_connect_success");
+//			AlphaApplication.getBaseActivity().showToast("ui_home_connect_success"); //dicy.cheng
 		}else {
 			mHandler.sendEmptyMessage(CONNECT_FAIL);
 			//AlphaApplication.getBaseActivity().showToast("ui_home_connect_failed");

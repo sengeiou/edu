@@ -29,7 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.baoyz.pg.PG;
-import com.tencent.mm.sdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
@@ -44,7 +44,6 @@ import com.ubt.alpha1e.business.thrid_party.IWeiXinListener;
 import com.ubt.alpha1e.business.thrid_party.MyFaceBook;
 import com.ubt.alpha1e.business.thrid_party.MyTencent;
 import com.ubt.alpha1e.business.thrid_party.MyTwitter;
-import com.ubt.alpha1e.business.thrid_party.MyWeiXin;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.JsonTools;
 import com.ubt.alpha1e.data.model.ActionColloInfo;
@@ -68,9 +67,8 @@ import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.ActionInfoCallback;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
-import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.utils.log.MyLog;
-
+import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.json.JSONException;
@@ -82,6 +80,8 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import okhttp3.Call;
+
+//import com.tencent.mm.sdk.modelbase.BaseResp;
 
 public class ActionsLibPreviewWebActivity extends BaseActivity implements
         IActionsLibUI, ActionsDownLoadManagerListener, IJsonListener, View.OnClickListener, IUiListener, IWeiXinListener, BaseDiaUI,NewActionsManagerListener {
@@ -611,10 +611,10 @@ public class ActionsLibPreviewWebActivity extends BaseActivity implements
                 MyTencent.doShareQQ(ActionsLibPreviewWebActivity.this, mAction, pactStringUrl(shareUrl,shareId), ActionsLibPreviewWebActivity.this);
                 break;
             case R.id.btn_to_qq_weixin:
-                MyWeiXin.doShareToWeiXin(pactStringUrl(shareUrl,shareId), mAction, ActionsLibPreviewWebActivity.this, ActionsLibPreviewWebActivity.this, 0);
+//                MyWeiXin.doShareToWeiXin(pactStringUrl(shareUrl,shareId), mAction, ActionsLibPreviewWebActivity.this, ActionsLibPreviewWebActivity.this, 0);
                 break;
             case R.id.btn_to_qq_weixin_pengyouquan:
-                MyWeiXin.doShareToWeiXin(pactStringUrl(shareUrl,shareId), mAction, ActionsLibPreviewWebActivity.this, ActionsLibPreviewWebActivity.this, 1);
+//                MyWeiXin.doShareToWeiXin(pactStringUrl(shareUrl,shareId), mAction, ActionsLibPreviewWebActivity.this, ActionsLibPreviewWebActivity.this, 1);
                 break;
             case R.id.btn_to_qq_zone:
                 MyTencent.doShareQQKongjian(ActionsLibPreviewWebActivity.this,
@@ -934,6 +934,8 @@ public class ActionsLibPreviewWebActivity extends BaseActivity implements
     public void notePlayCycleNext(String action_name) {
 
     }
+
+
 
     @Override
     public void onReadCollocationRecordFinish(boolean isSuccess, String errorInfo, List<ActionColloInfo> history) {

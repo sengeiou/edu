@@ -1,196 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.ubt.alpha1e"
-    android:versionCode="3138"
-    android:versionName="3.1.3.8">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.ubt.alpha1e"
+          android:versionCode="1"
+          android:versionName="V1.0.1.9">
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="21"/>
+
+    <meta-data
+        android:name="design_width"
+        android:value="1920"></meta-data>
+    <meta-data
+        android:name="design_height"
+        android:value="1080"></meta-data>
 
     <permission
         android:name="com.ubt.alpha1e.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature"/>
 
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <!-- Required  一些系统要求的权限，如访问网络等 -->
-    <uses-permission android:name="com.ubt.alpha1e.permission.JPUSH_MESSAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="com.ubt.alpha1e.permission.JPUSH_MESSAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <!-- Optional for location -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions"/>
 
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true" />
+        android:required="true"/>
 
     <application
         android:name="com.ubt.alpha1e.AlphaApplication"
         android:allowBackup="true"
+        android:debuggable="true"
+        android:exported="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="528c630705171445d20ec6bc60e925e1" />
+            android:value="528c630705171445d20ec6bc60e925e1"/>
         <meta-data
             android:name="com.ubt.alpha1e.isDebug"
-            android:value="0" />
+            android:value="0"/>
         <meta-data
             android:name="com.ubt.alpha1e.logTitle"
-            android:value="" />
+            android:value=""/>
         <meta-data
             android:name="com.ubt.alpha1e.currentEdit"
-            android:value="formal_edit" />
+            android:value="formal_edit"/>
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="5699e54fe0f55a1375000682" />
+            android:value="5699e54fe0f55a1375000682"/>
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="${UMENG_CHANNEL_VALUE}" />
-
-        <receiver android:name="com.ubt.alpha1e.services.OSStartBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name="com.ubt.alpha1e.services.GetResourcesService"
-            android:enabled="true" />
-
-        <service android:name="com.ubt.alpha1e.services.ActivationService" />
-
-        <service android:name="com.ubt.alpha1e.services.RecordSoftService" />
-
-        <service android:name="com.ubt.alpha1e.services.AutoScanConnectService" />
-
-        <!-- Required  一PushService -->
-        <service
-            android:name="cn.jpush.android.service.PushService"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTER" />
-                <action android:name="cn.jpush.android.intent.REPORT" />
-                <action android:name="cn.jpush.android.intent.PushService" />
-                <action android:name="cn.jpush.android.intent.PUSH_TIME" />
-            </intent-filter>
-        </service>
-        <service
-            android:name="cn.jpush.android.service.DaemonService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.DaemonService" />
-
-                <category android:name="com.ubt.alpha1e" />
-            </intent-filter>
-        </service>
-
-        <receiver
-            android:name="cn.jpush.android.service.PushReceiver"
-            android:enabled="true">
-            <intent-filter android:priority="1000">
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
-
-                <category android:name="com.ubt.alpha1e" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.USER_PRESENT" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-            <!-- Optional -->
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-
-        <!-- Required SDK核心功能 -->
-        <activity
-            android:name="cn.jpush.android.ui.PushActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="cn.jpush.android.ui.PushActivity" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="com.ubt.alpha1e" />
-            </intent-filter>
-        </activity>
-        <!-- Required SDK核心功能 -->
-        <service
-            android:name="cn.jpush.android.service.DownloadService"
-            android:enabled="true"
-            android:exported="false" />
-        <!-- Required SDK核心功能 -->
-        <receiver android:name="cn.jpush.android.service.AlarmReceiver" />
-        <receiver
-            android:name="com.ubt.alpha1e.services.MyJPushReceiver"
-            android:enabled="true">
-
-            <!-- android:enabled="true" 接受INSTALL ALONE SDK的广播信息 -->
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTRATION" />
-                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
-                <!-- NOTE: replace the package name "cn.jpush.android" to your app package name -->
-                <category android:name="com.ubt.alpha1e" />
-            </intent-filter>
-        </receiver>
-
-        <!-- Required. For publish channel feature -->
-        <!-- JPUSH_CHANNEL 是为了方便开发者统计APK分发渠道。 -->
-        <!-- 例如: -->
-        <!-- 发到 Google Play 的APK可以设置为 google-play; -->
-        <!-- 发到其他市场的 APK 可以设置为 xxx-market。 -->
+            android:value="${UMENG_CHANNEL_VALUE}"/>
         <meta-data
-            android:name="JPUSH_CHANNEL"
-            android:value="developer-default" />
-        <!-- Required. AppKey copied from Portal -->
-        <meta-data
-            android:name="JPUSH_APPKEY"
-            android:value="6dc6a3e99e238acf9cd91a9c" />
+            android:name="android.max_aspect"
+            android:value="2.2"/>
+
+        <receiver android:name=".services.OSStartBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".services.GetResourcesService"
+            android:enabled="true"/>
+        <service android:name=".services.ActivationService"/>
+        <service android:name=".services.RecordSoftService"/>
+        <service android:name=".services.AutoScanConnectService"/>
+        <service android:name=".services.SyncDataService"/>
+        <service android:name=".services.HibitsAlertService"/>
+        <service android:name=".services.SendClientIdService"/>
+        <service android:name=".services.GlobalMsgService"/>
 
         <!-- Facebook -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"
-            tools:ignore="ManifestResource" />
+            tools:ignore="ManifestResource"/>
 
         <!-- <meta-data -->
         <!-- android:name="com.facebook.sdk.ApplicationId" -->
@@ -200,382 +125,648 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
-        <!--Alpha1s FacebookContentProvider1533377826954209 改包名后 Alpha1e FacebookContentProvider1533377826954208 -->
+        <!-- Alpha1s FacebookContentProvider1533377826954209 改包名后 Alpha1e FacebookContentProvider1533377826954208 -->
         <provider
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider1533377826954208"
-            android:exported="true" />
+            android:exported="true"/>
 
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreenuser"/>
         <activity
             android:name="com.ubt.alpha1e.ui.StartInitSkinActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleThemeFullScreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="alpha1"
                     android:port="8080"
-                    android:scheme="ubtrobot" />
+                    android:scheme="ubtrobot"/>
             </intent-filter>
         </activity>
         <activity
             android:name="com.ubt.alpha1e.ui.Introduction.IntroductionActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleThemeFullScreen" />
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.StartActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleThemeFullScreen" />
-
+            android:name="com.ubt.alpha1e.ui.StartActivityNew"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.PcUpdateActivity"
+            android:name=".ui.PcUpdateActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.PcUpdateFinishActivity"
+            android:name=".ui.PcUpdateFinishActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-
-        <activity
+            android:theme="@style/NoTitleTheme"/>
+<!--        <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
             android:noHistory="true">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
-                <data android:scheme="tencent1104799391" />
+                <data android:scheme="1106515940"/>
             </intent-filter>
-        </activity>
-        <activity
+        </activity>-->
+        <!--
+            <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:screenOrientation="behind"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        -->
+       <!-- <activity
+            android:name="com.tencent.ai.tvs.ui.TVSAssistActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>-->
         <activity
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-
+            android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.RegisterActivity"
+            android:name=".ui.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.PrivateInfoActivity"
+            android:name=".ui.PrivateInfoActivity"
             android:label="@string/title_activity_private_info"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.google.zxing.client.android.CaptureActivity"
-            android:clearTaskOnLaunch="true"
-            android:stateNotNeeded="true"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            tools:replace="android:theme" />
-        <activity
-            android:name="com.ubt.alpha1e.ui.LoginActivity"
+            android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.FindPassWdActivity"
+            android:name=".ui.FindPassWdActivity"
             android:label="@string/title_activity_find_pass_wd"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.ScanActivity"
+            android:name=".ui.ScanActivity"
             android:label="@string/title_activity_scan"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.RemoteSelActivity"
-            android:label="@string/title_activity_remote_sel"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-
+            android:name=".ui.RemoteSelActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.RemoteAddActivity"
+            android:name=".ui.RemoteAddActivity"
             android:label="@string/title_activity_remote_add"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.RemoteRoleActionsAddActivity"
+            android:name=".ui.RemoteRoleActionsAddActivity"
             android:label="@string/title_activity_remote_role_actions_add"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.RemoteSetActivity"
+            android:name=".ui.RemoteSetActivity"
             android:label="@string/title_activity_remote_set"
             android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen" />
-
+            android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.RemoteActivity"
-            android:label="@string/title_activity_remote"
+            android:name=".ui.RemoteActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen" />
-
+            android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.MyMainActivity"
+            android:name=".ui.MyMainActivity"
             android:label="@string/title_activity_my_main"
             android:screenOrientation="portrait"
-            android:theme="@style/NoAnimationTheme" />
-
+            android:theme="@style/NoAnimationTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.PrivateInfoShowActivity"
+            android:name=".ui.PrivateInfoShowActivity"
             android:label="@string/title_activity_private_info_edit"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-        <activity android:name="com.ant.country.CountryActivity" />
+            android:theme="@style/NoTitleTheme"/>
+        <!--<activity android:name="com.ant.country.CountryActivity"/>-->
         <activity
-            android:name="com.ubt.alpha1e.ui.PrivateInfoEditActivity"
+            android:name=".ui.PrivateInfoEditActivity"
             android:label="@string/title_activity_private_info_edit"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.AboutUsActivity"
+            android:name=".ui.AboutUsActivity"
             android:label="@string/title_activity_about_us"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.WebContentActivity"
+            android:name=".ui.WebContentActivity"
             android:label="@string/title_activity_about_us"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.SettingActivity"
+            android:name=".ui.SettingActivity"
             android:label="@string/title_activity_setting"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.wxapi.WXEntryActivity"
+            android:name=".wxapi.WXEntryActivity"
             android:exported="true"
-            android:label="@string/title_activity_my_wei_xin"
-            android:theme="@style/NoTitleTheme" />
+            android:launchMode="singleTask"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.RobotInfoActivity"
+            android:name=".ui.RobotInfoActivity"
             android:label="@string/title_activity_robot_rename"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.utils.test.MyTestActivity"
-            android:label="@string/title_activity_my_test" />
+            android:name=".utils.test.MyTestActivity"
+            android:label="@string/title_activity_my_test"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.FeedBackActivity"
+            android:name=".ui.FeedBackActivity"
             android:label="@string/title_activity_feed_back"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.utils.test.TestActivity"
+            android:name=".utils.test.TestActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.business.thrid_party.TwitterWebView"
+            android:name=".business.thrid_party.TwitterWebView"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.MessageActivity"
+            android:name=".ui.MessageActivity"
             android:label="@string/title_activity_message"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.utils.test.MessageTestActivity"
-            android:label="@string/title_activity_message_test" />
+            android:name=".utils.test.MessageTestActivity"
+            android:label="@string/title_activity_message_test"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.RobotVersionActivity"
+            android:name=".ui.RobotVersionActivity"
             android:label="@string/title_activity_robot_version"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.RoborRenameActivity"
+            android:name=".ui.RoborRenameActivity"
             android:label="@string/title_activity_robor_rename"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.utils.test.EngTestActivity"
+            android:name=".utils.test.EngTestActivity"
             android:label="@string/title_activity_eng_test"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.ActionsEditActivity"
+            android:name=".ui.ActionsEditActivity"
             android:label="@string/title_activity_actions_edit"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.ActionsEditSaveActivity"
+            android:name=".ui.ActionsEditSaveActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:label="@string/title_activity_actions_edit_save"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
-            android:name="com.ubt.alpha1e.ui.MyThemeActivity"
+            android:name=".ui.MyThemeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.MyThemeInfoActivity"
+            android:name=".ui.MyThemeInfoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.LanguageActivity"
+            android:name=".ui.LanguageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.utils.test.DBActivity"
+            android:name=".utils.test.DBActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
+            android:theme="@style/NoTitleTheme"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.ActionsLibPreviewWebActivity"
+            android:name=".ui.ActionsLibPreviewWebActivity"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleTheme"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name="com.ubt.alpha1e.ui.ActionsSquareDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-        <activity
-            android:name="com.ubt.alpha1e.ui.MyActionsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-        <activity android:name="com.ubt.alpha1e.utils.test.JNIActivity" />
-        <activity
-            android:name="com.ubt.alpha1e.ui.MyActionsSyncActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-
-        <activity
-            android:name="com.ubt.alpha1e.ui.RobotConnectedActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            />
-        <activity
-            android:name="com.ubt.alpha1e.ui.ActionsPublishActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-        <activity
-            android:name="com.ubt.alpha1e.ui.MediaRecordActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-        <activity
-            android:name="com.ubt.alpha1e.ui.ImageDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-        <activity
-            android:name="com.ubt.alpha1e.ui.BannerDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-        <activity
-            android:name="com.ubt.alpha1e.ui.ActionUnpublishedActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-        <activity
-            android:name="com.ubt.alpha1e.ui.VideoPlayerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/NoTitleTheme" />
-        <activity android:name="com.ubt.alpha1e.ui.RegisterNextStepActivity"
-            android:windowSoftInputMode="adjustResize"
+            android:name=".ui.ActionsSquareDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.MyActionsActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustPan"/>
 
-        <service android:name="com.ubt.alpha1e.ui.custom.FloatControlViewService"/>
-        <activity android:name="com.ubt.alpha1e.ui.RobotControlActivity"
+        <activity android:name=".utils.test.JNIActivity"/>
+        <activity
+            android:name=".ui.MyActionsSyncActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.RobotConnectedActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.ActionsPublishActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.MediaRecordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.ImageDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.BannerDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme"/>
+        <activity
+            android:name=".ui.ActionUnpublishedActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.VideoPlayerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.RegisterNextStepActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleTheme"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <service android:name=".ui.custom.FloatControlViewService"/>
+
+        <activity
+            android:name=".ui.RobotControlActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NoAnimationTheme"/>
-
-        <activity android:name="com.ubt.alpha1e.ui.DubActivity"
+        <activity
+            android:name=".ui.DubActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-
-        <activity android:name="com.ubt.alpha1e.ui.DynamicActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
             android:theme="@style/NoTitleTheme"/>
-
-        <activity android:name="com.ubt.alpha1e.ui.MyActionsSelectActivity"
+        <activity
+            android:name=".ui.DynamicActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-
-        <activity android:name="com.ubt.alpha1e.ui.MyDynamicActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-
-        <activity android:name="com.ubt.alpha1e.ui.ThemeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-
-        <activity android:name="com.ubt.alpha1e.ui.OriginalListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/TranslucentTheme" />
-
-        <activity android:name="com.ubt.alpha1e.ui.ContactUsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoTitleTheme" />
-
-        <activity android:name="com.ubt.alpha1e.blockly.BlocklyActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen"
-            android:windowSoftInputMode="adjustPan"
-            android:configChanges="orientation|keyboardHidden|navigation|screenSize"/>
-
-        <activity android:name="com.ubt.alpha1e.blockly.BlocklyCourseActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/NoTitleThemeFullScreen"
-            android:windowSoftInputMode="adjustPan"
-            android:configChanges="orientation|keyboardHidden|navigation|screenSize"/>
-
-        <activity android:name="com.ubt.alpha1e.blockly.ScanBluetoothActivity"
-            android:screenOrientation="landscape"
             android:theme="@style/NoTitleTheme"
-            android:configChanges="orientation|keyboardHidden|navigation|screenSize"/>
-
-        <activity android:name="com.ubt.alpha1e.ui.RobotNetConnectActivity"
-            android:theme="@style/NoTitleTheme" />
-
-        <activity android:name="com.ubt.alpha1e.ui.CustomInstructionActivity"
-            android:theme="@style/NoTitleTheme" />
-
-        <activity android:name="com.ubt.alpha1e.ui.CustomInstructionSelActivity"
-            android:theme="@style/NoTitleTheme" />
-
-        <activity android:name="com.ubt.alpha1e.ui.CustomInstructionPlayTextActivity"
-            android:theme="@style/NoTitleTheme" />
-
-        <activity android:name="com.ubt.alpha1e.ui.CustomInstructionPlayActionActivity"
-            android:theme="@style/NoTitleTheme" />
-<!--
-        <activity android:name=".blockly.TestBluetooth"
-            android:theme="@style/NoTitleTheme"/>-->
-
-        <activity android:name="com.ubt.alpha1e.ui.ActionsNewEditActivity"
-            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".ui.MyActionsSelectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.MyDynamicActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.ThemeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.OriginalListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentTheme"/>
+        <activity
+            android:name=".ui.ContactUsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".userinfo.myrobot.MyRobotActivity"
             android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".blockly.BlocklyActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
-            />
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeForBlock"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".blockly.BlocklyCourseActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".blockly.ScanBluetoothActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.RobotNetConnectActivity"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.CustomInstructionActivity"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.CustomInstructionSelActivity"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.CustomInstructionPlayTextActivity"
+            android:theme="@style/NoTitleTheme"/>
+        <activity
+            android:name=".ui.CustomInstructionPlayActionActivity"
+            android:theme="@style/NoTitleTheme"/>
+        <!--
+        <activity android:name=".blockly.TestBluetooth"
+            android:theme="@style/NoTitleTheme"/>
+        -->
+
+        <activity
+            android:name=".ui.ActionsNewEditActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".action.ActionsCreateActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".userinfo.mainuser.UserCenterActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreenuser"/>
+        <activity
+            android:name=".userinfo.useredit.UserEditActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".login.LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".login.loginauth.LoginAuthActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="LoginAuthActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".userinfo.helpfeedback.HelpFeedbackActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".userinfo.helpfeedback.feedback.FeedbackActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".userinfo.helpfeedback.feedbackdetail.FeedbackDetailActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".webcontent.WebContentActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        //dicy.cheng
+        //蓝牙联网---开机引导
+        <activity
+            android:name=".bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        //蓝牙联网---蓝牙连接
+        <activity
+            android:name=".bluetoothandnet.bluetoothconnect.BluetoothconnectActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        //蓝牙联网---网络连接
+        <activity
+            android:name=".bluetoothandnet.netconnect.NetconnectActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        //蓝牙联网---连接状态
+        <activity
+            android:name=".bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        //蓝牙联网---搜索结果
+        <activity
+            android:name=".bluetoothandnet.netsearchresult.NetSearchResultActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity
+            android:name=".userinfo.aboutus.AboutUsActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".userinfo.cleancache.CleanCacheActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".userinfo.contactus.ContactUsActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".userinfo.photoshow.PhotoShowActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".userinfo.psdmanage.PsdManageActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.main.MainCourseActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.actioncourse.ActionCourseActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".course.principle.PrincipleActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".course.split.SplitActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".course.merge.MergeActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".course.feature.FeatureActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".behaviorhabits.BehaviorHabitsActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".behaviorhabits.playeventlist.PlayEventListActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".action.actioncreate.ActionTestActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelOneActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.courseone.CourseLevelTwoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.courseone.CourseLevelThreeActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.courseone.CourseLevelFourActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelFiveActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.courseone.CourseLevelSixActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelSevenActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelEightActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelNineActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".maincourse.courseone.CourseLevelTenActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".maincourse.courseone.ActionsCourseSaveActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:label="@string/title_activity_actions_edit_save"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
 
 
+        <activity
+            android:name=".action.actioncreate.SaveSuccessActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
 
+        <activity
+            android:name=".action.help.HelpActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".bluetoothandnet.BluetoothHelp"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"></activity>
+
+
+        <activity
+            android:name=".userinfo.dynamicaction.ActionDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".blocklycourse.BlocklyCourseActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".blocklycourse.courselist.CourseListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity
+            android:name=".userinfo.notice.WebActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity android:name=".login.PrivacyActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@style/NoTitleThemeFullScreen"/>
     </application>
 
 </manifest>

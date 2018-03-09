@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ui_show_actions"
+                android:text="@string/ui_control_demo"
                 android:textColor="@color/T1"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -266,7 +266,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/T1"
-                android:text="@string/ui_show_action_description"
+                android:text="@string/ui_control_demo_desc"
                 android:padding="3dp"
                 />
 

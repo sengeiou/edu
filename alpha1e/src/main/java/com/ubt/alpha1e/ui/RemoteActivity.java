@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.data.DB.RemoteRecordOperater;
 import com.ubt.alpha1e.data.RemoteItem;
@@ -23,12 +25,15 @@ import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.RemoteRoleInfo;
 import com.ubt.alpha1e.ui.custom.RemoteGuideView;
 import com.ubt.alpha1e.ui.dialog.BaseDiaUI;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.LoadingDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IRemoteUI;
+import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.RemoteHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ConstValue;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,7 +41,7 @@ import java.util.List;
 
 public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaUI {
 
-    private static final String TAG = "RemoteActivity";
+    private static final String TAG = RemoteActivity.class.getSimpleName();
 
     public static final int UPLOADING_FILE = 101;
     public static final int SEND_FILE_FINISH = 102;
@@ -67,8 +72,8 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
     private TextView titleView = null;
 
-    private LinearLayout lay_setting;
-    private LinearLayout lay_back;
+    private ImageView ivSetting;
+    private LinearLayout llBack;
 
     private List<View> mButtons;
     private static Date lastTime_onNote = null;
@@ -78,7 +83,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
     private boolean keepExec = false;
     private View longClickItem = null;
 
-    private RemoteGuideView guideView;
+    //private RemoteGuideView guideView;
 
     private Handler handler = new Handler() {
         @Override
@@ -94,15 +99,15 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(RemoteActivity.this, getStringResources("ui_remote_select_robot_synchoronize_success"),
-                            Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(RemoteActivity.this, getStringResources("ui_remote_select_robot_synchoronize_success"),
+//                            Toast.LENGTH_SHORT).show();
                     if((boolean)msg.obj){
                         RemoteItem item = RemoteRecordOperater.getItemByIndex(playIndex, RemoteHelper.mCurrentInfo);
                         ((RemoteHelper) mHelper).addActionName(item.hts_name.split("\\.")[0]);
                         ((RemoteHelper) mHelper).doAction(playIndex);
                     }else{
-                        Toast.makeText(RemoteActivity.this, getStringResources("ui_remote_select_robot_synchoronize_failed"),
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(RemoteActivity.this, getStringResources("ui_remote_select_robot_synchoronize_failed"),
+//                                Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case ACTION_FILE_NOT_EXIST:
@@ -128,51 +133,67 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         UbtLog.d(TAG,"layoutId isPad == " + isPad);
         if (RemoteHelper.mCurrentType == RemoteRecordOperater.ModelType.FIGHTER) {
             if(isPad){
-                layoutId = R.layout.activity_remote_fighter_pad;
+                layoutId = R.layout.activity_remote_football_1;
             }else {
-                layoutId = R.layout.activity_remote_fighter;
+                //layoutId = R.layout.activity_remote_fighter;
+                layoutId = R.layout.activity_remote_football_1;
             }
         } else if(RemoteHelper.mCurrentType == RemoteRecordOperater.ModelType.FOOTBALL_PLAYER){
             if(isPad){
-                layoutId = R.layout.activity_remote_football_pad;
+                layoutId = R.layout.activity_remote_football_1;
             }else {
-                layoutId = R.layout.activity_remote_football;
+                layoutId = R.layout.activity_remote_football_1;
             }
         }else{
-            if(isPad){
+            /*if(isPad){
                 layoutId = R.layout.activity_remote_costom_pad;
             }else {
                 layoutId = R.layout.activity_remote_costom;
-            }
-            mRemoteRoleInfo = (RemoteRoleInfo)getIntent().getSerializableExtra(RemoteHelper.REMOTE_ROLE_INFO_PARAM);
+            }*/
+            layoutId = R.layout.activity_remote_football_1;
         }
 
+        mRemoteRoleInfo = (RemoteRoleInfo)getIntent().getSerializableExtra(RemoteHelper.REMOTE_ROLE_INFO_PARAM);
         setContentView(layoutId);
         mButtons = new ArrayList<>();
+
+
+        mHelper = new RemoteHelper(this, this);
+        startOrStopRun((byte)0x05);
     }
 
     @Override
     protected void onResume() {
         setCurrentActivityLable(RemoteActivity.class.getSimpleName());
-        mHelper = new RemoteHelper(this, this);
-        ((RemoteHelper) mHelper).doReadActions();
+//        mHelper = new RemoteHelper(this, this);
+        //((RemoteHelper) mHelper).doReadActions();
         super.onResume();
         mCoonLoadingDia = LoadingDialog.getInstance(this, this);
         initUI();
         initControlListener();
-        if(guideView == null && !RemoteGuideView.isShowGuide(RemoteActivity.this)){
+        /*if(guideView == null && !RemoteGuideView.isShowGuide(RemoteActivity.this)){
              guideView = new RemoteGuideView(RemoteActivity.this);
-        }
+        }*/
 
     }
+
+    /**
+     * 进入或者退出遥控器
+     */
+    public void startOrStopRun(byte  params) {
+        if ((RemoteHelper)mHelper != null) {
+            ((RemoteHelper) mHelper).doRemoterState(params);
+        }
+    }
+
 
     @Override
     protected void onStop() {
         super.onStop();
-        if(guideView != null){
+        /*if(guideView != null){
             guideView.closeGuideView();
             guideView = null;
-        }
+        }*/
     }
 
     @Override
@@ -187,6 +208,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
         UbtLog.d(TAG,"RemoteHelper.mCurrentType="+RemoteHelper.mCurrentType);
         if(RemoteHelper.mCurrentType != RemoteRecordOperater.ModelType.CUSTOM){
+            //R.drawable.remoter_gohead_select
             btn_1.setBackgroundResource(((RemoteHelper) mHelper).getResId(RemoteHelper.mCurrentInfo.do_1.image_name));
             btn_2.setBackgroundResource(((RemoteHelper) mHelper).getResId(RemoteHelper.mCurrentInfo.do_2.image_name));
             btn_3.setBackgroundResource(((RemoteHelper) mHelper).getResId(RemoteHelper.mCurrentInfo.do_3.image_name));
@@ -246,9 +268,14 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
             mButtons.add(img_action_6);
         }
 
-        lay_setting = (LinearLayout) findViewById(R.id.lay_setting);
-        lay_back = (LinearLayout) findViewById(R.id.lay_back);
+        ivSetting = (ImageView) findViewById(R.id.iv_title_right);
+//        ivSetting.setBackgroundResource(R.drawable.icon_setting);
+        ivSetting.setVisibility(View.INVISIBLE);
+        llBack = (LinearLayout) findViewById(R.id.ll_base_back);
 
+        TextView ivTitleName = (TextView) findViewById(R.id.tv_base_title_name);
+        ivTitleName.setText(mRemoteRoleInfo.roleName);
+        ivTitleName.setTextColor(getResources().getColor(R.color.white));
     }
 
     private void replaceImageView1To6(ImageView imageView, RemoteItem mRemoteItem){
@@ -266,38 +293,118 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
             if(event.getAction() == MotionEvent.ACTION_DOWN){
 
-                longClickItem = view;
-                execActions(longClickItem);
-                keepExec = true;
+//                if(view.getId() == R.id.btn_up
+//                        || view.getId() == R.id.btn_down
+//                        || view.getId() == R.id.btn_left
+//                        || view.getId() == R.id.btn_right){
+//
+//                    if(view.getId() == R.id.btn_up){
+//                        ((RemoteHelper) mHelper).doWalkAction(0,1,0);
+//                    } else if(view.getId() == R.id.btn_left){
+//                        ((RemoteHelper) mHelper).doWalkAction(2,1,0);
+//                    } else if(view.getId() == R.id.btn_right){
+//                        ((RemoteHelper) mHelper).doWalkAction(3,1,0);
+//                    } else if(view.getId() == R.id.btn_down){
+//                        ((RemoteHelper) mHelper).doWalkAction(1,1,0);
+//                    }
+//                }else {
+//                    longClickItem = view;
+//                    execActions(longClickItem);
+//                    keepExec = true;
+//
+//                }
             }else if(event.getAction() == MotionEvent.ACTION_UP){
-                keepExec = false;
-                longClickItem = null;
+
                 //松开stop
-                handler.sendEmptyMessageDelayed(EXEC_STOP_ACTION,200);
+//                if(view.getId() == R.id.btn_up
+//                        || view.getId() == R.id.btn_down
+//                        || view.getId() == R.id.btn_left
+//                        || view.getId() == R.id.btn_right){
+//
+//                    ((RemoteHelper) mHelper).doStopWalkAction();
+//                }else {
+                if(!keepExec){
+                    return false;
+                }
+//
+                    keepExec = false;
+                    longClickItem = null;
+                    handler.sendEmptyMessageDelayed(EXEC_STOP_ACTION,200);
+//                }
+                lastClickTime = System.currentTimeMillis();
             }
             return false;
         }
     };
 
+
+
+    private View.OnLongClickListener viewOnLongTouchListener = new View.OnLongClickListener() {
+
+        @Override
+        public boolean onLongClick(View view) {
+            longClickItem = view;
+            execActions(longClickItem);
+            keepExec = true;
+            return false;
+        }
+    };
+
+//             if(event.getAction() == MotionEvent.ACTION_DOWN){
+//        handler.removeCallbacks(stopRunnable);
+//        if(System.currentTimeMillis()-lastClickTime < 800){
+//            UbtLog.d(TAG,"800ms才能点击");
+//            longClickItem = view;
+//            handler.postDelayed(actiondownRunnable,800);
+//        }else {
+//            longClickItem = view;
+//            execActions(longClickItem);
+//            keepExec = true;
+//        }
+//    }else if(event.getAction() == MotionEvent.ACTION_UP){
+//        handler.removeCallbacks(actiondownRunnable);
+//        handler.removeCallbacks(stopRunnable);
+//        keepExec = false;
+////                longClickItem = null;
+//        //松开stop
+////                handler.sendEmptyMessageDelayed(EXEC_STOP_ACTION,200);
+//        handler.postDelayed(stopRunnable,200);
+//        lastClickTime = System.currentTimeMillis();
+//    }
+//            return false;
+
+//    Runnable actiondownRunnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            execActions(longClickItem);
+//            keepExec = true;
+//        }
+//    };
+//
+//    Runnable stopRunnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            ((RemoteHelper) mHelper).doAction(-1);
+//        }
+//    };
+
+    long lastClickTime = System.currentTimeMillis();
     private View.OnClickListener controlListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View arg0) {
             // TODO Auto-generated method stub
+//            arg0.setClickable(false);
+            if(System.currentTimeMillis()-lastClickTime < 1000){
+                UbtLog.d(TAG,"1000ms才能点击");
+                return;
+            }
+            lastClickTime = System.currentTimeMillis();
             execActions(arg0);
         }
     };
 
     private void execActions(View view){
-        //检测是否在充电状态和边充边玩状态是否打开
-        if(mHelper.getChargingState() && !SettingHelper.isPlayCharging(RemoteActivity.this)){
-            Toast.makeText(RemoteActivity.this, getStringResources("ui_settings_play_during_charging_tips"), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(isFirstPlayAction(mHelper)){
-            return;
-        }
 
         playIndex = -1;
         for (int i = 0; i < mButtons.size(); i++) {
@@ -306,6 +413,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
                 break;
             }
         }
+
         if(RemoteHelper.mCurrentType != RemoteRecordOperater.ModelType.CUSTOM){
             UbtLog.d(TAG,"lihai------playIndex:" + playIndex);
             ((RemoteHelper) mHelper).doAction(playIndex);
@@ -334,39 +442,24 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         }
     }
 
-    /**
-     * 判断是否首次播放
-     * @param mHelper
-     * @return
-     */
-    private boolean isFirstPlayAction(BaseHelper mHelper){
-        if(mHelper.isFirstPlayAction()){
-            mHelper.setIsFirstPlayAction();
-            mHelper.showFirstPlayTip();
-            return true;
-        }else {
-            return false;
-        }
-    }
-
     @Override
     protected void initControlListener() {
-        /*btn_up.setOnClickListener(controlListener);
-        btn_left.setOnClickListener(controlListener);
-        btn_right.setOnClickListener(controlListener);
-        btn_down.setOnClickListener(controlListener);
-
-        btn_to_left.setOnClickListener(controlListener);
-        btn_to_right.setOnClickListener(controlListener);*/
 
         //方向键可以长按一直执行
         btn_up.setOnTouchListener(viewOnTouchListener);
+        btn_up.setOnLongClickListener(viewOnLongTouchListener);
         btn_left.setOnTouchListener(viewOnTouchListener);
+        btn_left.setOnLongClickListener(viewOnLongTouchListener);
         btn_right.setOnTouchListener(viewOnTouchListener);
+        btn_right.setOnLongClickListener(viewOnLongTouchListener);
         btn_down.setOnTouchListener(viewOnTouchListener);
+        btn_down.setOnLongClickListener(viewOnLongTouchListener);
 
         btn_to_left.setOnTouchListener(viewOnTouchListener);
+        btn_to_left.setOnLongClickListener(viewOnLongTouchListener);
         btn_to_right.setOnTouchListener(viewOnTouchListener);
+
+        btn_to_right.setOnLongClickListener(viewOnLongTouchListener);
 
         btn_stop.setOnClickListener(controlListener);
         if(RemoteHelper.mCurrentType != RemoteRecordOperater.ModelType.CUSTOM){
@@ -387,20 +480,21 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
             img_action_6.setOnClickListener(controlListener);
         }
 
-        lay_setting.setOnClickListener(new View.OnClickListener() {
+        ivSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent inte = new Intent();
+                /*Intent inte = new Intent();
                 if(RemoteHelper.mCurrentType == RemoteRecordOperater.ModelType.CUSTOM){
                     inte.putExtra("roleId",mRemoteRoleInfo.roleid+"");
                 }
                 inte.setClass(RemoteActivity.this, RemoteSetActivity.class);
-                RemoteActivity.this.startActivity(inte);
+                RemoteActivity.this.startActivity(inte);*/
             }
         });
-        lay_back.setOnClickListener(new View.OnClickListener() {
+        llBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startOrStopRun((byte)0x06);
                 handler.sendEmptyMessage(EXEC_STOP_ACTION);
                 RemoteActivity.this.finish();
             }
@@ -417,6 +511,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
     @Override
     protected void onDestroy() {
+        MyActionsHelper.mCurrentLocalPlayType = null ;
         if(mCoonLoadingDia!=null)
         {
             if(mCoonLoadingDia.isShowing()&&!isFinishing()){
@@ -428,6 +523,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         if(handler.hasMessages(EXEC_STOP_ACTION)){
             handler.removeMessages(EXEC_STOP_ACTION);
         }
+//        startOrStopRun((byte)0x06);
         super.onDestroy();
     }
     @Override
@@ -492,6 +588,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
     @Override
     public void notePlayFinish(List<String> mSourceActionNameList, ActionPlayer.Play_type mCurrentPlayType, String hashCode) {
+        UbtLog.d(TAG,"--notePlayFinish--");
         if(keepExec){
             execActions(longClickItem);
         }
@@ -562,5 +659,14 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
     @Override
     public void noteWaitWebProcressShutDown() {
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            startOrStopRun((byte)0x06);
+            handler.sendEmptyMessage(EXEC_STOP_ACTION);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

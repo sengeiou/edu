@@ -3,10 +3,10 @@ package com.ubt.alpha1e.business;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator.DataType;
 import com.ubt.alpha1e.data.FileTools;
@@ -14,6 +14,7 @@ import com.ubt.alpha1e.data.FileTools.State;
 import com.ubt.alpha1e.data.IFileListener;
 import com.ubt.alpha1e.data.ZipTools;
 import com.ubt.alpha1e.data.model.NewActionInfo;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.ui.DubActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -244,19 +245,22 @@ public class NewActionsManager implements IFileListener {
     public void saveActionToServer() {
 
         try {
-            if(((AlphaApplication) mContext
-            ).getCurrentUserInfo() == null)
-            {
-                isSaveSuccess = false;
-                notifyListeners();
-                Toast.makeText(mContext,"请先登录",Toast.LENGTH_SHORT).show();
-                return;
-            }
-            long actionUserId = ((AlphaApplication) mContext
-            ).getCurrentUserInfo().userId;
+//            if(((AlphaApplication) mContext
+//            ).getCurrentUserInfo() == null)
+//            {
+//                isSaveSuccess = false;
+//                notifyListeners();
+//                Toast.makeText(mContext,"请先登录",Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//            long actionUserId = ((AlphaApplication) mContext).getCurrentUserInfo().userId;
+            String actionUserId = SPUtils.getInstance().getString(Constant.SP_USER_ID);
+            UbtLog.d(TAG, "actionUserId:" + actionUserId);
+
             File file = new File(FileTools.actions_new_cache + File.separator + mChangeNewActionInfo.actionId + ".zip");
             File imageFile;
             if (!TextUtils.isEmpty(mChangeNewActionInfo.actionHeadUrl)) {
+                UbtLog.d(TAG, "writeImage to server");
                 imageFile = new File(mChangeNewActionInfo.actionHeadUrl);
             } else {
                 imageFile = new File(FileTools.actions_new_cache + File.separator + "Images/" + "default.jpg");
@@ -275,11 +279,14 @@ public class NewActionsManager implements IFileListener {
             params.put("actionDesciber", mChangeNewActionInfo.actionDesciber);
             params.put("actionType", mChangeNewActionInfo.actionType + "");
             params.put("actionTime", mChangeNewActionInfo.actionTime+ "");
-            String url = HttpAddress.getRequestUrl(HttpAddress.Request_type.createaction_upload);
+           // String url = HttpAddress.getRequestUrl(HttpAddress.Request_type.createaction_upload);
+           // String url = HttpAddress.getRequestUrl(HttpEntity.SAVE_ACTION);
+           UbtLog.d("maptojson",new Gson().toJson(params));
+
             OkHttpUtils.post()//
                     .addFile("mFile1", file.getName(), file)//
                     .addFile("mFile2", imageFile.getName(), imageFile)
-                    .url(url)//
+                    .url(HttpEntity.SAVE_ACTION)//
                     .params(params)//
                     .build()//
                     .execute(new StringCallback() {
@@ -292,6 +299,7 @@ public class NewActionsManager implements IFileListener {
 
                         @Override
                         public void onResponse(String s,int i) {
+                            UbtLog.d(TAG, "onResponse:" + s);
                             try {
                                 JSONObject json = new JSONObject(s);
                                 if ((Boolean) json.get("status")) {
@@ -302,7 +310,7 @@ public class NewActionsManager implements IFileListener {
                                     FileTools.readFileString(FileTools.actions_new_cache,
                                             FileTools.actions_new_log_name,
                                             do_read_new_actions_for_save, thiz);
-                                    UbtLog.d(TAG, "onResponse:" + s);
+
                                 }
                             } catch (Exception e) {
                                 isSaveSuccess = false;
@@ -342,12 +350,15 @@ public class NewActionsManager implements IFileListener {
     @Override
     public void onReadImageFinish(Bitmap img, long request_code) {
         // TODO Auto-generated method stub
+        UbtLog.d(TAG, "wmma onReadImageFinish");
 
     }
 
     @Override
     public void onReadFileStrFinish(String erroe_str, String result,
                                     boolean result_state, long request_code) {
+        UbtLog.d(TAG, "wmma onReadFileStrFinish");
+
         if (request_code == do_read_new_actions_for_play
                 || request_code == do_read_new_actions_for_update
                 || request_code == do_read_new_actions_for_delete
@@ -417,6 +428,7 @@ public class NewActionsManager implements IFileListener {
     @Override
     public void onWriteFileStrFinish(String erroe_str, boolean result,
                                      long request_code) {
+
         if (request_code == do_record_new_actions_for_change) {
             for (int i = 0; i < mListenerLists.size(); i++) {
                 mListenerLists.get(i).onChangeNewActionsFinish();
@@ -436,18 +448,21 @@ public class NewActionsManager implements IFileListener {
     @Override
     public void onWriteDataFinish(long requestCode, State state) {
         // TODO Auto-generated method stub
+        UbtLog.d(TAG, "wmma onWriteDataFinish");
 
     }
 
     @Override
     public void onReadCacheSize(int size) {
         // TODO Auto-generated method stub
+        UbtLog.d(TAG, "wmma onReadCacheSize");
 
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
         // TODO Auto-generated method stub
+        UbtLog.d(TAG, "wmma onClearCache");
 
     }
 }

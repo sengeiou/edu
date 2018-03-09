@@ -16,6 +16,8 @@ import com.ubtechinc.log.MyLog;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 public class BlueToothManager extends Thread implements ClentCallBack,
 		BluetoothUtilCallBack {
 
@@ -105,6 +107,7 @@ public class BlueToothManager extends Thread implements ClentCallBack,
 
 	// 释放所有连接
 	synchronized public void releaseAllConnected() {
+		Log.d("buletoothManager","mListClient size   :"+mListClient.size() + "	mRun = " + mRun );
 		for (BlueToothClientHandler s : mListClient) {
 			s.releaseConnection();
 		}
@@ -132,7 +135,6 @@ public class BlueToothManager extends Thread implements ClentCallBack,
 
 	synchronized public void sendCommand(String mac, byte cmd, byte[] param,
 			int len, boolean isMonopolyRight) {
-
 		if (isMonopoly && (!isMonopolyRight)){
 			return;
 		}
@@ -172,6 +174,7 @@ public class BlueToothManager extends Thread implements ClentCallBack,
 	@Override
 	public void run() {
 		while (mRun) {
+			byte[] xtParams = null;
 			synchronized (this) {
 				BlueToothClientHandler remove = null;
 				for (BlueToothClientHandler s : mListClient) {
@@ -181,8 +184,11 @@ public class BlueToothManager extends Thread implements ClentCallBack,
 					} else {
 						ProtocolPacket packet = new ProtocolPacket();
 						packet.setmCmd(ConstValue.DV_XT);
-						packet.setmParam(null);
-						packet.setmParamLen(0);
+						//packet.setmParam(null);
+						//packet.setmParamLen(0);
+						xtParams = (System.currentTimeMillis()+"").getBytes();
+						packet.setmParam(xtParams);
+						packet.setmParamLen(xtParams.length);
 
 						byte[] rawDatas = packet.packetData();
 						s.sendXT(rawDatas, rawDatas.length);
@@ -206,7 +212,7 @@ public class BlueToothManager extends Thread implements ClentCallBack,
 			}
 
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(2500);
 			} catch (InterruptedException e) {
 				mRun = false;
 				break;

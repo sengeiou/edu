@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ant.country.CountryActivity;
+//import com.ant.country.CountryActivity;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.ui.LoginActivity;
 
@@ -99,11 +99,11 @@ public class PhoneLoginFragment extends BaseFragment {
 
             @Override
             public void onClick(View arg0) {
-                Intent intent = new Intent();
+                /*Intent intent = new Intent();
                 intent.setClass(PhoneLoginFragment.this.getActivity(),
                         CountryActivity.class);
                 PhoneLoginFragment.this.getActivity().startActivityForResult(
-                        intent, LoginActivity.MSG_GET_COUNTRY);
+                        intent, LoginActivity.MSG_GET_COUNTRY);*/
             }
         });
 

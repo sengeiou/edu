@@ -8,7 +8,6 @@ import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -16,8 +15,11 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
+import com.ubt.alpha1e.action.model.ActionConstant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
+
+import static com.ubt.alpha1e.base.Constant.SP_GUIDE_STEP;
 
 /**
  * AppGuideView
@@ -243,7 +245,25 @@ public class ActionGuideView {
 
 
     private void initRobot(){
-        if(density == 3.0){
+
+        UbtLog.d(TAG, "density:" + density);
+        if (AlphaApplication.isPad()) {
+            UbtLog.d(TAG, "Pad Robot 1");
+        } else {
+            ivRobot.setLayoutParams(ActionConstant.getIvRobotParams(density, ivRobot));
+            UbtLog.d(TAG, "ivRobot:" + ivRobot.getWidth() + "/" + ivRobot.getHeight());
+            ivHandLeft.setLayoutParams(ActionConstant.getIvRobotParams(density, ivHandLeft));
+            UbtLog.d(TAG, "ivHandLeft:" + ivHandLeft.getWidth() + "/" + ivHandLeft.getHeight());
+            ivHandRight.setLayoutParams(ActionConstant.getIvRobotParams(density, ivHandRight));
+            UbtLog.d(TAG, "ivHandRight:" + ivHandRight.getWidth() + "/" + ivHandRight.getHeight());
+            ivLegLeft.setLayoutParams(ActionConstant.getIvRobotParams(density, ivLegLeft));
+            UbtLog.d(TAG, "ivLegLeft:" + ivLegLeft.getWidth() + "/" + ivLegLeft.getHeight());
+            ivLegRight.setLayoutParams(ActionConstant.getIvRobotParams(density, ivLegRight));
+            UbtLog.d(TAG, "ivLegRight:" + ivLegRight.getWidth() + "/" + ivLegRight.getHeight());
+        }
+
+
+   /*     if(density == 3.0){
             ViewGroup.LayoutParams params = ivRobot.getLayoutParams();
 
             UbtLog.d(TAG, "width:"+ params.width + "--height:" + params.height);
@@ -308,7 +328,7 @@ public class ActionGuideView {
             params.height = params.height/2*4;
             ivLegRight.setLayoutParams(params);
             UbtLog.d(TAG, "ivLegRight:" + ivLegRight.getWidth() + "/" + ivLegRight.getHeight());
-        }
+        }*/
     }
 
 
@@ -395,12 +415,14 @@ public class ActionGuideView {
 
 
     public void recordGuideStep(String step) {
-        BasicSharedPreferencesOperator.getInstance(mContext, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(BasicSharedPreferencesOperator.KEY_ACTION_CUIDE_STEP,
-                step, null, -1);
+        SPUtils.getInstance().put(SP_GUIDE_STEP, step);
+//        BasicSharedPreferencesOperator.getInstance(mContext, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(BasicSharedPreferencesOperator.KEY_ACTION_CUIDE_STEP,
+//                step, null, -1);
     }
 
     public String readGuideStep() {
-        return BasicSharedPreferencesOperator.getInstance(mContext, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doReadSync(BasicSharedPreferencesOperator.KEY_ACTION_CUIDE_STEP);
+        return SPUtils.getInstance().getString(SP_GUIDE_STEP);
+//        return BasicSharedPreferencesOperator.getInstance(mContext, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doReadSync(BasicSharedPreferencesOperator.KEY_ACTION_CUIDE_STEP);
     }
 
 

@@ -6,21 +6,35 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
+import android.text.TextUtils;
 
-import com.ant.country.CountryActivity;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreater;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreater;
+import com.scwang.smartrefresh.layout.api.RefreshFooter;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.tencent.ai.tvs.LoginApplication;
 import com.ubt.alpha1e.AlphaApplicationValues.Thrid_login_type;
+import com.ubt.alpha1e.base.AppManager;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.MyRefreshHead;
+import com.ubt.alpha1e.base.ResponseMode.MyRefreshFoot;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
+import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.ActionsDownLoadManager;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
-import com.ubt.alpha1e.data.DB.ActionsOnlineCacheOperater;
-import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.ISharedPreferensListenet;
+import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.services.AutoScanConnectService;
+import com.ubt.alpha1e.services.GlobalMsgService;
 import com.ubt.alpha1e.ui.AboutUsActivity;
 import com.ubt.alpha1e.ui.ActionUnpublishedActivity;
 import com.ubt.alpha1e.ui.ActionsLibPreviewWebActivity;
@@ -45,25 +59,30 @@ import com.ubt.alpha1e.ui.SettingActivity;
 import com.ubt.alpha1e.ui.StartInitSkinActivity;
 import com.ubt.alpha1e.ui.WebContentActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
-import com.ubt.alpha1e.ui.fragment.ActionsLibMainFragment3;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.update.EngineUpdateManager;
+import com.ubt.alpha1e.userinfo.dynamicaction.DownLoadActionManager;
+import com.ubt.alpha1e.utils.DynamicTimeFormat;
 import com.ubt.alpha1e.utils.connect.ConnectClientUtil;
 import com.ubt.alpha1e.utils.crash.CrashHandler;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.alpha1e.xingepush.XGListener;
+import com.ubt.xingemodule.XGUBTManager;
 import com.ubtechinc.base.BlueToothManager;
 import com.ubtechinc.sqlite.DBAlphaInfoManager;
 import com.umeng.analytics.MobclickAgent;
-import com.yixia.camera.VCamera;
+import com.zhy.changeskin.SkinManager;
+
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import cn.jpush.android.api.JPushInterface;
 
-public class AlphaApplication extends MultiDexApplication {
+public class AlphaApplication extends LoginApplication {
 
     private static final String TAG = "AlphaApplication";
 
@@ -80,6 +99,7 @@ public class AlphaApplication extends MultiDexApplication {
     private static Date lastTime_tryRestart = null;
 
     private static BaseActivity baseActivity;
+    private static Activity mCurrentActivity;
     private static MyActionsHelper.Action_type action_type;
 
     public static Context mContext = null;
@@ -91,22 +111,50 @@ public class AlphaApplication extends MultiDexApplication {
     //默认当前连接对象为非1E，没有连上的时候，默认为非Alpha1E
     private boolean isAlpha1E = false;
 
+    public NetworkInfo getmCurrentNetworkInfo() {
+        return mCurrentNetworkInfo;
+    }
+
+    public void setmCurrentNetworkInfo(NetworkInfo mCurrentNetworkInfo) {
+        this.mCurrentNetworkInfo = mCurrentNetworkInfo;
+    }
+
+    private NetworkInfo mCurrentNetworkInfo = null;
+
+    public static String getmNeedOpenActivity() {
+        return mNeedOpenActivity;
+    }
+
+    public static void setmNeedOpenActivity(String activity) {
+        mNeedOpenActivity = activity;
+    }
+
+    private static String mNeedOpenActivity = null;
+
+    public static String currentRobotSN = "";
+
+    private static XGListener xgListener;
+
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
+        xgListener = new XGListener();
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(this);
 
         initActivityLife();
-        initJPush(this);
         initSkin(this);
         initConnectClient();
-
+        startGlobalMsgService(); //处理全局消息，包括信鸽，必须在信鸽前初始化
+        initXG();
+        initLanguage();
+        LitePal.initialize(this);
+        initSmartRefresh();
 //        LeakCanary.install(this);
-        VCamera.setVideoCachePath(FileTools.media_cache);
-        VCamera.setDebugMode(true);
-        VCamera.initialize(this);
+        //   VCamera.setVideoCachePath(FileTools.media_cache);
+        //  VCamera.setDebugMode(true);
+        //  VCamera.initialize(this);
 //        IntentFilter screenOffFilter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
 //        registerReceiver(new BroadcastReceiver() {
 //            @Override
@@ -118,14 +166,37 @@ public class AlphaApplication extends MultiDexApplication {
 //                }
 //            }
 //        }, screenOffFilter);
+
     }
 
-    /**
-     * 初始化推送库
-     */
-    public void initJPush(Context ctx) {
-        JPushInterface.setDebugMode(true);
-        JPushInterface.init(ctx);
+    private void startGlobalMsgService() {
+        Intent mIntent = new Intent(this, GlobalMsgService.class);
+        startService(mIntent);
+    }
+
+    private void initSmartRefresh() {
+        SmartRefreshLayout.setDefaultRefreshHeaderCreater(new DefaultRefreshHeaderCreater() {
+            @NonNull
+            @Override
+            public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
+                //layout.setPrimaryColorsId(R.color.colorPrimary, android.R.color.black);//全局设置主题颜色
+                return new MyRefreshHead(context).setTimeFormat(new DynamicTimeFormat("更新于 %s")).setEnableLastTime(false)
+                        .setDrawableMarginRight(5);
+            }
+        });
+        //设置全局的Footer构建器
+        SmartRefreshLayout.setDefaultRefreshFooterCreater(new DefaultRefreshFooterCreater() {
+            @Override
+            public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
+                //指定为经典Footer，默认是 BallPulseFooter
+                return new MyRefreshFoot(context).setDrawableSize(20).setDrawableMarginRight(5);
+            }
+        });
+    }
+
+
+    public static Context getmContext() {
+        return mContext;
     }
 
     /**
@@ -133,15 +204,39 @@ public class AlphaApplication extends MultiDexApplication {
      */
     public void initSkin(Context ctx) {
         //改放到在baseActivity 初始化
-        //SkinManager.getInstance().init(ctx);
+        SkinManager.getInstance().init(ctx);
+    }
+
+    public static void initXG() {
+        String accessId = SPUtils.getInstance().getString(Constant.SP_XG_ACCESSID);
+        String accessKey = SPUtils.getInstance().getString(Constant.SP_XG_ACCESSKEY);
+        if (!TextUtils.isEmpty(accessId) && !TextUtils.isEmpty(accessKey)) {
+            XGUBTManager.getInstance().initXG(mContext, Long.parseLong(accessId), accessKey);
+            XGUBTManager.getInstance().setXGListener(xgListener);
+            //  XGUBTManager.getInstance(this).initXG(2100270011, "A783M4PIM7JI");
+        }
     }
 
     /**
      * 初始化网络连接客户端
      */
-    public void initConnectClient(){
+    public void initConnectClient() {
         ConnectClientUtil.getInstance().init();
     }
+
+    public void initLanguage() {
+        String currentLanguage = BasicSharedPreferencesOperator.getInstance(this,
+                BasicSharedPreferencesOperator.DataType.APP_INFO_RECORD).doReadSync(
+                BasicSharedPreferencesOperator.LANGUAGE_SET_KEY);
+
+        if (currentLanguage.equals(BasicSharedPreferencesOperator.NO_VALUE)) {
+            BasicSharedPreferencesOperator.getInstance(this,
+                    BasicSharedPreferencesOperator.DataType.APP_INFO_RECORD).doWrite(
+                    BasicSharedPreferencesOperator.LANGUAGE_SET_KEY, "zh_CN",
+                    null, -1);
+        }
+    }
+
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -152,7 +247,7 @@ public class AlphaApplication extends MultiDexApplication {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        JPushInterface.onKillProcess(getApplicationContext());
+
     }
 
     @Override
@@ -228,8 +323,8 @@ public class AlphaApplication extends MultiDexApplication {
         return this.mCurrentBluetooth;
     }
 
-    public String getCurrentBluetoothAddress(){
-        if(this.mCurrentBluetooth != null){
+    public String getCurrentBluetoothAddress() {
+        if (this.mCurrentBluetooth != null) {
             return this.mCurrentBluetooth.getAddress();
         }
         return "";
@@ -265,29 +360,49 @@ public class AlphaApplication extends MultiDexApplication {
             mActivityList.remove(act);
     }
 
-    public List<Activity> getHistoryActivityList(){
+    public List<Activity> getHistoryActivityList() {
         return mActivityList;
+    }
+
+    public void doLostConnect() {
+
+        setCurrentBluetooth(null);
+        UbtLog.d(TAG, "doLostConnect ..... ");
+        ActionPlayer.StopCycleThread(true);
+        // 蓝牙断线
+        if (mBlueManager != null) {
+            mBlueManager.releaseAllConnected();
+        }
+
+        cleanBluetoothConnectData();
+
+        MyActionsHelper.mCacheActionsNames.clear();
     }
 
     public void doLostConn(Activity mCurrentAct) {
         CommonCtrlView.closeCommonCtrlView();
         MyActionsHelper.doStopMp3ForMyDownload();
-        MyActionsHelper.getInstance((BaseActivity) mCurrentAct).resetPlayer();
+        if (mCurrentAct != null) {
+            MyActionsHelper.getInstance((BaseActivity) mCurrentAct).resetPlayer();
+        }
         ActionPlayer.StopCycleThread(true);
         ActionsDownLoadManager.resetData();
-
+        DownLoadActionManager.getInstance(this).resetData();
         // 蓝牙断线
-        if (mBlueManager != null){
+        if (mBlueManager != null) {
             mBlueManager.releaseAllConnected();
         }
 
         cleanBluetoothConnectData();
 
         Activity mActivity = null;
+        if (mActivityList == null) {
+            return;
+        }
         for (int i = 0; i < mActivityList.size(); i++) {
             try {
                 mActivity = mActivityList.get(i);
-                if(mActivity instanceof MyMainActivity
+                if (mActivity instanceof MyMainActivity
                         || mActivity instanceof ActionsSquareDetailActivity
                         || mActivity instanceof ActionsLibPreviewWebActivity
                         || mActivity instanceof WebContentActivity
@@ -302,7 +417,7 @@ public class AlphaApplication extends MultiDexApplication {
                         || mActivity instanceof RegisterActivity
                         || mActivity instanceof FindPassWdActivity
                         || mActivity instanceof RegisterNextStepActivity
-                        || mActivity instanceof CountryActivity
+                        /*|| mActivity instanceof CountryActivity*/
                         || mActivity instanceof ActionUnpublishedActivity
                         || mActivity instanceof ActionsPublishActivity
                         || mActivity instanceof MediaRecordActivity
@@ -310,18 +425,23 @@ public class AlphaApplication extends MultiDexApplication {
                         || mActivity instanceof RobotControlActivity
                         || mActivity instanceof BlocklyActivity
                         || mActivity instanceof BlocklyCourseActivity
-                        ){
-                            if(mActivity instanceof MyActionsActivity){
-                                if(MyActionsActivity.requestPosition == 1
-                                        || MyActionsActivity.requestPosition == 2
-                                        || MyActionsActivity.requestPosition == 3){
-                                    //my creation/my download/my collect need not close
-                                    continue;
-                                }
-                            }else{
-                                continue;
-                            }
+                        || mActivity instanceof NetconnectActivity //add by dicy.cheng  当在网络连接页面时，如果蓝牙掉线，则该网络连接页面也关掉
+                        || mActivity instanceof MainActivity
+                        || mActivity instanceof BluetoothandnetconnectstateActivity
+
+                        ) {
+                    if (mActivity instanceof MyActionsActivity) {
+                        if (MyActionsActivity.requestPosition == 1
+                                || MyActionsActivity.requestPosition == 2
+                                || MyActionsActivity.requestPosition == 3) {
+                            //my creation/my download/my collect need not close
+                            continue;
+                        }
+                    } else {
+                        continue;
+                    }
                 }
+                UbtLog.d(TAG, "mActivity finish");
                 mActivity.finish();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -335,18 +455,16 @@ public class AlphaApplication extends MultiDexApplication {
 
     public void doGotoPcUpdate(Activity mCurrentAct) {
         // 蓝牙断线
-        if (mBlueManager != null){
+        if (mBlueManager != null) {
             mBlueManager.releaseAllConnected();
         }
 
         cleanBluetoothConnectData();
 
-
-
         clearCacheData();
 
         Intent intent = new Intent();
-        intent.setClass(mCurrentAct,PcUpdateActivity.class);
+        intent.setClass(mCurrentAct, PcUpdateActivity.class);
         mCurrentAct.startActivity(intent);
         mCurrentAct.finish();
     }
@@ -361,19 +479,21 @@ public class AlphaApplication extends MultiDexApplication {
         clearCacheData();
 
         // 蓝牙断线
-        if (mBlueManager != null){
+        if (mBlueManager != null) {
             mBlueManager.releaseAllConnected();
         }
 
         cleanBluetoothConnectData();
 
-        for (int i = 0; i < mActivityList.size(); i++) {
-            try {
-                mActivityList.get(i).finish();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        for (int i = 0; i < mActivityList.size(); i++) {
+//            try {
+//                mActivityList.get(i).finish();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+
+        AppManager.getInstance().finishAllActivity();
 
         if (isStopProcress) {
             MobclickAgent.onKillProcess(this);
@@ -385,22 +505,20 @@ public class AlphaApplication extends MultiDexApplication {
     /**
      * 清空缓存数据
      */
-    public void clearCacheData(){
+    public void clearCacheData() {
         //清除在线缓存
         BaseHelper.hasGetScheme = false;
-        ActionsOnlineCacheOperater.getInstance(this,FileTools.db_log_cache, FileTools.db_log_name).cleanOnlineCache();
         MyActionsHelper.mCacheActionsNames.clear();
-        ActionsLibMainFragment3.clearCacheDatas();
+//        ActionsLibMainFragment3.clearCacheDatas();
 
         //app 改版指引相关
-        BasicSharedPreferencesOperator.getInstance(this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(BasicSharedPreferencesOperator.KEY_GUIDE_STEP,
-                "0", null, -1);
+        BasicSharedPreferencesOperator.getInstance(this, BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(BasicSharedPreferencesOperator.KEY_GUIDE_STEP, "0", null, -1);
     }
 
     /**
      * 情况蓝牙连接数据
      */
-    public void cleanBluetoothConnectData(){
+    public void cleanBluetoothConnectData() {
         setCurrentBluetooth(null);
         setRobotHardVersion(null);
         setRobotSoftVersion(null);
@@ -445,24 +563,26 @@ public class AlphaApplication extends MultiDexApplication {
         clearCacheData();
 
         // 蓝牙断线
-        if (mBlueManager != null){
+        if (mBlueManager != null) {
             mBlueManager.releaseAllConnected();
         }
         cleanBluetoothConnectData();
 
         Activity mCurrentActivity = null;
-        for (int i = 0; i < mActivityList.size(); i++) {
-            try {
-                if(i == (mActivityList.size()-1)){
-                    mCurrentActivity = mActivityList.get(i);
-                }else{
-                    mActivityList.get(i).finish();
+        if (mActivityList != null) {
+            for (int i = 0; i < mActivityList.size(); i++) {
+                try {
+                    if (i == (mActivityList.size() - 1)) {
+                        mCurrentActivity = mActivityList.get(i);
+                    } else {
+                        mActivityList.get(i).finish();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
-        if(mCurrentActivity != null && !mCurrentActivity.isFinishing()){
+        if (mCurrentActivity != null && !mCurrentActivity.isFinishing()) {
             Intent mIntent = new Intent();
             //mIntent.setClass(mCurrentActivity, StartActivity.class);
             mIntent.setClass(mCurrentActivity, StartInitSkinActivity.class);
@@ -484,10 +604,10 @@ public class AlphaApplication extends MultiDexApplication {
         mCurrentRobotHardVersion = version;
 
         //判断是否Alpha1E
-        if(mCurrentRobotHardVersion != null
-                && mCurrentRobotHardVersion.toLowerCase().contains(EngineUpdateManager.Alpha1e)){
+        if (mCurrentRobotHardVersion != null
+                && mCurrentRobotHardVersion.toLowerCase().contains(EngineUpdateManager.Alpha1e)) {
             isAlpha1E = true;
-        }else {
+        } else {
             isAlpha1E = false;
         }
     }
@@ -496,7 +616,7 @@ public class AlphaApplication extends MultiDexApplication {
         mCurrentRobotSoftVersion = version;
     }
 
-    public boolean isAlpha1E(){
+    public boolean isAlpha1E() {
         return isAlpha1E;
     }
 
@@ -505,12 +625,20 @@ public class AlphaApplication extends MultiDexApplication {
         setCurrentUserInfo(null);
     }
 
-    public void setBaseActivity(BaseActivity baseActivity){
+    public void setCurrentActivity(Activity activity) {
+        this.mCurrentActivity = activity;
+    }
+
+    public static Activity getCurrentActivity() {
+        return mCurrentActivity;
+    }
+
+    public void setBaseActivity(BaseActivity baseActivity) {
         this.baseActivity = baseActivity;
     }
 
     public static BaseActivity getBaseActivity() {
-        return  baseActivity;
+        return baseActivity;
     }
 
     public static void setActionType(MyActionsHelper.Action_type actionType) {
@@ -521,17 +649,19 @@ public class AlphaApplication extends MultiDexApplication {
         return action_type;
     }
 
-    private  static boolean isShowCircleFragemt = false;
-    public synchronized static boolean isCycleActionFragment(){
+    private static boolean isShowCircleFragemt = false;
+
+    public synchronized static boolean isCycleActionFragment() {
         return isShowCircleFragemt;
     }
 
-    public synchronized static void setCycleFragmentShow(boolean isShow){
+    public synchronized static void setCycleFragmentShow(boolean isShow) {
         isShowCircleFragemt = isShow;
     }
 
     /**
      * 判断当前设备是手机还是平板，代码来自 Google I/O App for Android
+     *
      * @return 平板返回 True，手机返回 False
      */
     public static boolean isPad() {
@@ -542,12 +672,13 @@ public class AlphaApplication extends MultiDexApplication {
 
     /**
      * 判断app是否进入后台
+     *
      * @return
      */
-    public static boolean isBackground(){
-        if(mStateActivityCount == 0){
+    public static boolean isBackground() {
+        if (mStateActivityCount == 0) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -555,7 +686,7 @@ public class AlphaApplication extends MultiDexApplication {
     /**
      * 初始化简单Activity的生命周期
      */
-    private void initActivityLife(){
+    private void initActivityLife() {
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle bundle) {
@@ -580,8 +711,8 @@ public class AlphaApplication extends MultiDexApplication {
             @Override
             public void onActivityStopped(Activity activity) {
                 mStateActivityCount--;
-                UbtLog.d(TAG,"mStateActivityCount stop = " + mStateActivityCount);
-                if(mStateActivityCount == 0){
+                UbtLog.d(TAG, "mStateActivityCount stop = " + mStateActivityCount);
+                if (mStateActivityCount == 0) {
                     AutoScanConnectService.doEntryBackground();
                 }
             }

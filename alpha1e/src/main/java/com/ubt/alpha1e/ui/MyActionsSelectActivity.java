@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -89,8 +90,9 @@ public class MyActionsSelectActivity extends BaseActivity implements IActionsUI{
         tvNext.setText(getStringResources("ui_perfect_next"));
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_action_list);
-        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        //mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
         mAdapter = new ActionsAdapter(this, mDatas);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -519,7 +521,7 @@ public class MyActionsSelectActivity extends BaseActivity implements IActionsUI{
     }
 
     @Override
-    public void onClaerCache() {
+    public void onClearCache() {
 
     }
 

@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/B6"
-   >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@drawable/action_dialog_filter_rect"
+              android:orientation="vertical"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
+
         <TextView
             android:id="@+id/title_actions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/ui_create_basic_action"
-            android:textSize="16sp"
             android:padding="16dp"
-            android:background="#ECF1F4"
+            android:text="@string/ui_create_basic_action"
+            android:textColor="@color/tv_user_edit_color"
+            android:textSize="16sp"
             />
 
 
@@ -26,23 +27,15 @@
             android:id="@+id/iv_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_delete"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:visibility="invisible"
             android:paddingRight="16dp"
+            android:src="@drawable/icon_delete"
+            android:visibility="invisible"
             />
 
     </RelativeLayout>
 
-
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#ECF1F4"
-        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_actions"
@@ -53,56 +46,46 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#ECF1F4"
-        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:gravity="center"
         android:orientation="horizontal"
         >
 
         <TextView
             android:id="@+id/tv_cancel"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/ui_common_cancel"
+            android:background="@drawable/btn_alert_bg"
             android:gravity="center"
+            android:onClick="false"
+            android:padding="10dp"
+            android:text="@string/ui_common_cancel"
+            android:textColor="@color/tv_user_edit_color"
             android:textSize="16sp"
-            android:textColor="#2c87f1"
+            android:visibility="gone"
             />
 
-        <View
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="#ECF1F4"
-            />
 
         <TextView
             android:id="@+id/tv_confirm"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/ui_common_confirm"
-            android:textSize="16sp"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/btn_alert_bg"
             android:gravity="center"
-            android:textColor="#ECF1F4"
             android:onClick="false"
+            android:padding="10dp"
+            android:text="@string/ui_common_confirm"
+            android:textColor="@color/tv_user_edit_color"
+            android:textSize="16sp"
             />
 
 
-
-
-
     </LinearLayout>
-
-
-
-
 
 
 </LinearLayout>
