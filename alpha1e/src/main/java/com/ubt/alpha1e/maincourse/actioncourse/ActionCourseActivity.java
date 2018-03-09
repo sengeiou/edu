@@ -284,27 +284,30 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                         public void onClick(DialogPlus dialog, View view) {
                             if (view.getId() == R.id.btn_pos) {
                                 int n = position + 1;
+                                Intent intent = null;
                                 if (position == 0) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class), REQUESTCODE);
-                                } else if (position == 1) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class), REQUESTCODE);
-                                } else if (position == 2) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelThreeActivity.class), REQUESTCODE);
-                                } else if (position == 3) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFourActivity.class), REQUESTCODE);
-                                } else if (position == 4) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFiveActivity.class), REQUESTCODE);
-                                } else if (position == 5) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelSixActivity.class), REQUESTCODE);
-                                } else if (position == 6) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelSevenActivity.class), REQUESTCODE);
-                                } else if (position == 7) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelEightActivity.class), REQUESTCODE);
-                                } else if (position == 8) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelNineActivity.class), REQUESTCODE);
-                                } else if (position == 9) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTenActivity.class), REQUESTCODE);
-                                }
+                                    intent= new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class);
+                                 } else if (position == 1) {
+                                    intent =  new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class);
+                                 } else if (position == 2) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelThreeActivity.class);
+                                 } else if (position == 3) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelFourActivity.class);
+                                 } else if (position == 4) {
+                                    intent= new Intent(ActionCourseActivity.this, CourseLevelFiveActivity.class);
+                                 } else if (position == 5) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelSixActivity.class);
+                                 } else if (position == 6) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelSevenActivity.class);
+                                 } else if (position == 7) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelEightActivity.class);
+                                 } else if (position == 8) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelNineActivity.class);
+                                 } else if (position == 9) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelTenActivity.class);
+                                 }
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivityForResult(intent, REQUESTCODE);
                                 ActionCourseActivity.this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                                 dialog.dismiss();
                                 myHandler.removeMessages(HANDLER_EXIT_COURSE);
