@@ -100,10 +100,10 @@ public class HibitsEventPlayDialog {
                         UbtLog.d(TAG,"seqNo = " + eventPlayStatus.playAudioSeq + "  isInteger = "+ StringUtils.isInteger(eventPlayStatus.playAudioSeq));
                         if(StringUtils.isInteger(eventPlayStatus.playAudioSeq)){
                             int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
-                            if(currentEventId.equals(eventPlayStatus.eventId)){
+                            if(currentEventId.equals(eventPlayStatus.eventId) && "1".equals(eventPlayStatus.eventState)){
                                 isStartPlayProcess = true;
                                 playStatus = eventPlayStatus.audioState;
-                                if(mPlayContentInfoList != null /*&& seqNo < mPlayContentInfoList.size()*/ ){
+                                if(mPlayContentInfoList != null ){
                                     if("playing".equals(playStatus) || "pause".equals(playStatus)){
                                         currentPlaySeq = seqNo;
                                         currentPlayInfo = mPlayContentInfoList.get(seqNo);

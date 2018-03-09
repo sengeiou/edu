@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.BuildConfig;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.animator.FrameAnimation;
@@ -42,6 +43,7 @@ import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loopHandler.HandlerCallback;
 import com.ubt.alpha1e.base.loopHandler.LooperThread;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsActivity;
+import com.ubt.alpha1e.behaviorhabits.model.behaviourHabitModel;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
@@ -67,6 +69,7 @@ import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.custom.CommonGuideView;
+import com.ubt.alpha1e.ui.custom.MainActivityGuideView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
@@ -149,10 +152,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     ImageView actionIndicator;
     @BindView(R.id.indicator0)
     ImageView indicator;
-
+    @BindView(R.id.tv_habits_event_time)
+    TextView  habitsTime;
+    @BindView(R.id.tv_hibits_event_name)
+    TextView  habitsName;
     @BindView(R.id.top_icon4)
     ImageView voiceCmd;
-
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
@@ -281,7 +286,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mActionIndicator.setVisible(true,true);
         mPresenter.registerEventBus();
         mPresenter.getXGInfo();
-
+        if(!MainActivityGuideView.hasShowGuide()) {
+            MainActivityGuideView.getInstant(this);
+        }
     }
 
     @Override
@@ -296,9 +303,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG, "onResume");
         initUI();
         showUserPicIcon();
-       // new CommonGuideView(getContext());
+        requireBehaviourNextEvent();
         if (!isBulueToothConnected()) {
-            showDisconnectIcon();
             showGlobalButtonAnmiationEffect(false);
             looperThread.send(createMessage(Constant.APP_LAUNCH_STATUS));
             // looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_FIVE_STATUS));
@@ -308,6 +314,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     AutoScanConnectService.startService(MainActivity.this); //add by dicy.cheng 打开自动连接
                 }
             }, 100);
+            showDisconnectIcon(true);
         } else {
             MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
             if (cartoonAction != null) {
@@ -321,10 +328,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     if (networkInfo.status) {
                         hiddenDisconnectIcon();
                     } else {
-                        showDisconnectIcon();
+                        showDisconnectIcon(true);
                     }
                 } else {
-                    showDisconnectIcon();
+                    showDisconnectIcon(true);
                 }
             }
             getCurrentPower();
@@ -606,7 +613,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showDisconnectIcon();
+                        showDisconnectIcon(false);
                     }
                 });
             }
@@ -688,6 +695,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
                 looperThread.send(createMessage(Constant.APP_BLUETOOTH_CONNECTED));
             }
+        }else if(event.getEvent()==RobotEvent.Event.ENTER_CONNECT_DEVICE){
+            gotoConnectBluetooth();
         }
 
     }
@@ -1261,7 +1270,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void handleMessage(Bundle bundle) {
 
       Byte status= bundle.getByte(STATUS_MACHINE);
-        UbtLog.d(TAG,"STATE MACHINE IS "+status);
+      //  UbtLog.d(TAG,"STATE MACHINE IS "+status);
         switch (status){
            case Constant.APP_LAUNCH_STATUS:  //启动应用,虚拟形象睡觉姿势
              runOnUiThread(new Runnable() {
@@ -1269,8 +1278,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    public void run() {
                        showBuddleText(getString(R.string.buddle_text_init_status));
                        buddleTextAsynchronousTask();
-                       cartoonAction.setBackgroundResource(R.drawable.sleep21);
-                       cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
+                       if(cartoonAction!=null) {
+                           cartoonAction.setBackgroundResource(R.drawable.sleep21);
+                           cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
+                       }
                        hiddenCartoonTouchView();
                        recoveryCartoonBodyUi();
                        hiddenBatteryUi();
@@ -1300,7 +1311,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
-                       showDisconnectIcon();
+                       showDisconnectIcon(false);
                        stopchargeAsynchronousTask();
                        stopBuddleTextAsynchronousTask();
                         showBuddleText(getString(R.string.buddle_text_init_status));
@@ -1372,7 +1383,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    public void run() {
                        showCartoonAction(cartoon_action_sleep);
                        recoveryCartoonBodyUi();
-                       showDisconnectIcon();
+                       showDisconnectIcon(true);
                        stopchargeAsynchronousTask();
                    }
                });
@@ -1510,30 +1521,37 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
           topIcon2.clearAnimation();
       }
   }
-    private void showDisconnectIcon(){
+
+    /**
+     *
+     * true running the animation
+     * false donot execute the animaiton
+     * @param animationRunning
+     */
+    private void showDisconnectIcon(boolean animationRunning){
         if(topIcon2Disconnect!=null) {
             topIcon2Disconnect.setVisibility(View.VISIBLE);
-            hyperspaceJump = AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump);
-            hyperspaceJump.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
+            if(animationRunning) {
+                hyperspaceJump = AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump);
+                hyperspaceJump.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
 
-                }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        // topIcon2Disconnect.startAnimation(hyperspaceJump);
+                        //  topIcon2.startAnimation(hyperspaceJump);
+                    }
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    topIcon2Disconnect.startAnimation(hyperspaceJump);
-                    topIcon2.startAnimation(hyperspaceJump);
-                }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-
-            topIcon2Disconnect.startAnimation(hyperspaceJump);
-            topIcon2.startAnimation(hyperspaceJump);
+                    }
+                });
+                topIcon2Disconnect.startAnimation(hyperspaceJump);
+                topIcon2.startAnimation(hyperspaceJump);
+            }
         }
 
     }
@@ -1587,5 +1605,35 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
       }
   }
 
+  private void setBehaviourHabitNextEvent(String eventName,String eventTime){
+      habitsTime.setText(eventTime);
+      habitsName.setText(eventName);
+  }
+
+    public void requireBehaviourNextEvent() {
+        BaseRequest mBehaviourControlRequest = new BaseRequest();
+        doRequestFromServer(BuildConfig.WebServiceUbx+HttpEntity.GET_BEHAVIOURHABIT_NEXTEVENT,mBehaviourControlRequest);
+    }
+    public void doRequestFromServer(String url, BaseRequest baseRequest) {
+        synchronized (this) {
+            OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, 999).execute(new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                }
+                @Override
+                public void onResponse(String response, int id) {
+                    UbtLog.d(TAG, "response = " + response);
+                    if(id==999){
+                        BaseResponseModel<behaviourHabitModel> baseResponseModel1 = GsonImpl.get().toObject(response, new TypeToken<BaseResponseModel<behaviourHabitModel>>() {
+                        }.getType());
+                        if(baseResponseModel1.models!=null) {
+                            UbtLog.d(TAG, "GET RESOPNSE " + baseResponseModel1.models.eventName );
+                            setBehaviourHabitNextEvent(baseResponseModel1.models.eventName,baseResponseModel1.models.eventTime);
+                        }
+                    }
+                }
+            });
+        }
+    }
 
 }

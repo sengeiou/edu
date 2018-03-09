@@ -354,7 +354,7 @@ public class CourseLevelFourLayout extends BaseActionEditLayout implements Actio
      * Activity执行onPause方法
      */
     public void onPause() {
-
+        pause();
     }
 
 

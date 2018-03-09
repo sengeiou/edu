@@ -52,7 +52,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
+      <LinearLayout
         android:id="@+id/ll_remote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -182,8 +182,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/v_vertical_center"
-        android:layout_marginLeft="35dp"
-        android:layout_marginBottom="-16dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginBottom="-11dp"
         >
 
         <ImageView
@@ -205,6 +205,7 @@
             />
 
         <TextView
+            android:id="@+id/tv_habits_event_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

@@ -977,6 +977,9 @@
     <string name="dialog_permission_storage_setting">您尚未开启\"ALpha 1E\"存储权限,请到设置中开启</string>
     <string name="dialog_permission_microphone_setting">您尚未开启\"ALpha 1E\"录音权限,请到设置中开启</string>
     <string name="dialog_go_setting">去设置</string>
+    <string name="ui_setting_email_report">邮件反馈</string>
+    <string name="ui_setting_online_report">在线咨询</string>
+    <string name="ui_setting_close_notice_tip">关闭通知，你将无法收到行为习惯提醒、各类活动和系统消息的通知</string>
 
     <string name="ui_common_save_success">保存成功</string>
     <string name="ui_common_save_fail">保存失败</string>
@@ -1073,5 +1076,7 @@
 
     <string name="ui_resave_tip">当前名称文件已存在，确定覆盖当前文件吗?</string>
     <string name="ui_recording_txt">动作记录中...</string>
+
+    <string name="ui_webview_network_error">网络出错，轻触屏幕重新加载</string>
 
 </resources>

@@ -16,6 +16,7 @@ import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.CheckIsBindRequest;
+import com.ubt.alpha1e.base.RequstMode.SetNoticeStatusRequest;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.BlocklyProjectMode;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
@@ -50,6 +51,8 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
     private static final String TAG = SettingPresenter.class.getSimpleName();
     private static int do_set_message_note = 10002;
     private static final int CHECK_ROBOT_INFO = 1;
+    private static final int GET_NOTICE_STATUS = 2;
+    private static final int SET_NOTICE_STATUS = 3;
 
     @Override
     public boolean isOnlyWifiDownload(Context context) {
@@ -83,39 +86,24 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
     }
 
     @Override
-    public boolean isMessageNote(Context context) {
-        String value = BasicSharedPreferencesOperator.getInstance(context,
-                BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doReadSync(
-                BasicSharedPreferencesOperator.IS_MESSAGE_NOTE_KEY);
-        if (BasicSharedPreferencesOperator.IS_MESSAGE_NOTE_VALUE_FALSE.equalsIgnoreCase(value)){
-            return false;
-        } else{
-            return true;
-        }
+    public void doGetMessageNote() {
+
+        BaseRequest baseRequest = new BaseRequest();
+
+        doRequest(HttpEntity.GET_NOTICE_STATUS, baseRequest, GET_NOTICE_STATUS);
+
     }
 
     @Override
-    public void doSetMessageNote(Context context, boolean isNote) {
-        if (isNote) {
-            BasicSharedPreferencesOperator.getInstance(context,
-                    BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(
-                    BasicSharedPreferencesOperator.IS_MESSAGE_NOTE_KEY,
-                    BasicSharedPreferencesOperator.IS_MESSAGE_NOTE_VALUE_TRUE,
-                    null, do_set_message_note);
-
-        } else {
-            BasicSharedPreferencesOperator.getInstance(context,
-                    BasicSharedPreferencesOperator.DataType.USER_USE_RECORD).doWrite(
-                    BasicSharedPreferencesOperator.IS_MESSAGE_NOTE_KEY,
-                    BasicSharedPreferencesOperator.IS_MESSAGE_NOTE_VALUE_FALSE,
-                    null, do_set_message_note);
-
-        }
+    public void doSetMessageNote(boolean isNote) {
+        SetNoticeStatusRequest setNoticeStatusRequest = new SetNoticeStatusRequest();
+        setNoticeStatusRequest.setStatus(isNote ? "1" : "0");
+        doRequest(HttpEntity.SET_NOTICE_STATUS, setNoticeStatusRequest,SET_NOTICE_STATUS);
     }
 
     @Override
     public void doSetAutoUpgrade(boolean isAutoUpgrade) {
-        SPUtils.getInstance().put(Constant.SP_AUTO_UPGRADE,isAutoUpgrade);
+        SPUtils.getInstance().put(Constant.SP_AUTO_UPGRADE, isAutoUpgrade);
     }
 
     @Override
@@ -242,12 +230,21 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
         OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
+                if(mView == null){
+                    return;
+                }
+
                 UbtLog.d(TAG, "doRequest onError:" + e.getMessage());
                 switch (id){
                     case CHECK_ROBOT_INFO:
                         mView.onGetRobotInfo(0,null);
                         break;
-
+                    case GET_NOTICE_STATUS:
+                        mView.onGetMessageNote(false,"");
+                        break;
+                    case SET_NOTICE_STATUS:
+                        mView.onGetMessageNote(false,"");
+                        break;
                     default:
                         break;
                 }
@@ -256,6 +253,10 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
             @Override
             public void onResponse(String response, int id) {
                 UbtLog.d(TAG,"response = " + response);
+                if(mView == null){
+                    return;
+                }
+
                 switch (id) {
                     case CHECK_ROBOT_INFO:
                         BaseResponseModel<ArrayList<MyRobotModel>> baseResponseModel = GsonImpl.get().toObject(response,
@@ -276,7 +277,30 @@ public class SettingPresenter extends BasePresenterImpl<SettingContract.View> im
                             }
                         }
                         break;
-
+                    case GET_NOTICE_STATUS:
+                        {
+                            BaseResponseModel mbaseResponseModel = GsonImpl.get().toObject(response,
+                                    new TypeToken<BaseResponseModel>() {
+                                    }.getType());//加上type转换，避免泛型擦除
+                            if(mbaseResponseModel.status){
+                                mView.onGetMessageNote(true,(String) mbaseResponseModel.models);
+                            }else {
+                                mView.onGetMessageNote(false,"");
+                            }
+                            break;
+                        }
+                    case SET_NOTICE_STATUS:
+                        {
+                            BaseResponseModel mbaseResponseModel = GsonImpl.get().toObject(response,
+                                    new TypeToken<BaseResponseModel>() {
+                                    }.getType());//加上type转换，避免泛型擦除
+                            if(mbaseResponseModel.status){
+                                mView.onSetMessageNote(true,(String) mbaseResponseModel.models);
+                            }else {
+                                mView.onSetMessageNote(false,"");
+                            }
+                            break;
+                        }
                     default:
                         break;
                 }
