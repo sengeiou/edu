@@ -105,6 +105,7 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
         int width = (int) ((display.getWidth()) * 0.8); //设置宽度
         mDialogPlus = DialogPlus.newDialog(mContext)
                 .setContentHolder(viewHolder)
+                .setContentBackgroundResource(R.drawable.action_dialog_filter_rect)
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(width)
                 .setOnClickListener(this)
@@ -212,7 +213,7 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
                 break;
 
             case R.id.iv_add_action_arrow:
-                 
+
             case R.id.tv_confirm:
                 if (TimeUtils.isFastClick()) {
                     if (selectDataModel == null) {
@@ -267,7 +268,7 @@ public class CourseMusicDialogUtil implements BaseQuickAdapter.OnItemClickListen
                 ivDelete.setVisibility(View.GONE);
                 textView.setVisibility(View.INVISIBLE);
             } else {
-                ivSelect.setImageResource(R.drawable.bg_dottedline);
+                 ivSelect.setVisibility(View.INVISIBLE);
                 textView.setVisibility(View.VISIBLE);
                 textView.setText(item.getMusicName());
                 gifView.setVisibility(View.VISIBLE);

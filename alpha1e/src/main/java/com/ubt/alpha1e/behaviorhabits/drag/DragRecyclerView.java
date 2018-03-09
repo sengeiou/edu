@@ -14,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 /**
  * User : Cyan(newbeeeeeeeee@gmail.com)
@@ -185,7 +186,14 @@ public class DragRecyclerView extends RecyclerView {
     }
 
     public void startDrag(int position) {
-        touchHelper.startDrag(getChildViewHolder(getChildAt(position)));
+        View childView = getLayoutManager().findViewByPosition(position);
+        //UbtLog.e("DragRecyclerView","startDrag position = " + position + "  child = " + getChildAt(position) + "/" + childView);
+        if(childView == null){
+            return;
+        }
+        //getChildAt 是获取可视view的坐标,有可能返回null，要换成findViewByPosition
+        //touchHelper.startDrag(getChildViewHolder(getChildAt(position)));
+        touchHelper.startDrag(getChildViewHolder(childView));
     }
 
 }

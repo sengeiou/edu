@@ -236,6 +236,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     public boolean isOnCourse;//是否正在课程页面
     public boolean isCourseReading;//课程里面正在读取机器人角度变化
 
+    private RelativeLayout rlRecordingState;
+    private TextView tvRecordIndex;
+    private TextView tvRecordTime;
+
     public BaseActionEditLayout(Context context) {
         super(context);
         mContext = context;
@@ -602,6 +606,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         initMediaPlayer();
 
         changeSaveAndPlayState();
+
+        rlRecordingState = (RelativeLayout) findViewById(R.id.rl_recording_state);
+        tvRecordTime = (TextView) findViewById(R.id.tv_recoding_time);
+        tvRecordIndex = (TextView) findViewById(R.id.tv_recoding_index);
     }
 
 
@@ -637,7 +645,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 onPlayMusicComplete();
                 playFinish = true;
                 mHandler.removeMessages(0);
-                if (isFinishFramePlay) {
+                if (isFinishFramePlay && mediaPlayer != null) {
                     mediaPlayer.seekTo(0);
                     sbVoice.setProgress(0);
                     tvMusicTime.setText(TimeUtils.getTimeFromMillisecond((long) handleMusicTime(mediaPlayer.getDuration())));
@@ -755,6 +763,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 if (mediaPlayer != null) {
                     mediaPlayer.stop();
                     playFinish = true;
+                    mediaPlayer = null;
                 }
                 ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x04);
                 ((Activity) mContext).finish();
@@ -766,6 +775,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                 if (mediaPlayer != null) {
                     mediaPlayer.stop();
                     playFinish = true;
+                    mediaPlayer = null;
                 }
                 ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x04);
                 ((Activity) mContext).finish();
@@ -778,6 +788,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             if (mediaPlayer != null) {
                 mediaPlayer.stop();
                 playFinish = true;
+                mediaPlayer = null;
             }
             ((Activity) mContext).finish();
             return true;
@@ -802,6 +813,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                             if (mediaPlayer != null) {
                                 mediaPlayer.stop();
                                 playFinish = true;
+                                mediaPlayer = null;
                             }
                             ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x04);
                             ((Activity) mContext).finish();
@@ -814,13 +826,13 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     public void saveNewAction(int type) {
 
-        if (null != list_frames && list_frames.size() > 80) {
-            for (int i = list_frames.size()-1; i > 80; i--) {
-                UbtLog.d(TAG, "list_frames====remove" + i);
-                list_frames.remove(i);
-            }
-            adapter.notifyDataSetChanged();
-        }
+//        if (null != list_frames && list_frames.size() > 80) {
+//            for (int i = list_frames.size()-1; i > 80; i--) {
+//                UbtLog.d(TAG, "list_frames====remove" + i);
+//                list_frames.remove(i);
+//            }
+//            adapter.notifyDataSetChanged();
+//        }
         if (musicTimes == 0) {
             if (list_frames.size() < 1) {
                 MyAlertDialog.getInstance(
@@ -1273,7 +1285,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                     return;
                 }
             }
-            isFinishFramePlay = false;
+//            isFinishFramePlay = false;
             if (mDir != "" && mediaPlayer != null) {
                 UbtLog.d(TAG, "current pos:" + mediaPlayer.getCurrentPosition());
                 if (mediaPlayer.getCurrentPosition() == 0) {
@@ -1570,6 +1582,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         if (autoRead) {
             mHandler.removeMessages(MSG_AUTO_READ);
             autoRead = false;
+            ivAutoRead.setImageResource(R.drawable.actions_edit_auto_selector);
+            tvRecordIndex.setText("");
+            tvRecordTime.setText("");
+            rlRecordingState.setVisibility(View.INVISIBLE);
             needAdd = false;
             autoAng = "";
             ivAddFrame.setImageResource(R.drawable.ic_addaction_enable);
@@ -1716,6 +1732,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
             mediaPlayer.prepareAsync();//数据缓冲
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
                 public void onPrepared(MediaPlayer mp) {
 //                    mp.start();
                     mp.seekTo(0);
@@ -1741,8 +1758,10 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         setButtonEnable(false);
 
         autoRead = true;
+        ivAutoRead.setImageResource(R.drawable.ic_auto_disable);
         ivAddFrame.setImageResource(R.drawable.ic_stop);
         mHandler.sendEmptyMessage(MSG_AUTO_READ);
+        rlRecordingState.setVisibility(View.VISIBLE);
     }
 
     private void initTimeFrame() {
@@ -2013,6 +2032,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         int width = (int) ((display.getWidth()) * 0.6); //设置宽度
         DialogPlus.newDialog(mContext)
                 .setContentHolder(viewHolder)
+                .setContentBackgroundResource(R.drawable.action_dialog_filter_rect)
                 .setGravity(Gravity.CENTER)
                 .setContentWidth(width)
                 .setOnClickListener(new com.orhanobut.dialogplus.OnClickListener() {
@@ -2244,6 +2264,12 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
                             }
                             UbtLog.d(TAG, "need added");
                             list_autoFrames.add(map);
+                            tvRecordIndex.setText(list_autoFrames.size()+ "");
+                            if(list_autoFrames.size() < 5){
+                                tvRecordTime.setText("00:01");
+                            }else{
+                                tvRecordTime.setText(""+TimeUtils.getTimeFromMillisecond((long)list_autoFrames.size()*200));
+                            }
                         }
                     }
 
@@ -2445,7 +2471,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     public void onPlaying() {
         UbtLog.d(TAG, "onPlaying");
-
+        isFinishFramePlay = false;
     }
 
 

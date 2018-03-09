@@ -288,6 +288,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     public void initRecyclerViews() {
         flowLayoutManager = new FlowLayoutManager();
         rvPlayContent.setLayoutManager(flowLayoutManager);
+
         RecyclerView.ItemAnimator animator = rvPlayContent.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
@@ -302,7 +303,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             }
         });
 
-        mAdapter = new FlowPlayContentRecyclerAdapter(getContext(), mPlayContentInfoDatas, mHandler);
+        mAdapter = new FlowPlayContentRecyclerAdapter(getContext(), mPlayContentInfoDatas);
         rvPlayContent.setAdapter(mAdapter);
 
         /** custom setting */
@@ -318,7 +319,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         flowLayoutManager = new FlowLayoutManager();
         rvPlayContent.setLayoutManager(flowLayoutManager);
 
-        mAdapter = new FlowPlayContentRecyclerAdapter(getContext(), mPlayContentInfoDatas, mHandler);
+        mAdapter = new FlowPlayContentRecyclerAdapter(getContext(), mPlayContentInfoDatas);
         rvPlayContent.setAdapter(mAdapter);
 
         /** custom setting */
@@ -332,11 +333,10 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     HoldTouchHelper.OnItemTouchEvent onItemTouchEvent = new HoldTouchHelper.OnItemTouchEvent() {
         @Override
         public void onLongPress(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int position) {
-            UbtLog.e(TAG,"onLongPress position = " + position);
             //暂时屏蔽不给拖
-            /*if (((SampleAdapter) recyclerView.getAdapter()).onItemDrag(position)) {
+            if (((SampleAdapter) recyclerView.getAdapter()).onItemDrag(position)) {
                 ((DragRecyclerView) recyclerView).startDrag(position);
-            }*/
+            }
         }
 
         @Override

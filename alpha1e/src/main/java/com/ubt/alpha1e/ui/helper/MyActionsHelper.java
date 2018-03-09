@@ -755,13 +755,13 @@ public class MyActionsHelper extends BaseHelper implements
     public void doTurnVol() {
         byte[] papram = new byte[1];
         if (mCurrentVoiceState) {
+            //MUTE
             papram[0] = 0;
             ChangeMisucVol(0);
-            //有声音
             mCurrentVoiceState = false;
         } else {
+            //UNMUTE
             papram[0] = 1;
-            //无声音
             mCurrentVoiceState = true;
         }
 

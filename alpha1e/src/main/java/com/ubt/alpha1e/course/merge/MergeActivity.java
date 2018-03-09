@@ -133,9 +133,14 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                 case SHOW_DIALOG:
                     mHandler.sendEmptyMessageDelayed(SHOW_NEXT_OVER_TIME, OVER_TIME);
                     ((PrincipleHelper)mHelper).playSoundAudio("{\"filename\":\"组装.mp3\",\"playcount\":1}");
-                    ((PrincipleHelper)mHelper).playFile("蹲下.hts");
                     tvMsgShow.setText(getStringResources("ui_principle_on_engine_tips"));
                     showView(tvMsgShow, true, biggerLeftBottomAnim);
+
+                    UbtLog.d(TAG,"PRINCIPLE_ENTER_PROGRESS : " + SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0));
+                    if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 1){
+                        ((PrincipleHelper)mHelper).playFile("蹲下.hts");
+                    }
+
                     break;
                 case HIDE_DIALOG:
                     hasPlaySoundAudioFinish = true;
@@ -615,14 +620,16 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                         }else if(view.getId() == R.id.iv_leg_left ){
                             hasLostLegLeft = false;
                             if(!hasLostLegRight){
-                                ((PrincipleHelper)mHelper).doOnLeftFoot();
-                                ((PrincipleHelper)mHelper).doOnRightFoot();
+                                //((PrincipleHelper)mHelper).doOnLeftFoot();
+                                //((PrincipleHelper)mHelper).doOnRightFoot();
+                                ((PrincipleHelper)mHelper).doOnFoot();
                             }
                         }else if(view.getId() == R.id.iv_leg_right){
                             hasLostLegRight = false;
                             if(!hasLostLegLeft){
-                                ((PrincipleHelper)mHelper).doOnLeftFoot();
-                                ((PrincipleHelper)mHelper).doOnRightFoot();
+                                //((PrincipleHelper)mHelper).doOnLeftFoot();
+                                //((PrincipleHelper)mHelper).doOnRightFoot();
+                                ((PrincipleHelper)mHelper).doOnFoot();
                             }
                         }
 

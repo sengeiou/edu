@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -50,7 +48,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-
 import static android.app.Service.START_NOT_STICKY;
 
 /**
@@ -74,7 +71,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     private int paddingBottomHeight ; //定义浮动按钮距离页面底部的高度
 
     private static LinearLayout lay_ctrl_more;
-    private ImageView btn_reset_m, btn_pause_or_continue, btn_stop_m, btn_vol_log, btn_actionList,btn_lig_logo,btn_sensorControl;
+    private ImageView btn_reset_m, btn_pause_or_continue, btn_stop_m, btn_vol_log, btn_actionList,btn_lig_logo,btn_sensorControl,btnSensorGreeting;
     private TextView txt_action_name_m;
     private SeekBar sek_vol_ctrl;
     private ImageView gifImageView;
@@ -242,6 +239,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         radiologicalWaveAnim = (AnimationDrawable)gifImageView.getBackground();
         //init hide view
         btn_sensorControl=(ImageView)view.findViewById(R.id.sensor_control);
+        btnSensorGreeting = (ImageView)view.findViewById(R.id.sensor_greeting);
+
         btn_actionList = (ImageView) view.findViewById(R.id.btn_actionlist);
         btn_reset_m=(ImageView) view.findViewById(R.id.btn_poweroff);
         btn_pause_or_continue = (ImageView) view.findViewById(R.id.btn_playaction);
@@ -264,21 +263,11 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         }
 
         if((currentState == ActionPlayer.Play_state.action_playing || currentNewPlayState == NewActionPlayer.PlayerState.PLAYING) && playingName != ""){
-            btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
-            gifImageView.setVisibility(View.VISIBLE);
-            radiologicalWaveAnim.setOneShot(false);
-            radiologicalWaveAnim.setVisible(true,true);
-            radiologicalWaveAnim.start();
-            enablePlayStopButton(playingName);
+            playActionEffect(true,playingName);
         }else if((currentState == ActionPlayer.Play_state.action_pause || currentNewPlayState == NewActionPlayer.PlayerState.PAUSING) && playingName != ""){
-            gifImageView.setVisibility(View.VISIBLE);
-            radiologicalWaveAnim.setOneShot(false);
-            radiologicalWaveAnim.setVisible(true,true);
-            //radiologicalWaveAnim.start();
-            enablePlayStopButton(playingName);
+            playActionEffect(false,playingName);
         }else{
-            gifImageView.setVisibility(View.INVISIBLE);
-            disablePlayStopButton();
+            stopActionEffect();
         }
 
 
@@ -299,6 +288,27 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 }
             }
         });
+
+
+        btnSensorGreeting.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if(!mHelper.mSensorGreetingState) {
+                    //打开传感器
+                    initGreetingDialogView();
+                    // showDialog();
+                }else {
+                    //关闭传感器
+                    byte[] papram=new byte[2];
+                    papram[0] = 0x1;
+                    papram[1] = 0x0;
+                    mMainHelper.doSendComm(ConstValue.DV_SENSOR_GREETING,papram);
+                    disableGreetingSensorButton();
+                }
+            }
+        });
+
+
         btn_actionList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -320,12 +330,11 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 UbtLog.d(TAG, "--wmma--current Action Type=" + AlphaApplication.getActionType());
                 mHelper.doActionCommand(
                         MyActionsHelper.Command_type.Do_default, "", AlphaApplication.getActionType());
-                disablePlayStopButton();
                 mBaseActivity.saveCurrentPlayingActionName("");
-                gifImageView.setVisibility(View.INVISIBLE);
                 mHelper.setLooping(false);
                 mMainPresenter.requestGlobalButtonControl(false);
                 mHelper.clearPlayingInfo();
+                stopActionEffect();
                 //Toast.makeText(mBaseActivity,"机器人已经服务",Toast.LENGTH_SHORT).show();
                // btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
                // gifImageView.setVisibility(View.INVISIBLE);
@@ -431,6 +440,34 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
     }
 
     /**
+     *  播放的状态
+     * @param status
+     * status true 正在播放
+     * status false 暂停
+     */
+    private void playActionEffect(boolean status,String name) {
+        btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
+        gifImageView.setVisibility(View.VISIBLE);
+        gifImageView.setBackground(mContext.getDrawable(R.drawable.playindicator_animation));
+        radiologicalWaveAnim = (AnimationDrawable)gifImageView.getBackground();
+        radiologicalWaveAnim.setOneShot(false);
+        radiologicalWaveAnim.setVisible(true,true);
+        if (status) {
+            radiologicalWaveAnim.start();
+        } else {
+            radiologicalWaveAnim.stop();
+        }
+        enablePlayStopButton(name);
+    }
+    /**
+     *
+     */
+    private void stopActionEffect(){
+        radiologicalWaveAnim.stop();
+        disablePlayStopButton();
+    }
+
+    /**
      * 初始化机器人状态
      */
     private  void initRobotState(){
@@ -448,6 +485,12 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             enableSensorButton();
        }else {
            disableSensorButton();
+       }
+
+       if (mHelper.mSensorGreetingState){
+           enableGreetingSensorButton();
+       }else{
+           disableGreetingSensorButton();
        }
     }
 
@@ -474,6 +517,34 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                         papram[1] = 0x01;
                         mMainHelper.doSendComm(ConstValue.DV_SENSOR_CONTROL,papram);
                         enableSensorButton();
+                    }
+                }).show();
+
+    }
+
+    /**
+     *  传感器防止摔倒功能需要弹出对话框，让用户选择
+     */
+    private void initGreetingDialogView() {
+        new ConfirmDialog(mContext).builder()
+                .setTitle("提示")
+                .setMsg(AlphaApplication.getBaseActivity().getStringResources("ui_action_sensor_greeting"))
+                .setNegativeButton(AlphaApplication.getBaseActivity().getStringResources("ui_common_cancel"), new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                })
+                .setPositiveButton(AlphaApplication.getBaseActivity().getStringResources("ui_common_confirm"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去打开SENSOR");
+                        byte[] papram=new byte[2];
+                        //开启传感器
+                        papram[0] = 0x01;
+                        papram[1] = 0x01;
+                        mMainHelper.doSendComm(ConstValue.DV_SENSOR_GREETING,papram);
+                        enableGreetingSensorButton();
                     }
                 }).show();
 
@@ -539,7 +610,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             UbtLog.d(TAG,"cc_volumeicon default or others situation" +voluemeProgress);
             if(voluemeProgress!=0) {
                 btn_vol_log.setImageDrawable(mBaseActivity.getDrawableRes("cc_volumeicon"));
-                //mHelper.doChangeVol(voluemeProgress);
             }else{
                 btn_vol_log.setImageDrawable(mBaseActivity.getDrawableRes("cc_mute"));
             }
@@ -666,12 +736,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                     && "#@%".contains(name.toCharArray()[0] + "")) {
                 name = name.substring(1);
             }
-            enablePlayStopButton(name);
-            gifImageView.setVisibility(View.VISIBLE);
-            radiologicalWaveAnim.setOneShot(false);
-            radiologicalWaveAnim.setVisible(true,true);
-            radiologicalWaveAnim.start();
-            gifImageView.setVisibility(View.VISIBLE);
+            playActionEffect(true,name);
             mBaseActivity.saveCurrentPlayingActionName(name);
             mMainPresenter.requestGlobalButtonControl(true);
 
@@ -712,11 +777,8 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             public void run() {
 
                 mHelper.doStopMp3ForMyDownload();
-                disablePlayStopButton();
                 mBaseActivity.saveCurrentPlayingActionName("");
-                btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
-                radiologicalWaveAnim.stop();
-                gifImageView.setVisibility(View.INVISIBLE);
+                stopActionEffect();
             }
         });
         mMainPresenter.requestGlobalButtonControl(false);
@@ -731,8 +793,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
                 String name = ((MyActionsHelper) mHelper).getNewPlayerName();
                 mBaseActivity.saveCurrentPlayingActionName(name);
-                enablePlayStopButton(name);
-                gifImageView.setVisibility(View.VISIBLE);
+                playActionEffect(true,name);
             }
         });
     }
@@ -755,9 +816,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         mBaseActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                disablePlayStopButton();
-                btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
-                gifImageView.setVisibility(View.INVISIBLE);
+                stopActionEffect();
                 mBaseActivity.saveCurrentPlayingActionName("");
             }
         });
@@ -787,13 +846,10 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                     && "#@%".contains(action_name.toCharArray()[0] + "")) {
                 action_name = action_name.substring(1);
             }
-            enablePlayStopButton(action_name);
+
             mBaseActivity.saveCurrentPlayingActionName(action_name);
             btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
-            gifImageView.setVisibility(View.VISIBLE);
-            radiologicalWaveAnim.setOneShot(false);
-            radiologicalWaveAnim.setVisible(true,true);
-            radiologicalWaveAnim.start();
+            playActionEffect(true,action_name);
             mMainPresenter.requestGlobalButtonControl(true);
 
         }
@@ -936,41 +992,60 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
        txt_action_name_m.setText("暂无播放内容");
        btn_pause_or_continue.setEnabled(false);
        btn_stop_m.setEnabled(false);
+       btn_stop_m.setImageDrawable(mContext.getDrawable(R.drawable.cc_stop_disable));
+       btn_pause_or_continue.setImageDrawable(mContext.getDrawable(R.drawable.cc_play_disable));
+       gifImageView.setBackground(mContext.getDrawable(R.drawable.cc_default_playindicator));
+       gifImageView.setVisibility(View.VISIBLE);
+
        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
-        ColorMatrix matrix = new ColorMatrix();
-        matrix.setSaturation(0);
-        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
-       btn_pause_or_continue.setColorFilter(filter);
-       btn_stop_m.setColorFilter(filter);
+//        ColorMatrix matrix = new ColorMatrix();
+//        matrix.setSaturation(0);
+//        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+//       btn_pause_or_continue.setColorFilter(filter);
+//       btn_stop_m.setColorFilter(filter);
        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
    }
    private void enablePlayStopButton(String actionName){
        txt_action_name_m.setText("正在播放: " +actionName);
        btn_pause_or_continue.setEnabled(true);
        btn_stop_m.setEnabled(true);
+       btn_pause_or_continue.setImageDrawable(mContext.getDrawable(R.drawable.cc_pause));
+       btn_stop_m.setImageDrawable(mContext.getDrawable(R.drawable.cc_stop));
        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
-       ColorMatrix matrix = new ColorMatrix();
-       matrix.setSaturation(1);
-       ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
-       btn_pause_or_continue.setColorFilter(filter);
-       btn_stop_m.setColorFilter(filter);
+//       ColorMatrix matrix = new ColorMatrix();
+//       matrix.setSaturation(1);
+//       ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+//       btn_pause_or_continue.setColorFilter(filter);
+//       btn_stop_m.setColorFilter(filter);
        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
    }
    private void disableSensorButton(){
        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
-       ColorMatrix matrix = new ColorMatrix();
-       matrix.setSaturation(0);
-       ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
-       btn_sensorControl.setColorFilter(filter);
+//       ColorMatrix matrix = new ColorMatrix();
+//       matrix.setSaturation(0);
+//       ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+//       btn_sensorControl.setColorFilter(filter);
+       btn_sensorControl.setImageDrawable(mContext.getDrawable(R.drawable.cc_protection_off));
    }
    private void enableSensorButton(){
        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
-       ColorMatrix matrix = new ColorMatrix();
-       matrix.setSaturation(1);
-       ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
-       btn_sensorControl.setColorFilter(filter);
+//       ColorMatrix matrix = new ColorMatrix();
+//       matrix.setSaturation(1);
+//       ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+//       btn_sensorControl.setColorFilter(filter);
+       btn_sensorControl.setImageDrawable(mContext.getDrawable(R.drawable.cc_sensorcontorl));
+
    }
 
+    private void disableGreetingSensorButton(){
+
+        btnSensorGreeting.setImageDrawable(mContext.getDrawable(R.drawable.ic_redhi_off));
+    }
+    private void enableGreetingSensorButton(){
+
+        btnSensorGreeting.setImageDrawable(mContext.getDrawable(R.drawable.ic_redhi));
+
+    }
 
 }
 

@@ -49,7 +49,8 @@ extern "C"
 			jstring eng_angles_i = (jstring)env->GetObjectField(NewActionInfo_frameActions_i, eng_angles);
 			char* eng_angles_i_array = jstringTostring(env, eng_angles_i);
 			__android_log_print(ANDROID_LOG_INFO, "yuyong----------", "log from cpp : %s", eng_angles_i_array);
-
+            env->DeleteLocalRef(eng_angles_i);
+            free(eng_angles_i_array);
 			jintArray datas_i = (jintArray)env->CallObjectMethod(NewActionInfo_frameActions_i, get_data_int);
 			jsize alen = env->GetArrayLength(datas_i);
 			jint* ba = env->GetIntArrayElements(datas_i, JNI_FALSE);
@@ -57,9 +58,9 @@ extern "C"
 			fdata[i].runtime = (int)eng_time_i;
 			fdata[i].totaltime = (int)totle_time_i;
 			jintArrayTointArray(fdata[i].steeringAngles, env, datas_i);
-
+            env->DeleteLocalRef(datas_i);
 			__android_log_print(ANDROID_LOG_INFO, "yuyong----------", "log from cpp : steeringAngles --> %i", fdata[i].steeringAngles[15]);
-
+            env->DeleteLocalRef(NewActionInfo_frameActions_i);
 		}
 
 		char **buf = (char**)malloc(sizeof(char*));
@@ -76,6 +77,7 @@ extern "C"
 
 		unsigned long size = File_Write(file_path, *buf, *bufsize, finish_size);
 		free(*buf);
+        free(file_path);
 
 		jclass IHtsHelperListener_class = env->FindClass("com/ubt/alpha1e/business/IHtsHelperListener");
 		jmethodID on_hts_write_finish = env->GetMethodID(IHtsHelperListener_class, "onHtsWriteFinish", "(Z)V");
@@ -105,6 +107,7 @@ extern "C"
 
 		//modify by lihai on 2016/07/27 for file is not exist return false
 		unsigned short file_strean = File_Read(file_path, file_content, *file_size, finish_size);
+		free(file_path);
         if(file_strean == 100){
                 jclass IHtsHelperListener_class = env->FindClass("com/ubt/alpha1e/business/IHtsHelperListener");
                 jmethodID on_get_new_action_info_finish = env->GetMethodID(IHtsHelperListener_class, "onGetNewActionInfoFinish", "(Z)V");
@@ -143,6 +146,10 @@ extern "C"
 			rtn[alen] = 0;
 		}
 		env->ReleaseByteArrayElements(barr, ba, 0);
+		env->DeleteLocalRef(barr);
+		env->DeleteLocalRef(strencode);
+		env->DeleteLocalRef(clsstring);
+
 		return rtn;
 	}
 

@@ -38,6 +38,9 @@ public class MainCoursedapter extends BaseQuickAdapter<CourseModel, BaseViewHold
         ImageView ivScore = helper.getView(R.id.iv_complete);
         ImageView ivLock = helper.getView(R.id.iv_lock);
         ivLock.setVisibility(item.getLockType() == 0 ? View.GONE : View.VISIBLE);
+        View ivBackground = helper.getView(R.id.view_background);
+        ivBackground.setVisibility(item.getLockType() == 0 ? View.GONE : View.VISIBLE);
+
         ((ImageView) helper.getView(R.id.iv_cources)).setAlpha(item.getLockType() == 0 ? 1.0f : 0.5f);
     }
 }

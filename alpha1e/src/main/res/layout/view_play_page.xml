@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/lay_ctrl_more"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_alignParentBottom="true"
+        android:alpha="0.96"
         android:background="@drawable/content_background"
         android:clickable="true"
         android:orientation="vertical"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:visibility="visible"
-        android:layout_alignParentBottom="true">
+        android:visibility="visible">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -30,7 +31,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentLeft="true"
-                android:src="@drawable/cc_poweroff" />
+                android:src="@drawable/cc_poweroff"/>
 
             <LinearLayout
                 android:id="@+id/Ll_play_content"
@@ -39,7 +40,7 @@
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_toLeftOf="@+id/sensor_control"
+                android:layout_toLeftOf="@+id/btn_lig_logo"
                 android:layout_toRightOf="@+id/btn_poweroff"
                 android:background="@color/B5"
                 android:gravity="center"
@@ -50,7 +51,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:background="@drawable/playindicator_animation"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
                 <TextView
                     android:id="@+id/text_playContentName"
@@ -58,15 +59,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="暂无播放内容"
-                    android:textColor="@color/T1" />
+                    android:textColor="@color/T1"/>
             </LinearLayout>
 
+
             <ImageView
-                android:id="@+id/sensor_control"
+                android:id="@+id/btn_lig_logo"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/cc_sensorcontorl" />
+                android:src="@drawable/cc_lightoff"/>
         </RelativeLayout>
         <!--android:background="#7fff0000"-->
 
@@ -81,7 +83,7 @@
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:layout_toLeftOf="@+id/btn_playaction"
-                android:src="@drawable/cc_actionlist" />
+                android:src="@drawable/cc_actionlist"/>
 
             <ImageView
                 android:id="@+id/btn_playaction"
@@ -90,14 +92,14 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="45dp"
                 android:layout_marginRight="45dp"
-                android:src="@drawable/cc_playaction" />
+                android:src="@drawable/cc_playaction"/>
 
             <ImageView
                 android:id="@+id/btn_stopaction"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@+id/btn_playaction"
-                android:src="@drawable/cc_stop" />
+                android:src="@drawable/cc_stop"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -107,12 +109,13 @@
 
             <ImageView
                 android:id="@+id/btn_vol_logo"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="16dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/cc_volumeicon" />
+                android:src="@drawable/cc_volumeicon"/>
 
             <SeekBar
                 android:id="@+id/skb_vol_control"
@@ -120,22 +123,30 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/btn_lig_logo"
+                android:layout_toLeftOf="@+id/sensor_control"
                 android:layout_toRightOf="@+id/btn_vol_logo"
                 android:maxHeight="2dp"
                 android:minHeight="2dp"
                 android:progressDrawable="@drawable/sec_bg_vol"
                 android:splitTrack="false"
-                android:thumb="@drawable/cc_volumecontrol" />
+                android:thumb="@drawable/cc_volumecontrol"/>
+
 
             <ImageView
-                android:id="@+id/btn_lig_logo"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
+                android:id="@+id/sensor_control"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/cc_lightoff" />
+                android:layout_toLeftOf="@+id/sensor_greeting"
+                android:src="@drawable/cc_sensorcontorl"/>
+
+            <ImageView
+                android:id="@+id/sensor_greeting"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_redhi_off"/>
         </RelativeLayout>
 
     </LinearLayout>

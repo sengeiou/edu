@@ -57,7 +57,7 @@ public class BezierView extends View {
     private static final int TEXT_HEIGHT = 60;  // 文本高度
     private static final int RATE = 20; // 移动速率
     private static final int HANDLER_WHAT = 100;
-    private static final int FRAME = 500;  // 1000帧
+    private static final int FRAME = 400;  // 1000帧
     private static final String[] TANGENT_COLORS = {"#7fff00", "#7a67ee", "#ee82ee", "#ffd700", "#1c86ee", "#8b8b00"};  // 切线颜色
     private static final int STATE_READY = 0x0001;
     private static final int STATE_RUNNING = 0x0002;
@@ -98,7 +98,7 @@ public class BezierView extends View {
     private PointF mCurPoint; // 当前移动的控制点
 
     private IBezierView mCallback = null;
-
+    private int mf = 0;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -176,7 +176,7 @@ public class BezierView extends View {
         mBezierPaint.setStyle(Paint.Style.STROKE);
         mBezierPaint.setAntiAlias(true);
         //虚线
-        PathEffect effects = new DashPathEffect(new float[]{8,8,8,8},1);
+        PathEffect effects = new DashPathEffect(new float[]{10,10,10,10},1);
         mBezierPaint.setPathEffect(effects);
 
         // 移动点画笔
@@ -298,6 +298,7 @@ public class BezierView extends View {
      * @return
      */
     private float deCasteljauX(int i, int j, float t) {
+        //UbtLog.d(TAG,"deCasteljauX = " + (mf++));
         if (i == 1) {
             return (1 - t) * mControlPoints.get(j).x + t * mControlPoints.get(j + 1).x;
         }

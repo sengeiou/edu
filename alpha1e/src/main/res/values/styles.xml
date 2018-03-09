@@ -198,7 +198,7 @@
         <item name="android:drawableRight">@drawable/icon_right_arrow</item>
         <item name="android:layout_marginRight">14dp</item>
         <item name="android:textColor">@color/tv_blue_color</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="text_left_style">

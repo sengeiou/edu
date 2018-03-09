@@ -228,7 +228,7 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-                outRect.bottom = 36;
+                outRect.bottom = 30;
             }
         });
 

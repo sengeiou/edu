@@ -9,7 +9,7 @@
     <color name="sec_txt_remote">#66c8c5</color>
     <color name="sec_txt_act_lib">#6679a1</color>
     <color name="sec_txt_acts">#e98db1</color>
-    <color name="sec_ctrl_bottom">#aab9cb</color>
+    <color name="sec_ctrl_bottom">#DDDDDD</color>
     <color name="sec_txt_num">#788797</color>
     <color name="sec_bg_rename">#c7c7cc</color>
     <color name="sec_txt_disc_low">#71777d</color>
@@ -148,10 +148,12 @@
     <color name="B13">#7B9ECB</color>
     <color name="B14">#E1EAF4</color>
     <color name="B15">#E4F2F7</color>
+    <color name="B16">#F4FFFFFF</color>
     <color name="LB1">#FFFFFF</color>
     <color name="DB1">#FFFFFF</color>
     <color name="GB1">#FFFFFF</color>
     <color name="GB2">#E7EAEA</color>
+    <color name="actionPlayTitle">#E4F2F7</color>
 
 
     <color name="colorPrimary">#F0F3F3</color>

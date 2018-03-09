@@ -82,7 +82,7 @@
             android:background="@drawable/btn_alert_bg"
             android:gravity="center"
             android:text="@string/ui_common_cancel"
-            android:textColor="#2c87f1"
+            android:textColor="@color/tv_user_edit_color"
             android:textSize="16sp"
             />
 
@@ -106,7 +106,7 @@
                 android:background="@drawable/btn_alert_bg"
                 android:gravity="center"
                 android:text="@string/ui_common_confirm"
-                android:textColor="#2c87f1"
+                android:textColor="@color/tv_user_edit_color"
                 android:textSize="16sp"
                 />
 

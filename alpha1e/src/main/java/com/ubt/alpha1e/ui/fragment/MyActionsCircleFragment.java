@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -45,7 +46,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import pl.droidsonroids.gif.GifImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,6 +74,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private RelativeLayout rlCircle;
     private TextView tvCircle;
     private ImageView ivCircle;
+
 
 
     public MyActionsCircleFragment() {
@@ -794,7 +795,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             public RelativeLayout rl_info;
             public ImageView img_action_logo,img_select,img_pause,img_play;
             public TextView txt_action_name;
-            public GifImageView gif;
+            public ImageView gif;
+            AnimationDrawable waveShapingAnim = null;
             public LinearLayout ll_select;
             public MyCircleHolder(View view) {
                 super(view);
@@ -811,7 +813,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 txt_action_name = (TextView) view.findViewById(R.id.txt_action_name);
 
                 //循环播放的时候在动作图标上的动画效果
-                gif = (GifImageView) view.findViewById(R.id.gif_playing);
+                gif = (ImageView) view.findViewById(R.id.gif_playing);
+                waveShapingAnim= (AnimationDrawable)gif.getBackground();
                 ll_select = (LinearLayout)view.findViewById(R.id.ll_select);
             }
 
@@ -834,16 +837,17 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 //            }
             final MyCircleHolder holder = (MyCircleHolder)mHolder;
             final Map<String,Object> actionList =mDatas.get(position);
+            String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
+            //删除自己编译的动作文件,文字名字开头为数字15XXXXX 等
+            if(removeSelfCreationAction(action_name)){
+                //从队列中移除元素
+                mDatas.remove(position);
+                return;
+            }
             Glide.with(mContext)
                     .load(R.drawable.sec_action_logo)
                     .fitCenter()
                     .into(holder.img_action_logo);
-
-            String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
-            //删除自己编译的动作文件,文字名字开头为数字15XXXXX 等
-            if(removeSelfCreationAction(action_name)){
-                return;
-            }
             if(action_name.startsWith("@") || action_name.startsWith("#") || action_name.startsWith("%")){
                 action_name = action_name.substring(1);
             }
@@ -869,16 +873,22 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             }
             if(isStartLooping)
             {
-
                 //循环播放的时候
                 if(actionList.get(MyActionsHelper.map_val_action_is_playing)!=null)
                 {
                     if ((Boolean) actionList.get(MyActionsHelper.map_val_action_is_playing)) {
                         holder.gif.setVisibility(View.VISIBLE);
+//                        startWaveAnimation();
+                        holder.waveShapingAnim.setOneShot(false);
+                        holder.waveShapingAnim.setVisible(true,true);
+                        holder.waveShapingAnim.start();
                         holder.img_pause.setVisibility(View.INVISIBLE);
                         holder.img_play.setVisibility(View.INVISIBLE);
                     } else {
                         holder.gif.setVisibility(View.INVISIBLE);
+                        //stopWaveAnimation();
+                        holder.waveShapingAnim.setVisible(false,false);
+                        holder.waveShapingAnim.stop();
                         holder.img_pause.setVisibility(View.INVISIBLE);
                         holder.img_play.setVisibility(View.VISIBLE);
                     }
@@ -895,10 +905,16 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 {
                     if ((Boolean) actionList.get(MyActionsHelper.map_val_action_is_playing)) {
                         holder.gif.setVisibility(View.INVISIBLE);
+//                        stopWaveAnimation();
+                        holder.waveShapingAnim.setVisible(false,false);
+                        holder.waveShapingAnim.stop();
                         holder.rl_info.findViewById(R.id.img_pause).setVisibility(View.VISIBLE);
                         holder.rl_info.findViewById(R.id.img_play).setVisibility(View.INVISIBLE);
                     } else {
                         holder.gif.setVisibility(View.INVISIBLE);
+//                        stopWaveAnimation();
+                        holder.waveShapingAnim.setVisible(false,false);
+                        holder.waveShapingAnim.stop();
                         holder.rl_info.findViewById(R.id.img_pause).setVisibility(View.INVISIBLE);
                         holder.rl_info.findViewById(R.id.img_play).setVisibility(View.VISIBLE);
                     }
@@ -1003,6 +1019,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private boolean removeSelfCreationAction(String name){
         if(name.substring(0,1).equals("1")||name.substring(0,1).equals("")){
             UbtLog.d(TAG,"remove selfCreationAction name :"+" position i  :");
+
             return true;
         }
         return false;
@@ -1093,4 +1110,18 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 .setCancelable(true)
                 .show();
     }
+//    private void startWaveAnimation(){
+//        UbtLog.d(TAG,"startWaveAnimation");
+//        holder.waveShapingAnim.setOneShot(false);
+//        waveShapingAnim.setVisible(true,true);
+//        waveShapingAnim.start();
+//
+//    }
+//    private void stopWaveAnimation(){
+//        UbtLog.d(TAG,"stopWaveAnimation");
+//        if(waveShapingAnim!=null) {
+//            waveShapingAnim.setVisible(false,false);
+//            waveShapingAnim.stop();
+//        }
+//    }
 }

@@ -156,10 +156,10 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     if(eventPlayStatus != null && mHabitsEventInfoDatas != null){
                         if(StringUtils.isStringNumber(eventPlayStatus.playAudioSeq)){
                             int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
-                            if(seqNo >= 0 && "playing".equals(eventPlayStatus.audioState)){
+                            UbtLog.d(TAG,"seqNo = " + seqNo + " eventId = " + eventPlayStatus.eventId + "   audioState = " + eventPlayStatus.audioState);
+                            if(seqNo >= 0 && "1".equals(eventPlayStatus.eventState)){
                                 for(HabitsEvent<List<PlayContentInfo>> event : mHabitsEventInfoDatas){
                                     if(event.eventId.equals(eventPlayStatus.eventId)){
-
                                         showPlayEventDialog(event.contents, event.eventId);
                                         break;
                                     }
@@ -223,7 +223,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-                outRect.bottom = 36;
+                outRect.bottom = 30;
             }
         });
 
@@ -482,7 +482,6 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
         }else {
 
             //startForResult(ParentManageCenterFragment.newInstance(), Constant.HIBITS_PARENT_CENTER_REQUEST_CODE);
-
             new InputPasswordDialog(getContext()).builder()
                     .setMsg(getStringRes("ui_habits_password_input_tip"))
                     .setCancelable(true)

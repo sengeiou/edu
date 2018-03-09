@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#8F8F8F"
+    android:orientation="vertical"
+    >
+    <ImageView
+        android:id="@+id/charging"
+        android:layout_width="48dp"
+        android:layout_height="29dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/power5"
+        android:visibility="invisible" />
+    <View
+        android:id="@+id/v_vertical_center"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:visibility="invisible"
+        android:layout_centerVertical="true">
+    </View>
+    <RelativeLayout
+        android:id="@+id/rl_hibits_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/v_vertical_center"
+        android:layout_marginLeft="35dp"
+        android:layout_marginBottom="-16dp"
+        >
+        <ImageView
+            android:id="@+id/iv_habits"
+            android:layout_width="120dp"
+            android:layout_height="60dp"
+            android:background="@drawable/img_home_clock"
+            android:visibility="visible" />
+        <TextView
+            android:id="@+id/tv_hibits_event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:text="起床"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/tv_hibits_event_name"
+            android:textColor="@color/T31"
+            android:text="AM 7:00"
+            android:textSize="12sp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_hibits_event_guids"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rl_hibits_event"
+        android:layout_toRightOf="@+id/rl_hibits_event"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="-12dp"
+        android:visibility="visible"
+        >
+        <ImageView
+            android:layout_width="243dp"
+            android:layout_height="107dp"
+            android:src="@drawable/img_action_guide" />
+        <TextView
+            android:layout_width="180dp"
+            android:layout_height="107dp"
+            android:layout_marginLeft="40dp"
+            android:gravity="center"
+            android:text="点这里可以给宝宝设置日期提醒。"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/ll_remote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_toLeftOf="@+id/ll_action"
+        android:layout_marginRight="50dp"
+        android:visibility="invisible">
+        <ImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@drawable/ic_home_controller"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ui_main_right_icon"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:visibility="invisible"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll_remote_guides"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ll_remote"
+        android:layout_toRightOf="@+id/ll_remote"
+        android:layout_marginLeft="-50dp"
+        android:visibility="invisible"
+       >
+
+        <ImageView
+            android:layout_width="243dp"
+            android:layout_height="107dp"
+            android:src="@drawable/img_control_guide" />
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="107dp"
+            android:layout_marginLeft="50dp"
+            android:gravity="center"
+            android:text="点这里可以控制机器人做动作。"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/ll_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_toLeftOf="@+id/charging"
+        android:layout_marginRight="25dp"
+        android:visibility="invisible">
+        <ImageView
+            android:id="@+id/iv_action"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@drawable/ic_home_action"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ui_main_right_icon2"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:visibility="invisible"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rl_action_guides"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ll_action"
+        android:layout_toRightOf="@+id/ll_action"
+        android:layout_marginLeft="-25dp"
+        android:visibility="invisible"
+        >
+        <ImageView
+            android:layout_width="243dp"
+            android:layout_height="107dp"
+            android:src="@drawable/img_action_guide" />
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="107dp"
+            android:layout_marginLeft="50dp"
+            android:gravity="center"
+            android:text="点这里可以给机器人编动作。"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_program"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@+id/charging"
+        android:layout_marginLeft="25dp"
+        android:visibility="invisible">
+        <ImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@drawable/ic_home_program"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ui_main_right_icon3"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:visibility="invisible"/>
+
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rl_program_guides"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ll_program"
+        android:layout_toRightOf="@+id/ll_program"
+        android:layout_marginLeft="-25dp"
+        android:visibility="invisible"
+        >
+        <ImageView
+            android:layout_width="243dp"
+            android:layout_height="107dp"
+            android:src="@drawable/img_program_guide" />
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="107dp"
+            android:layout_marginLeft="50dp"
+            android:gravity="center"
+            android:text="点这里可以给机器人写程序。"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/ll_community"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_toRightOf="@+id/ll_program"
+        android:layout_marginLeft="50dp"
+        android:visibility="invisible">
+
+        <ImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@drawable/ic_home_community"
+           />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ui_main_right_icon4"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:visibility="invisible"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rl_community_guides"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ll_community"
+        android:layout_toLeftOf="@+id/ll_community"
+        android:layout_marginLeft="-50dp"
+        android:visibility="invisible"
+        >
+        <ImageView
+            android:layout_width="243dp"
+            android:layout_height="107dp"
+            android:src="@drawable/img_community_guide" />
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="107dp"
+            android:layout_marginLeft="50dp"
+            android:gravity="center"
+            android:text="点这里可以在社区内分享作品，参与互动。"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_course_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/v_vertical_center"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="59dp"
+        android:layout_marginBottom="-15dp"
+        android:visibility="invisible"
+        >
+        <ImageView
+            android:id="@+id/iv_course"
+            android:layout_width="60dp"
+            android:layout_height="70dp"
+            android:background="@drawable/ic_home_course"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_course_center_guides"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rl_course_center"
+        android:layout_toLeftOf="@+id/rl_course_center"
+        android:layout_marginLeft="-50dp"
+        android:visibility="invisible"
+        >
+        <ImageView
+            android:layout_width="243dp"
+            android:layout_height="107dp"
+            android:src="@drawable/img_community_guide" />
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="107dp"
+            android:layout_marginLeft="50dp"
+            android:gravity="center"
+            android:text="给机器人编动作，写程序太难了？先来课程中心学习一下"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/top_icon2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/ll_remote"
+        android:layout_alignTop="@+id/top_icon2_disconnect"
+        android:src="@drawable/main_connect"
+        android:visibility="invisible"/>
+    <ImageView
+        android:id="@+id/top_icon2_disconnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/top_icon2"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/main_disconnected"
+        android:visibility="invisible" />
+    <TextView
+        android:id="@+id/jump_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/btn_skip"
+        android:text="跳过指引"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:visibility="visible"
+        android:layout_alignBottom="@+id/ll_community"
+        android:layout_toRightOf="@+id/ll_community"
+        />
+
+
+    <RelativeLayout
+        android:id="@+id/top_icon2_guides"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/top_icon2"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="40dp"
+        android:visibility="invisible"
+        >
+        <ImageView
+            android:layout_width="243dp"
+            android:layout_height="107dp"
+            android:src="@drawable/img_connect_guide" />
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="107dp"
+            android:layout_marginLeft="50dp"
+            android:gravity="center"
+            android:text="最最关键的第一步：点这里连接机器人并给它联网。"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

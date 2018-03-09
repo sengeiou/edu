@@ -21,12 +21,16 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.BuildConfig;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.animator.FrameAnimation;
@@ -39,6 +43,7 @@ import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loopHandler.HandlerCallback;
 import com.ubt.alpha1e.base.loopHandler.LooperThread;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsActivity;
+import com.ubt.alpha1e.behaviorhabits.model.behaviourHabitModel;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
@@ -64,6 +69,7 @@ import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.custom.CommonGuideView;
+import com.ubt.alpha1e.ui.custom.MainActivityGuideView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
@@ -72,6 +78,7 @@ import com.ubt.alpha1e.ui.helper.BluetoothStateHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.userinfo.notice.WebActivity;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -113,11 +120,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @BindView(R.id.right_icon4)
     TextView rightIcon4;
     @BindView(R.id.top_icon)
-    TextView topIcon;
+    ImageView topIcon;
     @BindView(R.id.top_icon2)
-    TextView topIcon2;
+    ImageView topIcon2;
     @BindView(R.id.top_icon2_disconnect)
-    TextView topIcon2Disconnect;
+    ImageView topIcon2Disconnect;
     @BindView(R.id.top_icon3)
     TextView topIcon3;
 
@@ -145,6 +152,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     ImageView actionIndicator;
     @BindView(R.id.indicator0)
     ImageView indicator;
+    @BindView(R.id.tv_habits_event_time)
+    TextView  habitsTime;
+    @BindView(R.id.tv_hibits_event_name)
+    TextView  habitsName;
+    @BindView(R.id.top_icon4)
+    ImageView voiceCmd;
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
@@ -247,7 +260,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     AnimationDrawable  mActionIndicator=null;
     long mClickTime=0;
     int CLICK_THRESHOLD_DUPLICATE=800;
-
+    Animation hyperspaceJump;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,6 +269,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mCurrentTouchTime = System.currentTimeMillis();
         getScreenInch();
         initUI();
+
         mHelper = MainUiBtHelper.getInstance(getContext());
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         filter1.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
@@ -271,6 +285,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mActionIndicator.setOneShot(false);
         mActionIndicator.setVisible(true,true);
         mPresenter.registerEventBus();
+        mPresenter.getXGInfo();
+        if(!MainActivityGuideView.hasShowGuide()) {
+            MainActivityGuideView.getInstant(this);
+        }
     }
 
     @Override
@@ -284,7 +302,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         super.onResume();
         UbtLog.d(TAG, "onResume");
         initUI();
-        mPresenter.getXGInfo();
+        showUserPicIcon();
+        requireBehaviourNextEvent();
         if (!isBulueToothConnected()) {
             showDisconnectIcon();
             showGlobalButtonAnmiationEffect(false);
@@ -377,7 +396,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     };
 
 
-    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.ll_remote, R.id.ll_action, R.id.ll_program,
+    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.top_icon4,R.id.ll_remote, R.id.ll_action, R.id.ll_program,
             R.id.ll_community, R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
             R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg, R.id.rl_course_center, R.id.rl_hibits_event})
     protected void switchActivity(View view) {
@@ -422,6 +441,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     }
                 } else {
                     showBluetoothConnectDialog();
+                }
+                break;
+            case R.id.top_icon4:
+                if(!removeDuplicateClickEvent()) {
+                    WebActivity.launchActivity(this,HttpEntity.VOICE_CMD,"语音指令");
                 }
                 break;
             case R.id.ll_remote:
@@ -671,6 +695,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
                 looperThread.send(createMessage(Constant.APP_BLUETOOTH_CONNECTED));
             }
+        }else if(event.getEvent()==RobotEvent.Event.ENTER_CONNECT_DEVICE){
+            gotoConnectBluetooth();
         }
 
     }
@@ -689,6 +715,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             showGlobalButtonAnmiationEffect(false);
         }
     }
+
     void showBluetoothDisconnect() {
         dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
                 .setTitle("提示")
@@ -954,6 +981,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public void hiddenBuddleText() {
         hiddenBuddleTextView();
+    }
+
+    @Override
+    public Handler getHandler() {
+        return m_Handler;
     }
 
     //若要使用此功能，需先绑定机器人！
@@ -1238,7 +1270,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     public void handleMessage(Bundle bundle) {
 
       Byte status= bundle.getByte(STATUS_MACHINE);
-        UbtLog.d(TAG,"STATE MACHINE IS "+status);
+      //  UbtLog.d(TAG,"STATE MACHINE IS "+status);
         switch (status){
            case Constant.APP_LAUNCH_STATUS:  //启动应用,虚拟形象睡觉姿势
              runOnUiThread(new Runnable() {
@@ -1246,8 +1278,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    public void run() {
                        showBuddleText(getString(R.string.buddle_text_init_status));
                        buddleTextAsynchronousTask();
-                       cartoonAction.setBackgroundResource(R.drawable.sleep21);
-                       cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
+                       if(cartoonAction!=null) {
+                           cartoonAction.setBackgroundResource(R.drawable.sleep21);
+                           cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
+                       }
                        hiddenCartoonTouchView();
                        recoveryCartoonBodyUi();
                        hiddenBatteryUi();
@@ -1474,16 +1508,45 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
  }
 
   private void showUserPicIcon(){
-      UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
-      UbtLog.d(TAG,"user image picture"+userModel.getHeadPic());
+      UserModel mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+      if(mUserModel != null) {
+          UbtLog.d(TAG, "user image picture" + mUserModel.getHeadPic());
+          Glide.with(this).load(mUserModel.getHeadPic()).asBitmap().into(topIcon);
+      }
   }
   private void hiddenDisconnectIcon(){
-      if(topIcon2Disconnect!=null)
-      topIcon2Disconnect.setVisibility(View.INVISIBLE);
+      if(topIcon2Disconnect!=null) {
+          topIcon2Disconnect.setVisibility(View.INVISIBLE);
+          topIcon2Disconnect.clearAnimation();
+          topIcon2.clearAnimation();
+      }
   }
     private void showDisconnectIcon(){
-        if(topIcon2Disconnect!=null)
-        topIcon2Disconnect.setVisibility(View.VISIBLE);
+        if(topIcon2Disconnect!=null) {
+            topIcon2Disconnect.setVisibility(View.VISIBLE);
+            hyperspaceJump = AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump);
+            hyperspaceJump.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    topIcon2Disconnect.startAnimation(hyperspaceJump);
+                    topIcon2.startAnimation(hyperspaceJump);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+
+            topIcon2Disconnect.startAnimation(hyperspaceJump);
+            topIcon2.startAnimation(hyperspaceJump);
+        }
+
     }
   private void sendCommandToRobot(String absouteActionPath){
         if(cartoon_enable) {
@@ -1535,5 +1598,35 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
       }
   }
 
+  private void setBehaviourHabitNextEvent(String eventName,String eventTime){
+      habitsTime.setText(eventTime);
+      habitsName.setText(eventName);
+  }
+
+    public void requireBehaviourNextEvent() {
+        BaseRequest mBehaviourControlRequest = new BaseRequest();
+        doRequestFromServer(BuildConfig.WebServiceUbx+HttpEntity.GET_BEHAVIOURHABIT_NEXTEVENT,mBehaviourControlRequest);
+    }
+    public void doRequestFromServer(String url, BaseRequest baseRequest) {
+        synchronized (this) {
+            OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, 999).execute(new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                }
+                @Override
+                public void onResponse(String response, int id) {
+                    UbtLog.d(TAG, "response = " + response);
+                    if(id==999){
+                        BaseResponseModel<behaviourHabitModel> baseResponseModel1 = GsonImpl.get().toObject(response, new TypeToken<BaseResponseModel<behaviourHabitModel>>() {
+                        }.getType());
+                        if(baseResponseModel1.models!=null) {
+                            UbtLog.d(TAG, "GET RESOPNSE " + baseResponseModel1.models.eventName );
+                            setBehaviourHabitNextEvent(baseResponseModel1.models.eventName,baseResponseModel1.models.eventTime);
+                        }
+                    }
+                }
+            });
+        }
+    }
 
 }
