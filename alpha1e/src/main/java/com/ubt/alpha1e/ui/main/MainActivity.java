@@ -305,7 +305,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         showUserPicIcon();
         requireBehaviourNextEvent();
         if (!isBulueToothConnected()) {
-            showDisconnectIcon();
             showGlobalButtonAnmiationEffect(false);
             looperThread.send(createMessage(Constant.APP_LAUNCH_STATUS));
             // looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_FIVE_STATUS));
@@ -315,6 +314,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     AutoScanConnectService.startService(MainActivity.this); //add by dicy.cheng 打开自动连接
                 }
             }, 100);
+            showDisconnectIcon(true);
         } else {
             MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
             if (cartoonAction != null) {
@@ -328,10 +328,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     if (networkInfo.status) {
                         hiddenDisconnectIcon();
                     } else {
-                        showDisconnectIcon();
+                        showDisconnectIcon(true);
                     }
                 } else {
-                    showDisconnectIcon();
+                    showDisconnectIcon(true);
                 }
             }
             getCurrentPower();
@@ -613,7 +613,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showDisconnectIcon();
+                        showDisconnectIcon(false);
                     }
                 });
             }
@@ -1311,7 +1311,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
-                       showDisconnectIcon();
+                       showDisconnectIcon(false);
                        stopchargeAsynchronousTask();
                        stopBuddleTextAsynchronousTask();
                         showBuddleText(getString(R.string.buddle_text_init_status));
@@ -1383,7 +1383,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                    public void run() {
                        showCartoonAction(cartoon_action_sleep);
                        recoveryCartoonBodyUi();
-                       showDisconnectIcon();
+                       showDisconnectIcon(true);
                        stopchargeAsynchronousTask();
                    }
                });
@@ -1521,30 +1521,37 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
           topIcon2.clearAnimation();
       }
   }
-    private void showDisconnectIcon(){
+
+    /**
+     *
+     * true running the animation
+     * false donot execute the animaiton
+     * @param animationRunning
+     */
+    private void showDisconnectIcon(boolean animationRunning){
         if(topIcon2Disconnect!=null) {
             topIcon2Disconnect.setVisibility(View.VISIBLE);
-            hyperspaceJump = AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump);
-            hyperspaceJump.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
+            if(animationRunning) {
+                hyperspaceJump = AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump);
+                hyperspaceJump.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
 
-                }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        // topIcon2Disconnect.startAnimation(hyperspaceJump);
+                        //  topIcon2.startAnimation(hyperspaceJump);
+                    }
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    topIcon2Disconnect.startAnimation(hyperspaceJump);
-                    topIcon2.startAnimation(hyperspaceJump);
-                }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-
-            topIcon2Disconnect.startAnimation(hyperspaceJump);
-            topIcon2.startAnimation(hyperspaceJump);
+                    }
+                });
+                topIcon2Disconnect.startAnimation(hyperspaceJump);
+                topIcon2.startAnimation(hyperspaceJump);
+            }
         }
 
     }
