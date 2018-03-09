@@ -1758,7 +1758,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         setButtonEnable(false);
 
         autoRead = true;
-        ivAutoRead.setImageResource(R.drawable.ic_auto_disable);
+        ivAutoRead.setImageResource(R.drawable.ic_manual_disable);
         ivAddFrame.setImageResource(R.drawable.ic_stop);
         mHandler.sendEmptyMessage(MSG_AUTO_READ);
         rlRecordingState.setVisibility(View.VISIBLE);
