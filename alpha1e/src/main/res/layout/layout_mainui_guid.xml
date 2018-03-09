@@ -318,7 +318,7 @@
             android:layout_height="107dp"
             android:layout_marginLeft="50dp"
             android:gravity="center"
-            android:text="给机器人编动作，写程序太难了？先来课程中心学习一下"
+            android:text="给机器人编动作，写程序太难了？先来课程中心学习一下。"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
