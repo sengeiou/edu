@@ -349,7 +349,6 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         // ActionDetailActivity.launch(getActivity(), mDynamicActionModels.get(position));
         Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
         intent.putExtra(dynamicModel, mDynamicActionModels.get(position));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivityForResult(intent, 1);
     }
 

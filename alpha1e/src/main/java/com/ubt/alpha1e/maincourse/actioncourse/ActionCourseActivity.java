@@ -306,7 +306,6 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                                  } else if (position == 9) {
                                     intent = new Intent(ActionCourseActivity.this, CourseLevelTenActivity.class);
                                  }
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivityForResult(intent, REQUESTCODE);
                                 ActionCourseActivity.this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                                 dialog.dismiss();
