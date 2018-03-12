@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.userinfo.model.NoticeModel;
@@ -77,6 +78,7 @@ public class WebActivity extends MVPBaseActivity<NoticeContract.View, NoticePres
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LoadingDialog.show(this);
         mTitle = (String) getIntent().getStringExtra(
                 WEB_TITLE);
         mUrl = (String) getIntent().getStringExtra(WEB_URL);
@@ -187,6 +189,7 @@ public class WebActivity extends MVPBaseActivity<NoticeContract.View, NoticePres
                     isRefreshing = false;
                     imgNetError.clearAnimation();
                 }
+                LoadingDialog.dismiss(WebActivity.this);
             }
         };
 
