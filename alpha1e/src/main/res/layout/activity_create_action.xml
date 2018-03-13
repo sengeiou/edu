@@ -24,6 +24,71 @@
 
             />
 
+        <RelativeLayout
+            android:id="@+id/rl_recording_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/iv_back"
+            android:gravity="center"
+            android:layout_marginLeft="26dp"
+            android:layout_marginTop="5dp"
+            android:visibility="invisible"
+            >
+
+            <ImageView
+                android:id="@+id/iv_recording_state"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginLeft="8dp"
+                android:src="@drawable/img_recording"
+                android:scaleType="fitXY"
+                />
+
+            <TextView
+                android:id="@+id/tv_recording_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/iv_recording_state"
+                android:text="@string/ui_recording_txt"
+                android:textColor="#2C3E50"
+                android:textSize="16sp"
+                android:layout_marginLeft="8dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_recoding_index"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/tv_recording_tip"
+                android:textColor="@android:color/white"
+                android:text="1 "
+                android:textSize="16sp"
+                />
+            <TextView
+                android:id="@+id/tv_11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_recoding_index"
+                android:layout_marginLeft="5dp"
+                android:text="|"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tv_recoding_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_11"
+                android:layout_marginLeft="5dp"
+                android:textColor="@android:color/white"
+                android:text="00:00"
+                android:textSize="16sp"
+                />
+
+
+        </RelativeLayout>
+
+
         <ImageView
             android:id="@+id/iv_help"
             android:layout_width="45dp"
@@ -36,6 +101,7 @@
             android:id="@+id/iv_save_action"
             android:layout_width="45dp"
             android:layout_height="45dp"
+            android:layout_marginRight="6dp"
             android:scaleType="fitXY"
             android:src="@drawable/actions_edit_save_selector"
             android:layout_toLeftOf="@+id/iv_help"
@@ -45,6 +111,7 @@
             android:id="@+id/iv_auto_read"
             android:layout_width="45dp"
             android:layout_height="45dp"
+            android:layout_marginRight="6dp"
             android:src="@drawable/actions_edit_auto_selector"
             android:scaleType="fitXY"
             android:layout_toLeftOf="@id/iv_save_action"
@@ -54,6 +121,7 @@
             android:id="@+id/iv_reset"
             android:layout_width="45dp"
             android:layout_height="45dp"
+            android:layout_marginRight="6dp"
             android:src="@drawable/actions_edit_reset_selector"
             android:scaleType="fitXY"
             android:layout_toLeftOf="@+id/iv_auto_read"
@@ -113,6 +181,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/icon_advanced_action"
                     android:scaleType="fitXY"
+                    android:layout_marginTop="5dp"
                     />
 
 
@@ -122,6 +191,7 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/icon_bg_action"
                     android:scaleType="fitXY"
+                    android:layout_marginTop="5dp"
                     />
 
 
@@ -175,7 +245,7 @@
     <RelativeLayout
         android:id="@+id/rl_action_line"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="140dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/img_bg_bottom"
         android:visibility="visible"
@@ -208,6 +278,7 @@
                 android:layout_toRightOf="@+id/iv_zoom_plus"
                 android:paddingRight="10dp"
                 android:paddingTop="10dp"
+                android:visibility="gone"
                 />
 
 
@@ -215,18 +286,21 @@
                 android:id="@+id/iv_zoom_minus"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/tv_zoom_plus"
+                android:layout_toRightOf="@+id/iv_cancel_update"
                 android:src="@drawable/actions_zoom_minus_selector"
+                android:layout_marginRight="55dp"
                 />
 
             <TextView
                 android:id="@+id/tv_zoom_minus"
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/iv_zoom_minus"
-                android:paddingTop="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="65dp"
                 android:paddingRight="10dp"
-                />
+                android:paddingTop="10dp"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/iv_cancel_update"
@@ -257,11 +331,11 @@
 
                 <ImageView
                     android:id="@+id/iv_play_music"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:src="@drawable/icon_play_music"
                     android:layout_centerHorizontal="true"
-                    android:paddingTop="10dp"
+                    android:scaleType="centerCrop"
                     />
 
                 <TextView
@@ -270,6 +344,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/iv_play_music"
                     android:gravity="center"
+                    android:textColor="#fff"
 
                     />
 
@@ -285,6 +360,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/rl_play_music"
                 android:layout_toLeftOf="@+id/iv_add_frame"
+                android:layout_marginRight="16dp"
                 android:orientation="vertical"
                 android:gravity="center_vertical"
                 >

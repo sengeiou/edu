@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/webview_main"
                 android:background="@color/home_background">
 
     <RelativeLayout
@@ -30,11 +31,43 @@
             android:background="@drawable/blutooth_retrun"/>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/web_parant"
+        android:layout_below="@id/rl_tile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <WebView
         android:id="@+id/web_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rl_tile"
         android:background="#00000000"/>
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_below="@id/rl_tile"
+        android:id="@+id/load_error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@android:color/white"
+        >
+
+        <TextView
+            android:id="@+id/tv_webview_network_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#AFBFC8"
+            android:textSize="@dimen/sp_14"
+            android:layout_centerInParent="true"
+            android:text="@string/ui_webview_network_error" />
+
+        <ImageView
+            android:id="@+id/img_net_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tv_webview_network_error"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/webview_network_error" />
+    </RelativeLayout>
 </RelativeLayout>

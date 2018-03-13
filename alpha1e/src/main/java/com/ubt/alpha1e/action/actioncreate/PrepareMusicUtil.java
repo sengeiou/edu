@@ -248,7 +248,7 @@ public class PrepareMusicUtil implements BaseQuickAdapter.OnItemClickListener, O
                 ivDelete.setVisibility(View.GONE);
                 textView.setVisibility(View.INVISIBLE);
             } else {
-                ivSelect.setVisibility(View.GONE);
+                ivSelect.setVisibility(View.INVISIBLE);
                 textView.setVisibility(View.VISIBLE);
                 textView.setText(item.getMusicName());
                 gifView.setVisibility(View.VISIBLE);

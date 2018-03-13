@@ -28,6 +28,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResponseMode.CourseDetailScoreModule;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.maincourse.adapter.ActionCoursedapter;
 import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
 import com.ubt.alpha1e.maincourse.courselayout.ActionCourseDataManager;
@@ -41,9 +42,11 @@ import com.ubt.alpha1e.maincourse.courseone.CourseLevelSixActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelTenActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelThreeActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
@@ -74,6 +77,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
 
     private static final int REQUESTCODE = 10000;
     private static ActionCourseActivity mainCourseInstance = null;
+    private boolean isShowBleDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +156,9 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
     protected void onResume() {
         super.onResume();
         UbtLog.d(TAG, "------------------onResume-----------------");
+        if (!isBulueToothConnected()) {
+            showLoasBleDiaog();
+        }
     }
 
 
@@ -219,7 +226,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
 //                            }
 //                        }
                     }
-                    if (i==9){
+                    if (i == 9) {
 
                     }
                 }
@@ -277,27 +284,29 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                         public void onClick(DialogPlus dialog, View view) {
                             if (view.getId() == R.id.btn_pos) {
                                 int n = position + 1;
+                                Intent intent = null;
                                 if (position == 0) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class), REQUESTCODE);
-                                } else if (position == 1) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class), REQUESTCODE);
-                                } else if (position == 2) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelThreeActivity.class), REQUESTCODE);
-                                } else if (position == 3) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFourActivity.class), REQUESTCODE);
-                                } else if (position == 4) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFiveActivity.class), REQUESTCODE);
-                                } else if (position == 5) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelSixActivity.class), REQUESTCODE);
-                                } else if (position == 6) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelSevenActivity.class), REQUESTCODE);
-                                } else if (position == 7) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelEightActivity.class), REQUESTCODE);
-                                } else if (position == 8) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelNineActivity.class), REQUESTCODE);
-                                } else if (position == 9) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTenActivity.class), REQUESTCODE);
-                                }
+                                    intent= new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class);
+                                 } else if (position == 1) {
+                                    intent =  new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class);
+                                 } else if (position == 2) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelThreeActivity.class);
+                                 } else if (position == 3) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelFourActivity.class);
+                                 } else if (position == 4) {
+                                    intent= new Intent(ActionCourseActivity.this, CourseLevelFiveActivity.class);
+                                 } else if (position == 5) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelSixActivity.class);
+                                 } else if (position == 6) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelSevenActivity.class);
+                                 } else if (position == 7) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelEightActivity.class);
+                                 } else if (position == 8) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelNineActivity.class);
+                                 } else if (position == 9) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelTenActivity.class);
+                                 }
+                                startActivityForResult(intent, REQUESTCODE);
                                 ActionCourseActivity.this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                                 dialog.dismiss();
                                 myHandler.removeMessages(HANDLER_EXIT_COURSE);
@@ -335,7 +344,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         byte[] params = new byte[1];
         params[0] = 0;
         if (null != ((AlphaApplication) this
-                .getApplicationContext()).getBlueToothManager()&&null!=((AlphaApplication) this.getApplicationContext())
+                .getApplicationContext()).getBlueToothManager() && null != ((AlphaApplication) this.getApplicationContext())
                 .getCurrentBluetooth()) {
             ((AlphaApplication) this
                     .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) this.getApplicationContext())
@@ -366,17 +375,17 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
 //                        exitCourse();
 //                    }
 //                }, 3500);
-                myHandler.sendEmptyMessageDelayed(HANDLER_EXIT_COURSE,4000);
+                myHandler.sendEmptyMessageDelayed(HANDLER_EXIT_COURSE, 4000);
             }
         }
     }
 
-    private static  int HANDLER_EXIT_COURSE =11111;
-    Handler myHandler= new Handler(){
+    private static int HANDLER_EXIT_COURSE = 11111;
+    Handler myHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what==HANDLER_EXIT_COURSE){
+            if (msg.what == HANDLER_EXIT_COURSE) {
                 exitCourse();
             }
         }
@@ -427,4 +436,30 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 .create().show();
     }
 
+    private void showLoasBleDiaog() {
+        isShowBleDialog = true;
+        new ConfirmDialog(this).builder()
+                .setTitle("提示")
+                .setMsg("请先连接机器人蓝牙")
+                .setCancelable(false)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接蓝牙 ");
+                        Intent intent = new Intent();
+                        intent.setClass(ActionCourseActivity.this, BluetoothconnectActivity.class);
+                        startActivity(intent);
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                MainCourseActivity.finishByMySelf();
+                ActionCourseActivity.finishByMySelf();
+                ActionCourseActivity.this.finish();
+                //关闭窗体动画显示
+                ActionCourseActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            }
+        }).show();
+    }
 }

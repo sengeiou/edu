@@ -16,10 +16,12 @@ import android.widget.TextView;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.adapter.FeedbackRecyclerAdapter;
 import com.ubt.alpha1e.data.model.FeedbackInfo;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.userinfo.helpfeedback.feedback.FeedbackActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.alpha1e.webcontent.WebContentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,7 +163,9 @@ public class HotQuestionFragment extends MVPBaseFragment<HotQuestionContract.Vie
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rl_feedback:
-                FeedbackActivity.LaunchActivity(getContext());
+                //FeedbackActivity.LaunchActivity(getContext());
+                WebContentActivity.launchActivity(getActivity(), HttpEntity.EMAIL_REPORT, getStringRes("ui_setting_email_report"), true);
+
                 break;
         }
     }

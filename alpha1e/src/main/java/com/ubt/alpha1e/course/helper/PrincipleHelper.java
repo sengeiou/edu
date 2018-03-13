@@ -102,7 +102,7 @@ public class PrincipleHelper extends BaseHelper {
 
     private void doOnOnePower(int id){
         byte[] params = new byte[5];
-        //DefaultServosInitAngle=1==93,2==20,3==66,4==86,5==156,6==127,7==90,8==74,9==95,10==101,11==90,12==90,13==104,14==81,15==80,16==90
+        //DefaultServosInitAngle=1==93,2==20,3==66,4==86,5==156,6==127,7==90,8==74,9==95,10==104,11==89,12==89,13==104,14==81,15==76,16==89
         params[0] = ByteHexHelper.intToHexByte(id);
         if(id == 1){
             params[1] = ByteHexHelper.intToHexByte(93);
@@ -123,21 +123,21 @@ public class PrincipleHelper extends BaseHelper {
         }else if(id == 9){
             params[1] = ByteHexHelper.intToHexByte(95);
         }else if(id == 10){
-            params[1] = ByteHexHelper.intToHexByte(101);
+            params[1] = ByteHexHelper.intToHexByte(104);
         }else if(id == 11){
-            params[1] = ByteHexHelper.intToHexByte(90);
+            params[1] = ByteHexHelper.intToHexByte(89);
         }else if(id == 12){
-            params[1] = ByteHexHelper.intToHexByte(90);
+            params[1] = ByteHexHelper.intToHexByte(89);
         }else if(id == 13){
             params[1] = ByteHexHelper.intToHexByte(104);
         }else if(id == 14){
             params[1] = ByteHexHelper.intToHexByte(81);
         }else if(id == 15){
-            params[1] = ByteHexHelper.intToHexByte(80);
-        }else if(id == 15){
-            params[1] = ByteHexHelper.intToHexByte(90);
+            params[1] = ByteHexHelper.intToHexByte(76);
+        }else if(id == 16){
+            params[1] = ByteHexHelper.intToHexByte(89);
         }else {
-            params[1] = ByteHexHelper.intToHexByte(90);
+            params[1] = ByteHexHelper.intToHexByte(89);
         }
         params[2] = ByteHexHelper.intToHexByte(100);
         params[3] = ByteHexHelper.intToHexByte(0);
@@ -209,10 +209,23 @@ public class PrincipleHelper extends BaseHelper {
         doOnOnePower(16);
     }
 
+    public void doOnFoot(){
+        doOnOnePower(11);
+        doOnOnePower(16);
+        doOnOnePower(10);
+        doOnOnePower(15);
+        doOnOnePower(9);
+        doOnOnePower(14);
+        doOnOnePower(8);
+        doOnOnePower(13);
+        doOnOnePower(7);
+        doOnOnePower(12);
+    }
+
     /**
-     * 机器人控制舵机命令（目前只有控制双脚蹲下掉电）
+     * 机器人控制舵机命令（目前只有[1,3],[1,4]）
      * @param controlType 1.掉电；2.上电
-     * @param position 1.左手；2.右手 3.双脚。
+     * @param position 1.左手；2.右手 3.双脚 4.除8号、13号舵机外，其他全部掉电
      */
     public void doControlEngine(int controlType, int position){
         byte[] params = new byte[2];

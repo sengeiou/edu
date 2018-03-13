@@ -56,6 +56,8 @@ public class BlocklyCourseAdapter extends BaseQuickAdapter<CourseData, BaseViewH
         tvActionName.setTextColor(Integer.valueOf(item.getStatus()) ==  1 ? mContext.getResources().getColorStateList(R.color.tv_black_color) : mContext.getResources().getColorStateList(R.color.login_line_color));
         ImageView ivLock = helper.getView(R.id.iv_action_lock);
         ivLock.setVisibility(Integer.valueOf(item.getStatus()) == 1 ? View.GONE : View.VISIBLE);
+        View mView = helper.getView(R.id.view_background);
+        mView.setVisibility(Integer.valueOf(item.getStatus()) == 1 ? View.GONE : View.VISIBLE);
 
         ImageView ivStar = helper.getView(R.id.iv_action_complete);
         if(item.getCurrGraphProgramId() > item.getCid()){

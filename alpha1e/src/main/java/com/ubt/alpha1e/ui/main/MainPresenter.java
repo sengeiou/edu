@@ -369,7 +369,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     }
 
     private void BindXGServer(final XGDeviceMode xgDeviceMode) {
-        String userId = SPUtils.getInstance().getString(Constant.SP_XG_USERID);
+        String userId = SPUtils.getInstance().getString(Constant.SP_USER_ID);
         if(TextUtils.isEmpty(userId)){
      //   if(!TextUtils.isEmpty(userId)&&userId.equals(SPUtils.getInstance().getString(Constant.SP_USER_ID))){
             UbtLog.d(TAG,"BindXGServer  userId null");
