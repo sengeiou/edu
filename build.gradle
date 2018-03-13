@@ -42,39 +42,39 @@ allprojects {
         jcenter()
         jcenter()
         maven { url "https://jitpack.io" }
-        maven {
-            url "${artifactory_url}/${artifactory_alpha1e_release}"
-            credentials {
-                username = artifactory_username
-                password = artifactory_password
-            }
-        }
-        maven {
-            url "${artifactory_url}/${artifactory_alpha1e_snapshot}"
-            credentials {
-                username = artifactory_username
-                password = artifactory_password
-            }
-        }
-        maven {
-            url "${artifactory_url}/${artifactory_alpha1e_release}"
-            credentials {
-                username = artifactory_username
-                password = artifactory_password
-            }
-        }
-
-        maven {
-            url "${artifactory_url}/${artifactory_alpha1e_snapshot}"
-            credentials {
-                username = artifactory_username
-                password = artifactory_password
-            }
-        }
-        configurations.all {
-            // check for updates every build
-            resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-        }
+//        maven {
+//            url "${artifactory_url}/${artifactory_alpha1e_release}"
+//            credentials {
+//                username = artifactory_username
+//                password = artifactory_password
+//            }
+//        }
+//        maven {
+//            url "${artifactory_url}/${artifactory_alpha1e_snapshot}"
+//            credentials {
+//                username = artifactory_username
+//                password = artifactory_password
+//            }
+//        }
+//        maven {
+//            url "${artifactory_url}/${artifactory_alpha1e_release}"
+//            credentials {
+//                username = artifactory_username
+//                password = artifactory_password
+//            }
+//        }
+//
+//        maven {
+//            url "${artifactory_url}/${artifactory_alpha1e_snapshot}"
+//            credentials {
+//                username = artifactory_username
+//                password = artifactory_password
+//            }
+//        }
+//        configurations.all {
+//            // check for updates every build
+//            resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+//        }
         maven {
             url 'https://maven.google.com/'
             name 'Google'
