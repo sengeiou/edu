@@ -1,25 +1,121 @@
 apply plugin: 'com.android.library'
+
+
+//protobuf {
+//    protoc {
+//        artifact = rootProject.ext.plugin.protocArtifact
+//    }
+//    plugins {
+//        java {
+//            artifact = rootProject.ext.plugin.protocArtifact
+//        }
+//    }
+//    generateProtoTasks {
+//        all().each { task ->
+//            task.plugins {
+//                java {}
+//            }
+//        }
+//    }
+//}
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
-
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-        encoding = "UTF-8"
+
+        multiDexEnabled true
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 
 dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:26.+'
+    testCompile 'junit:junit:4.12'
+
+}
+
+apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'maven-publish'
+
+def group = 'com.ubtrobot.lib.packets'
+def libraryVersion = '0.0.2'
+def baseName = project.getName()
+
+task jarSdk(
+        type: Jar,
+        dependsOn: [
+                ':alpha1sLib:assembleRelease']) {
+    archiveName = "${baseName}-${libraryVersion}.jar"
+
+    //需打包的资源所在的路径集
+    def srcClassDir = [project.buildDir.absolutePath + "/intermediates/classes/release"];
+    //初始化资源路径集
+    from srcClassDir
+
+    exclude "**/BuildConfig.class"
+    exclude "**/R.class"
+    exclude "**/BuildConfig\$*.class"
+    exclude "**/R\$*.class"
+
+//    //只导入资源路径集下的部分资源
+//    include "com/ubtrobot/led/listener/*.class"
+//    include "com/ubtrobot/led/LedApi*.class"
+//    include "com/ubtrobot/led/protos/*.class"
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId group
+            artifactId baseName
+
+//            if (rootProject.ext.snapshot) {
+//                version = libraryVersion + "-SNAPSHOT"
+//            }else {
+                version libraryVersion
+//            }
+            artifact("build/libs/${baseName}-${libraryVersion}.jar")
+        }
+    }
+}
+
+artifactory {
+    contextUrl = artifactory_url
+
+    publish {
+        repository {
+//            if (rootProject.ext.snapshot){
+//                repoKey = artifactory_alpha1e_snapshot
+//            }else {
+                repoKey = artifactory_alpha1e_release
+//            }
+            username = artifactory_username
+            password = artifactory_password
+        }
+
+        defaults {
+            publications('mavenJava')
+            publishArtifacts = true
+        }
+    }
+
+    resolve {
+        repoKey = 'jcenter'
+    }
 }

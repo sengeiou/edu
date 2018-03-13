@@ -10,19 +10,10 @@ buildscript {
      //     classpath 'com.android.tools.build:gradle:3.0.1'
      //   classpath 'com.android.tools.build:gradle:1.1.1'
         //classpath 'com.jakewharton:butterknife-gradle-plugin:8.4.0'
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.6.2' // 添加了这一行
     }
 }
-allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-        //google()
 
-    }
-
-}
-
-/*在根目录中配置公用供子模块调用*/
 ext {
     //Android
     compileSdkVersion = 26
@@ -40,5 +31,57 @@ ext {
             supportRecyleView:"com.android.support:recyclerview-v7:${supportLibrary}"
 
     ]
+    if (!project.hasProperty("snapshot") || Boolean.parseBoolean(Project.property("snapshot"))) {
+        snapshot = true
+    } else {
+        snapshot = false
+    }
+}
+allprojects {
+    repositories {
+        jcenter()
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven {
+            url "${artifactory_url}/${artifactory_alpha1e_release}"
+            credentials {
+                username = artifactory_username
+                password = artifactory_password
+            }
+        }
+        maven {
+            url "${artifactory_url}/${artifactory_alpha1e_snapshot}"
+            credentials {
+                username = artifactory_username
+                password = artifactory_password
+            }
+        }
+        maven {
+            url "${artifactory_url}/${artifactory_alpha1e_release}"
+            credentials {
+                username = artifactory_username
+                password = artifactory_password
+            }
+        }
 
+        maven {
+            url "${artifactory_url}/${artifactory_alpha1e_snapshot}"
+            credentials {
+                username = artifactory_username
+                password = artifactory_password
+            }
+        }
+        configurations.all {
+            // check for updates every build
+            resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+        }
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
