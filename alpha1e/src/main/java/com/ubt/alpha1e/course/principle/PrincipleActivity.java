@@ -24,9 +24,12 @@ import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.split.SplitActivity;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
+import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -299,12 +302,42 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
     }
 
     @Override
+    public void onEventRobot(RobotEvent event) {
+        super.onEventRobot(event);
+        if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS){
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            if(event.isHibitsProcessStatus()){
+                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
+                finish();
+            }
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         ((PrincipleHelper)mHelper).doEnterCourse((byte)1);
 
         doGetCourseProgress(1);
-        mHandler.sendEmptyMessage(PLAY_ACTION_NEXT);
+
+        if(mHelper.isStartHibitsProcess()){
+            mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                @Override
+                public void onDismissCallback(Object obj) {
+                    UbtLog.d("onDismissCallback","obj = " +obj);
+                    if((boolean)obj){
+                        //行为习惯流程未结束，退出当前流程
+                        finish();
+                    }else {
+                        //行为习惯流程结束，该干啥干啥
+                        mHandler.sendEmptyMessage(PLAY_ACTION_NEXT);
+                    }
+                }
+            });
+        }else {
+            //行为习惯流程未开始，该干啥干啥
+            mHandler.sendEmptyMessage(PLAY_ACTION_NEXT);
+        }
     }
 
     @Override

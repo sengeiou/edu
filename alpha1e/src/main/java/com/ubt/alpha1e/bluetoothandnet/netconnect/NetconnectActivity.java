@@ -207,23 +207,24 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
 
                 break;
             case R.id.btn_send_wifi_pwd:
-                new ConfirmDialog(this).builder()
-                        .setTitle("提示")
-                        .setMsg("本软件仅支持4G网络，请确认接入的是4G网络。")
-                        .setCancelable(false)
-                        .setPositiveButton("继续", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                UbtLog.d(TAG, "继续");
-                                doNetConnect();
-                            }
-                        }).setNegativeButton("重选Wi-Fi", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        UbtLog.d(TAG, "重选Wi-Fi");
-                        gotoSelectWifi();
-                    }
-                }).show();
+//                new ConfirmDialog(this).builder()
+//                        .setTitle("提示")
+//                        .setMsg("本软件仅支持4G网络，请确认接入的是4G网络。")
+//                        .setCancelable(false)
+//                        .setPositiveButton("继续", new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                UbtLog.d(TAG, "继续");
+//                                doNetConnect();
+//                            }
+//                        }).setNegativeButton("重选Wi-Fi", new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        UbtLog.d(TAG, "重选Wi-Fi");
+//                        gotoSelectWifi();
+//                    }
+//                }).show();
+                doNetConnect();
                 break;
             default:
 

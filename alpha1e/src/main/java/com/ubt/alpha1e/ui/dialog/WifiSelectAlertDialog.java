@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.Html;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -212,7 +213,11 @@ public class WifiSelectAlertDialog {
         if ("".equals(title)) {
             tvTitle.setText("标题");
         } else {
-            tvTitle.setText(title);
+            if(title.equals("可用网络列表")){
+                tvTitle.setText(Html.fromHtml("可用网络列表<font color='#929ea5'>"+"<small>"+"  (机器人不支持5G网络哦)"+"<small>"+"</font>"));
+            }else {
+                tvTitle.setText(title);
+            }
         }
         return this;
     }
