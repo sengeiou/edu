@@ -146,7 +146,6 @@
         android:layout_height="250dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
         android:background="@drawable/img_hoem_robot"
         android:visibility="visible" />
 

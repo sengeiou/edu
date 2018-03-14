@@ -1980,7 +1980,7 @@ public class MyActionsHelper extends BaseHelper implements
 
             try {
                 String name = actions_list.get(i).toString();
-                if(isStringNumber(name) && i >= (localSize + myDownloadSize)){
+                if(isStringNumber(name)&& i >=(localSize + myDownloadSize)){
                     sb.append(name+",");
                     numberNameList.add(name);
                     continue;
@@ -2353,7 +2353,6 @@ public class MyActionsHelper extends BaseHelper implements
 
                 for(int num = 0; num < numberNameList.size(); num++){
                     Map<String, Object> action_item = new HashMap<String, Object>();
-
                     String name = numberNameList.get(num);
                     action_item.put(MyActionsHelper.map_val_action,name);
                     action_item.put(MyActionsHelper.map_val_action_name, name);

@@ -61,7 +61,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private RecyclerView mSyncRecyclerview;
     private LinearLayoutManager mLayoutManager;
     private ActionsCircleAdapter mAdapter;
-    private List<Map<String, Object>> mDatas = new ArrayList<>();
+    private  List<Map<String, Object>> mDatas = new ArrayList<>();
     private View mView;
     private int type = 6;
     private MyActionsActivity mActivity;
@@ -177,7 +177,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             mHelper.setPlayContent(mDatas);
         }
         removeDuplicate(mDatas);
-
         //MyActionHelper trigger setDatas
         if(mAdapter!=null){
             mAdapter.notifyDataSetChanged();
@@ -620,6 +619,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         UbtLog.d(TAG, "wmma-syncServerDataEnd--" +data.size());
         //Deal Server Reply result
         setDatas(data);
+
     }
 
     @Override
@@ -831,19 +831,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder mHolder, final int position) {
 
-//            if(!isBulueToothConnected()){
-//                showBluetoothConnectDialog();
-//                return;
-//            }
             final MyCircleHolder holder = (MyCircleHolder)mHolder;
             final Map<String,Object> actionList =mDatas.get(position);
             String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
-            //删除自己编译的动作文件,文字名字开头为数字15XXXXX 等
-            if(removeSelfCreationAction(action_name)){
-                //从队列中移除元素
-                mDatas.remove(position);
-                return;
-            }
             Glide.with(mContext)
                     .load(R.drawable.sec_action_logo)
                     .fitCenter()
@@ -851,7 +841,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             if(action_name.startsWith("@") || action_name.startsWith("#") || action_name.startsWith("%")){
                 action_name = action_name.substring(1);
             }
-
             holder.txt_action_name.setText(action_name);
 
             for (int i = 0; i < MyActionsHelper.mCurrentSeletedNameList.size(); i++) {
@@ -990,18 +979,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     }
 
 
-    private void removeDuplicate() {
-        UbtLog.d(TAG, "removeDuplicate");
-        for ( int i = 0 ; i <mDatas.size() - 1 ; i ++ ) {
-            for ( int j = mDatas.size() - 1 ; j > i; j -- ) {
-                if (mDatas.get(j).get(ActionsHelper.map_val_action_name).equals(mDatas.get(i).get(ActionsHelper.map_val_action_name))) {
-                    UbtLog.d(TAG, "removeDuplicate=" + mDatas.get(j).toString());
-                    mDatas.remove(j);
-                }
-            }
-        }
-    }
-
     private void removeDuplicate(List<Map<String, Object>> list) {
         UbtLog.d(TAG, "removeDuplicate");
         for ( int i = 0 ; i < list.size() - 1 ; i ++ ) {
@@ -1015,17 +992,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
         System.out.println(list);
     }
-
-    private boolean removeSelfCreationAction(String name){
-        if(name.substring(0,1).equals("1")||name.substring(0,1).equals("")){
-            UbtLog.d(TAG,"remove selfCreationAction name :"+" position i  :");
-
-            return true;
-        }
-        return false;
-    }
-
-
 
     private void clearActionInfoList(){
         MyActionsHelper.mCurrentSeletedNameList.clear();
