@@ -2,15 +2,11 @@ package com.ubt.alpha1e.course.helper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 
-import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
-import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ByteHexHelper;
 import com.ubtechinc.base.ConstValue;
@@ -223,9 +219,9 @@ public class PrincipleHelper extends BaseHelper {
     }
 
     /**
-     * 机器人控制舵机命令（目前只有控制双脚蹲下掉电）
+     * 机器人控制舵机命令（目前只有[1,3],[1,4]）
      * @param controlType 1.掉电；2.上电
-     * @param position 1.左手；2.右手 3.双脚。
+     * @param position 1.左手；2.右手 3.双脚 4.除8号、13号舵机外，其他全部掉电
      */
     public void doControlEngine(int controlType, int position){
         byte[] params = new byte[2];
@@ -269,21 +265,6 @@ public class PrincipleHelper extends BaseHelper {
 
     public void doLostPower() {
         doSendComm(ConstValue.DV_DIAODIAN, null);
-
-        //doLostLeftHand();
-        //doLostRightHand();
-
-        /*doLostOnePower(7);
-        //doLostOnePower(8);
-        doLostOnePower(9);
-        doLostOnePower(10);
-        doLostOnePower(11);
-
-        doLostOnePower(12);
-        //doLostOnePower(13);
-        doLostOnePower(14);
-        doLostOnePower(15);
-        doLostOnePower(16);*/
     }
 
     public void doInit(){

@@ -278,7 +278,8 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
         }if(event.getEvent() == PrincipleEvent.Event.PLAY_ACTION_FINISH){
             UbtLog.d(TAG,"--PLAY_ACTION_FINISH--");
             hasLostRobot = true;
-            ((PrincipleHelper)mHelper).doLostPower();
+            //((PrincipleHelper)mHelper).doLostPower();
+            ((PrincipleHelper)mHelper).doControlEngine(1,4);
         }else if(event.getEvent() == PrincipleEvent.Event.DISCONNECTED){
             mHandler.sendEmptyMessage(BLUETOOTH_DISCONNECT);
         }

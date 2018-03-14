@@ -16,6 +16,7 @@ import android.util.Log;
 import com.tencent.android.tpush.XGPushShowedResult;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
+import com.ubt.alpha1e.ui.StartInitSkinActivity;
 import com.ubt.alpha1e.ui.dialog.HibitsAlertDialog;
 import com.ubt.alpha1e.utils.NotifyUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -127,7 +128,13 @@ public class GlobalMsgService extends Service {
                 } else {
                     ActivityManager am = (ActivityManager) GlobalMsgService.this.getSystemService(Context.ACTIVITY_SERVICE);
                     Activity activity = AppManager.getInstance().currentActivity();
-                    am.moveTaskToFront(activity.getTaskId(), ActivityManager.MOVE_TASK_WITH_HOME);
+                    if (null != activity && !activity.isFinishing()) {
+                        am.moveTaskToFront(activity.getTaskId(), ActivityManager.MOVE_TASK_WITH_HOME);
+                    } else {
+                        Intent intent1 = new Intent(GlobalMsgService.this, StartInitSkinActivity.class);
+                        intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent1);
+                    }
                 }
             } else if (intent.getAction().equals(NOTIFICATION_USER_CENTER)) {//跳转个人中心
 
