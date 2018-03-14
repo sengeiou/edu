@@ -176,7 +176,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         if(mHelper!=null) {
             mHelper.setPlayContent(mDatas);
         }
-        removeDuplicate(mDatas);
+
+        //removeDuplicate(mDatas);
 
         //MyActionHelper trigger setDatas
         if(mAdapter!=null){
@@ -210,7 +211,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         super.onResume();
         UbtLog.d(TAG,"MyActionsCircleFragment----onResume--");
         if(mHelper!=null) {
-            mHelper.doReadActions();
+            //mHelper.doReadActions();
         }
 //        if(isStartLooping){
 //            if(mListener!=null) mListener.onHiddenLoopButton();
@@ -838,12 +839,12 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             final MyCircleHolder holder = (MyCircleHolder)mHolder;
             final Map<String,Object> actionList =mDatas.get(position);
             String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
-            //删除自己编译的动作文件,文字名字开头为数字15XXXXX 等
+            /*//删除自己编译的动作文件,文字名字开头为数字15XXXXX 等
             if(removeSelfCreationAction(action_name)){
                 //从队列中移除元素
                 mDatas.remove(position);
                 return;
-            }
+            }*/
             Glide.with(mContext)
                     .load(R.drawable.sec_action_logo)
                     .fitCenter()
@@ -966,6 +967,12 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                                 actionInfo.hts_file_name = (String) actionList.get(MyActionsHelper.map_val_action);
                                 actionInfo.actionSize = position;//zan cun
                                 recoveryPlayType();
+
+                                if(position < MyActionsHelper.localSize){
+                                    MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.Unkown;
+                                }else {
+                                    MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_download_local;
+                                }
                                 mHelper.doPlay(actionInfo);
                                 UbtLog.d(TAG, "REFACTOR lihai------actionName->" + actionName + "----position->" + position + "--" + actionList.get(MyActionsHelper.map_val_action));
                             } else {
