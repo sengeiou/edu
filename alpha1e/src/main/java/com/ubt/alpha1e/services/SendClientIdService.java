@@ -20,6 +20,7 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.FileUtils;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.CheckIsBindRequest;
 import com.ubt.alpha1e.base.RequstMode.GotoBindRequest;
@@ -244,11 +245,16 @@ public class SendClientIdService extends Service {
 									adviceBind();
 								}
 							},800);
-						}else if(state.equals("1002")){
+						}else if(state.startsWith("1002:")){
+							int len = state.length();
+							if(len == 5){
+								return;
+							}
+							final String ad = state.substring(5);
 							mHandler.postDelayed(new Runnable() {
 								@Override
 								public void run() {
-									adviceRobotBinded();
+									adviceRobotBinded(FileUtils.utf8ToString(ad));
 								}
 							},800);
 						}else if(state.equals("1001")){
@@ -438,10 +444,10 @@ public class SendClientIdService extends Service {
 	}
 
 	//该机器人已被其他账号绑定部分功能不可用
-	public void adviceRobotBinded(){
+	public void adviceRobotBinded(String man){
 			new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
 			.setTitle("提示")
-			.setMsg("该机器人已被其他账号绑定，部分功能不可用！")
+			.setMsg("该机器人已被 "+man+" 绑定，部分功能不可用！")
 			.setCancelable(true)
 			.setPositiveButton("我知道了", new View.OnClickListener() {
 				@Override

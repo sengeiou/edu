@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
+import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.Md5;
@@ -22,6 +24,8 @@ import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.dialog.AlertDialog;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -73,6 +77,8 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
     private static boolean isCharging = false; //用来判断机器人当前是否在充电中,false 表示没有充电中,true表示充电中.
     private static byte mPowerValue=0;
+    private boolean isStartHibitsProcess = false;
+
     /*public BaseHelper(BaseActivity _baseActivity) {
         mBaseActivity = _baseActivity;
     }*/
@@ -198,7 +204,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     }
 
     public void doSendReadStateComm() {
-
+        UbtLog.d(TAG,"doSendReadStateComm isStartHibitsProcess = " + isStartHibitsProcess);
         //读机器人状态(音量，灯光状态）
         byte[] params = new byte[1];
         params[0] = 0;
@@ -214,6 +220,9 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
         sensorParams[0] = 0;
         sensorParams[1] = 0;
         doSendComm(ConstValue.DV_SENSOR_GREETING, sensorParams);
+
+        //连接蓝牙成功，读取一次行为习惯播放状态
+        doSendComm(ConstValue.DV_READ_HIBITS_PLAY_STATUS, null);
 
         //定时读电量(10S读一次)
         byte[] param = new byte[1];
@@ -384,9 +393,20 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 //SENSOR ENABLE
                 mSensorGreetingState=true;
             }
+        }else if(cmd == ConstValue.DV_READ_HIBITS_PLAY_STATUS){
+
+            String eventPlayStatusJson = BluetoothParamUtil.bytesToString(param);
+
+            UbtLog.d(TAG,"cmd = " + cmd + "    eventPlayStatusJson = " + eventPlayStatusJson);
+            EventPlayStatus eventPlayStatus = GsonImpl.get().toObject(eventPlayStatusJson,EventPlayStatus.class);
+            isStartHibitsProcess = "1".equals(eventPlayStatus.eventState) ? true : false;
+
+            UbtLog.d(TAG,"isStartHibitsProcess = " + isStartHibitsProcess);
+
+            RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.HIBITS_PROCESS_STATUS);
+            robotEvent.setHibitsProcessStatus(isStartHibitsProcess);
+            EventBus.getDefault().post(robotEvent);
         }
-
-
     }
 
     public UserInfo getCurrentUser() {
@@ -630,4 +650,36 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     }
 
 
+    //获取当前机器人是否正在行为提醒
+    public boolean isStartHibitsProcess() {
+        //isStartHibitsProcess = true;
+
+        return isStartHibitsProcess;
+    }
+
+    //显示行为提醒弹出框
+    public void showStartHibitsProcess(final IDismissCallbackListener mIListener){
+        String msg = "行为习惯正在进行中，请先完成";
+        String position = "好的";
+        if(mContext instanceof MVPBaseActivity){
+            msg = ((MVPBaseActivity)mContext).getStringResources("ui_habits_process_starting");
+            position = ((MVPBaseActivity)mContext).getStringResources("ui_common_ok");
+        }else if(mContext instanceof BaseActivity){
+            msg = ((BaseActivity)mContext).getStringResources("ui_habits_process_starting");
+            position = ((BaseActivity)mContext).getStringResources("ui_common_ok");
+        }
+
+        new ConfirmDialog(mContext)
+                .builder()
+                .setMsg(msg)
+                .setCancelable(false)
+                .setPositiveButton(position, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(mIListener != null){
+                            mIListener.onDismissCallback(isStartHibitsProcess);
+                        }
+                    }
+                }).show();
+    }
 }
