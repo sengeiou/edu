@@ -79,6 +79,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private RelativeLayout rlCircle;
     private TextView tvCircle;
     private ImageView ivCircle;
+    private RelativeLayout mServoGuide;
+    private ImageView mCloseGuide;
 
 
 
@@ -119,6 +121,15 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         rlCircle=(RelativeLayout) mView.findViewById(R.id.rl_cycle);
         ivCircle=(ImageView)mView.findViewById(R.id.btn_start_cycle);
         tvCircle=(TextView) mView.findViewById(R.id.tv_start_cycle);
+        mServoGuide=(RelativeLayout)mView.findViewById(R.id.servo_guide);
+        mCloseGuide=(ImageView)mView.findViewById(R.id.iv_close_header);
+        mCloseGuide.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                mServoGuide.setVisibility(View.INVISIBLE);
+            }
+        });
+
 
         ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
         ivCircle.setAlpha(0.5f);
@@ -130,6 +141,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 //循环播放
                 if (MyActionsHelper.mCurrentSeletedNameList.size() > 0) {
                     if (!isStartLooping) {
+                        mServoGuide.setVisibility(View.VISIBLE);
                         UbtLog.d(TAG, "BEGIN CIRCLE PLAY");
                         setActionPlayType(true);
                         clearPlayingStatusList();
