@@ -225,6 +225,9 @@ public class ActionPlayer implements BlueToothInteracter {
 
     public void doPlayAction(ActionInfo info) {
         UbtLog.d(TAG, "---wmma mCurrentPlayState=" + mCurrentPlayState + " actionOriginalId =" + info.actionOriginalId);
+        if(thiz == null){
+            return;
+        }
         actionOriginalId = info.actionOriginalId;
         if (thiz.mCurrentPlayState == Play_state.action_pause) {
             thiz.mCurrentPlayState = Play_state.action_finish;
