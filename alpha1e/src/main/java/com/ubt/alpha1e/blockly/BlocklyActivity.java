@@ -35,6 +35,7 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.blockly.bean.QueryResult;
 import com.ubt.alpha1e.blockly.bean.RobotSensor;
 import com.ubt.alpha1e.blockly.sensor.SensorHelper;
@@ -1367,6 +1368,13 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     }
                 });
             }
+        }else
+        if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS){
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            if(event.isHibitsProcessStatus()){
+                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
+                finish();
+            }
         }
     }
 
@@ -1532,6 +1540,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             mHandler.sendEmptyMessage(DO_DOWNLOAD_LESSON_TASK);
         }
     }
+
+
 
     /**
      * 根据数据处理UI

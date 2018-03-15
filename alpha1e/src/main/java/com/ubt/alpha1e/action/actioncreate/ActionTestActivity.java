@@ -7,8 +7,10 @@ import android.util.DisplayMetrics;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.NewActionInfo;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.custom.ActionGuideView;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
@@ -72,6 +74,19 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
             }
         }
 
+    }
+
+    @Override
+    public void onEventRobot(RobotEvent event) {
+        super.onEventRobot(event);
+        if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS){
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            UbtLog.d(TAG, "isHibitsProcessStatus:"+ event.isHibitsProcessStatus());
+            if(event.isHibitsProcessStatus()){
+                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
+                finish();
+            }
+        }
     }
 
     @Override
