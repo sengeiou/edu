@@ -76,6 +76,7 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
             }
         }
 
+        UbtLog.d(TAG, "isStartHibitsProcess:"+ mHelper.isStartHibitsProcess());
         if(mHelper.isStartHibitsProcess()){
             mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
                 @Override

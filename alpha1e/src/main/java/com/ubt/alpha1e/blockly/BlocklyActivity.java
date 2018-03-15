@@ -1407,9 +1407,9 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     }
                 });
             }
-        }else
-        if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS){
+        }else if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS){
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            UbtLog.d(TAG, "isHibitsProcessStatus" + event.isHibitsProcessStatus());
             if(event.isHibitsProcessStatus()){
                 mHandler.postDelayed(new Runnable() {
                     @Override
