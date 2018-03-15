@@ -101,7 +101,7 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
                         if(StringUtils.isInteger(eventPlayStatus.playAudioSeq)){
                             int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
                             currentPlaySeq = seqNo;
-                            if(currentEventId.equals(eventPlayStatus.eventId) && "1".equals(eventPlayStatus.eventState)){
+                            if(currentEventId.equals(eventPlayStatus.eventId) && "1".equals(eventPlayStatus.eventState) && seqNo >= 0){
                                 isStartPlayProcess = true;
                                 if("playing".equals(eventPlayStatus.audioState) || "pause".equals(eventPlayStatus.audioState)){
                                     if(mPlayContentInfoDatas != null && seqNo < mPlayContentInfoDatas.size()){

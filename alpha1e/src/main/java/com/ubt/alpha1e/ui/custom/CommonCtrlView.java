@@ -246,7 +246,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         btn_pause_or_continue = (ImageView) view.findViewById(R.id.btn_playaction);
         btn_stop_m = (ImageView) view.findViewById(R.id.btn_stopaction);
         btn_vol_log = (ImageView) view.findViewById(R.id.btn_vol_logo);
-        btn_lig_logo = (ImageView) view.findViewById(R.id.btn_lig_logo);
+       // btn_lig_logo = (ImageView) view.findViewById(R.id.btn_lig_logo);
         sek_vol_ctrl = (SeekBar) view.findViewById(R.id.skb_vol_control);
 
         //view_alertdialog  layout
@@ -381,17 +381,17 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
             }
         });
 
-        btn_lig_logo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mHelper.doTurnLight();
-                if(mHelper.mLightState){
-                    noteLightOn();
-                }else {
-                    noteLightOff();
-                }
-            }
-        });
+//        btn_lig_logo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mHelper.doTurnLight();
+//                if(mHelper.mLightState){
+//                    noteLightOn();
+//                }else {
+//                    noteLightOff();
+//                }
+//            }
+//        });
 
         btn_vol_log.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -683,12 +683,12 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
 
     @Override
     public void noteLightOn() {
-        btn_lig_logo.setImageDrawable(mBaseActivity.getDrawableRes("cc_lighton"));
+     //   btn_lig_logo.setImageDrawable(mBaseActivity.getDrawableRes("cc_lighton"));
     }
 
     @Override
     public void noteLightOff() {
-        btn_lig_logo.setImageDrawable(mBaseActivity.getDrawableRes("cc_lightoff"));
+      //  btn_lig_logo.setImageDrawable(mBaseActivity.getDrawableRes("cc_lightoff"));
     }
 
     @Override
