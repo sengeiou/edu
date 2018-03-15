@@ -323,13 +323,20 @@
             android:textSize="16sp"
             android:textStyle="bold" />
     </RelativeLayout>
-
-
+    <com.ubt.alpha1e.ui.custom.RoundImageView
+        android:id="@+id/top_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignTop="@+id/top_icon2"
+        android:layout_alignLeft="@+id/rl_hibits_event"
+        android:src="@drawable/main_center"
+        android:visibility="invisible"/>
     <ImageView
         android:id="@+id/top_icon2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/ll_remote"
+        android:layout_toRightOf="@+id/top_icon"
+        android:layout_marginLeft="20dp"
         android:layout_alignTop="@+id/top_icon2_disconnect"
         android:src="@drawable/main_connect"
         android:visibility="invisible"/>
