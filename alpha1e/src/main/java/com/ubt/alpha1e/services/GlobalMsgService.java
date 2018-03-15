@@ -69,7 +69,7 @@ public class GlobalMsgService extends Service {
 
     @Subscribe
     public void onDataSynEvent(XGPushShowedResult xgPushShowedResult) {
-        UbtLog.i(TAG, "onDataSynEvent event---->" + xgPushShowedResult.getContent());
+        UbtLog.i(TAG, "onDataSynEvent event---->" +xgPushShowedResult.toString());
         try {
             JSONObject mJson = new JSONObject(xgPushShowedResult.getCustomContent());
             if (mJson.getString("category").equals(XGCmdConstract.BEHAVIOUR_HABIT)) {
@@ -82,7 +82,7 @@ public class GlobalMsgService extends Service {
                             .show();
                     //requireBehaviourNextEvent();
 
-                    showNotify(NOTIFICATION_HABIT_TOFORNT, xgPushShowedResult);
+                   // showNotify(NOTIFICATION_HABIT_TOFORNT, xgPushShowedResult);
                 }
             }
         } catch (JSONException e) {
@@ -104,8 +104,8 @@ public class GlobalMsgService extends Service {
         PendingIntent pIntent = PendingIntent.getBroadcast(this, 0, Intent_pre, 0);
 
         int smallIcon = R.drawable.ic_launcher;
-        String ticker = "您有一条新通知" + id;
-        String title = "消息" + id;
+        String ticker = "您有一条新通知";
+        String title = xgPushShowedResult.getTitle();
         String content = xgPushShowedResult.getContent();
         //实例化工具类，并且调用接口
         NotifyUtil notify2 = new NotifyUtil(GlobalMsgService.this, id);

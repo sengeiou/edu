@@ -237,6 +237,7 @@ public class NotifyUtil {
             setBuilder(pendingIntent, smallIcon, ticker, true, true, false);
             nBuilder.setContentTitle(title);
             nBuilder.setContentText(content);
+            cBuilder.setAutoCancel(true);
             nBuilder.setPriority(Notification.PRIORITY_HIGH);
             notification = new Notification.BigTextStyle(nBuilder).bigText(content).build();
             // 发送该通知
