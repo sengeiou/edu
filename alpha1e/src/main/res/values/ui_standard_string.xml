@@ -340,6 +340,7 @@
     <string name="ui_readback_cutoff">掉电完成，请给机器人设定动作。点击“结束”即停止添加</string>
     <string name="ui_readback_reset">掉电完成，请重新设定动作，点击“确认”即替换成功</string>
     <string name="ui_remote_role_introduction">选择不同角色可以表演不同的动作哦</string>
+    <string name="ui_servo_guide">为了维护舵机寿命，阿尔法在循环播放20分钟后，会停下休息哦。</string>
     <string name="ui_remote_role_footballer">足球员</string>
     <string name="ui_remote_role_footballer_introduction">翻腾、射门、守门，我样样都行</string>
     <string name="ui_remote_role_fighter">格斗家</string>
