@@ -310,4 +310,27 @@ public class BehaviorHabitsPresenter extends BasePresenterImpl<BehaviorHabitsCon
             });
         }
     }
+
+    /**
+     * 重新排序数据，状态为开的，则排在前面
+     * @param mData
+     * @return
+     */
+    public List<HabitsEvent<List<PlayContentInfo>>> reSortData(List<HabitsEvent<List<PlayContentInfo>>> mData){
+        List<HabitsEvent<List<PlayContentInfo>>> newData = new ArrayList<>();
+        if(mData != null){
+            for(HabitsEvent<List<PlayContentInfo>> eventData : mData){
+                if("1".equals(eventData.status)){
+                    newData.add(eventData);
+                }
+            }
+
+            for(HabitsEvent<List<PlayContentInfo>> eventData : mData){
+                if(!"1".equals(eventData.status)){
+                    newData.add(eventData);
+                }
+            }
+        }
+        return newData;
+    }
 }

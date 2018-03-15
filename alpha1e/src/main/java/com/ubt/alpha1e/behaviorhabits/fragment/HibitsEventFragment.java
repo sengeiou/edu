@@ -125,7 +125,8 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                         tvScore.setText(userScore.totalScore);
                         cbScore.setSweepAngle((Float.parseFloat(userScore.percent)*250)/100);
 
-                        List<HabitsEvent<List<PlayContentInfo>>> habitsEventList = userScore.details;
+                        List<HabitsEvent<List<PlayContentInfo>>> habitsEventList = mPresenter.reSortData(userScore.details);
+
                         mHabitsEventInfoDatas.clear();
                         mHabitsEventInfoDatas.addAll(habitsEventList);
                         mAdapter.notifyDataSetChanged();
