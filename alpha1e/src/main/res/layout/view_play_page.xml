@@ -40,7 +40,7 @@
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_toLeftOf="@+id/btn_lig_logo"
+                android:layout_toLeftOf="@+id/sensor_control"
                 android:layout_toRightOf="@+id/btn_poweroff"
                 android:background="@color/B5"
                 android:gravity="center"
@@ -62,13 +62,13 @@
                     android:textColor="@color/T1"/>
             </LinearLayout>
 
-
             <ImageView
-                android:id="@+id/btn_lig_logo"
+                android:id="@+id/sensor_control"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/cc_lightoff"/>
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/cc_sensorcontorl" />
         </RelativeLayout>
         <!--android:background="#7fff0000"-->
 
@@ -123,22 +123,13 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/sensor_control"
+                android:layout_toLeftOf="@+id/sensor_greeting"
                 android:layout_toRightOf="@+id/btn_vol_logo"
                 android:maxHeight="2dp"
                 android:minHeight="2dp"
                 android:progressDrawable="@drawable/sec_bg_vol"
                 android:splitTrack="false"
                 android:thumb="@drawable/cc_volumecontrol"/>
-
-
-            <ImageView
-                android:id="@+id/sensor_control"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/sensor_greeting"
-                android:src="@drawable/cc_sensorcontorl"/>
 
             <ImageView
                 android:id="@+id/sensor_greeting"
@@ -147,6 +138,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/ic_redhi_off"/>
+
         </RelativeLayout>
 
     </LinearLayout>

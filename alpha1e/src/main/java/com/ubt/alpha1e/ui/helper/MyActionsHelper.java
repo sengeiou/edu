@@ -1979,12 +1979,6 @@ public class MyActionsHelper extends BaseHelper implements
 
             try {
                 String name = actions_list.get(i).toString();
-                /*if(isStringNumber(name) && i >= (localSize + myDownloadSize)){
-                    UbtLog.d(TAG,"name => " + name + "   i = " + i + "   localSize = " + localSize);
-                    sb.append(name+",");
-                    numberNameList.add(name);
-                    continue;
-                }*/
                 action_item.put(MyActionsHelper.map_val_action,name);
 
 //                if (mCurrentActionType != Action_type.Custom_type) {
@@ -2353,7 +2347,6 @@ public class MyActionsHelper extends BaseHelper implements
 
                 for(int num = 0; num < numberNameList.size(); num++){
                     Map<String, Object> action_item = new HashMap<String, Object>();
-
                     String name = numberNameList.get(num);
                     action_item.put(MyActionsHelper.map_val_action,name);
                     action_item.put(MyActionsHelper.map_val_action_name, name);
