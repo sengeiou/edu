@@ -35,7 +35,6 @@ import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.blockly.bean.QueryResult;
 import com.ubt.alpha1e.blockly.bean.RobotSensor;
 import com.ubt.alpha1e.blockly.sensor.SensorHelper;
@@ -75,6 +74,8 @@ import com.ubt.alpha1e.ui.LoginActivity;
 import com.ubt.alpha1e.ui.RobotNetConnectActivity;
 import com.ubt.alpha1e.ui.custom.IOnClickListener;
 import com.ubt.alpha1e.ui.dialog.BaseDiaUI;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
 import com.ubt.alpha1e.ui.dialog.LessonTaskFinishDialog;
 import com.ubt.alpha1e.ui.dialog.LessonTaskHelpDialog;
 import com.ubt.alpha1e.ui.dialog.LessonTaskSuccessDialog;
@@ -553,6 +554,20 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             mListener = new DirectionSensorEventListener(this);
             mSensorManager.registerListener(mListener,mSensor,SensorManager.SENSOR_DELAY_NORMAL);
         }
+
+        if(mHelper != null && mHelper.isStartHibitsProcess()){
+            mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                @Override
+                public void onDismissCallback(Object obj) {
+                    UbtLog.d(TAG,"onDismissCallback = obj == " + obj);
+                    if((boolean)obj){
+                        //行为习惯流程未结束，退出当前流程
+                        finish();
+                    }
+                }
+            });
+        }
+        UbtLog.d(TAG, "onResume 18");
     }
 
     private void showLoading() {
@@ -1372,8 +1387,22 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS){
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
             if(event.isHibitsProcessStatus()){
-                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
-                finish();
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        new ConfirmDialog(BlocklyActivity.this).builder()
+                                .setTitle("提示")
+                                .setMsg(getStringResources("ui_habits_process_start"))
+                                .setCancelable(false)
+                                .setPositiveButton("确定", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        UbtLog.d(TAG, "确定");
+                                        finish();
+                                    }
+                                }).show();
+                    }
+                },10);
             }
         }
     }
