@@ -104,11 +104,13 @@ public class CommonGuideView {
                     rlGuideVolume.setVisibility(View.VISIBLE);
                 }else if(rlGuideVolume.getVisibility() == View.VISIBLE){
                     rlGuideVolume.setVisibility(View.GONE);
-                    rlGuideLight.setVisibility(View.VISIBLE);
-                }else if(rlGuideLight.getVisibility() == View.VISIBLE){
-                    rlGuideLight.setVisibility(View.GONE);
                     rlGreeting.setVisibility(View.VISIBLE);
-                }else if(rlGreeting.getVisibility() == View.VISIBLE){
+                }
+//                else if(rlGuideLight.getVisibility() == View.VISIBLE){
+//                    rlGuideLight.setVisibility(View.GONE);
+//                    rlGreeting.setVisibility(View.VISIBLE);
+//                }
+                else if(rlGreeting.getVisibility() == View.VISIBLE){
                     rlGreeting.setVisibility(View.GONE);
                     rlGuideProtection.setVisibility(View.VISIBLE);
                 }else if(rlGuideProtection.getVisibility() == View.VISIBLE){
