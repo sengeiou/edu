@@ -30,8 +30,11 @@ import com.ubt.alpha1e.data.model.ActionColloInfo;
 import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.ActionRecordInfo;
 import com.ubt.alpha1e.data.model.NewActionInfo;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.ui.MyActionsActivity;
+import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
 import com.ubt.alpha1e.ui.helper.ActionsHelper;
 import com.ubt.alpha1e.ui.helper.ActionsLibHelper;
 import com.ubt.alpha1e.ui.helper.IActionsUI;
@@ -39,6 +42,8 @@ import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -88,6 +93,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         isStartLooping=mHelper.getLoopingFlag();
         UbtLog.d(TAG,"isStartLooping flag"+isStartLooping);
         initViews();
+        EventBus.getDefault().register(this);
         return mView;
     }
 
@@ -161,6 +167,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 outRect.bottom = 20;
                 outRect.top = 20;
                 outRect.left = 30;
+
                 outRect.right = 30;
             }
         });
@@ -210,6 +217,18 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         UbtLog.d(TAG,"MyActionsCircleFragment----onResume--");
         if(mHelper!=null) {
             //mHelper.doReadActions();
+        }
+        if(mHelper.isStartHibitsProcess()){
+            mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                @Override
+                public void onDismissCallback(Object obj) {
+                    UbtLog.d(TAG,"onDismissCallback = obj == " + obj);
+                    if((boolean)obj){
+                        //行为习惯流程未结束，退出当前流程
+                       onDestroy();
+                    }
+                }
+            });
         }
 //        if(isStartLooping){
 //            if(mListener!=null) mListener.onHiddenLoopButton();
@@ -1096,4 +1115,30 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 //            waveShapingAnim.stop();
 //        }
 //    }
+
+
+    @Subscribe
+    public void onEventRobot(RobotEvent event) {
+        UbtLog.d(TAG,"onEventRobot = obj == 1" );
+        if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS){
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            UbtLog.d(TAG,"onEventRobot = obj == 2" + event.isHibitsProcessStatus());
+            if(event.isHibitsProcessStatus()){
+                UbtLog.d(TAG,"onEventRobot = obj == 3" );
+                        new ConfirmDialog(mActivity).builder()
+                                .setTitle("提示")
+                                .setMsg(mActivity.getStringResources("ui_habits_process_start"))
+                                .setCancelable(false)
+                                .setPositiveButton("确定", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        UbtLog.d(TAG, "确定");
+                                        onDestroy();
+                                    }
+                                }).show();
+                    }
+                //行为习惯流程未结束，退出当前流程
+            }
+        }
+
 }
