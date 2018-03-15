@@ -122,6 +122,7 @@ public class ShapedImageView extends ImageView {
     }
 
     private Bitmap makeStrokeBitmap(int w, int h) {
+
         Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bm);
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);

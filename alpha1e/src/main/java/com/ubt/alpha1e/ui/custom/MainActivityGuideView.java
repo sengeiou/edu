@@ -192,11 +192,13 @@ public class MainActivityGuideView {
                     rlGuideBookCenter.setVisibility(View.INVISIBLE);
                     top_icon2.setVisibility(View.VISIBLE);
                     rlGuideTopIcon2.setVisibility(View.VISIBLE);
+                    jump_exit.setVisibility(View.INVISIBLE);
                 }else if(rlGuideTopIcon2.getVisibility()==View.VISIBLE){
                     top_icon2.setVisibility(View.INVISIBLE);
                     rlGuideTopIcon2.setVisibility(View.INVISIBLE);
                     closeGuideView();
                     recordGuideState();
+
                 }
             }
 
