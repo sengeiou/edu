@@ -2,15 +2,11 @@ package com.ubt.alpha1e.course.helper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 
-import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
-import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ByteHexHelper;
 import com.ubtechinc.base.ConstValue;

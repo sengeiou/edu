@@ -286,26 +286,26 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                                 int n = position + 1;
                                 Intent intent = null;
                                 if (position == 0) {
-                                    intent= new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class);
-                                 } else if (position == 1) {
-                                    intent =  new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class);
-                                 } else if (position == 2) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class);
+                                } else if (position == 1) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class);
+                                } else if (position == 2) {
                                     intent = new Intent(ActionCourseActivity.this, CourseLevelThreeActivity.class);
-                                 } else if (position == 3) {
+                                } else if (position == 3) {
                                     intent = new Intent(ActionCourseActivity.this, CourseLevelFourActivity.class);
-                                 } else if (position == 4) {
-                                    intent= new Intent(ActionCourseActivity.this, CourseLevelFiveActivity.class);
-                                 } else if (position == 5) {
+                                } else if (position == 4) {
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelFiveActivity.class);
+                                } else if (position == 5) {
                                     intent = new Intent(ActionCourseActivity.this, CourseLevelSixActivity.class);
-                                 } else if (position == 6) {
+                                } else if (position == 6) {
                                     intent = new Intent(ActionCourseActivity.this, CourseLevelSevenActivity.class);
-                                 } else if (position == 7) {
+                                } else if (position == 7) {
                                     intent = new Intent(ActionCourseActivity.this, CourseLevelEightActivity.class);
-                                 } else if (position == 8) {
+                                } else if (position == 8) {
                                     intent = new Intent(ActionCourseActivity.this, CourseLevelNineActivity.class);
-                                 } else if (position == 9) {
+                                } else if (position == 9) {
                                     intent = new Intent(ActionCourseActivity.this, CourseLevelTenActivity.class);
-                                 }
+                                }
                                 startActivityForResult(intent, REQUESTCODE);
                                 ActionCourseActivity.this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                                 dialog.dismiss();
@@ -361,21 +361,21 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         if (resultCode == 1) {
             if (requestCode == REQUESTCODE) {
                 //设置结果显示框的显示数值
-                int course = data.getIntExtra("course", 1);
-                int leavel = data.getIntExtra("leavel", 1);
-                boolean isComplete = data.getBooleanExtra("isComplete", false);
-                int score = data.getIntExtra("score", 0);
-                showResultDialog(course, isComplete);
-                UbtLog.d(TAG, "course==" + course + "   leavel==" + leavel + "  isComplete==" + isComplete + "  socre===" + score);
-                mPresenter.saveCourseProgress(String.valueOf(course), isComplete ? "1" : "0");
-                playAction(Constant.COURSE_ACTION_PATH + "AE_victory editor.hts");
-//                mHandler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        exitCourse();
-//                    }
-//                }, 3500);
-                myHandler.sendEmptyMessageDelayed(HANDLER_EXIT_COURSE, 4000);
+                int resulttype = data.getIntExtra("resulttype", 0);
+                if (resulttype == 0) {
+                    int course = data.getIntExtra("course", 1);
+                    int leavel = data.getIntExtra("leavel", 1);
+                    boolean isComplete = data.getBooleanExtra("isComplete", false);
+                    int score = data.getIntExtra("score", 0);
+
+                    showResultDialog(course, isComplete);
+                    UbtLog.d(TAG, "course==" + course + "   leavel==" + leavel + "  isComplete==" + isComplete + "  socre===" + score);
+                    mPresenter.saveCourseProgress(String.valueOf(course), isComplete ? "1" : "0");
+                    playAction(Constant.COURSE_ACTION_PATH + "AE_victory editor.hts");
+                    myHandler.sendEmptyMessageDelayed(HANDLER_EXIT_COURSE, 4000);
+                } else {
+                    showStartHibitsProcess();
+                }
             }
         }
     }
@@ -390,6 +390,26 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
             }
         }
     };
+
+    //显示行为提醒弹出框
+    public void showStartHibitsProcess() {
+        String msg = "行为习惯正在进行中，请先完成";
+        String position = "好的";
+
+        msg = this.getStringResources("ui_habits_process_starting");
+        position = this.getStringResources("ui_common_ok");
+
+        new ConfirmDialog(this)
+                .builder()
+                .setMsg(msg)
+                .setCancelable(false)
+                .setPositiveButton(position, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                }).show();
+    }
 
     /**
      * 显示完成结果
