@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -81,8 +83,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private ImageView ivCircle;
     private RelativeLayout mServoGuide;
     private ImageView mCloseGuide;
-
-
+    private boolean isShowHibitsDialog = false;
 
     public MyActionsCircleFragment() {
         // Required empty public constructor
@@ -231,16 +232,29 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             //mHelper.doReadActions();
         }
         if(mHelper.isStartHibitsProcess()){
-            mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
-                @Override
-                public void onDismissCallback(Object obj) {
-                    UbtLog.d(TAG,"onDismissCallback = obj == " + obj);
-                    if((boolean)obj){
-                        //行为习惯流程未结束，退出当前流程
-                       onDestroy();
-                    }
-                }
-            });
+            isShowHibitsDialog = true;
+
+            String msg = "行为习惯正在进行中，请先完成";
+            String position = "好的";
+            new ConfirmDialog(mActivity)
+                    .builder()
+                    .setMsg(msg)
+                    .setCancelable(false)
+                    .setPositiveButton(position, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            isShowHibitsDialog = false;
+                            if(mHelper.isStartHibitsProcess()){
+                                //行为习惯流程未结束，退出当前流程
+                                if(mActivity != null){
+                                    mActivity.finish();
+                                }
+                            }
+                        }
+                    }).show();
+
+
         }
 //        if(isStartLooping){
 //            if(mListener!=null) mListener.onHiddenLoopButton();
@@ -285,6 +299,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     public void onDestroy() {
         super.onDestroy();
         UbtLog.d(TAG, "onDestroy isCycleActionFragment=" + false);
+        EventBus.getDefault().unregister(this);
         AlphaApplication.setCycleFragmentShow(false);
         if(mHelper!= null){
             mHelper.unRegisterListeners(this);
@@ -1131,12 +1146,15 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
     @Subscribe
     public void onEventRobot(RobotEvent event) {
-        UbtLog.d(TAG,"onEventRobot = obj == 1" );
-        if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS){
+        UbtLog.d(TAG, "onEventRobot = obj == 1");
+        if (event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS) {
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
-            UbtLog.d(TAG,"onEventRobot = obj == 2" + event.isHibitsProcessStatus());
-            if(event.isHibitsProcessStatus()){
-                UbtLog.d(TAG,"onEventRobot = obj == 3" );
+            UbtLog.d(TAG, "onEventRobot = obj == 2" + event.isHibitsProcessStatus());
+            if (event.isHibitsProcessStatus() && !isShowHibitsDialog) {
+                UbtLog.d(TAG, "onEventRobot = obj == 3");
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
                         new ConfirmDialog(mActivity).builder()
                                 .setTitle("提示")
                                 .setMsg(mActivity.getStringResources("ui_habits_process_start"))
@@ -1145,12 +1163,15 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                                     @Override
                                     public void onClick(View view) {
                                         UbtLog.d(TAG, "确定");
-                                        onDestroy();
+                                        if(mActivity != null){
+                                            mActivity.finish();
+                                        }
                                     }
                                 }).show();
                     }
+                });
                 //行为习惯流程未结束，退出当前流程
             }
         }
-
+    }
 }
