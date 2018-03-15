@@ -555,7 +555,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             mSensorManager.registerListener(mListener,mSensor,SensorManager.SENSOR_DELAY_NORMAL);
         }
 
-        if(mHelper != null && mHelper.isStartHibitsProcess()){
+   /*     if(mHelper != null && mHelper.isStartHibitsProcess()){
             mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
                 @Override
                 public void onDismissCallback(Object obj) {
@@ -566,8 +566,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     }
                 }
             });
-        }
-        UbtLog.d(TAG, "onResume 18");
+        }*/
     }
 
     private void showLoading() {
@@ -715,6 +714,19 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 }
                 mWebView.setVisibility(View.INVISIBLE);
 
+                if(mHelper != null && mHelper.isStartHibitsProcess()){
+                    mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                        @Override
+                        public void onDismissCallback(Object obj) {
+                            UbtLog.d(TAG,"onDismissCallback = obj == " + obj);
+                            if((boolean)obj){
+                                //行为习惯流程未结束，退出当前流程
+                                finish();
+                            }
+                        }
+                    });
+                }
+
             }
 
             @Override
@@ -762,6 +774,18 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
                 }else{
                     rlGoVideo.setVisibility(View.GONE);
+                }
+                if(mHelper != null && mHelper.isStartHibitsProcess()){
+                    mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                        @Override
+                        public void onDismissCallback(Object obj) {
+                            UbtLog.d(TAG,"onDismissCallback = obj == " + obj);
+                            if((boolean)obj){
+                                //行为习惯流程未结束，退出当前流程
+                                finish();
+                            }
+                        }
+                    });
                 }
             }
 
