@@ -2,12 +2,16 @@ package com.ubt.alpha1e.course.principle;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -25,6 +29,7 @@ import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
+import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -75,6 +80,7 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
     private static String[] playActionFile = {"原理1.hts","原理2.hts","原理3.hts"};
 
     private ConfirmDialog mTapHeadDialog = null;
+    private boolean isShowHibitsDialog = false;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -153,8 +159,10 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
 
                     break;
                 case TAP_HEAD:
-                    //拍头退出课程模式
-                    showTapHeadDialog();
+                    if(!isShowHibitsDialog){
+                        //拍头退出课程模式
+                        showTapHeadDialog();
+                    }
                     break;
                 case SHOW_NEXT_OVER_TIME:
                     setViewEnable(tvNext,true,1f);
@@ -299,11 +307,25 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
     @Override
     public void onEventRobot(RobotEvent event) {
         super.onEventRobot(event);
-        if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS){
+        if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS && !isShowHibitsDialog){
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
             if(event.isHibitsProcessStatus()){
+
+                /*new ConfirmDialog(getContext())
+                        .builder()
+                        .setMsg(getStringResources("ui_habits_process_start"))
+                        .setCancelable(false)
+                        .setPositiveButton(getStringResources("ui_common_ok"), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                onBack();
+                            }
+                        }).show();*/
+
                 ToastUtils.showShort(getStringResources("ui_habits_process_start"));
-                finish();
+                ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                PrincipleActivity.this.finish();
+                PrincipleActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
             }
         }
     }
@@ -316,13 +338,17 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
         doGetCourseProgress(1);
 
         if(mHelper.isStartHibitsProcess()){
+            isShowHibitsDialog = true;
             mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
                 @Override
                 public void onDismissCallback(Object obj) {
+                    isShowHibitsDialog = false;
                     UbtLog.d("onDismissCallback","obj = " +obj);
                     if((boolean)obj){
                         //行为习惯流程未结束，退出当前流程
-                        finish();
+                        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                        PrincipleActivity.this.finish();
+                        PrincipleActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
                     }else {
                         //行为习惯流程结束，该干啥干啥
                         mHandler.sendEmptyMessage(PLAY_ACTION_NEXT);

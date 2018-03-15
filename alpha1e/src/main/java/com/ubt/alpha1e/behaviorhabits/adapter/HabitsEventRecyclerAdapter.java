@@ -15,7 +15,6 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.behaviorhabits.fragment.HibitsEventFragment;
 import com.ubt.alpha1e.behaviorhabits.fragment.ParentManageCenterFragment;
 import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
-import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -188,6 +187,8 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 imageId = R.drawable.icon_habits_homework_highlight;
             }else if("12".equals(eventType)){
                 imageId = R.drawable.icon_habits_entertainment_highlight;
+            }else if("13".equals(eventType)){
+                imageId = R.drawable.icon_habits_shower_highlight;
             }else if("14".equals(eventType)){
                 imageId = R.drawable.icon_habits_walk_highlight;
             }else{
@@ -218,6 +219,8 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                 imageId = R.drawable.icon_habits_homework_grey;
             }else if("12".equals(eventType)){
                 imageId = R.drawable.icon_habits_entertainment_grey;
+            }else if("13".equals(eventType)){
+                imageId = R.drawable.icon_habits_shower_grey;
             }else if("14".equals(eventType)){
                 imageId = R.drawable.icon_habits_walk_grey;
             }else{
@@ -273,6 +276,8 @@ public class HabitsEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             }else if("12".equals(eventType)){
                 imageId = R.drawable.icon_habits_entertainment_highlight;
                 imageId = R.drawable.img_waiquan_entertainment;
+            }else if("13".equals(eventType)){
+                imageId = R.drawable.img_waiquan_shower;
             }else if("14".equals(eventType)){
                 imageId = R.drawable.img_waiquan_walk;
             }else{

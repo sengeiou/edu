@@ -28,9 +28,11 @@ import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.split.SplitActivity;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -181,6 +183,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     private final int OVER_TIME = 15 * 1000;//(15S音频等播放时间)超时
 
     private Date startTime = null;
+    private boolean isShowHibitsDialog = false;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -406,8 +409,10 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                     }
                     break;
                 case TAP_HEAD:
-                    //拍头退出课程模式
-                    showTapHeadDialog();
+                    if(!isShowHibitsDialog){
+                        //拍头退出课程模式
+                        showTapHeadDialog();
+                    }
                     break;
                 case BLUETOOTH_DISCONNECT:
                     ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
@@ -512,17 +517,33 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     @Override
     protected void onResume() {
         super.onResume();
-        startTime = new Date(System.currentTimeMillis());
 
-        ((PrincipleHelper) mHelper).doInit();
-        ((PrincipleHelper) mHelper).doEnterCourse((byte) 1);
-        showView(bzvPrincipleSteeringEngine, 100);
-        showView(bzvPrincipleInfraredSensor, 400);
-        showView(bzvPrincipleSoundbox, 700);
-        showView(bzvPrincipleHead, 1000);
-        showView(bzvPrincipleEye, 1300);
-        showView(bzvPrincipleVoice, 1600);
-        showView(bzvPrincipleVoiceObstacleAvoidance, 1900);
+        if(mHelper.isStartHibitsProcess()){
+            isShowHibitsDialog = true;
+            mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                @Override
+                public void onDismissCallback(Object obj) {
+                    isShowHibitsDialog = false;
+                    UbtLog.d("onDismissCallback","obj = " +obj);
+                    if((boolean)obj){
+                        //行为习惯流程未结束，退出当前流程
+                        isDoBack = true;
+                        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                        FeatureActivity.this.finish();
+                        FeatureActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                    }else {
+                        //行为习惯流程结束，该干啥干啥
+                        showBezierView();
+                    }
+                }
+            });
+        }else {
+            //行为习惯流程未开始，该干啥干啥
+            ((PrincipleHelper) mHelper).doInit();
+            ((PrincipleHelper) mHelper).doEnterCourse((byte) 1);
+            showBezierView();
+        }
+
     }
 
     @Override
@@ -539,6 +560,18 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         showView(rlPrincipleEyeIntro,false,null);
         showView(rlPrincipleVoiceIntro,false,null);
         showView(rlPrincipleVoiceObstacleAvoidanceIntro,false,null);
+    }
+
+    private void showBezierView(){
+        startTime = new Date(System.currentTimeMillis());
+
+        showView(bzvPrincipleSteeringEngine, 100);
+        showView(bzvPrincipleInfraredSensor, 400);
+        showView(bzvPrincipleSoundbox, 700);
+        showView(bzvPrincipleHead, 1000);
+        showView(bzvPrincipleEye, 1300);
+        showView(bzvPrincipleVoice, 1600);
+        showView(bzvPrincipleVoiceObstacleAvoidance, 1900);
     }
 
     private void showView(View view, int delayTime) {
@@ -579,6 +612,22 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
             }
         }else if(event.getEvent() == PrincipleEvent.Event.DISCONNECTED){
             mHandler.sendEmptyMessage(BLUETOOTH_DISCONNECT);
+        }
+    }
+
+    @Override
+    public void onEventRobot(RobotEvent event) {
+        super.onEventRobot(event);
+        if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS && !isShowHibitsDialog){
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            if(event.isHibitsProcessStatus()){
+
+                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
+                isDoBack = true;
+                ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                FeatureActivity.this.finish();
+                FeatureActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            }
         }
     }
 
@@ -1109,15 +1158,19 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
 
         isDoBack = true;
         if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 2 ){
-            ((PrincipleHelper) mHelper).doInit();
-            ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
-            this.finish();
-            this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            exitPrincipleProcess();
         }else {
             ((PrincipleHelper) mHelper).doInit();
             MergeActivity.launchActivity(this, true);
             this.finish();
         }
+    }
+
+    private void exitPrincipleProcess(){
+        ((PrincipleHelper) mHelper).doInit();
+        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+        this.finish();
+        this.overridePendingTransition(0, R.anim.activity_close_down_up);
     }
 
     /**
