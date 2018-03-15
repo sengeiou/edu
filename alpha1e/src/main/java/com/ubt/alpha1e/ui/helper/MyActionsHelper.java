@@ -908,7 +908,6 @@ public class MyActionsHelper extends BaseHelper implements
             }
 
         } else if ((cmd & 0xff) == (ConstValue.UV_STOPACTIONFILE & 0xff)) {
-            UbtLog.d(TAG,"lihai------------getDataType-=>>"+getDataType);
             if(getDataType == Action_type.MY_WALK){
                 return;
             }
@@ -1980,11 +1979,6 @@ public class MyActionsHelper extends BaseHelper implements
 
             try {
                 String name = actions_list.get(i).toString();
-                if(isStringNumber(name)&& i >=(localSize + myDownloadSize)){
-                    sb.append(name+",");
-                    numberNameList.add(name);
-                    continue;
-                }
                 action_item.put(MyActionsHelper.map_val_action,name);
 
 //                if (mCurrentActionType != Action_type.Custom_type) {
@@ -2038,7 +2032,7 @@ public class MyActionsHelper extends BaseHelper implements
                     }
                 });
         }else{
-            dealResPonseResult(null,mNoNumberData,fnumberNameList);
+            //dealResPonseResult(null,mNoNumberData,fnumberNameList);
         }
         return mDatas;
 

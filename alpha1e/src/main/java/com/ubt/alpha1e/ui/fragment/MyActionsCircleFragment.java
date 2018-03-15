@@ -176,7 +176,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         if(mHelper!=null) {
             mHelper.setPlayContent(mDatas);
         }
-        removeDuplicate(mDatas);
+
         //MyActionHelper trigger setDatas
         if(mAdapter!=null){
             mAdapter.notifyDataSetChanged();
@@ -209,7 +209,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         super.onResume();
         UbtLog.d(TAG,"MyActionsCircleFragment----onResume--");
         if(mHelper!=null) {
-            mHelper.doReadActions();
+            //mHelper.doReadActions();
         }
 //        if(isStartLooping){
 //            if(mListener!=null) mListener.onHiddenLoopButton();
@@ -955,6 +955,12 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                                 actionInfo.hts_file_name = (String) actionList.get(MyActionsHelper.map_val_action);
                                 actionInfo.actionSize = position;//zan cun
                                 recoveryPlayType();
+
+                                if(position < MyActionsHelper.localSize){
+                                    MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.Unkown;
+                                }else {
+                                    MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_download_local;
+                                }
                                 mHelper.doPlay(actionInfo);
                                 UbtLog.d(TAG, "REFACTOR lihai------actionName->" + actionName + "----position->" + position + "--" + actionList.get(MyActionsHelper.map_val_action));
                             } else {
