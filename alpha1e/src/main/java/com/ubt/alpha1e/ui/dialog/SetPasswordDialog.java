@@ -1,7 +1,11 @@
 package com.ubt.alpha1e.ui.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,6 +24,7 @@ import android.widget.TextView;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.Md5;
+import com.ubt.alpha1e.utils.SoftInputUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 /**
@@ -54,6 +59,12 @@ public class SetPasswordDialog {
     private ISetPasswordListener mISetPasswordListener;
     private String mPasswordFirst = "";
     private String mPasswordSecond = "";
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
 
     public SetPasswordDialog(Context context) {
         this.mContext = context;
@@ -133,6 +144,23 @@ public class SetPasswordDialog {
         // 调整dialog背景大小
         lLayout_bg.setLayoutParams(new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 获取焦点
+                        edtPassword1.requestFocus();
+                        // 显示软键盘
+                        SoftInputUtils.showSoftInput((Activity)mContext);
+                    }
+                },50);
+
+            }
+        });
 
         return this;
     }
