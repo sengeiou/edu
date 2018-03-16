@@ -852,6 +852,7 @@
     <!--behaviour habit-->
     <string name="network_request_error">网络请求失败</string>
     <string name="network_request_success">网络请求成功</string>
+    <string name="set_reminder_guide">设置好习惯</string>
 
 
     <string name="ui_setting_clear_cache">清除缓存数据</string>

@@ -203,6 +203,17 @@
             android:text="起床"
             android:textSize="16sp"
             />
+        <ImageView
+            android:id="@+id/iv_hibits_reminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:src="@drawable/ic_remind_none"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            />
 
         <TextView
             android:id="@+id/tv_habits_event_time"
