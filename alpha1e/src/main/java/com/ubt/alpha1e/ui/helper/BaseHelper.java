@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
-import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
@@ -215,11 +214,11 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
         sensorParams[1] = 0;
         doSendComm(ConstValue.DV_SENSOR_CONTROL, sensorParams);
 
-        //读取机器人加速度传感器是否开启（摔倒开启，关闭）状态
+        //读取机器人打招呼（摔倒开启，关闭）状态
         byte[] sensorGreetingParams = new byte[2];
-        sensorParams[0] = 0;
-        sensorParams[1] = 0;
-        doSendComm(ConstValue.DV_SENSOR_GREETING, sensorParams);
+        sensorGreetingParams[0] = 0;
+        sensorGreetingParams[1] = 0;
+        doSendComm(ConstValue.DV_SENSOR_GREETING, sensorGreetingParams);
 
         //连接蓝牙成功，读取一次行为习惯播放状态
         doSendComm(ConstValue.DV_READ_HIBITS_PLAY_STATUS, null);

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
+    android:background="@color/B6"
+    >
+ <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+     android:id="@+id/action_title"
     android:background="@color/actionPlayTitle">
-
 <ImageView
     android:id="@+id/img_cancel"
     android:layout_width="40dp"
@@ -22,7 +27,6 @@
     android:textSize="18sp"
     android:visibility="invisible"
     />
-
 
     <RelativeLayout
         android:id="@+id/rl_cycle"
@@ -54,5 +58,33 @@
     </RelativeLayout>
 
 
+</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@+id/action_title"
+        android:id="@+id/servo_guide"
+        android:background="@color/servo_guide_minutes"
+        android:visibility="invisible">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="19dp"
+            android:layout_marginTop="6dp"
+            android:text="@string/ui_servo_guide"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            android:id="@+id/textView" />
 
+        <ImageView
+            android:id="@+id/iv_close_header"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignBottom="@+id/textView"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_ct_tip_close" />
+    </RelativeLayout>
 </RelativeLayout>

@@ -158,6 +158,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     TextView  habitsName;
     @BindView(R.id.top_icon4)
     ImageView voiceCmd;
+    @BindView(R.id.iv_hibits_reminder)
+    ImageView habits_reminder;
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
@@ -1606,8 +1608,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
   }
 
   private void setBehaviourHabitNextEvent(String eventName,String eventTime){
+      habitsName.setVisibility(View.VISIBLE);
+      habits_reminder.setVisibility(View.INVISIBLE);
       habitsTime.setText(eventTime);
       habitsName.setText(eventName);
+  }
+  private void setBehaviourHabitDefault(){
+      habitsName.setVisibility(View.INVISIBLE);
+      habits_reminder.setVisibility(View.VISIBLE);
+      habitsTime.setText(getString(R.string.set_reminder_guide));
   }
 
     public void requireBehaviourNextEvent() {
@@ -1629,6 +1638,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         if(baseResponseModel1.models!=null) {
                             UbtLog.d(TAG, "GET RESOPNSE " + baseResponseModel1.models.eventName );
                             setBehaviourHabitNextEvent(baseResponseModel1.models.eventName,baseResponseModel1.models.eventTime);
+                        }else {
+                            setBehaviourHabitDefault();
                         }
                     }
                 }

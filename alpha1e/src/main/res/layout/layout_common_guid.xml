@@ -86,7 +86,7 @@
             android:layout_marginBottom="130dp"
             android:layout_marginRight="40dp"
             android:scaleType="fitXY"
-            android:src="@drawable/cc_lightoff"
+            android:src="@drawable/cc_sensorcontorl"
             android:visibility="visible"/>
 
         <RelativeLayout
@@ -110,7 +110,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="18dp"
                 android:gravity="center"
-                android:text="开启或关闭机器人关节LED指示灯。"
+                android:text="开启或关闭机器人摔倒自我保护功能。"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"

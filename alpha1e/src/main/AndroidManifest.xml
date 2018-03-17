@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ubt.alpha1e"
           android:versionCode="1"
-          android:versionName="V1.0.2.1">
+          android:versionName="V1.0.2.2">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -56,7 +56,8 @@
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions"/>
-
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.REORDER_TASKS"/>
 
     <uses-feature
         android:glEsVersion="0x00020000"

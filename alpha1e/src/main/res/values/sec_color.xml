@@ -154,6 +154,7 @@
     <color name="GB1">#FFFFFF</color>
     <color name="GB2">#E7EAEA</color>
     <color name="actionPlayTitle">#E4F2F7</color>
+    <color name="servo_guide_minutes">#FFF1F0</color>
 
 
     <color name="colorPrimary">#F0F3F3</color>
