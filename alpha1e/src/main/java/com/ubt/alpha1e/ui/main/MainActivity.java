@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.BuildConfig;
@@ -1513,7 +1514,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
       UserModel mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
       if(mUserModel != null) {
           UbtLog.d(TAG, "user image picture" + mUserModel.getHeadPic());
-          Glide.with(this).load(mUserModel.getHeadPic()).asBitmap().into(topIcon);
+          Glide.with(this).load(mUserModel.getHeadPic()).asBitmap().placeholder(R.drawable.main_center).diskCacheStrategy(DiskCacheStrategy.ALL).into(topIcon);
       }
   }
   private void hiddenDisconnectIcon(){
