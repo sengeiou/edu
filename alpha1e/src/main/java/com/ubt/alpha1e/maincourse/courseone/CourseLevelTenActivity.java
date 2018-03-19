@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.event.RobotEvent;
@@ -110,8 +109,7 @@ public class CourseLevelTenActivity extends MVPBaseActivity<CourseOneContract.Vi
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
             if (event.isHibitsProcessStatus()) {
                 ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
-                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
-                Intent intent = new Intent();
+                 Intent intent = new Intent();
                 intent.putExtra("resulttype", 1);//结束类型
 
                 setResult(1, intent);

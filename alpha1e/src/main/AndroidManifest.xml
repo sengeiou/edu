@@ -520,7 +520,7 @@
             android:name=".userinfo.mainuser.UserCenterActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:theme="@style/NoTitleThemeFullScreenuser"/>
         <activity
             android:name=".userinfo.useredit.UserEditActivity"

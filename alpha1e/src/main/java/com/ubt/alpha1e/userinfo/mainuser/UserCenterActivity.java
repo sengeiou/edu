@@ -4,6 +4,7 @@ package com.ubt.alpha1e.userinfo.mainuser;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;*/
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -58,7 +59,9 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
     private FragmentTransaction mFragmentTransaction;
     private Fragment mCurrentFragment;
 
-    private int mCurrentPosition = -1;
+    private int mCurrentPosition = 0;
+
+    public static String USER_CURRENT_POSITION = "current_check_position";
 
     String[] mStrings = new String[]{};
 
@@ -68,8 +71,27 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
         //setContentView(R.layout.activity_user_center);
         mPresenter.initData(this);
         mPresenter.getUnReadMessage();
+        mCurrentPosition = getIntent().getIntExtra(USER_CURRENT_POSITION, 0);
+        UbtLog.d(TAG, "------------onCreate----------" + mCurrentPosition);
         initUI();
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        UbtLog.d(TAG, "------------onNewIntent----------" + mCurrentPosition);
+        int position = intent.getIntExtra(USER_CURRENT_POSITION, 0);
+        mMenuModels.get(mCurrentPosition).setChick(false);
+        mCurrentPosition = position;
+        initUI();
+        mPresenter.getUnReadMessage();
+        if (null != mCurrentFragment && mCurrentFragment instanceof NoticeFragment) {
+            NoticeFragment fragment = (NoticeFragment) mCurrentFragment;
+            UbtLog.d(TAG, "------------refreshNewData----------" + mCurrentPosition);
+            fragment.refreshNewData();
+        }
+    }
+
 
     @Override
     public int getContentViewId() {
@@ -101,14 +123,18 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
     protected void initUI() {
         mFragmentManager = this.getSupportFragmentManager();
         mFragmentTransaction = this.mFragmentManager.beginTransaction();
-        mFragmentTransaction.add(R.id.fl_main_content, mFragmentList.get(0));
-        mFragmentTransaction.commit();
-        mCurrentFragment = mFragmentList.get(0);
+        Fragment fragment = mFragmentList.get(mCurrentPosition);
+        if (!fragment.isAdded()) {
+            mFragmentTransaction.add(R.id.fl_main_content, fragment);
+            mFragmentTransaction.commit();
+        } else {
+            loadFragment(fragment);
+        }
+        mCurrentFragment = fragment;
         mRecyclerView = (RecyclerView) findViewById(R.id.rl_leftmenu);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mCurrentPosition = 0;
         //mTvTitle.setText(mMenuModels.get(0).getNameString());
-        mMenuModels.get(0).setChick(true);
+        mMenuModels.get(mCurrentPosition).setChick(true);
         mBaseQuickAdapter = new LeftAdapter(R.layout.layout_usercenter_left_item, mMenuModels);
 
         mBaseQuickAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -116,6 +142,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 LeftMenuModel menuModel = mMenuModels.get(position);
                 // mTvTitle.setText(menuModel.getNameString());
+                mCurrentPosition = position;
                 loadFragment(mFragmentList.get(position));
                 for (int i = 0; i < mMenuModels.size(); i++) {
                     if (mMenuModels.get(i).getNameString().equals(menuModel.getNameString())) {
@@ -186,7 +213,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
 
     @Override
     public void onChangeUnReadMessage() {
-        UbtLog.d("Notice","onChangeUnReadMessage==");
+        UbtLog.d("Notice", "onChangeUnReadMessage==");
         int unReadCount = mMenuModels.get(2).getCountUnRead();
         mMenuModels.get(2).setCountUnRead(unReadCount - 1);
         mBaseQuickAdapter.notifyDataSetChanged();
@@ -219,7 +246,7 @@ public class UserCenterActivity extends MVPBaseActivity<UserCenterContact.UserCe
                 if (item.getCountUnRead() > 0) {
                     barView.setVisibility(View.VISIBLE);
                     if (item.getCountUnRead() < 100) {
-                        barView.setText(item.getCountUnRead()+"");
+                        barView.setText(item.getCountUnRead() + "");
                     } else {
                         barView.setText("99+");
                     }

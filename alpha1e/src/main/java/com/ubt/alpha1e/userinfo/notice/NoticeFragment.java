@@ -155,6 +155,13 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
         mRefreshLayout.autoRefresh();
     }
 
+    public void refreshNewData() {
+        if (null != mRefreshLayout) {
+            //触发自动刷新
+            mRefreshLayout.autoRefresh();
+        }
+
+    }
 
     @Override
     protected void initControlListener() {

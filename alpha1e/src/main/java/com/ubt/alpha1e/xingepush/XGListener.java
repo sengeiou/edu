@@ -52,16 +52,20 @@ public class XGListener implements IXGListener {
 
     @Override
     public void onNotifactionClickedResult(Context context, XGPushClickedResult xgPushClickedResult) {
-        Log.d(TAG, "onNotifactionClickedResult"+xgPushClickedResult.toString());
+        Log.d(TAG, "onNotifactionClickedResult" + xgPushClickedResult.toString());
         String text = "";
         if (xgPushClickedResult.getActionType() == XGPushClickedResult.NOTIFACTION_CLICKED_TYPE) {
             // 通知在通知栏被点击啦。。。。。
             // APP自己处理点击的相关动作
             // 这个动作可以在activity的onResume也能监听，请看第3点相关内容
             text = "通知被打开 :";
+//            Intent intent = new Intent(context, UserCenterActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra(UserCenterActivity.USER_CURRENT_POSITION, 2);
+//            context.startActivity(intent);
         } else if (xgPushClickedResult.getActionType() == XGPushClickedResult.NOTIFACTION_DELETED_TYPE) {
             // 通知被清除啦。。。。
-            // APP自己处理通知被清除后的相关动作
+            //
             text = "通知被清除 :";
         }
         Log.d(TAG, "onNotifactionClickedResult==" + text);

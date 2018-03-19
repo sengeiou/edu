@@ -16,12 +16,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.GlideRoundTransform;
+import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.data.TimeTools;
 import com.ubt.alpha1e.data.model.DownloadProgressInfo;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -77,6 +80,7 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
     public static int REQUEST_CODE = 1000;
     public static String DELETE_RESULT = "delete_action";
     public static String DELETE_ACTIONID = "delete_action_id";
+    private boolean isShowHibitsDialog = false;
 
     public static void launch(Activity context, DynamicActionModel mDynamicActionModel) {
         Intent intent = new Intent(context, ActionDetailActivity.class);
@@ -166,6 +170,11 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
      * 播放按钮
      */
     private void playAction() {
+        if (BaseHelper.isStartHibitsProcess) {
+            showStartHibitsProcess();
+            return;
+        }
+
         int actionStatu = mDynamicActionModel.getActionStatu();
         if (actionStatu == 0) {
             if (mDynamicActionModel.isDownload()) {//已经下载
@@ -321,6 +330,28 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
     }
 
 
+    @Override
+    public void onEventRobot(RobotEvent event) {
+        super.onEventRobot(event);
+        UbtLog.d("ActionDetailActivity", "onEventRobot===========" + event.isHibitsProcessStatus());
+        if (event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS) {
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            if (event.isHibitsProcessStatus()) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDynamicActionModel.setActionStatu(0);
+                        setPlaBtnAction(1);
+                        if (!isShowHibitsDialog) {
+                            showStartHibitsProcess();
+                        }
+                    }
+                });
+
+            }
+        }
+    }
+
     //显示蓝牙连接对话框
     private void showDeleteDialog() {
         new ConfirmDialog(this).builder()
@@ -340,4 +371,27 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
                     }
                 }).show();
     }
+
+
+    //显示行为提醒弹出框
+    public void showStartHibitsProcess() {
+        isShowHibitsDialog = true;
+        String msg = "行为习惯正在进行中，请先完成";
+        String position = "好的";
+
+        msg = ResourceManager.getInstance(this).getStringResources("ui_habits_process_starting");
+        position = ResourceManager.getInstance(this).getStringResources("ui_common_ok");
+
+        new ConfirmDialog(this)
+                .builder()
+                .setMsg(msg)
+                .setCancelable(false)
+                .setPositiveButton(position, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        isShowHibitsDialog = false;
+                    }
+                }).show();
+    }
+
 }

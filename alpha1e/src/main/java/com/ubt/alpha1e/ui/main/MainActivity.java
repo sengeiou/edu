@@ -417,6 +417,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         } else if (TextUtils.isEmpty(userModel.getAge())) {
                             intent.setClass(this, UserEditActivity.class);
                         } else {
+                            intent.putExtra(UserCenterActivity.USER_CURRENT_POSITION,0);
                             intent.setClass(this, UserCenterActivity.class);
                         }
                     }

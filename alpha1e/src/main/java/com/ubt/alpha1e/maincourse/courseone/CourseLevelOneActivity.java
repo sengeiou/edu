@@ -77,7 +77,7 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     protected void onResume() {
         super.onResume();
-        UbtLog.d(TAG, "------------onResume------"+mHelper.isStartHibitsProcess());
+        UbtLog.d(TAG, "------------onResume------" + mHelper.isStartHibitsProcess());
         if (mHelper.isStartHibitsProcess()) {
             mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
                 @Override
@@ -105,12 +105,11 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     public void onEventRobot(RobotEvent event) {
         super.onEventRobot(event);
-        UbtLog.d(TAG,"onEventRobot==========="+event.isHibitsProcessStatus());
+        UbtLog.d(TAG, "onEventRobot===========" + event.isHibitsProcessStatus());
         if (event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS) {
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
             if (event.isHibitsProcessStatus()) {
                 ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
-                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
                 Intent intent = new Intent();
                 intent.putExtra("resulttype", 1);//结束类型
 

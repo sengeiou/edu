@@ -76,7 +76,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
     private static boolean isCharging = false; //用来判断机器人当前是否在充电中,false 表示没有充电中,true表示充电中.
     private static byte mPowerValue=0;
-    private static boolean isStartHibitsProcess = false;
+    public static boolean isStartHibitsProcess = false;
 
     /*public BaseHelper(BaseActivity _baseActivity) {
         mBaseActivity = _baseActivity;

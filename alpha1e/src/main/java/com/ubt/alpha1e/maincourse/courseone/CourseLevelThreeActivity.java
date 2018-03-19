@@ -112,8 +112,7 @@ public class CourseLevelThreeActivity extends MVPBaseActivity<CourseOneContract.
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
             if (event.isHibitsProcessStatus()) {
                 ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
-                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
-                Intent intent = new Intent();
+                 Intent intent = new Intent();
                 intent.putExtra("resulttype", 1);//结束类型
 
                 setResult(1, intent);
