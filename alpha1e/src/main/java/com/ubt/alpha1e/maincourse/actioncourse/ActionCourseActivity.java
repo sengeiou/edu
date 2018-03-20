@@ -159,6 +159,9 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         if (!isBulueToothConnected()) {
             showLoasBleDiaog();
         }
+        if (mMainCoursedapter != null) {
+            mMainCoursedapter.notifyDataSetChanged();
+        }
     }
 
 

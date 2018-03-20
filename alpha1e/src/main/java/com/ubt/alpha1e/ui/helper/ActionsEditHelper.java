@@ -73,9 +73,14 @@ public class ActionsEditHelper extends BaseHelper implements
 
     @Override
     public void UnRegisterHelper() {
+      //  super.UnRegisterHelper();
+    }
+
+
+    @Override
+    public void unRegister(){
         super.UnRegisterHelper();
         mNewActionsManager.removeListener(this);
-
     }
 
     public boolean getActionSaveState() {

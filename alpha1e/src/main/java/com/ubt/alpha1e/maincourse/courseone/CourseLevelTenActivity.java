@@ -60,24 +60,6 @@ public class CourseLevelTenActivity extends MVPBaseActivity<CourseOneContract.Vi
         mHelper.RegisterHelper();
         ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
-
-    }
-
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 1111) {
-                mActionEdit.playComplete();
-            }
-        }
-    };
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        UbtLog.d(TAG, "------------onResume------");
         if (mHelper.isStartHibitsProcess()) {
             mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
                 @Override
@@ -100,6 +82,24 @@ public class CourseLevelTenActivity extends MVPBaseActivity<CourseOneContract.Vi
             mActionEdit.setData(this);
 
         }
+    }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1111) {
+                mActionEdit.playComplete();
+            }
+        }
+    };
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UbtLog.d(TAG, "------------onResume------");
+
     }
     @Override
     public void onEventRobot(RobotEvent event) {
@@ -203,6 +203,9 @@ public class CourseLevelTenActivity extends MVPBaseActivity<CourseOneContract.Vi
     protected void onDestroy() {
         super.onDestroy();
         UbtLog.d(TAG, "------------onDestroy------------");
+        if (mHelper!=null){
+            mHelper.unRegister();
+        }
     }
 
 

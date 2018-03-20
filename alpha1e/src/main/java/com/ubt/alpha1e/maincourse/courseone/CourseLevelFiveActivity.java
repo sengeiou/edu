@@ -20,7 +20,6 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.BaseActionEditLayout;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.event.RobotEvent;
@@ -62,24 +61,6 @@ public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.V
         mHelper.RegisterHelper();
         ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
-
-    }
-
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 1111) {
-                mActionEdit.playComplete();
-            }
-        }
-    };
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        UbtLog.d(TAG, "------------onResume------");
         if (mHelper.isStartHibitsProcess()) {
             mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
                 @Override
@@ -102,6 +83,24 @@ public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.V
             mActionEdit.setData(this);
 
         }
+    }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1111) {
+                mActionEdit.playComplete();
+            }
+        }
+    };
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UbtLog.d(TAG, "------------onResume------");
+
     }
     @Override
     public void onEventRobot(RobotEvent event) {
@@ -213,6 +212,9 @@ public class CourseLevelFiveActivity extends MVPBaseActivity<CourseOneContract.V
         UbtLog.d(TAG, "------------onDestroy------------");
         // ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
         mActionEdit.onPause();
+        if (mHelper!=null){
+            mHelper.unRegister();
+        }
     }
 
 

@@ -7,6 +7,8 @@ package com.ubt.alpha1e.xingepush;
  */
 
 public interface XGCmdConstract {
-    String BEHAVIOUR_HABIT="1";
-    String COMMUNITY="2";
+    String BEHAVIOUR_HABIT = "1";
+    String USER_CENTER = "2";
+
+    String COMMUNITY = "2";
 }

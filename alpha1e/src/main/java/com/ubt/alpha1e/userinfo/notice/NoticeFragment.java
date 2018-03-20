@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -389,8 +390,12 @@ public class NoticeFragment extends MVPBaseFragment<NoticeContract.View, NoticeP
             if (mNoticeModels.get(position).getStatus().equals("0")) {
                 mPresenter.updateNoticeStatu(mNoticeModels.get(position).getId());
             }
-            //WebActivity.launchActivity(getActivity(), "https://www.ubtrobot.com/cn/", "详情");
-        }
+            NoticeModel noticeModel = mNoticeModels.get(position);
+
+            if (noticeModel.getType().equals("2") && !TextUtils.isEmpty(noticeModel.getLinkUrl())) {
+                WebActivity.launchActivity(getActivity(), noticeModel.getLinkUrl(), "活动详情");
+            }
+         }
     }
 
     private static long lastClickTime1;
