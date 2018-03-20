@@ -92,6 +92,7 @@ public class MyActionsHelper extends BaseHelper implements
     public static final String action_info = "action_info";
     public static final String action_info_all = "action_info_all";
 
+
     public  enum Action_type {
         Story_type, Dance_type, Base_type, Custom_type, My_download, My_new,My_download_local,My_new_local,My_gamepad ,All,Unkown,MY_WALK,MY_COURSE
     }
@@ -205,6 +206,7 @@ public class MyActionsHelper extends BaseHelper implements
     private String mSchemeId = "";
     private String mSchemeName = "";
     private static boolean isLooping=false;
+
 
     public Action_type getCurrentPlayType() {
         return mCurrentPlayType;
@@ -2711,5 +2713,7 @@ public class MyActionsHelper extends BaseHelper implements
     public boolean getSensorStatus() {
         return mSensorState;
     }
+
+
 
 }
