@@ -100,25 +100,23 @@ public class HibitsEventPlayDialog {
                         UbtLog.d(TAG,"seqNo = " + eventPlayStatus.playAudioSeq + "  isInteger = "+ StringUtils.isInteger(eventPlayStatus.playAudioSeq));
                         if(StringUtils.isInteger(eventPlayStatus.playAudioSeq)){
                             int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
-                            if(currentEventId.equals(eventPlayStatus.eventId) && "1".equals(eventPlayStatus.eventState) && seqNo >= 0 ){
+                            if(currentEventId.equals(eventPlayStatus.eventId) && "1".equals(eventPlayStatus.eventState) && seqNo >= 0 && mPlayContentInfoList.size() > 0){
                                 isStartPlayProcess = true;
                                 playStatus = eventPlayStatus.audioState;
-                                if(mPlayContentInfoList != null ){
-                                    if("playing".equals(playStatus) || "pause".equals(playStatus)){
-                                        currentPlaySeq = seqNo;
-                                        currentPlayInfo = mPlayContentInfoList.get(seqNo);
-                                        String playContent = "正在播放：" + currentPlayInfo.contentName /*+ "_" + currentPlaySeq*/;
-                                        SpannableString style = new SpannableString(playContent);
-                                        style.setSpan(new ForegroundColorSpan(mActivity.getResources().getColor(R.color.T32)),0, "正在播放：".length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                        tvPlayName.setText(style);
+                                if("playing".equals(playStatus) || "pause".equals(playStatus)){
+                                    currentPlaySeq = seqNo;
+                                    currentPlayInfo = mPlayContentInfoList.get(seqNo);
+                                    String playContent = "正在播放：" + currentPlayInfo.contentName /*+ "_" + currentPlaySeq*/;
+                                    SpannableString style = new SpannableString(playContent);
+                                    style.setSpan(new ForegroundColorSpan(mActivity.getResources().getColor(R.color.T32)),0, "正在播放：".length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                    tvPlayName.setText(style);
 
-                                        if("pause".equals(playStatus)){
-                                            isPause = true;
-                                        }
-                                    }else {
-                                        //audioState = noPlay
-                                        tvPlayName.setText("暂无播放内容");
+                                    if("pause".equals(playStatus)){
+                                        isPause = true;
                                     }
+                                }else {
+                                    //audioState = noPlay
+                                    tvPlayName.setText("暂无播放内容");
                                 }
                             }else {
                                 isStartPlayProcess = false;

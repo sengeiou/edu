@@ -135,14 +135,13 @@
             android:visibility="invisible">
 
         </View>
-
         <ImageView
             android:id="@+id/iv_volumeicon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_above="@+id/v_bottom_volume"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="30dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
             android:scaleType="fitXY"
             android:src="@drawable/cc_volumeicon"/>
 
