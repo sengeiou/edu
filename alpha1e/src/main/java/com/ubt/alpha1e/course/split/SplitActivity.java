@@ -59,6 +59,7 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
     private static final int TAP_HEAD = 5;
     private static final int SHOW_NEXT_OVER_TIME = 6;
     private static final int BLUETOOTH_DISCONNECT = 7;
+    private static final int RECIEVE_HIBITS_START = 8;
 
     private final int ANIMATOR_TIME = 500;
     private final int OVER_TIME = (25+10) * 1000;//(25S音频+ 10S操作) 超时
@@ -105,6 +106,7 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
 
     private boolean hasPlayFileFinish = false;
     private boolean isShowHibitsDialog = false;
+    private boolean hasReceiveHibitsStart = false;
 
     private ConfirmDialog mTapHeadDialog = null;
 
@@ -153,6 +155,12 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                     MainCourseActivity.finishByMySelf();
                     finish();
                     break;
+                case RECIEVE_HIBITS_START:
+                    MainCourseActivity.showHabitsStartDialog();
+                    ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                    SplitActivity.this.finish();
+                    SplitActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                    break;
             }
         }
     };
@@ -183,11 +191,9 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
         super.onEventRobot(event);
         if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS && !isShowHibitsDialog){
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
-            if(event.isHibitsProcessStatus()){
-
-                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
-                SplitActivity.this.finish();
-                SplitActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            if(event.isHibitsProcessStatus() && !hasReceiveHibitsStart){
+                hasReceiveHibitsStart = true;
+                mHandler.sendEmptyMessage(RECIEVE_HIBITS_START);
             }
         }
     }
