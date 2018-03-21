@@ -185,6 +185,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
 
     private Date startTime = null;
     private boolean isShowHibitsDialog = false;
+    private boolean hasReceiveHibitsStart = false;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -628,7 +629,8 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         super.onEventRobot(event);
         if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS && !isShowHibitsDialog){
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
-            if(event.isHibitsProcessStatus()){
+            if(event.isHibitsProcessStatus() && !hasReceiveHibitsStart){
+                hasReceiveHibitsStart = true;
                 mHandler.sendEmptyMessage(RECIEVE_HIBITS_START);
             }
         }
