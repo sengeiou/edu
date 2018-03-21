@@ -58,7 +58,6 @@ public class MainActivityGuideView{
     private RelativeLayout rlGuideLayout;
 
     private boolean created = false;
-    private RelativeLayout rlGuideTopIcon2;
     private TextView jump_exit;
     static MainActivityGuideView  mMainActivityGuideView;
     Unbinder mUnbinder;
@@ -105,6 +104,8 @@ public class MainActivityGuideView{
     ImageView topIcon;
     @BindView(R.id.top_icon2)
     ImageView topIcon2;
+    @BindView(R.id.top_icon2_guides)
+    RelativeLayout rltoopIcon2Guide;
     @BindView(R.id.top_icon2_disconnect)
     ImageView topIcon2Disconnect;
     @BindView(R.id.top_icon3)
@@ -378,10 +379,10 @@ public class MainActivityGuideView{
                 }else if(rlCourseCenterGuides.getVisibility()==View.VISIBLE) {
                     rlCourseCenter.setVisibility(View.INVISIBLE);
                     rlCourseCenterGuides.setVisibility(View.INVISIBLE);
-                    rlGuideTopIcon2.setVisibility(View.VISIBLE);
+                    rltoopIcon2Guide.setVisibility(View.VISIBLE);
                     topIcon2.setVisibility(View.VISIBLE);
-                }else if(rlGuideTopIcon2.getVisibility()==View.VISIBLE){
-                    rlGuideTopIcon2.setVisibility(View.INVISIBLE);
+                }else if(rltoopIcon2Guide.getVisibility()==View.VISIBLE){
+                    rltoopIcon2Guide.setVisibility(View.INVISIBLE);
                     topIcon2.setVisibility(View.INVISIBLE);
                     closeGuideView();
                     recordGuideState();

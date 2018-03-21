@@ -87,58 +87,58 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             TypedArray typedArray=null;
             int[] resId={0};
             switch (value) {
-                case Constant.cartoon_action_enjoy:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.enjoy);
-                    actionName="enjoy";
-                    break;
-                case Constant.cartoon_action_fall:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.fall);
-                    actionName="fall";
-                    break;
-                case Constant.cartoon_action_greeting:
-                    typedArray =mView.getContext().getResources().obtainTypedArray(R.array.greetting);
-                    actionName="greetting";
-                    break;
-                case Constant. cartoon_action_hand_stand:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.hand_stand);
-                    actionName="hand_stand";
-                    break;
-                case Constant.cartoon_action_hand_stand_reverse:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.hand_stand_reverse);
-                    actionName="hand_stand_reverse";
-                    break;
-                case Constant.cartoon_action_smile:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.smile);
-                    actionName="smile";
-                    break;
-                case Constant.cartoon_action_squat:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.squat);
-                    actionName="squat";
-                    break;
-                case Constant.cartoon_aciton_squat_reverse:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.squat_reverse);
-                    actionName="squat_reverse";
-                    break;
-                case Constant.cartoon_action_shiver:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.shiver);
-                    actionName="shiver";
-                    break;
-                case Constant.cartoon_action_swing_left_hand:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_lefthand);
-                    actionName="left_hand";
-                    break;
-                case Constant.cartoon_action_swing_left_leg:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_leftleg);
-                    actionName="left_leg";
-                    break;
-                case Constant.cartoon_action_swing_right_hand:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_righthand);
-                    actionName="right_hand";
-                    break;
-                case Constant.cartoon_action_swing_right_leg:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_rightleg);
-                    actionName="right_leg";
-                    break;
+//                case Constant.cartoon_action_enjoy:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.enjoy);
+//                    actionName="enjoy";
+//                    break;
+//                case Constant.cartoon_action_fall:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.fall);
+//                    actionName="fall";
+//                    break;
+//                case Constant.cartoon_action_greeting:
+//                    typedArray =mView.getContext().getResources().obtainTypedArray(R.array.greetting);
+//                    actionName="greetting";
+//                    break;
+//                case Constant. cartoon_action_hand_stand:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.hand_stand);
+//                    actionName="hand_stand";
+//                    break;
+//                case Constant.cartoon_action_hand_stand_reverse:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.hand_stand_reverse);
+//                    actionName="hand_stand_reverse";
+//                    break;
+//                case Constant.cartoon_action_smile:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.smile);
+//                    actionName="smile";
+//                    break;
+//                case Constant.cartoon_action_squat:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.squat);
+//                    actionName="squat";
+//                    break;
+//                case Constant.cartoon_aciton_squat_reverse:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.squat_reverse);
+//                    actionName="squat_reverse";
+//                    break;
+//                case Constant.cartoon_action_shiver:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.shiver);
+//                    actionName="shiver";
+//                    break;
+//                case Constant.cartoon_action_swing_left_hand:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_lefthand);
+//                    actionName="left_hand";
+//                    break;
+//                case Constant.cartoon_action_swing_left_leg:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_leftleg);
+//                    actionName="left_leg";
+//                    break;
+//                case Constant.cartoon_action_swing_right_hand:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_righthand);
+//                    actionName="right_hand";
+//                    break;
+//                case Constant.cartoon_action_swing_right_leg:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_rightleg);
+//                    actionName="right_leg";
+//                    break;
                 default:
                     break;
             }
