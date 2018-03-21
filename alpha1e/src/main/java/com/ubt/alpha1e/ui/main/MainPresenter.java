@@ -17,6 +17,7 @@ import com.ubt.alpha1e.base.RequstMode.CheckIsBindRequest;
 import com.ubt.alpha1e.base.RequstMode.XGGetAccessIdRequest;
 import com.ubt.alpha1e.base.ResponseMode.XGDeviceMode;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.ActionPlayerListener;
 import com.ubt.alpha1e.data.model.ActionInfo;
@@ -451,6 +452,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     @Override
     public void checkMyRobotState() {
+        LoadingDialog.show(AppManager.getInstance().currentActivity());
         CheckIsBindRequest checkRobotInfo = new CheckIsBindRequest();
         checkRobotInfo.setSystemType("3");
         String url = HttpEntity.CHECK_ROBOT_INFO;
@@ -494,6 +496,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 switch (id){
                     case CHECK_ROBOT_INFO_HABIT:
                         mView.onGetRobotInfo(0,null);
+                        LoadingDialog.dismiss(AppManager.getInstance().currentActivity());
                         break;
                     default:
                         break;
@@ -505,6 +508,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 UbtLog.d(TAG,"response = " + response);
                 switch (id) {
                     case CHECK_ROBOT_INFO_HABIT:
+                        LoadingDialog.dismiss(AppManager.getInstance().currentActivity());
                         BaseResponseModel<ArrayList<MyRobotModel>> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<ArrayList<MyRobotModel>>>() {
                                 }.getType());//加上type转换，避免泛型擦除
