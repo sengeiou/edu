@@ -66,6 +66,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     private static final int TAP_HEAD = 9;
     private static final int BLUETOOTH_DISCONNECT = 10;
     private static final int OVER_TIME_FINISH = 11;
+    private static final int RECIEVE_HIBITS_START = 12;
 
     @BindView(R.id.tv_next)
     TextView tvNext;
@@ -422,6 +423,13 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                 case OVER_TIME_FINISH:
                     isClickable = true;
                     break;
+                case RECIEVE_HIBITS_START:
+                    isDoBack = true;
+                    MainCourseActivity.showHabitsStartDialog();
+                    ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                    FeatureActivity.this.finish();
+                    FeatureActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                    break;
             }
 
         }
@@ -621,12 +629,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS && !isShowHibitsDialog){
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
             if(event.isHibitsProcessStatus()){
-
-                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
-                isDoBack = true;
-                ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
-                FeatureActivity.this.finish();
-                FeatureActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                mHandler.sendEmptyMessage(RECIEVE_HIBITS_START);
             }
         }
     }

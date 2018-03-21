@@ -58,6 +58,7 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
     private static final int GO_NEXT = 7;
     private static final int SHOW_NEXT_OVER_TIME = 8;
     private static final int BLUETOOTH_DISCONNECT = 9;
+    private static final int RECIEVE_HIBITS_START = 10;
 
     private final int OVER_TIME = 35 * 1000;//超时
 
@@ -171,6 +172,13 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
                     ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
                     MainCourseActivity.finishByMySelf();
                     finish();
+                    break;
+                case RECIEVE_HIBITS_START:
+                    //ToastUtils.showShort(getStringResources("ui_habits_process_start"));
+                    MainCourseActivity.showHabitsStartDialog();
+                    ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                    PrincipleActivity.this.finish();
+                    PrincipleActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
                     break;
             }
         }
@@ -310,22 +318,7 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
         if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS && !isShowHibitsDialog){
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
             if(event.isHibitsProcessStatus()){
-
-                /*new ConfirmDialog(getContext())
-                        .builder()
-                        .setMsg(getStringResources("ui_habits_process_start"))
-                        .setCancelable(false)
-                        .setPositiveButton(getStringResources("ui_common_ok"), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                onBack();
-                            }
-                        }).show();*/
-
-                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
-                ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
-                PrincipleActivity.this.finish();
-                PrincipleActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                mHandler.sendEmptyMessage(RECIEVE_HIBITS_START);
             }
         }
     }

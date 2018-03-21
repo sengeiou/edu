@@ -59,6 +59,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     private static final int TAP_HEAD = 5;
     private static final int SHOW_NEXT_OVER_TIME = 6;
     private static final int BLUETOOTH_DISCONNECT = 7;
+    private static final int RECIEVE_HIBITS_START = 8;
 
     private final int ANIMATOR_TIME = 500;
     private final int OVER_TIME = (15 + 10) * 1000;//(15S音频+ 10S操作)超时
@@ -162,6 +163,12 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                     ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
                     MainCourseActivity.finishByMySelf();
                     finish();
+                    break;
+                case RECIEVE_HIBITS_START:
+                    MainCourseActivity.showHabitsStartDialog();
+                    ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                    MergeActivity.this.finish();
+                    MergeActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
                     break;
             }
         }
@@ -318,10 +325,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
             if(event.isHibitsProcessStatus()){
 
-                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
-                ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
-                MergeActivity.this.finish();
-                MergeActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                mHandler.sendEmptyMessage(RECIEVE_HIBITS_START);
             }
         }
     }
