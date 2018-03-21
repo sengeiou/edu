@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.event.RobotEvent;
@@ -61,23 +60,6 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
         mHelper.RegisterHelper();
         ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
-    }
-
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 1111) {
-                mActionEdit.playComplete();
-            }
-        }
-    };
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        UbtLog.d(TAG, "------------onResume------"+mHelper.isStartHibitsProcess());
         if (mHelper.isStartHibitsProcess()) {
             mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
                 @Override
@@ -102,15 +84,32 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
         }
     }
 
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1111) {
+                mActionEdit.playComplete();
+            }
+        }
+    };
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UbtLog.d(TAG, "------------onResume------" + mHelper.isStartHibitsProcess());
+
+    }
+
     @Override
     public void onEventRobot(RobotEvent event) {
         super.onEventRobot(event);
-        UbtLog.d(TAG,"onEventRobot==========="+event.isHibitsProcessStatus());
+        UbtLog.d(TAG, "onEventRobot===========" + event.isHibitsProcessStatus());
         if (event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS) {
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
             if (event.isHibitsProcessStatus()) {
                 ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
-                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
                 Intent intent = new Intent();
                 intent.putExtra("resulttype", 1);//结束类型
 
@@ -220,6 +219,9 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
         UbtLog.d(TAG, "------------onDestroy------------");
         // ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
         mActionEdit.onPause();
+        if (mHelper!=null){
+            mHelper.unRegister();
+        }
     }
 
 

@@ -24,15 +24,19 @@ import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ResourceManager;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.data.model.DownloadProgressInfo;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
 import com.ubt.alpha1e.utils.log.UbtLog;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +104,8 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
 
     private int page = 1;
     private int offset = 8;
+
+    private boolean isShowHibitsDialog = false;
 
     public DynamicActionFragment() {
     }
@@ -218,8 +224,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         } else {//请求失败
             if (mDynamicActionModels.size() == 0) {//如果请求失败切列表数据为0，则显示错误页面
                 showStatuLayout(2);
-                ToastUtils.showShort("加载失败");
-            }else{
+            } else {
                 mRefreshLayout.finishRefresh();
                 mRefreshLayout.finishLoadmore();
             }
@@ -317,6 +322,12 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             showBluetoothConnectDialog();
             return;
         }
+
+        if (BaseHelper.isStartHibitsProcess) {
+            showStartHibitsProcess();
+            return;
+        }
+
         mPresenter.playAction(getActivity(), position, mDynamicActionModels);
         mDynamicActionAdapter.notifyDataSetChanged();
 
@@ -328,6 +339,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
         // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
+        EventBus.getDefault().register(this);
         return rootView;
     }
 
@@ -374,7 +386,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
                             break;
                         }
                     }
-                    if (mDynamicActionModels.size()==0){
+                    if (mDynamicActionModels.size() == 0) {
                         mRefreshLayout.setEnableLoadmore(false);
                         showStatuLayout(1);
                     }
@@ -493,7 +505,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
                 mDynamicActionModels.get(i).setActionStatu(statu);
                 if (statu == 1) {
                     DynamicActionModel model = DownLoadActionManager.getInstance(getActivity()).getPlayingInfo();
-                    if (null != model&&model.getActionId()!=actionid) {
+                    if (null != model && model.getActionId() != actionid) {
                         int postion = mPresenter.getPositionById(model.getActionId(), mDynamicActionModels);
                         mDynamicActionModels.get(postion).setActionStatu(0);
                     }
@@ -536,6 +548,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         UbtLog.d(TAG, "--------------onDestory-----------");
         DownLoadActionManager.getInstance(getActivity()).removeDownLoadActionListener(this);
     }
@@ -575,4 +588,48 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
                     }
                 }).show();
     }
+
+    @Subscribe
+    public void onEventRobot(RobotEvent event) {
+        UbtLog.d(TAG, "onEventRobot = obj == 1");
+        if (event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS) {
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            UbtLog.d(TAG, "onEventRobot = obj == 2" + event.isHibitsProcessStatus());
+            if (event.isHibitsProcessStatus()) {
+                UbtLog.d(TAG, "onEventRobot = obj == 3");
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        onBlutheDisconnected();
+                        if (!isShowHibitsDialog) {
+                            showStartHibitsProcess();
+                        }
+                    }
+                });
+                //行为习惯流程未结束，退出当前流程
+            }
+        }
+    }
+
+    //显示行为提醒弹出框
+    public void showStartHibitsProcess() {
+        isShowHibitsDialog = true;
+        String msg = "行为习惯正在进行中，请先完成";
+        String position = "好的";
+
+        msg = ResourceManager.getInstance(getActivity()).getStringResources("ui_habits_process_starting");
+        position = ResourceManager.getInstance(getActivity()).getStringResources("ui_common_ok");
+
+        new ConfirmDialog(getActivity())
+                .builder()
+                .setMsg(msg)
+                .setCancelable(false)
+                .setPositiveButton(position, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        isShowHibitsDialog = false;
+                    }
+                }).show();
+    }
+
 }

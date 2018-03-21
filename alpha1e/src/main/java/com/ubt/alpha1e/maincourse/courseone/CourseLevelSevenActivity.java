@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.event.RobotEvent;
@@ -61,24 +60,6 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
         mHelper.RegisterHelper();
         ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
-
-    }
-
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 1111) {
-                mActionEdit.playComplete();
-            }
-        }
-    };
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        UbtLog.d(TAG, "------------onResume------");
         if (mHelper.isStartHibitsProcess()) {
             mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
                 @Override
@@ -102,6 +83,24 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
 
         }
     }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1111) {
+                mActionEdit.playComplete();
+            }
+        }
+    };
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UbtLog.d(TAG, "------------onResume------");
+
+    }
     @Override
     public void onEventRobot(RobotEvent event) {
         super.onEventRobot(event);
@@ -110,8 +109,7 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
             if (event.isHibitsProcessStatus()) {
                 ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
-                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
-                Intent intent = new Intent();
+                 Intent intent = new Intent();
                 intent.putExtra("resulttype", 1);//结束类型
 
                 setResult(1, intent);
@@ -215,6 +213,9 @@ public class CourseLevelSevenActivity extends MVPBaseActivity<CourseOneContract.
         UbtLog.d(TAG, "------------onDestroy------------");
         // ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
         mActionEdit.onPause();
+        if (mHelper!=null){
+            mHelper.unRegister();
+        }
     }
 
 

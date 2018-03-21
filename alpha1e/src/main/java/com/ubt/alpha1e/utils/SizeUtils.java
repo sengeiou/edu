@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.ubt.alpha1e.utils.log.UbtLog;
+
 /**
  * Created by yanjunhui
  * on 2016/9/29.
@@ -23,6 +25,24 @@ public class SizeUtils {
         DisplayMetrics metrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(metrics);
         return metrics.heightPixels;
+    }
+
+    /**
+     * 判断是否全面屏
+     * @param context
+     * @return
+     */
+    public static boolean isComprehensiveScreen(Context context){
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics metrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(metrics);
+        float ratio = (1.0f * metrics.widthPixels) / metrics.heightPixels;
+
+        UbtLog.d("SizeUtils","width/height = " + metrics.widthPixels + "/" + metrics.heightPixels + "    ratio = " + ratio);
+        if(ratio > 1.8){
+            return true;
+        }
+        return false;
     }
 
     public static int dip2px(Context context, float dpValue) {
