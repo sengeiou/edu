@@ -21,7 +21,6 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ResourceManager;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.event.RobotEvent;
@@ -72,7 +71,28 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
         mHelper.RegisterHelper();
         ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
+        if (mHelper.isStartHibitsProcess()) {
+            mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                @Override
+                public void onDismissCallback(Object obj) {
+                    UbtLog.d("onDismissCallback", "obj = " + obj);
+                    if ((boolean) obj) {
+                        //行为习惯流程未结束，退出当前流程
+                        finish();
+                    } else {
+                        //行为习惯流程结束，该干啥干啥
+                        ((ActionsEditHelper) mHelper).doEnterCourse((byte) 1);
+                        mActionEdit.setData(CourseLevelTwoActivity.this);
 
+                    }
+                }
+            });
+        } else {
+            //行为习惯流程未开始，该干啥干啥
+            ((ActionsEditHelper) mHelper).doEnterCourse((byte) 1);
+            mActionEdit.setData(this);
+
+        }
     }
 
     Handler mHandler = new Handler() {
@@ -93,30 +113,7 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     protected void onResume() {
         super.onResume();
-        if (mHelper.isStartHibitsProcess()) {
-            mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
-                @Override
-                public void onDismissCallback(Object obj) {
-                    UbtLog.d("onDismissCallback", "obj = " + obj);
-                    if ((boolean) obj) {
-                        //行为习惯流程未结束，退出当前流程
-                        finish();
-                    } else {
-                        //行为习惯流程结束，该干啥干啥
-                        mRlInstruction.setVisibility(View.GONE);
-                        ((ActionsEditHelper) mHelper).doEnterCourse((byte) 1);
-                        mActionEdit.setData(CourseLevelTwoActivity.this);
 
-                    }
-                }
-            });
-        } else {
-            //行为习惯流程未开始，该干啥干啥
-            mRlInstruction.setVisibility(View.GONE);
-            ((ActionsEditHelper) mHelper).doEnterCourse((byte) 1);
-            mActionEdit.setData(this);
-
-        }
 
     }
     @Override
@@ -232,6 +229,9 @@ public class CourseLevelTwoActivity extends MVPBaseActivity<CourseOneContract.Vi
         //((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
         mActionEdit.onPause();
         isAllIntroduc = false;
+        if (mHelper!=null){
+            mHelper.unRegister();
+        }
     }
 
     private void showExitDialog() {

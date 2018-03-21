@@ -120,6 +120,11 @@ public class HttpEntity {
      * 删除消息
      */
     public static final String MESSAGE_DELETE = BASIC_UBX_SYS + "message/deleteByMessageId";
+
+    /**
+     * 删除消息
+     */
+    public static final String SEND_MESSAGE = BASIC_UBX_SYS + "message/sendSysMessage\n";
     /**
      * 获取原创列表
      */
