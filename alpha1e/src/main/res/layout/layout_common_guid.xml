@@ -132,14 +132,15 @@
             android:layout_width="1dp"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="18dp"
             android:visibility="invisible">
 
         </View>
 
         <ImageView
             android:id="@+id/iv_volumeicon"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_above="@+id/v_bottom_volume"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="30dp"
