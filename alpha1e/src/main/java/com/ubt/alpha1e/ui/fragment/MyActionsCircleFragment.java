@@ -127,9 +127,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         ivCircle=(ImageView)mView.findViewById(R.id.btn_start_cycle);
         tvCircle=(TextView) mView.findViewById(R.id.tv_start_cycle);
         mServoGuide=(RelativeLayout)mView.findViewById(R.id.servo_guide);
-        if(SPUtils.getInstance().getBoolean(Constant.SP_SHOW_SERVO_GUIDE,false)) {
-             mServoGuide.setVisibility(View.GONE);
-         }
+        mServoGuide.setVisibility(View.GONE);
         mCloseGuide=(ImageView)mView.findViewById(R.id.iv_close_header);
         mCloseGuide.setOnClickListener(new View.OnClickListener(){
             @Override
