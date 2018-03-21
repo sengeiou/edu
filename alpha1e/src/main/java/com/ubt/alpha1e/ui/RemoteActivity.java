@@ -1,7 +1,5 @@
 package com.ubt.alpha1e.ui;
 
-import android.content.Intent;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,26 +15,20 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.base.AppManager;
-import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.data.DB.RemoteRecordOperater;
 import com.ubt.alpha1e.data.RemoteItem;
 import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.RemoteRoleInfo;
 import com.ubt.alpha1e.event.RobotEvent;
-import com.ubt.alpha1e.ui.custom.RemoteGuideView;
 import com.ubt.alpha1e.ui.dialog.BaseDiaUI;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
 import com.ubt.alpha1e.ui.dialog.LoadingDialog;
-import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IRemoteUI;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.RemoteHelper;
-import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
-import com.ubtechinc.base.ConstValue;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -524,12 +516,14 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         super.onLostBtCoon();
     }
 
+    boolean showDialog = false;
     @Override
     public void onEventRobot(RobotEvent event) {
         super.onEventRobot(event);
         if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS){
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
-            if(event.isHibitsProcessStatus()){
+            if(event.isHibitsProcessStatus() && !showDialog){
+                showDialog = true;
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -541,6 +535,7 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
                                     @Override
                                     public void onClick(View view) {
                                         UbtLog.d(TAG, "确定");
+                                        showDialog = false;
                                         finish();
                                     }
                                 }).show();

@@ -1346,6 +1346,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
     /****************end***********************/
 
+   boolean showDialog  = false;
     @Override
     public void onEventRobot(RobotEvent event){
         super.onEventRobot(event);
@@ -1410,7 +1411,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         }else if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS){
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
             UbtLog.d(TAG, "isHibitsProcessStatus" + event.isHibitsProcessStatus());
-            if(event.isHibitsProcessStatus()){
+            if(event.isHibitsProcessStatus() && !showDialog){
+                showDialog = true;
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -1422,6 +1424,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                                     @Override
                                     public void onClick(View view) {
                                         UbtLog.d(TAG, "确定");
+                                        showDialog = false;
                                         finish();
                                     }
                                 }).show();
