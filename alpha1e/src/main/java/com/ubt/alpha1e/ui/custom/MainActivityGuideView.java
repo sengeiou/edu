@@ -122,9 +122,11 @@ public class MainActivityGuideView{
 
     public MainActivityGuideView(Context context) {
         mContext = context;
+        LayoutInflater inflater = LayoutInflater.from(mContext.getApplicationContext());
+        rlGuideLayout = (RelativeLayout) inflater.inflate(R.layout.layout_mainui_guid, null);
+        mUnbinder = ButterKnife.bind(this,rlGuideLayout);
         createGuideView();
         recordGuideState();
-        mUnbinder = ButterKnife.bind(this,rlGuideLayout);
         initView();
 
     }
@@ -149,8 +151,6 @@ public class MainActivityGuideView{
         wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
         ColorDrawable colorDrawable = new ColorDrawable(Color.argb(180, 0, 0, 0));
 
-        LayoutInflater inflater = LayoutInflater.from(mContext.getApplicationContext());
-        rlGuideLayout = (RelativeLayout) inflater.inflate(R.layout.layout_mainui_guid, null);
 
 
         if (Build.VERSION.SDK_INT >= 16) {
