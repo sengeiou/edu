@@ -52,6 +52,8 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -84,6 +86,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private RelativeLayout mServoGuide;
     private ImageView mCloseGuide;
     private boolean isShowHibitsDialog = false;
+
 
     public MyActionsCircleFragment() {
         // Required empty public constructor
@@ -254,34 +257,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                         }
                     }).show();
 
-
         }
-//        if(isStartLooping){
-//            if(mListener!=null) mListener.onHiddenLoopButton();
-//        }
-//        mHelper.stopPlayAction();
-
-//        if(isStartLooping ){
-//            List<Map<String,Object>> playActionMap = new ArrayList<>();
-//            for(Map<String,Object> actionMap : mDatas){
-//                UbtLog.e(TAG, "mInsideDatas size=" + mDatas.size());
-//                if(MyActionsHelper.mCurrentSeletedActionInfoMap.get(actionMap.get(MyActionsHelper.map_val_action_name)) != null){
-//                    if(actionMap.get(ActionsHelper.map_val_action_name).equals(currentCycleActionName)){
-//                        actionMap.put(MyActionsHelper.map_val_action_is_playing,true);
-//                    }else{
-//                        actionMap.put(MyActionsHelper.map_val_action_is_playing,false);
-//                    }
-//
-//                    actionMap.put(MyActionsHelper.map_val_action_selected,true);
-//                    playActionMap.add(actionMap);
-//                }
-//            }
-        //  setDatas(playActionMap);
-        // if(mListener!=null) mListener.onHiddenLoopButton();
-
-        // }
-
-//        mDatas = mActivity.mInsideDatas;
     }
 
     @Override
@@ -1172,6 +1148,10 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 });
                 //行为习惯流程未结束，退出当前流程
             }
+        }else if(event.getEvent() == RobotEvent.Event.DISCONNECT){
+            UbtLog.d(TAG,"DISCONNECT THE BLUETOOTH");
         }
     }
+
+
 }

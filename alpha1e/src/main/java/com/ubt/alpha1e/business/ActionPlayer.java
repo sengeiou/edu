@@ -63,7 +63,11 @@ public class ActionPlayer implements BlueToothInteracter {
     private String cycleActionName = "";  //增加循环播放时动作的名称，用于在全局控件中更新显示动作名称
     private String mCurrentPlayActionName = "";
     private long mCurrentExecuteTime=0;
+    private long mCycleExecuteTime=0;
     private long actionOriginalId = 0;
+    Timer mServoProtectionTimer;
+    int mMax_ServoProtectionDuration=20*60*1000;
+    private String Servo_protection_indication="{\"filename\":\"循环播放20分钟停下.wav\",\"playcount\":1}";
 
     private Date mLastPlayTime = null;
     private long time=0;
@@ -357,7 +361,7 @@ public class ActionPlayer implements BlueToothInteracter {
 
     public void doCycle(String[] _action_name) {
         UbtLog.d(TAG, "****循环播放功能 ActionPlayer.doCycle:_action_name-->"+ _action_name.length);
-
+        mCycleExecuteTime=System.currentTimeMillis();
         doStopPlay();
         doInitDefaultAction();
 
@@ -608,7 +612,10 @@ public class ActionPlayer implements BlueToothInteracter {
             UbtLog.d(TAG,"DV_ACTION_FINISH");
             String finishPlayActionName = BluetoothParamUtil.bytesToString(param);
             UbtLog.d(TAG, "DV_ACTION_FINISH:   finishPlayActionName = " + finishPlayActionName + "    mCurrentPlayActionName = " + mCurrentPlayActionName);
-
+            if((System.currentTimeMillis()-mCycleExecuteTime)>mMax_ServoProtectionDuration){
+                mBtManager.sendCommand(mBtMac, ConstValue.DV_SET_PLAY_SOUND, BluetoothParamUtil.stringToBytes(Servo_protection_indication),BluetoothParamUtil.stringToBytes(Servo_protection_indication).length,false);
+                thiz.doStopCycle(false);
+            }
             boolean isStopLocal = false;
             if(finishPlayActionName.contains(mCurrentPlayActionName)){
                 isStopLocal = true;
@@ -855,4 +862,5 @@ public class ActionPlayer implements BlueToothInteracter {
             doStopPlay();
         }
     }
+
 }

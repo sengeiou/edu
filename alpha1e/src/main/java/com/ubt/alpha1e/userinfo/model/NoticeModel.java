@@ -25,6 +25,7 @@ public class NoticeModel {
     private long createTime;
 
     private long updateTime;
+    private String linkUrl;
 
     public int getId() {
         return id;
@@ -90,6 +91,16 @@ public class NoticeModel {
         this.updateTime = updateTime;
     }
 
+
+
+    public String getLinkUrl() {
+        return linkUrl;
+    }
+
+    public void setLinkUrl(String linkUrl) {
+        this.linkUrl = linkUrl;
+    }
+
     @Override
     public String toString() {
         return "NoticeModel{" +
@@ -100,7 +111,8 @@ public class NoticeModel {
                 ", type='" + type + '\'' +
                 ", status='" + status + '\'' +
                 ", createTime=" + createTime +
-                ", updateTime='" + updateTime + '\'' +
+                ", updateTime=" + updateTime +
+                ", linkUrl='" + linkUrl + '\'' +
                 '}';
     }
 }

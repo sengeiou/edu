@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.tencent.android.tpush.XGPushClickedResult;
+import com.tencent.android.tpush.XGPushManager;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
@@ -28,6 +30,19 @@ public class StartInitSkinActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 判断是否从推送通知栏打开的
+        XGPushClickedResult click = XGPushManager.onActivityStarted(this);
+        if (click != null) {
+            //从推送通知栏打开-Service打开Activity会重新执行Laucher流程
+            //查看是不是全新打开的面板
+            if (isTaskRoot()) {
+                return;
+            }
+            //如果有面板存在则关闭当前的面板
+            finish();
+        }
+
         setContentView(R.layout.activity_start_new);
         //测试版本提交，删除数据库
         if (BasicSharedPreferencesOperator

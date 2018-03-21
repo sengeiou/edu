@@ -17,6 +17,7 @@ import com.ubt.alpha1e.base.RequstMode.CheckIsBindRequest;
 import com.ubt.alpha1e.base.RequstMode.XGGetAccessIdRequest;
 import com.ubt.alpha1e.base.ResponseMode.XGDeviceMode;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.ActionPlayerListener;
 import com.ubt.alpha1e.data.model.ActionInfo;
@@ -87,58 +88,58 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             TypedArray typedArray=null;
             int[] resId={0};
             switch (value) {
-                case Constant.cartoon_action_enjoy:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.enjoy);
-                    actionName="enjoy";
-                    break;
-                case Constant.cartoon_action_fall:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.fall);
-                    actionName="fall";
-                    break;
-                case Constant.cartoon_action_greeting:
-                    typedArray =mView.getContext().getResources().obtainTypedArray(R.array.greetting);
-                    actionName="greetting";
-                    break;
-                case Constant. cartoon_action_hand_stand:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.hand_stand);
-                    actionName="hand_stand";
-                    break;
-                case Constant.cartoon_action_hand_stand_reverse:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.hand_stand_reverse);
-                    actionName="hand_stand_reverse";
-                    break;
-                case Constant.cartoon_action_smile:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.smile);
-                    actionName="smile";
-                    break;
-                case Constant.cartoon_action_squat:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.squat);
-                    actionName="squat";
-                    break;
-                case Constant.cartoon_aciton_squat_reverse:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.squat_reverse);
-                    actionName="squat_reverse";
-                    break;
-                case Constant.cartoon_action_shiver:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.shiver);
-                    actionName="shiver";
-                    break;
-                case Constant.cartoon_action_swing_left_hand:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_lefthand);
-                    actionName="left_hand";
-                    break;
-                case Constant.cartoon_action_swing_left_leg:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_leftleg);
-                    actionName="left_leg";
-                    break;
-                case Constant.cartoon_action_swing_right_hand:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_righthand);
-                    actionName="right_hand";
-                    break;
-                case Constant.cartoon_action_swing_right_leg:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_rightleg);
-                    actionName="right_leg";
-                    break;
+//                case Constant.cartoon_action_enjoy:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.enjoy);
+//                    actionName="enjoy";
+//                    break;
+//                case Constant.cartoon_action_fall:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.fall);
+//                    actionName="fall";
+//                    break;
+//                case Constant.cartoon_action_greeting:
+//                    typedArray =mView.getContext().getResources().obtainTypedArray(R.array.greetting);
+//                    actionName="greetting";
+//                    break;
+//                case Constant. cartoon_action_hand_stand:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.hand_stand);
+//                    actionName="hand_stand";
+//                    break;
+//                case Constant.cartoon_action_hand_stand_reverse:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.hand_stand_reverse);
+//                    actionName="hand_stand_reverse";
+//                    break;
+//                case Constant.cartoon_action_smile:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.smile);
+//                    actionName="smile";
+//                    break;
+//                case Constant.cartoon_action_squat:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.squat);
+//                    actionName="squat";
+//                    break;
+//                case Constant.cartoon_aciton_squat_reverse:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.squat_reverse);
+//                    actionName="squat_reverse";
+//                    break;
+//                case Constant.cartoon_action_shiver:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.shiver);
+//                    actionName="shiver";
+//                    break;
+//                case Constant.cartoon_action_swing_left_hand:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_lefthand);
+//                    actionName="left_hand";
+//                    break;
+//                case Constant.cartoon_action_swing_left_leg:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_leftleg);
+//                    actionName="left_leg";
+//                    break;
+//                case Constant.cartoon_action_swing_right_hand:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_righthand);
+//                    actionName="right_hand";
+//                    break;
+//                case Constant.cartoon_action_swing_right_leg:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_rightleg);
+//                    actionName="right_leg";
+//                    break;
                 default:
                     break;
             }
@@ -451,6 +452,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     @Override
     public void checkMyRobotState() {
+        LoadingDialog.show(AppManager.getInstance().currentActivity());
         CheckIsBindRequest checkRobotInfo = new CheckIsBindRequest();
         checkRobotInfo.setSystemType("3");
         String url = HttpEntity.CHECK_ROBOT_INFO;
@@ -494,6 +496,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 switch (id){
                     case CHECK_ROBOT_INFO_HABIT:
                         mView.onGetRobotInfo(0,null);
+                        LoadingDialog.dismiss(AppManager.getInstance().currentActivity());
                         break;
                     default:
                         break;
@@ -505,6 +508,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 UbtLog.d(TAG,"response = " + response);
                 switch (id) {
                     case CHECK_ROBOT_INFO_HABIT:
+                        LoadingDialog.dismiss(AppManager.getInstance().currentActivity());
                         BaseResponseModel<ArrayList<MyRobotModel>> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<ArrayList<MyRobotModel>>>() {
                                 }.getType());//加上type转换，避免泛型擦除
