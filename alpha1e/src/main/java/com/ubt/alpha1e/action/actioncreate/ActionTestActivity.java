@@ -35,6 +35,8 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
 
     private ActionGuideView actionGuideView;
 
+    ConfirmDialog confirmDialog;
+
     @Override
     protected void initUI() {
 
@@ -61,6 +63,19 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
         mActionEdit = (ActionEditsStandard) findViewById(R.id.action_edit);
         mActionEdit.setUp(mHelper);
         mActionEdit.setOnSaveSucessListener(this);
+
+        confirmDialog = new ConfirmDialog(ActionTestActivity.this).builder()
+                .setTitle("提示")
+                .setMsg(getStringResources("ui_habits_process_start"))
+                .setCancelable(false)
+                .setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "确定");
+                        showDialog = false;
+                        finish();
+                    }
+                });
     }
 
     @Override
@@ -92,6 +107,9 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
 
     }
 
+
+
+
     boolean showDialog = false;
     @Override
     public void onEventRobot(RobotEvent event) {
@@ -104,7 +122,7 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new ConfirmDialog(ActionTestActivity.this).builder()
+                  /*       new ConfirmDialog(ActionTestActivity.this).builder()
                                 .setTitle("提示")
                                 .setMsg(getStringResources("ui_habits_process_start"))
                                 .setCancelable(false)
@@ -115,9 +133,18 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
                                         showDialog = false;
                                         finish();
                                     }
-                                }).show();
+                                }).show();*/
+
+                    if(confirmDialog != null && !confirmDialog.isShowing()){
+                      confirmDialog.show();
+                    }
+
                     }
                 });
+            }else{
+                if(confirmDialog != null && confirmDialog.isShowing()){
+                    confirmDialog.dismiss();
+                }
             }
         }
     }
@@ -218,15 +245,20 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
 
 
         if (requestCode == ActionsEditHelper.SaveActionReq) {
-            if(mHelper != null){
+   /*         if(mHelper != null){
+                UbtLog.d(TAG, "退出动作编辑模式");
                 ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x04);
-            }
+            }*/
 
             if(data == null){
                 return;
             }
             isSaveSuccess =(Boolean) data.getExtras().get(ActionsEditHelper.SaveActionResult);
             if(isSaveSuccess){
+                if(mHelper != null){
+                    UbtLog.d(TAG, "退出动作编辑模式");
+                    ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x04);
+                }
                 NewActionInfo actionInfo = ((ActionsEditHelper)mHelper).getNewActionInfo();
                 Intent intent = new Intent(this, SaveSuccessActivity.class);
                 startActivity(intent);
