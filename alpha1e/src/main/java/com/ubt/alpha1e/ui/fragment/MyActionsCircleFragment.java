@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,14 +26,19 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionColloInfo;
 import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.ActionRecordInfo;
 import com.ubt.alpha1e.data.model.NewActionInfo;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.ui.MyActionsActivity;
+import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
 import com.ubt.alpha1e.ui.helper.ActionsHelper;
 import com.ubt.alpha1e.ui.helper.ActionsLibHelper;
 import com.ubt.alpha1e.ui.helper.IActionsUI;
@@ -39,12 +46,16 @@ import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -61,7 +72,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private RecyclerView mSyncRecyclerview;
     private LinearLayoutManager mLayoutManager;
     private ActionsCircleAdapter mAdapter;
-    private List<Map<String, Object>> mDatas = new ArrayList<>();
+    private  List<Map<String, Object>> mDatas = new ArrayList<>();
     private View mView;
     private int type = 6;
     private MyActionsActivity mActivity;
@@ -74,7 +85,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private RelativeLayout rlCircle;
     private TextView tvCircle;
     private ImageView ivCircle;
-
+    private RelativeLayout mServoGuide;
+    private ImageView mCloseGuide;
+    private boolean isShowHibitsDialog = false;
 
 
     public MyActionsCircleFragment() {
@@ -88,6 +101,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         isStartLooping=mHelper.getLoopingFlag();
         UbtLog.d(TAG,"isStartLooping flag"+isStartLooping);
         initViews();
+        EventBus.getDefault().register(this);
         return mView;
     }
 
@@ -104,8 +118,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         ImageView img_cancel = (ImageView) mView.findViewById(R.id.img_cancel);
         img_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //没有使用功能换皮肤功能
+            public void onClick(View v) {                //没有使用功能换皮肤功能
                 getActivity().finish();
             }
         });
@@ -113,7 +126,16 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         rlCircle=(RelativeLayout) mView.findViewById(R.id.rl_cycle);
         ivCircle=(ImageView)mView.findViewById(R.id.btn_start_cycle);
         tvCircle=(TextView) mView.findViewById(R.id.tv_start_cycle);
-
+        mServoGuide=(RelativeLayout)mView.findViewById(R.id.servo_guide);
+        mServoGuide.setVisibility(View.GONE);
+        mCloseGuide=(ImageView)mView.findViewById(R.id.iv_close_header);
+        mCloseGuide.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                SPUtils.getInstance().put(Constant.SP_SHOW_SERVO_GUIDE, true);
+                mServoGuide.setVisibility(View.GONE);
+            }
+        });
         ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
         ivCircle.setAlpha(0.5f);
         tvCircle.setText("循环播放");
@@ -124,9 +146,11 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 //循环播放
                 if (MyActionsHelper.mCurrentSeletedNameList.size() > 0) {
                     if (!isStartLooping) {
+                        if(!SPUtils.getInstance().getBoolean(Constant.SP_SHOW_SERVO_GUIDE,false)) {
+                            mServoGuide.setVisibility(View.VISIBLE);
+                        }
                         UbtLog.d(TAG, "BEGIN CIRCLE PLAY");
                         setActionPlayType(true);
-                        clearPlayingStatusList();
                         JSONArray action_cyc_list = new JSONArray(MyActionsHelper.mCurrentSeletedNameList);
                         try {
                             mHelper.doCycle(action_cyc_list);
@@ -176,7 +200,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         if(mHelper!=null) {
             mHelper.setPlayContent(mDatas);
         }
-        removeDuplicate(mDatas);
 
         //MyActionHelper trigger setDatas
         if(mAdapter!=null){
@@ -210,34 +233,32 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         super.onResume();
         UbtLog.d(TAG,"MyActionsCircleFragment----onResume--");
         if(mHelper!=null) {
-            mHelper.doReadActions();
+            //mHelper.doReadActions();
         }
-//        if(isStartLooping){
-//            if(mListener!=null) mListener.onHiddenLoopButton();
-//        }
-//        mHelper.stopPlayAction();
+        if(mHelper.isStartHibitsProcess()){
+            isShowHibitsDialog = true;
 
-//        if(isStartLooping ){
-//            List<Map<String,Object>> playActionMap = new ArrayList<>();
-//            for(Map<String,Object> actionMap : mDatas){
-//                UbtLog.e(TAG, "mInsideDatas size=" + mDatas.size());
-//                if(MyActionsHelper.mCurrentSeletedActionInfoMap.get(actionMap.get(MyActionsHelper.map_val_action_name)) != null){
-//                    if(actionMap.get(ActionsHelper.map_val_action_name).equals(currentCycleActionName)){
-//                        actionMap.put(MyActionsHelper.map_val_action_is_playing,true);
-//                    }else{
-//                        actionMap.put(MyActionsHelper.map_val_action_is_playing,false);
-//                    }
-//
-//                    actionMap.put(MyActionsHelper.map_val_action_selected,true);
-//                    playActionMap.add(actionMap);
-//                }
-//            }
-        //  setDatas(playActionMap);
-        // if(mListener!=null) mListener.onHiddenLoopButton();
+            String msg = "行为习惯正在进行中，请先完成";
+            String position = "好的";
+            new ConfirmDialog(mActivity)
+                    .builder()
+                    .setMsg(msg)
+                    .setCancelable(false)
+                    .setPositiveButton(position, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
 
-        // }
+                            isShowHibitsDialog = false;
+                            if(mHelper.isStartHibitsProcess()){
+                                //行为习惯流程未结束，退出当前流程
+                                if(mActivity != null){
+                                    mActivity.finish();
+                                }
+                            }
+                        }
+                    }).show();
 
-//        mDatas = mActivity.mInsideDatas;
+        }
     }
 
     @Override
@@ -255,6 +276,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     public void onDestroy() {
         super.onDestroy();
         UbtLog.d(TAG, "onDestroy isCycleActionFragment=" + false);
+        EventBus.getDefault().unregister(this);
         AlphaApplication.setCycleFragmentShow(false);
         if(mHelper!= null){
             mHelper.unRegisterListeners(this);
@@ -435,22 +457,20 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         //点击单独播放停止或者循环播放停止
         if (!isStartLooping) {
             UbtLog.d(TAG, "notePlayFinish clear data");
-            for (Map<String, Object> item : mDatas) {
-                item.put(MyActionsHelper.map_val_action_is_playing, false);
-            }
+
             for(int i=0;i<mSourceActionNameList.size();i++){
                 UbtLog.d(TAG,"GET SOURCE "+mSourceActionNameList.get(i));
             }
-            //first clear the data
-            clearActionInfoList();
-            //second notify the recycle view to update
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.notifyDataSetChanged();
-                    updateCircleButton();
-                }
-            });
+            for (Map<String, Object> item : mDatas) {
+                item.put(MyActionsHelper.map_val_action_is_playing, false);
+                item.put(MyActionsHelper.map_val_action_selected, false);
+            }
+            MyActionsHelper.mCurrentSeletedNameList.clear();
+            MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+            AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
+            mAdapter.notifyDataSetChanged();
+            updateCircleButton();
+
         } else {
             //拍头执行到这里
             if (mCurrentPlayType == ActionPlayer.Play_type.cycle_action) {
@@ -465,6 +485,15 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 });
                 setActionPlayType(false);
             }
+            for (Map<String, Object> item : mDatas) {
+                item.put(MyActionsHelper.map_val_action_is_playing, false);
+                item.put(MyActionsHelper.map_val_action_selected, false);
+            }
+            MyActionsHelper.mCurrentSeletedNameList.clear();
+            MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+            AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
+            mAdapter.notifyDataSetChanged();
+            updateCircleButton();
 
         }
 
@@ -620,6 +649,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         UbtLog.d(TAG, "wmma-syncServerDataEnd--" +data.size());
         //Deal Server Reply result
         setDatas(data);
+
     }
 
     @Override
@@ -820,7 +850,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
         }
 
-
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             mView =LayoutInflater.from(mContext).inflate(R.layout.layout_myactions_circle_play_item, parent, false);
@@ -831,19 +860,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder mHolder, final int position) {
 
-//            if(!isBulueToothConnected()){
-//                showBluetoothConnectDialog();
-//                return;
-//            }
             final MyCircleHolder holder = (MyCircleHolder)mHolder;
             final Map<String,Object> actionList =mDatas.get(position);
             String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
-            //删除自己编译的动作文件,文字名字开头为数字15XXXXX 等
-            if(removeSelfCreationAction(action_name)){
-                //从队列中移除元素
-                mDatas.remove(position);
-                return;
-            }
             Glide.with(mContext)
                     .load(R.drawable.sec_action_logo)
                     .fitCenter()
@@ -851,7 +870,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             if(action_name.startsWith("@") || action_name.startsWith("#") || action_name.startsWith("%")){
                 action_name = action_name.substring(1);
             }
-
             holder.txt_action_name.setText(action_name);
 
             for (int i = 0; i < MyActionsHelper.mCurrentSeletedNameList.size(); i++) {
@@ -966,6 +984,12 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                                 actionInfo.hts_file_name = (String) actionList.get(MyActionsHelper.map_val_action);
                                 actionInfo.actionSize = position;//zan cun
                                 recoveryPlayType();
+
+                                if(position < MyActionsHelper.localSize){
+                                    MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.Unkown;
+                                }else {
+                                    MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_download_local;
+                                }
                                 mHelper.doPlay(actionInfo);
                                 UbtLog.d(TAG, "REFACTOR lihai------actionName->" + actionName + "----position->" + position + "--" + actionList.get(MyActionsHelper.map_val_action));
                             } else {
@@ -990,18 +1014,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     }
 
 
-    private void removeDuplicate() {
-        UbtLog.d(TAG, "removeDuplicate");
-        for ( int i = 0 ; i <mDatas.size() - 1 ; i ++ ) {
-            for ( int j = mDatas.size() - 1 ; j > i; j -- ) {
-                if (mDatas.get(j).get(ActionsHelper.map_val_action_name).equals(mDatas.get(i).get(ActionsHelper.map_val_action_name))) {
-                    UbtLog.d(TAG, "removeDuplicate=" + mDatas.get(j).toString());
-                    mDatas.remove(j);
-                }
-            }
-        }
-    }
-
     private void removeDuplicate(List<Map<String, Object>> list) {
         UbtLog.d(TAG, "removeDuplicate");
         for ( int i = 0 ; i < list.size() - 1 ; i ++ ) {
@@ -1016,29 +1028,10 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         System.out.println(list);
     }
 
-    private boolean removeSelfCreationAction(String name){
-        if(name.substring(0,1).equals("1")||name.substring(0,1).equals("")){
-            UbtLog.d(TAG,"remove selfCreationAction name :"+" position i  :");
-
-            return true;
-        }
-        return false;
-    }
-
-
-
     private void clearActionInfoList(){
-        MyActionsHelper.mCurrentSeletedNameList.clear();
-        MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
-        AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
-        clearPlayingStatusList();
+
     }
-    private void clearPlayingStatusList(){
-        for (Map<String, Object> item : mDatas) {
-            item.put(MyActionsHelper.map_val_action_is_playing, false);
-            item.put(MyActionsHelper.map_val_action_selected, false);
-        }
-    }
+
 
     /**
      *  防止进入遥控器后，状态没有复位，导致动作播放的路径不对
@@ -1124,4 +1117,40 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 //            waveShapingAnim.stop();
 //        }
 //    }
+
+
+    @Subscribe
+    public void onEventRobot(RobotEvent event) {
+        UbtLog.d(TAG, "onEventRobot = obj == 1");
+        if (event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS) {
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            UbtLog.d(TAG, "onEventRobot = obj == 2" + event.isHibitsProcessStatus());
+            if (event.isHibitsProcessStatus() && !isShowHibitsDialog) {
+                UbtLog.d(TAG, "onEventRobot = obj == 3");
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        new ConfirmDialog(mActivity).builder()
+                                .setTitle("提示")
+                                .setMsg(mActivity.getStringResources("ui_habits_process_start"))
+                                .setCancelable(false)
+                                .setPositiveButton("确定", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        UbtLog.d(TAG, "确定");
+                                        if(mActivity != null){
+                                            mActivity.finish();
+                                        }
+                                    }
+                                }).show();
+                    }
+                });
+                //行为习惯流程未结束，退出当前流程
+            }
+        }else if(event.getEvent() == RobotEvent.Event.DISCONNECT){
+            UbtLog.d(TAG,"DISCONNECT THE BLUETOOTH");
+        }
+    }
+
+
 }

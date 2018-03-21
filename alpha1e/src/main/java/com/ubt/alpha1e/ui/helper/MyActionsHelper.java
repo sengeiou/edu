@@ -92,6 +92,7 @@ public class MyActionsHelper extends BaseHelper implements
     public static final String action_info = "action_info";
     public static final String action_info_all = "action_info_all";
 
+
     public  enum Action_type {
         Story_type, Dance_type, Base_type, Custom_type, My_download, My_new,My_download_local,My_new_local,My_gamepad ,All,Unkown,MY_WALK,MY_COURSE
     }
@@ -205,6 +206,7 @@ public class MyActionsHelper extends BaseHelper implements
     private String mSchemeId = "";
     private String mSchemeName = "";
     private static boolean isLooping=false;
+
 
     public Action_type getCurrentPlayType() {
         return mCurrentPlayType;
@@ -908,7 +910,6 @@ public class MyActionsHelper extends BaseHelper implements
             }
 
         } else if ((cmd & 0xff) == (ConstValue.UV_STOPACTIONFILE & 0xff)) {
-            UbtLog.d(TAG,"lihai------------getDataType-=>>"+getDataType);
             if(getDataType == Action_type.MY_WALK){
                 return;
             }
@@ -1980,11 +1981,6 @@ public class MyActionsHelper extends BaseHelper implements
 
             try {
                 String name = actions_list.get(i).toString();
-                if(isStringNumber(name) && i >= (localSize + myDownloadSize)){
-                    sb.append(name+",");
-                    numberNameList.add(name);
-                    continue;
-                }
                 action_item.put(MyActionsHelper.map_val_action,name);
 
 //                if (mCurrentActionType != Action_type.Custom_type) {
@@ -2038,7 +2034,7 @@ public class MyActionsHelper extends BaseHelper implements
                     }
                 });
         }else{
-            dealResPonseResult(null,mNoNumberData,fnumberNameList);
+            //dealResPonseResult(null,mNoNumberData,fnumberNameList);
         }
         return mDatas;
 
@@ -2353,7 +2349,6 @@ public class MyActionsHelper extends BaseHelper implements
 
                 for(int num = 0; num < numberNameList.size(); num++){
                     Map<String, Object> action_item = new HashMap<String, Object>();
-
                     String name = numberNameList.get(num);
                     action_item.put(MyActionsHelper.map_val_action,name);
                     action_item.put(MyActionsHelper.map_val_action_name, name);
@@ -2718,5 +2713,7 @@ public class MyActionsHelper extends BaseHelper implements
     public boolean getSensorStatus() {
         return mSensorState;
     }
+
+
 
 }

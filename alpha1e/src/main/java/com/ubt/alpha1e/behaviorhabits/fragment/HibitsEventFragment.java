@@ -125,7 +125,8 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                         tvScore.setText(userScore.totalScore);
                         cbScore.setSweepAngle((Float.parseFloat(userScore.percent)*250)/100);
 
-                        List<HabitsEvent<List<PlayContentInfo>>> habitsEventList = userScore.details;
+                        List<HabitsEvent<List<PlayContentInfo>>> habitsEventList = mPresenter.reSortData(userScore.details);
+
                         mHabitsEventInfoDatas.clear();
                         mHabitsEventInfoDatas.addAll(habitsEventList);
                         mAdapter.notifyDataSetChanged();
@@ -157,9 +158,9 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                         if(StringUtils.isStringNumber(eventPlayStatus.playAudioSeq)){
                             int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
                             UbtLog.d(TAG,"seqNo = " + seqNo + " eventId = " + eventPlayStatus.eventId + "   audioState = " + eventPlayStatus.audioState);
-                            if(seqNo >= 0 && "1".equals(eventPlayStatus.eventState)){
+                            if(seqNo >= 0 && "1".equals(eventPlayStatus.eventState) && "playing".equals(eventPlayStatus.audioState)){
                                 for(HabitsEvent<List<PlayContentInfo>> event : mHabitsEventInfoDatas){
-                                    if(event.eventId.equals(eventPlayStatus.eventId)){
+                                    if(event.eventId.equals(eventPlayStatus.eventId) && event.contents != null && event.contents.size() > 0){
                                         showPlayEventDialog(event.contents, event.eventId);
                                         break;
                                     }
@@ -462,6 +463,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
      * 进入家长管理中心
      */
     private void enterParentManageCenter() {
+
         if(TextUtils.isEmpty(mUserPassword)){
             new SetPasswordDialog(getContext()).builder()
                     .setCancelable(true)

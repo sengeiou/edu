@@ -35,6 +35,7 @@ import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.services.AutoScanConnectService;
 import com.ubt.alpha1e.services.GlobalMsgService;
+import com.ubt.alpha1e.services.MyLifecycleHandler;
 import com.ubt.alpha1e.ui.AboutUsActivity;
 import com.ubt.alpha1e.ui.ActionUnpublishedActivity;
 import com.ubt.alpha1e.ui.ActionsLibPreviewWebActivity;
@@ -151,6 +152,7 @@ public class AlphaApplication extends LoginApplication {
         initLanguage();
         LitePal.initialize(this);
         initSmartRefresh();
+        registerActivityLifecycleCallbacks(new MyLifecycleHandler());
 //        LeakCanary.install(this);
         //   VCamera.setVideoCachePath(FileTools.media_cache);
         //  VCamera.setDebugMode(true);

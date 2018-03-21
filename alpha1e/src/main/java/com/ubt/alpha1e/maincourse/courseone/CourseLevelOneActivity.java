@@ -21,6 +21,7 @@ import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.data.FileTools;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.CourseProgressListener;
 import com.ubt.alpha1e.maincourse.courselayout.CourseLevelOneLayout;
@@ -28,8 +29,8 @@ import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseOneContent;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
 import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
-import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IEditActionUI;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -44,7 +45,6 @@ import java.util.List;
 public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.View, CourseOnePresenter> implements CourseOneContract.View, IEditActionUI, CourseProgressListener, ActionsEditHelper.PlayCompleteListener {
 
     private static final String TAG = CourseLevelOneActivity.class.getSimpleName();
-    BaseHelper mHelper;
     CourseLevelOneLayout mActionEdit;
 
     /**
@@ -60,8 +60,28 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
         mHelper.RegisterHelper();
         ((ActionsEditHelper) mHelper).setListener(this);
         initUI();
-        ((ActionsEditHelper) mHelper).doEnterCourse((byte) 1);
-        mActionEdit.setData(this);
+        if (mHelper.isStartHibitsProcess()) {
+            mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                @Override
+                public void onDismissCallback(Object obj) {
+                    UbtLog.d("onDismissCallback", "obj = " + obj);
+                    if ((boolean) obj) {
+                        //行为习惯流程未结束，退出当前流程
+                        finish();
+                    } else {
+                        //行为习惯流程结束，该干啥干啥
+                        ((ActionsEditHelper) mHelper).doEnterCourse((byte) 1);
+                        mActionEdit.setData(CourseLevelOneActivity.this);
+
+                    }
+                }
+            });
+        } else {
+            //行为习惯流程未开始，该干啥干啥
+            ((ActionsEditHelper) mHelper).doEnterCourse((byte) 1);
+            mActionEdit.setData(this);
+
+        }
     }
 
     Handler mHandler = new Handler() {
@@ -78,15 +98,25 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
     @Override
     protected void onResume() {
         super.onResume();
-        UbtLog.d(TAG, "------------onResume------");
-//        if (!isBulueToothConnected()) {
-//            showLoasBleDiaog();
-//        } else {
-////            if (isShowBleDialog && mActionEdit.getCurrentCourse() == 1) {
-////                mActionEdit.setLayoutByCurrentCourse();
-////            }
-//            isShowBleDialog = false;
-//        }
+        UbtLog.d(TAG, "------------onResume------" + mHelper.isStartHibitsProcess());
+
+    }
+
+    @Override
+    public void onEventRobot(RobotEvent event) {
+        super.onEventRobot(event);
+        UbtLog.d(TAG, "onEventRobot===========" + event.isHibitsProcessStatus());
+        if (event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS) {
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            if (event.isHibitsProcessStatus()) {
+                ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
+                Intent intent = new Intent();
+                intent.putExtra("resulttype", 1);//结束类型
+
+                setResult(1, intent);
+                finish();
+            }
+        }
     }
 
     @Override
@@ -157,6 +187,7 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
         intent.putExtra("leavel", currentCourse);//第几个课时
         intent.putExtra("isComplete", true);
         intent.putExtra("score", 1);
+
         setResult(1, intent);
         finish();
         //关闭窗体动画显示
@@ -188,6 +219,9 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
         UbtLog.d(TAG, "------------onDestroy------------");
         // ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
         mActionEdit.onPause();
+        if (mHelper!=null){
+            mHelper.unRegister();
+        }
     }
 
 
@@ -225,7 +259,6 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
                 .setCancelable(false)
                 .create().show();
     }
-
 
     @Override
     protected void initControlListener() {
@@ -323,7 +356,7 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
             public void run() {
                 UbtLog.d("onLostBtCoon", "蓝牙掉线");
                 if (!isFinishing()) {
-                     CourseLevelOneActivity.this.finish();
+                    CourseLevelOneActivity.this.finish();
                     //关闭窗体动画显示
                     CourseLevelOneActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
                 }

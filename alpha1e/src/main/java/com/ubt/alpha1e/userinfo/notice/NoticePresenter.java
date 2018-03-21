@@ -2,6 +2,7 @@ package com.ubt.alpha1e.userinfo.notice;
 
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.base.RequstMode.GetMessageListRequest;
+import com.ubt.alpha1e.base.RequstMode.SendMessageRequest;
 import com.ubt.alpha1e.base.RequstMode.UpdateMessageRequest;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
@@ -135,4 +136,28 @@ public class NoticePresenter extends BasePresenterImpl<NoticeContract.View> impl
         });
 
     }
+
+    /**
+     * 发送消息状态
+     */
+
+    public void sendMessage() {
+        SendMessageRequest messageListRequest = new SendMessageRequest();
+        messageListRequest.setType("1");
+        messageListRequest.setContent("dddd");
+        messageListRequest.setLinkUrl("http://www.baidu.com");
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.SEND_MESSAGE, messageListRequest, 0).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d(TAG, "updateNoticeStatu==" + response);
+
+            }
+        });
+    }
+
 }

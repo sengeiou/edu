@@ -27,9 +27,11 @@ import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
 import com.ubt.alpha1e.course.split.SplitActivity;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -108,6 +110,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
 
 
     private ConfirmDialog mTapHeadDialog = null;
+    private boolean isShowHibitsDialog = false;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -147,8 +150,10 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
                     break;
                 case TAP_HEAD:
-                    //拍头退出课程模式
-                    showTapHeadDialog();
+                    if(!isShowHibitsDialog){
+                        //拍头退出课程模式
+                        showTapHeadDialog();
+                    }
                     break;
                 case SHOW_NEXT_OVER_TIME:
                     setViewEnable(tvNext,true,1f);
@@ -242,7 +247,28 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
             initViewLayout(ivLegRightBg, scale);
         }
 
-        mHandler.sendEmptyMessage(SHOW_DIALOG);
+        if(mHelper.isStartHibitsProcess()){
+            isShowHibitsDialog = true;
+            mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                @Override
+                public void onDismissCallback(Object obj) {
+                    isShowHibitsDialog = false;
+                    UbtLog.d("onDismissCallback","obj = " +obj);
+                    if((boolean)obj){
+                        //行为习惯流程未结束，退出当前流程
+                        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                        MergeActivity.this.finish();
+                        MergeActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                    }else {
+                        //行为习惯流程结束，该干啥干啥
+                        mHandler.sendEmptyMessage(SHOW_DIALOG);
+                    }
+                }
+            });
+        }else {
+            //行为习惯流程未开始，该干啥干啥
+            mHandler.sendEmptyMessage(SHOW_DIALOG);
+        }
     }
 
     private void initViewLayout(View view, int scale ) {
@@ -278,9 +304,25 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
         }if(event.getEvent() == PrincipleEvent.Event.PLAY_ACTION_FINISH){
             UbtLog.d(TAG,"--PLAY_ACTION_FINISH--");
             hasLostRobot = true;
-            ((PrincipleHelper)mHelper).doLostPower();
+            //((PrincipleHelper)mHelper).doLostPower();
+            ((PrincipleHelper)mHelper).doControlEngine(1,4);
         }else if(event.getEvent() == PrincipleEvent.Event.DISCONNECTED){
             mHandler.sendEmptyMessage(BLUETOOTH_DISCONNECT);
+        }
+    }
+
+    @Override
+    public void onEventRobot(RobotEvent event) {
+        super.onEventRobot(event);
+        if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS && !isShowHibitsDialog){
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            if(event.isHibitsProcessStatus()){
+
+                ToastUtils.showShort(getStringResources("ui_habits_process_start"));
+                ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                MergeActivity.this.finish();
+                MergeActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            }
         }
     }
 
@@ -395,13 +437,17 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
      */
     public void onBack() {
         if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 1 ){
-            ((PrincipleHelper) mHelper).doInit();
-            ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
-            this.finish();
-            this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            exitPrincipleProcess();
         }else {
             SplitActivity.launchActivity(this,true);
         }
+    }
+
+    private void exitPrincipleProcess(){
+        ((PrincipleHelper) mHelper).doInit();
+        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+        this.finish();
+        this.overridePendingTransition(0, R.anim.activity_close_down_up);
     }
 
     private boolean hasLearnFinish(){
