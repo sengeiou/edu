@@ -39,6 +39,7 @@ import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.animator.FrameAnimation;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.FileUtils;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.GotoBindRequest;
 import com.ubt.alpha1e.base.SPUtils;
@@ -1104,20 +1105,22 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         UbtLog.d(TAG, "status:" + baseResponseModel.status);
                         UbtLog.d(TAG, "info:" + baseResponseModel.info);
                         if (baseResponseModel.status) {
-                            UbtLog.d(TAG, "绑定成功");
+                            UbtLog.d(TAG, "绑定状态获取验证");
                             if (baseResponseModel.models == null || baseResponseModel.models.equals("")) {
                                 adviceBindSuccess();
-                            } else if (baseResponseModel.models != null && baseResponseModel.models.equals("1002")) {
-                                adviceBindFail("机器人已被他人绑定！");
-                            } else {
-                                adviceBindFail("");
+                            } else if (baseResponseModel.models != null && baseResponseModel.models.startsWith("1002:")) {
+                                if(baseResponseModel.models.length() == 5){
+                                    return;
+                                }
+                                adviceBindFail("机器人已被 "+ FileUtils.utf8ToString(baseResponseModel.models.substring(5))+" 绑定！");
+                            } else if(baseResponseModel.models != null && baseResponseModel.models.equals("1004")){
+                                adviceBindFail("机器人不存在！");
                             }
                         } else {
                             adviceBindFail("");
                             UbtLog.d(TAG, "绑定失败");
                         }
                         break;
-
                     default:
                         break;
                 }
