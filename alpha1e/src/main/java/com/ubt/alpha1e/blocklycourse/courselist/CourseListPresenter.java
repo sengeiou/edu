@@ -30,7 +30,7 @@ public class CourseListPresenter extends BasePresenterImpl<CourseListContract.Vi
     private static final String TAG = "CourseListPresenter";
 
     @Override
-    public void getBlocklyCourseList(Context context) {
+    public void getBlocklyCourseList(final Context context) {
         //从服务器获取数据并保存本地数据
 
 
@@ -65,6 +65,7 @@ public class CourseListPresenter extends BasePresenterImpl<CourseListContract.Vi
                     courseData.setThumbnailUrl(response.get(i).getThumbnailUrl());
                     courseData.setVideoUrl(response.get(i).getVideoUrl());
                     courseData.setCid(response.get(i).getCid());
+                    courseData.setSubTitle(response.get(i).getSubTitle());
                     courseData.saveOrUpdate("cid = ?" , String.valueOf(response.get(i).getCid()));
 
                     UbtLog.d(TAG, "courseData:" + courseData.toString());

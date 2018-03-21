@@ -25,6 +25,7 @@ import com.ubt.alpha1e.maincourse.adapter.MainCoursedapter;
 import com.ubt.alpha1e.maincourse.model.CourseModel;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.services.SyncDataService;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
@@ -79,6 +80,21 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     public static void finishByMySelf() {
         if (mainCourseInstance != null && !mainCourseInstance.isFinishing()) {
             mainCourseInstance.finish();
+        }
+    }
+
+    public static void showHabitsStartDialog() {
+        if (mainCourseInstance != null) {
+            new ConfirmDialog(mainCourseInstance)
+                    .builder()
+                    .setMsg(mainCourseInstance.getStringResources("ui_habits_process_start"))
+                    .setCancelable(false)
+                    .setPositiveButton(mainCourseInstance.getStringResources("ui_common_ok"), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    }).show();
         }
     }
 

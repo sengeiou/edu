@@ -58,7 +58,6 @@ public class MainActivityGuideView{
     private RelativeLayout rlGuideLayout;
 
     private boolean created = false;
-    private RelativeLayout rlGuideTopIcon2;
     private TextView jump_exit;
     static MainActivityGuideView  mMainActivityGuideView;
     Unbinder mUnbinder;
@@ -105,6 +104,8 @@ public class MainActivityGuideView{
     ImageView topIcon;
     @BindView(R.id.top_icon2)
     ImageView topIcon2;
+    @BindView(R.id.top_icon2_guides)
+    RelativeLayout rltoopIcon2Guide;
     @BindView(R.id.top_icon2_disconnect)
     ImageView topIcon2Disconnect;
     @BindView(R.id.top_icon3)
@@ -122,9 +123,11 @@ public class MainActivityGuideView{
 
     public MainActivityGuideView(Context context) {
         mContext = context;
+        LayoutInflater inflater = LayoutInflater.from(mContext.getApplicationContext());
+        rlGuideLayout = (RelativeLayout) inflater.inflate(R.layout.layout_mainui_guid, null);
+        mUnbinder = ButterKnife.bind(this,rlGuideLayout);
         createGuideView();
         recordGuideState();
-        mUnbinder = ButterKnife.bind(this,rlGuideLayout);
         initView();
 
     }
@@ -149,8 +152,6 @@ public class MainActivityGuideView{
         wmParams.gravity = Gravity.LEFT | Gravity.BOTTOM;
         ColorDrawable colorDrawable = new ColorDrawable(Color.argb(180, 0, 0, 0));
 
-        LayoutInflater inflater = LayoutInflater.from(mContext.getApplicationContext());
-        rlGuideLayout = (RelativeLayout) inflater.inflate(R.layout.layout_mainui_guid, null);
 
 
         if (Build.VERSION.SDK_INT >= 16) {
@@ -192,69 +193,69 @@ public class MainActivityGuideView{
 
     private void initView() {
         {
+            if (SizeUtils.isComprehensiveScreen(mContext)) {
+                rlHibitsEvent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
-            rlHibitsEvent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        UbtLog.d(TAG, "rlHibitsEvent = " + rlHibitsEvent);
+                        if (rlHibitsEvent != null) {
+                            rlHibitsEvent.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!hasInitUI && rlHibitsEvent.getHeight() > 0) {
+                                        hasInitUI = true;
+                                        // 获取屏幕密度（方法2）
+                                        DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
+                                        UbtLog.d(TAG, "isComprehensiveScreen = " + SizeUtils.isComprehensiveScreen(mContext) + "/" + dm.density + "/" + dm.scaledDensity);
 
-                @Override
-                public void onGlobalLayout() {
-                    UbtLog.d(TAG, "rlHibitsEvent = " + rlHibitsEvent );
-                    if (rlHibitsEvent != null) {
-                        rlHibitsEvent.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!hasInitUI && rlHibitsEvent.getHeight() > 0) {
-                                    hasInitUI = true;
-                                    // 获取屏幕密度（方法2）
-                                    DisplayMetrics dm =mContext.getResources().getDisplayMetrics();
-                                    UbtLog.d(TAG, "isComprehensiveScreen = " + SizeUtils.isComprehensiveScreen(mContext) + "/" + dm.density + "/" + dm.scaledDensity);
+                                        float tensileRatio = 1.0f * dm.widthPixels / 1920;//屏幕拉升比例，以宽度1920为基准
+                                        float densityRatio = 3.0f / dm.density;//屏幕密度比例，以密度3.0为基准
 
-                                    float tensileRatio = 1.0f * dm.widthPixels / 1920;//屏幕拉升比例，以宽度1920为基准
-                                    float densityRatio = 3.0f / dm.density;//屏幕密度比例，以密度3.0为基准
+                                        //行为习惯按键
+                                        RelativeLayout.LayoutParams rlHibitsLp = (RelativeLayout.LayoutParams) rlHibitsEvent.getLayoutParams();
+                                        rlHibitsLp.leftMargin = (int) (rlHibitsLp.leftMargin * densityRatio * tensileRatio);
+                                        UbtLog.d(TAG, "rlHibitsLp.leftMargin = " + rlHibitsLp.leftMargin + "/" + rlHibitsLp.width + "/" + rlHibitsLp.height);
+                                        rlHibitsEvent.setLayoutParams(rlHibitsLp);
 
-                                    //行为习惯按键
-                                    RelativeLayout.LayoutParams rlHibitsLp = (RelativeLayout.LayoutParams) rlHibitsEvent.getLayoutParams();
-                                    rlHibitsLp.leftMargin = (int) (rlHibitsLp.leftMargin * densityRatio * tensileRatio);
-                                    UbtLog.d(TAG, "rlHibitsLp.leftMargin = " + rlHibitsLp.leftMargin + "/" + rlHibitsLp.width + "/" + rlHibitsLp.height);
-                                    rlHibitsEvent.setLayoutParams(rlHibitsLp);
+                                        RelativeLayout.LayoutParams ivHibitsLp = (RelativeLayout.LayoutParams) ivHabits.getLayoutParams();
+                                        ivHibitsLp.width = (int) (ivHabits.getWidth() * densityRatio * tensileRatio);
+                                        ivHibitsLp.height = (int) (ivHabits.getHeight() * densityRatio);
+                                        UbtLog.d(TAG, "ivHibitsLp.width = " + ivHibitsLp.width + "/" + ivHibitsLp.height);
+                                        ivHabits.setLayoutParams(ivHibitsLp);
 
-                                    RelativeLayout.LayoutParams ivHibitsLp = (RelativeLayout.LayoutParams) ivHabits.getLayoutParams();
-                                    ivHibitsLp.width = (int) (ivHabits.getWidth() * densityRatio * tensileRatio);
-                                    ivHibitsLp.height = (int) (ivHabits.getHeight() * densityRatio);
-                                    UbtLog.d(TAG, "ivHibitsLp.width = " + ivHibitsLp.width + "/" + ivHibitsLp.height);
-                                    ivHabits.setLayoutParams(ivHibitsLp);
+                                        //课程中心按键
+                                        RelativeLayout.LayoutParams rlCourseLp = (RelativeLayout.LayoutParams) rlCourseCenter.getLayoutParams();
+                                        rlCourseLp.rightMargin = (int) (rlCourseLp.rightMargin * densityRatio * tensileRatio);
+                                        UbtLog.d(TAG, "rlCourseLp.rightMargin = " + rlCourseLp.rightMargin);
+                                        rlCourseCenter.setLayoutParams(rlCourseLp);
 
-                                    //课程中心按键
-                                    RelativeLayout.LayoutParams rlCourseLp = (RelativeLayout.LayoutParams) rlCourseCenter.getLayoutParams();
-                                    rlCourseLp.rightMargin = (int) (rlCourseLp.rightMargin * densityRatio * tensileRatio);
-                                    UbtLog.d(TAG, "rlCourseLp.rightMargin = " + rlCourseLp.rightMargin);
-                                    rlCourseCenter.setLayoutParams(rlCourseLp);
+                                        RelativeLayout.LayoutParams ivCourseLp = (RelativeLayout.LayoutParams) ivCourse.getLayoutParams();
+                                        ivCourseLp.width = (int) (ivCourse.getWidth() * densityRatio * tensileRatio);
+                                        ivCourseLp.height = (int) (ivCourse.getHeight() * densityRatio);
+                                        UbtLog.d(TAG, "ivCourseLp.width = " + ivCourseLp.width);
+                                        ivCourse.setLayoutParams(ivCourseLp);
 
-                                    RelativeLayout.LayoutParams ivCourseLp = (RelativeLayout.LayoutParams) ivCourse.getLayoutParams();
-                                    ivCourseLp.width = (int) (ivCourse.getWidth() * densityRatio * tensileRatio);
-                                    ivCourseLp.height = (int) (ivCourse.getHeight() * densityRatio);
-                                    UbtLog.d(TAG, "ivCourseLp.width = " + ivCourseLp.width);
-                                    ivCourse.setLayoutParams(ivCourseLp);
+                                        //个人中心按键
+                                        RelativeLayout.LayoutParams topIconLp = (RelativeLayout.LayoutParams) topIcon.getLayoutParams();
+                                        topIconLp.leftMargin = (int) (topIconLp.leftMargin * densityRatio * tensileRatio);
+                                        topIconLp.topMargin = (int) (topIconLp.topMargin * densityRatio);
+                                        topIconLp.width = (int) (topIcon.getWidth() * densityRatio * tensileRatio);
+                                        topIconLp.height = (int) (topIcon.getHeight() * densityRatio);
+                                        topIcon.setLayoutParams(topIconLp);
 
-                                    //个人中心按键
-                                    RelativeLayout.LayoutParams topIconLp = (RelativeLayout.LayoutParams) topIcon.getLayoutParams();
-                                    topIconLp.leftMargin = (int) (topIconLp.leftMargin * densityRatio * tensileRatio);
-                                    topIconLp.topMargin = (int) (topIconLp.topMargin * densityRatio);
-                                    topIconLp.width = (int) (topIcon.getWidth() * densityRatio * tensileRatio);
-                                    topIconLp.height = (int) (topIcon.getHeight() * densityRatio);
-                                    topIcon.setLayoutParams(topIconLp);
+                                        //蓝牙连接按键
+                                        RelativeLayout.LayoutParams topIcon2Lp = (RelativeLayout.LayoutParams) topIcon2.getLayoutParams();
+                                        topIcon2Lp.topMargin = (int) (topIcon2Lp.topMargin * densityRatio);
+                                        topIcon2Lp.width = (int) (topIcon2.getWidth() * densityRatio * tensileRatio);
+                                        topIcon2Lp.height = (int) (topIcon2.getHeight() * densityRatio);
+                                        topIcon2.setLayoutParams(topIcon2Lp);
 
-                                    //蓝牙连接按键
-                                    RelativeLayout.LayoutParams topIcon2Lp = (RelativeLayout.LayoutParams) topIcon2.getLayoutParams();
-                                    topIcon2Lp.topMargin = (int) (topIcon2Lp.topMargin * densityRatio);
-                                    topIcon2Lp.width = (int) (topIcon2.getWidth() * densityRatio * tensileRatio);
-                                    topIcon2Lp.height = (int) (topIcon2.getHeight() * densityRatio);
-                                    topIcon2.setLayoutParams(topIcon2Lp);
-
-                                    RelativeLayout.LayoutParams topIcon2DisconnectLp = (RelativeLayout.LayoutParams) topIcon2Disconnect.getLayoutParams();
-                                    topIcon2DisconnectLp.topMargin = (int) (topIcon2DisconnectLp.topMargin * densityRatio);
-                                    topIcon2DisconnectLp.width = (int) (topIcon2Disconnect.getWidth() * densityRatio * tensileRatio);
-                                    topIcon2DisconnectLp.height = (int) (topIcon2Disconnect.getHeight() * densityRatio);
-                                    topIcon2Disconnect.setLayoutParams(topIcon2DisconnectLp);
+                                        RelativeLayout.LayoutParams topIcon2DisconnectLp = (RelativeLayout.LayoutParams) topIcon2Disconnect.getLayoutParams();
+                                        topIcon2DisconnectLp.topMargin = (int) (topIcon2DisconnectLp.topMargin * densityRatio);
+                                        topIcon2DisconnectLp.width = (int) (topIcon2Disconnect.getWidth() * densityRatio * tensileRatio);
+                                        topIcon2DisconnectLp.height = (int) (topIcon2Disconnect.getHeight() * densityRatio);
+                                        topIcon2Disconnect.setLayoutParams(topIcon2DisconnectLp);
 
 //                                    //指令按键
 //                                    RelativeLayout.LayoutParams topIcon4Lp = (RelativeLayout.LayoutParams) topIcon4.getLayoutParams();
@@ -263,13 +264,13 @@ public class MainActivityGuideView{
 //                                    topIcon4Lp.height = (int) (topIcon4.getHeight() * densityRatio);
 //                                    topIcon4.setLayoutParams(topIcon4Lp);
 
-                                    //播放按键开始
-                                    RelativeLayout.LayoutParams topIcon3Lp = (RelativeLayout.LayoutParams) topIcon3.getLayoutParams();
-                                    topIcon3Lp.rightMargin = (int) (topIcon3Lp.rightMargin * densityRatio * tensileRatio);
-                                    topIcon3Lp.topMargin = (int) (topIcon3Lp.topMargin * densityRatio);
-                                    topIcon3Lp.width = (int) (topIcon3.getWidth() * densityRatio * tensileRatio);
-                                    topIcon3Lp.height = (int) (topIcon3.getHeight() * densityRatio);
-                                    topIcon3.setLayoutParams(topIcon3Lp);
+                                        //播放按键开始
+                                        RelativeLayout.LayoutParams topIcon3Lp = (RelativeLayout.LayoutParams) topIcon3.getLayoutParams();
+                                        topIcon3Lp.rightMargin = (int) (topIcon3Lp.rightMargin * densityRatio * tensileRatio);
+                                        topIcon3Lp.topMargin = (int) (topIcon3Lp.topMargin * densityRatio);
+                                        topIcon3Lp.width = (int) (topIcon3.getWidth() * densityRatio * tensileRatio);
+                                        topIcon3Lp.height = (int) (topIcon3.getHeight() * densityRatio);
+                                        topIcon3.setLayoutParams(topIcon3Lp);
 
 //                                    RelativeLayout.LayoutParams indicatorLp = (RelativeLayout.LayoutParams) indicator.getLayoutParams();
 //                                    indicatorLp.rightMargin = (int) (indicatorLp.rightMargin * densityRatio * tensileRatio);
@@ -284,62 +285,63 @@ public class MainActivityGuideView{
 //                                    actionIndicatorLp.width = (int) (actionIndicator.getWidth() * densityRatio * tensileRatio);
 //                                    actionIndicatorLp.height = (int) (actionIndicator.getHeight() * densityRatio);
 //                                    actionIndicator.setLayoutParams(actionIndicatorLp);
-                                    //播放按键结束
+                                        //播放按键结束
 
-                                    //动作按键
-                                    RelativeLayout.LayoutParams llActionLp = (RelativeLayout.LayoutParams) llAction.getLayoutParams();
-                                    llActionLp.bottomMargin = (int) (llActionLp.bottomMargin * densityRatio);
-                                    llActionLp.rightMargin = (int) (llActionLp.rightMargin * densityRatio);
-                                    llAction.setLayoutParams(llActionLp);
+                                        //动作按键
+                                        RelativeLayout.LayoutParams llActionLp = (RelativeLayout.LayoutParams) llAction.getLayoutParams();
+                                        llActionLp.bottomMargin = (int) (llActionLp.bottomMargin * densityRatio);
+                                        llActionLp.rightMargin = (int) (llActionLp.rightMargin * densityRatio);
+                                        llAction.setLayoutParams(llActionLp);
 
-                                    LinearLayout.LayoutParams ivActionLp = (LinearLayout.LayoutParams) ivAction.getLayoutParams();
-                                    ivActionLp.width = (int) (ivAction.getWidth() * densityRatio * tensileRatio);
-                                    ivActionLp.height = (int) (ivAction.getHeight() * densityRatio);
-                                    ivAction.setLayoutParams(ivActionLp);
+                                        LinearLayout.LayoutParams ivActionLp = (LinearLayout.LayoutParams) ivAction.getLayoutParams();
+                                        ivActionLp.width = (int) (ivAction.getWidth() * densityRatio * tensileRatio);
+                                        ivActionLp.height = (int) (ivAction.getHeight() * densityRatio);
+                                        ivAction.setLayoutParams(ivActionLp);
 
-                                    //遥控器按键
-                                    RelativeLayout.LayoutParams llRemoteLp = (RelativeLayout.LayoutParams) llRemote.getLayoutParams();
-                                    llRemoteLp.bottomMargin = (int) (llRemoteLp.bottomMargin * densityRatio);
-                                    llRemoteLp.rightMargin = (int) (llRemoteLp.rightMargin * densityRatio);
-                                    llRemote.setLayoutParams(llRemoteLp);
+                                        //遥控器按键
+                                        RelativeLayout.LayoutParams llRemoteLp = (RelativeLayout.LayoutParams) llRemote.getLayoutParams();
+                                        llRemoteLp.bottomMargin = (int) (llRemoteLp.bottomMargin * densityRatio);
+                                        llRemoteLp.rightMargin = (int) (llRemoteLp.rightMargin * densityRatio);
+                                        llRemote.setLayoutParams(llRemoteLp);
 
-                                    LinearLayout.LayoutParams ivRemoteLp = (LinearLayout.LayoutParams) ivRemote.getLayoutParams();
-                                    ivRemoteLp.width = (int) (ivRemote.getWidth() * densityRatio * tensileRatio);
-                                    ivRemoteLp.height = (int) (ivRemote.getHeight() * densityRatio);
-                                    ivRemote.setLayoutParams(ivRemoteLp);
+                                        LinearLayout.LayoutParams ivRemoteLp = (LinearLayout.LayoutParams) ivRemote.getLayoutParams();
+                                        ivRemoteLp.width = (int) (ivRemote.getWidth() * densityRatio * tensileRatio);
+                                        ivRemoteLp.height = (int) (ivRemote.getHeight() * densityRatio);
+                                        ivRemote.setLayoutParams(ivRemoteLp);
 
-                                    //编程按键
-                                    RelativeLayout.LayoutParams llProgramLp = (RelativeLayout.LayoutParams) llProgram.getLayoutParams();
-                                    llProgramLp.bottomMargin = (int) (llProgramLp.bottomMargin * densityRatio);
-                                    llProgramLp.leftMargin = (int) (llProgramLp.leftMargin * densityRatio);
-                                    llProgram.setLayoutParams(llProgramLp);
+                                        //编程按键
+                                        RelativeLayout.LayoutParams llProgramLp = (RelativeLayout.LayoutParams) llProgram.getLayoutParams();
+                                        llProgramLp.bottomMargin = (int) (llProgramLp.bottomMargin * densityRatio);
+                                        llProgramLp.leftMargin = (int) (llProgramLp.leftMargin * densityRatio);
+                                        llProgram.setLayoutParams(llProgramLp);
 
-                                    LinearLayout.LayoutParams ivProgramLp = (LinearLayout.LayoutParams) ivProgram.getLayoutParams();
-                                    ivProgramLp.width = (int) (ivProgram.getWidth() * densityRatio * tensileRatio);
-                                    ivProgramLp.height = (int) (ivProgram.getHeight() * densityRatio);
-                                    ivProgram.setLayoutParams(ivProgramLp);
+                                        LinearLayout.LayoutParams ivProgramLp = (LinearLayout.LayoutParams) ivProgram.getLayoutParams();
+                                        ivProgramLp.width = (int) (ivProgram.getWidth() * densityRatio * tensileRatio);
+                                        ivProgramLp.height = (int) (ivProgram.getHeight() * densityRatio);
+                                        ivProgram.setLayoutParams(ivProgramLp);
 
-                                    //社区按键
-                                    RelativeLayout.LayoutParams llCommunityLp = (RelativeLayout.LayoutParams) llCommunity.getLayoutParams();
-                                    llCommunityLp.bottomMargin = (int) (llCommunityLp.bottomMargin * densityRatio);
-                                    llCommunityLp.leftMargin = (int) (llCommunityLp.leftMargin * densityRatio);
-                                    llCommunity.setLayoutParams(llCommunityLp);
+                                        //社区按键
+                                        RelativeLayout.LayoutParams llCommunityLp = (RelativeLayout.LayoutParams) llCommunity.getLayoutParams();
+                                        llCommunityLp.bottomMargin = (int) (llCommunityLp.bottomMargin * densityRatio);
+                                        llCommunityLp.leftMargin = (int) (llCommunityLp.leftMargin * densityRatio);
+                                        llCommunity.setLayoutParams(llCommunityLp);
 
-                                    LinearLayout.LayoutParams ivCommunityLp = (LinearLayout.LayoutParams) ivCommunity.getLayoutParams();
-                                    ivCommunityLp.width = (int) (ivCommunity.getWidth() * densityRatio * tensileRatio);
-                                    ivCommunityLp.height = (int) (ivCommunity.getHeight() * densityRatio);
-                                    ivCommunity.setLayoutParams(ivCommunityLp);
-                                    //社区按键
+                                        LinearLayout.LayoutParams ivCommunityLp = (LinearLayout.LayoutParams) ivCommunity.getLayoutParams();
+                                        ivCommunityLp.width = (int) (ivCommunity.getWidth() * densityRatio * tensileRatio);
+                                        ivCommunityLp.height = (int) (ivCommunity.getHeight() * densityRatio);
+                                        ivCommunity.setLayoutParams(ivCommunityLp);
+                                        //社区按键
 //                                    RelativeLayout.LayoutParams buddleTextLp = (RelativeLayout.LayoutParams) buddleText.getLayoutParams();
 //                                    buddleTextLp.topMargin = (int) (buddleTextLp.topMargin * densityRatio);
 //                                    buddleTextLp.leftMargin = (int) (buddleTextLp.leftMargin * densityRatio);
 //                                    buddleText.setLayoutParams(buddleTextLp);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
 
 
         }
@@ -378,10 +380,10 @@ public class MainActivityGuideView{
                 }else if(rlCourseCenterGuides.getVisibility()==View.VISIBLE) {
                     rlCourseCenter.setVisibility(View.INVISIBLE);
                     rlCourseCenterGuides.setVisibility(View.INVISIBLE);
-                    rlGuideTopIcon2.setVisibility(View.VISIBLE);
+                    rltoopIcon2Guide.setVisibility(View.VISIBLE);
                     topIcon2.setVisibility(View.VISIBLE);
-                }else if(rlGuideTopIcon2.getVisibility()==View.VISIBLE){
-                    rlGuideTopIcon2.setVisibility(View.INVISIBLE);
+                }else if(rltoopIcon2Guide.getVisibility()==View.VISIBLE){
+                    rltoopIcon2Guide.setVisibility(View.INVISIBLE);
                     topIcon2.setVisibility(View.INVISIBLE);
                     closeGuideView();
                     recordGuideState();

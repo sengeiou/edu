@@ -15,24 +15,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         />
-    <ImageView
-        android:id="@+id/charging"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/charging_normal"
-        android:layout_marginBottom="15dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        />
-    <ImageView
-        android:id="@+id/charging_dot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/charging_normal_dot"
-        android:layout_marginBottom="13dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        />
 
     <!--<pl.droidsonroids.gif.GifImageView-->
     <ImageView
