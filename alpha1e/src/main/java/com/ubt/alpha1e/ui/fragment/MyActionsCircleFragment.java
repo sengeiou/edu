@@ -461,15 +461,21 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             for(int i=0;i<mSourceActionNameList.size();i++){
                 UbtLog.d(TAG,"GET SOURCE "+mSourceActionNameList.get(i));
             }
+            MyActionsHelper.mCurrentSeletedNameList.clear();
+            MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
             for (Map<String, Object> item : mDatas) {
                 item.put(MyActionsHelper.map_val_action_is_playing, false);
                 item.put(MyActionsHelper.map_val_action_selected, false);
             }
-            MyActionsHelper.mCurrentSeletedNameList.clear();
-            MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
             AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
-            mAdapter.notifyDataSetChanged();
-            updateCircleButton();
+            getActivity().runOnUiThread(new Runnable() {
+              @Override
+               public void run() {
+                 // mAdapter.notifyDataSetChanged();
+                  updateCircleButton();
+              }
+          });
+
 
         } else {
             //拍头执行到这里
@@ -485,15 +491,21 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 });
                 setActionPlayType(false);
             }
+            MyActionsHelper.mCurrentSeletedNameList.clear();
+            MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
             for (Map<String, Object> item : mDatas) {
                 item.put(MyActionsHelper.map_val_action_is_playing, false);
                 item.put(MyActionsHelper.map_val_action_selected, false);
             }
-            MyActionsHelper.mCurrentSeletedNameList.clear();
-            MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
             AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
-            mAdapter.notifyDataSetChanged();
-            updateCircleButton();
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // mAdapter.notifyDataSetChanged();
+                    updateCircleButton();
+                }
+            });
+
 
         }
 
