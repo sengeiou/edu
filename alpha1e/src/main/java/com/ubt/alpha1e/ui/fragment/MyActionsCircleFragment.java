@@ -26,6 +26,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionColloInfo;
@@ -116,8 +118,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         ImageView img_cancel = (ImageView) mView.findViewById(R.id.img_cancel);
         img_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //没有使用功能换皮肤功能
+            public void onClick(View v) {                //没有使用功能换皮肤功能
                 getActivity().finish();
             }
         });
@@ -126,15 +127,17 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         ivCircle=(ImageView)mView.findViewById(R.id.btn_start_cycle);
         tvCircle=(TextView) mView.findViewById(R.id.tv_start_cycle);
         mServoGuide=(RelativeLayout)mView.findViewById(R.id.servo_guide);
+        if(SPUtils.getInstance().getBoolean(Constant.SP_SHOW_SERVO_GUIDE,false)) {
+             mServoGuide.setVisibility(View.GONE);
+         }
         mCloseGuide=(ImageView)mView.findViewById(R.id.iv_close_header);
         mCloseGuide.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                mServoGuide.setVisibility(View.INVISIBLE);
+                SPUtils.getInstance().put(Constant.SP_SHOW_SERVO_GUIDE, true);
+                mServoGuide.setVisibility(View.GONE);
             }
         });
-
-
         ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_play_disable"));
         ivCircle.setAlpha(0.5f);
         tvCircle.setText("循环播放");
@@ -145,10 +148,11 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 //循环播放
                 if (MyActionsHelper.mCurrentSeletedNameList.size() > 0) {
                     if (!isStartLooping) {
-                        mServoGuide.setVisibility(View.VISIBLE);
+                        if(!SPUtils.getInstance().getBoolean(Constant.SP_SHOW_SERVO_GUIDE,false)) {
+                            mServoGuide.setVisibility(View.VISIBLE);
+                        }
                         UbtLog.d(TAG, "BEGIN CIRCLE PLAY");
                         setActionPlayType(true);
-                        clearPlayingStatusList();
                         JSONArray action_cyc_list = new JSONArray(MyActionsHelper.mCurrentSeletedNameList);
                         try {
                             mHelper.doCycle(action_cyc_list);
@@ -183,7 +187,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 outRect.bottom = 20;
                 outRect.top = 20;
                 outRect.left = 30;
-
                 outRect.right = 30;
             }
         });
@@ -456,22 +459,20 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         //点击单独播放停止或者循环播放停止
         if (!isStartLooping) {
             UbtLog.d(TAG, "notePlayFinish clear data");
-            for (Map<String, Object> item : mDatas) {
-                item.put(MyActionsHelper.map_val_action_is_playing, false);
-            }
+
             for(int i=0;i<mSourceActionNameList.size();i++){
                 UbtLog.d(TAG,"GET SOURCE "+mSourceActionNameList.get(i));
             }
-            //first clear the data
-            clearActionInfoList();
-            //second notify the recycle view to update
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mAdapter.notifyDataSetChanged();
-                    updateCircleButton();
-                }
-            });
+            for (Map<String, Object> item : mDatas) {
+                item.put(MyActionsHelper.map_val_action_is_playing, false);
+                item.put(MyActionsHelper.map_val_action_selected, false);
+            }
+            MyActionsHelper.mCurrentSeletedNameList.clear();
+            MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+            AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
+            mAdapter.notifyDataSetChanged();
+            updateCircleButton();
+
         } else {
             //拍头执行到这里
             if (mCurrentPlayType == ActionPlayer.Play_type.cycle_action) {
@@ -486,6 +487,15 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 });
                 setActionPlayType(false);
             }
+            for (Map<String, Object> item : mDatas) {
+                item.put(MyActionsHelper.map_val_action_is_playing, false);
+                item.put(MyActionsHelper.map_val_action_selected, false);
+            }
+            MyActionsHelper.mCurrentSeletedNameList.clear();
+            MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+            AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
+            mAdapter.notifyDataSetChanged();
+            updateCircleButton();
 
         }
 
@@ -842,7 +852,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
         }
 
-
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             mView =LayoutInflater.from(mContext).inflate(R.layout.layout_myactions_circle_play_item, parent, false);
@@ -1022,17 +1031,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     }
 
     private void clearActionInfoList(){
-        MyActionsHelper.mCurrentSeletedNameList.clear();
-        MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
-        AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
-        clearPlayingStatusList();
+
     }
-    private void clearPlayingStatusList(){
-        for (Map<String, Object> item : mDatas) {
-            item.put(MyActionsHelper.map_val_action_is_playing, false);
-            item.put(MyActionsHelper.map_val_action_selected, false);
-        }
-    }
+
 
     /**
      *  防止进入遥控器后，状态没有复位，导致动作播放的路径不对
