@@ -485,9 +485,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     }
 
     private void changeAdapter() {
-        MyActionsHelper.mCurrentSeletedNameList.clear();
-        //
         if(!getActionPlayType()) {
+            MyActionsHelper.mCurrentSeletedNameList.clear();
             MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
         }
         for (Map<String, Object> item : mDatas) {
