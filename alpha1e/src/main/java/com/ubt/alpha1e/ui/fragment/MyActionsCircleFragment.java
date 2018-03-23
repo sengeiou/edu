@@ -144,7 +144,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             @Override
             public void onClick(View view) {
                 //循环播放
-                if (MyActionsHelper.mCurrentSeletedNameList.size() > 0) {
                     if (!isStartLooping) {
                         if(!SPUtils.getInstance().getBoolean(Constant.SP_SHOW_SERVO_GUIDE,false)) {
                             mServoGuide.setVisibility(View.VISIBLE);
@@ -165,7 +164,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                         mHelper.stopPlayAction();
                     }
                     updateCircleButton();
-            }
             }
         });
         mSyncRecyclerview = (RecyclerView) mView.findViewById(R.id.recyclerview_circle);
@@ -463,21 +461,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             for(int i=0;i<mSourceActionNameList.size();i++){
                 UbtLog.d(TAG,"GET SOURCE "+mSourceActionNameList.get(i));
             }
-            MyActionsHelper.mCurrentSeletedNameList.clear();
-            MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
-            for (Map<String, Object> item : mDatas) {
-                item.put(MyActionsHelper.map_val_action_is_playing, false);
-                item.put(MyActionsHelper.map_val_action_selected, false);
-            }
-            AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
-            getActivity().runOnUiThread(new Runnable() {
-              @Override
-               public void run() {
-                  mAdapter.notifyDataSetChanged();
-                  updateCircleButton();
-              }
-          });
-
+            changeAdapter();
         } else {
             UbtLog.d(TAG, "notePlayFinish clear data 2");
             //拍头执行到这里
@@ -493,25 +477,30 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 });
                 setActionPlayType(false);
             }
-            MyActionsHelper.mCurrentSeletedNameList.clear();
-            MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
-            for (Map<String, Object> item : mDatas) {
-                item.put(MyActionsHelper.map_val_action_is_playing, false);
-                item.put(MyActionsHelper.map_val_action_selected, false);
-            }
-            AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                     mAdapter.notifyDataSetChanged();
-                    updateCircleButton();
-                }
-            });
-
+            changeAdapter();
 
         }
 
 
+    }
+
+    private void changeAdapter() {
+        if(!getActionPlayType()) {
+            MyActionsHelper.mCurrentSeletedNameList.clear();
+            MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
+        }
+        for (Map<String, Object> item : mDatas) {
+            item.put(MyActionsHelper.map_val_action_is_playing, false);
+            item.put(MyActionsHelper.map_val_action_selected, false);
+        }
+        AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
+        getActivity().runOnUiThread(new Runnable() {
+          @Override
+           public void run() {
+              mAdapter.notifyDataSetChanged();
+              updateCircleButton();
+          }
+      });
     }
 
     @Override
@@ -875,7 +864,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             final MyCircleHolder holder = (MyCircleHolder) mHolder;
             final Map<String, Object> actionList = mDatas.get(position);
             String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
-            UbtLog.d(TAG, "onBindViewHolder " + position);
+            //UbtLog.d(TAG, "onBindViewHolder " + position);
             Glide.with(mContext)
                     .load(R.drawable.sec_action_logo)
                     .fitCenter()
@@ -1054,7 +1043,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         //刚进入列表的时候，循环播放按钮状态，退出播放列表后，还能够继续播放开始
         if (isStartLooping) {
             //正在播放，并且大小大于1
-            if (MyActionsHelper.mCurrentSeletedNameList.size() >= 1) {
+            if (MyActionsHelper.mCurrentSeletedActionInfoMap.size() >= 1) {
                 ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
                 ivCircle.setAlpha(1.0f);
                 tvCircle.setText("停止播放");
@@ -1091,6 +1080,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private void setActionPlayType(boolean status ){
         isStartLooping = status;
         mHelper.setLooping(status);
+    }
+    private boolean getActionPlayType(){
+        return isStartLooping;
     }
     public boolean isBulueToothConnected() {
 

@@ -510,7 +510,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_community:
                 //BehaviorHabitsActivity.LaunchActivity(this);
-                ToastUtils.showShort("程序猿正在施工中！！！");
+                ToastUtils.showShort("即将开放，敬请期待!");
                 break;
             case R.id.cartoon_head:
                 UbtLog.d(TAG, "click head");

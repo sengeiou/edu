@@ -199,7 +199,7 @@ public class ActionPlayer implements BlueToothInteracter {
 
     public void doStopPlay() {
         //DEBUG
-//        new Exception().printStackTrace();
+       // new Exception().printStackTrace();
         doStopCurrentPlay(true);
     }
 
@@ -210,8 +210,10 @@ public class ActionPlayer implements BlueToothInteracter {
         if (thiz.mCurrentPlayState != Play_state.action_finish) {
             if (thiz.mCurrentPlayType == Play_type.single_action) {
                 mCyclePlayThread = null;
+               // new Exception().printStackTrace();
                 thiz.doStopSingleAction(needSendComm);
             } else {
+               // new Exception().printStackTrace();
                 //thiz.doStopSingleAction(true);
                   thiz.doStopCycle(false);
             }
@@ -394,9 +396,9 @@ public class ActionPlayer implements BlueToothInteracter {
 
         }else {
             mCyclePlayThread = new CycleThread(mActionNameList);
-            MyLog.writeLog("循环播放功能", "线程启动");
-            mCyclePlayThread.start();
-        }
+        MyLog.writeLog("循环播放功能", "线程启动");
+        mCyclePlayThread.start();
+    }
 
         thiz.mCurrentPlayState = Play_state.action_playing;
 
@@ -447,7 +449,6 @@ public class ActionPlayer implements BlueToothInteracter {
         mIsCycleContinuePlay = false;
         mCyclePlayThread.isShutDowm = true;
         //发送给机器人停止播放
-        UbtLog.d(TAG,"NOT NEED");
         doStopSingleAction(true);
         continueCycle();
     }
@@ -739,6 +740,7 @@ public class ActionPlayer implements BlueToothInteracter {
                         ActionInfo actionInfo = MyActionsHelper.mCurrentSeletedActionInfoMap.get(action_name);
                         if(actionInfo == null){
                             //线上友盟crash报null,但是找不到规律，判null处理
+                           // UbtLog.d(TAG,"ACTIONINFO NULL");
                             continue;
                         }
 //                        //全局控制按钮消失DESTROY后，需要通过这个变量来获取正在播放的
