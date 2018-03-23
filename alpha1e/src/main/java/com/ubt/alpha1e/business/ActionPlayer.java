@@ -210,10 +210,10 @@ public class ActionPlayer implements BlueToothInteracter {
         if (thiz.mCurrentPlayState != Play_state.action_finish) {
             if (thiz.mCurrentPlayType == Play_type.single_action) {
                 mCyclePlayThread = null;
-                new Exception().printStackTrace();
+               // new Exception().printStackTrace();
                 thiz.doStopSingleAction(needSendComm);
             } else {
-                new Exception().printStackTrace();
+               // new Exception().printStackTrace();
                 //thiz.doStopSingleAction(true);
                   thiz.doStopCycle(false);
             }

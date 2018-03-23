@@ -196,13 +196,12 @@
             android:id="@+id/tv_hibits_event_name"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
+            android:layout_alignTop="@+id/iv_hibits_reminder"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/white"
             android:gravity="center"
             android:text="起床"
-            android:textSize="18sp"
-            />
+            android:textColor="@color/white"
+            android:textSize="17sp" />
 
         <ImageView
             android:id="@+id/iv_hibits_reminder"
@@ -221,7 +220,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/tv_hibits_event_name"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="4dp"
             android:textColor="@color/T31"
             android:text="AM 7:00"
             android:textSize="14sp"
