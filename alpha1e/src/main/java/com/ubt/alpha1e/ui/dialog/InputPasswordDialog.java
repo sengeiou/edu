@@ -160,7 +160,7 @@ public class InputPasswordDialog {
                         // 显示软键盘
                         SoftInputUtils.showSoftInput((Activity)mContext);
                     }
-                },50);
+                },150);
             }
         });
 
