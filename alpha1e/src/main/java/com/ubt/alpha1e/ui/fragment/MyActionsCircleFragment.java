@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.business.ActionPlayer;
@@ -41,6 +42,7 @@ import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
 import com.ubt.alpha1e.ui.helper.ActionsHelper;
 import com.ubt.alpha1e.ui.helper.ActionsLibHelper;
+import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IActionsUI;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
@@ -145,6 +147,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             public void onClick(View view) {
                 //循环播放
                     if (!isStartLooping) {
+                        if(lowBatteryNotExecutedAction()){
+                            return;
+                        };
                         if(!SPUtils.getInstance().getBoolean(Constant.SP_SHOW_SERVO_GUIDE,false)) {
                             mServoGuide.setVisibility(View.VISIBLE);
                         }
@@ -966,6 +971,9 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     @Override
                     public void onClick(View view) {
                         if (!isStartLooping) {
+                            if(!lowBatteryNotExecutedAction()){
+                                return;
+                            };
                             for (int i = 0; i < mDatas.size(); i++) {
                                 if (i != position) {
                                     mDatas.get(i).put(MyActionsHelper.map_val_action_is_playing, false);
@@ -986,6 +994,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                                 } else {
                                     MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_download_local;
                                 }
+
                                 mHelper.doPlay(actionInfo);
                                 UbtLog.d(TAG, "REFACTOR lihai------actionName->" + actionName + "----position->" + position + "--" + actionList.get(MyActionsHelper.map_val_action));
                             } else {
@@ -996,7 +1005,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     }
                 };
                 //动作的图片点击事件
-                holder.rl_info.setOnClickListener(actioniconlistener);
+                holder.rl_info.findViewById(R.id.action_logo).setOnClickListener(actioniconlistener);
             }
 
         }
@@ -1151,5 +1160,20 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         }
     }
 
-
+  private boolean  lowBatteryNotExecutedAction(){
+      if(BaseHelper.isLowBatteryNotExecuteAction){
+          new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                  .setTitle("提示")
+                  .setMsg("机器人电量低不能够执行动作，请充电！")
+                  .setCancelable(true)
+                  .setPositiveButton("确定", new View.OnClickListener() {
+                      @Override
+                      public void onClick(View view) {
+                          UbtLog.d(TAG, "确定 ");
+                          getActivity().finish();
+                      }
+                  }).show();
+      }
+      return BaseHelper.isLowBatteryNotExecuteAction;
+  }
 }

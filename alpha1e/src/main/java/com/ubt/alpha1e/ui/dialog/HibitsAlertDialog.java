@@ -56,51 +56,52 @@ public class HibitsAlertDialog {
     }
 
     public HibitsAlertDialog builder() {
-        // 获取Dialog布局
-        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_hibits_alert, null);
+        if(dialog==null) {
+            // 获取Dialog布局
+            View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_hibits_alert, null);
 
-        // 获取自定义Dialog布局中的控件
-        lLayout_bg = (LinearLayout) view.findViewById(R.id.lLayout_bg);
+            // 获取自定义Dialog布局中的控件
+            lLayout_bg = (LinearLayout) view.findViewById(R.id.lLayout_bg);
 
-        tvMsg = (TextView) view.findViewById(R.id.tv_msg);
-        lvAlert = (LoopView) view.findViewById(R.id.lv_alert);
+            tvMsg = (TextView) view.findViewById(R.id.tv_msg);
+            lvAlert = (LoopView) view.findViewById(R.id.lv_alert);
 
-        lvAlert.setCenterTextColor(mContext.getResources().getColor(R.color.tv_center_color));
-        lvAlert.setItems(Arrays.asList(mAlert));
-        lvAlert.setInitPosition(0);
-        lvAlert.setCurrentPosition(0);
+            lvAlert.setCenterTextColor(mContext.getResources().getColor(R.color.tv_center_color));
+            lvAlert.setItems(Arrays.asList(mAlert));
+            lvAlert.setInitPosition(0);
+            lvAlert.setCurrentPosition(0);
 
-        btnCancel = (Button) view.findViewById(R.id.btn_cancel);
-        btnConfirm    = (Button) view.findViewById(R.id.btn_confirm);
+            btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+            btnConfirm = (Button) view.findViewById(R.id.btn_confirm);
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
 
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UbtLog.d("btnConfirm","mEventId = " + mEventId + "  DelayTime = " + mAlertVal[lvAlert.getSelectedItem()]);
-                Intent mIntent = new Intent(mContext, HibitsAlertService.class);
-                mIntent.putExtra("EventId",mEventId);
-                mIntent.putExtra("DelayTime",mAlertVal[lvAlert.getSelectedItem()]);
-                mContext.startService(mIntent);
+            btnConfirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UbtLog.d("btnConfirm", "mEventId = " + mEventId + "  DelayTime = " + mAlertVal[lvAlert.getSelectedItem()]);
+                    Intent mIntent = new Intent(mContext, HibitsAlertService.class);
+                    mIntent.putExtra("EventId", mEventId);
+                    mIntent.putExtra("DelayTime", mAlertVal[lvAlert.getSelectedItem()]);
+                    mContext.startService(mIntent);
 
-                dialog.dismiss();
-            }
-        });
+                    dialog.dismiss();
+                }
+            });
 
-        // 定义Dialog布局和参数
-        dialog = new Dialog(mContext, R.style.NewAlertDialogStyle);
-        dialog.setContentView(view);
+            // 定义Dialog布局和参数
+            dialog = new Dialog(mContext, R.style.NewAlertDialogStyle);
+            dialog.setContentView(view);
 
-        // 调整dialog背景大小
-        lLayout_bg.setLayoutParams(new FrameLayout.LayoutParams((int) (display
-                .getWidth() * 0.75), LinearLayout.LayoutParams.WRAP_CONTENT));
-
+            // 调整dialog背景大小
+            lLayout_bg.setLayoutParams(new FrameLayout.LayoutParams((int) (display
+                    .getWidth() * 0.75), LinearLayout.LayoutParams.WRAP_CONTENT));
+        }
         return this;
     }
 
