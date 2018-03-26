@@ -173,9 +173,11 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         InputFilter[] filters = {new NameLengthFilter(20)};
         mTvUserName.setFilters(filters);
         mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
-        String name = FileUtils.utf8ToString(mUserModel.getNickName());
-        UbtLog.d(TAG, "name===" + name);
-        mTvUserName.setText(name);
+        if (null != mUserModel && !TextUtils.isEmpty(mUserModel.getNickName())) {
+            String name = FileUtils.utf8ToString(mUserModel.getNickName());
+            UbtLog.d(TAG, "name===" + name);
+            mTvUserName.setText(name);
+        }
 
         mTvUserAge.setText(mUserModel.getAge());
         mTvUserGrade.setText(mUserModel.getGrade());
