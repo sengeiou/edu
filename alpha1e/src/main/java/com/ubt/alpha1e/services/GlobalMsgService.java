@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @作者：bin.zhang@ubtrobot.com
  * @日期: 2018/1/8 15:16
- * @描述: 处理全局消息的服务
+ * @描述: 处理全局消息的服务my
  */
 
 public class GlobalMsgService extends Service {
@@ -75,6 +75,9 @@ public class GlobalMsgService extends Service {
             if (mJson.getString("category").equals(XGCmdConstract.BEHAVIOUR_HABIT)) {
                 if (mJson.get("eventId") != null) {
                     Log.d("TPush", " contents" + xgPushShowedResult.getContent());
+                    //DISMISS
+                    new HibitsAlertDialog(AppManager.getInstance().currentActivity()).dismiss();
+                    //SHOW
                     new HibitsAlertDialog(AppManager.getInstance().currentActivity()).builder()
                             .setCancelable(true)
                             .setEventId(mJson.get("eventId").toString())

@@ -860,7 +860,8 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
             public void run() {
                 if (mType == ActionPlayer.Play_type.cycle_action) {
                     if(myActionsCircleFragment!=null){
-                        myActionsCircleFragment.setDatas(mInsideDatas);
+                        //LILIANG DONOT ADD IT, EQUAL NULL DATA TO ADAPTER
+                     //   myActionsCircleFragment.setDatas(mInsideDatas);
                     }
                 }
             }

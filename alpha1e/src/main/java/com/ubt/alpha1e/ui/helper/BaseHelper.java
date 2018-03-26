@@ -77,7 +77,8 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     private static boolean isCharging = false; //用来判断机器人当前是否在充电中,false 表示没有充电中,true表示充电中.
     private static byte mPowerValue = 0;
     public static boolean isStartHibitsProcess = false;
-
+   //
+    public static boolean isLowBatteryNotExecuteAction=false;
     /*public BaseHelper(BaseActivity _baseActivity) {
         mBaseActivity = _baseActivity;
     }*/
@@ -292,11 +293,13 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                     if (power <= 5 && isNeedNoteLowPowerFive) {
                         UbtLog.d(TAG, "LESS 5 SHOW DIALOG");
                         AlphaApplication.getBaseActivity().onNoteLowPower(LOW_BATTERY_FIVE);
+                        isLowBatteryNotExecuteAction=true;
                         isNeedNoteLowPowerFive = false;
                     }
                 } else {
                     isNeedNoteLowPowerTwenty = true;
                     isNeedNoteLowPowerFive = true;
+                    isLowBatteryNotExecuteAction=false;
                 }
 
             } catch (Exception e) {

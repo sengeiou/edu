@@ -56,8 +56,9 @@ public class ActionPlayer implements BlueToothInteracter {
 
     private static final int UI_NOTE_PLAY_CYCLE_NEXT = 1001;
     private static final int UI_NOTE_PLAY_CYCLE_STOP = 1002;//循环20分钟 自动停止
-
-    private static final int AUTO_STOP_PLAY_CYCLE_TIME = 20*60*1000;//20分钟
+    //Servo protection time 20 minutes
+    private static final int AUTO_STOP_PLAY_CYCLE_TIME =20*60*1000;  //20分钟
+    private String Servo_protection_indication="{\"filename\":\"循环播放20分钟停下.wav\",\"playcount\":1}";
     private static final int REMOVE_DUPLICATE_REPLY_TIMEOUT=4000;
 
     private String cycleActionName = "";  //增加循环播放时动作的名称，用于在全局控件中更新显示动作名称
@@ -65,9 +66,7 @@ public class ActionPlayer implements BlueToothInteracter {
     private long mCurrentExecuteTime=0;
     private long mCycleExecuteTime=0;
     private long actionOriginalId = 0;
-    Timer mServoProtectionTimer;
-    int mMax_ServoProtectionDuration=20*60*1000;
-    private String Servo_protection_indication="{\"filename\":\"循环播放20分钟停下.wav\",\"playcount\":1}";
+
 
     private Date mLastPlayTime = null;
     private long time=0;
@@ -89,6 +88,7 @@ public class ActionPlayer implements BlueToothInteracter {
                     break;
                 case UI_NOTE_PLAY_CYCLE_STOP:
                     UbtLog.d(TAG,"20 分钟时间到，自动停止循环播放");
+                    mBtManager.sendCommand(mBtMac, ConstValue.DV_SET_PLAY_SOUND, BluetoothParamUtil.stringToBytes(Servo_protection_indication),BluetoothParamUtil.stringToBytes(Servo_protection_indication).length,false);
                     thiz.doStopCycle(false);
                     break;
 
@@ -199,7 +199,7 @@ public class ActionPlayer implements BlueToothInteracter {
 
     public void doStopPlay() {
         //DEBUG
-//        new Exception().printStackTrace();
+       // new Exception().printStackTrace();
         doStopCurrentPlay(true);
     }
 
@@ -210,8 +210,10 @@ public class ActionPlayer implements BlueToothInteracter {
         if (thiz.mCurrentPlayState != Play_state.action_finish) {
             if (thiz.mCurrentPlayType == Play_type.single_action) {
                 mCyclePlayThread = null;
+               // new Exception().printStackTrace();
                 thiz.doStopSingleAction(needSendComm);
             } else {
+               // new Exception().printStackTrace();
                 //thiz.doStopSingleAction(true);
                   thiz.doStopCycle(false);
             }
@@ -394,9 +396,9 @@ public class ActionPlayer implements BlueToothInteracter {
 
         }else {
             mCyclePlayThread = new CycleThread(mActionNameList);
-            MyLog.writeLog("循环播放功能", "线程启动");
-            mCyclePlayThread.start();
-        }
+        MyLog.writeLog("循环播放功能", "线程启动");
+        mCyclePlayThread.start();
+    }
 
         thiz.mCurrentPlayState = Play_state.action_playing;
 
@@ -447,7 +449,6 @@ public class ActionPlayer implements BlueToothInteracter {
         mIsCycleContinuePlay = false;
         mCyclePlayThread.isShutDowm = true;
         //发送给机器人停止播放
-        UbtLog.d(TAG,"NOT NEED");
         doStopSingleAction(true);
         continueCycle();
     }
@@ -612,10 +613,6 @@ public class ActionPlayer implements BlueToothInteracter {
             UbtLog.d(TAG,"DV_ACTION_FINISH");
             String finishPlayActionName = BluetoothParamUtil.bytesToString(param);
             UbtLog.d(TAG, "DV_ACTION_FINISH:   finishPlayActionName = " + finishPlayActionName + "    mCurrentPlayActionName = " + mCurrentPlayActionName);
-            if((System.currentTimeMillis()-mCycleExecuteTime)>mMax_ServoProtectionDuration){
-                mBtManager.sendCommand(mBtMac, ConstValue.DV_SET_PLAY_SOUND, BluetoothParamUtil.stringToBytes(Servo_protection_indication),BluetoothParamUtil.stringToBytes(Servo_protection_indication).length,false);
-                thiz.doStopCycle(false);
-            }
             boolean isStopLocal = false;
             if(finishPlayActionName.contains(mCurrentPlayActionName)){
                 isStopLocal = true;
@@ -739,6 +736,7 @@ public class ActionPlayer implements BlueToothInteracter {
                         ActionInfo actionInfo = MyActionsHelper.mCurrentSeletedActionInfoMap.get(action_name);
                         if(actionInfo == null){
                             //线上友盟crash报null,但是找不到规律，判null处理
+                           // UbtLog.d(TAG,"ACTIONINFO NULL");
                             continue;
                         }
 //                        //全局控制按钮消失DESTROY后，需要通过这个变量来获取正在播放的
