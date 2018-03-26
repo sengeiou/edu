@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.NewActionPlayer;
 import com.ubt.alpha1e.data.Constant;
@@ -36,6 +37,7 @@ import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.MyActionsActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
+import com.ubt.alpha1e.ui.helper.BluetoothStateHelper;
 import com.ubt.alpha1e.ui.helper.IActionsUI;
 import com.ubt.alpha1e.ui.helper.IMainUI;
 import com.ubt.alpha1e.ui.helper.MainHelper;
@@ -316,7 +318,19 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                     Toast.makeText(mBaseActivity,mBaseActivity.getStringResources("ui_remote_synchoronize_no_sd"),Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if(BaseHelper.isLowBatteryNotExecuteAction){
+                    new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                            .setTitle("提示")
+                            .setMsg("机器人电量低动作不能执行，请充电！")
+                            .setCancelable(true)
+                            .setPositiveButton("确定", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    UbtLog.d(TAG, "确定 ");
+                                }
+                            }).show();
+                    return;
+                }
                 if(AlphaApplication.isCycleActionFragment()){
                     return;
                 }

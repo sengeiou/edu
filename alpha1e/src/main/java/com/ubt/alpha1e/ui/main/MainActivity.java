@@ -1282,7 +1282,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                     actionIndicator.setLayoutParams(actionIndicatorLp);
                                     //播放按键结束
 
-                                    //电量按键
+                                    //电量按键R
                                     RelativeLayout.LayoutParams chargingLp = (RelativeLayout.LayoutParams) charging.getLayoutParams();
                                     chargingLp.bottomMargin = (int) (chargingLp.bottomMargin * densityRatio);
                                     chargingLp.width = (int) (charging.getWidth() * densityRatio * tensileRatio);
