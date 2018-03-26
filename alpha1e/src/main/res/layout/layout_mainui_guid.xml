@@ -338,7 +338,7 @@
             android:layout_height="107dp"
             android:src="@drawable/img_community_guide" />
         <TextView
-            android:layout_width="150dp"
+            android:layout_width="160dp"
             android:layout_height="107dp"
             android:layout_marginLeft="50dp"
             android:gravity="center"

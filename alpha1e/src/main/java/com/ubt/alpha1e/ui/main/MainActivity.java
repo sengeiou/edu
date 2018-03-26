@@ -180,6 +180,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     ImageView ivProgram;
     @BindView(R.id.iv_community)
     ImageView ivCommunity;
+    @BindView(R.id.rl_top_icon)
+    RelativeLayout rlTopIcon;
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
@@ -422,14 +424,14 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     };
 
 
-    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.top_icon4, R.id.ll_remote, R.id.ll_action, R.id.ll_program,
+    @OnClick({R.id.rl_top_icon, R.id.top_icon2, R.id.top_icon3, R.id.top_icon4, R.id.ll_remote, R.id.ll_action, R.id.ll_program,
             R.id.ll_community, R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
             R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg, R.id.rl_course_center, R.id.rl_hibits_event})
     protected void switchActivity(View view) {
         UbtLog.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
         switch (view.getId()) {
-            case R.id.top_icon:
+            case R.id.rl_top_icon:
                 if (!removeDuplicateClickEvent()) {
                     Intent intent = new Intent();
                     UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
@@ -1232,9 +1234,14 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                     ivCourse.setLayoutParams(ivCourseLp);
 
                                     //个人中心按键
+                                    RelativeLayout.LayoutParams rlTopIconLp = (RelativeLayout.LayoutParams) rlTopIcon.getLayoutParams();
+                                    rlTopIconLp.leftMargin = (int) (rlTopIconLp.leftMargin * densityRatio * tensileRatio);
+                                    rlTopIconLp.topMargin = (int) (rlTopIconLp.topMargin * densityRatio);
+                                    rlTopIconLp.width = (int) (rlTopIcon.getWidth() * densityRatio * tensileRatio);
+                                    rlTopIconLp.height = (int) (rlTopIcon.getHeight() * densityRatio);
+                                    rlTopIcon.setLayoutParams(rlTopIconLp);
+
                                     RelativeLayout.LayoutParams topIconLp = (RelativeLayout.LayoutParams) topIcon.getLayoutParams();
-                                    topIconLp.leftMargin = (int) (topIconLp.leftMargin * densityRatio * tensileRatio);
-                                    topIconLp.topMargin = (int) (topIconLp.topMargin * densityRatio);
                                     topIconLp.width = (int) (topIcon.getWidth() * densityRatio * tensileRatio);
                                     topIconLp.height = (int) (topIcon.getHeight() * densityRatio);
                                     topIcon.setLayoutParams(topIconLp);
