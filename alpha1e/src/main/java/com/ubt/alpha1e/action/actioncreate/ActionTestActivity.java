@@ -245,10 +245,6 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
 
 
         if (requestCode == ActionsEditHelper.SaveActionReq) {
-   /*         if(mHelper != null){
-                UbtLog.d(TAG, "退出动作编辑模式");
-                ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x04);
-            }*/
 
             if(data == null){
                 return;
