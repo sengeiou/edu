@@ -382,6 +382,7 @@ public class MainActivityGuideView{
                     rlCourseCenterGuides.setVisibility(View.INVISIBLE);
                     rltoopIcon2Guide.setVisibility(View.VISIBLE);
                     topIcon2.setVisibility(View.VISIBLE);
+                    jump_exit.setVisibility(View.INVISIBLE);
                 }else if(rltoopIcon2Guide.getVisibility()==View.VISIBLE){
                     rltoopIcon2Guide.setVisibility(View.INVISIBLE);
                     topIcon2.setVisibility(View.INVISIBLE);

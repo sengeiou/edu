@@ -56,7 +56,6 @@ public class HibitsAlertDialog {
     }
 
     public HibitsAlertDialog builder() {
-        if(dialog==null) {
             // 获取Dialog布局
             View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_hibits_alert, null);
 
@@ -101,7 +100,7 @@ public class HibitsAlertDialog {
             // 调整dialog背景大小
             lLayout_bg.setLayoutParams(new FrameLayout.LayoutParams((int) (display
                     .getWidth() * 0.75), LinearLayout.LayoutParams.WRAP_CONTENT));
-        }
+
         return this;
     }
 

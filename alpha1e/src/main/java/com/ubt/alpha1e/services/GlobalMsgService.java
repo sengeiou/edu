@@ -75,8 +75,6 @@ public class GlobalMsgService extends Service {
             if (mJson.getString("category").equals(XGCmdConstract.BEHAVIOUR_HABIT)) {
                 if (mJson.get("eventId") != null) {
                     Log.d("TPush", " contents" + xgPushShowedResult.getContent());
-                    //DISMISS
-                    new HibitsAlertDialog(AppManager.getInstance().currentActivity()).dismiss();
                     //SHOW
                     new HibitsAlertDialog(AppManager.getInstance().currentActivity()).builder()
                             .setCancelable(true)
