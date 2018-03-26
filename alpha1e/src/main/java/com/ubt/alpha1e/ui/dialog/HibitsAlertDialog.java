@@ -2,25 +2,22 @@ package com.ubt.alpha1e.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.services.HibitsAlertService;
-import com.ubt.alpha1e.services.SyncDataService;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.weigan.loopview.LoopView;
 
@@ -32,6 +29,8 @@ import java.util.Arrays;
 public class HibitsAlertDialog {
 
     private static final String TAG = HibitsAlertDialog.class.getSimpleName();
+    private static final int ALERT_TIME_OVER = 1;
+    private static final int ALERT_TIME_LIMITE = 2*60*1000;//2分钟
 
     private Context mContext;
     private Dialog dialog;
@@ -47,7 +46,21 @@ public class HibitsAlertDialog {
     private String[] mAlert = {"准时提醒", "延时5分钟", "延时10分钟", "关闭提醒"};
     private String[] mAlertVal = {"0", "5", "10", "-1"};
 
+
     private String mEventId = "";
+    private boolean isTimeOver = false;
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case ALERT_TIME_OVER:
+                    isTimeOver = true;
+                    break;
+            }
+        }
+    };
 
     public HibitsAlertDialog(Context context) {
         this.mContext = context;
@@ -84,12 +97,15 @@ public class HibitsAlertDialog {
             btnConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UbtLog.d("btnConfirm", "mEventId = " + mEventId + "  DelayTime = " + mAlertVal[lvAlert.getSelectedItem()]);
-                    Intent mIntent = new Intent(mContext, HibitsAlertService.class);
-                    mIntent.putExtra("EventId", mEventId);
-                    mIntent.putExtra("DelayTime", mAlertVal[lvAlert.getSelectedItem()]);
-                    mContext.startService(mIntent);
-
+                    UbtLog.d(TAG,"mEventId = " + mEventId + "  DelayTime = " + mAlertVal[lvAlert.getSelectedItem()] + " isTimeOver = " + isTimeOver);
+                    if(!isTimeOver){
+                        Intent mIntent = new Intent(mContext, HibitsAlertService.class);
+                        mIntent.putExtra("EventId",mEventId);
+                        mIntent.putExtra("DelayTime",mAlertVal[lvAlert.getSelectedItem()]);
+                        mContext.startService(mIntent);
+                    }else {
+                        ToastUtils.showShort("该事项已经确认，无法更改");
+                    }
                     dialog.dismiss();
                 }
             });
@@ -97,6 +113,15 @@ public class HibitsAlertDialog {
             // 定义Dialog布局和参数
             dialog = new Dialog(mContext, R.style.NewAlertDialogStyle);
             dialog.setContentView(view);
+
+            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    if(mHandler.hasMessages(ALERT_TIME_OVER)){
+                        mHandler.removeMessages(ALERT_TIME_OVER);
+                    }
+                }
+            });
 
             // 调整dialog背景大小
             lLayout_bg.setLayoutParams(new FrameLayout.LayoutParams((int) (display
@@ -110,6 +135,7 @@ public class HibitsAlertDialog {
     }
 
     public HibitsAlertDialog setMsg(String msg) {
+        UbtLog.d(TAG,"msg = " + msg);
         tvMsg.setText(msg);
         return this;
     }
@@ -134,6 +160,7 @@ public class HibitsAlertDialog {
 
     public void show() {
         setLayout();
+        mHandler.sendEmptyMessageDelayed(ALERT_TIME_OVER, ALERT_TIME_LIMITE);
         dialog.show();
     }
 
