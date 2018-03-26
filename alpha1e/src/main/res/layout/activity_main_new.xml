@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainui"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -246,20 +247,34 @@
             />
     </RelativeLayout>
 
-    <com.ubt.alpha1e.ui.custom.RoundImageView
-        android:id="@+id/top_icon"
+    <RelativeLayout
+        android:id="@+id/rl_top_icon"
         android:layout_width="43dp"
         android:layout_height="43dp"
         android:layout_marginTop="15dp"
-        android:layout_marginLeft="26dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/main_center" />
+        android:layout_marginLeft="26dp">
+
+        <com.ubt.alpha1e.ui.custom.ShapedImageView
+            android:id="@+id/top_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:shape_mode="circle"
+            android:src="@drawable/main_center" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/img_home_mine"/>
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/top_icon2"
         android:layout_width="43dp"
         android:layout_height="43dp"
-        android:layout_toRightOf="@+id/top_icon"
+        android:layout_toRightOf="@+id/rl_top_icon"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="15dp"
         android:scaleType="fitXY"

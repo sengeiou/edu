@@ -217,7 +217,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     public static final String FROM_VIDEO = "fromVideo";
     public static final String SHOTCUT_NAME = "shotVideo";
     private boolean fromVideo = false;
-    private RelativeLayout rlGoVideo;
+    private DragView rlGoVideo;
     private ImageView ivGoVideo;
     private ImageView ivShotAlbum;
     private ImageView ivBack;
@@ -314,7 +314,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         setContentView(R.layout.activity_blockly);
         mWebView = (WebView) findViewById(R.id.blockly_webView);
         rlBlank = (RelativeLayout) findViewById(R.id.rl_blank);
-        rlGoVideo = (RelativeLayout) findViewById(R.id.rl_go_video);
+        rlGoVideo = (DragView) findViewById(R.id.rl_go_video);
         ivGoVideo = (ImageView) findViewById(R.id.iv_go_video);
         ivShotAlbum = (ImageView) findViewById(R.id.iv_shot_album);
         ivBack = (ImageView) findViewById(R.id.iv_block_back);
@@ -328,8 +328,11 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         rlGoVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
-                overridePendingTransition(0, R.anim.activity_close_down_up);
+                if(!rlGoVideo.isDrag()){
+                    finish();
+                    overridePendingTransition(0, R.anim.activity_close_down_up);
+                }
+
             }
         });
 
