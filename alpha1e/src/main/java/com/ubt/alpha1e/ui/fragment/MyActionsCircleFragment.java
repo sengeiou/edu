@@ -971,7 +971,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     @Override
                     public void onClick(View view) {
                         if (!isStartLooping) {
-                            if(!lowBatteryNotExecutedAction()){
+                            if(lowBatteryNotExecutedAction()){
                                 return;
                             };
                             for (int i = 0; i < mDatas.size(); i++) {
