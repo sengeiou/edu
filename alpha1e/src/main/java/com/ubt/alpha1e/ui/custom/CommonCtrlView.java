@@ -460,15 +460,16 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
      * status false 暂停
      */
     private void playActionEffect(boolean status,String name) {
-        btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
         gifImageView.setVisibility(View.VISIBLE);
         gifImageView.setBackground(mContext.getDrawable(R.drawable.playindicator_animation));
         radiologicalWaveAnim = (AnimationDrawable)gifImageView.getBackground();
         radiologicalWaveAnim.setOneShot(false);
         radiologicalWaveAnim.setVisible(true,true);
         if (status) {
+            btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_pause"));
             radiologicalWaveAnim.start();
         } else {
+            btn_pause_or_continue.setImageDrawable(mBaseActivity.getDrawableRes("cc_playaction"));
             radiologicalWaveAnim.stop();
         }
         enablePlayStopButton(name);
@@ -1023,7 +1024,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
        txt_action_name_m.setText("正在播放: " +actionName);
        btn_pause_or_continue.setEnabled(true);
        btn_stop_m.setEnabled(true);
-       btn_pause_or_continue.setImageDrawable(mContext.getDrawable(R.drawable.cc_pause));
+      //btn_pause_or_continue.setImageDrawable(mContext.getDrawable(R.drawable.cc_pause));
        btn_stop_m.setImageDrawable(mContext.getDrawable(R.drawable.cc_stop));
        //BRIAN PLAY ACITON LIST FUNCTION  GRAY DISABLE
 //       ColorMatrix matrix = new ColorMatrix();
