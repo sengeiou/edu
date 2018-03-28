@@ -405,7 +405,7 @@ public class CourseLevelEightLayout extends BaseActionEditLayout implements Cour
         UbtLog.d(TAG, "进入第二课时，弹出对话框");
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_action_course_content, null);
         TextView title = contentView.findViewById(R.id.tv_card_name);
-        title.setText("第五关 创建动作");
+        title.setText("第八关 连续动作");
 
         Button button = contentView.findViewById(R.id.btn_pos);
         button.setText("下一节");

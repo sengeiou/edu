@@ -54,7 +54,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
 
         ActionCourseModel courseModel2 = new ActionCourseModel();
         courseModel2.setActionCourcesName("第2关");
-        courseModel2.setTitle("第二关 创定指定动作");
+        courseModel2.setTitle("第二关 学习动作库");
         courseModel2.setDrawableId(R.drawable.ic_action_level2);
         courseModel2.setActionLockType(0);
         courseModel2.setSize(3);
@@ -75,7 +75,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
 
         ActionCourseModel courseModel4 = new ActionCourseModel();
         courseModel4.setActionCourcesName("第4关");
-        courseModel4.setTitle("第四关 添加动作音频");
+        courseModel4.setTitle("第四关 添加动作+音频");
         courseModel4.setDrawableId(R.drawable.ic_action_level4);
         courseModel4.setActionLockType(0);
         courseModel4.setSize(3);
@@ -83,7 +83,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
 
         ActionCourseModel courseModel5 = new ActionCourseModel();
         courseModel5.setActionCourcesName("第5关");
-        courseModel5.setTitle("第五关 创定指定动作");
+        courseModel5.setTitle("第五关 创建动作");
         courseModel5.setDrawableId(R.drawable.ic_action_level5);
         courseModel5.setActionLockType(0);
         courseModel5.setSize(3);
@@ -99,7 +99,7 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
 
         ActionCourseModel courseModel7 = new ActionCourseModel();
         courseModel7.setActionCourcesName("第7关");
-        courseModel7.setTitle("第七关 创定指定动作");
+        courseModel7.setTitle("第七关 修改动作");
         courseModel7.setDrawableId(R.drawable.ic_action_level7);
         courseModel7.setActionLockType(0);
         courseModel7.setSize(2);
