@@ -24,6 +24,70 @@
 
             />
 
+        <RelativeLayout
+            android:id="@+id/rl_recording_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/iv_back"
+            android:gravity="center"
+            android:layout_marginLeft="26dp"
+            android:layout_marginTop="5dp"
+            android:visibility="invisible"
+            >
+
+            <ImageView
+                android:id="@+id/iv_recording_state"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginLeft="8dp"
+                android:src="@drawable/img_recording"
+                android:scaleType="fitXY"
+                />
+
+            <TextView
+                android:id="@+id/tv_recording_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/iv_recording_state"
+                android:text="@string/ui_recording_txt"
+                android:textColor="#2C3E50"
+                android:textSize="16sp"
+                android:layout_marginLeft="8dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_recoding_index"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/tv_recording_tip"
+                android:textColor="@android:color/white"
+                android:text="1 "
+                android:textSize="16sp"
+                />
+            <TextView
+                android:id="@+id/tv_11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_recoding_index"
+                android:layout_marginLeft="5dp"
+                android:text="|"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tv_recoding_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_11"
+                android:layout_marginLeft="5dp"
+                android:textColor="@android:color/white"
+                android:text="00:00"
+                android:textSize="16sp"
+                />
+
+
+        </RelativeLayout>
+
         <ImageView
             android:id="@+id/iv_help"
             android:layout_width="45dp"

@@ -71,7 +71,7 @@
 
     </RelativeLayout>
     
-    <RelativeLayout
+    <com.ubt.alpha1e.blockly.DragView
         android:id="@+id/rl_go_video"
         android:layout_width="200dp"
         android:layout_height="130dp"
@@ -112,7 +112,7 @@
 
         
         
-    </RelativeLayout>
+    </com.ubt.alpha1e.blockly.DragView>
     
     
 </RelativeLayout>
