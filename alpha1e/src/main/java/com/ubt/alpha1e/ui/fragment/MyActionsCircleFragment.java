@@ -956,7 +956,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     @Override
                     public void onClick(View view) {
                         actionList.put(MyActionsHelper.map_val_action_selected, !(Boolean) actionList.get(MyActionsHelper.map_val_action_selected));
-                        String actionName = (String) actionList.get(MyActionsHelper.map_val_action_name);
+                        String actionName = (String) actionList.get(MyActionsHelper.map_val_action);
                         if (!MyActionsHelper.mCurrentSeletedNameList.contains(actionName)) {
                             MyActionsHelper.mCurrentSeletedNameList.add(actionName);
                             ActionInfo actionInfo = new ActionInfo();
