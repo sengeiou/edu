@@ -12,6 +12,7 @@ import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.DownloadProgressInfo;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.net.http.basic.FileDownloadListener;
+import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -137,7 +138,18 @@ public class DownLoadActionManager {
                                 //机器人下载成功，加入缓存
                                 if (null != downLoadCompleteList && !TextUtils.isEmpty(actionInfo.getActionName())) {
                                     UbtLog.d(TAG, "机器人下载成功：hts_file_name = " + actionInfo.getActionName());
+
+                                    UbtLog.d(TAG, "机器人下载成功：sendFileName = " + actionInfo.getActionOriginalId());
                                     downLoadCompleteList.add(actionInfo);
+                                    if(!MyActionsHelper.mCacheActionsNames.isEmpty() && !TextUtils.isEmpty(actionInfo.getActionOriginalId())){
+                                       // String sendFileName = actionInfo.hts_file_name.split("\\.")[0];
+                                        String sendFileName = actionInfo.getActionOriginalId();
+
+                                        //UbtLog.d(TAG,"机器人下载成功：hts_file_name = " + sendFileName);
+                                        MyActionsHelper.mCacheActionsNames.add((MyActionsHelper.localSize + MyActionsHelper.myDownloadSize),sendFileName);
+                                        MyActionsHelper.myDownloadSize++;
+                                    }
+
                                 }
                             } else {
                                 state = FileDownloadListener.State.fail;
