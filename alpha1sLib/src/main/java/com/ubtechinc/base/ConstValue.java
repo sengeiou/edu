@@ -272,7 +272,15 @@ public class ConstValue {
 	/**
 	 * 读取机器人加速度, 0x01开启上报， 0x00关闭上报
 	 */
+	@Deprecated
 	public static final byte DV_READ_ROBOT_ACCELERATION = (byte) 0x54;
+
+	/**
+	 * 读取机器人温湿度传感器, 0x01开启上报， 0x00关闭上报
+	 */
+	public static final byte DV_READ_TEMPERATURE = (byte) 0x54;
+
+
 
 
 	/**

@@ -2081,6 +2081,25 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
 
     }
 
+    public void  doStopPlay(){
+        UbtLog.d(TAG, "doStopPlay");
+        if(!isFinishFramePlay){
+            ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,
+                    getEditingActions());
+            doReset();
+        }
+        if(!playFinish){
+            if (mediaPlayer != null && mediaPlayer.isPlaying() && !mDir.equals("")) {
+                pause();
+            }
+            replayMusic();
+            sbVoice.setProgress(0);
+            recyclerViewFrames.smoothScrollToPosition(0);
+            recyclerViewTimes.smoothScrollToPosition(0);
+            setEnable(true);
+        }
+    }
+
     private void resetState() {
         lostLeftHand = false;
         lostRightHand = false;

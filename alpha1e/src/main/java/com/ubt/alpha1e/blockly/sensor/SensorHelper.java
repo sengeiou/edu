@@ -112,6 +112,10 @@ public class SensorHelper extends BaseHelper {
                 }
 
             }
+        }else if(cmd == ConstValue.DV_READ_TEMPERATURE){
+            if(param != null) {
+                UbtLog.d(TAG, "temp:"+ BluetoothParamUtil.bytesToString(param));
+            }
         }
     }
 
@@ -248,6 +252,16 @@ public class SensorHelper extends BaseHelper {
      */
     public void doRead6DState(){
         doSendComm(ConstValue.DV_6D_GESTURE, null);
+    }
+
+    /**
+     * 读取温湿度、光敏传感器数据
+
+     */
+    public void doReadTemperature(byte param) {
+        byte[] params = new byte[1];
+        params[0] = param;
+        doSendComm(ConstValue.DV_READ_TEMPERATURE, params);
     }
 
 
