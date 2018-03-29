@@ -24,18 +24,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.BuildConfig;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
+
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.behaviorhabits.model.behaviourHabitModel;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionColloInfo;
 import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.ActionRecordInfo;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.data.model.NewActionInfo;
 import com.ubt.alpha1e.event.RobotEvent;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.ui.MyActionsActivity;
 import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
@@ -54,10 +60,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 
 /**
@@ -104,6 +112,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         UbtLog.d(TAG,"isStartLooping flag"+isStartLooping);
         initViews();
         EventBus.getDefault().register(this);
+
+
         return mView;
     }
 
@@ -202,6 +212,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         mDatas = datas;
         if(mHelper!=null) {
             mHelper.setPlayContent(mDatas);
+           // debugActionList(mDatas);
         }
         //MyActionHelper trigger setDatas
         if(mAdapter!=null){
@@ -867,7 +878,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder mHolder, final int position) {
-
             final MyCircleHolder holder = (MyCircleHolder) mHolder;
             final Map<String, Object> actionList = mDatas.get(position);
             String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
@@ -880,7 +890,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 action_name = action_name.substring(1);
             }
             holder.txt_action_name.setText(action_name);
-
             for (int i = 0; i < MyActionsHelper.mCurrentSeletedNameList.size(); i++) {
                 if (MyActionsHelper.mCurrentSeletedNameList.get(i).equals(action_name)) {
                     UbtLog.d(TAG, "current select is looping:" + isStartLooping + "name :" + action_name + "size" + MyActionsHelper.mCurrentSeletedNameList.size());
@@ -1021,23 +1030,14 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     }
 
 
-    private void removeDuplicate(List<Map<String, Object>> list) {
-        UbtLog.d(TAG, "removeDuplicate");
+    private void debugActionList(List<Map<String, Object>> list) {
         for ( int i = 0 ; i < list.size() - 1 ; i ++ ) {
-            for ( int j = list.size() - 1 ; j > i; j -- ) {
-                if (list.get(j).get(ActionsHelper.map_val_action_name).equals(list.get(i).get(ActionsHelper.map_val_action_name))) {
-                    UbtLog.d(TAG, "removeDuplicate=" + list.get(j).toString());
-                    list.remove(j);
-                }
-            }
+                UbtLog.d(TAG,"INDEX "+list.get(i).get(ActionsHelper.map_val_action_name));
         }
 
         System.out.println(list);
     }
 
-    private void clearActionInfoList(){
-
-    }
 
 
     /**
@@ -1179,4 +1179,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
       }
       return BaseHelper.isLowBatteryNotExecuteAction;
   }
+
+
+
+
 }
