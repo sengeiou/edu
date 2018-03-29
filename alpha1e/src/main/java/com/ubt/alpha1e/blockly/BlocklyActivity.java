@@ -769,6 +769,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 //                    mSensorHelper.doReadGyroData((byte)0x01);
 //                    mSensorHelper.doReadAcceleration((byte)0x01);
                     mSensorHelper.doRead6DState();
+//                    mSensorHelper.doReadTemperature((byte)0x01);
                 }
 
                 if(isBulueToothConnected()){
@@ -1126,6 +1127,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 //                mSensorHelper.doReadAcceleration((byte)0x00);
                 UbtLog.d(TAG, "startOrStopRun end");
                 startOrStopRun((byte)0x02);
+//                mSensorHelper.doReadTemperature((byte)0x00);
             }
             mSensorHelper.UnRegisterHelper();
         }

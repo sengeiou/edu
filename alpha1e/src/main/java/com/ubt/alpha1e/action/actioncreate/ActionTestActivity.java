@@ -117,24 +117,14 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
         if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS){
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
             UbtLog.d(TAG, "isHibitsProcessStatus:"+ event.isHibitsProcessStatus());
+            if(event.isHibitsProcessStatus()){
+                mActionEdit.doStopPlay();
+            }
             if(event.isHibitsProcessStatus() && !showDialog){
                 showDialog = true;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                  /*       new ConfirmDialog(ActionTestActivity.this).builder()
-                                .setTitle("提示")
-                                .setMsg(getStringResources("ui_habits_process_start"))
-                                .setCancelable(false)
-                                .setPositiveButton("确定", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        UbtLog.d(TAG, "确定");
-                                        showDialog = false;
-                                        finish();
-                                    }
-                                }).show();*/
-
                     if(confirmDialog != null && !confirmDialog.isShowing()){
                       confirmDialog.show();
                     }
@@ -142,7 +132,8 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
                     }
                 });
             }else{
-                if(confirmDialog != null && confirmDialog.isShowing()){
+                if(!event.isHibitsProcessStatus() && confirmDialog != null && confirmDialog.isShowing()){
+                    UbtLog.d(TAG, "confirmDialog dismiss ");
                     confirmDialog.dismiss();
                 }
             }
