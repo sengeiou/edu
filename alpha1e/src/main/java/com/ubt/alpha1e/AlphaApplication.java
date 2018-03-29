@@ -112,6 +112,16 @@ public class AlphaApplication extends LoginApplication {
     //默认当前连接对象为非1E，没有连上的时候，默认为非Alpha1E
     private boolean isAlpha1E = false;
 
+    public long getActionOriginalId() {
+        return actionOriginalId;
+    }
+
+    public void setActionOriginalId(long actionOriginalId) {
+        this.actionOriginalId = actionOriginalId;
+    }
+
+    public long actionOriginalId = 0;
+
     public NetworkInfo getmCurrentNetworkInfo() {
         return mCurrentNetworkInfo;
     }

@@ -202,7 +202,7 @@
             android:gravity="center"
             android:text="起床"
             android:textColor="@color/white"
-            android:textSize="17sp" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/iv_hibits_reminder"

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
@@ -54,7 +55,7 @@ public class NewActionsManager implements IFileListener {
     private int do_record_new_actions_for_change = 10005;
     private int do_write_sync_actions = 10006;
 
-    public  ExecutorService single_pool = Executors
+    public ExecutorService single_pool = Executors
             .newSingleThreadExecutor();
     public NewActionInfo mChangeNewActionInfo;
     private List<NewActionInfo> mSyncActionInfos = new ArrayList<>();
@@ -101,7 +102,16 @@ public class NewActionsManager implements IFileListener {
 
     public void doSave(NewActionInfo info, final String musicDir) {
         mChangeNewActionInfo = info;
-        mChangeNewActionInfo.actionOriginalId = System.currentTimeMillis();
+        if (((AlphaApplication) mContext
+                .getApplicationContext()).getActionOriginalId() != 0) {
+            mChangeNewActionInfo.actionOriginalId = ((AlphaApplication) mContext
+                    .getApplicationContext()).getActionOriginalId();
+            UbtLog.d("actionOriginalId", "已经保存过一次了");
+            UbtLog.d("actionOriginalId", "actionOriginalId====" + mChangeNewActionInfo.actionOriginalId);
+        } else {
+            UbtLog.d("actionOriginalId", "第一次保存");
+            mChangeNewActionInfo.actionOriginalId = System.currentTimeMillis();
+         }
         mChangeNewActionInfo.actionId = mChangeNewActionInfo.actionOriginalId;
         final String mDir = FileTools.actions_new_cache + File.separator + mChangeNewActionInfo.actionOriginalId + "";
         String mFileName = mChangeNewActionInfo.actionOriginalId + ".hts";
@@ -117,14 +127,12 @@ public class NewActionsManager implements IFileListener {
         UbtLog.d(TAG, "mChangeNewActionInfo=" + mChangeNewActionInfo.toString());
         UbtLog.d(TAG, "musicDir=" + musicDir);
 
-
-
         HtsHelper.writeHts(mChangeNewActionInfo, filePath, new IHtsHelperListener() {
             @Override
             public void onHtsWriteFinish(boolean isSuccess) {
                 if (isSuccess) {
-                    if(musicDir != "" && musicDir != null){
-                        copyFile(musicDir, mDir + File.separator+mChangeNewActionInfo.actionOriginalId + ".mp3" );
+                    if (musicDir != "" && musicDir != null) {
+                        copyFile(musicDir, mDir + File.separator + mChangeNewActionInfo.actionOriginalId + ".mp3");
                     }
                     zipHtsActions(mChangeNewActionInfo);
                     saveActionToServer();
@@ -146,8 +154,8 @@ public class NewActionsManager implements IFileListener {
     public void doSave(NewActionInfo info, long dubTag, int type) {
         mChangeNewActionInfo = info;
         mChangeNewActionInfo.actionOriginalId = System.currentTimeMillis();
-        UbtLog.d(TAG, "actionOriginalId=" +   mChangeNewActionInfo.actionOriginalId + "---dubTag" + dubTag);
-        String convert = "" +  mChangeNewActionInfo.actionOriginalId + 1;
+        UbtLog.d(TAG, "actionOriginalId=" + mChangeNewActionInfo.actionOriginalId + "---dubTag" + dubTag);
+        String convert = "" + mChangeNewActionInfo.actionOriginalId + 1;
         UbtLog.d(TAG, "convert=" + convert);
         mChangeNewActionInfo.actionOriginalId = Long.parseLong(convert);
         mChangeNewActionInfo.actionId = mChangeNewActionInfo.actionOriginalId;
@@ -164,40 +172,39 @@ public class NewActionsManager implements IFileListener {
 
         UbtLog.d(TAG, "mChangeNewActionInfo=" + mChangeNewActionInfo.toString());
         //开始拷贝文件
-        if(type == DubActivity.TYPE_CREATE){
+        if (type == DubActivity.TYPE_CREATE) {
             UbtLog.d(TAG, "create new action");
-            File fileFold =  new File(FileTools.actions_new_cache + File.separator+ dubTag);
+            File fileFold = new File(FileTools.actions_new_cache + File.separator + dubTag);
             String[] action_files = fileFold.list(new FilenameFilter() {
                 public boolean accept(File f, String name) {
                     return name.endsWith(".hts");
                 }
             });
 
-            if(action_files != null && action_files.length !=0){
+            if (action_files != null && action_files.length != 0) {
                 UbtLog.d(TAG, "action_files[0]=" + action_files[0].toString());
-                copyFile(fileFold + File.separator +  action_files[0], filePath);
-            }else{
+                copyFile(fileFold + File.separator + action_files[0], filePath);
+            } else {
                 UbtLog.e(TAG, "not have hts file!");
             }
 
 //            copyFile(FileTools.actions_new_cache + File.separator+ dubTag + File.separator + "1476342972456.hts", filePath);
-        }else if(type == DubActivity.TYPE_DOWNLOAD){
+        } else if (type == DubActivity.TYPE_DOWNLOAD) {
 
-            File fileFold =  new File(FileTools.actions_download_cache + File.separator+ dubTag);
+            File fileFold = new File(FileTools.actions_download_cache + File.separator + dubTag);
             String[] action_files = fileFold.list(new FilenameFilter() {
                 public boolean accept(File f, String name) {
                     return name.endsWith(".hts");
                 }
             });
 
-            if(action_files != null && action_files.length !=0){
-                copyFile(fileFold + File.separator +  action_files[0], filePath);
+            if (action_files != null && action_files.length != 0) {
+                copyFile(fileFold + File.separator + action_files[0], filePath);
             }
 
         }
 
-
-        copyFile( FileTools.actions_new_cache+File.separator+"tep_audio_recorder_for_mp3.mp3", mDir + File.separator+mChangeNewActionInfo.actionOriginalId + ".mp3" );
+        copyFile(FileTools.actions_new_cache + File.separator + "tep_audio_recorder_for_mp3.mp3", mDir + File.separator + mChangeNewActionInfo.actionOriginalId + ".mp3");
         zipHtsActions(mChangeNewActionInfo);
         saveActionToServer();
 
@@ -212,16 +219,15 @@ public class NewActionsManager implements IFileListener {
                 InputStream inStream = new FileInputStream(oldPath); //读入原文件
                 FileOutputStream fs = new FileOutputStream(newPath);
                 byte[] buffer = new byte[1444];
-                while ( (byteread = inStream.read(buffer)) != -1) {
+                while ((byteread = inStream.read(buffer)) != -1) {
                     bytesum += byteread; //字节数 文件大小
                     System.out.println(bytesum);
                     fs.write(buffer, 0, byteread);
                 }
                 inStream.close();
             }
-        }
-        catch (Exception e) {
-           UbtLog.e(TAG, "复制单个文件操作出错");
+        } catch (Exception e) {
+            UbtLog.e(TAG, "复制单个文件操作出错");
             e.printStackTrace();
 
         }
@@ -267,22 +273,22 @@ public class NewActionsManager implements IFileListener {
 
             }
 
-
 //            Map<String, File> fileMap = new HashMap<>();
 //            fileMap.put(imageFile.getName(),imageFile);
 //            fileMap.put(file.getName(),file);
-            Map<String, String> params =HttpAddress.getBasicParamsMap(mContext);
+            Map<String, String> params = HttpAddress.getBasicParamsMap(mContext);
 
             params.put("actionOriginalId", mChangeNewActionInfo.actionId + "");
             params.put("actionUserId", actionUserId + "");
             params.put("actionName", mChangeNewActionInfo.actionName);
             params.put("actionDesciber", mChangeNewActionInfo.actionDesciber);
             params.put("actionType", mChangeNewActionInfo.actionType + "");
-            params.put("actionTime", mChangeNewActionInfo.actionTime+ "");
-           // String url = HttpAddress.getRequestUrl(HttpAddress.Request_type.createaction_upload);
-           // String url = HttpAddress.getRequestUrl(HttpEntity.SAVE_ACTION);
-           UbtLog.d("maptojson",new Gson().toJson(params));
-
+            params.put("actionTime", mChangeNewActionInfo.actionTime + "");
+            // String url = HttpAddress.getRequestUrl(HttpAddress.Request_type.createaction_upload);
+            // String url = HttpAddress.getRequestUrl(HttpEntity.SAVE_ACTION);
+            UbtLog.d("maptojson", new Gson().toJson(params));
+            ((AlphaApplication) mContext
+                    .getApplicationContext()).setActionOriginalId(mChangeNewActionInfo.actionId);
             OkHttpUtils.post()//
                     .addFile("mFile1", file.getName(), file)//
                     .addFile("mFile2", imageFile.getName(), imageFile)
@@ -291,16 +297,18 @@ public class NewActionsManager implements IFileListener {
                     .build()//
                     .execute(new StringCallback() {
                         @Override
-                        public void onError(Call call, Exception e,int i) {
+                        public void onError(Call call, Exception e, int i) {
                             UbtLog.d(TAG, "onResponse:" + e.getMessage());
                             isSaveSuccess = false;
                             notifyListeners();
                         }
 
                         @Override
-                        public void onResponse(String s,int i) {
+                        public void onResponse(String s, int i) {
                             UbtLog.d(TAG, "onResponse:" + s);
                             try {
+                                ((AlphaApplication) mContext
+                                        .getApplicationContext()).setActionOriginalId(0);
                                 JSONObject json = new JSONObject(s);
                                 if ((Boolean) json.get("status")) {
                                     isSaveSuccess = true;
@@ -371,7 +379,7 @@ public class NewActionsManager implements IFileListener {
                 try {
                     JSONArray action_list;
                     //UbtLog.d(TAG, "result=" + result);
-                    if(!result.equals("") || !result.equals("null")){
+                    if (!result.equals("") || !result.equals("null")) {
                         action_list = new JSONArray(result);//""
                         for (int i = 0; i < action_list.length(); i++) {
                             JSONObject jsonObject = action_list.getJSONObject(i);
@@ -392,9 +400,9 @@ public class NewActionsManager implements IFileListener {
 
                 if (request_code == do_read_new_actions_for_save) {
                     //倒序,添加到第一个
-                    infos.add(0,mChangeNewActionInfo);
+                    infos.add(0, mChangeNewActionInfo);
                 } else if (request_code == do_write_sync_actions) {
-                    infos.addAll(0,mSyncActionInfos);
+                    infos.addAll(0, mSyncActionInfos);
                 } else {
 
                     for (int i = 0; i < infos.size(); i++) {

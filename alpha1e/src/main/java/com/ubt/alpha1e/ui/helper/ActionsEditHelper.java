@@ -81,6 +81,7 @@ public class ActionsEditHelper extends BaseHelper implements
     public void unRegister(){
         super.UnRegisterHelper();
         mNewActionsManager.removeListener(this);
+        mNewPlayer.removeListener(mUI);
     }
 
     public boolean getActionSaveState() {

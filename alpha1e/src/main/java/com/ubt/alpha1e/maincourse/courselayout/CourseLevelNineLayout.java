@@ -421,7 +421,7 @@ public class CourseLevelNineLayout extends BaseActionEditLayout {
         UbtLog.d(TAG, "进入第二课时，弹出对话框");
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_action_course_content, null);
         TextView title = contentView.findViewById(R.id.tv_card_name);
-        title.setText("第二关 创建指定动作");
+        title.setText("第九关 快速创建连续动作");
         Button button = contentView.findViewById(R.id.btn_pos);
         button.setText("下一节");
         RecyclerView mrecyle = contentView.findViewById(R.id.recyleview_content);
