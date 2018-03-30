@@ -156,11 +156,13 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             @Override
             public void onClick(View view) {
                 //循环播放
+                if (MyActionsHelper.mCurrentSeletedNameList.size() > 0) {
                     if (!isStartLooping) {
-                        if(lowBatteryNotExecutedAction()){
+                        if (lowBatteryNotExecutedAction()) {
                             return;
-                        };
-                        if(!SPUtils.getInstance().getBoolean(Constant.SP_SHOW_SERVO_GUIDE,false)) {
+                        }
+                        ;
+                        if (!SPUtils.getInstance().getBoolean(Constant.SP_SHOW_SERVO_GUIDE, false)) {
                             mServoGuide.setVisibility(View.VISIBLE);
                         }
                         UbtLog.d(TAG, "BEGIN CIRCLE PLAY");
@@ -179,6 +181,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                         mHelper.stopPlayAction();
                     }
                     updateCircleButton();
+                }
             }
         });
         mSyncRecyclerview = (RecyclerView) mView.findViewById(R.id.recyclerview_circle);
@@ -1062,7 +1065,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 tvCircle.setAlpha(1.0f);
             }else {
                 //没播放，大小小于1
-                ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
+                ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop""));
                 ivCircle.setAlpha(0.5f);
                 tvCircle.setText("循环播放");
                 tvCircle.setAlpha(0.5f);
