@@ -38,7 +38,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/btn_alert_bg"
         android:gravity="center"
-        android:text="确定"
+        android:text="开始闯关"
         android:textColor="@color/tv_user_edit_color"
         android:textSize="16sp"/>
 

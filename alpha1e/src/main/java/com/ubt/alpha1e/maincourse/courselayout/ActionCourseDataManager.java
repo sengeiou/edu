@@ -148,7 +148,7 @@ public class ActionCourseDataManager {
             list.add(model3);
         } else if (card == 3) {
             model1 = new CourseActionModel("1.了解音乐库", 0);
-            model2 = new CourseActionModel("2.打开音乐库", 0);
+            model2 = new CourseActionModel("2.添加音频", 0);
             list.add(model1);
             list.add(model2);
         } else if (card == 4) {

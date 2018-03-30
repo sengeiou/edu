@@ -28,6 +28,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResponseMode.CourseDetailScoreModule;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.maincourse.adapter.ActionCoursedapter;
 import com.ubt.alpha1e.maincourse.adapter.CourseItemAdapter;
 import com.ubt.alpha1e.maincourse.courselayout.ActionCourseDataManager;
@@ -41,9 +42,11 @@ import com.ubt.alpha1e.maincourse.courseone.CourseLevelSixActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelTenActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelThreeActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
@@ -74,6 +77,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
 
     private static final int REQUESTCODE = 10000;
     private static ActionCourseActivity mainCourseInstance = null;
+    private boolean isShowBleDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +156,12 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
     protected void onResume() {
         super.onResume();
         UbtLog.d(TAG, "------------------onResume-----------------");
+        if (!isBulueToothConnected()) {
+            showLoasBleDiaog();
+        }
+        if (mMainCoursedapter != null) {
+            mMainCoursedapter.notifyDataSetChanged();
+        }
     }
 
 
@@ -219,7 +229,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
 //                            }
 //                        }
                     }
-                    if (i==9){
+                    if (i == 9) {
 
                     }
                 }
@@ -277,27 +287,29 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                         public void onClick(DialogPlus dialog, View view) {
                             if (view.getId() == R.id.btn_pos) {
                                 int n = position + 1;
+                                Intent intent = null;
                                 if (position == 0) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class), REQUESTCODE);
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelOneActivity.class);
                                 } else if (position == 1) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class), REQUESTCODE);
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelTwoActivity.class);
                                 } else if (position == 2) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelThreeActivity.class), REQUESTCODE);
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelThreeActivity.class);
                                 } else if (position == 3) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFourActivity.class), REQUESTCODE);
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelFourActivity.class);
                                 } else if (position == 4) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelFiveActivity.class), REQUESTCODE);
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelFiveActivity.class);
                                 } else if (position == 5) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelSixActivity.class), REQUESTCODE);
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelSixActivity.class);
                                 } else if (position == 6) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelSevenActivity.class), REQUESTCODE);
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelSevenActivity.class);
                                 } else if (position == 7) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelEightActivity.class), REQUESTCODE);
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelEightActivity.class);
                                 } else if (position == 8) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelNineActivity.class), REQUESTCODE);
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelNineActivity.class);
                                 } else if (position == 9) {
-                                    startActivityForResult(new Intent(ActionCourseActivity.this, CourseLevelTenActivity.class), REQUESTCODE);
+                                    intent = new Intent(ActionCourseActivity.this, CourseLevelTenActivity.class);
                                 }
+                                startActivityForResult(intent, REQUESTCODE);
                                 ActionCourseActivity.this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                                 dialog.dismiss();
                                 myHandler.removeMessages(HANDLER_EXIT_COURSE);
@@ -335,7 +347,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         byte[] params = new byte[1];
         params[0] = 0;
         if (null != ((AlphaApplication) this
-                .getApplicationContext()).getBlueToothManager()&&null!=((AlphaApplication) this.getApplicationContext())
+                .getApplicationContext()).getBlueToothManager() && null != ((AlphaApplication) this.getApplicationContext())
                 .getCurrentBluetooth()) {
             ((AlphaApplication) this
                     .getApplicationContext()).getBlueToothManager().sendCommand(((AlphaApplication) this.getApplicationContext())
@@ -352,35 +364,55 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
         if (resultCode == 1) {
             if (requestCode == REQUESTCODE) {
                 //设置结果显示框的显示数值
-                int course = data.getIntExtra("course", 1);
-                int leavel = data.getIntExtra("leavel", 1);
-                boolean isComplete = data.getBooleanExtra("isComplete", false);
-                int score = data.getIntExtra("score", 0);
-                showResultDialog(course, isComplete);
-                UbtLog.d(TAG, "course==" + course + "   leavel==" + leavel + "  isComplete==" + isComplete + "  socre===" + score);
-                mPresenter.saveCourseProgress(String.valueOf(course), isComplete ? "1" : "0");
-                playAction(Constant.COURSE_ACTION_PATH + "AE_victory editor.hts");
-//                mHandler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        exitCourse();
-//                    }
-//                }, 3500);
-                myHandler.sendEmptyMessageDelayed(HANDLER_EXIT_COURSE,4000);
+                int resulttype = data.getIntExtra("resulttype", 0);
+                if (resulttype == 0) {
+                    int course = data.getIntExtra("course", 1);
+                    int leavel = data.getIntExtra("leavel", 1);
+                    boolean isComplete = data.getBooleanExtra("isComplete", false);
+                    int score = data.getIntExtra("score", 0);
+
+                    showResultDialog(course, isComplete);
+                    UbtLog.d(TAG, "course==" + course + "   leavel==" + leavel + "  isComplete==" + isComplete + "  socre===" + score);
+                    mPresenter.saveCourseProgress(String.valueOf(course), isComplete ? "1" : "0");
+                    playAction(Constant.COURSE_ACTION_PATH + "AE_victory editor.hts");
+                    myHandler.sendEmptyMessageDelayed(HANDLER_EXIT_COURSE, 4000);
+                } else {
+                    showStartHibitsProcess();
+                }
             }
         }
     }
 
-    private static  int HANDLER_EXIT_COURSE =11111;
-    Handler myHandler= new Handler(){
+    private static int HANDLER_EXIT_COURSE = 11111;
+    Handler myHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what==HANDLER_EXIT_COURSE){
+            if (msg.what == HANDLER_EXIT_COURSE) {
                 exitCourse();
             }
         }
     };
+
+    //显示行为提醒弹出框
+    public void showStartHibitsProcess() {
+        String msg = "行为习惯正在进行中，请先完成";
+        String position = "好的";
+
+        msg = this.getStringResources("ui_habits_process_starting");
+        position = this.getStringResources("ui_common_ok");
+
+        new ConfirmDialog(this)
+                .builder()
+                .setMsg(msg)
+                .setCancelable(false)
+                .setPositiveButton(position, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                }).show();
+    }
 
     /**
      * 显示完成结果
@@ -427,4 +459,30 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                 .create().show();
     }
 
+    private void showLoasBleDiaog() {
+        isShowBleDialog = true;
+        new ConfirmDialog(this).builder()
+                .setTitle("提示")
+                .setMsg("请先连接机器人蓝牙")
+                .setCancelable(false)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接蓝牙 ");
+                        Intent intent = new Intent();
+                        intent.setClass(ActionCourseActivity.this, BluetoothconnectActivity.class);
+                        startActivity(intent);
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                MainCourseActivity.finishByMySelf();
+                ActionCourseActivity.finishByMySelf();
+                ActionCourseActivity.this.finish();
+                //关闭窗体动画显示
+                ActionCourseActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            }
+        }).show();
+    }
 }

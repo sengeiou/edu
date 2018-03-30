@@ -22,6 +22,7 @@ public class BlocklyCourseModel {
     private String videoUrl;
     private String thumbnailUrl;
     private String status;
+    private String subTitle;
 
     public String getToken() {
         return token;
@@ -95,6 +96,15 @@ public class BlocklyCourseModel {
         this.status = status;
     }
 
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
+    }
+
+
     @Override
     public String toString() {
         return "BlocklyCourseModel{" +
@@ -107,6 +117,7 @@ public class BlocklyCourseModel {
                 ", videoUrl='" + videoUrl + '\'' +
                 ", thumbnailUrl='" + thumbnailUrl + '\'' +
                 ", status='" + status + '\'' +
+                ", subTitle='" + subTitle + '\'' +
                 '}';
     }
 }

@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -288,6 +289,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     public void initRecyclerViews() {
         flowLayoutManager = new FlowLayoutManager();
         rvPlayContent.setLayoutManager(flowLayoutManager);
+
         RecyclerView.ItemAnimator animator = rvPlayContent.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
@@ -302,7 +304,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             }
         });
 
-        mAdapter = new FlowPlayContentRecyclerAdapter(getContext(), mPlayContentInfoDatas, mHandler);
+        mAdapter = new FlowPlayContentRecyclerAdapter(getContext(), mPlayContentInfoDatas);
         rvPlayContent.setAdapter(mAdapter);
 
         /** custom setting */
@@ -318,7 +320,7 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
         flowLayoutManager = new FlowLayoutManager();
         rvPlayContent.setLayoutManager(flowLayoutManager);
 
-        mAdapter = new FlowPlayContentRecyclerAdapter(getContext(), mPlayContentInfoDatas, mHandler);
+        mAdapter = new FlowPlayContentRecyclerAdapter(getContext(), mPlayContentInfoDatas);
         rvPlayContent.setAdapter(mAdapter);
 
         /** custom setting */
@@ -332,11 +334,10 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     HoldTouchHelper.OnItemTouchEvent onItemTouchEvent = new HoldTouchHelper.OnItemTouchEvent() {
         @Override
         public void onLongPress(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int position) {
-            UbtLog.e(TAG,"onLongPress position = " + position);
             //暂时屏蔽不给拖
-            /*if (((SampleAdapter) recyclerView.getAdapter()).onItemDrag(position)) {
+            if (((SampleAdapter) recyclerView.getAdapter()).onItemDrag(position)) {
                 ((DragRecyclerView) recyclerView).startDrag(position);
-            }*/
+            }
         }
 
         @Override
@@ -558,6 +559,11 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
     private boolean isHasEdit(){
         if(originEventDetail != null && newEventDetail != null){
             newEventDetail.eventTime = mHourArr[lvHour.getSelectedItem()] + ":" + mMinuteArr[lvMinute.getSelectedItem()];
+            if(originEventDetail.eventTime.length() == 4){
+                //处理时间少于10点的字符串，如: (7:30->07:30)
+                originEventDetail.eventTime = "0" + originEventDetail.eventTime;
+            }
+
             if(!originEventDetail.eventTime.equals(newEventDetail.eventTime)){
                 return true;
             }
@@ -567,7 +573,6 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
             if(!originEventDetail.remindSecond.equals(newEventDetail.remindSecond)){
                 return true;
             }
-
             if(originEventDetail.contents == null){
                 if(mPlayContentInfoDatas.size() > 0){
                     return true;

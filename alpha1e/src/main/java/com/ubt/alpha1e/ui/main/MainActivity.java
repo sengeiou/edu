@@ -20,18 +20,26 @@ import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.BuildConfig;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.action.actioncreate.ActionTestActivity;
 import com.ubt.alpha1e.animator.FrameAnimation;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.FileUtils;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.GotoBindRequest;
 import com.ubt.alpha1e.base.SPUtils;
@@ -39,6 +47,7 @@ import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loopHandler.HandlerCallback;
 import com.ubt.alpha1e.base.loopHandler.LooperThread;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsActivity;
+import com.ubt.alpha1e.behaviorhabits.model.behaviourHabitModel;
 import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
@@ -64,6 +73,7 @@ import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
 import com.ubt.alpha1e.ui.custom.CommonGuideView;
+import com.ubt.alpha1e.ui.custom.MainActivityGuideView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
@@ -72,9 +82,11 @@ import com.ubt.alpha1e.ui.helper.BluetoothStateHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
 import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.userinfo.model.UserModel;
+import com.ubt.alpha1e.userinfo.notice.WebActivity;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
@@ -96,7 +108,7 @@ import okhttp3.Call;
  * Main UI function
  */
 
-public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View,HandlerCallback {
+public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View, HandlerCallback {
 
     @BindView(R.id.cartoon_body_touch_bg)
     ImageView cartoonBodyTouchBg;
@@ -104,22 +116,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     ImageView charging;
     @BindView(R.id.cartoon_action)
     ImageView cartoonAction;
-    @BindView(R.id.right_icon)
-    TextView rightIcon;
-    @BindView(R.id.right_icon2)
-    TextView rightIcon2;
-    @BindView(R.id.right_icon3)
-    TextView rightIcon3;
-    @BindView(R.id.right_icon4)
-    TextView rightIcon4;
+
     @BindView(R.id.top_icon)
-    TextView topIcon;
+    ImageView topIcon;
     @BindView(R.id.top_icon2)
-    TextView topIcon2;
+    ImageView topIcon2;
     @BindView(R.id.top_icon2_disconnect)
-    TextView topIcon2Disconnect;
+    ImageView topIcon2Disconnect;
     @BindView(R.id.top_icon3)
-    TextView topIcon3;
+    ImageView topIcon3;
 
     @BindView(R.id.cartoon_head)
     ImageView cartoonHead;
@@ -137,14 +142,46 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     RelativeLayout mainui;
     @BindView(R.id.buddle_text)
     TextView buddleText;
-//    @BindView(R.id.charging_dot)
-//    ImageView chargingDot;
     @BindView(R.id.touch_control)
     RelativeLayout touchControl;
     @BindView(R.id.indicator)
     ImageView actionIndicator;
     @BindView(R.id.indicator0)
     ImageView indicator;
+    @BindView(R.id.tv_habits_event_time)
+    TextView habitsTime;
+    @BindView(R.id.tv_hibits_event_name)
+    TextView habitsName;
+    @BindView(R.id.top_icon4)
+    ImageView topIcon4;
+    @BindView(R.id.iv_hibits_reminder)
+    ImageView habits_reminder;
+    @BindView(R.id.rl_hibits_event)
+    RelativeLayout rlHibitsEvent;
+    @BindView(R.id.rl_course_center)
+    RelativeLayout rlCourseCenter;
+    @BindView(R.id.iv_habits)
+    ImageView ivHabits;
+    @BindView(R.id.iv_course)
+    ImageView ivCourse;
+    @BindView(R.id.ll_action)
+    LinearLayout llAction;
+    @BindView(R.id.ll_remote)
+    LinearLayout llRemote;
+    @BindView(R.id.ll_program)
+    LinearLayout llProgram;
+    @BindView(R.id.ll_community)
+    LinearLayout llCommunity;
+    @BindView(R.id.iv_action)
+    ImageView ivAction;
+    @BindView(R.id.iv_remote)
+    ImageView ivRemote;
+    @BindView(R.id.iv_program)
+    ImageView ivProgram;
+    @BindView(R.id.iv_community)
+    ImageView ivCommunity;
+    @BindView(R.id.rl_top_icon)
+    RelativeLayout rlTopIcon;
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
@@ -175,7 +212,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private TimerTask mBuddleTextTimeOutTask;
     private LooperThread looperThread;
     Timer mChargetimer;
-    private int tmp=-1;
+    private int tmp = -1;
     TimerTask mChargingTimeoutTask;
     private byte mChargeValue = 0;
     private int mPowerValue = 0;
@@ -244,9 +281,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int CURRENT_ACTION_NAME = 0;
     private boolean cartoon_enable = false;
     private static final int ROBOT_GOTO_BIND = 20;
-    AnimationDrawable  mActionIndicator=null;
-    long mClickTime=0;
-    int CLICK_THRESHOLD_DUPLICATE=800;
+    AnimationDrawable mActionIndicator = null;
+    long mClickTime = 0;
+    int CLICK_THRESHOLD_DUPLICATE = 800;
+    Animation hyperspaceJump;
+
+    private boolean hasInitUI = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -255,7 +295,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mCurrentTouchTime = System.currentTimeMillis();
         getScreenInch();
-        initUI();
+
         mHelper = MainUiBtHelper.getInstance(getContext());
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         filter1.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
@@ -267,26 +307,32 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         // 启动发送clientId服务
         SendClientIdService.startService(MainActivity.this);
 
-        mActionIndicator=(AnimationDrawable)actionIndicator.getBackground();
+        mActionIndicator = (AnimationDrawable) actionIndicator.getBackground();
         mActionIndicator.setOneShot(false);
-        mActionIndicator.setVisible(true,true);
+        mActionIndicator.setVisible(true, true);
         mPresenter.registerEventBus();
+        mPresenter.getXGInfo();
+        if (!MainActivityGuideView.hasShowGuide()) {
+            MainActivityGuideView.getInstant(this);
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         UbtLog.d(TAG, "onStart");
+
+        initUI();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         UbtLog.d(TAG, "onResume");
-        initUI();
-        mPresenter.getXGInfo();
+
+        showUserPicIcon();
+        requireBehaviourNextEvent();
         if (!isBulueToothConnected()) {
-            showDisconnectIcon();
             showGlobalButtonAnmiationEffect(false);
             looperThread.send(createMessage(Constant.APP_LAUNCH_STATUS));
             // looperThread.send(createMessage(ROBOT_LOW_POWER_LESS_FIVE_STATUS));
@@ -296,6 +342,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     AutoScanConnectService.startService(MainActivity.this); //add by dicy.cheng 打开自动连接
                 }
             }, 100);
+            showDisconnectIcon(true);
         } else {
             MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
             if (cartoonAction != null) {
@@ -309,10 +356,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     if (networkInfo.status) {
                         hiddenDisconnectIcon();
                     } else {
-                        showDisconnectIcon();
+                        showDisconnectIcon(true);
                     }
                 } else {
-                    showDisconnectIcon();
+                    showDisconnectIcon(true);
                 }
             }
             getCurrentPower();
@@ -320,8 +367,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
     private void getCurrentPower() {
-        int indexPower=mPresenter.getPowerCapacity(MainUiBtHelper.getInstance(getContext()).getPowerValue());
-        showBatteryCapacity(MainUiBtHelper.getInstance(getContext()).getChargingState(),indexPower);
+        int indexPower = mPresenter.getPowerCapacity(MainUiBtHelper.getInstance(getContext()).getPowerValue());
+        showBatteryCapacity(MainUiBtHelper.getInstance(getContext()).getChargingState(), indexPower);
     }
 
     @Override
@@ -377,15 +424,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     };
 
 
-    @OnClick({R.id.top_icon, R.id.top_icon2, R.id.top_icon3, R.id.ll_remote, R.id.ll_action, R.id.ll_program,
+    @OnClick({R.id.rl_top_icon, R.id.top_icon2, R.id.top_icon3, R.id.top_icon4, R.id.ll_remote, R.id.ll_action, R.id.ll_program,
             R.id.ll_community, R.id.cartoon_chest, R.id.cartoon_head, R.id.cartoon_left_hand,
             R.id.cartoon_right_hand, R.id.cartoon_left_leg, R.id.cartoon_right_leg, R.id.rl_course_center, R.id.rl_hibits_event})
     protected void switchActivity(View view) {
         UbtLog.d(TAG, "VIEW +" + view.getTag());
         Intent mLaunch = new Intent();
         switch (view.getId()) {
-            case R.id.top_icon:
-                if(!removeDuplicateClickEvent()) {
+            case R.id.rl_top_icon:
+                if (!removeDuplicateClickEvent()) {
                     Intent intent = new Intent();
                     UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
                     if (null == userModel) {
@@ -396,6 +443,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         } else if (TextUtils.isEmpty(userModel.getAge())) {
                             intent.setClass(this, UserEditActivity.class);
                         } else {
+                            intent.putExtra(UserCenterActivity.USER_CURRENT_POSITION,0);
                             intent.setClass(this, UserCenterActivity.class);
                         }
                     }
@@ -422,6 +470,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     }
                 } else {
                     showBluetoothConnectDialog();
+                }
+                break;
+            case R.id.top_icon4:
+                if(!removeDuplicateClickEvent()) {
+                    WebActivity.launchActivity(this,HttpEntity.VOICE_CMD,"语音指令");
                 }
                 break;
             case R.id.ll_remote:
@@ -459,7 +512,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_community:
                 //BehaviorHabitsActivity.LaunchActivity(this);
-                ToastUtils.showShort("程序猿正在施工中！！！");
+                ToastUtils.showShort("即将开放，敬请期待!");
                 break;
             case R.id.cartoon_head:
                 UbtLog.d(TAG, "click head");
@@ -589,7 +642,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showDisconnectIcon();
+                        showDisconnectIcon(false);
                     }
                 });
             }
@@ -650,9 +703,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             return;
                         }
                         showBluetoothDisconnect();
-                        } else {
-                            UbtLog.d(TAG, "onLostBtCoon " + "  为空");
-                        }
+                    } else {
+                        UbtLog.d(TAG, "onLostBtCoon " + "  为空");
+                    }
                 }
             });
         } else if (event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS) {
@@ -671,6 +724,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 MainUiBtHelper.getInstance(getContext()).readNetworkStatus();
                 looperThread.send(createMessage(Constant.APP_BLUETOOTH_CONNECTED));
             }
+        }else if(event.getEvent()==RobotEvent.Event.ENTER_CONNECT_DEVICE){
+            gotoConnectBluetooth();
         }
 
     }
@@ -689,6 +744,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             showGlobalButtonAnmiationEffect(false);
         }
     }
+
     void showBluetoothDisconnect() {
         dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
                 .setTitle("提示")
@@ -853,23 +909,23 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                        if (charging != null) {
-                                            if(index!=(com.ubt.alpha1e.data.Constant.powerThreshold.length-1)) {
-                                                charging.setBackground(getDrawableRes("power" + com.ubt.alpha1e.data.Constant.powerThreshold[index + 1]));
-                                            }else {
-                                                //BATTERY ENOUGH
-                                                charging.setBackground(getDrawableRes("power" + com.ubt.alpha1e.data.Constant.powerThreshold[index]));
-                                            }
+                                    if (charging != null) {
+                                        if(index!=(com.ubt.alpha1e.data.Constant.powerThreshold.length-1)) {
+                                            charging.setBackground(getDrawableRes("power" + com.ubt.alpha1e.data.Constant.powerThreshold[index + 1]));
+                                        }else {
+                                            //BATTERY ENOUGH
+                                            charging.setBackground(getDrawableRes("power" + com.ubt.alpha1e.data.Constant.powerThreshold[index]));
                                         }
+                                    }
                                 }
                             });
                             Thread.sleep(charging_shrink_interval);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                        if (charging != null) {
-                                            charging.setBackground(getDrawableRes("power" + com.ubt.alpha1e.data.Constant.powerThreshold[index]));
-                                        }
+                                    if (charging != null) {
+                                        charging.setBackground(getDrawableRes("power" + com.ubt.alpha1e.data.Constant.powerThreshold[index]));
+                                    }
                                 }
                             });
 
@@ -933,7 +989,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     public void showGlobalButtonAnmiationEffect(final boolean status) {
-            UbtLog.d(TAG,"ICON ANIMATION : "+status);
+        UbtLog.d(TAG,"ICON ANIMATION : "+status);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -954,6 +1010,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     public void hiddenBuddleText() {
         hiddenBuddleTextView();
+    }
+
+    @Override
+    public Handler getHandler() {
+        return m_Handler;
     }
 
     //若要使用此功能，需先绑定机器人！
@@ -1046,20 +1107,22 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         UbtLog.d(TAG, "status:" + baseResponseModel.status);
                         UbtLog.d(TAG, "info:" + baseResponseModel.info);
                         if (baseResponseModel.status) {
-                            UbtLog.d(TAG, "绑定成功");
+                            UbtLog.d(TAG, "绑定状态获取验证");
                             if (baseResponseModel.models == null || baseResponseModel.models.equals("")) {
                                 adviceBindSuccess();
-                            } else if (baseResponseModel.models != null && baseResponseModel.models.equals("1002")) {
-                                adviceBindFail("机器人已被他人绑定！");
-                            } else {
-                                adviceBindFail("");
+                            } else if (baseResponseModel.models != null && baseResponseModel.models.startsWith("1002:")) {
+                                if(baseResponseModel.models.length() == 5){
+                                    return;
+                                }
+                                adviceBindFail("机器人已被 "+ FileUtils.utf8ToString(baseResponseModel.models.substring(5))+" 绑定！");
+                            } else if(baseResponseModel.models != null && baseResponseModel.models.equals("1004")){
+                                adviceBindFail("机器人不存在！");
                             }
                         } else {
                             adviceBindFail("");
                             UbtLog.d(TAG, "绑定失败");
                         }
                         break;
-
                     default:
                         break;
                 }
@@ -1116,24 +1179,186 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     protected void initUI() {
-        return;
-        //course center icon
-        /*int course_icon_margin_left = 22;
-        int course_icon_margin_top = 260;
-        RelativeLayout.LayoutParams rlParams = (RelativeLayout.LayoutParams) bottomIcon.getLayoutParams();
-        rlParams.leftMargin = getAdaptiveScreenX(course_icon_margin_left);
-        rlParams.topMargin = getAdaptiveScreenY(course_icon_margin_top);
-        bottomIcon.setLayoutParams(rlParams);
-        bottomIcon.setVisibility(View.GONE);*/
 
-    //Buddle Text
-        /*int buddle_text_margin_left = 388;
-        int buddle_text_margin_top = 116;//height*0.31
-        RelativeLayout.LayoutParams buddleParams = (RelativeLayout.LayoutParams) buddleText.getLayoutParams();
-        buddleParams.leftMargin = getAdaptiveScreenX(buddle_text_margin_left);
-        buddleParams.topMargin = getAdaptiveScreenY(buddle_text_margin_top);
-        buddleText.setLayoutParams(buddleParams);*/
-   }
+        if (SizeUtils.isComprehensiveScreen(getContext())) {
+
+            rlHibitsEvent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+                @Override
+                public void onGlobalLayout() {
+                    UbtLog.d(TAG, "rlHibitsEvent = " + rlHibitsEvent );
+                    if (rlHibitsEvent != null) {
+                        rlHibitsEvent.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!hasInitUI && rlHibitsEvent.getHeight() > 0) {
+                                    hasInitUI = true;
+
+                                    // 获取屏幕密度（方法2）
+                                    DisplayMetrics dm = getResources().getDisplayMetrics();
+                                    UbtLog.d(TAG, "isComprehensiveScreen = " + SizeUtils.isComprehensiveScreen(getContext()) + "/" + dm.density + "/" + dm.scaledDensity);
+
+                                    float tensileRatio = 1.0f * dm.widthPixels / 1920;//屏幕拉升比例，以宽度1920为基准
+                                    float densityRatio = 3.0f / dm.density;//屏幕密度比例，以密度3.0为基准
+
+                                    //中间机器人UI
+                                    RelativeLayout.LayoutParams robotLp = (RelativeLayout.LayoutParams) cartoonAction.getLayoutParams();
+                                    robotLp.topMargin = (int) (robotLp.topMargin * densityRatio * densityRatio);
+                                    robotLp.width = (int) (cartoonAction.getWidth() * densityRatio * tensileRatio);
+                                    robotLp.height = (int) (cartoonAction.getHeight() * densityRatio);
+                                    UbtLog.d(TAG, "robotLp.topMargin =>>> " + robotLp.topMargin);
+                                    cartoonAction.setLayoutParams(robotLp);
+
+                                    //行为习惯按键
+                                    RelativeLayout.LayoutParams rlHibitsLp = (RelativeLayout.LayoutParams) rlHibitsEvent.getLayoutParams();
+                                    rlHibitsLp.leftMargin = (int) (rlHibitsLp.leftMargin * densityRatio * tensileRatio);
+                                    UbtLog.d(TAG, "rlHibitsLp.leftMargin = " + rlHibitsLp.leftMargin + "/" + rlHibitsLp.width + "/" + rlHibitsLp.height);
+                                    rlHibitsEvent.setLayoutParams(rlHibitsLp);
+
+                                    RelativeLayout.LayoutParams ivHibitsLp = (RelativeLayout.LayoutParams) ivHabits.getLayoutParams();
+                                    ivHibitsLp.width = (int) (ivHabits.getWidth() * densityRatio * tensileRatio);
+                                    ivHibitsLp.height = (int) (ivHabits.getHeight() * densityRatio);
+                                    UbtLog.d(TAG, "ivHibitsLp.width = " + ivHibitsLp.width + "/" + ivHibitsLp.height);
+                                    ivHabits.setLayoutParams(ivHibitsLp);
+
+                                    //课程中心按键
+                                    RelativeLayout.LayoutParams rlCourseLp = (RelativeLayout.LayoutParams) rlCourseCenter.getLayoutParams();
+                                    rlCourseLp.rightMargin = (int) (rlCourseLp.rightMargin * densityRatio * tensileRatio);
+                                    UbtLog.d(TAG, "rlCourseLp.rightMargin = " + rlCourseLp.rightMargin);
+                                    rlCourseCenter.setLayoutParams(rlCourseLp);
+
+                                    RelativeLayout.LayoutParams ivCourseLp = (RelativeLayout.LayoutParams) ivCourse.getLayoutParams();
+                                    ivCourseLp.width = (int) (ivCourse.getWidth() * densityRatio * tensileRatio);
+                                    ivCourseLp.height = (int) (ivCourse.getHeight() * densityRatio);
+                                    UbtLog.d(TAG, "ivCourseLp.width = " + ivCourseLp.width);
+                                    ivCourse.setLayoutParams(ivCourseLp);
+
+                                    //个人中心按键
+                                    RelativeLayout.LayoutParams rlTopIconLp = (RelativeLayout.LayoutParams) rlTopIcon.getLayoutParams();
+                                    rlTopIconLp.leftMargin = (int) (rlTopIconLp.leftMargin * densityRatio * tensileRatio);
+                                    rlTopIconLp.topMargin = (int) (rlTopIconLp.topMargin * densityRatio);
+                                    rlTopIconLp.width = (int) (rlTopIcon.getWidth() * densityRatio * tensileRatio);
+                                    rlTopIconLp.height = (int) (rlTopIcon.getHeight() * densityRatio);
+                                    rlTopIcon.setLayoutParams(rlTopIconLp);
+
+                                    RelativeLayout.LayoutParams topIconLp = (RelativeLayout.LayoutParams) topIcon.getLayoutParams();
+                                    topIconLp.width = (int) (topIcon.getWidth() * densityRatio * tensileRatio);
+                                    topIconLp.height = (int) (topIcon.getHeight() * densityRatio);
+                                    topIcon.setLayoutParams(topIconLp);
+
+                                    //蓝牙连接按键
+                                    RelativeLayout.LayoutParams topIcon2Lp = (RelativeLayout.LayoutParams) topIcon2.getLayoutParams();
+                                    topIcon2Lp.topMargin = (int) (topIcon2Lp.topMargin * densityRatio);
+                                    topIcon2Lp.width = (int) (topIcon2.getWidth() * densityRatio * tensileRatio);
+                                    topIcon2Lp.height = (int) (topIcon2.getHeight() * densityRatio);
+                                    topIcon2.setLayoutParams(topIcon2Lp);
+
+                                    RelativeLayout.LayoutParams topIcon2DisconnectLp = (RelativeLayout.LayoutParams) topIcon2Disconnect.getLayoutParams();
+                                    topIcon2DisconnectLp.topMargin = (int) (topIcon2DisconnectLp.topMargin * densityRatio);
+                                    topIcon2DisconnectLp.width = (int) (topIcon2Disconnect.getWidth() * densityRatio * tensileRatio);
+                                    topIcon2DisconnectLp.height = (int) (topIcon2Disconnect.getHeight() * densityRatio);
+                                    topIcon2Disconnect.setLayoutParams(topIcon2DisconnectLp);
+
+                                    //指令按键
+                                    RelativeLayout.LayoutParams topIcon4Lp = (RelativeLayout.LayoutParams) topIcon4.getLayoutParams();
+                                    topIcon4Lp.topMargin = (int) (topIcon4Lp.topMargin * densityRatio);
+                                    topIcon4Lp.width = (int) (topIcon4.getWidth() * densityRatio * tensileRatio);
+                                    topIcon4Lp.height = (int) (topIcon4.getHeight() * densityRatio);
+                                    topIcon4.setLayoutParams(topIcon4Lp);
+
+                                    //播放按键开始
+                                    RelativeLayout.LayoutParams topIcon3Lp = (RelativeLayout.LayoutParams) topIcon3.getLayoutParams();
+                                    topIcon3Lp.rightMargin = (int) (topIcon3Lp.rightMargin * densityRatio * tensileRatio);
+                                    topIcon3Lp.topMargin = (int) (topIcon3Lp.topMargin * densityRatio);
+                                    topIcon3Lp.width = (int) (topIcon3.getWidth() * densityRatio * tensileRatio);
+                                    topIcon3Lp.height = (int) (topIcon3.getHeight() * densityRatio);
+                                    topIcon3.setLayoutParams(topIcon3Lp);
+
+                                    RelativeLayout.LayoutParams indicatorLp = (RelativeLayout.LayoutParams) indicator.getLayoutParams();
+                                    indicatorLp.rightMargin = (int) (indicatorLp.rightMargin * densityRatio * tensileRatio);
+                                    indicatorLp.topMargin = (int) (indicatorLp.topMargin * densityRatio);
+                                    indicatorLp.width = (int) (indicator.getWidth() * densityRatio * tensileRatio);
+                                    indicatorLp.height = (int) (indicator.getHeight() * densityRatio);
+                                    indicator.setLayoutParams(indicatorLp);
+
+                                    RelativeLayout.LayoutParams actionIndicatorLp = (RelativeLayout.LayoutParams) actionIndicator.getLayoutParams();
+                                    actionIndicatorLp.rightMargin = (int) (actionIndicatorLp.rightMargin * densityRatio * tensileRatio);
+                                    actionIndicatorLp.topMargin = (int) (actionIndicatorLp.topMargin * densityRatio);
+                                    actionIndicatorLp.width = (int) (actionIndicator.getWidth() * densityRatio * tensileRatio);
+                                    actionIndicatorLp.height = (int) (actionIndicator.getHeight() * densityRatio);
+                                    actionIndicator.setLayoutParams(actionIndicatorLp);
+                                    //播放按键结束
+
+                                    //电量按键R
+                                    RelativeLayout.LayoutParams chargingLp = (RelativeLayout.LayoutParams) charging.getLayoutParams();
+                                    chargingLp.bottomMargin = (int) (chargingLp.bottomMargin * densityRatio);
+                                    chargingLp.width = (int) (charging.getWidth() * densityRatio * tensileRatio);
+                                    chargingLp.height = (int) (charging.getHeight() * densityRatio);
+                                    charging.setLayoutParams(chargingLp);
+
+                                    //动作按键
+                                    RelativeLayout.LayoutParams llActionLp = (RelativeLayout.LayoutParams) llAction.getLayoutParams();
+                                    llActionLp.bottomMargin = (int) (llActionLp.bottomMargin * densityRatio);
+                                    llActionLp.rightMargin = (int) (llActionLp.rightMargin * densityRatio);
+                                    llAction.setLayoutParams(llActionLp);
+
+                                    LinearLayout.LayoutParams ivActionLp = (LinearLayout.LayoutParams) ivAction.getLayoutParams();
+                                    ivActionLp.width = (int) (ivAction.getWidth() * densityRatio * tensileRatio);
+                                    ivActionLp.height = (int) (ivAction.getHeight() * densityRatio);
+                                    ivAction.setLayoutParams(ivActionLp);
+
+                                    //遥控器按键
+                                    RelativeLayout.LayoutParams llRemoteLp = (RelativeLayout.LayoutParams) llRemote.getLayoutParams();
+                                    llRemoteLp.bottomMargin = (int) (llRemoteLp.bottomMargin * densityRatio);
+                                    llRemoteLp.rightMargin = (int) (llRemoteLp.rightMargin * densityRatio);
+                                    llRemote.setLayoutParams(llRemoteLp);
+
+                                    LinearLayout.LayoutParams ivRemoteLp = (LinearLayout.LayoutParams) ivRemote.getLayoutParams();
+                                    ivRemoteLp.width = (int) (ivRemote.getWidth() * densityRatio * tensileRatio);
+                                    ivRemoteLp.height = (int) (ivRemote.getHeight() * densityRatio);
+                                    ivRemote.setLayoutParams(ivRemoteLp);
+
+                                    //编程按键
+                                    RelativeLayout.LayoutParams llProgramLp = (RelativeLayout.LayoutParams) llProgram.getLayoutParams();
+                                    llProgramLp.bottomMargin = (int) (llProgramLp.bottomMargin * densityRatio);
+                                    llProgramLp.leftMargin = (int) (llProgramLp.leftMargin * densityRatio);
+                                    llProgram.setLayoutParams(llProgramLp);
+
+                                    LinearLayout.LayoutParams ivProgramLp = (LinearLayout.LayoutParams) ivProgram.getLayoutParams();
+                                    ivProgramLp.width = (int) (ivProgram.getWidth() * densityRatio * tensileRatio);
+                                    ivProgramLp.height = (int) (ivProgram.getHeight() * densityRatio);
+                                    ivProgram.setLayoutParams(ivProgramLp);
+
+                                    //社区按键
+                                    RelativeLayout.LayoutParams llCommunityLp = (RelativeLayout.LayoutParams) llCommunity.getLayoutParams();
+                                    llCommunityLp.bottomMargin = (int) (llCommunityLp.bottomMargin * densityRatio);
+                                    llCommunityLp.leftMargin = (int) (llCommunityLp.leftMargin * densityRatio);
+                                    llCommunity.setLayoutParams(llCommunityLp);
+
+                                    LinearLayout.LayoutParams ivCommunityLp = (LinearLayout.LayoutParams) ivCommunity.getLayoutParams();
+                                    ivCommunityLp.width = (int) (ivCommunity.getWidth() * densityRatio * tensileRatio);
+                                    ivCommunityLp.height = (int) (ivCommunity.getHeight() * densityRatio);
+                                    ivCommunity.setLayoutParams(ivCommunityLp);
+
+
+                                    //社区按键
+                                    RelativeLayout.LayoutParams buddleTextLp = (RelativeLayout.LayoutParams) buddleText.getLayoutParams();
+                                    buddleTextLp.topMargin = (int) (buddleTextLp.topMargin * densityRatio);
+                                    buddleTextLp.leftMargin = (int) (buddleTextLp.leftMargin * densityRatio);
+                                    buddleText.setLayoutParams(buddleTextLp);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+
+
+        }
+    }
+
+
+
     private int getAdaptiveScreenX(int init_x) {
         return init_x * screen_width / init_screen_width;
     }
@@ -1202,9 +1427,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageEvent(MessageEvent event) {
-            mPresenter.dealMessage(event.message);
+        mPresenter.dealMessage(event.message);
     }
-   private Message createMessage(byte cmd) {
+    private Message createMessage(byte cmd) {
         Message message = new Message();
         Bundle bundle = new Bundle();
         bundle.putByte(STATUS_MACHINE,cmd);
@@ -1213,147 +1438,149 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     }
 
 
-	    @Override
+    @Override
     public void showBatteryCapacity(final boolean isCharging, final int value) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showBatteryUi();
-                        if(isCharging) {
-                               if(mChargetimer==null||value!=tmp) {
-                                   stopchargeAsynchronousTask();
-                                   chargeAsynchronousTask(value);
-                                   tmp=value;
-                               }
-                        }else {
-                            stopchargeAsynchronousTask();
-                            charging.setBackground(getDrawableRes("power" + com.ubt.alpha1e.data.Constant.powerThreshold[value]));
-                        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showBatteryUi();
+                if(isCharging) {
+                    if(mChargetimer==null||value!=tmp) {
+                        stopchargeAsynchronousTask();
+                        chargeAsynchronousTask(value);
+                        tmp=value;
                     }
-                });
+                }else {
+                    stopchargeAsynchronousTask();
+                    charging.setBackground(getDrawableRes("power" + com.ubt.alpha1e.data.Constant.powerThreshold[value]));
+                }
+            }
+        });
     }
 
 
     @Override
     public void handleMessage(Bundle bundle) {
 
-      Byte status= bundle.getByte(STATUS_MACHINE);
-        UbtLog.d(TAG,"STATE MACHINE IS "+status);
+        Byte status= bundle.getByte(STATUS_MACHINE);
+        //  UbtLog.d(TAG,"STATE MACHINE IS "+status);
         switch (status){
-           case Constant.APP_LAUNCH_STATUS:  //启动应用,虚拟形象睡觉姿势
-             runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       showBuddleText(getString(R.string.buddle_text_init_status));
-                       buddleTextAsynchronousTask();
-                       cartoonAction.setBackgroundResource(R.drawable.sleep21);
-                       cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
-                       hiddenCartoonTouchView();
-                       recoveryCartoonBodyUi();
-                       hiddenBatteryUi();
-                       //showCartoonAction(cartoon_action_sleep);
-                   }
-               });
-               break;
-           case Constant.APP_BLUETOOTH_CONNECTED: //蓝牙连接成功,虚拟形象站立姿势
-               UbtLog.d(TAG,"APP_CONNECTED"+status);
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       if(isNetworkConnect){
-                           hiddenDisconnectIcon();
-                       }
-                       if(!cartoon_enable){
-                           cartoonAction.setBackgroundResource(R.drawable.main_robot);
-                           cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
-                       }
-                       showCartoonAction(cartoon_action_squat);
-                       showBuddleText(getString(R.string.buddle_bluetoothConnection));
-                      // showBattryUi();
-                   }
-               });
-               break;
-           case Constant.APP_BLUETOOTH_CLOSE: //手机端，主动关闭蓝牙，虚拟形象睡觉姿势
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       showDisconnectIcon();
-                       stopchargeAsynchronousTask();
-                       stopBuddleTextAsynchronousTask();
+            case Constant.APP_LAUNCH_STATUS:  //启动应用,虚拟形象睡觉姿势
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                         showBuddleText(getString(R.string.buddle_text_init_status));
-                       //showCartoonAction(cartoon_action_sleep);
-                       cartoonAction.setBackgroundResource(R.drawable.sleep21);
-                       cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
-                       recoveryCartoonBodyUi();
-                       hiddenBatteryUi();
-                   }
-               });
-               break;
-           case Constant.ROBOT_LOW_POWER_LESS_TWENTY_STATUS: //低电量的时候，小于百分之20，弹框处理
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                      // new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_TWENTY_THRESHOLD).builder().show();
-                   }
-               });
-               break;
-           case Constant.ROBOT_LOW_POWER_LESS_FIVE_STATUS:  //低电量的时候，小于百分之5，弹框，虚拟形象蹲下，气泡处理
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       showCartoonAction(cartoon_aciton_squat_reverse);
-                      // new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_FIVE_THRESHOLD).builder().show();
-                   }
-               });
-               for(int i=0;i<3;i++){
-                   runOnUiThread(new Runnable() {
-                       @Override
-                       public void run() {
-                           showBuddleText(mPresenter.getBuddleText(Constant.BUDDLE_LOW_BATTERY_TEXT));
-                       }
-                   });
-                   try {
-                       Thread.sleep(3000);
-                   }catch(InterruptedException e){
-                       e.printStackTrace();
-                   }
-               }
-               break;
-           case Constant.ROBOT_SLEEP_EVENT: //休眠执行蹲下动作
-               runOnUiThread(new Runnable() {
-               @Override
-               public void run() {
-                   showCartoonAction(cartoon_aciton_squat_reverse);
-               }
-           });
-               break;
-           case Constant.ROBOT_HIT_HEAD:  //该指令没有使用
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       showCartoonAction(cartoon_action_enjoy);
-                   }
-               });
-               break;
-           case Constant.ROBOT_WAKEUP_ACTION: //休眠后，虚拟形象站立
-               runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    showCartoonAction(cartoon_action_squat);
+                        buddleTextAsynchronousTask();
+                        if(cartoonAction!=null) {
+                            cartoonAction.setBackgroundResource(R.drawable.sleep21);
+                            cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
+                        }
+                        hiddenCartoonTouchView();
+                        recoveryCartoonBodyUi();
+                        hiddenBatteryUi();
+                        //showCartoonAction(cartoon_action_sleep);
+                    }
+                });
+                break;
+            case Constant.APP_BLUETOOTH_CONNECTED: //蓝牙连接成功,虚拟形象站立姿势
+                UbtLog.d(TAG,"APP_CONNECTED"+status);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(isNetworkConnect){
+                            hiddenDisconnectIcon();
+                        }
+                        if(!cartoon_enable){
+                            cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                            cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
+                        }
+                        showCartoonAction(cartoon_action_squat);
+                        showBuddleText(getString(R.string.buddle_bluetoothConnection));
+                        // showBattryUi();
+                    }
+                });
+                break;
+            case Constant.APP_BLUETOOTH_CLOSE: //手机端，主动关闭蓝牙，虚拟形象睡觉姿势
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showDisconnectIcon(false);
+                        stopchargeAsynchronousTask();
+                        stopBuddleTextAsynchronousTask();
+                        showBuddleText(getString(R.string.buddle_text_init_status));
+                        //showCartoonAction(cartoon_action_sleep);
+                        cartoonAction.setBackgroundResource(R.drawable.sleep21);
+                        cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
+                        recoveryCartoonBodyUi();
+                        hiddenBatteryUi();
+                    }
+                });
+                break;
+            case Constant.ROBOT_LOW_POWER_LESS_TWENTY_STATUS: //低电量的时候，小于百分之20，弹框处理
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_TWENTY_THRESHOLD).builder().show();
+                    }
+                });
+                break;
+            case Constant.ROBOT_LOW_POWER_LESS_FIVE_STATUS:  //低电量的时候，小于百分之5，弹框，虚拟形象蹲下，气泡处理
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showCartoonAction(cartoon_aciton_squat_reverse);
+                        // new LowBatteryDialog(getContext()).setBatteryThresHold(LOW_BATTERY_FIVE_THRESHOLD).builder().show();
+                    }
+                });
+                for(int i=0;i<3;i++){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showBuddleText(mPresenter.getBuddleText(Constant.BUDDLE_LOW_BATTERY_TEXT));
+                        }
+                    });
+                    try {
+                        Thread.sleep(3000);
+                    }catch(InterruptedException e){
+                        e.printStackTrace();
+                    }
                 }
-            });
-            break;
-           case Constant.ROBOT_POWEROFF:  //该指令没有使用，通过蓝牙断开回调实现机器人关机的现象
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       showCartoonAction(cartoon_action_sleep);
-                       recoveryCartoonBodyUi();
-                       showDisconnectIcon();
-                       stopchargeAsynchronousTask();
-                   }
-               });
-               break;
+                break;
+            case Constant.ROBOT_SLEEP_EVENT: //休眠执行蹲下动作
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showCartoonAction(cartoon_aciton_squat_reverse);
+                    }
+                });
+                break;
+            case Constant.ROBOT_HIT_HEAD:  //该指令没有使用
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showCartoonAction(cartoon_action_enjoy);
+                    }
+                });
+                break;
+            case Constant.ROBOT_WAKEUP_ACTION: //休眠后，虚拟形象站立
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showCartoonAction(cartoon_action_squat);
+                    }
+                });
+                break;
+            case Constant.ROBOT_POWEROFF:  //该指令没有使用，通过蓝牙断开回调实现机器人关机的现象
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showCartoonAction(cartoon_action_sleep);
+                        recoveryCartoonBodyUi();
+                        showDisconnectIcon(true);
+                        stopchargeAsynchronousTask();
+                    }
+                });
+                break;
             case Constant.ROBOT_hand_stand: //机器人被翻转，虚拟形象翻转
                 runOnUiThread(new Runnable() {
                     @Override
@@ -1373,8 +1600,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case Constant.ROBOT_default_gesture:
                 runOnUiThread(new Runnable() {
                     @Override
-                          public void run(){
-                            cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                    public void run(){
+                        cartoonAction.setBackgroundResource(R.drawable.main_robot);
                     }
                 });
             case ROBOT_sleep_gesture:
@@ -1394,43 +1621,43 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                     @Override
                     public void run(){
                         if(APP_CURRENT_STATUS!=ROBOT_SLEEP_EVENT) {
-                        // showCartoonAction(cartoon_action_squat);
-                        //站立
-                        cartoonAction.setBackgroundResource(R.drawable.main_robot);
-                    }else {
-                        //蹲下
-                         if(cartoon_enable) {
-                             cartoonAction.setBackgroundResource(R.drawable.squat60);
-                         }else {
-                             cartoonAction.setBackgroundResource(R.drawable.main_robot);
-                         }
+                            // showCartoonAction(cartoon_action_squat);
+                            //站立
+                            cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                        }else {
+                            //蹲下
+                            if(cartoon_enable) {
+                                cartoonAction.setBackgroundResource(R.drawable.squat60);
+                            }else {
+                                cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                            }
+                        }
                     }
-                }
                 });
                 break;
-           default:
-               UbtLog.d(TAG,"NO SITUATION "+status);
-               break;
+            default:
+                UbtLog.d(TAG,"NO SITUATION "+status);
+                break;
 
-       }
-       APP_CURRENT_STATUS=status;
+        }
+        APP_CURRENT_STATUS=status;
     }
 
     private void recoveryLowBatteryFlag(){
-       ENTER_LOW_BATTERY_TWENTY=false;
-       ENTER_LOW_BATTERY_FIVE=false;
-   }
+        ENTER_LOW_BATTERY_TWENTY=false;
+        ENTER_LOW_BATTERY_FIVE=false;
+    }
 
-   private void hiddenCartoonTouchView(){
-       if(cartoonChest!=null) {
-           cartoonChest.setVisibility(View.INVISIBLE);
-           cartoonHead.setVisibility(View.INVISIBLE);
-           cartoonLeftHand.setVisibility(View.INVISIBLE);
-           cartoonRightHand.setVisibility(View.INVISIBLE);
-           cartoonLeftLeg.setVisibility(View.INVISIBLE);
-           cartoonRightLeg.setVisibility(View.INVISIBLE);
-       }
-   }
+    private void hiddenCartoonTouchView(){
+        if(cartoonChest!=null) {
+            cartoonChest.setVisibility(View.INVISIBLE);
+            cartoonHead.setVisibility(View.INVISIBLE);
+            cartoonLeftHand.setVisibility(View.INVISIBLE);
+            cartoonRightHand.setVisibility(View.INVISIBLE);
+            cartoonLeftLeg.setVisibility(View.INVISIBLE);
+            cartoonRightLeg.setVisibility(View.INVISIBLE);
+        }
+    }
     private void showCartoonTouchView(){
         if(cartoonChest!=null) {
             cartoonChest.setVisibility(View.VISIBLE);
@@ -1455,85 +1682,160 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
     }
 
-  private void recoveryCartoonBodyUi(){
-      if(charging!=null) {
-          //charging.setBackground(getDrawableRes("charging_normal"));
-          //chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
-          cartoonBodyTouchBg.setBackground(getDrawableRes("main_robot_background"));
-      }
-  }
-  private void hiddenBatteryUi(){
-      if(charging!=null) {
-          charging.setVisibility(View.INVISIBLE);
-      }
-  }
- private void showBatteryUi(){
-     if(charging!=null) {
-         charging.setVisibility(View.VISIBLE);
-     }
- }
-
-  private void showUserPicIcon(){
-      UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
-      UbtLog.d(TAG,"user image picture"+userModel.getHeadPic());
-  }
-  private void hiddenDisconnectIcon(){
-      if(topIcon2Disconnect!=null)
-      topIcon2Disconnect.setVisibility(View.INVISIBLE);
-  }
-    private void showDisconnectIcon(){
-        if(topIcon2Disconnect!=null)
-        topIcon2Disconnect.setVisibility(View.VISIBLE);
+    private void recoveryCartoonBodyUi(){
+        if(charging!=null) {
+            //charging.setBackground(getDrawableRes("charging_normal"));
+            //chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
+            cartoonBodyTouchBg.setBackground(getDrawableRes("main_robot_background"));
+        }
     }
-  private void sendCommandToRobot(String absouteActionPath){
+    private void hiddenBatteryUi(){
+        if(charging!=null) {
+            charging.setVisibility(View.INVISIBLE);
+        }
+    }
+    private void showBatteryUi(){
+        if(charging!=null) {
+            charging.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showUserPicIcon(){
+        UserModel mUserModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+        if(mUserModel != null) {
+            UbtLog.d(TAG, "user image picture" + mUserModel.getHeadPic());
+            Glide.with(this).load(mUserModel.getHeadPic()).asBitmap().placeholder(R.drawable.main_center).diskCacheStrategy(DiskCacheStrategy.ALL).into(topIcon);
+        }
+    }
+    private void hiddenDisconnectIcon(){
+        if(topIcon2Disconnect!=null) {
+            topIcon2Disconnect.setVisibility(View.INVISIBLE);
+            topIcon2Disconnect.clearAnimation();
+            topIcon2.clearAnimation();
+        }
+    }
+
+    /**
+     *
+     * true running the animation
+     * false donot execute the animaiton
+     * @param animationRunning
+     */
+    private void showDisconnectIcon(boolean animationRunning){
+        if(topIcon2Disconnect!=null) {
+            topIcon2Disconnect.setVisibility(View.VISIBLE);
+            if(animationRunning) {
+                hyperspaceJump = AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump);
+                hyperspaceJump.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        // topIcon2Disconnect.startAnimation(hyperspaceJump);
+                        //  topIcon2.startAnimation(hyperspaceJump);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                topIcon2Disconnect.startAnimation(hyperspaceJump);
+                topIcon2.startAnimation(hyperspaceJump);
+            }
+        }
+
+    }
+    private void sendCommandToRobot(String absouteActionPath){
         if(cartoon_enable) {
             byte[] actions = BluetoothParamUtil.stringToBytes(absouteActionPath);
             mPresenter.commandRobotAction(ConstValue.DV_PLAYACTION, actions);
         }else {
             UbtLog.d(TAG,"sendCommandToRobot cartoon disable");
         }
-  }
-  private void hiddenBuddleTextView(){
-      runOnUiThread(new Runnable() {
-          @Override
-          public void run(){
-              if(buddleText != null) {
-                  buddleText.setVisibility(View.INVISIBLE);
-              }
-          }
-      });
-  }
-  private void showBuddleTextView(){
-      runOnUiThread(new Runnable() {
-          @Override
-          public void run(){
-              if(buddleText != null){
-                  buddleText.setVisibility(View.VISIBLE);
-              }
-          }
-      });
-  }
-  private void debugClickRegion(){
-      if(cartoonHead!=null) {
-          cartoonHead.setBackgroundColor(Color.YELLOW);
-          cartoonChest.setBackgroundColor(Color.YELLOW);
-          cartoonLeftHand.setBackgroundColor(Color.YELLOW);
-          cartoonRightHand.setBackgroundColor(Color.YELLOW);
-          cartoonLeftLeg.setBackgroundColor(Color.YELLOW);
-          cartoonRightLeg.setBackgroundColor(Color.YELLOW);
-      }
-  }
+    }
+    private void hiddenBuddleTextView(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run(){
+                if(buddleText != null) {
+                    buddleText.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+    }
+    private void showBuddleTextView(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run(){
+                if(buddleText != null){
+                    buddleText.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+    private void debugClickRegion(){
+        if(cartoonHead!=null) {
+            cartoonHead.setBackgroundColor(Color.YELLOW);
+            cartoonChest.setBackgroundColor(Color.YELLOW);
+            cartoonLeftHand.setBackgroundColor(Color.YELLOW);
+            cartoonRightHand.setBackgroundColor(Color.YELLOW);
+            cartoonLeftLeg.setBackgroundColor(Color.YELLOW);
+            cartoonRightLeg.setBackgroundColor(Color.YELLOW);
+        }
+    }
 
-  private Boolean removeDuplicateClickEvent(){
-      UbtLog.d(TAG,"INTERVAL IS "+(System.currentTimeMillis()-mClickTime));
-      if(System.currentTimeMillis()-mClickTime<CLICK_THRESHOLD_DUPLICATE){
-          mClickTime=System.currentTimeMillis();
-          return true;
-      }else {
-          mClickTime = System.currentTimeMillis();
-          return false;
-      }
-  }
+    private Boolean removeDuplicateClickEvent(){
+        UbtLog.d(TAG,"INTERVAL IS "+(System.currentTimeMillis()-mClickTime));
+        if(System.currentTimeMillis()-mClickTime<CLICK_THRESHOLD_DUPLICATE){
+            mClickTime=System.currentTimeMillis();
+            return true;
+        }else {
+            mClickTime = System.currentTimeMillis();
+            return false;
+        }
+    }
 
+    private void setBehaviourHabitNextEvent(String eventName,String eventTime){
+        habitsName.setVisibility(View.VISIBLE);
+        habits_reminder.setVisibility(View.INVISIBLE);
+        habitsTime.setText(eventTime);
+        habitsName.setText(eventName);
+    }
+    private void setBehaviourHabitDefault(){
+        habitsName.setVisibility(View.INVISIBLE);
+        habits_reminder.setVisibility(View.VISIBLE);
+        habitsTime.setText(getString(R.string.set_reminder_guide));
+    }
+
+    public void requireBehaviourNextEvent() {
+        BaseRequest mBehaviourControlRequest = new BaseRequest();
+        doRequestFromServer(BuildConfig.WebServiceUbx+HttpEntity.GET_BEHAVIOURHABIT_NEXTEVENT,mBehaviourControlRequest);
+    }
+    public void doRequestFromServer(String url, BaseRequest baseRequest) {
+        synchronized (this) {
+            OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, 999).execute(new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                }
+                @Override
+                public void onResponse(String response, int id) {
+                    UbtLog.d(TAG, "response = " + response);
+                    if(id==999){
+                        BaseResponseModel<behaviourHabitModel> baseResponseModel1 = GsonImpl.get().toObject(response, new TypeToken<BaseResponseModel<behaviourHabitModel>>() {
+                        }.getType());
+                        if(baseResponseModel1.models!=null) {
+                            UbtLog.d(TAG, "GET RESOPNSE " + baseResponseModel1.models.eventName );
+                            setBehaviourHabitNextEvent(baseResponseModel1.models.eventName,baseResponseModel1.models.eventTime);
+                        }else {
+                            setBehaviourHabitDefault();
+                        }
+                    }
+                }
+            });
+        }
+    }
 
 }

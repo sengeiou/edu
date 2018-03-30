@@ -24,6 +24,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.FileUtils;
@@ -163,7 +164,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         super.onActivityCreated(savedInstanceState);
         UbtLog.d("UserInfoFragment", "onActivityCreated");
         initData();
-        Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().into(mImgHead);
+
     }
 
     private void initData() {
@@ -171,10 +172,12 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
         UbtLog.d(TAG, "usermode===" + mUserModel.toString());
         InputFilter[] filters = {new NameLengthFilter(20)};
         mTvUserName.setFilters(filters);
-        mTvUserName.addTextChangedListener(new MyTextWatcher(                                                                                                                              mTvUserName, this));
-        String name = FileUtils.utf8ToString(mUserModel.getNickName());
-        UbtLog.d(TAG, "name===" + name);
-        mTvUserName.setText(name);
+        mTvUserName.addTextChangedListener(new MyTextWatcher(mTvUserName, this));
+        if (null != mUserModel && !TextUtils.isEmpty(mUserModel.getNickName())) {
+            String name = FileUtils.utf8ToString(mUserModel.getNickName());
+            UbtLog.d(TAG, "name===" + name);
+            mTvUserName.setText(name);
+        }
 
         mTvUserAge.setText(mUserModel.getAge());
         mTvUserGrade.setText(mUserModel.getGrade());
@@ -185,6 +188,8 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 mFemale.setChecked(true);
             }
         }
+        Glide.with(this).load(mUserModel.getHeadPic()).asBitmap().placeholder(R.drawable.main_center)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE).centerCrop().error(R.drawable.main_center).into(mImgHead);
     }
 
     @Override
@@ -400,22 +405,20 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
             if (null != userAllModel.getGradeList() && userAllModel.getGradeList().size() > 0) {
                 gradeList = StringUtils.getGradeList(userAllModel.getGradeList());
             }
-//            String headPic = userAllModel.getHeadPic();
-//            UbtLog.d(TAG, "headpic===" + headPic);
-//            UserModel model = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
-//            if (null != model) {
-//                model.setHeadPic(headPic);
-//                model.setGrade(userAllModel.getGrade());
-//                model.setSex(userAllModel.getSex());
-//                model.setNickName(userAllModel.getNickName());
-//                model.setPhone(userAllModel.getPhone());
-//                model.setAge(userAllModel.getAge());
-//                SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, model);
-//                initData();
-//                Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().into(mImgHead);
-//            }
-        } else {
-
+            String headPic = userAllModel.getHeadPic();
+            UbtLog.d(TAG, "headpic===" + headPic);
+            UserModel model = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+            if (null != model) {
+                model.setHeadPic(headPic);
+                model.setGrade(StringUtils.getGradeStringBytype(userAllModel.getGrade()));
+                model.setSex(userAllModel.getSex());
+                model.setNickName(userAllModel.getNickName());
+                model.setPhone(userAllModel.getPhone());
+                model.setAge(StringUtils.getAgeStringBytype(userAllModel.getAge()));
+                SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, model);
+                initData();
+                //Glide.with(this).load(mUserModel.getHeadPic()).centerCrop().into(mImgHead);
+            }
         }
     }
 
@@ -444,8 +447,8 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                     String h_type = cr.getType(data.getData());
                     //android di ban ben
                     String l_type = data.getType();
-                    UbtLog.d(TAG,"h_type:"+h_type  + "   l_type:"+l_type);
-                    if (h_type == null && l_type == null){
+                    UbtLog.d(TAG, "h_type:" + h_type + "   l_type:" + l_type);
+                    if (h_type == null && l_type == null) {
                         return;
                     }
                     mImageUri = data.getData();
@@ -490,7 +493,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
             String unicode = FileUtils.stringToUtf8(editText);
             if (!mUserModel.getNickName().equals(unicode)) {
                 updateUserInfo(Constant.KEY_NICK_NAME, unicode);
-                UbtLog.d(TAG,unicode);
+                UbtLog.d(TAG, unicode);
             }
 //            }
         }
@@ -544,6 +547,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
 
     /**
      * 解决小米手机上获取图片路径为null的情况
+     *
      * @param intent
      * @return
      */
@@ -559,7 +563,7 @@ public class UserInfoFragment extends MVPBaseFragment<UserEditContract.View, Use
                 buff.append("(").append(MediaStore.Images.ImageColumns.DATA).append("=")
                         .append("'" + path + "'").append(")");
                 Cursor cur = cr.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        new String[] { MediaStore.Images.ImageColumns._ID },
+                        new String[]{MediaStore.Images.ImageColumns._ID},
                         buff.toString(), null, null);
                 int index = 0;
                 for (cur.moveToFirst(); !cur.isAfterLast(); cur.moveToNext()) {

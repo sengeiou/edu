@@ -6,6 +6,7 @@
     <string name="ui_common_edit">编辑</string>
     <string name="ui_common_save">保存</string>
     <string name="ui_common_confirm">确定</string>
+    <string name="ui_common_add">添加</string>
     <string name="ui_common_search">搜索</string>
     <string name="ui_common_check">查看</string>
     <string name="ui_common_close">关闭</string>
@@ -252,6 +253,7 @@
     <string name="ui_action_mine">我的</string>
     <string name="ui_action_no_action">无动作</string>
     <string name="ui_action_sensor_warning">开启摔倒保护功能后，机器人跌倒或倾斜时会自主爬起，请不要手扶或拿起机器人，避免夹伤，夹手时可按急停键</string>
+    <string name="ui_action_sensor_greeting">打开打招呼功能后，当机器人处于空闲状态并且检测到前方有障碍物时，会主动跟你打招呼哦。</string>
     <string name="ui_action_no_description">暂无描述</string>
     <string name="ui_action_no_play">暂无动作播放</string>
     <string name="ui_action_no_time">暂无时长</string>
@@ -338,6 +340,7 @@
     <string name="ui_readback_cutoff">掉电完成，请给机器人设定动作。点击“结束”即停止添加</string>
     <string name="ui_readback_reset">掉电完成，请重新设定动作，点击“确认”即替换成功</string>
     <string name="ui_remote_role_introduction">选择不同角色可以表演不同的动作哦</string>
+    <string name="ui_servo_guide">为了维护舵机寿命，阿尔法在循环播放20分钟后，会停下休息哦。</string>
     <string name="ui_remote_role_footballer">足球员</string>
     <string name="ui_remote_role_footballer_introduction">翻腾、射门、守门，我样样都行</string>
     <string name="ui_remote_role_fighter">格斗家</string>
@@ -660,7 +663,7 @@
     <string name="ui_official_hot">热门</string>
     <string name="ui_official_recommend">推荐</string>
     <string name="ui_release_empty_action">小主人，您没有未发布的动作哦</string>
-    <string name="ui_contact_title">关于我们</string>
+    <string name="ui_contact_title">联系我们</string>
     <string name="ui_contact_phone">客服电话</string>
     <string name="ui_contact_email">客服邮箱</string>
     <string name="ui_contact_qrcode_title">关注优必选微信公众号</string>
@@ -849,6 +852,7 @@
     <!--behaviour habit-->
     <string name="network_request_error">网络请求失败</string>
     <string name="network_request_success">网络请求成功</string>
+    <string name="set_reminder_guide">设置好习惯</string>
 
 
     <string name="ui_setting_clear_cache">清除缓存数据</string>
@@ -975,6 +979,9 @@
     <string name="dialog_permission_storage_setting">您尚未开启\"ALpha 1E\"存储权限,请到设置中开启</string>
     <string name="dialog_permission_microphone_setting">您尚未开启\"ALpha 1E\"录音权限,请到设置中开启</string>
     <string name="dialog_go_setting">去设置</string>
+    <string name="ui_setting_email_report">邮件反馈</string>
+    <string name="ui_setting_online_report">在线咨询</string>
+    <string name="ui_setting_close_notice_tip">关闭通知，你将无法收到行为习惯提醒、各类活动和系统消息的通知</string>
 
     <string name="ui_common_save_success">保存成功</string>
     <string name="ui_common_save_fail">保存失败</string>
@@ -1013,6 +1020,8 @@
     <string name="ui_habits_alert_set_success">设置提醒成功</string>
     <string name="ui_habits_alert_set_fail">设置提醒失败</string>
     <string name="ui_habits_event_list">事项列表</string>
+    <string name="ui_habits_process_starting">行为习惯正在进行中，请先完成</string>
+    <string name="ui_habits_process_start">行为习惯开始了，请先完成</string>
 
     <!--动作编辑课程 -->
     <string name="action_course_card1_1">1.了解时间轴</string>
@@ -1070,5 +1079,8 @@
 
 
     <string name="ui_resave_tip">当前名称文件已存在，确定覆盖当前文件吗?</string>
+    <string name="ui_recording_txt">动作记录中...</string>
+
+    <string name="ui_webview_network_error">网络出错，轻触屏幕重新加载</string>
 
 </resources>

@@ -22,6 +22,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.FileUtils;
 import com.ubt.alpha1e.base.PermissionUtils;
@@ -163,6 +164,8 @@ public class ActionsEditSaveActivity extends BaseActivity implements
             }
             mLoadingDialog = null;
         }
+        ((AlphaApplication) this
+                .getApplicationContext()).setActionOriginalId(0);
         super.onDestroy();
     }
 

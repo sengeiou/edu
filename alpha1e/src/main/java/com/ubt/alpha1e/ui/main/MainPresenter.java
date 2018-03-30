@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.ui.main;
 
 import android.content.res.TypedArray;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.ubt.alpha1e.base.RequstMode.CheckIsBindRequest;
 import com.ubt.alpha1e.base.RequstMode.XGGetAccessIdRequest;
 import com.ubt.alpha1e.base.ResponseMode.XGDeviceMode;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.ActionPlayerListener;
 import com.ubt.alpha1e.data.model.ActionInfo;
@@ -70,6 +72,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
     private byte mChargeValue=0;
     private boolean IS_CHARGING=false;
     XGDeviceMode xgDeviceMode;
+    private int xgCnt = 0;
 
     public void registerEventBus() {
         EventBus.getDefault().register(MainPresenter.this);
@@ -85,58 +88,58 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
             TypedArray typedArray=null;
             int[] resId={0};
             switch (value) {
-                case Constant.cartoon_action_enjoy:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.enjoy);
-                    actionName="enjoy";
-                    break;
-                case Constant.cartoon_action_fall:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.fall);
-                    actionName="fall";
-                    break;
-                case Constant.cartoon_action_greeting:
-                    typedArray =mView.getContext().getResources().obtainTypedArray(R.array.greetting);
-                    actionName="greetting";
-                    break;
-                case Constant. cartoon_action_hand_stand:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.hand_stand);
-                    actionName="hand_stand";
-                    break;
-                case Constant.cartoon_action_hand_stand_reverse:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.hand_stand_reverse);
-                    actionName="hand_stand_reverse";
-                    break;
-                case Constant.cartoon_action_smile:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.smile);
-                    actionName="smile";
-                    break;
-                case Constant.cartoon_action_squat:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.squat);
-                    actionName="squat";
-                    break;
-                case Constant.cartoon_aciton_squat_reverse:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.squat_reverse);
-                    actionName="squat_reverse";
-                    break;
-                case Constant.cartoon_action_shiver:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.shiver);
-                    actionName="shiver";
-                    break;
-                case Constant.cartoon_action_swing_left_hand:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_lefthand);
-                    actionName="left_hand";
-                    break;
-                case Constant.cartoon_action_swing_left_leg:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_leftleg);
-                    actionName="left_leg";
-                    break;
-                case Constant.cartoon_action_swing_right_hand:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_righthand);
-                    actionName="right_hand";
-                    break;
-                case Constant.cartoon_action_swing_right_leg:
-                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_rightleg);
-                    actionName="right_leg";
-                    break;
+//                case Constant.cartoon_action_enjoy:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.enjoy);
+//                    actionName="enjoy";
+//                    break;
+//                case Constant.cartoon_action_fall:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.fall);
+//                    actionName="fall";
+//                    break;
+//                case Constant.cartoon_action_greeting:
+//                    typedArray =mView.getContext().getResources().obtainTypedArray(R.array.greetting);
+//                    actionName="greetting";
+//                    break;
+//                case Constant. cartoon_action_hand_stand:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.hand_stand);
+//                    actionName="hand_stand";
+//                    break;
+//                case Constant.cartoon_action_hand_stand_reverse:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.hand_stand_reverse);
+//                    actionName="hand_stand_reverse";
+//                    break;
+//                case Constant.cartoon_action_smile:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.smile);
+//                    actionName="smile";
+//                    break;
+//                case Constant.cartoon_action_squat:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.squat);
+//                    actionName="squat";
+//                    break;
+//                case Constant.cartoon_aciton_squat_reverse:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.squat_reverse);
+//                    actionName="squat_reverse";
+//                    break;
+//                case Constant.cartoon_action_shiver:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.shiver);
+//                    actionName="shiver";
+//                    break;
+//                case Constant.cartoon_action_swing_left_hand:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_lefthand);
+//                    actionName="left_hand";
+//                    break;
+//                case Constant.cartoon_action_swing_left_leg:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_leftleg);
+//                    actionName="left_leg";
+//                    break;
+//                case Constant.cartoon_action_swing_right_hand:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_righthand);
+//                    actionName="right_hand";
+//                    break;
+//                case Constant.cartoon_action_swing_right_leg:
+//                    typedArray = mView.getContext().getResources().obtainTypedArray(R.array.swing_rightleg);
+//                    actionName="right_leg";
+//                    break;
                 default:
                     break;
             }
@@ -334,16 +337,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         String accessKey = SPUtils.getInstance().getString(Constant.SP_XG_ACCESSKEY);
         String userId = SPUtils.getInstance().getString(Constant.SP_XG_USERID);
         UbtLog.d("XGREquest","getXGInfo  old userId"+userId+ "new USERID "+SPUtils.getInstance().getString(Constant.SP_USER_ID));
-        //if (TextUtils.isEmpty(accessId) || TextUtils.isEmpty(accessKey)) {
-        if(TextUtils.isEmpty(userId)||!userId.equals(SPUtils.getInstance().getString(Constant.SP_USER_ID))){
-            if(!userId.equals(SPUtils.getInstance().getString(Constant.SP_USER_ID))){
-               // UnBindXGServer();
-                if(!userId.equals("")) {
-                    UnBindXGServer("20002", userId);
-                }else{
-                    UbtLog.d(TAG,"USERID HASNOT CONTENT");
-                }
-            }
             String Url = HttpEntity.getXGAppId + "?appName=ALPHA1E";
             UbtLog.d("XGREquest", "url===" + Url);
             OkHttpUtils.get()
@@ -355,7 +348,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 public void onError(Call call, Exception e, int id) {
                     UbtLog.d("XGREquest", "onError===" + e.getMessage());
                 }
-
                 @Override
                 public void onResponse(String response, int id) {
                     UbtLog.d("XGREquest", "response===" + response);
@@ -368,36 +360,20 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                             SPUtils.getInstance().put(Constant.SP_XG_ACCESSID, xgDeviceMode.getAccessId());
                             SPUtils.getInstance().put(Constant.SP_XG_ACCESSKEY, xgDeviceMode.getAccessKey());
                             AlphaApplication.initXG();
-//
-
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-//                    XGBaseModule xgBaseModule = GsonImpl.get().toObject(response, XGBaseModule.class);
-//                    UbtLog.d("XGREquest", "response===" + xgBaseModule.toString());
-//                    //if (null != xgBaseModule && xgBaseModule.isSuccess()) {
-//                    for (XGDeviceMode xgDeviceMode : xgBaseModule.getData()) {
-//                        if (xgDeviceMode.getDevice().equals("a")) {
-//                            SPUtils.getInstance().put(Constant.SP_XG_ACCESSID, xgDeviceMode.getAccessId());
-//                            SPUtils.getInstance().put(Constant.SP_XG_ACCESSKEY, xgDeviceMode.getAccessKey());
-//                            BindXGServer(xgDeviceMode);
-//                            break;
-//                        }
-//                    }
-                    //  }
                 }
             });
-        }else {
-            UbtLog.d("XGREquest","accessId:   "+accessId+"accessKey:    "+accessKey);
-        }
     }
 
-    private void BindXGServer(XGDeviceMode xgDeviceMode) {
-        String userId = SPUtils.getInstance().getString(Constant.SP_XG_USERID);
-        if(!TextUtils.isEmpty(userId)&&userId.equals(SPUtils.getInstance().getString(Constant.SP_USER_ID))){
-            UbtLog.d(TAG,"BindXGServer failed  userId="+ userId);
+    private void BindXGServer(final XGDeviceMode xgDeviceMode) {
+        String userId = SPUtils.getInstance().getString(Constant.SP_USER_ID);
+        if(TextUtils.isEmpty(userId)){
+     //   if(!TextUtils.isEmpty(userId)&&userId.equals(SPUtils.getInstance().getString(Constant.SP_USER_ID))){
+            UbtLog.d(TAG,"BindXGServer  userId null");
             return;
         }
         XGGetAccessIdRequest request = new XGGetAccessIdRequest();
@@ -417,14 +393,24 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 .build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                UbtLog.d("XGREquest", "onError===" + e.getMessage());
+                UbtLog.d("XGREquest", "onError===" + e.getMessage()+"  xgCntxgCnt="+xgCnt);
+                mView.getHandler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(xgCnt < 2) {
+                            BindXGServer(xgDeviceMode);
+                            xgCnt++;
+                        }else{
+                            xgCnt = 0;
+                        }
+                    }
+                },2000);
             }
 
             @Override
             public void onResponse(String response, int id) {
                 UbtLog.d("XGREquest", "response===" + response);
                 SPUtils.getInstance().put(Constant.SP_XG_USERID,SPUtils.getInstance().getString(Constant.SP_USER_ID));
-
             }
         });
     }
@@ -466,6 +452,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     @Override
     public void checkMyRobotState() {
+        LoadingDialog.show(AppManager.getInstance().currentActivity());
         CheckIsBindRequest checkRobotInfo = new CheckIsBindRequest();
         checkRobotInfo.setSystemType("3");
         String url = HttpEntity.CHECK_ROBOT_INFO;
@@ -509,6 +496,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 switch (id){
                     case CHECK_ROBOT_INFO_HABIT:
                         mView.onGetRobotInfo(0,null);
+                        LoadingDialog.dismiss(AppManager.getInstance().currentActivity());
                         break;
                     default:
                         break;
@@ -520,6 +508,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 UbtLog.d(TAG,"response = " + response);
                 switch (id) {
                     case CHECK_ROBOT_INFO_HABIT:
+                        LoadingDialog.dismiss(AppManager.getInstance().currentActivity());
                         BaseResponseModel<ArrayList<MyRobotModel>> baseResponseModel = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<ArrayList<MyRobotModel>>>() {
                                 }.getType());//加上type转换，避免泛型擦除

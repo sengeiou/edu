@@ -27,9 +27,11 @@ import com.ubt.alpha1e.course.event.PrincipleEvent;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -57,6 +59,7 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
     private static final int TAP_HEAD = 5;
     private static final int SHOW_NEXT_OVER_TIME = 6;
     private static final int BLUETOOTH_DISCONNECT = 7;
+    private static final int RECIEVE_HIBITS_START = 8;
 
     private final int ANIMATOR_TIME = 500;
     private final int OVER_TIME = (25+10) * 1000;//(25S音频+ 10S操作) 超时
@@ -102,6 +105,8 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
     private boolean hasLostLegRight = false;
 
     private boolean hasPlayFileFinish = false;
+    private boolean isShowHibitsDialog = false;
+    private boolean hasReceiveHibitsStart = false;
 
     private ConfirmDialog mTapHeadDialog = null;
 
@@ -137,8 +142,10 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
                     break;
                 case TAP_HEAD:
-                    //拍头退出课程模式
-                    showTapHeadDialog();
+                    if(!isShowHibitsDialog){
+                        //拍头退出课程模式
+                        showTapHeadDialog();
+                    }
                     break;
                 case SHOW_NEXT_OVER_TIME:
                     setViewEnable(tvNext,true,1f);
@@ -147,6 +154,12 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                     ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
                     MainCourseActivity.finishByMySelf();
                     finish();
+                    break;
+                case RECIEVE_HIBITS_START:
+                    MainCourseActivity.showHabitsStartDialog();
+                    ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                    SplitActivity.this.finish();
+                    SplitActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
                     break;
             }
         }
@@ -170,6 +183,18 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
             mHandler.sendEmptyMessage(TAP_HEAD);
         }else if(event.getEvent() == PrincipleEvent.Event.DISCONNECTED){
             mHandler.sendEmptyMessage(BLUETOOTH_DISCONNECT);
+        }
+    }
+
+    @Override
+    public void onEventRobot(RobotEvent event) {
+        super.onEventRobot(event);
+        if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS && !isShowHibitsDialog){
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            if(event.isHibitsProcessStatus() && !hasReceiveHibitsStart){
+                hasReceiveHibitsStart = true;
+                mHandler.sendEmptyMessage(RECIEVE_HIBITS_START);
+            }
         }
     }
 
@@ -246,7 +271,27 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
 
         }
 
-        mHandler.sendEmptyMessage(SHOW_DIALOG);
+        if(mHelper.isStartHibitsProcess()){
+            isShowHibitsDialog = true;
+            mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                @Override
+                public void onDismissCallback(Object obj) {
+                    isShowHibitsDialog = false;
+                    UbtLog.d("onDismissCallback","obj = " +obj);
+                    if((boolean)obj){
+                        //行为习惯流程未结束，退出当前流程
+                        SplitActivity.this.finish();
+                        SplitActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                    }else {
+                        //行为习惯流程结束，该干啥干啥
+                        mHandler.sendEmptyMessage(SHOW_DIALOG);
+                    }
+                }
+            });
+        }else {
+            //行为习惯流程未开始，该干啥干啥
+            mHandler.sendEmptyMessage(SHOW_DIALOG);
+        }
     }
 
     private void initViewLayout(View view, int scale ) {
@@ -379,15 +424,18 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
      */
     public void onBack() {
         if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 0 ){
-            ((PrincipleHelper) mHelper).doInit();
-            ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
-            this.finish();
-            this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            exitPrincipleProcess();
         }else {
             PrincipleActivity.launchActivity(this,true);
         }
     }
 
+    private void exitPrincipleProcess(){
+        ((PrincipleHelper) mHelper).doInit();
+        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+        this.finish();
+        this.overridePendingTransition(0, R.anim.activity_close_down_up);
+    }
 
     private void setViewEnable(View mView, boolean enable, float alpha) {
         mView.setClickable(enable);

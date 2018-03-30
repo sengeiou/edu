@@ -26,6 +26,7 @@ public class CourseData extends DataSupport implements Serializable{
     private String thumbnailUrl;
     private String status;
     private String localVideoPath;
+    private String subTitle;
 
     public String getToken() {
         return token;
@@ -107,6 +108,14 @@ public class CourseData extends DataSupport implements Serializable{
         this.localVideoPath = localVideoPath;
     }
 
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
+    }
+
     @Override
     public String toString() {
         return "CourseData{" +
@@ -120,6 +129,7 @@ public class CourseData extends DataSupport implements Serializable{
                 ", thumbnailUrl='" + thumbnailUrl + '\'' +
                 ", status='" + status + '\'' +
                 ", localVideoPath='" + localVideoPath + '\'' +
+                ", subTitle='" + subTitle + '\'' +
                 '}';
     }
 }

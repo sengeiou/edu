@@ -10,6 +10,7 @@ import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.event.ActionEvent;
 import com.ubt.alpha1e.ui.BaseActivity;
+import com.ubt.alpha1e.ui.helper.ActionsHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.MyLog;
@@ -56,13 +57,17 @@ public class ActionPlayer implements BlueToothInteracter {
 
     private static final int UI_NOTE_PLAY_CYCLE_NEXT = 1001;
     private static final int UI_NOTE_PLAY_CYCLE_STOP = 1002;//循环20分钟 自动停止
-
-    private static final int AUTO_STOP_PLAY_CYCLE_TIME = 20*60*1000;//20分钟
+    //Servo protection time 20 minutes
+    private static final int AUTO_STOP_PLAY_CYCLE_TIME =20*60*1000;  //20分钟
+    private String Servo_protection_indication="{\"filename\":\"循环播放20分钟停下.wav\",\"playcount\":1}";
     private static final int REMOVE_DUPLICATE_REPLY_TIMEOUT=4000;
 
     private String cycleActionName = "";  //增加循环播放时动作的名称，用于在全局控件中更新显示动作名称
     private String mCurrentPlayActionName = "";
+    private long mCurrentExecuteTime=0;
+    private long mCycleExecuteTime=0;
     private long actionOriginalId = 0;
+
 
     private Date mLastPlayTime = null;
     private long time=0;
@@ -84,6 +89,7 @@ public class ActionPlayer implements BlueToothInteracter {
                     break;
                 case UI_NOTE_PLAY_CYCLE_STOP:
                     UbtLog.d(TAG,"20 分钟时间到，自动停止循环播放");
+                    mBtManager.sendCommand(mBtMac, ConstValue.DV_SET_PLAY_SOUND, BluetoothParamUtil.stringToBytes(Servo_protection_indication),BluetoothParamUtil.stringToBytes(Servo_protection_indication).length,false);
                     thiz.doStopCycle(false);
                     break;
 
@@ -194,7 +200,7 @@ public class ActionPlayer implements BlueToothInteracter {
 
     public void doStopPlay() {
         //DEBUG
-//        new Exception().printStackTrace();
+       // new Exception().printStackTrace();
         doStopCurrentPlay(true);
     }
 
@@ -205,8 +211,10 @@ public class ActionPlayer implements BlueToothInteracter {
         if (thiz.mCurrentPlayState != Play_state.action_finish) {
             if (thiz.mCurrentPlayType == Play_type.single_action) {
                 mCyclePlayThread = null;
+               // new Exception().printStackTrace();
                 thiz.doStopSingleAction(needSendComm);
             } else {
+               // new Exception().printStackTrace();
                 //thiz.doStopSingleAction(true);
                   thiz.doStopCycle(false);
             }
@@ -224,6 +232,9 @@ public class ActionPlayer implements BlueToothInteracter {
 
     public void doPlayAction(ActionInfo info) {
         UbtLog.d(TAG, "---wmma mCurrentPlayState=" + mCurrentPlayState + " actionOriginalId =" + info.actionOriginalId);
+        if(thiz == null){
+            return;
+        }
         actionOriginalId = info.actionOriginalId;
         if (thiz.mCurrentPlayState == Play_state.action_pause) {
             thiz.mCurrentPlayState = Play_state.action_finish;
@@ -353,7 +364,7 @@ public class ActionPlayer implements BlueToothInteracter {
 
     public void doCycle(String[] _action_name) {
         UbtLog.d(TAG, "****循环播放功能 ActionPlayer.doCycle:_action_name-->"+ _action_name.length);
-
+        mCycleExecuteTime=System.currentTimeMillis();
         doStopPlay();
         doInitDefaultAction();
 
@@ -386,9 +397,9 @@ public class ActionPlayer implements BlueToothInteracter {
 
         }else {
             mCyclePlayThread = new CycleThread(mActionNameList);
-            MyLog.writeLog("循环播放功能", "线程启动");
-            mCyclePlayThread.start();
-        }
+        MyLog.writeLog("循环播放功能", "线程启动");
+        mCyclePlayThread.start();
+    }
 
         thiz.mCurrentPlayState = Play_state.action_playing;
 
@@ -439,7 +450,6 @@ public class ActionPlayer implements BlueToothInteracter {
         mIsCycleContinuePlay = false;
         mCyclePlayThread.isShutDowm = true;
         //发送给机器人停止播放
-        UbtLog.d(TAG,"NOT NEED");
         doStopSingleAction(true);
         continueCycle();
     }
@@ -544,6 +554,8 @@ public class ActionPlayer implements BlueToothInteracter {
         notifyMainActivityEvent(info, ActionEvent.Event.ACTION_PLAY_START);
         byte[] actions = BluetoothParamUtil.stringToBytes(info);
         mBtManager.sendCommand(mBtMac, ConstValue.DV_PLAYACTION, actions,actions.length, false);
+        mCurrentExecuteTime=System.currentTimeMillis();
+
     }
 
     // ------------------------------------------------------------------------
@@ -593,14 +605,15 @@ public class ActionPlayer implements BlueToothInteracter {
         }else if(cmd==ConstValue.DV_TAP_HEAD||cmd==ConstValue.DV_VOICE_WAIT){
             UbtLog.d(TAG,"DV_TAP_HEAD");
             //解决拍头循环播放还进入下一首的问题，直接停止
-            stopPlayingAndClearPlayingList();
+            stopPlayingAndClearPlayingList(true);
             notifyMainActivityEvent(mCurrentPlayActionName, ActionEvent.Event.ACTION_PLAY_FINISH);
-        }else  if (cmd == ConstValue.DV_ACTION_FINISH)// 动作播放完毕
+        }else if (cmd==ConstValue.DV_6D_GESTURE){
+
+        }else if (cmd == ConstValue.DV_ACTION_FINISH)// 动作播放完毕
         {
             UbtLog.d(TAG,"DV_ACTION_FINISH");
             String finishPlayActionName = BluetoothParamUtil.bytesToString(param);
             UbtLog.d(TAG, "DV_ACTION_FINISH:   finishPlayActionName = " + finishPlayActionName + "    mCurrentPlayActionName = " + mCurrentPlayActionName);
-
             boolean isStopLocal = false;
             if(finishPlayActionName.contains(mCurrentPlayActionName)){
                 isStopLocal = true;
@@ -657,13 +670,10 @@ public class ActionPlayer implements BlueToothInteracter {
             }
         }else if(cmd == ConstValue.DV_STOPPLAY){
             UbtLog.d(TAG,"DV_STOPPLAY :reply stop  time "+(System.currentTimeMillis()-time)+" mCurrentPlayType:  "+ mCurrentPlayType+"MyActionsHelper.mCurrentLocalPlayType: "+MyActionsHelper.mCurrentLocalPlayType);
-//            if(mSend_Stop_playType!=mCurrentPlayType&&time!=0){
-//                UbtLog.d(TAG,"IS DIFFERENT ");
-//                UbtLog.d(TAG,"RECEIVE THE ERROR STOP,DISTOR          " +(System.currentTimeMillis()-time));
-//               // continueCycle();
-//                clearSinglePlayStatus();
-//                return;
-//            }
+            if(System.currentTimeMillis()-mCurrentExecuteTime>1){
+                stopPlayingAndClearPlayingList(false);
+                notifyMainActivityEvent(mCurrentPlayActionName, ActionEvent.Event.ACTION_PLAY_FINISH);
+            }
 
         }else if(cmd == ConstValue.DV_CURRENT_PLAY_NAME){
             String robotCurrentPlayName = BluetoothParamUtil.bytesToString(param);
@@ -682,7 +692,7 @@ public class ActionPlayer implements BlueToothInteracter {
         // TODO Auto-generated method stub
         try {
             UbtLog.d(TAG, "---onConnectState");
-            stopPlayingAndClearPlayingList();
+            stopPlayingAndClearPlayingList(true);
             MyActionsHelper.getInstance(AlphaApplication.getBaseActivity()).resetPlayer();
         }catch(Exception e){
             e.printStackTrace();
@@ -723,14 +733,18 @@ public class ActionPlayer implements BlueToothInteracter {
                // UbtLog.d(TAG, "AFTER 循环播放功能，播放动作：" + mActionNameList[i] + "   isShutDowm：" + isShutDowm+"    mIsCycleContinuePlay:   "+mIsCycleContinuePlay+"  isStopCycleThread:  "+isStopCycleThread);
                 if (!isShutDowm && thiz.mCurrentPlayState == Play_state.action_playing) {
                     String action_name = mActionNameList[i];
+                    String actionName = mActionNameList[i];
                     if(!mCurrentDefaultAction.equals(action_name)){
                         ActionInfo actionInfo = MyActionsHelper.mCurrentSeletedActionInfoMap.get(action_name);
                         if(actionInfo == null){
                             //线上友盟crash报null,但是找不到规律，判null处理
+                           // UbtLog.d(TAG,"ACTIONINFO NULL");
                             continue;
                         }
+                        actionName = actionInfo.actionName;
 //                        //全局控制按钮消失DESTROY后，需要通过这个变量来获取正在播放的
-                        AlphaApplication.getBaseActivity().saveCurrentPlayingActionName(action_name);
+                        AlphaApplication.getBaseActivity().saveCurrentPlayingActionName(actionInfo.actionName);
+                        //setActionShowName(mDatas,action_name);
                         int pos = actionInfo.actionSize;
                         if(pos < MyActionsHelper.localSize){
                             action_name = FileTools.action_robot_file_path + "/"+action_name+".hts";
@@ -749,7 +763,8 @@ public class ActionPlayer implements BlueToothInteracter {
 
                     Message msg = new Message();
                     msg.what = UI_NOTE_PLAY_CYCLE_NEXT;
-                    msg.obj = mActionNameList[i];
+                    //msg.obj = mActionNameList[i];
+                    msg.obj = actionName;
                     mHandler.sendMessage(msg);
 
                 }else {
@@ -832,17 +847,33 @@ public class ActionPlayer implements BlueToothInteracter {
         mDatas=nameList;
     }
 
-    private void stopPlayingAndClearPlayingList(){
+//    private void setActionShowName(List<Map<String, Object>> list,String action_name_id) {
+//        for ( int i = 0 ; i < list.size() - 1 ; i ++ ) {
+//            UbtLog.d(TAG,"INDEX "+list.get(i).get(ActionsHelper.map_val_action));
+//            if(list.get(i).get(ActionsHelper.map_val_action).equals(action_name_id)){
+//                UbtLog.d(TAG,"setActionShowNa"+list.get(i).get(ActionsHelper.map_val_action_name).toString());
+//                AlphaApplication.getBaseActivity().saveCurrentPlayingActionName(list.get(i).get(ActionsHelper.map_val_action_name).toString());
+//                break;
+//            }
+//        }
+//    }
+    /**
+     * 是否发送给机器人停止执行动作的命令
+     * @param isSendStop
+     */
+    private void stopPlayingAndClearPlayingList(boolean isSendStop){
         clearPlayingInfoList();
         if (mCurrentPlayType == Play_type.cycle_action){
-            doStopPlay();
             StopCycleThread(true);
             mIsCycleContinuePlay = false;
             MyActionsHelper.setLooping(false);
             AlphaApplication.getBaseActivity().saveCurrentPlayingActionName("");
         }else if(mCurrentPlayType==Play_type.single_action){
-            doStopPlay();
             notePlayFinish();
         }
+        if(isSendStop){
+            doStopPlay();
+        }
     }
+
 }

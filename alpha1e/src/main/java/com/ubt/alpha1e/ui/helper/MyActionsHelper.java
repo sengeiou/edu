@@ -10,9 +10,12 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.adapter.FillLocalContent;
+import com.ubt.alpha1e.base.RequstMode.GetMessageListRequest;
+import com.ubt.alpha1e.base.RequstMode.MyDownloadName;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.ActionPlayer.Play_state;
 import com.ubt.alpha1e.business.ActionPlayer.Play_type;
@@ -34,9 +37,11 @@ import com.ubt.alpha1e.data.ZipTools;
 import com.ubt.alpha1e.data.model.ActionColloInfo;
 import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.data.model.ActionRecordInfo;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.data.model.NewActionInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
 import com.ubt.alpha1e.event.ActionEvent;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.net.http.basic.BaseWebRunnable;
 import com.ubt.alpha1e.net.http.basic.FileDownloadListener.State;
 import com.ubt.alpha1e.net.http.basic.HttpAddress;
@@ -46,6 +51,7 @@ import com.ubt.alpha1e.ui.MyActionsSyncActivity;
 import com.ubt.alpha1e.ui.dialog.AlertDialog;
 import com.ubt.alpha1e.ui.fragment.BaseMyActionsFragment;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
+import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.ResourceUtils;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.MyLog;
@@ -91,6 +97,9 @@ public class MyActionsHelper extends BaseHelper implements
     public static final String action_type = "action_type";
     public static final String action_info = "action_info";
     public static final String action_info_all = "action_info_all";
+    private int page = 1;
+    private int offset = 8;
+
 
     public  enum Action_type {
         Story_type, Dance_type, Base_type, Custom_type, My_download, My_new,My_download_local,My_new_local,My_gamepad ,All,Unkown,MY_WALK,MY_COURSE
@@ -205,6 +214,7 @@ public class MyActionsHelper extends BaseHelper implements
     private String mSchemeId = "";
     private String mSchemeName = "";
     private static boolean isLooping=false;
+
 
     public Action_type getCurrentPlayType() {
         return mCurrentPlayType;
@@ -755,13 +765,13 @@ public class MyActionsHelper extends BaseHelper implements
     public void doTurnVol() {
         byte[] papram = new byte[1];
         if (mCurrentVoiceState) {
+            //MUTE
             papram[0] = 0;
             ChangeMisucVol(0);
-            //有声音
             mCurrentVoiceState = false;
         } else {
+            //UNMUTE
             papram[0] = 1;
-            //无声音
             mCurrentVoiceState = true;
         }
 
@@ -908,7 +918,6 @@ public class MyActionsHelper extends BaseHelper implements
             }
 
         } else if ((cmd & 0xff) == (ConstValue.UV_STOPACTIONFILE & 0xff)) {
-            UbtLog.d(TAG,"lihai------------getDataType-=>>"+getDataType);
             if(getDataType == Action_type.MY_WALK){
                 return;
             }
@@ -1968,81 +1977,121 @@ public class MyActionsHelper extends BaseHelper implements
     public List<Map<String, Object>> loadDatas()
     {
         JSONArray actions_list = new JSONArray(mActionsNames);
-        StringBuilder sb = new StringBuilder();
-        List<String> numberNameList = new ArrayList<String>();
+        final List<String> numberNameList = new ArrayList<String>();
 
         List<Map<String, Object>> mDatas = new ArrayList<>();
 
         for (int i = 0; i < actions_list.length(); i++) {
+
             Map<String, Object> action_item = new HashMap<String, Object>();
-//            action_item.put(ActionsHelper.map_val_action_logo_res,
-//                    R.drawable.action_local_logo_grid);
 
             try {
                 String name = actions_list.get(i).toString();
-                if(isStringNumber(name) && i >= (localSize + myDownloadSize)){
-                    sb.append(name+",");
+                action_item.put(MyActionsHelper.map_val_action,name);
+
+                if(i >= localSize){
                     numberNameList.add(name);
                     continue;
                 }
-                action_item.put(MyActionsHelper.map_val_action,name);
 
-//                if (mCurrentActionType != Action_type.Custom_type) {
-//                    name = name.substring(1);
-//                }
-//                if (!name.toLowerCase().contains(key.toLowerCase())) {
-//                    continue;
-//                }
                 action_item.put(MyActionsHelper.map_val_action_name, name);
+                action_item.put(MyActionsHelper.map_val_action_type_logo_res, R.drawable.actions_item_unkown);
+                action_item.put(MyActionsHelper.map_val_action_type_name, ((BaseActivity)mActivity).getStringResources("ui_square_unknown"));
+                action_item.put(MyActionsHelper.map_val_action_time, 0);
+                action_item.put(MyActionsHelper.map_val_action_disc, ((BaseActivity)mActivity).getStringResources("ui_action_no_description"));
+                action_item.put(MyActionsHelper.map_val_action_is_playing, false);
+                action_item.put(MyActionsHelper.map_val_action_selected, false);
+                action_item.put(MyActionsHelper.map_val_action_browse_time, 0);
+                mDatas.add(action_item);
+
             } catch (JSONException e) {
 //                action_item.put(
 //                        ActionsHelper.map_val_action_name,
 //                        this.getResources().getString(
 //                                R.string.ui_action_no_action));
             }
-            action_item.put(MyActionsHelper.map_val_action_type_logo_res,
-                    R.drawable.actions_item_unkown);
-            action_item.put(MyActionsHelper.map_val_action_type_name,
-                    ((BaseActivity)mActivity).getStringResources("ui_square_unknown"));
-            action_item.put(MyActionsHelper.map_val_action_time, 0);
-            action_item.put(MyActionsHelper.map_val_action_disc, ((BaseActivity)mActivity).getStringResources("ui_action_no_description"));
-            action_item.put(MyActionsHelper.map_val_action_is_playing, false);
-            action_item.put(MyActionsHelper.map_val_action_selected, false);
-            action_item.put(MyActionsHelper.map_val_action_browse_time, 0);
-            mDatas.add(action_item);
+
         }
         final List<Map<String, Object>> mNoNumberData = mDatas;
-        final List<String> fnumberNameList = numberNameList;
-        if(sb.length()>0){
-            sb.deleteCharAt(sb.length()-1);
+        //final List<String> fnumberNameList = numberNameList;
 
-            String url = HttpAddress.getRequestUrl(HttpAddress.Request_type.detailById);
-            String params = HttpAddress.getParamsForPost(new String[]{sb.toString()},
-                    HttpAddress.Request_type.detailById,
-                    mBaseActivity);
-            final StringBuilder numberSb = sb;
+        if(numberNameList.size()>0){
 
-            OkHttpClientUtils
-                    .getJsonByPostRequest(url,params)
-                    .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e,int i) {
-                        UbtLog.d(TAG,"Exception:"+e.getMessage());
-                        dealResPonseResult(null,mNoNumberData,fnumberNameList);
+            GetMessageListRequest messageListRequest = new GetMessageListRequest();
+            messageListRequest.setOffset(page);
+            messageListRequest.setLimit(offset);
+            OkHttpClientUtils.getJsonByPostRequest(HttpEntity.ACTION_DYNAMIC_LIST, messageListRequest, 9999).execute(new StringCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                    if(id==9999){
+                        UbtLog.d(TAG, "GET RESOPNSE onError" );
+                        //dealResPonseResult(null,mNoNumberData,fnumberNameList);
                     }
+                }
+                @Override
+                public void onResponse(String response, int id) {
+                    UbtLog.d(TAG, "GET RESOPNSE SUCCESS"+response );
+                    List<Map<String, Object>> mNewDatas = new ArrayList<>();
+                    mNewDatas.addAll(mNoNumberData);
 
-                    @Override
-                    public void onResponse(String resultData,int i) {
-                        //UbtLog.d(TAG,"lihai------onResponse::"+resultData.toString());
-                        dealResPonseResult(resultData,mNoNumberData,fnumberNameList);
+                    if(id==9999){
+                        BaseResponseModel<List<MyDownloadName>> baseResponseModel= GsonImpl.get().toObject(response, new TypeToken<BaseResponseModel<List<MyDownloadName>>>() {
+                        }.getType());
+
+                        if(baseResponseModel.models!=null) {
+                            List<MyDownloadName> myDownloadNameList = baseResponseModel.models;
+                            if(myDownloadNameList != null){
+
+                                for(String numName : numberNameList){
+                                    String needAddActionName = "";
+                                    UbtLog.d(TAG, "numName = " + numName + " fnumberNameList = " + numberNameList.size() );
+                                    for(int i=0;i<myDownloadNameList.size();i++) {
+                                        String actionOriginalId = myDownloadNameList.get(i).actionOriginalId;
+                                        UbtLog.d(TAG, "actionOriginalId = " + actionOriginalId + " myDownloadNameList.get(i).actionName =  "+ myDownloadNameList.get(i).actionName);
+                                        if(actionOriginalId.equals(numName)){
+                                            needAddActionName = myDownloadNameList.get(i).actionName;
+                                            break;
+                                        }
+                                    }
+
+                                    if(!TextUtils.isEmpty(needAddActionName)){
+                                        Map<String, Object> action_item = new HashMap<String, Object>();
+
+                                        String name = needAddActionName;
+
+                                        action_item.put(MyActionsHelper.map_val_action,numName);
+                                        action_item.put(MyActionsHelper.map_val_action_name, name);
+
+                                        action_item.put(MyActionsHelper.map_val_action_type_logo_res, R.drawable.actions_item_unkown);
+                                        action_item.put(MyActionsHelper.map_val_action_type_name, ((BaseActivity)mActivity).getStringResources("ui_square_unknown"));
+                                        action_item.put(MyActionsHelper.map_val_action_time, 0);
+                                        action_item.put(MyActionsHelper.map_val_action_disc, ((BaseActivity)mActivity).getStringResources("ui_action_no_description"));
+                                        action_item.put(MyActionsHelper.map_val_action_is_playing, false);
+                                        action_item.put(MyActionsHelper.map_val_action_selected, false);
+                                        action_item.put(MyActionsHelper.map_val_action_browse_time, 0);
+                                        mNewDatas.add(action_item);
+                                    }
+                                }
+                            }
+
+                        }else {
+                            UbtLog.d(TAG, "GET RESOPNSE null" );
+                        }
                     }
-                });
-        }else{
-            dealResPonseResult(null,mNoNumberData,fnumberNameList);
+                    myDownloadSize = mNewDatas.size() - localSize;
+
+                    Message msg = new Message();
+                    msg.what = MSG_DO_SYNC_SERVER_ACTION_FINISH;
+                    msg.obj = mNewDatas;
+                    mHandler.sendMessage(msg);
+                }
+            });
         }
+
         return mDatas;
 
     }
+
 
     /**
      * my download
@@ -2353,7 +2402,6 @@ public class MyActionsHelper extends BaseHelper implements
 
                 for(int num = 0; num < numberNameList.size(); num++){
                     Map<String, Object> action_item = new HashMap<String, Object>();
-
                     String name = numberNameList.get(num);
                     action_item.put(MyActionsHelper.map_val_action,name);
                     action_item.put(MyActionsHelper.map_val_action_name, name);
@@ -2718,5 +2766,7 @@ public class MyActionsHelper extends BaseHelper implements
     public boolean getSensorStatus() {
         return mSensorState;
     }
+
+
 
 }

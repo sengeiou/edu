@@ -656,7 +656,7 @@ public class CourseLevelOneLayout extends BaseActionEditLayout {
         UbtLog.d(TAG, "进入第二课时，弹出对话框");
         View contentView = LayoutInflater.from(mContext).inflate(R.layout.dialog_action_course_content, null);
         TextView title = contentView.findViewById(R.id.tv_card_name);
-        title.setText("第一关 基本概念");
+        title.setText("第一关 了解动作编辑器");
 
         Button button = contentView.findViewById(R.id.btn_pos);
         button.setText("下一节");

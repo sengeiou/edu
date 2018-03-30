@@ -71,7 +71,7 @@
             android:layout_centerHorizontal="true">
             <TextView
                 android:id="@+id/txt_msg"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="56dp"
                 android:textStyle="bold"
                 android:text="  可用网络列表"
@@ -79,6 +79,17 @@
                 android:paddingLeft="20dp"
                 android:textColor="#666666"
                 android:textSize="16sp"
+                android:background="@null"/>
+            <TextView
+                android:id="@+id/txt_msg_advice"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:layout_toRightOf="@id/txt_msg"
+                android:text="(机器人不支持5G网络哦)"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:textColor="#929ea5"
+                android:textSize="15sp"
                 android:background="@null"/>
             <TextView
                 android:id="@+id/line2"

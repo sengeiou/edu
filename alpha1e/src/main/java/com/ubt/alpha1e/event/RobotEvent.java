@@ -30,6 +30,8 @@ public class RobotEvent {
 
     private short rssi;
 
+    private boolean hibitsProcessStatus = true;
+
     public RobotEvent(int power) {
         this.power = power;
     }
@@ -52,7 +54,9 @@ public class RobotEvent {
         BLUETOOTH_TURN_ON,
         BLUETOOTH_SEND_CLIENTID_SUCCESS,
         BLUETOOTH_GET_ROBOT_SN_SUCCESSS,
-        BLUETOOTH_GET_ROBOT_UPGRADE
+        BLUETOOTH_GET_ROBOT_UPGRADE,
+        ENTER_CONNECT_DEVICE,
+        HIBITS_PROCESS_STATUS
     }
 
     public int getPower() {
@@ -109,5 +113,13 @@ public class RobotEvent {
 
     public void setRssi(short rssi) {
         this.rssi = rssi;
+    }
+
+    public boolean isHibitsProcessStatus() {
+        return hibitsProcessStatus;
+    }
+
+    public void setHibitsProcessStatus(boolean hibitsProcessStatus) {
+        this.hibitsProcessStatus = hibitsProcessStatus;
     }
 }

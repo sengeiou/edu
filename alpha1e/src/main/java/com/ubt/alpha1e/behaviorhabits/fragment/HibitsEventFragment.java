@@ -125,7 +125,8 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                         tvScore.setText(userScore.totalScore);
                         cbScore.setSweepAngle((Float.parseFloat(userScore.percent)*250)/100);
 
-                        List<HabitsEvent<List<PlayContentInfo>>> habitsEventList = userScore.details;
+                        List<HabitsEvent<List<PlayContentInfo>>> habitsEventList = mPresenter.reSortData(userScore.details);
+
                         mHabitsEventInfoDatas.clear();
                         mHabitsEventInfoDatas.addAll(habitsEventList);
                         mAdapter.notifyDataSetChanged();
@@ -156,10 +157,10 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
                     if(eventPlayStatus != null && mHabitsEventInfoDatas != null){
                         if(StringUtils.isStringNumber(eventPlayStatus.playAudioSeq)){
                             int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
-                            if(seqNo >= 0 && "playing".equals(eventPlayStatus.audioState)){
+                            UbtLog.d(TAG,"seqNo = " + seqNo + " eventId = " + eventPlayStatus.eventId + "   audioState = " + eventPlayStatus.audioState);
+                            if(seqNo >= 0 && "1".equals(eventPlayStatus.eventState) && "playing".equals(eventPlayStatus.audioState)){
                                 for(HabitsEvent<List<PlayContentInfo>> event : mHabitsEventInfoDatas){
-                                    if(event.eventId.equals(eventPlayStatus.eventId)){
-
+                                    if(event.eventId.equals(eventPlayStatus.eventId) && event.contents != null && event.contents.size() > 0){
                                         showPlayEventDialog(event.contents, event.eventId);
                                         break;
                                     }
@@ -211,7 +212,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
     }
 
     public void initRecyclerViews() {
-        UbtLog.d(TAG, "rvHabitsEvent = " + rvHabitsEvent);
+        UbtLog.d(TAG, "rvHabitsEvent => " + rvHabitsEvent);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvHabitsEvent.setLayoutManager(mLayoutManager);
         RecyclerView.ItemAnimator animator = rvHabitsEvent.getItemAnimator();
@@ -223,7 +224,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-                outRect.bottom = 36;
+                outRect.bottom = 30;
             }
         });
 
@@ -462,6 +463,7 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
      * 进入家长管理中心
      */
     private void enterParentManageCenter() {
+
         if(TextUtils.isEmpty(mUserPassword)){
             new SetPasswordDialog(getContext()).builder()
                     .setCancelable(true)
@@ -482,7 +484,6 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
         }else {
 
             //startForResult(ParentManageCenterFragment.newInstance(), Constant.HIBITS_PARENT_CENTER_REQUEST_CODE);
-
             new InputPasswordDialog(getContext()).builder()
                     .setMsg(getStringRes("ui_habits_password_input_tip"))
                     .setCancelable(true)

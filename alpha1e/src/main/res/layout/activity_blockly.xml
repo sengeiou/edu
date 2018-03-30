@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
 
     <WebView
         android:id="@+id/blockly_webView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+    >
 
     </WebView>
+
+    <RelativeLayout
+        android:id="@+id/rl_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#b3b3b3"
+        android:visibility="gone"
+        >
+
+        <com.ubt.alpha1e.base.loading.MKLoader
+            android:id="@+id/loading"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/loading"
+            android:text="@string/ui_init_blockly"
+            android:gravity="center"
+            />
+
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_blank"
@@ -43,7 +71,7 @@
 
     </RelativeLayout>
     
-    <RelativeLayout
+    <com.ubt.alpha1e.blockly.DragView
         android:id="@+id/rl_go_video"
         android:layout_width="200dp"
         android:layout_height="130dp"
@@ -84,7 +112,7 @@
 
         
         
-    </RelativeLayout>
+    </com.ubt.alpha1e.blockly.DragView>
     
     
 </RelativeLayout>

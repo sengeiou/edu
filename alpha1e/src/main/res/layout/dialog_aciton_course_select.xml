@@ -30,12 +30,17 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingRight="16dp"
-            android:src="@drawable/icon_delete"
+            android:src="@drawable/ic_delete_grey"
             android:visibility="invisible"
             />
 
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/tv_user_edit_color"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_actions"

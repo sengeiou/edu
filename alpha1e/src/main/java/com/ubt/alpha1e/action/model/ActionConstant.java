@@ -51,25 +51,34 @@ public class ActionConstant {
             "    ]\n" +
             "  }";
 
-    public static final String STOOP = "{\n" +
-            "    \"frame\": [\n" +
+    public static final String STOOP = " {\n" +
+            "     \"frame\": [\n" +
             "      {\n" +
-            "        \"-xmlRunTime\": \"440\",\n" +
-            "        \"-xmlFrameStatus\": \"1\",\n" +
-            "        \"-xmlFrameAll\": \"2\",\n" +
-            "        \"-xmldata\": \"90#17#90#90#160#90#85#76#112#88#95#95#102#71#86#85\",\n" +
+            "        \"-xmlFrameAll\": \"3\",\n" +
             "        \"-xmlAllRunTime\": \"440\",\n" +
-            "        \"-xmlFrameIndex\": \"1\"\n" +
+            "        \"-xmlFrameIndex\": \"1\",\n" +
+            "        \"-xmldata\": \"90#17#90#90#160#90#85#76#112#88#95#95#102#71#86#85\",\n" +
+            "        \"-xmlRunTime\": \"440\",\n" +
+            "        \"-xmlFrameStatus\": \"1\"\n" +
             "      },\n" +
             "      {\n" +
-            "        \"-xmlRunTime\": \"1400\",\n" +
-            "        \"-xmlFrameStatus\": \"3\",\n" +
-            "        \"-xmlFrameAll\": \"2\",\n" +
+            "        \"-xmlFrameAll\": \"3\",\n" +
+            "        \"-xmlAllRunTime\": \"2500\",\n" +
+            "        \"-xmlFrameIndex\": \"2\",\n" +
             "        \"-xmldata\": \"5#89#89#180#85#98#85#168#33#174#90#95#14#152#7#90\",\n" +
-            "        \"-xmlAllRunTime\": \"1400\",\n" +
-            "        \"-xmlFrameIndex\": \"2\"\n" +
+            "        \"-xmlRunTime\": \"1500\",\n" +
+            "        \"-xmlFrameStatus\": \"2\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"-xmlFrameAll\": \"3\",\n" +
+            "        \"-xmlAllRunTime\": \"2000\",\n" +
+            "        \"-xmlFrameIndex\": \"3\",\n" +
+            "        \"-xmldata\": \"93#20#66#86#156#127#90#74#95#104#89#89#104#81#76#89\",\n" +
+            "        \"-xmlRunTime\": \"2000\",\n" +
+            "        \"-xmlFrameStatus\": \"3\"\n" +
             "      }\n" +
             "    ]\n" +
+            "   \n" +
             "  }";
 
     public static final String SQUAT = "{\n" +

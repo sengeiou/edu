@@ -205,7 +205,7 @@
 
             <TextView
                 android:id="@+id/tv_devices_num"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:textStyle="bold"
                 android:text="可用网络列表"

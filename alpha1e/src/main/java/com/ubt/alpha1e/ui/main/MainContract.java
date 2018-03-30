@@ -1,10 +1,12 @@
 package com.ubt.alpha1e.ui.main;
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
 import com.ubt.alpha1e.userinfo.model.MyRobotModel;
+
 
 /**
  * MVPPlugin
@@ -25,6 +27,7 @@ public class MainContract {
         //隐藏汽包文字
         void hiddenBuddleText();
 
+        Handler getHandler();
 
     }
 

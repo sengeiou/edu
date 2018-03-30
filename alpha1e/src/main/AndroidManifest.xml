@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ubt.alpha1e"
           android:versionCode="1"
-          android:versionName="V1.0.1.9">
+          android:versionName="V1.0.2.5">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -56,7 +56,8 @@
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions"/>
-
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.REORDER_TASKS"/>
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -460,18 +461,22 @@
             android:theme="@style/NoTitleTheme"/>
         <activity
             android:name=".userinfo.myrobot.MyRobotActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".blockly.BlocklyActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeForBlock"
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".blockly.BlocklyCourseActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"
             android:windowSoftInputMode="adjustPan"/>
         <activity
@@ -503,21 +508,25 @@
             android:name=".ui.ActionsNewEditActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".action.ActionsCreateActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.mainuser.UserCenterActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTask"
             android:theme="@style/NoTitleThemeFullScreenuser"/>
         <activity
             android:name=".userinfo.useredit.UserEditActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"
             android:windowSoftInputMode="adjustPan"/>
         <activity
@@ -539,22 +548,26 @@
             android:name=".userinfo.helpfeedback.HelpFeedbackActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".userinfo.helpfeedback.feedback.FeedbackActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.helpfeedback.feedbackdetail.FeedbackDetailActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".webcontent.WebContentActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         //dicy.cheng
         //蓝牙联网---开机引导
@@ -562,18 +575,21 @@
             android:name=".bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         //蓝牙联网---蓝牙连接
         <activity
             android:name=".bluetoothandnet.bluetoothconnect.BluetoothconnectActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         //蓝牙联网---网络连接
         <activity
             android:name=".bluetoothandnet.netconnect.NetconnectActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         //蓝牙联网---连接状态
@@ -590,182 +606,219 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:theme="@style/NoTitleThemeFullScreen"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity
             android:name=".userinfo.aboutus.AboutUsActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.cleancache.CleanCacheActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.contactus.ContactUsActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.photoshow.PhotoShowActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.psdmanage.PsdManageActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".maincourse.main.MainCourseActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".maincourse.actioncourse.ActionCourseActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".course.principle.PrincipleActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".course.split.SplitActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".course.merge.MergeActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".course.feature.FeatureActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".behaviorhabits.BehaviorHabitsActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".behaviorhabits.playeventlist.PlayEventListActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".action.actioncreate.ActionTestActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".maincourse.courseone.CourseLevelOneActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".maincourse.courseone.CourseLevelTwoActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".maincourse.courseone.CourseLevelThreeActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".maincourse.courseone.CourseLevelFourActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".maincourse.courseone.CourseLevelFiveActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".maincourse.courseone.CourseLevelSixActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".maincourse.courseone.CourseLevelSevenActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".maincourse.courseone.CourseLevelEightActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".maincourse.courseone.CourseLevelNineActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".maincourse.courseone.CourseLevelTenActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".maincourse.courseone.ActionsCourseSaveActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:label="@string/title_activity_actions_edit_save"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
 
         <activity
             android:name=".action.actioncreate.SaveSuccessActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".action.help.HelpActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".bluetoothandnet.BluetoothHelp"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"></activity>
 
 
         <activity
             android:name=".userinfo.dynamicaction.ActionDetailActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".blocklycourse.BlocklyCourseActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".blocklycourse.courselist.CourseListActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
             android:name=".userinfo.notice.WebActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity android:name=".login.PrivacyActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
     </application>
 

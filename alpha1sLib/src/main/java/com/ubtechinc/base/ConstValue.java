@@ -272,7 +272,15 @@ public class ConstValue {
 	/**
 	 * 读取机器人加速度, 0x01开启上报， 0x00关闭上报
 	 */
+	@Deprecated
 	public static final byte DV_READ_ROBOT_ACCELERATION = (byte) 0x54;
+
+	/**
+	 * 读取机器人温湿度传感器, 0x01开启上报， 0x00关闭上报
+	 */
+	public static final byte DV_READ_TEMPERATURE = (byte) 0x54;
+
+
 
 
 	/**
@@ -406,7 +414,10 @@ public class ConstValue {
 	 *  参数2 1B：1.左手；2.右手 3.双脚。
 	 */
 	public static final byte DV_CONTROL_ENGINE_COMMAND = (byte) 0x97;
-
+	/**
+	 *  传感器打招呼控制命令 0 禁止 1 启用
+	 */
+	public static final byte DV_SENSOR_GREETING=(byte)0x98;
 
 	/**
 	 * 获取行为事项播放状态

@@ -342,7 +342,7 @@ public class BlocklyCourseActivity extends MVPBaseActivity<BlocklyCourseContract
         TextView tvResult = contentView.findViewById(R.id.tv_result);
         tvResult.setText(result ? "闯关成功" : "闯关失败");
         TextView title = contentView.findViewById(R.id.tv_card_name);
-        title.setText("图形化编程课程完成");
+        title.setText("" + courseData.getName() + "  " +  courseData.getSubTitle());
         ((ImageView) contentView.findViewById(R.id.iv_result)).setImageResource(result ? R.drawable.img_level_success : R.drawable.img_level_fail);
         ViewHolder viewHolder = new ViewHolder(contentView);
         WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);

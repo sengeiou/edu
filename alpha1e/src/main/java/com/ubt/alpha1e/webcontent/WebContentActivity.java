@@ -3,16 +3,20 @@ package com.ubt.alpha1e.webcontent;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.SslErrorHandler;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
@@ -37,6 +41,13 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
     private static final String TAG = WebContentActivity.class.getSimpleName();
     public static final String WEB_TITLE = "WEB_TITLE";
     public static final String WEB_URL = "WEB_URL";
+    public static final String SHOW_BACK = "SHOW_BACK";
+
+    public ValueCallback<Uri> mUploadMessage;
+    public ValueCallback<Uri[]> mUploadMessageForAndroid5;
+
+    public final static int FILECHOOSER_RESULTCODE = 1;
+    public final static int FILECHOOSER_RESULTCODE_FOR_ANDROID_5 = 2;
 
     @BindView(R.id.ll_base_back)
     LinearLayout llBaseBack;
@@ -44,22 +55,33 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
     TextView tvBaseTitleName;
     @BindView(R.id.web_content)
     WebView webContent;
+    @BindView(R.id.rl_title)
+    RelativeLayout rlTitle;
 
     private String mTitle = "";
     private String mUrl;
+    private boolean isShowBack = false;
     private Stack<String> mUrls;
 
     public static void launchActivity(Activity activity, String url, String mTitle) {
+        launchActivity(activity,url,mTitle,false);
+    }
+
+    public static void launchActivity(Activity activity, String url, String mTitle,boolean isShowBack){
         Intent intent = new Intent();
         intent.setClass(activity, WebContentActivity.class);
         intent.putExtra(WebContentActivity.WEB_URL, url);
         intent.putExtra(WebContentActivity.WEB_TITLE, mTitle);
+        intent.putExtra(WebContentActivity.SHOW_BACK, isShowBack);
         activity.startActivity(intent);
-
     }
 
     @Override
     protected void initUI() {
+        UbtLog.d(TAG,"initUI-->");
+        if(isShowBack){
+            rlTitle.setVisibility(View.VISIBLE);
+        }
 
         tvBaseTitleName.setText(mTitle);
 
@@ -69,15 +91,24 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
         webSettings.setDomStorageEnabled(true);
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webSettings.setUseWideViewPort(true);
+
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setBlockNetworkImage(false);//解决图片加载不出来的问题
+
         if (Build.VERSION.SDK_INT >= 19) {//4.4 ,小于4.4没有这个方法
             webSettings.setMediaPlaybackRequiresUserGesture(true);
         }
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
 
         WebViewClient webViewClient = new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                UbtLog.d(TAG,"url = " + url);
+                UbtLog.d(TAG, "url = " + url);
                 doGotoPage(url);
                 return true;
             }
@@ -91,17 +122,73 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
                     super.onReceivedSslError(view, handler, error);
                 }
             }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                UbtLog.d(TAG,"onPageFinished url = " + url);
+                super.onPageFinished(view, url);
+            }
+
         };
-        UbtLog.d(TAG,"mUrl = " + mUrl);
+
+        WebChromeClient webChromeClient = new WebChromeClient(){
+            //扩展浏览器上传文件
+            //3.0++版本
+            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
+                openFileChooserImpl(uploadMsg);
+            }
+
+            //3.0--版本
+            public void openFileChooser(ValueCallback<Uri> uploadMsg) {
+                openFileChooserImpl(uploadMsg);
+            }
+
+            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+                openFileChooserImpl(uploadMsg);
+            }
+
+            // For Android > 5.0
+            @Override
+            public boolean onShowFileChooser (WebView webView, ValueCallback<Uri[]> uploadMsg, WebChromeClient.FileChooserParams fileChooserParams) {
+                openFileChooserImplForAndroid5(uploadMsg);
+                return true;
+            }
+        };
+
+
+        UbtLog.d(TAG, "mUrl = " + mUrl);
         webContent.setWebViewClient(webViewClient);
+        webContent.setWebChromeClient(webChromeClient);
         webContent.loadUrl(mUrl);
+    }
+
+
+    private void openFileChooserImpl(ValueCallback<Uri> uploadMsg) {
+        mUploadMessage = uploadMsg;
+        Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+        i.addCategory(Intent.CATEGORY_OPENABLE);
+        i.setType("image/*");
+        startActivityForResult(Intent.createChooser(i, "File Chooser"), FILECHOOSER_RESULTCODE);
+    }
+
+    private void openFileChooserImplForAndroid5(ValueCallback<Uri[]> uploadMsg) {
+        mUploadMessageForAndroid5 = uploadMsg;
+        Intent contentSelectionIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        contentSelectionIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        contentSelectionIntent.setType("image/*");
+
+        Intent chooserIntent = new Intent(Intent.ACTION_CHOOSER);
+        chooserIntent.putExtra(Intent.EXTRA_INTENT, contentSelectionIntent);
+        chooserIntent.putExtra(Intent.EXTRA_TITLE, "Image Chooser");
+
+        startActivityForResult(chooserIntent, FILECHOOSER_RESULTCODE_FOR_ANDROID_5);
     }
 
     private void doGotoPage(String url) {
         UbtLog.d(TAG, "url:" + url + "  mTitle:" + mTitle);
-        if(url.startsWith("alpha1e:goBack")){//
+        if (url.startsWith("alpha1e:goBack")) {//
             this.finish();
-        }else {
+        } else {
             mUrls.push(url);
             webContent.loadUrl(url);
         }
@@ -150,6 +237,7 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
 
         mTitle = (String) getIntent().getExtras().get(WebContentActivity.WEB_TITLE);
         mUrl = (String) getIntent().getExtras().get(WebContentActivity.WEB_URL);
+        isShowBack = getIntent().getExtras().getBoolean(WebContentActivity.SHOW_BACK, false);
 
         mUrls = new Stack<String>();
         if (!mUrl.toLowerCase().contains("http")) {
@@ -159,6 +247,29 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
         initUI();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (requestCode == FILECHOOSER_RESULTCODE) {
+            if (null == mUploadMessage)
+                return;
+            Uri result = intent == null || resultCode != RESULT_OK ? null: intent.getData();
+            mUploadMessage.onReceiveValue(result);
+            mUploadMessage = null;
+
+        } else if (requestCode == FILECHOOSER_RESULTCODE_FOR_ANDROID_5){
+            if (null == mUploadMessageForAndroid5)
+                return;
+            Uri result = (intent == null || resultCode != RESULT_OK) ? null: intent.getData();
+            if (result != null) {
+                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
+            } else {
+                mUploadMessageForAndroid5.onReceiveValue(new Uri[]{});
+            }
+            mUploadMessageForAndroid5 = null;
+        }
+    }
 
     @OnClick({R.id.ll_base_back})
     public void onViewClicked(View view) {

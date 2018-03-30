@@ -10,6 +10,7 @@ import com.ubt.alpha1e.maincourse.courseone.CourseLevelFiveActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelNineActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelSevenActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelSixActivity;
+import com.ubt.alpha1e.maincourse.courseone.CourseLevelTenActivity;
 import com.ubt.alpha1e.ui.ActionsEditActivity;
 import com.ubt.alpha1e.ui.ActionsNewEditActivity;
 import com.ubt.alpha1e.ui.MediaRecordActivity;
@@ -67,7 +68,7 @@ public class NewActionPlayer implements PublicInterface.BlueToothInteracter {
                         listener instanceof ActionsNewEditActivity||listener instanceof ActionTestActivity
                     ||listener instanceof CourseLevelFiveActivity||listener instanceof CourseLevelSixActivity
                     ||listener instanceof CourseLevelSevenActivity ||listener instanceof CourseLevelEightActivity
-                    ||listener instanceof CourseLevelNineActivity){
+                    ||listener instanceof CourseLevelNineActivity||listener instanceof CourseLevelTenActivity){
                 mListeners.add(listener);
             }
         }

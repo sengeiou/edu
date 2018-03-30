@@ -2,13 +2,12 @@ package com.ubt.alpha1e.ui.helper;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
 import com.ubt.alpha1e.blockly.BlocklyCourseActivity;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.Md5;
@@ -24,8 +23,8 @@ import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.net.http.basic.IImageListener;
 import com.ubt.alpha1e.ui.BaseActivity;
 import com.ubt.alpha1e.ui.dialog.AlertDialog;
-import com.ubt.alpha1e.ui.dialog.LowBatteryDialog;
-import com.ubt.alpha1e.ui.main.MainActivity;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -35,8 +34,6 @@ import com.ubtechinc.base.PublicInterface.BlueToothInteracter;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -55,8 +52,8 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     private static Timer read_battery_timer = null;
     private static Date lastTime_doReadState = null;
     private static boolean isNeedNoteLowPower = true;
-    private static boolean isNeedNoteLowPowerTwenty=true;
-    private static boolean isNeedNoteLowPowerFive=true;
+    private static boolean isNeedNoteLowPowerTwenty = true;
+    private static boolean isNeedNoteLowPowerFive = true;
     protected static long readUserHeadImgRequest = 1111001;
     public static boolean hasHandshakeBseven = false;
     public static boolean hasSupportA2DP = false;
@@ -68,15 +65,20 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     public static boolean mCurrentVoiceState = true;
     public static int mCurrentVolume = 0;
     public static boolean mLightState = true;
-    public static boolean mSensorState=true;
+    public static boolean mSensorState = true;
+
+    public static boolean mSensorGreetingState = true;
 
     public static String mCourseAccessToken = "";
-    private int LOW_BATTERY_TWENTY=20;
-    private int LOW_BATTERY_FIVE=5;
+    private int LOW_BATTERY_TWENTY = 20;
+    private int LOW_BATTERY_FIVE = 5;
 
 
     private static boolean isCharging = false; //用来判断机器人当前是否在充电中,false 表示没有充电中,true表示充电中.
-    private static byte mPowerValue=0;
+    private static byte mPowerValue = 0;
+    public static boolean isStartHibitsProcess = false;
+   //
+    public static boolean isLowBatteryNotExecuteAction=false;
     /*public BaseHelper(BaseActivity _baseActivity) {
         mBaseActivity = _baseActivity;
     }*/
@@ -149,6 +151,10 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
         }
     }
 
+    public void unRegister() {
+
+    }
+
     public abstract void DistoryHelper();
 
     public void RegisterHelper() {
@@ -190,10 +196,10 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
 
             }
         }
-        if(EventBus.getDefault().hasSubscriberForEvent(RobotEvent.class)) {
+        if (EventBus.getDefault().hasSubscriberForEvent(RobotEvent.class)) {
             RobotEvent disconnectEvent = new RobotEvent(RobotEvent.Event.DISCONNECT);
             EventBus.getDefault().post(disconnectEvent);
-            UbtLog.d(TAG,"--MSG_DO_NOTE_DISCONNECT " );
+            UbtLog.d(TAG, "--MSG_DO_NOTE_DISCONNECT ");
         }
 
         if (mContext != null && mContext instanceof BaseActivity) {
@@ -202,7 +208,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     }
 
     public void doSendReadStateComm() {
-
+        UbtLog.d(TAG, "doSendReadStateComm isStartHibitsProcess = " + isStartHibitsProcess);
         //读机器人状态(音量，灯光状态）
         byte[] params = new byte[1];
         params[0] = 0;
@@ -212,6 +218,16 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
         sensorParams[0] = 0;
         sensorParams[1] = 0;
         doSendComm(ConstValue.DV_SENSOR_CONTROL, sensorParams);
+
+        //读取机器人打招呼（摔倒开启，关闭）状态
+        byte[] sensorGreetingParams = new byte[2];
+        sensorGreetingParams[0] = 0;
+        sensorGreetingParams[1] = 0;
+        doSendComm(ConstValue.DV_SENSOR_GREETING, sensorGreetingParams);
+
+        //连接蓝牙成功，读取一次行为习惯播放状态
+        doSendComm(ConstValue.DV_READ_HIBITS_PLAY_STATUS, null);
+
         //定时读电量(10S读一次)
         byte[] param = new byte[1];
         param[0] = 4;
@@ -229,7 +245,7 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                     param[0] = 4;
                     doSendComm(ConstValue.DV_READ_BATTERY, param);
                 }
-            }, 0, 10*1000);
+            }, 0, 10 * 1000);
         }
     }
 
@@ -253,35 +269,37 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                 if (charge == 0x01) {
                     //UbtLog.d("BaseHelper", "charging" + "   power = " + param[3]);
                     setChargingState(true);
-                } else if(charge==0x0) {
+                } else if (charge == 0x0) {
                     //UbtLog.d("BaseHelper", "not charging" + "   power = " + param[3]);
                     setChargingState(false);
-                }else if(charge==0x03){
+                } else if (charge == 0x03) {
                     setChargingState(true);
                 }
 
                 int power = param[3];
-                setPowerValue((byte)power);
+                setPowerValue((byte) power);
                 if (power <= 10 && isNeedNoteLowPower) {
                     isNeedNoteLowPower = false;
-                   // AlphaApplication.getBaseActivity().onNoteLowPower();
+                    // AlphaApplication.getBaseActivity().onNoteLowPower();
                 } else if (power > 10) {
                     isNeedNoteLowPower = true;
                 }
-                if(param[2]==0){
-                    if(power>5&&power<=20&&isNeedNoteLowPowerTwenty){
-                        UbtLog.d(TAG,"LESS 20 SHOW DIALOG");
+                if (param[2] == 0) {
+                    if (power > 5 && power <= 20 && isNeedNoteLowPowerTwenty) {
+                        UbtLog.d(TAG, "LESS 20 SHOW DIALOG");
                         AlphaApplication.getBaseActivity().onNoteLowPower(LOW_BATTERY_TWENTY);
-                        isNeedNoteLowPowerTwenty=false;
+                        isNeedNoteLowPowerTwenty = false;
                     }
-                    if(power<=5&&isNeedNoteLowPowerFive){
-                        UbtLog.d(TAG,"LESS 5 SHOW DIALOG");
+                    if (power <= 5 && isNeedNoteLowPowerFive) {
+                        UbtLog.d(TAG, "LESS 5 SHOW DIALOG");
                         AlphaApplication.getBaseActivity().onNoteLowPower(LOW_BATTERY_FIVE);
-                        isNeedNoteLowPowerFive=false;
+                        isLowBatteryNotExecuteAction=true;
+                        isNeedNoteLowPowerFive = false;
                     }
-                }else {
-                    isNeedNoteLowPowerTwenty=true;
-                    isNeedNoteLowPowerFive=true;
+                } else {
+                    isNeedNoteLowPowerTwenty = true;
+                    isNeedNoteLowPowerFive = true;
+                    isLowBatteryNotExecuteAction=false;
                 }
 
             } catch (Exception e) {
@@ -358,22 +376,43 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
             NetworkInfo networkInfo = GsonImpl.get().toObject(networkInfoJson, NetworkInfo.class);
             if (networkInfo.status) {
                 hasConnectNetwork = true;
-                UbtLog.d(TAG, "base 网络已经连接" );
+                UbtLog.d(TAG, "base 网络已经连接");
             } else {
                 hasConnectNetwork = false;
-                UbtLog.d(TAG, "base 网络没有连接" );
+                UbtLog.d(TAG, "base 网络没有连接");
             }
-        }else if(cmd==ConstValue.DV_SENSOR_CONTROL){
-             UbtLog.d(TAG,"DV_SENSOR_CONTROL Status"+param[0]);
-             if(param[0]==0) {
-                 //SENSOR DISABLE
-                 mSensorState =false;
-             }else {
+        } else if (cmd == ConstValue.DV_SENSOR_CONTROL) {
+            UbtLog.d(TAG, "DV_SENSOR_CONTROL Status" + param[0]);
+            if (param[0] == 0) {
+                //SENSOR DISABLE
+                mSensorState = false;
+            } else {
                 //SENSOR ENABLE
-                 mSensorState=true;
-             }
-        }
+                mSensorState = true;
+            }
+        } else if (cmd == ConstValue.DV_SENSOR_GREETING) {
+            UbtLog.d(TAG, "DV_SENSOR_GREETING Status" + param[0]);
+            if (param[0] == 0) {
+                //SENSOR DISABLE
+                mSensorGreetingState = false;
+            } else {
+                //SENSOR ENABLE
+                mSensorGreetingState = true;
+            }
+        } else if (cmd == ConstValue.DV_READ_HIBITS_PLAY_STATUS) {
 
+            String eventPlayStatusJson = BluetoothParamUtil.bytesToString(param);
+
+            UbtLog.d(TAG, "cmd = " + cmd + "    eventPlayStatusJson = " + eventPlayStatusJson);
+            EventPlayStatus eventPlayStatus = GsonImpl.get().toObject(eventPlayStatusJson, EventPlayStatus.class);
+            isStartHibitsProcess = "1".equals(eventPlayStatus.eventState) ? true : false;
+
+            UbtLog.d(TAG, "isStartHibitsProcess = " + isStartHibitsProcess);
+
+            RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.HIBITS_PROCESS_STATUS);
+            robotEvent.setHibitsProcessStatus(isStartHibitsProcess);
+            EventBus.getDefault().post(robotEvent);
+        }
     }
 
     public UserInfo getCurrentUser() {
@@ -609,12 +648,46 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
     public boolean getChargingState() {
         return isCharging;
     }
-    private void setPowerValue(byte value){
-        mPowerValue=value;
+
+    private void setPowerValue(byte value) {
+        mPowerValue = value;
     }
-    public byte  getPowerValue(){
-       return  mPowerValue;
+
+    public byte getPowerValue() {
+        return mPowerValue;
     }
 
 
+    //获取当前机器人是否正在行为提醒
+    public boolean isStartHibitsProcess() {
+        //isStartHibitsProcess = true;
+
+        return isStartHibitsProcess;
+    }
+
+    //显示行为提醒弹出框
+    public void showStartHibitsProcess(final IDismissCallbackListener mIListener) {
+        String msg = "行为习惯正在进行中，请先完成";
+        String position = "好的";
+        if (mContext instanceof MVPBaseActivity) {
+            msg = ((MVPBaseActivity) mContext).getStringResources("ui_habits_process_starting");
+            position = ((MVPBaseActivity) mContext).getStringResources("ui_common_ok");
+        } else if (mContext instanceof BaseActivity) {
+            msg = ((BaseActivity) mContext).getStringResources("ui_habits_process_starting");
+            position = ((BaseActivity) mContext).getStringResources("ui_common_ok");
+        }
+
+        new ConfirmDialog(mContext)
+                .builder()
+                .setMsg(msg)
+                .setCancelable(false)
+                .setPositiveButton(position, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mIListener != null) {
+                            mIListener.onDismissCallback(isStartHibitsProcess);
+                        }
+                    }
+                }).show();
+    }
 }

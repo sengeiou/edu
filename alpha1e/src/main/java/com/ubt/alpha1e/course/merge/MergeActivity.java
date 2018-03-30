@@ -27,9 +27,11 @@ import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.helper.PrincipleHelper;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
 import com.ubt.alpha1e.course.split.SplitActivity;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
 import com.ubt.alpha1e.utils.SizeUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -57,6 +59,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     private static final int TAP_HEAD = 5;
     private static final int SHOW_NEXT_OVER_TIME = 6;
     private static final int BLUETOOTH_DISCONNECT = 7;
+    private static final int RECIEVE_HIBITS_START = 8;
 
     private final int ANIMATOR_TIME = 500;
     private final int OVER_TIME = (15 + 10) * 1000;//(15S音频+ 10S操作)超时
@@ -108,6 +111,8 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
 
 
     private ConfirmDialog mTapHeadDialog = null;
+    private boolean isShowHibitsDialog = false;
+    private boolean hasReceiveHibitsStart = false;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -133,17 +138,24 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                 case SHOW_DIALOG:
                     mHandler.sendEmptyMessageDelayed(SHOW_NEXT_OVER_TIME, OVER_TIME);
                     ((PrincipleHelper)mHelper).playSoundAudio("{\"filename\":\"组装.mp3\",\"playcount\":1}");
-                    ((PrincipleHelper)mHelper).playFile("蹲下.hts");
                     tvMsgShow.setText(getStringResources("ui_principle_on_engine_tips"));
                     showView(tvMsgShow, true, biggerLeftBottomAnim);
+
+                    UbtLog.d(TAG,"PRINCIPLE_ENTER_PROGRESS : " + SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0));
+                    if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 1){
+                        ((PrincipleHelper)mHelper).playFile("蹲下.hts");
+                    }
+
                     break;
                 case HIDE_DIALOG:
                     hasPlaySoundAudioFinish = true;
                     showView(tvMsgShow, false, smallerLeftBottomAnim);
                     break;
                 case TAP_HEAD:
-                    //拍头退出课程模式
-                    showTapHeadDialog();
+                    if(!isShowHibitsDialog){
+                        //拍头退出课程模式
+                        showTapHeadDialog();
+                    }
                     break;
                 case SHOW_NEXT_OVER_TIME:
                     setViewEnable(tvNext,true,1f);
@@ -152,6 +164,12 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                     ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
                     MainCourseActivity.finishByMySelf();
                     finish();
+                    break;
+                case RECIEVE_HIBITS_START:
+                    MainCourseActivity.showHabitsStartDialog();
+                    ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                    MergeActivity.this.finish();
+                    MergeActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
                     break;
             }
         }
@@ -237,7 +255,28 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
             initViewLayout(ivLegRightBg, scale);
         }
 
-        mHandler.sendEmptyMessage(SHOW_DIALOG);
+        if(mHelper.isStartHibitsProcess()){
+            isShowHibitsDialog = true;
+            mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                @Override
+                public void onDismissCallback(Object obj) {
+                    isShowHibitsDialog = false;
+                    UbtLog.d("onDismissCallback","obj = " +obj);
+                    if((boolean)obj){
+                        //行为习惯流程未结束，退出当前流程
+                        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                        MergeActivity.this.finish();
+                        MergeActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                    }else {
+                        //行为习惯流程结束，该干啥干啥
+                        mHandler.sendEmptyMessage(SHOW_DIALOG);
+                    }
+                }
+            });
+        }else {
+            //行为习惯流程未开始，该干啥干啥
+            mHandler.sendEmptyMessage(SHOW_DIALOG);
+        }
     }
 
     private void initViewLayout(View view, int scale ) {
@@ -273,9 +312,22 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
         }if(event.getEvent() == PrincipleEvent.Event.PLAY_ACTION_FINISH){
             UbtLog.d(TAG,"--PLAY_ACTION_FINISH--");
             hasLostRobot = true;
-            ((PrincipleHelper)mHelper).doLostPower();
+            //((PrincipleHelper)mHelper).doLostPower();
+            ((PrincipleHelper)mHelper).doControlEngine(1,4);
         }else if(event.getEvent() == PrincipleEvent.Event.DISCONNECTED){
             mHandler.sendEmptyMessage(BLUETOOTH_DISCONNECT);
+        }
+    }
+
+    @Override
+    public void onEventRobot(RobotEvent event) {
+        super.onEventRobot(event);
+        if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS && !isShowHibitsDialog){
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            if(event.isHibitsProcessStatus() && !hasReceiveHibitsStart){
+                hasReceiveHibitsStart = true;
+                mHandler.sendEmptyMessage(RECIEVE_HIBITS_START);
+            }
         }
     }
 
@@ -390,13 +442,17 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
      */
     public void onBack() {
         if(SPUtils.getInstance().getInt(Constant.PRINCIPLE_ENTER_PROGRESS, 0) > 1 ){
-            ((PrincipleHelper) mHelper).doInit();
-            ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
-            this.finish();
-            this.overridePendingTransition(0, R.anim.activity_close_down_up);
+            exitPrincipleProcess();
         }else {
             SplitActivity.launchActivity(this,true);
         }
+    }
+
+    private void exitPrincipleProcess(){
+        ((PrincipleHelper) mHelper).doInit();
+        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+        this.finish();
+        this.overridePendingTransition(0, R.anim.activity_close_down_up);
     }
 
     private boolean hasLearnFinish(){
@@ -615,14 +671,16 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                         }else if(view.getId() == R.id.iv_leg_left ){
                             hasLostLegLeft = false;
                             if(!hasLostLegRight){
-                                ((PrincipleHelper)mHelper).doOnLeftFoot();
-                                ((PrincipleHelper)mHelper).doOnRightFoot();
+                                //((PrincipleHelper)mHelper).doOnLeftFoot();
+                                //((PrincipleHelper)mHelper).doOnRightFoot();
+                                ((PrincipleHelper)mHelper).doOnFoot();
                             }
                         }else if(view.getId() == R.id.iv_leg_right){
                             hasLostLegRight = false;
                             if(!hasLostLegLeft){
-                                ((PrincipleHelper)mHelper).doOnLeftFoot();
-                                ((PrincipleHelper)mHelper).doOnRightFoot();
+                                //((PrincipleHelper)mHelper).doOnLeftFoot();
+                                //((PrincipleHelper)mHelper).doOnRightFoot();
+                                ((PrincipleHelper)mHelper).doOnFoot();
                             }
                         }
 

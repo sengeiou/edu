@@ -74,6 +74,8 @@ import com.ubt.alpha1e.ui.LoginActivity;
 import com.ubt.alpha1e.ui.RobotNetConnectActivity;
 import com.ubt.alpha1e.ui.custom.IOnClickListener;
 import com.ubt.alpha1e.ui.dialog.BaseDiaUI;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.dialog.IDismissCallbackListener;
 import com.ubt.alpha1e.ui.dialog.LessonTaskFinishDialog;
 import com.ubt.alpha1e.ui.dialog.LessonTaskHelpDialog;
 import com.ubt.alpha1e.ui.dialog.LessonTaskSuccessDialog;
@@ -215,10 +217,12 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     public static final String FROM_VIDEO = "fromVideo";
     public static final String SHOTCUT_NAME = "shotVideo";
     private boolean fromVideo = false;
-    private RelativeLayout rlGoVideo;
+    private DragView rlGoVideo;
     private ImageView ivGoVideo;
     private ImageView ivShotAlbum;
     private ImageView ivBack;
+
+    private RelativeLayout rlLoading;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -229,7 +233,9 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     if(isBulueToothConnected()){
 //                    ((RemoteHelper)mHelper).sendWalkFiles(unSyncFileNames);
                     }
-                    dismissLoading();
+                    if(isLoadFinish){
+                        dismissLoading();
+                    }
                     break;
                 case STOP_WALK_CONTINUE_CODE :
                     stopPlay();
@@ -256,10 +262,10 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     dealLessonTaskUI((List<LessonTaskInfo>) msg.obj);
                     break;
                 case DO_DOWNLOAD_UPDATE_PROGRESS:
-                    if(mSyncAlertDialog != null && msg.arg1 < 100){
-                        mSyncAlertDialog.setProgress(msg.arg1);
-                    }
-                    break;
+//                    if(mSyncAlertDialog != null && msg.arg1 < 100){
+//                        mSyncAlertDialog.setProgress(msg.arg1);
+//                    }
+//                    break;
                 case DO_DOWNLOAD_FAIL:
                     dismissLoading();
                     break;
@@ -281,9 +287,9 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     break;
                 case DO_DOWNLOAD_LESSON_TASK:
                 case DO_DOWNLOAD_BLOCKLY:
-                    if(mSyncAlertDialog != null && mSyncAlertDialog.isShowing()){
-                        mSyncAlertDialog.setCancelable(false);
-                    }
+//                    if(mSyncAlertDialog != null && mSyncAlertDialog.isShowing()){
+//                        mSyncAlertDialog.setCancelable(false);
+//                    }
                     break;
                 case DO_PLAY_SOUND_EFFECT_FINISH:
                     if(mWebView != null){
@@ -298,6 +304,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         }
     };
 
+    ConfirmDialog confirmDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -306,7 +314,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         setContentView(R.layout.activity_blockly);
         mWebView = (WebView) findViewById(R.id.blockly_webView);
         rlBlank = (RelativeLayout) findViewById(R.id.rl_blank);
-        rlGoVideo = (RelativeLayout) findViewById(R.id.rl_go_video);
+        rlGoVideo = (DragView) findViewById(R.id.rl_go_video);
         ivGoVideo = (ImageView) findViewById(R.id.iv_go_video);
         ivShotAlbum = (ImageView) findViewById(R.id.iv_shot_album);
         ivBack = (ImageView) findViewById(R.id.iv_block_back);
@@ -320,8 +328,11 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         rlGoVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
-                overridePendingTransition(0, R.anim.activity_close_down_up);
+                if(!rlGoVideo.isDrag()){
+                    finish();
+                    overridePendingTransition(0, R.anim.activity_close_down_up);
+                }
+
             }
         });
 
@@ -347,8 +358,24 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 .setImageResoure(R.drawable.data_loading)
                 .setCancelable(true,20);
 
+
+        rlLoading = (RelativeLayout) findViewById(R.id.rl_loading);
+
         requestUpdate();
         init();
+
+        confirmDialog = new ConfirmDialog(BlocklyActivity.this).builder()
+                .setTitle("提示")
+                .setMsg(getStringResources("ui_habits_process_start"))
+                .setCancelable(false)
+                .setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "确定");
+                        showDialog = false;
+                        finish();
+                    }
+                });
     }
 
     @Override
@@ -545,24 +572,44 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             mListener = new DirectionSensorEventListener(this);
             mSensorManager.registerListener(mListener,mSensor,SensorManager.SENSOR_DELAY_NORMAL);
         }
+
+   /*     if(mHelper != null && mHelper.isStartHibitsProcess()){
+            mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                @Override
+                public void onDismissCallback(Object obj) {
+                    UbtLog.d(TAG,"onDismissCallback = obj == " + obj);
+                    if((boolean)obj){
+                        //行为习惯流程未结束，退出当前流程
+                        finish();
+                    }
+                }
+            });
+        }*/
     }
 
     private void showLoading() {
 
-        if(mSyncAlertDialog != null && !mSyncAlertDialog.isShowing())
-        {
-            mSyncAlertDialog.show();
-        }
+        rlLoading.setVisibility(View.VISIBLE);
+
+//        if(mSyncAlertDialog != null && !mSyncAlertDialog.isShowing())
+//        {
+//            mSyncAlertDialog.show();
+//        }
 
     }
 
     public void dismissLoading() {
 
-        if(mSyncAlertDialog != null && mSyncAlertDialog.isShowing() && !this.isFinishing())
-        {
-            mSyncAlertDialog.display();
-        }
+        rlLoading.setVisibility(View.GONE);
+
+//        if(mSyncAlertDialog != null && mSyncAlertDialog.isShowing() && !this.isFinishing())
+//        {
+//            mSyncAlertDialog.display();
+//        }
+
+
     }
+
 
     private void initActionData(){
 
@@ -685,6 +732,19 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 }
                 mWebView.setVisibility(View.INVISIBLE);
 
+                if(mHelper != null && mHelper.isStartHibitsProcess()){
+                    mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                        @Override
+                        public void onDismissCallback(Object obj) {
+                            UbtLog.d(TAG,"onDismissCallback = obj == " + obj);
+                            if((boolean)obj){
+                                //行为习惯流程未结束，退出当前流程
+                                finish();
+                            }
+                        }
+                    });
+                }
+
             }
 
             @Override
@@ -709,6 +769,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 //                    mSensorHelper.doReadGyroData((byte)0x01);
 //                    mSensorHelper.doReadAcceleration((byte)0x01);
                     mSensorHelper.doRead6DState();
+//                    mSensorHelper.doReadTemperature((byte)0x01);
                 }
 
                 if(isBulueToothConnected()){
@@ -732,6 +793,18 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
                 }else{
                     rlGoVideo.setVisibility(View.GONE);
+                }
+                if(mHelper != null && mHelper.isStartHibitsProcess()){
+                    mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
+                        @Override
+                        public void onDismissCallback(Object obj) {
+                            UbtLog.d(TAG,"onDismissCallback = obj == " + obj);
+                            if((boolean)obj){
+                                //行为习惯流程未结束，退出当前流程
+                                finish();
+                            }
+                        }
+                    });
                 }
             }
 
@@ -1054,6 +1127,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 //                mSensorHelper.doReadAcceleration((byte)0x00);
                 UbtLog.d(TAG, "startOrStopRun end");
                 startOrStopRun((byte)0x02);
+//                mSensorHelper.doReadTemperature((byte)0x00);
             }
             mSensorHelper.UnRegisterHelper();
         }
@@ -1292,6 +1366,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
     /****************end***********************/
 
+   boolean showDialog  = false;
     @Override
     public void onEventRobot(RobotEvent event){
         super.onEventRobot(event);
@@ -1352,6 +1427,37 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                         mWebView.loadUrl(js);
                     }
                 });
+            }
+        }else if(event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS){
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            UbtLog.d(TAG, "isHibitsProcessStatus" + event.isHibitsProcessStatus());
+            if(event.isHibitsProcessStatus() && !showDialog){
+                showDialog = true;
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        /*new ConfirmDialog(BlocklyActivity.this).builder()
+                                .setTitle("提示")
+                                .setMsg(getStringResources("ui_habits_process_start"))
+                                .setCancelable(false)
+                                .setPositiveButton("确定", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        UbtLog.d(TAG, "确定");
+                                        showDialog = false;
+                                        finish();
+                                    }
+                                }).show();*/
+
+                        if(confirmDialog != null && !confirmDialog.isShowing()){
+                            confirmDialog.show();
+                        }
+                    }
+                },10);
+            }else{
+                if(confirmDialog != null && confirmDialog.isShowing()){
+                    confirmDialog.dismiss();
+                }
             }
         }
     }
@@ -1518,6 +1624,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             mHandler.sendEmptyMessage(DO_DOWNLOAD_LESSON_TASK);
         }
     }
+
+
 
     /**
      * 根据数据处理UI
