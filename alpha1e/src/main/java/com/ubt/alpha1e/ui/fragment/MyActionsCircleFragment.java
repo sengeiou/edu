@@ -881,6 +881,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             final MyCircleHolder holder = (MyCircleHolder) mHolder;
             final Map<String, Object> actionList = mDatas.get(position);
             String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
+            String action_player_name=actionList.get(ActionsLibHelper.map_val_action) + "";
             //UbtLog.d(TAG, "onBindViewHolder " + position);
             Glide.with(mContext)
                     .load(R.drawable.sec_action_logo)
@@ -891,14 +892,14 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             }
             holder.txt_action_name.setText(action_name);
             for (int i = 0; i < MyActionsHelper.mCurrentSeletedNameList.size(); i++) {
-                if (MyActionsHelper.mCurrentSeletedNameList.get(i).equals(action_name)) {
+                if (MyActionsHelper.mCurrentSeletedNameList.get(i).equals(action_player_name)) {
                     UbtLog.d(TAG, "current select is looping:" + isStartLooping + "name :" + action_name + "size" + MyActionsHelper.mCurrentSeletedNameList.size());
                     actionList.put(MyActionsHelper.map_val_action_selected, true);
                     break;
                 }
             }
-            //  if (mHelper.getCurrentPlayName().equals(action_name)) {
-            if (AlphaApplication.getBaseActivity().readCurrentPlayingActionName().equals(action_name)) {
+
+            if (AlphaApplication.getBaseActivity().readCurrentPlayingActionName().equals(action_player_name)) {
                 actionList.put(MyActionsHelper.map_val_action_is_playing, true);
             }
 
@@ -960,7 +961,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                         if (!MyActionsHelper.mCurrentSeletedNameList.contains(actionName)) {
                             MyActionsHelper.mCurrentSeletedNameList.add(actionName);
                             ActionInfo actionInfo = new ActionInfo();
-                            actionInfo.actionName = actionName;
+                            actionInfo.actionName = (String) actionList.get(MyActionsHelper.map_val_action_name);
                             actionInfo.hts_file_name = (String) actionList.get(MyActionsHelper.map_val_action);
                             actionInfo.actionSize = position;//zan cun
                             MyActionsHelper.mCurrentSeletedActionInfoMap.put(actionName, actionInfo);

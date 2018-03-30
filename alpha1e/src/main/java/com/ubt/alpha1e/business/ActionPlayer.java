@@ -10,6 +10,7 @@ import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionInfo;
 import com.ubt.alpha1e.event.ActionEvent;
 import com.ubt.alpha1e.ui.BaseActivity;
+import com.ubt.alpha1e.ui.helper.ActionsHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.MyLog;
@@ -732,6 +733,7 @@ public class ActionPlayer implements BlueToothInteracter {
                // UbtLog.d(TAG, "AFTER 循环播放功能，播放动作：" + mActionNameList[i] + "   isShutDowm：" + isShutDowm+"    mIsCycleContinuePlay:   "+mIsCycleContinuePlay+"  isStopCycleThread:  "+isStopCycleThread);
                 if (!isShutDowm && thiz.mCurrentPlayState == Play_state.action_playing) {
                     String action_name = mActionNameList[i];
+                    String actionName = mActionNameList[i];
                     if(!mCurrentDefaultAction.equals(action_name)){
                         ActionInfo actionInfo = MyActionsHelper.mCurrentSeletedActionInfoMap.get(action_name);
                         if(actionInfo == null){
@@ -739,8 +741,10 @@ public class ActionPlayer implements BlueToothInteracter {
                            // UbtLog.d(TAG,"ACTIONINFO NULL");
                             continue;
                         }
+                        actionName = actionInfo.actionName;
 //                        //全局控制按钮消失DESTROY后，需要通过这个变量来获取正在播放的
-                        AlphaApplication.getBaseActivity().saveCurrentPlayingActionName(action_name);
+                        AlphaApplication.getBaseActivity().saveCurrentPlayingActionName(actionInfo.actionName);
+                        //setActionShowName(mDatas,action_name);
                         int pos = actionInfo.actionSize;
                         if(pos < MyActionsHelper.localSize){
                             action_name = FileTools.action_robot_file_path + "/"+action_name+".hts";
@@ -759,7 +763,8 @@ public class ActionPlayer implements BlueToothInteracter {
 
                     Message msg = new Message();
                     msg.what = UI_NOTE_PLAY_CYCLE_NEXT;
-                    msg.obj = mActionNameList[i];
+                    //msg.obj = mActionNameList[i];
+                    msg.obj = actionName;
                     mHandler.sendMessage(msg);
 
                 }else {
@@ -842,6 +847,16 @@ public class ActionPlayer implements BlueToothInteracter {
         mDatas=nameList;
     }
 
+//    private void setActionShowName(List<Map<String, Object>> list,String action_name_id) {
+//        for ( int i = 0 ; i < list.size() - 1 ; i ++ ) {
+//            UbtLog.d(TAG,"INDEX "+list.get(i).get(ActionsHelper.map_val_action));
+//            if(list.get(i).get(ActionsHelper.map_val_action).equals(action_name_id)){
+//                UbtLog.d(TAG,"setActionShowNa"+list.get(i).get(ActionsHelper.map_val_action_name).toString());
+//                AlphaApplication.getBaseActivity().saveCurrentPlayingActionName(list.get(i).get(ActionsHelper.map_val_action_name).toString());
+//                break;
+//            }
+//        }
+//    }
     /**
      * 是否发送给机器人停止执行动作的命令
      * @param isSendStop
