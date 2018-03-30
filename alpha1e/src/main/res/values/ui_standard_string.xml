@@ -663,7 +663,7 @@
     <string name="ui_official_hot">热门</string>
     <string name="ui_official_recommend">推荐</string>
     <string name="ui_release_empty_action">小主人，您没有未发布的动作哦</string>
-    <string name="ui_contact_title">关于我们</string>
+    <string name="ui_contact_title">联系我们</string>
     <string name="ui_contact_phone">客服电话</string>
     <string name="ui_contact_email">客服邮箱</string>
     <string name="ui_contact_qrcode_title">关注优必选微信公众号</string>
