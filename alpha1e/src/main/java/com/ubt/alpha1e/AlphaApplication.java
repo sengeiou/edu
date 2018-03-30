@@ -112,6 +112,8 @@ public class AlphaApplication extends LoginApplication {
     //默认当前连接对象为非1E，没有连上的时候，默认为非Alpha1E
     private boolean isAlpha1E = false;
 
+    private static boolean isPad = false;
+
     public long getActionOriginalId() {
         return actionOriginalId;
     }
@@ -160,6 +162,7 @@ public class AlphaApplication extends LoginApplication {
         startGlobalMsgService(); //处理全局消息，包括信鸽，必须在信鸽前初始化
         initXG();
         initLanguage();
+        initIsPad(this);
         LitePal.initialize(this);
         initSmartRefresh();
         registerActivityLifecycleCallbacks(new MyLifecycleHandler());
@@ -671,15 +674,21 @@ public class AlphaApplication extends LoginApplication {
         isShowCircleFragemt = isShow;
     }
 
+    public static boolean isPad() {
+        return isPad;
+    }
+
     /**
      * 判断当前设备是手机还是平板，代码来自 Google I/O App for Android
      *
      * @return 平板返回 True，手机返回 False
      */
-    public static boolean isPad() {
-        return (getBaseActivity().getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK)
-                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    private void initIsPad(Context context){
+        try {
+            isPad = (context.getResources().getConfiguration().screenLayout
+                    & Configuration.SCREENLAYOUT_SIZE_MASK)
+                    >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+        }catch (Exception ex){}
     }
 
     /**
