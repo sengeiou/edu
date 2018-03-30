@@ -1065,7 +1065,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 tvCircle.setAlpha(1.0f);
             }else {
                 //没播放，大小小于1
-                ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop""));
+                ivCircle.setImageDrawable(mActivity.getDrawableRes("ic_circle_stop"));
                 ivCircle.setAlpha(0.5f);
                 tvCircle.setText("循环播放");
                 tvCircle.setAlpha(0.5f);
