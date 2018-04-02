@@ -40,6 +40,7 @@ public class MyActionsSyncActivity extends BaseActivity implements View.OnClickL
 
 
     private RecyclerView mSyncRecyclerview;
+
     private LinearLayoutManager mLayoutManager;
     private ActionsSyncRecyclerAdapter mAdapter;
     private List<Map<String, Object>> mDatas = new ArrayList<>();
@@ -54,11 +55,11 @@ public class MyActionsSyncActivity extends BaseActivity implements View.OnClickL
 
 
     public static void launchActivity(Activity activity,int sync_type, int requestCode) {
-        Intent intent = new Intent();
-        intent.setClass(activity,
-                MyActionsSyncActivity.class);
-        intent.putExtra(MyActionsHelper.ACTIONS_SYNC_TYPE,sync_type);
-        activity.startActivityForResult(intent, requestCode);
+//        Intent intent = new Intent();
+//        intent.setClass(activity,
+//                MyActionsSyncActivity.class);
+//        intent.putExtra(MyActionsHelper.ACTIONS_SYNC_TYPE,sync_type);
+//        activity.startActivityForResult(intent, requestCode);
 
     }
 
@@ -68,6 +69,7 @@ public class MyActionsSyncActivity extends BaseActivity implements View.OnClickL
         setContentView(R.layout.activity_my_actions_sync);
         sync_type = (int)getIntent().getExtras().get(MyActionsHelper.ACTIONS_SYNC_TYPE);
         type = sync_type == FillLocalContent.CREATE_ACTIONS? FillLocalContent.SYNC_CREATE_ACTIONS: FillLocalContent.SYNC_DOWNLOAD_ACTIONS;
+        new Exception().printStackTrace();
         initUI();
         initControlListener();
         requestData(sync_type);
@@ -182,7 +184,7 @@ public class MyActionsSyncActivity extends BaseActivity implements View.OnClickL
         txt_delete.setOnClickListener(this);
         txt_download.setOnClickListener(this);
         img_select_all.setOnClickListener(this);
-        img_circle.setOnClickListener(this);
+        //img_circle.setOnClickListener(this);
         txt_select_all.setOnClickListener(this);
         mHelper = MyActionsHelper.getInstance(this);
         mSyncRecyclerview = (RecyclerView) findViewById(R.id.recyclerview_sync);
