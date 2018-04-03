@@ -97,4 +97,12 @@ public class SizeUtils {
         return height_;
     }
 
+    /**
+     * 获取屏幕密度
+     * @param context
+     * @return
+     */
+    public static float getDensity(Context context){
+        return context.getResources().getDisplayMetrics().density;
+    }
 }
