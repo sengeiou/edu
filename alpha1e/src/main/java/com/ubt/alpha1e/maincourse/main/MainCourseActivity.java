@@ -24,6 +24,7 @@ import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.MainCoursedapter;
 import com.ubt.alpha1e.maincourse.model.CourseModel;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerActivity;
 import com.ubt.alpha1e.services.SyncDataService;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -165,7 +166,10 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (isFastClick()) {
-            if (position == 0) {
+            if(position==0){
+                startActivity(new Intent(this, OnlineAudioPlayerActivity.class));
+            }
+            else if (position == 1) {
 
                 if (isBulueToothConnected()) {
                     String progressKey = Constant.PRINCIPLE_PROGRESS + SPUtils.getInstance().getString(Constant.SP_USER_ID);
@@ -189,10 +193,10 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
                     ToastUtils.showShort(getStringResources("ui_action_connect_robot"));
                 }
 
-            } else if (position == 1) {
+            } else if (position == 2) {
                 startActivity(new Intent(this, ActionCourseActivity.class));
 
-            } else if (position == 2) {
+            } else if (position == 3) {
                 startActivity(new Intent(this, CourseListActivity.class));
             }
             this.overridePendingTransition(R.anim.activity_open_up_down, 0);
