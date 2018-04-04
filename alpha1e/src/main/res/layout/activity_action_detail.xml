@@ -49,10 +49,10 @@
 
         <ImageView
             android:id="@+id/iv_cover"
-            android:layout_width="86dp"
-            android:layout_height="86dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_width="@dimen/detail_image_width"
+            android:layout_height="@dimen/detail_image_width"
+            android:layout_marginLeft="@dimen/detail_margin_left"
+            android:layout_marginTop="@dimen/detail_margin_top"
             android:src="@drawable/img_action_background"
             />
 
@@ -63,13 +63,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/detail_margin_top"
                 android:layout_toRightOf="@+id/iv_cover"
                 android:text="测试"
                 android:textColor="@color/tv_center_color"
                 android:drawableRight="@drawable/tab_action"
                 android:drawablePadding="5dp"
-                android:textSize="15sp"
+                android:textSize="@dimen/detail_textsize_three"
                 />
 
 
@@ -81,10 +81,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="@dimen/detail_margin_top"
             android:text="五分钟前创建"
             android:textColor="@color/tv_notice_title"
-            android:textSize="14sp"
+            android:textSize="@dimen/detail_textsize_two"
             />
 
         <View
@@ -117,7 +117,7 @@
                 android:gravity="center"
                 android:text="03:21"
                 android:textColor="@color/tv_notice_title"
-                android:textSize="14sp"
+                android:textSize="@dimen/detail_textsize_two"
                 />
 
             <ImageView
@@ -138,7 +138,7 @@
                 android:layout_toRightOf="@+id/tv_action_time"
                 android:gravity="center"
                  android:textColor="@color/tv_notice_title"
-                android:textSize="14sp"
+                android:textSize="@dimen/detail_textsize_two"
                 />
 
         </LinearLayout>
@@ -153,7 +153,7 @@
             android:layout_toRightOf="@+id/iv_cover"
             android:text="描述:"
             android:textColor="@color/tv_content_color"
-            android:textSize="13sp"
+            android:textSize="@dimen/detail_textsize_one"
             />
 
         <TextView
@@ -163,7 +163,7 @@
             android:layout_marginRight="23dp"
             android:text="空的数据付哈扩所付测试测试测试测试测试测空的数据付哈扩所付测试测试测试测试测试测"
             android:textColor="@color/tv_content_color"
-            android:textSize="13sp"
+            android:textSize="@dimen/detail_textsize_one"
             android:layout_alignBaseline="@+id/tv_flag"
             android:layout_alignBottom="@+id/tv_flag"
             android:layout_toEndOf="@+id/tv_flag"/>
@@ -184,7 +184,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_line1"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/detail_play_top"
             android:orientation="horizontal">
 
             <Button

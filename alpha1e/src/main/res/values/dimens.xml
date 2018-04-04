@@ -34,4 +34,21 @@
     <!--圆角-->
     <dimen name="radius_alertview">28px</dimen>
 
+    <!-- 个人中心左侧item-->
+    <dimen name="user_left_item_padding_drawable">12dp</dimen>
+    <dimen name="user_left_item_padding_bottom">8dp</dimen>
+    <dimen name="user_left_item_padding_left">10dp</dimen>
+    <dimen name="user_left_item_padding_top">8dp</dimen>
+    <dimen name="user_left_item_textsize">18sp</dimen>
+    <dimen name="user_left_item_notice_textsize">10sp</dimen>
+
+    <!-- 动作详情页-->
+    <dimen name="detail_margin_left">15dp</dimen>
+    <dimen name="detail_margin_top">15dp</dimen>
+    <dimen name="detail_image_width">86dp</dimen>
+    <dimen name="detail_textsize_one">13sp</dimen>
+    <dimen name="detail_textsize_two">14sp</dimen>
+    <dimen name="detail_textsize_three">15sp</dimen>
+    <dimen name="detail_play_top">20dp</dimen>
+
 </resources>

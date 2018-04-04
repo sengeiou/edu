@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="dp_theme_icon_h">216dp</dimen>
+    <dimen name="dp_theme_icon_w">162dp</dimen>
+
+    <!-- 个人中心左侧item-->
+    <dimen name="user_left_item_padding_drawable">15dp</dimen>
+    <dimen name="user_left_item_padding_bottom">12dp</dimen>
+    <dimen name="user_left_item_padding_left">15dp</dimen>
+    <dimen name="user_left_item_padding_top">12dp</dimen>
+    <dimen name="user_left_item_textsize">25sp</dimen>
+    <dimen name="user_left_item_notice_textsize">16sp</dimen>
+
+
+    <!-- 动作详情页-->
+    <dimen name="detail_margin_left">30dp</dimen>
+    <dimen name="detail_margin_top">40dp</dimen>
+    <dimen name="detail_image_width">120dp</dimen>
+    <dimen name="detail_textsize_one">15sp</dimen>
+    <dimen name="detail_textsize_two">17sp</dimen>
+    <dimen name="detail_textsize_three">18sp</dimen>
+    <dimen name="detail_play_top">50dp</dimen>
+</resources>
