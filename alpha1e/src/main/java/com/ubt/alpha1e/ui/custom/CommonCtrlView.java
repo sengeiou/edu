@@ -43,6 +43,7 @@ import com.ubt.alpha1e.ui.helper.IMainUI;
 import com.ubt.alpha1e.ui.helper.MainHelper;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.main.MainPresenter;
+import com.ubt.alpha1e.utils.RobotInnerActionInfoUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
 
@@ -164,6 +165,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         wmParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         lay_ctrl_more.setVisibility(View.VISIBLE);
         mWindowManager.addView(mFloatLayout, wmParams);
+        RobotInnerActionInfoUtil.init();
 
     }
 

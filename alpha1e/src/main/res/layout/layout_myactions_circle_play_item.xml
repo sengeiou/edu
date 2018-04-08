@@ -69,6 +69,13 @@
                 android:ellipsize="end"
                 android:textColor="@color/txt_new_edtion"
                 android:textSize="16sp" />
+            <TextView android:id="@+id/txt_time_duration"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/txt_action_name"
+                android:text="时长：01:29"
+                android:visibility="invisible"
+                />
 
            <LinearLayout
                 android:id="@+id/ll_select"

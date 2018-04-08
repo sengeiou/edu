@@ -847,6 +847,7 @@
     <string name="ui_main_course_center">课程中心</string>
     <string name="control_center">关闭</string>
     <string name="lowpower_indicator">电量低于</string>
+    <string name="lowpower_indicator_dialog">"机器人电量低，请充电"</string>
     <string name="buddle_text_init_status">开机来叫醒沉睡的Alpha吧</string>
     <string name="buddle_bluetoothConnection">嗨，我是阿尔法</string>
     <!--behaviour habit-->

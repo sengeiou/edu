@@ -52,12 +52,14 @@ import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IActionsUI;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
+import com.ubt.alpha1e.utils.RobotInnerActionInfoUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -156,11 +158,13 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             @Override
             public void onClick(View view) {
                 //循环播放
+                if (MyActionsHelper.mCurrentSeletedNameList.size() > 0) {
                     if (!isStartLooping) {
-                        if(lowBatteryNotExecutedAction()){
+                        if (lowBatteryNotExecutedAction()) {
                             return;
-                        };
-                        if(!SPUtils.getInstance().getBoolean(Constant.SP_SHOW_SERVO_GUIDE,false)) {
+                        }
+                        ;
+                        if (!SPUtils.getInstance().getBoolean(Constant.SP_SHOW_SERVO_GUIDE, false)) {
                             mServoGuide.setVisibility(View.VISIBLE);
                         }
                         UbtLog.d(TAG, "BEGIN CIRCLE PLAY");
@@ -179,6 +183,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                         mHelper.stopPlayAction();
                     }
                     updateCircleButton();
+                }
             }
         });
         mSyncRecyclerview = (RecyclerView) mView.findViewById(R.id.recyclerview_circle);
@@ -834,6 +839,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         public RelativeLayout rl_info;
         public ImageView img_action_logo,img_select,img_pause,img_play;
         public TextView txt_action_name;
+        private TextView txt_action_time;
         public ImageView gif;
         AnimationDrawable waveShapingAnim = null;
         public LinearLayout ll_select;
@@ -848,6 +854,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             img_pause = (ImageView) view.findViewById(R.id.img_pause);
             rl_info  = (RelativeLayout) view.findViewById(R.id.rl_logo_info);
             txt_action_name = (TextView) view.findViewById(R.id.txt_action_name);
+            txt_action_time = (TextView) view.findViewById(R.id.txt_time_duration);
             //循环播放的时候在动作图标上的动画效果
             gif = (ImageView) view.findViewById(R.id.gif_playing);
             waveShapingAnim= (AnimationDrawable)gif.getBackground();
@@ -878,11 +885,24 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder mHolder, final int position) {
+            int imageLogo=R.drawable.sec_action_logo;
             final MyCircleHolder holder = (MyCircleHolder) mHolder;
             final Map<String, Object> actionList = mDatas.get(position);
             String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
             String action_player_name=actionList.get(ActionsLibHelper.map_val_action) + "";
-            //UbtLog.d(TAG, "onBindViewHolder " + position);
+            RobotInnerActionInfoUtil.getImageIcon(action_player_name);
+            if(!TextUtils.isEmpty(RobotInnerActionInfoUtil.getImageIcon(action_player_name))){
+            if(RobotInnerActionInfoUtil.getImageIcon(action_player_name).equals("story")){
+                imageLogo=R.drawable.ic_story;
+            }else if(RobotInnerActionInfoUtil.getImageIcon(action_player_name).equals("dance")){
+                imageLogo=R.drawable.ic_dance;
+            }else if(RobotInnerActionInfoUtil.getImageIcon(action_player_name).equals("yoga")){
+                imageLogo=R.drawable.ic_yoga;
+            }else if(RobotInnerActionInfoUtil.getImageIcon(action_player_name).equals("sport")){
+                imageLogo=R.drawable.ic_sport;
+            }}else {
+                imageLogo=R.drawable.sec_action_logo;
+            }
             Glide.with(mContext)
                     .load(R.drawable.sec_action_logo)
                     .fitCenter()
@@ -891,6 +911,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 action_name = action_name.substring(1);
             }
             holder.txt_action_name.setText(action_name);
+            holder.txt_action_time.setText(RobotInnerActionInfoUtil.getTime(action_player_name));
             for (int i = 0; i < MyActionsHelper.mCurrentSeletedNameList.size(); i++) {
                 if (MyActionsHelper.mCurrentSeletedNameList.get(i).equals(action_player_name)) {
                     UbtLog.d(TAG, "current select is looping:" + isStartLooping + "name :" + action_name + "size" + MyActionsHelper.mCurrentSeletedNameList.size());
@@ -898,7 +919,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                     break;
                 }
             }
-
             if (AlphaApplication.getBaseActivity().readCurrentPlayingActionName().equals(action_player_name)) {
                 actionList.put(MyActionsHelper.map_val_action_is_playing, true);
             }

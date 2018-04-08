@@ -115,6 +115,17 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
     @BindView(R.id.tv_advice1)
     TextView tv_advice1;
 
+    //增加IP布局
+    @BindView(R.id.rl_wifi_name_ip)
+    RelativeLayout rl_wifi_name_ip;
+
+    //增加IP布局 wifi名称
+    @BindView(R.id.rl_wifi_name)
+    EditText rl_wifi_name;
+    //增加IP布局  ip
+    @BindView(R.id.rl_ip_addr)
+    EditText rl_ip_addr;
+
     private static final int UPDATE_WIFI_STATUS = 1; //更新WIFI状态
     public static final int MSG_DO_BLUETOOTH_DISCONNECT = 8; //蓝牙断开
     public static final int CLOSED_ACTIVITY = 9; //关闭页面
@@ -141,7 +152,8 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
                             UbtLog.d(TAG,"bluetoothandnetstate CONNECT_SUCCESS 2");
                             BluetoothDevice b = (BluetoothDevice)((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getCurrentBluetooth();
                             String name = b.getName();
-                            bluetoothAndNetConnect(name,networkInfo.name);
+                            bluetoothAndNetConnect(name,networkInfo.name,networkInfo.ip);
+                            UbtLog.d(TAG,"networkInfo.ip  "+networkInfo.ip);
                             ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).setmCurrentNetworkInfo(networkInfo);
                         }else {
                             bluetoothDisconnect();
@@ -206,10 +218,13 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         ig_state1_goto_connect_net.setText("联网");
         ig_state1_goto_connect_net.setTextColor(Color.parseColor("#C1C1C1"));
         tv_advice1.setVisibility(View.INVISIBLE);
+
+        rl_wifi_name_ip.setVisibility(View.INVISIBLE);
+        ed_state1_wifi_name.setVisibility(View.VISIBLE);
     }
 
     //蓝牙和网络同时连接
-    void bluetoothAndNetConnect(String bluetoothName,String wifiName){
+    void bluetoothAndNetConnect(String bluetoothName,String wifiName,String ip){
         UbtLog.d(TAG, "蓝牙和网络同时连接!");
         if(rl_state1_up_big == null){
             return;
@@ -220,10 +235,20 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         ed_state1_bluetooth_name.setText(bluetoothName);
         ig_state1_get_bluetooth_list.setText("断开连接");
         ig_state1_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.img_wifi_connected));
-        ed_state1_wifi_name.setText(wifiName);
+        rl_wifi_name.setText(wifiName);
         ig_state1_goto_connect_net.setText("切换Wi-Fi");
         ig_state1_goto_connect_net.setTextColor(Color.parseColor("#02AAE8"));
         tv_advice1.setVisibility(View.INVISIBLE);
+
+        rl_wifi_name_ip.setVisibility(View.VISIBLE);
+        ed_state1_wifi_name.setVisibility(View.INVISIBLE);
+
+        if(ip != null){
+            rl_ip_addr.setText("机器人IP:"+ip);
+        }else {
+            rl_ip_addr.setText("机器人IP:");
+        }
+
     }
 
     //只有蓝牙连接
@@ -238,6 +263,9 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         ig_state2_wifi.setBackground(ContextCompat.getDrawable(BluetoothandnetconnectstateActivity.this,R.drawable.img_alpha_connected_b));
         ed_state2_wifi_name.setText(bluetoothName);
         ig_state2_goto_connect_net.setText("断开连接");
+
+        rl_wifi_name_ip.setVisibility(View.INVISIBLE);
+        ed_state1_wifi_name.setVisibility(View.VISIBLE);
     }
 
 
@@ -339,7 +367,7 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
             if(BluetoothandnetconnectstateActivity.this != null && ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getmCurrentNetworkInfo() != null){
                 NetworkInfo networkInfo = ((AlphaApplication) BluetoothandnetconnectstateActivity.this.getApplication()).getmCurrentNetworkInfo();
                 UbtLog.d(TAG,"网络和蓝牙都连接了  "+ networkInfo.name);
-                bluetoothAndNetConnect(name,networkInfo.name);
+                bluetoothAndNetConnect(name,networkInfo.name,networkInfo.ip);
             }
         }else {
             bluetoothDisconnect();
@@ -512,11 +540,11 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
             Intent i = new Intent();
             if(isConnectWifi){
-                i.putExtra("wifiName",ed_state1_wifi_name.getText().toString());
+                i.putExtra("wifiName",rl_wifi_name.getText().toString());
             }else {
                 i.putExtra("wifiName","");
             }
-            UbtLog.d(TAG,"ed_wifi_name===="+ed_state1_wifi_name.getText().toString());
+            UbtLog.d(TAG,"ed_wifi_name===="+rl_wifi_name.getText().toString());
             i.setClass(BluetoothandnetconnectstateActivity.this,NetSearchResultActivity.class);
             this.startActivityForResult(i,REQUEST_CODE_ENTER_NETSEARCHRESULT);
 

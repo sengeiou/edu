@@ -132,8 +132,9 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="69dp"/>
             <EditText
+                android:visibility="visible"
                 android:id="@+id/ed_state1_wifi_name"
-                android:layout_width="140dp"
+                android:layout_width="146dp"
                 android:layout_height="40dp"
                 android:layout_toRightOf="@id/ig_state1_wifi"
                 android:layout_centerVertical="true"
@@ -151,6 +152,50 @@
                 android:background="@null"
                 android:editable="false"
                 android:textSize="15sp"/>
+            <RelativeLayout
+                android:id="@+id/rl_wifi_name_ip"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/ig_state1_wifi"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:visibility="invisible">
+                <EditText
+                    android:id="@+id/rl_wifi_name"
+                    android:layout_width="142dp"
+                    android:layout_height="40dp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:maxLength="100"
+                    android:layout_marginLeft="8dp"
+                    android:textColor="#666666"
+                    android:gravity="bottom"
+                    android:text="UBT_guest"
+                    android:textStyle="bold"
+                    android:background="@null"
+                    android:windowSoftInputMode="adjustPan"
+                    android:imeOptions="flagNoExtractUi"
+                    android:editable="false"
+                    android:textSize="16sp"/>
+                <EditText
+                    android:id="@+id/rl_ip_addr"
+                    android:layout_width="150dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="2dp"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:maxLength="170"
+                    android:layout_marginLeft="8dp"
+                    android:textColor="#C1C1C1"
+                    android:gravity="top"
+                    android:windowSoftInputMode="adjustPan"
+                    android:imeOptions="flagNoExtractUi"
+                    android:layout_below="@id/rl_wifi_name"
+                    android:text="机器人IP:192.63.36.3"
+                    android:editable="false"
+                    android:background="@null"
+                    android:textSize="12sp"/>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/ig_state1_goto_connect_net"
