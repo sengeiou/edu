@@ -82,9 +82,12 @@ public class SensorHelper extends BaseHelper {
             String port = BluetoothParamUtil.bytesToString(param);
             UbtLog.d(TAG, "port:" +port );
             EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_CONNECT_SOCKET, port));
-        }else if(cmd == ConstValue.DV_READ_ROBOT_ACCELERATION) {
+        }else if(cmd == ConstValue.DV_READ_TEMPERATURE) {
             String value = BluetoothParamUtil.bytesToString(param);
-            UbtLog.d(TAG, "acceleration:" + value);
+            UbtLog.d(TAG, "temp:" + value);
+            if(param != null) {
+                EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_TEMPERATURE,  value));
+            }
         }else if(cmd == ConstValue.DV_FALL_DOWN) {
             UbtLog.d(TAG, "robot fall down: " + BluetoothParamUtil.bytesToString(param));
             EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_ROBOT_FALL_DOWN));
@@ -111,10 +114,6 @@ public class SensorHelper extends BaseHelper {
                     EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_6D_GESTURE, param[0]));
                 }
 
-            }
-        }else if(cmd == ConstValue.DV_READ_TEMPERATURE){
-            if(param != null) {
-                UbtLog.d(TAG, "temp:"+ BluetoothParamUtil.bytesToString(param));
             }
         }
     }

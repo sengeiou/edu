@@ -32,6 +32,7 @@ import com.google.gson.reflect.TypeToken;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
 import com.ubt.alpha1e.AlphaApplication;
+import com.ubt.alpha1e.BuildConfig;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.SPUtils;
@@ -129,7 +130,7 @@ import okhttp3.Call;
 public class BlocklyActivity extends BaseActivity implements IEditActionUI, IActionsUI, DirectionSensorEventListener.ActionListener, BaseDiaUI, IRemoteUI,IUiListener,IWeiXinListener {
 
     private static final String TAG = "BlocklyActivity";
-    public static String URL = "https://ubt.codemao.cn/";
+    public static String URL = BuildConfig.WebServiceCodeMao; //此为测试地址
     public static int REQUEST_CODE = 1000;
     public static int LOGIN_REQUEST_CODE = 1111;
     public static final int READ_ACTION_TIME_OUT_CODE = 2222;
@@ -769,7 +770,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 //                    mSensorHelper.doReadGyroData((byte)0x01);
 //                    mSensorHelper.doReadAcceleration((byte)0x01);
                     mSensorHelper.doRead6DState();
-//                    mSensorHelper.doReadTemperature((byte)0x01);
+                    mSensorHelper.doReadTemperature((byte)0x01);
                 }
 
                 if(isBulueToothConnected()){
@@ -1127,7 +1128,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 //                mSensorHelper.doReadAcceleration((byte)0x00);
                 UbtLog.d(TAG, "startOrStopRun end");
                 startOrStopRun((byte)0x02);
-//                mSensorHelper.doReadTemperature((byte)0x00);
+                mSensorHelper.doReadTemperature((byte)0x00);
             }
             mSensorHelper.UnRegisterHelper();
         }
@@ -1285,6 +1286,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     UbtLog.d(TAG, "startOrStopRun start");
                     startOrStopRun((byte)0x01);
                     mSensorHelper.doRead6DState();
+                    mSensorHelper.doReadTemperature((byte)0x01);
                 }
 
       /*          mWebView.post(new Runnable() {
@@ -1464,6 +1466,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
     @Subscribe
     public void onEventBlock(BlocklyEvent event){
+        UbtLog.d(TAG, "onEventBlock:" + event.getType());
         if(event.getType() == BlocklyEvent.CALL_JAVASCRIPT){
             final String js = (String)event.getMessage();
             mWebView.post(new Runnable() {
@@ -1562,6 +1565,17 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 public void run() {
                     UbtLog.d(TAG, "gesture:" + gesture);
                     mWebView.loadUrl("javascript:robotPostture(" + gesture + ")");
+                }
+            });
+        }else if(event.getType() == BlocklyEvent.CALL_TEMPERATURE){
+            final String humidity =event.getMessage().toString();
+            UbtLog.d(TAG, "sss humidity:" + humidity);
+            mWebView.post(new Runnable() {
+                @Override
+                public void run() {
+                    UbtLog.d(TAG, "humidity:" + humidity);
+                    mWebView.loadUrl("javascript:humidity(JSON.stringify(" + humidity + "))");
+//                    mWebView.loadUrl("javascript:humidity(" + humidity + ")");
                 }
             });
         }

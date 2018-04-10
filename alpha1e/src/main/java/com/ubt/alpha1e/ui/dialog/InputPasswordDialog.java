@@ -354,7 +354,8 @@ public class InputPasswordDialog {
                     }
                     dismiss();
                 }else {
-                    if(inputCount >3 ){
+                    //输入一次即提示忘记密码
+                    if(inputCount >0 ){
                         edtPassword1.setText("");
                         edtPassword2.setText("");
                         edtPassword3.setText("");

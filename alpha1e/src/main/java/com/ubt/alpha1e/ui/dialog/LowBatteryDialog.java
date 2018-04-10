@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,6 +24,8 @@ public class LowBatteryDialog {
     private Dialog dialog;
     private LinearLayout lLayout_bg;
     private TextView txt_lowBattery;
+    private ImageView mBatteryIcon;
+
     private Display display;
     int power=0;
     private boolean showTitle = false;
@@ -37,7 +40,7 @@ public class LowBatteryDialog {
     }
 
     public LowBatteryDialog setBatteryThresHold(int value){
-        power=value;
+         power=value;
         return this ;
     }
 
@@ -48,9 +51,16 @@ public class LowBatteryDialog {
         // 获取自定义Dialog布局中的控件
        // lLayout_bg = (LinearLayout) view.findViewById(R.id.lLayout_bg);
         txt_lowBattery = (TextView) view.findViewById(R.id.txt_lowBattery);
-        txt_lowBattery.setText("电量低于"+power+"%");
+        txt_lowBattery.setText(R.string.lowpower_indicator_dialog);
         txt_lowBattery.setVisibility(View.VISIBLE);
 
+        mBatteryIcon=(ImageView)view.findViewById(R.id.lowbattery_icon);
+
+        if(power==5){
+            mBatteryIcon.setBackground(context.getDrawable(R.drawable.img_tip_power_5));
+        }else if(power==20){
+            mBatteryIcon.setBackground(context.getDrawable(R.drawable.img_tip_power_20));
+        }
         // 定义Dialog布局和参数
         dialog = new Dialog(context, R.style.AlertDialogStyle);
         dialog.setContentView(view);
