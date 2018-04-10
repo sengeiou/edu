@@ -33,7 +33,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
     public static void launchActivity(Context context) {
         Intent intent = new Intent(context, StatisticsActivity.class);
-
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -54,8 +54,8 @@ public class StatisticsActivity extends AppCompatActivity {
         String token = SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN);
         //  mWebView.loadUrl("http://10.10.1.14:8080/alpha1e/index.html" + "?" + "userid=" + userId + "&" + "token=" + token);
         mUrl = HttpEntity.HABIT_STATIS_URL + "?" + "userid=" + userId + "&" + "token=" + token;
-        //mUrl = "http://10.10.1.14:8080/alpha1e/index.html" + "?" + "userid=" + userId + "&" + "token=" + token;
-
+       // mUrl = "http://10.10.32.149:8080/behavioralHabits/index.html" + "?" + "userid=" + userId + "&" + "token=" + token;
+        //mUrl= "http://10.10.32.149:8080/behavioralHabits/index.html";
         UbtLog.d(TAG, "mUrl=====" + mUrl);
 //		webView.loadUrl("http://10.10.1.14:8080/Alexa/desktop.html");
         mWebView.getSettings().setDomStorageEnabled(true);
