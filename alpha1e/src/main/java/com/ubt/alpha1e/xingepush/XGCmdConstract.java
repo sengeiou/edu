@@ -10,5 +10,6 @@ public interface XGCmdConstract {
     String BEHAVIOUR_HABIT = "1";
     String USER_CENTER = "2";
 
-    String COMMUNITY = "2";
+    String COMMUNITY = "3";
+    String HABIT_TOTAL = "4";
 }

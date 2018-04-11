@@ -816,10 +816,17 @@
             android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity android:name=".login.PrivacyActivity"
-            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
-            android:screenOrientation="landscape"
-            android:launchMode="singleTop"
-            android:theme="@style/NoTitleThemeFullScreen"/>
+                  android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+                  android:screenOrientation="landscape"
+                  android:launchMode="singleTop"
+                  android:theme="@style/NoTitleThemeFullScreen"/>
+        <activity android:name=".behaviorhabits.StatisticsActivity"
+                  android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+                  android:launchMode="singleTop"
+                  android:screenOrientation="landscape"
+                  android:theme="@style/NoTitleThemeFullScreen"/>
+
+
 
         <activity android:name=".onlineaudioplayer.OnlineAudioPlayerActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"

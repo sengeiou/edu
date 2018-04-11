@@ -1,0 +1,5 @@
+<resources>
+    <item name="layout_main_cources" type="layout">@layout/layout_main_cources_pad</item>
+     <item name="activity_user_center" type="layout">@layout/activity_user_center_pad</item>
+    <item name="fragment_user_info" type="layout">@layout/fragment_user_info_pad</item>
+</resources>
