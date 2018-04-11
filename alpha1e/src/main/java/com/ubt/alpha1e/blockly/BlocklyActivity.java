@@ -1574,7 +1574,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 @Override
                 public void run() {
                     UbtLog.d(TAG, "humidity:" + humidity);
-                    mWebView.loadUrl("javascript:humidity(JSON.stringify(" + humidity + "))");
+                    mWebView.loadUrl("javascript:humidity(" + humidity + ")");
 //                    mWebView.loadUrl("javascript:humidity(" + humidity + ")");
                 }
             });
