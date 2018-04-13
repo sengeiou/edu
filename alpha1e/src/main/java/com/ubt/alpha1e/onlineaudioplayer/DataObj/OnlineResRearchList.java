@@ -8,6 +8,16 @@ public class OnlineResRearchList {
     public String res_name;
     public String res_id;
 
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String grade;
+
     public String getRes_name() {
         return res_name;
     }

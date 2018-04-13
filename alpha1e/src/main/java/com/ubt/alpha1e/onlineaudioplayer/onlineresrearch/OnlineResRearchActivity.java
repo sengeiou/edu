@@ -1,7 +1,5 @@
 package com.ubt.alpha1e.onlineaudioplayer.onlineresrearch;
 
-
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
@@ -10,11 +8,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -22,21 +20,35 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.reflect.TypeToken;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.adapter.OnlineresRearchResultListAdpter;
+import com.ubt.alpha1e.base.RequstMode.BaseRequest;
+import com.ubt.alpha1e.base.RequstMode.GotoBindRequest;
+import com.ubt.alpha1e.base.RequstMode.OnlineResRearchRequest;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.FlowLayoutManager;
+import com.ubt.alpha1e.data.model.BaseResponseModel;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.onlineaudioplayer.DataObj.CategoryMax;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.DataConfig;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineResRearchList;
+import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineResSearch;
+import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineresList;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.ShowItem;
+import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.zhy.http.okhttp.callback.StringCallback;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.Call;
 
 
 /**
@@ -48,6 +60,9 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
 
     @BindView(R.id.ib_return)
     ImageButton ib_return;
+
+    @BindView(R.id.ib_rearch)
+    TextView ib_rearch;
 
     @BindView(R.id.searchView)
     SearchView mSearchView;
@@ -71,18 +86,102 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
     @BindView(R.id.research_result_list)
     RecyclerView research_result_list;
 
+    private String TAG = "OnlineResRearchActivity";
 
     private List<ShowItem> list = new ArrayList<>();
     private FlowAdapter flowAdapter;
 
+    private static final int SEARCH = 51;
 
-    @OnClick({R.id.ib_return})
+    @OnClick({R.id.ib_return,R.id.ib_rearch})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ib_return:
                 this.finish();
                 break;
+            case R.id.ib_rearch:
+                int id = mSearchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+                EditText textView = (EditText ) mSearchView.findViewById(id);
+                String cnt = textView.getText().toString();
+                UbtLog.d(TAG, "cnt :" + cnt);
+                search(cnt);
+                break;
         }
+    }
+
+    //搜索
+    public void search(String content) {
+        if(content == null || content.equals("")){
+            ToastUtils.showShort("搜索内容不能为空");
+            return;
+        }
+        com.ubt.alpha1e.base.loading.LoadingDialog.show(this);
+        OnlineResRearchRequest onlineResRearchRequest = new OnlineResRearchRequest();
+        onlineResRearchRequest.setAlbumKeyword(content);
+
+        String url = HttpEntity.GET_ONLINE_RES_REARCH;
+        doRequestGetOnlineResSearch(url, onlineResRearchRequest, SEARCH);
+
+    }
+
+    /**
+     * 网络请求
+     */
+    public void doRequestGetOnlineResSearch(String url, BaseRequest baseRequest, int requestId) {
+
+        OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d(TAG, "doRequestGetOnlineResSearch onError:" + e.getMessage());
+                switch (id) {
+                    case SEARCH:
+                        com.ubt.alpha1e.base.loading.LoadingDialog.dismiss(OnlineResRearchActivity.this);
+                        ToastUtils.showShort("请求失败");
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d(TAG, "doRequestGetOnlineResSearch response = " + response);
+                switch (id) {
+                    case SEARCH:
+                        com.ubt.alpha1e.base.loading.LoadingDialog.dismiss(OnlineResRearchActivity.this);
+                        BaseResponseModel<ArrayList<OnlineResSearch>> modle = GsonImpl.get().toObject(response,
+                                new TypeToken<BaseResponseModel<ArrayList<OnlineResSearch>>>() {
+                                }.getType());//加上type转换，避免泛型擦除
+                        if (modle.status) {
+                            UbtLog.d(TAG, "请求成功");
+                            if(modle.models == null || modle.models.size() == 0){
+                                UbtLog.d(TAG, "没有搜索到内容" );
+                                displayNoResultSearch();
+                                return;
+                            }else {
+                                UbtLog.d(TAG, "size = "+modle.models.size());
+                                displaySearchResult();
+                                int size = modle.models.size();
+                                onlineResRearchList.clear();
+                                for(int i = 0;i < size ;i++){
+                                    OnlineResRearchList list = new OnlineResRearchList();
+                                    list.setRes_id(modle.models.get(i).getAlbumId());
+                                    list.setRes_name(modle.models.get(i).getAlbumName());
+                                    list.setGrade(modle.models.get(i).getGrade());
+                                    onlineResRearchList.add(list);
+                                }
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            UbtLog.d(TAG, "请求失败");
+                            ToastUtils.showShort("请求失败");
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -98,27 +197,26 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this,R.drawable.linesharp));
         research_result_list.addItemDecoration(dividerItemDecoration);
-//        displayRecentSearch();
         displayRecentSearch();
         //获取到TextView的ID
         int id = mSearchView.getContext().getResources().getIdentifier("android:id/search_src_text",null,null);
-//获取到TextView的控件
+        //获取到TextView的控件
         TextView textView = (TextView) mSearchView.findViewById(id);
-//设置字体大小为14sp
+        //设置字体大小为14sp
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);//14sp
-//设置字体颜色
+        //设置字体颜色
         textView.setTextColor(this.getResources().getColor(R.color.black));
-//设置提示文字颜色
-//        textView.setHintTextColor(this.getResources().getColor(R.color.colorAccent));
+        //设置提示文字颜色
+        //        textView.setHintTextColor(this.getResources().getColor(R.color.colorAccent));
 
-//获取ImageView的id
+        //获取ImageView的id
         int imgId = mSearchView.getContext().getResources().getIdentifier("android:id/search_mag_icon",null,null);
-//获取ImageView
+        //获取ImageView
         ImageView searchButton = (ImageView)mSearchView.findViewById(imgId);
-//设置图片
+        //设置图片
         searchButton.setImageResource(R.drawable.ic_search);
 
-//不使用默认
+        //不使用默认
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setFocusable(false);
 
