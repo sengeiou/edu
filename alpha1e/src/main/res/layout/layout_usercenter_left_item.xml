@@ -8,13 +8,13 @@
         android:id="@+id/tv_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawablePadding="12dp"
-        android:paddingBottom="8dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="8dp"
+        android:drawablePadding="@dimen/user_left_item_padding_drawable"
+        android:paddingBottom="@dimen/user_left_item_padding_bottom"
+        android:paddingLeft="@dimen/user_left_item_padding_left"
+        android:paddingTop="@dimen/user_left_item_padding_top"
         android:text="消息"
         android:textColor="@drawable/color_main_left"
-        android:textSize="18sp"
+        android:textSize="@dimen/user_left_item_textsize"
         />
 
     <TextView
@@ -29,7 +29,7 @@
         android:gravity="center"
          android:visibility="gone"
         android:textColor="#FFFFFF"
-        android:textSize="10dp"/>
+        android:textSize="@dimen/user_left_item_notice_textsize"/>
 
 
 </RelativeLayout>

@@ -213,7 +213,7 @@
                 android:paddingLeft="34dp"
                 android:textColor="#666666"
                 android:textSize="16sp"
-                android:background="@drawable/bg_bluetooth_devices"/>
+                android:background="@drawable/bg_onlineres_list"/>
             <TextView
                 android:id="@+id/line2"
                 android:layout_below="@id/tv_devices_num"

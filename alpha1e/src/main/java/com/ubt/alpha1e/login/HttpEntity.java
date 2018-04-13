@@ -67,7 +67,7 @@ public class HttpEntity {
     public static final String GET_COURSE_PROGRESS = BASIC_UBX_SYS + "course/getCourseProgress";
     public static final String USER_PRIVACY = BASIC_UBX_SYS + "privacy.html";
     public static final String VOICE_CMD = BASIC_UBX_SYS + "voiceCommand.html"; //语音指令
-
+    public static final String HABIT_STATIS_URL = BASIC_UBX_SYS + "index.html"; //语音指令
 
     public static final String BASIC_UBX_SYS_BIND = BuildConfig.WebServiceBind; //绑定相关 测试环境
     //public static final String BASIC_UBX_SYS_BIND = "http://10.10.1.12:8085/equipment/"; //绑定相关 测试环境
@@ -87,6 +87,9 @@ public class HttpEntity {
 
     //更新机器人自动升级状态
     public static final String UPDATE_AUTO_UPGRADE = BASIC_UBX_SYS_BIND + "relation/updateAutoUpgrade";
+
+    //拉最大的类别；
+    public static final String GET_MAX_CATERGOTY = BASIC_UBX_SYS + "content/getCategory";
 
     /**
      * 获取通知开关状态
