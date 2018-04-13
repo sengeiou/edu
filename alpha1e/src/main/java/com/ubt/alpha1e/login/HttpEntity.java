@@ -91,6 +91,9 @@ public class HttpEntity {
     //拉最大的类别；
     public static final String GET_MAX_CATERGOTY = BASIC_UBX_SYS + "content/getCategory";
 
+    //在线资源搜索
+    public static final String GET_ONLINE_RES_REARCH = BASIC_UBX_SYS + "content/searchAlbum";
+
     /**
      * 获取通知开关状态
      */
