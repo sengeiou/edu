@@ -108,8 +108,11 @@ public class OnlineAudioPlayerPresenter extends BasePresenterImpl<OnlineAudioPla
                             BaseResponseModel<ArrayList<AlbumContentInfo>> mbaseResponseModel0 = GsonImpl.get().toObject(response,
                                     new TypeToken<BaseResponseModel<ArrayList<AlbumContentInfo>>>() {
                                     }.getType());//加上type转换，避免泛型擦除
-
-                            mView.showAlbumList(true,mbaseResponseModel0.models,"success");
+                            if(mbaseResponseModel0.models!=null) {
+                                mView.showAlbumList(true, mbaseResponseModel0.models, "success");
+                            }else {
+                                mView.showAlbumList(false, mbaseResponseModel0.models, "success");
+                            }
                             break;
                         case GETAUDIOREQUEST:
                             BaseResponseModel<ArrayList<AudioContentInfo>> mbaseResponseModel1 = GsonImpl.get().toObject(response,

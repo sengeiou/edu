@@ -21,6 +21,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
@@ -204,27 +205,34 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
 
     @Override
     public void showAlbumList(Boolean status, List<AlbumContentInfo> album, String errorMsgs) {
-        UbtLog.d(TAG,"showAlbumList"+album.size());
-        mAlbumDatas=album;
-        ArrayList<String> temp = new ArrayList();
-        for(int i=0;i<album.size();i++){
-            mOriginalDatas.add(i,album.get(i));
-        }
-        for(int i=0;i<album.size();i++){
-            mGradeSelectedData.add(i,true);
-        }
-        for(int i=0;i<album.size();i++){
-                mGradData.add(i,album.get(i).grade);
-        }
-        for(int i=0;i<mGradData.size();i++){
-            if(!temp.contains(mGradData.get(i))){
-                if(mGradData.get(i)!=null) {
-                    temp.add(mGradData.get(i));
+        if(status) {
+            UbtLog.d(TAG,"showAlbumList"+album.size());
+            mAlbumDatas.clear();
+            mGradData.clear();
+            mOriginalDatas.clear();
+            mAlbumDatas = album;
+            ArrayList<String> temp = new ArrayList();
+            for (int i = 0; i < album.size(); i++) {
+                mOriginalDatas.add(i, album.get(i));
+            }
+            for (int i = 0; i < album.size(); i++) {
+                mGradeSelectedData.add(i, true);
+            }
+            for (int i = 0; i < album.size(); i++) {
+                mGradData.add(i, album.get(i).grade);
+            }
+            for (int i = 0; i < mGradData.size(); i++) {
+                if (!temp.contains(mGradData.get(i))) {
+                    if (mGradData.get(i) != null) {
+                        temp.add(mGradData.get(i));
+                    }
                 }
             }
+            mGradData = temp;
+            mAdapter.notifyDataSetChanged();
+        }else {
+            Toast.makeText(getActivity(),"后台出错，没有配置数据",Toast.LENGTH_LONG).show();
         }
-        mGradData=temp;
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
