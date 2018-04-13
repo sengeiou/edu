@@ -11,6 +11,9 @@ import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsActivity;
 import com.ubt.alpha1e.behaviorhabits.fragment.HibitsEventFragment;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioResourcesFragment;
+import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.List;
@@ -27,12 +30,9 @@ import butterknife.ButterKnife;
 public class OnlineAudioPlayerActivity extends MVPBaseActivity<OnlineAudioPlayerContract.View, OnlineAudioPlayerPresenter> implements OnlineAudioPlayerContract.View {
 
     private String TAG="OnlineAudioPlayerActivity";
-    @BindView(R.id.rl_content)
-    RelativeLayout rlContent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
         OnlineAudioResourcesFragment fragment = findFragment(OnlineAudioResourcesFragment.class);
         UbtLog.d(TAG, "OnlineAudioPlayerActivity = " + fragment);
         if (fragment == null) {
@@ -41,11 +41,18 @@ public class OnlineAudioPlayerActivity extends MVPBaseActivity<OnlineAudioPlayer
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     public static void LaunchActivity(Context context) {
         Intent intent = new Intent(context, OnlineAudioPlayerActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
+
+
 
     @Override
     protected void initUI() {
@@ -67,14 +74,25 @@ public class OnlineAudioPlayerActivity extends MVPBaseActivity<OnlineAudioPlayer
         return R.layout.activity_behavior_habits;
     }
 
+
+
     @Override
-    public void showGradeList() {
+    public void showCourseList(List<CourseContentInfo> album) {
 
     }
 
     @Override
-    public void showAlbumList(List<String> album) {
+    public void showAlbumList(Boolean status, List<AlbumContentInfo> album, String errorMsgs) {
 
     }
 
+    @Override
+    public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
+
+    }
+
+    @Override
+    public void onRequestStatus(int requestType, int errorCode) {
+
+    }
 }

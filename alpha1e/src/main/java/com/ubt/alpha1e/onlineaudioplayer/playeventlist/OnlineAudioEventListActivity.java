@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baoyz.pg.PG;
@@ -21,8 +22,15 @@ import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
 import com.ubt.alpha1e.behaviorhabits.helper.HabitsHelper;
 import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
+import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerContract;
+import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerPresenter;
+import com.ubt.alpha1e.onlineaudioplayer.adapter.OnlineAudioListRecyclerAdapter;
+import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
 import com.ubt.alpha1e.ui.dialog.HibitsEventPlayDialog;
 import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -42,54 +50,65 @@ import butterknife.OnClick;
  * 邮箱 784787081@qq.com
  */
 
-public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract.View, PlayEventListPresenter> implements PlayEventListContract.View {
+public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPlayerContract.View, OnlineAudioPlayerPresenter> implements OnlineAudioPlayerContract.View {
 
-    private static final String TAG = PlayEventListActivity.class.getSimpleName();
+    private static final String TAG = OnlineAudioEventListActivity.class.getSimpleName();
     public static final int DO_PLAY_OR_PAUSE = 1;
     private static final int UPDATE_PLAY_STATUS = 2;
+    public static final int SELECT_ADD=3;
+    public static final int DESELECT_DELETE=4;
 
     @BindView(R.id.tv_base_title_name)
     TextView tvBaseTitleName;
     @BindView(R.id.rv_event_list)
     RecyclerView rvEventList;
+    @BindView(R.id.iv_title_right)
+    ImageView mConfirm;
 
     private LinearLayoutManager mLayoutManager = null;
-    public EventListRecyclerAdapter mAdapter;
-    private List<PlayContentInfo> mPlayContentInfoDatas = null;
-    private boolean isStartPlayProcess = false;//是否开启播放流程
+    public OnlineAudioListRecyclerAdapter mAdapter;
+    private List<AudioContentInfo> mPlayContentInfoDatas = null;
+    private boolean isStartPlayProcess = true;//是否开启播放流程
     private String currentEventId = "";
     private int currentPlaySeq = -1;
     private boolean isFirstPlay = true;
+
 
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
+                case SELECT_ADD:
+                    UbtLog.d(TAG,"ADD");
+                    break;
+                case DESELECT_DELETE:
+                    UbtLog.d(TAG,"DELETE");
+                    break;
                 case DO_PLAY_OR_PAUSE:
                     if(isStartPlayProcess){
                         int position = msg.arg1;
-                        PlayContentInfo playContentInfo = mPlayContentInfoDatas.get(position);
+                        AudioContentInfo playContentInfo = mPlayContentInfoDatas.get(position);
 
-                        if("1".equals(playContentInfo.isSelect)){
-                            playContentInfo.isSelect = "0";
-                            mAdapter.notifyItemChanged(position);
-                            ((HabitsHelper)mHelper).playEventSound(currentEventId, position + "","pause");
-                        }else {
-                            for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
-                                mPlayContentInfo.isSelect = "0";
-                            }
-
-                            playContentInfo.isSelect = "1";
-                            mAdapter.notifyDataSetChanged();
-
-                            if(currentPlaySeq == position){
-                                ((HabitsHelper)mHelper).playEventSound(currentEventId, position + "","unpause");
-                            }else {
-                                ((HabitsHelper)mHelper).playEventSound(currentEventId, position + "","start");
-                            }
-                            currentPlaySeq = position;
-                        }
+//                        if("1".equals(playContentInfo.isSelect)){
+//                            playContentInfo.isSelect = "0";
+//                            mAdapter.notifyItemChanged(position);
+//                            ((HabitsHelper)mHelper).playEventSound(currentEventId, position + "","pause");
+//                        }else {
+//                            for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
+//                                mPlayContentInfo.isSelect = "0";
+//                            }
+//
+//                            playContentInfo.isSelect = "1";
+//                            mAdapter.notifyDataSetChanged();
+//
+//                            if(currentPlaySeq == position){
+//                                ((HabitsHelper)mHelper).playEventSound(currentEventId, position + "","unpause");
+//                            }else {
+//                                ((HabitsHelper)mHelper).playEventSound(currentEventId, position + "","start");
+//                            }
+//                            currentPlaySeq = position;
+//                        }
                     }else {
                         ToastUtils.showShort("本事项播放提醒流程尚未开始！");
                     }
@@ -104,30 +123,30 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
                                 isStartPlayProcess = true;
                                 if("playing".equals(eventPlayStatus.audioState) || "pause".equals(eventPlayStatus.audioState)){
                                     if(mPlayContentInfoDatas != null && seqNo < mPlayContentInfoDatas.size()){
-                                        for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
-                                            mPlayContentInfo.isSelect = "0";
-                                        }
-
-                                        if("playing".equals(eventPlayStatus.audioState)){
-                                            mPlayContentInfoDatas.get(seqNo).isSelect = "1";
-                                        }
+//                                        for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
+//                                            mPlayContentInfo.isSelect = "0";
+//                                        }
+//
+//                                        if("playing".equals(eventPlayStatus.audioState)){
+//                                            mPlayContentInfoDatas.get(seqNo).isSelect = "1";
+//                                        }
                                         mAdapter.notifyDataSetChanged();
                                         moveToPosition(seqNo);
                                     }
                                 }else {
                                     if(mPlayContentInfoDatas != null){
-                                        for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
-                                            mPlayContentInfo.isSelect = "0";
-                                        }
+//                                        for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
+//                                            mPlayContentInfo.isSelect = "0";
+//                                        }
                                         mAdapter.notifyDataSetChanged();
                                     }
                                 }
                             }else {
                                 isStartPlayProcess = false;
                                 if(mPlayContentInfoDatas != null){
-                                    for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
-                                        mPlayContentInfo.isSelect = "0";
-                                    }
+//                                    for(PlayContentInfo mPlayContentInfo : mPlayContentInfoDatas){
+//                                        mPlayContentInfo.isSelect = "0";
+//                                    }
                                     mAdapter.notifyDataSetChanged();
                                 }
                             }
@@ -149,7 +168,7 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
             }
         }
 
-        Intent intent = new Intent(mActivity, PlayEventListActivity.class);
+        Intent intent = new Intent(mActivity, OnlineAudioEventListActivity.class);
         intent.putParcelableArrayListExtra(Constant.PLAY_CONTENT_INFO_LIST_KEY, playContentList);
         intent.putExtra(Constant.HIBITS_EVENT_ID, eventId);
 
@@ -170,8 +189,16 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
 
-        mAdapter = new EventListRecyclerAdapter(getContext(), mPlayContentInfoDatas, mHandler);
+        mAdapter = new OnlineAudioListRecyclerAdapter(getContext(),mPlayContentInfoDatas, mHandler);
         rvEventList.setAdapter(mAdapter);
+
+        mConfirm.setVisibility(View.VISIBLE);
+        mConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pop();
+            }
+        });
     }
 
     @Override
@@ -246,29 +273,50 @@ public class PlayEventListActivity extends MVPBaseActivity<PlayEventListContract
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
-
         mPlayContentInfoDatas = new ArrayList<>();
         if(getIntent() != null){
             ArrayList<? extends PlayContentInfo> playContentInfoList = getIntent().getParcelableArrayListExtra(Constant.PLAY_CONTENT_INFO_LIST_KEY);
             if(playContentInfoList != null){
-                mPlayContentInfoDatas.addAll(playContentInfoList);
+              //  mPlayContentInfoDatas.addAll(playContentInfoList);
             }
             currentEventId = getIntent().getStringExtra(Constant.HIBITS_EVENT_ID);
         }
         mHelper = new HabitsHelper(this);
         initUI();
+        mPresenter.getAudioList(currentEventId);
     }
 
     @OnClick({R.id.ll_base_back, R.id.tv_base_title_name})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_back:
-
-                PlayEventListActivity.this.finish();
+                OnlineAudioEventListActivity.this.finish();
                 HibitsEventPlayDialog.refreshStatus();
                 break;
             case R.id.tv_base_title_name:
                 break;
         }
+    }
+
+    @Override
+    public void showCourseList(List<CourseContentInfo> album) {
+
+    }
+
+
+    @Override
+    public void showAlbumList(Boolean status, List<AlbumContentInfo> album, String errorMsgs) {
+
+    }
+
+    @Override
+    public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
+        mPlayContentInfoDatas.addAll(album);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onRequestStatus(int requestType, int errorCode) {
+
     }
 }

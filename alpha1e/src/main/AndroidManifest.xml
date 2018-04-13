@@ -687,13 +687,19 @@
             android:screenOrientation="landscape"
             android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
-
         <activity
-            android:name=".action.actioncreate.ActionTestActivity"
+            android:name=".onlineaudioplayer.playeventlist.OnlineAudioEventListActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+        android:name=".action.actioncreate.ActionTestActivity"
+        android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+        android:screenOrientation="landscape"
+        android:launchMode="singleTop"
+        android:theme="@style/NoTitleThemeFullScreen"/>
 
         <activity
             android:name=".maincourse.courseone.CourseLevelOneActivity"
@@ -788,7 +794,6 @@
             android:screenOrientation="landscape"
             android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"></activity>
-
 
         <activity
             android:name=".userinfo.dynamicaction.ActionDetailActivity"

@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.behaviorhabits.adapter;
+package com.ubt.alpha1e.onlineaudioplayer.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
@@ -8,15 +8,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.behaviorhabits.fragment.PlayContentSelectFragment;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.behaviorhabits.playeventlist.PlayEventListActivity;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.playeventlist.OnlineAudioEventListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,31 +25,31 @@ import java.util.List;
  *
  * Created by Administrator on 2016/5/13.
  */
-public class EventListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private static final String TAG = EventListRecyclerAdapter.class.getSimpleName();
+    private static final String TAG = OnlineAudioListRecyclerAdapter.class.getSimpleName();
 
     private Context mContext;
-    public List<PlayContentInfo> mDatas = new ArrayList<>();
+    public List<AudioContentInfo> mDatas = new ArrayList<>();
     private View mView;
     private Handler mHandler = null;
 
-    public EventListRecyclerAdapter(Context mContext, List<PlayContentInfo> list, Handler handler) {
+    public OnlineAudioListRecyclerAdapter(Context mContext, List<AudioContentInfo> list, Handler handler) {
         super();
         this.mContext = mContext;
         this.mDatas = list;
         this.mHandler = handler;
     }
 
-    public void setData(List<PlayContentInfo>  data) {
+    public void setData(List<AudioContentInfo>  data) {
         this.mDatas = data;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
-        MyPlayContentHolder myHolder  = (MyPlayContentHolder) holder;
-        PlayContentInfo playContentInfo = mDatas.get(position);
+        final MyPlayContentHolder myHolder  = (MyPlayContentHolder) holder;
+        AudioContentInfo playContentInfo = mDatas.get(position);
 //        if("1".equals(playContentInfo.isSelect)){
 //            myHolder.ivPlay.setBackgroundResource(R.drawable.ic_music_list_pause);
 //            myHolder.playStatusAnim.start();
@@ -65,10 +65,18 @@ public class EventListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         myHolder.ivPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message msg = new Message();
-                msg.what = PlayEventListActivity.DO_PLAY_OR_PAUSE;
-                msg.arg1 = position;
-                mHandler.sendMessage(msg);
+
+                if(myHolder.ivPlay.isChecked()){
+                                        Message msg = new Message();
+                    msg.what = OnlineAudioEventListActivity.SELECT_ADD;
+                    msg.arg1 = position;
+                    mHandler.sendMessage(msg);
+                }else {
+                    Message msg = new Message();
+                    msg.what = OnlineAudioEventListActivity.DESELECT_DELETE;
+                    msg.arg1 = position;
+                    mHandler.sendMessage(msg);
+                }
             }
         });
     }
@@ -76,7 +84,7 @@ public class EventListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        mView = LayoutInflater.from(mContext).inflate(R.layout.layout_play_event_item, parent, false);
+        mView = LayoutInflater.from(mContext).inflate(R.layout.layout_onlineplay_event_item, parent, false);
         MyPlayContentHolder myPlayContentHolder = new MyPlayContentHolder(mView);
         return myPlayContentHolder;
     }
@@ -91,7 +99,8 @@ public class EventListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     {
 
         public RelativeLayout rlPlayContentItem;
-        public ImageView ivPlay, ivPlayStatus;
+        public ImageView  ivPlayStatus;
+        public CheckBox ivPlay;
         public TextView tvPlayContent;
         private AnimationDrawable playStatusAnim = null;
 
@@ -100,7 +109,7 @@ public class EventListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             super(view);
 
             rlPlayContentItem  = (RelativeLayout) view.findViewById(R.id.rl_play_content_item);
-            ivPlay = (ImageView) view.findViewById(R.id.iv_play);
+            ivPlay = (CheckBox) view.findViewById(R.id.iv_play);
             ivPlayStatus = (ImageView) view.findViewById(R.id.iv_play_status);
             tvPlayContent = (TextView) view.findViewById(R.id.tv_play_content);
 

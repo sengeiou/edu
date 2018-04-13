@@ -461,7 +461,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     @Override
     public void exitGlocalControlCenter() {
-        //CommonCtrlView.exitGlocalControlCenter();
+        //onlineAudioPlayerView.exitGlocalControlCenter();
         CommonCtrlView.closeCommonCtrlView();
     }
 
