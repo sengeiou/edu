@@ -250,6 +250,10 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
                             intent.setClass(UserEditActivity.this, MainActivity.class);
                             startActivity(intent);
                             UserEditActivity.this.finish();
+                        }else{
+                            if(baseResponseModel.info.equals("11300")){
+                                ToastUtils.showShort("不能输入非法字符");
+                            }
                         }
 
                     }
