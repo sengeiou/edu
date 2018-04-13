@@ -54,7 +54,7 @@ public class OnlineAudioPlayerPresenter extends BasePresenterImpl<OnlineAudioPla
     }
 
     @Override
-    public void getAlbumList(String courseName) {
+    public void getAlbumList(final String courseName) {
         OnlineAudioPlayerAlbumRequest mAlbumRequest=new OnlineAudioPlayerAlbumRequest();
         mAlbumRequest.setCategoryId(courseName);
         doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+getAlbumContents,mAlbumRequest,GETALBUMREQUEST);

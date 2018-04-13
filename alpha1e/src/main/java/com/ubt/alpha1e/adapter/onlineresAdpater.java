@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineresList;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioResourcesFragment;
 import com.ubt.alpha1e.ui.dialog.WifiSelectAlertDialog;
 
 import java.util.ArrayList;
@@ -29,16 +31,18 @@ public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Context mContext;
     public List<OnlineresList> mDatas = new ArrayList<>();
     private View mView;
+    private Handler mHandler;
 
     /**
      * 类构造函数
      * @param mContext 上下文
      * @param list 数据列表
      */
-    public onlineresAdpater(Context mContext, List<OnlineresList> list) {
+    public onlineresAdpater(Context mContext, List<OnlineresList> list, Handler handler) {
         super();
         this.mContext = mContext;
         this.mDatas = list;
+        mHandler=handler;
     }
 
     @Override
@@ -53,7 +57,6 @@ public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
         final onlineresAdpater.OnlineResHolder myHolder  = (onlineresAdpater.OnlineResHolder) holder;
         final OnlineresList onlineres = mDatas.get(position);
 
-
         myHolder.res_name.setText(onlineres.getRes_name());
         myHolder.first_word.setText(onlineres.getRes_name().substring(0,1));
         if(myHolder.res_name.length()==5){
@@ -61,13 +64,13 @@ public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
         }else if(myHolder.res_name.length()==6){
             myHolder.res_name.setTextSize(14);
         }
-
         myHolder.res_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Message msg = new Message();
-                msg.what = WifiSelectAlertDialog.SELECT_POSITION;
-                msg.obj = onlineres;
+                msg.what = OnlineAudioResourcesFragment.LAUNCH_ALBUM_ITEM;
+                msg.obj = onlineres.getRes_id();
+                mHandler.sendMessage(msg);
             }
         });
     }
@@ -95,6 +98,8 @@ public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
             super(view);
             first_word = (TextView) view.findViewById(R.id.first_word);
             res_name = (TextView) view.findViewById(R.id.res_name);
+
+
         }
     }
 }

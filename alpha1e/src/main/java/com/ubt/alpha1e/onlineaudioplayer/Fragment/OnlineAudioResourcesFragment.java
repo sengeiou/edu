@@ -3,6 +3,8 @@ package com.ubt.alpha1e.onlineaudioplayer.Fragment;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
@@ -12,11 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -71,23 +70,6 @@ import okhttp3.Call;
 
 public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPlayerContract.View, OnlineAudioPlayerPresenter> implements OnlineAudioPlayerContract.View {
 
-    @Override
-    public void onRequestStatus(int requestType, int errorCode) {
-
-    }
-
-    @BindView(R.id.iv_back)
-    ImageView mIvBack;
-    @BindView(R.id.tv_base_title_name)
-    TextView mTitleName;
-    @BindView(R.id.rl_base_search)
-    RelativeLayout mRlSearch;
-    @BindView(R.id.iv_search)
-    ImageView mIvSearch;
-    @BindView(R.id.button2)
-    Button mButton;
-
-
     String TAG = "OnlineAudioResourcesFragment";
 
     @BindView(R.id.online_res_list)
@@ -111,10 +93,27 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
     public LinearLayoutManager mLayoutManager;
     public onlineresAdpater mAdapter;
     public List<OnlineresList> onlineresList = new ArrayList<>();
-
+    public final static int LAUNCH_ALBUM_ITEM=1;
     private static final int GET_MAX_CATEGORY = 50;
     Unbinder unbinder;
     private  OnlineAudioResourcesHelper mHelper = null;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case LAUNCH_ALBUM_ITEM:
+                    OnlineAudioAlbumPlayerFragment mfragment = OnlineAudioAlbumPlayerFragment.newInstance(msg.obj.toString());
+                    start(mfragment);
+                    break;
+            }
+        }
+    };
+
+
+
+
     public static OnlineAudioResourcesFragment newInstance() {
         OnlineAudioResourcesFragment onlineAudioResourcesFragment = new OnlineAudioResourcesFragment();
         return onlineAudioResourcesFragment;
@@ -141,20 +140,8 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
         mHelper = new OnlineAudioResourcesHelper(getContext());
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                   OnlineAudioAlbumPlayerFragment mfragment = OnlineAudioAlbumPlayerFragment.newInstance();
-                   start(mfragment);
-                }
-        });
-        mIvBack.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-               pop();
-            }
-        });
         return rootView;
     }
 
@@ -178,7 +165,7 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
                 outRect.bottom = 40;
             }
         });
-        mAdapter = new onlineresAdpater(getActivity().getApplicationContext(),onlineresList);
+        mAdapter = new onlineresAdpater(getActivity().getApplicationContext(),onlineresList,mHandler);
         mRecyclerview.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         getMaxCategory();
@@ -284,6 +271,11 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
 
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
+
+    }
+
+    @Override
+    public void onRequestStatus(int requestType, int errorCode) {
 
     }
 }

@@ -40,6 +40,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @作者：ubt
@@ -67,6 +69,7 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
     public static Context mContext;
     public final static int GRADE_SELECT_ADD = 1;
     public final static int GRADE_UNSELECT_DELETE= 2;
+    private static String mAlbumId;
 
 
     private Handler mHandler = new Handler() {
@@ -108,8 +111,9 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
             }
         }
     };
-    public static OnlineAudioAlbumPlayerFragment newInstance() {
+    public static OnlineAudioAlbumPlayerFragment newInstance(String albumId) {
         OnlineAudioAlbumPlayerFragment mOnlineAudioAlbumPlayerFragment  = new OnlineAudioAlbumPlayerFragment();
+        mAlbumId=albumId;
         return mOnlineAudioAlbumPlayerFragment;
     }
     @Nullable
@@ -137,7 +141,7 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
         mAdapter = new AlbumAdapter();
         mAlbumView.setAdapter(mAdapter);
         mPresenter.getCourseList();
-        mPresenter.getAlbumList("12");
+        mPresenter.getAlbumList(mAlbumId);
         mGradeSort.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -166,7 +170,6 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
         mBack.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-
                 getActivity().finish();
             }
         });
@@ -255,7 +258,7 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-            ((AlbumHolder) holder).txt_album_name.setText(mAlbumDatas.get(position).albumName+"GRADE"+mAlbumDatas.get(position).grade);
+            ((AlbumHolder) holder).txt_album_name.setText(mAlbumDatas.get(position).albumName);//+"GRADE"+mAlbumDatas.get(position).grade);
             ((AlbumHolder) holder).txt_album_name.setOnClickListener(new View.OnClickListener(){
 
                 @Override
