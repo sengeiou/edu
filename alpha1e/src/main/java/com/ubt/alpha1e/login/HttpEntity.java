@@ -88,6 +88,9 @@ public class HttpEntity {
     //更新机器人自动升级状态
     public static final String UPDATE_AUTO_UPGRADE = BASIC_UBX_SYS_BIND + "relation/updateAutoUpgrade";
 
+    //拉最大的类别；
+    public static final String GET_MAX_CATERGOTY = BASIC_UBX_SYS + "content/getCategory";
+
     /**
      * 获取通知开关状态
      */

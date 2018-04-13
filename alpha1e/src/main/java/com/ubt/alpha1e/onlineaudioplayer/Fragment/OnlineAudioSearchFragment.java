@@ -10,4 +10,10 @@ import android.app.Fragment;
 
 
 public class OnlineAudioSearchFragment extends Fragment {
+
+
+    public static OnlineAudioSearchFragment newInstance() {
+        OnlineAudioSearchFragment onlineAudioResourcesFragment = new OnlineAudioSearchFragment();
+        return onlineAudioResourcesFragment;
+    }
 }
