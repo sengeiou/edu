@@ -170,7 +170,7 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
         mBack.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                getActivity().finish();
+               pop();
             }
         });
         return mView;

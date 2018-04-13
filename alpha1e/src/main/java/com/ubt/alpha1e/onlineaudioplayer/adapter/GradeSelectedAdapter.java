@@ -71,7 +71,7 @@ public class GradeSelectedAdapter extends BaseAdapter {
                         mHandler.sendMessage(msg);
                         OnlineAudioAlbumPlayerFragment.mGradeSelectedData.add(i, false);
                     }
-                    UbtLog.d("GradeSelectedAdapter", "POSITION " + i + "state ");
+                    UbtLog.d("GradeSelectedAdapter", "POSITION " + i + "state "+OnlineAudioAlbumPlayerFragment.mGradeSelectedData.get(i));
 
                 }
             });
