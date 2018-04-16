@@ -23,8 +23,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:splitMotionEvents="false"></android.support.v7.widget.RecyclerView>
+            android:splitMotionEvents="false">
 
+        </android.support.v7.widget.RecyclerView>
+
+        <ListView
+            android:id="@+id/grade_select_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/rv_albums"
+            android:layout_marginBottom="90dp"
+            android:layout_marginStart="120dp"
+            android:layout_toEndOf="@+id/rv_albums"
+            android:src="@drawable/grade_dialog"
+            android:background="@color/A3"
+            android:visibility="visible">
+        </ListView>
     </RelativeLayout>
 
 </RelativeLayout>
