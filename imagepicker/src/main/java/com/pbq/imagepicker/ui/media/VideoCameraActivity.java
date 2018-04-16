@@ -168,7 +168,7 @@ public class VideoCameraActivity extends Activity {
     private void initView(){
         mTextureView = findViewById(R.id.texture);
         mCaptureLayout = findViewById(R.id.capture_layout);
-        int maxRecordTime = 10 * 1000;
+        int maxRecordTime = 15 * 1000;
         mCaptureLayout.setDuration(maxRecordTime);
         mCaptureLayout.setIconSrc(0, 0);
 

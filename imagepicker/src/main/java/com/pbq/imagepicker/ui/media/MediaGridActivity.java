@@ -295,6 +295,7 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
                     intent.putExtra(ImagePicker.EXTRA_IMAGE_ITEM, imagePicker.getSelectedImages().get(0));
                     startActivityForResult(intent, ImagePicker.REQUEST_VIDEO_PREVIEW);
                 }else {
+
                     Intent intent = new Intent(MediaGridActivity.this, ImagePreviewActivity.class);
                     intent.putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, 0);
                     intent.putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, imagePicker.getSelectedImages());
@@ -307,6 +308,23 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
             //点击返回按钮
             finish();
         }
+    }
+
+    private int getFirstSelectIndex(){
+        int index = 0;
+        ImageItem imageItem = imagePicker.getSelectedImages().get(0);
+        if(imageItem != null){
+            ArrayList<ImageItem> imageItems = imagePicker.getCurrentImageFolderItems();
+            ImageItem tmpItem = null;
+            for (int i = 0; i< imageItems.size();i++){
+                tmpItem = imageItems.get(i);
+                if(imageItem.path.equals(tmpItem.path)){
+                    index = i;
+                    break;
+                }
+            }
+        }
+        return index;
     }
 
     /** 创建弹出的ListView */
@@ -389,7 +407,7 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
         //根据是否有相机按钮确定位置
         position = imagePicker.isShowCamera() ? position - 1 : position;
         if (imagePicker.isMultiMode()) {
-            /*Intent intent = new Intent(MediaGridActivity.this, ImagePreviewActivity.class);
+            Intent intent = new Intent(MediaGridActivity.this, ImagePreviewActivity.class);
             intent.putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, position);
             intent.putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, imagePicker.getCurrentImageFolderItems());
             intent.putExtra(ImagePreviewActivity.ISORIGIN, isOrigin);

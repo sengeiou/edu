@@ -252,6 +252,11 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
      */
     private void doShareWeibo(String url,String title,String des){
         UbtLog.d(TAG,"doShareWeibo" + " isWbInstall = " + WbSdk.isWbInstall(this));
+        if(!WbSdk.isWbInstall(this)){
+            ToastUtils.showShort("请先安装新浪微博客户端");
+            return;
+        }
+
         MyWeiBoNew.doShareWeiBo(this, title, url);
     }
 
