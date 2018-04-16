@@ -102,7 +102,9 @@ public abstract class MVPBaseFragment<V extends BaseView, T extends BasePresente
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnbinder.unbind();
+        if(mUnbinder!=null) {
+            mUnbinder.unbind();
+        }
     }
 
     @Override

@@ -88,7 +88,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
     private View mView;
     private int type = 6;
     private MyActionsActivity mActivity;
-    private boolean isStartLooping = false;
+    private  boolean isStartLooping = false;
 
     private MyActionsHelper mHelper;
     private String currentCycleActionName;
@@ -904,14 +904,18 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
                 imageLogo=R.drawable.sec_action_logo;
             }
             Glide.with(mContext)
-                    .load(R.drawable.sec_action_logo)
+                    .load(imageLogo)
                     .fitCenter()
                     .into(holder.img_action_logo);
             if (action_name.startsWith("@") || action_name.startsWith("#") || action_name.startsWith("%")) {
                 action_name = action_name.substring(1);
             }
             holder.txt_action_name.setText(action_name);
-            holder.txt_action_time.setText(RobotInnerActionInfoUtil.getTime(action_player_name));
+            if(TextUtils.isEmpty(RobotInnerActionInfoUtil.getTime(action_player_name))){
+                holder.txt_action_time.setText("未知");
+            }else {
+                holder.txt_action_time.setText(RobotInnerActionInfoUtil.getTime(action_player_name));
+            }
             for (int i = 0; i < MyActionsHelper.mCurrentSeletedNameList.size(); i++) {
                 if (MyActionsHelper.mCurrentSeletedNameList.get(i).equals(action_player_name)) {
                     UbtLog.d(TAG, "current select is looping:" + isStartLooping + "name :" + action_name + "size" + MyActionsHelper.mCurrentSeletedNameList.size());

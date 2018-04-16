@@ -1,32 +1,30 @@
-package com.ubt.alpha1e.behaviorhabits.model;
+package com.ubt.alpha1e.onlineaudioplayer.model;
 
-import com.baoyz.pg.Parcelable;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.utils.GsonImpl;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by Administrator on 2016/6/12.
+ * @作者：ubt
+ * @日期: 2018/4/11 14:29
+ * @描述:
  */
-@Parcelable
-public class PlayContentInfo extends BaseModel {
 
-    public String contentId;
+
+public class AudioContentInfo extends BaseModel {
+    public AudioContentInfo thiz;
     public String contentName;
     public String contentUrl;
-    public String isSelect;
-
-    public PlayContentInfo thiz;
 
     @Override
-    public PlayContentInfo getThiz(String json) {
+    public AudioContentInfo getThiz(String json) {
         try {
-            thiz = mMapper.readValue(json, PlayContentInfo.class);
+            thiz = mMapper.readValue(json, AudioContentInfo.class);
             return thiz;
         } catch (Exception e) {
             thiz = null;
@@ -70,11 +68,9 @@ public class PlayContentInfo extends BaseModel {
 
     @Override
     public String toString() {
-        return "PlayContentInfo{" +
-                "contentId=" + contentId +
-                ", contentName='" + contentName + '\'' +
+        return "AudioContentInfo{" +
+                "contentName=" + contentName +
                 ", contentUrl='" + contentUrl + '\'' +
-                ", isSelect='" + isSelect + '\'' +
                 '}';
     }
 }

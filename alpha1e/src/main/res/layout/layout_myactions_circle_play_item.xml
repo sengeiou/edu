@@ -73,8 +73,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/txt_action_name"
+                android:layout_marginTop="-5dp"
                 android:text="时长：01:29"
-                android:visibility="invisible"
                 />
 
            <LinearLayout

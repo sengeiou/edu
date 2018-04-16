@@ -1,6 +1,6 @@
-package com.ubt.alpha1e.behaviorhabits.model;
+package com.ubt.alpha1e.onlineaudioplayer.model;
 
-import com.baoyz.pg.Parcelable;
+import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.utils.GsonImpl;
 
@@ -11,22 +11,23 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by Administrator on 2016/6/12.
+ * @作者：ubt
+ * @日期: 2018/4/11 11:28
+ * @描述:
  */
-@Parcelable
-public class PlayContentInfo extends BaseModel {
 
-    public String contentId;
-    public String contentName;
-    public String contentUrl;
-    public String isSelect;
 
-    public PlayContentInfo thiz;
+public class AlbumContentInfo  extends BaseModel implements Serializable {
 
+
+    public AlbumContentInfo thiz;
+    public String albumId;
+    public String albumName;
+    public String grade;
     @Override
-    public PlayContentInfo getThiz(String json) {
+    public AlbumContentInfo getThiz(String json) {
         try {
-            thiz = mMapper.readValue(json, PlayContentInfo.class);
+            thiz = mMapper.readValue(json, AlbumContentInfo.class);
             return thiz;
         } catch (Exception e) {
             thiz = null;
@@ -70,11 +71,10 @@ public class PlayContentInfo extends BaseModel {
 
     @Override
     public String toString() {
-        return "PlayContentInfo{" +
-                "contentId=" + contentId +
-                ", contentName='" + contentName + '\'' +
-                ", contentUrl='" + contentUrl + '\'' +
-                ", isSelect='" + isSelect + '\'' +
+        return "AlbumContentInfo{" +
+                "albumId=" + albumId +
+                ", albumName='" + albumName + '\'' +
+                ", grade='" + grade + '\'' +
                 '}';
     }
 }

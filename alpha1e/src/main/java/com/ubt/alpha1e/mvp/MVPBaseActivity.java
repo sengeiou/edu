@@ -435,12 +435,12 @@ public abstract class MVPBaseActivity<V extends BaseView, T extends BasePresente
 //                .getCurrentBluetooth() != null) {
 //            UbtLog.d(TAG, "--wmma--bluetooth ssss");
 //            if (stopFloatService() /*&& isServiceRun(getApplicationContext(), "com.ubt.alpha1e.ui.custom.FloatControlViewService")*/) {
-//                CommonCtrlView.closeCommonCtrlView();
+//                onlineAudioPlayerView.closeCommonCtrlView();
 //            } else {
-//                CommonCtrlView.getInstace(this);
+//                onlineAudioPlayerView.getInstace(this);
 //            }
 //        } else {
-//            CommonCtrlView.closeCommonCtrlView();
+//            onlineAudioPlayerView.closeCommonCtrlView();
 //        }
 
     }

@@ -3,6 +3,8 @@ package com.ubt.alpha1e.onlineaudioplayer.Fragment;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
@@ -37,6 +39,10 @@ import com.ubt.alpha1e.onlineaudioplayer.DividerItemDecorationNew;
 import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerContract;
 import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerPresenter;
 import com.ubt.alpha1e.onlineaudioplayer.helper.OnlineAudioResourcesHelper;
+
+import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.onlineresrearch.OnlineResRearchActivity;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.main.MainActivity;
@@ -87,10 +93,27 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
     public LinearLayoutManager mLayoutManager;
     public onlineresAdpater mAdapter;
     public List<OnlineresList> onlineresList = new ArrayList<>();
-
+    public final static int LAUNCH_ALBUM_ITEM=1;
     private static final int GET_MAX_CATEGORY = 50;
     Unbinder unbinder;
     private  OnlineAudioResourcesHelper mHelper = null;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case LAUNCH_ALBUM_ITEM:
+                    OnlineAudioAlbumPlayerFragment mfragment = OnlineAudioAlbumPlayerFragment.newInstance(msg.obj.toString());
+                    start(mfragment);
+                    break;
+            }
+        }
+    };
+
+
+
+
     public static OnlineAudioResourcesFragment newInstance() {
         OnlineAudioResourcesFragment onlineAudioResourcesFragment = new OnlineAudioResourcesFragment();
         return onlineAudioResourcesFragment;
@@ -124,6 +147,7 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
 
     @Override
     protected void initUI() {
+
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerview.setLayoutManager(mLayoutManager);
 
@@ -141,7 +165,7 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
                 outRect.bottom = 40;
             }
         });
-        mAdapter = new onlineresAdpater(getActivity().getApplicationContext(),onlineresList);
+        mAdapter = new onlineresAdpater(getActivity().getApplicationContext(),onlineresList,mHandler);
         mRecyclerview.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         getMaxCategory();
@@ -230,17 +254,29 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
 
     @Override
     public int getContentViewId() {
+
         return R.layout.fragment_onlineres_list;
     }
 
+
     @Override
-    public void showGradeList() {
+    public void showCourseList(List<CourseContentInfo> album) {
 
     }
 
     @Override
-    public void showAlbumList(List<String> albumList) {
+    public void showAlbumList(Boolean status, List<AlbumContentInfo> album, String errorMsgs) {
 
     }
 
+    @Override
+    public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
+
+    }
+
+    @Override
+    public void onRequestStatus(int requestType, int errorCode) {
+
+    }
 }
+

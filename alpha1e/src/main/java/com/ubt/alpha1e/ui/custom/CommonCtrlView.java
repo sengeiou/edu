@@ -64,7 +64,7 @@ import static android.app.Service.START_NOT_STICKY;
 
 public class CommonCtrlView implements IActionsUI, IMainUI {
 
-    private static final String TAG = "CommonCtrlView";
+    private static final String TAG = "onlineAudioPlayerView";
     public final static String KEY_CURRENT_PLAYING_ACTION_NAME = "currentPlayingActionName";
     //定义浮动窗口布局
     private static RelativeLayout mFloatLayout;
