@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lay_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sec_page_robot" >
+
+    <!--<include
+        android:id="@+id/lay_title"
+        layout="@layout/layout_title_back"/>-->
+
+    <RelativeLayout
+        android:id="@+id/lay_title"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/title_layout_bg_ft">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/sec_page_main" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:weightSum="14">
+
+            <LinearLayout
+                android:id="@+id/lay_base_back"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="5"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp">
+
+                <ImageView
+                    android:layout_width="8dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/sec_back_path_ft"></ImageView>
+
+                <TextView
+                    android:id="@+id/tv_base_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="#00000000"
+                    android:gravity="center|left"
+                    android:text="@string/ui_common_back"
+                    android:textColor="@color/title_layout_back_text_color_ft"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_base_title_name"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="4"
+                android:ellipsize="middle"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/title_layout_title_text_color_ft"
+                android:textSize="18sp"/>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="5">
+
+                <Button
+                    android:id="@+id/btn_help"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/icon_help" />
+
+                <Button
+                    android:id="@+id/btn_re_scan"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_toLeftOf="@+id/btn_help"
+                    android:layout_marginRight="8dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/icon_scanning"
+                    />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/img_line_spi"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/lay_title"
+        android:background="@color/B6" >
+    </ImageView>
+
+    <LinearLayout
+        android:id="@+id/lay_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/img_line_spi"
+        android:background="@color/A6"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+</RelativeLayout>

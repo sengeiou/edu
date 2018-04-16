@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_edit_user"
+    >
+
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="66dp"
+        android:text="Alpha Ebot搭载腾讯叮当智能助手"
+        android:textSize="18sp"
+        android:textColor="#3B6176"
+        android:gravity="center"
+        />
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/tv1"
+        android:text="登录体验多项语音黑科技"
+        android:textSize="16sp"
+        android:textColor="#3B6176"
+        android:gravity="center"
+        />
+
+    <Button
+        android:id="@+id/btn_dingdang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="34dp"
+        android:layout_below="@+id/tv2"
+        android:layout_centerHorizontal="true"
+        android:text="叮当管理中心"
+        android:textColor="#fff"
+        android:textSize="18sp"
+        android:background="@drawable/bt_dingdang_m"
+        />
+
+
+</RelativeLayout>

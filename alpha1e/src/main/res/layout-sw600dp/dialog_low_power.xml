@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dia_low_power"
+    android:padding="20dp" >
+
+    <ImageView
+        android:id="@+id/img_note_charge"
+        android:layout_width="120dp"
+        android:layout_height="18dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/charge_note" />
+
+
+    <TextView
+        android:id="@+id/txt_note_charge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img_note_charge"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/ui_remote_robot_low_battery"
+        android:textColor="@color/txt_charge"
+        android:textSize="16dp" />
+    <TextView
+        android:id="@+id/txt_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_note_charge"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="@string/ui_common_confirm"
+        android:textColor="@color/txt_new_edtion_ok"
+        android:textSize="18dp" />
+
+</RelativeLayout>

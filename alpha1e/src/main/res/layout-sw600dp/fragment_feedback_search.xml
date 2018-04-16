@@ -1,0 +1,88 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="90dp"
+        android:layout_marginRight="90dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/content_background">
+
+        <RelativeLayout
+            android:id="@+id/rl_head"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            >
+
+            <ImageView
+                android:id="@+id/iv_head"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_title_search"/>
+
+            <TextView
+                android:id="@+id/tv_head_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/iv_head"
+                android:layout_marginRight="10dp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/T21"
+                android:textSize="16sp"
+                android:lines="1"
+                android:ellipsize="end"
+                android:text="@string/ui_setting_hot_question"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/A16"
+                android:layout_alignParentBottom="true"/>
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_head"
+            android:layout_marginBottom="5dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:splitMotionEvents="false"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+
+        <RelativeLayout
+            android:id="@+id/rl_empty_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:drawableTop="@drawable/icon_setting_search_default"
+                android:drawablePadding="5dp"
+                android:text="@string/ui_setting_empty_search_result"
+                android:textSize="16sp"
+                android:textColor="#85B4C9"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

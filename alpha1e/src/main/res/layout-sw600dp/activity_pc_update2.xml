@@ -1,0 +1,142 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sec_page_robot">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="72dp"
+        android:layout_marginTop="30dp">
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="true"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:text="@string/ui_upgrade_guide2_title"
+                    android:textSize="15sp"
+                    />
+
+                <RelativeLayout
+                    android:id="@+id/lay_pc_charging"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-1dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/tv_title"
+                    android:background="@drawable/img_pc_update_charging">
+
+                    <TextView
+                        android:id="@+id/tv_charging_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/ui_upgrade_guide2_power"
+                        android:textSize="13sp"
+                        />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/img_pc_usbline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2dp"
+                    android:layout_below="@+id/lay_pc_charging"
+                    android:background="@drawable/img_pc_update_usbline">
+                </ImageView>
+
+                <ImageView
+                    android:id="@+id/img_pc_pc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2dp"
+                    android:layout_below="@+id/img_pc_usbline"
+                    android:background="@drawable/img_pc_update_pc">
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/tv_pc_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_below="@+id/img_pc_pc"
+                    android:text="@string/ui_upgrade_guide2_message"
+                    android:textSize="15sp"
+                    />
+                <TextView
+                    android:id="@+id/tv_pc_go"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_below="@+id/tv_pc_url"
+                    android:text="@string/ui_upgrade_guide2_service_hotline"
+                    android:textSize="13sp"
+                    />
+
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/lay_operate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+
+        <ImageView
+            android:id="@+id/img_pc_update_ok"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/pc_update_ok"
+            android:visibility="visible">
+        </ImageView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+        <ImageView
+            android:id="@+id/img_pc_update_back"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="44dp"
+            android:background="@drawable/pc_update_back"
+            android:visibility="visible">
+        </ImageView>
+
+    </RelativeLayout>
+
+</RelativeLayout>

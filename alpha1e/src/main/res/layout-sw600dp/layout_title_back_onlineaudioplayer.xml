@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_title"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_alignParentTop="true"
+    >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/A15"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/ll_base_back"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        >
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/back_icon"></ImageView>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_base_title_name"
+        android:layout_width="150dp"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:singleLine="true"
+        android:maxEms="10"
+        android:textColor="@color/T21"
+        android:textSize="18sp"
+        android:text="在线资源库"/>
+
+    <ImageView
+        android:id="@+id/iv_grade_sort"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="80dp"
+        android:background="@drawable/ic_screening"
+        android:visibility="visible"></ImageView>
+
+    <ImageView
+        android:id="@+id/iv_search"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/bluetooth_searchs"
+        android:visibility="visible"></ImageView>
+
+</RelativeLayout>

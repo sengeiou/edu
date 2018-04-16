@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_bluetooth_guide">
+
+    <ImageButton
+        android:id="@+id/bluetooth_guide_start_robot"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/action_close"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:id="@+id/button_next"
+        android:layout_width="132dp"
+        android:layout_height="40dp"
+        android:background="@drawable/action_button_disable"
+        android:gravity="center"
+        android:text="下一步"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"/>
+
+     <CheckBox
+         android:id="@+id/select"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:gravity="center_vertical"
+         android:layout_above="@id/button_next"
+         android:layout_marginBottom="18dp"
+         android:layout_centerHorizontal="true"
+         android:textSize="14sp"
+         android:text=" 机器人已经开机站立"
+         android:textStyle="bold"
+         android:textColor="#666666"
+         style="@style/CustomCheckBoxTheme" />
+
+    <TextView
+        android:id="@+id/tv_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="105dp"
+        android:layout_marginRight="108dp"
+        android:layout_alignParentRight="true"
+        android:layout_above="@id/select"
+        android:textSize="18sp"
+        android:text="请按ON/OFF键3-5秒,让机器人开机站立"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        style="@style/CustomCheckBoxTheme" />
+
+</RelativeLayout>

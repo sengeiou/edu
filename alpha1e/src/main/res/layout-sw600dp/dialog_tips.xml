@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/action_dialog_filter_rect"
+   >
+
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="请在机器人身上调节你点击的部位"
+        android:gravity="center"
+        />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#ECF1F4"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/tv_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:text="@string/ui_common_confirm"
+        android:textSize="16sp"
+        android:background="@drawable/btn_alert_bg"
+        android:textColor="@color/tv_user_edit_color"
+        android:gravity="center"
+        />
+
+
+
+
+
+
+</LinearLayout>

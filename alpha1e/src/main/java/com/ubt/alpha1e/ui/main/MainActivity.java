@@ -182,6 +182,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     ImageView ivCommunity;
     @BindView(R.id.rl_top_icon)
     RelativeLayout rlTopIcon;
+    @BindView(R.id.star1)
+    ImageView ivStar1;
+    @BindView(R.id.star2)
+    ImageView ivStar2;
+    @BindView(R.id.planet1)
+    ImageView ivPlant1;
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
@@ -285,17 +291,18 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     long mClickTime = 0;
     int CLICK_THRESHOLD_DUPLICATE = 800;
     Animation hyperspaceJump;
-
+    MainAnimationEffect mMainAnimationEffect;
     private boolean hasInitUI = false;
+    Context mContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UbtLog.d(TAG, "onCreate");
+        mContext=this;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mCurrentTouchTime = System.currentTimeMillis();
         getScreenInch();
-
         mHelper = MainUiBtHelper.getInstance(getContext());
         IntentFilter filter1 = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         filter1.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
@@ -315,6 +322,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if (!MainActivityGuideView.hasShowGuide()) {
             MainActivityGuideView.getInstant(this);
         }
+        mMainAnimationEffect=new MainAnimationEffect(mContext);
     }
 
     @Override
@@ -364,6 +372,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             }
             getCurrentPower();
         }
+        //GLOBAL ANIMATION EFFECT
+         showAnimationEffect(true);
     }
 
     private void getCurrentPower() {
@@ -479,13 +489,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_remote:
                 if (isBulueToothConnected()) {
+                    llRemote.setAnimation(mMainAnimationEffect.getBounceAnimation());
+                    llRemote.startAnimation(mMainAnimationEffect.getBounceAnimation());
                     if (!removeDuplicateClickEvent()) {
                         mPresenter.resetGlobalActionPlayer();
                         mLaunch.setClass(this, RemoteSelActivity.class);
                         //startActivity(new Intent(this, ActionTestActivity.class));
                         startActivity(mLaunch);
-
-
                     }
                 } else {
                     showBluetoothConnectDialog();
@@ -1725,29 +1735,42 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if(topIcon2Disconnect!=null) {
             topIcon2Disconnect.setVisibility(View.VISIBLE);
             if(animationRunning) {
-                hyperspaceJump = AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump);
-                hyperspaceJump.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        // topIcon2Disconnect.startAnimation(hyperspaceJump);
-                        //  topIcon2.startAnimation(hyperspaceJump);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                topIcon2Disconnect.startAnimation(hyperspaceJump);
-                topIcon2.startAnimation(hyperspaceJump);
+                topIcon2Disconnect.startAnimation(mMainAnimationEffect.getBounceAnimation());
+                topIcon2.startAnimation(mMainAnimationEffect.getBounceAnimation());
             }
         }
-
     }
+
+    /**
+     * Course cente animation
+     * @param
+     */
+    private void showCourseCenterAnimation(RelativeLayout mCousrCenter){
+        mCousrCenter.startAnimation(mMainAnimationEffect.getCourceCenterBounceAnimation(mCousrCenter));
+    }
+
+    /**
+     * Star animation
+     */
+    private void showStarAnimation(){
+        ivStar1.startAnimation(mMainAnimationEffect.getShrinkAnimation());
+        ivStar2.startAnimation(mMainAnimationEffect.getShrinkAnimation());
+    }
+
+    /**
+     * Planet animation
+     */
+    private void showPlanetAnimation(ImageView mPlanet){
+        mPlanet.startAnimation(mMainAnimationEffect.getPlanetAnimation(mPlanet));
+    }
+    private void showAnimationEffect(boolean status ){
+        if(status) {
+            showCourseCenterAnimation(rlCourseCenter);
+            showStarAnimation();
+            showPlanetAnimation(ivPlant1);
+        }
+    }
+
     private void sendCommandToRobot(String absouteActionPath){
         if(cartoon_enable) {
             byte[] actions = BluetoothParamUtil.stringToBytes(absouteActionPath);

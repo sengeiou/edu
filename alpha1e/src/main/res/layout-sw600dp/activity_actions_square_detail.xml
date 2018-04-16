@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/B6"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<include
+        android:id="@+id/layout_title"
+        layout="@layout/layout_title_back" />-->
+
+    <RelativeLayout
+        android:id="@+id/layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/TB1">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/A6" />
+
+        <LinearLayout
+            android:id="@+id/lay_base_back"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp"
+            android:paddingTop="10dp"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_width="8dp"
+                android:layout_height="18dp"
+                android:background="@drawable/sec_back_path"></ImageView>
+
+            <TextView
+                android:id="@+id/tv_base_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:background="#00000000"
+                android:gravity="center|left"
+                android:text="@string/ui_common_back"
+                android:textColor="@color/T1"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:id="@+id/txt_base_title_name"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:maxWidth="100dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:maxEms="10"
+                android:textColor="@color/T1"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/imgView_type_select"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="2dp"
+                android:gravity="center"
+                android:src="@drawable/actions_square_type_stuffe" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="250dp"
+        android:layout_height="44dp"
+        android:paddingLeft="5dp"
+        android:layout_below="@+id/layout_title"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/T5"
+        app:tabIndicatorHeight="1dp"
+        app:tabSelectedTextColor="@color/T5"
+        app:tabTextAppearance="@style/ActionsSquareTab"
+        app:tabTextColor="@color/T1" />
+
+    <ImageView
+        android:id="@+id/imgView_show_content_type"
+        android:layout_width="22dp"
+        android:layout_height="44dp"
+        android:layout_below="@+id/layout_title"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:gravity="center"
+        android:src="@drawable/actions_square_show_all" />
+
+    <View
+        android:id="@id/view_split"
+        android:layout_below="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/B5"/>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_fragment_content"
+        android:layout_below="@+id/view_split"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </RelativeLayout>
+    <include
+        layout="@layout/activity_actions_lib_type_select" />
+    <include
+        android:id="@+id/layout_share"
+        layout="@layout/activity_actions_lib_pre_view_share" />
+
+</RelativeLayout>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="400dp"
+
+    >
+
+    <RelativeLayout
+        android:layout_width="180dp"
+        android:layout_height="240dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="50dp"
+        >
+
+        <RelativeLayout
+            android:id="@+id/rl_lock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_cources"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_lesson_action"
+                />
+
+            <View
+                android:id="@+id/view_background"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:layout_centerInParent="true"
+                android:alpha="0.7"
+                android:background="@drawable/view_round_background"
+                />
+
+            <ImageView
+                android:id="@+id/iv_lock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/img_locked"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_cources_name"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_below="@+id/rl_lock"
+            android:background="@drawable/bg_main_course"
+            android:gravity="center"
+            android:text="课程原理"
+            android:textColor="@color/black"
+            android:textSize="20sp"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_complete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/img_lesson_completed"
+        android:visibility="gone"/>
+</RelativeLayout>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_hibits_event_info"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/content_background"
+    >
+
+    <RelativeLayout
+        android:id="@+id/rl_hibits_event_item"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        >
+
+        <RelativeLayout
+            android:id="@+id/rl_event_switch"
+            android:layout_width="55dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_event_switch"
+                android:layout_width="40dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/icon_habits_switch_open"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_event_logo"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/rl_event_switch"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/iv_event_logo_wq"
+                android:layout_width="68dp"
+                android:layout_height="68dp"
+                android:background="@drawable/img_waiquan_undo"/>
+
+            <ImageView
+                android:id="@+id/iv_event_logo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/icon_habits_awake_highlight"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_event_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/rl_event_logo"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/T27"
+            android:textSize="18sp"
+            android:text="07:55"
+            />
+
+        <View
+            android:id="@+id/v_split"
+            android:layout_width="2dp"
+            android:layout_height="18dp"
+            android:layout_toRightOf="@+id/tv_event_time"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:background="@color/T27"
+            />
+
+        <TextView
+            android:id="@+id/tv_event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/v_split"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/T27"
+            android:textSize="18sp"
+            android:lines="1"
+            android:ellipsize="end"
+            android:text="早餐"
+            />
+
+        <TextView style="@style/text_right_style"
+            android:id="@+id/tv_right"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_right"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            >
+
+            <ImageView
+                android:id="@+id/iv_star_1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/icon_habits_star_highlight"/>
+
+            <ImageView
+                android:id="@+id/iv_star_2"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/iv_star_1"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/icon_habits_star_highlight"/>
+
+            <TextView
+                android:id="@+id/tv_score"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/iv_star_2"
+                android:layout_marginRight="8dp"
+                android:layout_centerVertical="true"
+                android:textColor="@color/T28"
+                android:textSize="16sp"
+                android:gravity="center"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+
+

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="70dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginLeft="73dp"
+    android:padding="10dp"
+    android:background="@drawable/message_content_bg">
+
+    <TextView
+        android:id="@+id/txt_message_reontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:visibility="gone"/>
+
+    <com.ubt.alpha1e.ui.custom.ShapedImageView
+        android:id="@+id/img_message_public_logo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="13dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/txt_message_reontent"
+        app:round_radius="8dp"
+        app:shape_mode="round_rect"
+        app:stroke_width="1dp"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/img_message_video_play"
+        android:padding="10dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/txt_message_public_content"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_below="@+id/txt_message_reontent"
+        android:gravity="center_vertical"
+        android:layout_toRightOf="@+id/img_message_public_logo"
+        android:textSize="14sp"
+        android:maxLines="2"
+        android:ellipsize="end"/>
+
+</RelativeLayout>

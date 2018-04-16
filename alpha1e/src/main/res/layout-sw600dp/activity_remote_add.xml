@@ -1,0 +1,128 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <include layout="@layout/layout_title_back_ft" />
+
+    <RelativeLayout
+        android:id="@+id/lay_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lay_title"
+        android:layout_marginTop="23dp"
+        android:background="@color/B6">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="@string/ui_remote_role_head"
+            android:textColor="@color/T1"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/lay_remote_role"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/lay_top"
+        android:layout_marginTop="12dp"
+        android:layout_height="168dp"
+        android:horizontalSpacing="1dp"
+        android:numColumns="4"
+        android:verticalSpacing="1dp"></GridView>
+
+    <View
+        android:id="@+id/vew_spy_1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/lay_remote_role"
+        android:background="#F0F3F3" />
+
+    <RelativeLayout
+        android:id="@+id/lay_remote_name"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:gravity="center"
+        android:layout_below="@+id/vew_spy_1"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="@string/ui_remote_role_name"
+            android:textColor="@color/T1"
+            android:layout_marginLeft="15dp"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/ui_remote_role_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="210dp"
+            android:ellipsize="end"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="right"
+            android:background="#00000000"
+            android:singleLine="true"
+            android:textColor="@color/T1"
+            android:layout_marginRight="15dp"
+            android:hint="@string/ui_remote_role_name_placeholder"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/vew_spy_2"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/lay_remote_name"
+        android:background="#F0F3F3" />
+
+    <RelativeLayout
+        android:id="@+id/lay_remote_role_introduction"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:gravity="center"
+        android:layout_below="@+id/vew_spy_2"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="@string/ui_remote_role_desc"
+            android:textColor="@color/T1"
+            android:layout_marginLeft="15dp"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/ui_remote_role_describe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="210dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="right"
+            android:background="#00000000"
+            android:maxLength="14"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/T1"
+            android:layout_marginRight="15dp"
+            android:hint="@string/ui_remote_role_desc_placeholder"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/vew_spy_3"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@+id/lay_remote_role_introduction"
+        android:background="#F0F3F3" />
+0
+</RelativeLayout>

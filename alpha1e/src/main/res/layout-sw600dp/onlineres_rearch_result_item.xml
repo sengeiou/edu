@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/online_res_swipe"
+    android:layout_width="match_parent"
+    android:layout_height="46dp"
+    android:layout_marginLeft="18dp"
+    android:layout_marginRight="18dp"
+    android:background="@null">
+
+    <TextView
+        android:id="@+id/online_res_name"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:text="语"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:background="@null" />
+
+</RelativeLayout>
+

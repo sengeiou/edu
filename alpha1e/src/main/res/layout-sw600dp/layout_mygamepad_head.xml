@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_header_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/remote_head_item_bg_ft"
+    >
+
+    <ImageView
+        android:id="@+id/iv_tips"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/gamepad_warning"
+        android:layout_margin="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"
+        android:layout_toRightOf="@+id/iv_tips"
+        android:layout_centerInParent="true"
+        android:text="@string/ui_remote_role_introduction"/>
+
+    <ImageView
+        android:id="@+id/iv_close_header"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/gamepad_warning_close"/>
+
+
+
+</RelativeLayout>

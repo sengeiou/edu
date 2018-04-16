@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginLeft="15dp"
+    android:background="@color/B11">
+
+    <com.ubt.alpha1e.ui.custom.ShapedImageView
+        android:id="@+id/action_logo"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop"
+        app:round_radius="16dp"
+        app:shape_mode="round_rect"
+        app:stroke_width="1dp"
+        />
+
+    <ImageView
+        android:id="@+id/img_action_type"
+        android:layout_width="30dp"
+        android:layout_height="18dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:background="@drawable/actions_official_pic"
+        />
+
+    <TextView
+        android:id="@+id/txt_action_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@+id/action_logo"
+        android:layout_toLeftOf="@+id/img_state"
+        android:text="@string/hello_world"
+        android:textColor="@color/txt_new_edtion"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/txt_disc"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:ellipsize="end"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@+id/action_logo"
+        android:layout_toLeftOf="@+id/img_state"
+        android:layout_below="@+id/txt_action_name"
+        android:layout_marginBottom="3dp"
+        android:maxLines="2"
+        android:text="Tell a story about being Tell a story about being about being being about be being about be"
+        android:textColor="#71777d"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/img_type_logo"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/action_logo"
+        android:layout_below="@+id/txt_disc"
+        android:layout_centerVertical="true"
+        android:src="@drawable/actionlib_item_story_icon"
+        />
+
+    <TextView
+        android:id="@+id/txt_type_des"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/img_type_logo"
+        android:layout_below="@+id/txt_disc"
+        android:text="Children's song"
+        android:singleLine="true"
+        android:maxEms="4"
+        android:textColor="#b5b5b5"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/img_time_long"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/txt_disc"
+        android:layout_toRightOf="@+id/txt_type_des"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/actionlib_item_time_icon" />
+
+    <TextView
+        android:id="@+id/txt_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/txt_disc"
+        android:layout_toRightOf="@+id/img_time_long"
+        android:textColor="#b5b5b5"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/img_see_time"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_below="@+id/txt_disc"
+        android:layout_toRightOf="@+id/txt_time"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/actionlib_item_saw_icon" />
+
+    <TextView
+        android:id="@+id/txt_sees"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/txt_disc"
+        android:layout_toRightOf="@+id/img_see_time"
+        android:singleLine="true"
+        android:text="0"
+        android:textColor="@color/T9"
+        android:textSize="12sp" />
+
+
+    <ImageView
+        android:id="@+id/img_state"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/txt_progress"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="8dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:text="0%"
+        android:gravity="center"
+        android:textColor="@color/download_progress_text_color_ft"
+        android:textSize="11sp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/txt_square_item_down_num"
+        android:layout_width="34dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="6dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/img_state"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:textColor="@color/download_number_text_color_ft"
+        android:text="0"/>
+
+</RelativeLayout>

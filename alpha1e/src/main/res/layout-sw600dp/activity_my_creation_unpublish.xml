@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/B5"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <include layout="@layout/layout_title_back" />
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/B6"
+        android:padding="15dp">
+
+        <com.ubt.alpha1e.ui.custom.ShapedImageView
+            android:id="@+id/action_logo"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="15dp"
+            app:round_radius="16dp"
+            app:shape_mode="round_rect"
+            app:stroke_width="1dp" />
+
+       <TextView
+           android:id="@+id/txt_action_name"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_toRightOf="@+id/action_logo"
+           android:textSize="16sp"
+           android:textColor="@color/T1"
+           android:text="@string/ui_square_action_name"
+           />
+       <TextView
+           android:id="@+id/txt_action_name_value"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginLeft="5dp"
+           android:textSize="16sp"
+           android:textColor="@color/T1"
+           android:layout_toRightOf="@+id/txt_action_name"
+           />
+       <TextView
+           android:id="@+id/txt_action_time"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_toRightOf="@+id/action_logo"
+           android:layout_marginTop="8dp"
+           android:textSize="11sp"
+           android:textColor="@color/T2"
+           android:layout_below="@+id/txt_action_name"
+           android:text="@string/ui_square_action_time"
+           />
+
+        <TextView
+            android:id="@+id/txt_action_time_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="8dp"
+            android:textSize="11sp"
+            android:textColor="@color/T2"
+            android:layout_below="@+id/txt_action_name_value"
+            android:layout_toRightOf="@+id/txt_action_time"
+            />
+       <TextView
+           android:id="@+id/txt_action_type"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="8dp"
+           android:textSize="14sp"
+           android:textColor="@color/T2"
+           android:layout_below="@+id/txt_action_time"
+           android:layout_toRightOf="@+id/action_logo"
+           android:text="@string/ui_readback_action_type"
+           />
+       <TextView
+           android:id="@+id/txt_action_type_value"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginLeft="5dp"
+           android:layout_marginTop="8dp"
+           android:textSize="14sp"
+           android:textColor="@color/T2"
+           android:layout_below="@+id/txt_action_time_value"
+           android:layout_toRightOf="@+id/txt_action_type"
+           />
+
+        <TextView
+            android:id="@+id/txt_action_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/action_logo"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:textSize="14sp"
+            android:textColor="@color/T2"
+            android:text="@string/ui_distribute_description"
+            />
+        <TextView
+            android:id="@+id/txt_action_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/action_logo"
+            android:layout_toRightOf="@+id/txt_action_des"
+            android:layout_marginTop="15dp"
+            android:textSize="14sp"
+            android:textColor="@color/T2"
+            />
+
+
+    </RelativeLayout>
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_height="44dp"
+        android:layout_width="230dp"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_login_round_button"
+        android:gravity="center"
+        android:textColor="@color/T1"
+        android:text="@string/ui_dynamic_releasetoshow"
+        android:textSize="18sp" />
+
+
+ <!--   <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/ui_dynamic_release_encourage"
+        android:layout_gravity="center_horizontal"
+        />-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/go_dub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ui_dub_for_actions"
+            android:textSize="18sp"
+            android:textColor="#0076ff"
+            android:layout_gravity="center_horizontal"
+            />
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/icon_go_dub"
+            android:layout_toRightOf="@+id/go_dub"
+            android:layout_marginTop="4dp"
+            android:scaleType="fitXY"
+            android:layout_gravity="center_horizontal"
+            />
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

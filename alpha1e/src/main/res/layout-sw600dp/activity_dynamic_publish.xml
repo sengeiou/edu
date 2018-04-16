@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ubt.alpha1e.ui.ActionsPublishActivity"
+    android:background="@color/B5"
+
+>
+
+    <include
+        android:id="@+id/layout_title"
+        layout="@layout/layout_title_back"/>
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_title"
+        android:background="@android:color/white"
+        android:paddingBottom="16dp"
+        >
+
+        <com.ubt.alpha1e.ui.custom.DesContentEditText
+            android:id="@+id/edt_content"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="16dp"
+            android:gravity="top|left"
+            android:maxLength="140"
+            android:hint="@string/ui_readback_placeholder"
+            android:background="@drawable/bg_action_publish_edt"
+            android:textSize="14sp"
+            android:padding="5dp"
+            android:textColorHint="@color/T7"
+            android:textColor="@color/T1">
+            <requestFocus />
+        </com.ubt.alpha1e.ui.custom.DesContentEditText>
+        <TextView
+            android:id="@+id/txt_max_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/edt_content"
+            android:layout_marginLeft="11dp"
+            android:layout_marginRight="22dp"
+            android:gravity="right"
+            android:padding="10dp"
+            android:text="0/140"
+            android:textColor="@color/txt_hint"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_show_photo_or_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/edt_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_show_photo_or_video"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:scaleType="fitXY"
+
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                />
+            <ImageView
+                android:id="@+id/iv_delete_photo_or_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_close"
+                android:layout_marginLeft="70dp"
+                />
+            <ImageView
+                android:id="@+id/iv_type_video"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_play_dub"
+                android:visibility="gone"
+                />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_show_photo_or_video"
+            android:background="@color/B5"
+            android:layout_margin="16dp"
+            android:padding="10dp"
+            android:visibility="gone"
+            >
+
+
+
+            <com.ubt.alpha1e.ui.custom.ShapedImageView
+                android:id="@+id/action_logo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/ic_launcher"
+                android:layout_centerVertical="true"
+                />
+
+
+                <RelativeLayout
+                    android:id="@+id/lay_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="16dp"
+                    android:gravity="center_vertical"
+                    android:layout_toRightOf="@+id/action_logo"
+                    android:layout_toLeftOf="@+id/iv_delete_action"
+                    android:paddingBottom="3dp"
+                    android:paddingTop="3dp">
+
+                    <TextView
+                        android:id="@+id/txt_action_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hello_world"
+                        android:textColor="@color/txt_new_edtion"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_disc"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:ellipsize="end"
+                        android:layout_below="@+id/txt_action_name"
+                        android:singleLine="true"
+                        android:text="Tell a story about being Tell a story about being about being being about be being about be"
+                        android:textColor="#71777d"
+                        android:textSize="14sp" />
+
+                    <RelativeLayout
+                        android:id="@+id/lay_center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt_disc"
+                        >
+
+                        <ImageView
+                            android:id="@+id/img_type_logo"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/actionlib_item_story_icon"
+                            />
+
+                        <TextView
+                            android:id="@+id/txt_type_des"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_toRightOf="@+id/img_type_logo"
+                            android:text="Children's song"
+                            android:singleLine="true"
+                            android:maxEms="4"
+                            android:textColor="#b5b5b5"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:id="@+id/img_time_long"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/txt_type_des"
+                            android:layout_marginLeft="10dp"
+                            android:background="@drawable/actionlib_item_time_icon" />
+
+                        <TextView
+                            android:id="@+id/txt_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_toRightOf="@+id/img_time_long"
+                            android:textColor="#b5b5b5"
+                            android:textSize="12sp" />
+
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/iv_delete_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/icon_close"
+                />
+
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/rl_content"
+        android:background="@color/A11"
+        android:visibility="gone"
+        />
+
+    <RelativeLayout
+        android:id="@+id/rl_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+
+
+        >
+
+            <ImageView
+                android:id="@+id/take_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="11dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/icon_camera"
+                android:scaleType="fitXY"
+                />
+
+            <ImageView
+                android:id="@+id/iv_add_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_toRightOf="@+id/take_photo"
+                android:src="@drawable/icon_add_action"
+                android:scaleType="fitXY"
+                />
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+</RelativeLayout>

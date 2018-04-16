@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="6dip"
+    android:background="@color/white"
+    >
+    <CheckBox
+        android:id="@+id/grade_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:focusable="false"
+        android:button="@drawable/checkbox_selected"
+        android:focusableInTouchMode="false"
+        android:checked="true"
+         />
+    <TextView
+        android:id="@+id/grade_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/grade_select"
+        android:layout_alignBottom="@+id/grade_select"
+        android:layout_toRightOf="@+id/grade_select"
+        android:layout_marginLeft="50dp"
+        android:textSize="15sp"
+        android:text="TextView" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#A1BBC9"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/grade_name"/>
+
+    </RelativeLayout>

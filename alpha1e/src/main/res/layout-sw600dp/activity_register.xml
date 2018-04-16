@@ -1,0 +1,123 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/B5">
+
+
+    <TextView
+        android:id="@+id/tv_account"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:gravity="center|top"
+        android:text="@string/ui_guide_create_account"
+        android:textColor="@color/T1"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/lay_input_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_account"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"></LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_invalid_msg"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lay_input_info"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textColor="@color/T11"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btn_register_by_phone_num"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/tv_invalid_msg"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/bg_login_round_button"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@color/T1"
+        android:textSize="18sp"></Button>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/im_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="@color/A4" />
+
+        <TextView
+            android:id="@+id/tv_account_already"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/ui_register_has_account"
+            android:textColor="@color/T1"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btn_register_by_phone_num"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <ImageButton
+            android:id="@+id/btn_logo_facebook"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/register_facebook_logo"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/btn_logo_twitter"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/register_twitter_logo"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/btn_logo_qq"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/register_qq_logo"></ImageButton>
+
+        <ImageButton
+            android:id="@+id/btn_logo_weixin"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/register_wechat_logo"></ImageButton>
+    </LinearLayout>
+
+</RelativeLayout>

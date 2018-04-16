@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/list"
+    >
+
+
+    <ImageView
+        android:id="@+id/iv_main_back"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/back_icon"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="34dp"
+        android:layout_toRightOf="@+id/rl_leftmenu"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_main_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="个人中心"
+            android:textColor="@color/tv_center_title_color"
+            android:textSize="20sp"
+            />
+
+        <FrameLayout
+            android:id="@+id/fl_main_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/tv_main_title"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="15dp"
+            android:visibility="visible"/>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rl_leftmenu"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/iv_main_back"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/img_me_sidebar"
+        android:overScrollMode="never"
+        android:paddingTop="15dp"
+        android:scrollbars="none"
+        android:visibility="visible"
+        />
+
+
+</RelativeLayout>

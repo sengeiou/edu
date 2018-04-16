@@ -1,0 +1,86 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sec_page_main">
+
+    <include layout="@layout/layout_title_back" />
+
+    <RelativeLayout
+        android:id="@+id/lay_scan"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gif_scan_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/gif_main_scan"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/img_scan_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/scan_myrobot_scan" />
+
+        <TextView
+            android:id="@+id/txt_scan_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/ui_scan_doing"
+            android:textColor="@color/sec_txt_main"
+            android:textSize="17dp" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lst_robots"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/txt_scan_note"
+        android:layout_below="@+id/lay_scan"
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="20dp"
+        android:divider="#00000000"
+        android:dividerHeight="8dp"
+        android:transcriptMode="alwaysScroll" />
+
+    <Button
+        android:id="@+id/btn_no_robot"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#00000000"
+        android:gravity="center"
+        android:text="@string/ui_scan_cannot_find"
+        android:textColor="@color/sec_txt_main"
+        android:textSize="18dp"
+        android:visibility="gone"/>
+
+    <View
+        android:id="@+id/vew_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/btn_no_robot"
+        android:background="@color/sec_line_bottom"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/txt_scan_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/vew_bottom"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:text="@string/ui_home_scan_connect"
+        android:textColor="@color/sec_txt_disc"
+        android:textSize="15dp"
+        android:visibility="gone"/>
+
+</RelativeLayout>

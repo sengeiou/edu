@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/lLayout_bg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/action_dialog_filter_rect"
+    >
+
+    <TextView
+        android:id="@+id/tv_card_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/tv_user_edit_color"
+        android:textSize="20sp"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyleview_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_card_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        />
+
+    <Button
+        android:id="@+id/btn_pos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/recyleview_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_alert_bg"
+        android:gravity="center"
+        android:text="开始闯关"
+        android:textColor="@color/tv_user_edit_color"
+        android:textSize="16sp"/>
+
+</RelativeLayout>
