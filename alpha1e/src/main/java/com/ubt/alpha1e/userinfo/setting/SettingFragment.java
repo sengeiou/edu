@@ -267,8 +267,8 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
                 break;
             case R.id.rl_help_feedback:
 
-                WebContentActivity.launchActivity(getActivity(),HttpEntity.HELP_FEEDBACK, "");
-                //HelpFeedbackActivity.LaunchActivity(getContext());
+                //WebContentActivity.launchActivity(getActivity(),HttpEntity.HELP_FEEDBACK, "");
+                HelpFeedbackActivity.LaunchActivity(getContext());
                 break;
             case R.id.rl_about:
                 AboutUsActivity.LaunchActivity(getContext());
