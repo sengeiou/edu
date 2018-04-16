@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="theme_body">#F1F8FA</color>
+    <color name="black">#000000</color>
+    <color name="status_bar">#303135</color>
+    <color name="top_bar">#9f556061</color>
+    <color name="transparent">#00000000</color>
+    <color name="sec_txt_main">#2c3e50</color>
+    <color name="sec_txt_disc">#666c72</color>
+
+    <color name="bg_progress_background">#E4EBF3</color>
+    <color name="bg_progress_progress">#D1E2F9</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="imagepick_T1">#1D3740</color>
+    <color name="imagepick_T2">#02AAE8</color>
+    <color name="imagepick_T3">#AFBFC8</color>
+    <color name="imagepick_T4">#3B6176</color>
+</resources>

@@ -569,6 +569,14 @@
             android:screenOrientation="landscape"
             android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".community.CommunityActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
         //dicy.cheng
         //蓝牙联网---开机引导
         <activity

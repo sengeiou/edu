@@ -12,7 +12,7 @@ import android.widget.TextView;
 //import com.ant.country.CountryTool;
 import com.bumptech.glide.Glide;
 import com.facebook.Profile;
-import com.sina.weibo.sdk.openapi.models.User;
+//import com.sina.weibo.sdk.openapi.models.User;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.data.model.QQUserInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
@@ -173,10 +173,10 @@ public class PrivateInfoShowActivity extends BaseActivity implements
 
     }
 
-    @Override
-    public void onWeiBoPrivateInfo(User info) {
-
-    }
+//    @Override
+//    public void onWeiBoPrivateInfo(User info) {
+//
+//    }
 
     @Override
     public void onPreEditFinish(boolean b, Object object) {

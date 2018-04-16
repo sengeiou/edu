@@ -17,7 +17,7 @@ import android.widget.Toast;
 /*import com.ant.country.CountryActivity;
 import com.ant.country.CountryTool;*/
 import com.facebook.Profile;
-import com.sina.weibo.sdk.openapi.models.User;
+//import com.sina.weibo.sdk.openapi.models.User;
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.AlphaApplicationValues.Thrid_login_type;
 import com.ubt.alpha1e.R;
@@ -609,24 +609,24 @@ public class PrivateInfoActivity extends BaseActivity implements
                 img_head.getHeight(), img_head.getWidth());
     }
 
-    @Override
-    public void onWeiBoPrivateInfo(User info) {
-
-        // txt_nick_name_head.setText(info.name);
-        mUserNameThride = info.name;
-        if (info.gender.equals("m")) {
-            btn_gender_f.setBackgroundResource(R.drawable.gender_unselected);
-            btn_gender_m.setBackgroundResource(R.drawable.gender_selected);
-            mCurrentGender = Gender.M;
-        } else {
-            btn_gender_f.setBackgroundResource(R.drawable.gender_selected);
-            btn_gender_m.setBackgroundResource(R.drawable.gender_unselected);
-            mCurrentGender = Gender.F;
-        }
-        ((PrivateInfoHelper) mHelper).getUserHead(info.avatar_hd,
-                img_head.getHeight(), img_head.getWidth());
-
-    }
+//    @Override
+//    public void onWeiBoPrivateInfo(User info) {
+//
+//        // txt_nick_name_head.setText(info.name);
+//        mUserNameThride = info.name;
+//        if (info.gender.equals("m")) {
+//            btn_gender_f.setBackgroundResource(R.drawable.gender_unselected);
+//            btn_gender_m.setBackgroundResource(R.drawable.gender_selected);
+//            mCurrentGender = Gender.M;
+//        } else {
+//            btn_gender_f.setBackgroundResource(R.drawable.gender_selected);
+//            btn_gender_m.setBackgroundResource(R.drawable.gender_unselected);
+//            mCurrentGender = Gender.F;
+//        }
+//        ((PrivateInfoHelper) mHelper).getUserHead(info.avatar_hd,
+//                img_head.getHeight(), img_head.getWidth());
+//
+//    }
 
     @Override
     public void onPreEditFinish(boolean b, Object object) {

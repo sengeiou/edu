@@ -86,11 +86,38 @@ public class MyTencent {
 		final Bundle params = new Bundle();
 		params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE,
 				QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
-		params.putString(QQShare.SHARE_TO_QQ_TITLE, "Alpha");
+		params.putString(QQShare.SHARE_TO_QQ_TITLE, "Alpha Ebot");
 		params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
 		params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "");
 		params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "");
-		params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "Alpha");
+		params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "Alpha Ebot");
+		mTencent.shareToQQ(act, params, listener);
+
+	}
+
+	public static void doShareQQ(Activity act, String url,String title,String des, IUiListener listener) {
+		if (mTencent == null) {
+			initTencent(act);
+		}
+		final Bundle params = new Bundle();
+		params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
+
+		if(!TextUtils.isEmpty(title)){
+			params.putString(QQShare.SHARE_TO_QQ_TITLE, title);
+		}else {
+			params.putString(QQShare.SHARE_TO_QQ_TITLE, "Alpha Ebot");
+		}
+
+		if(!TextUtils.isEmpty(des)){
+			params.putString(QQShare.SHARE_TO_QQ_SUMMARY, des);
+			params.putString(QQShare.SHARE_TO_QQ_EXT_STR, des);
+		}else {
+			params.putString(QQShare.SHARE_TO_QQ_SUMMARY, "");
+		}
+
+		params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
+		params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "");
+		params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "Alpha Ebot");
 		mTencent.shareToQQ(act, params, listener);
 
 	}
