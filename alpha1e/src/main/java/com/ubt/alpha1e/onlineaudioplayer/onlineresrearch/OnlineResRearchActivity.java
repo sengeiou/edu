@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,26 +20,25 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
-import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.adapter.OnlineresRearchResultListAdpter;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
-import com.ubt.alpha1e.base.RequstMode.GotoBindRequest;
 import com.ubt.alpha1e.base.RequstMode.OnlineResRearchRequest;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.FlowLayoutManager;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.onlineaudioplayer.DataObj.CategoryMax;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.DataConfig;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineResRearchList;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineResSearch;
-import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineresList;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.ShowItem;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioAlbumPlayerFragment;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioResourcesFragment;
+import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -88,11 +89,28 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
 
     private String TAG = "OnlineResRearchActivity";
 
-    private List<ShowItem> list = new ArrayList<>();
+    private List<ShowItem> flowerList = new ArrayList<>();
     private FlowAdapter flowAdapter;
 
     private static final int SEARCH = 51;
+    public final static int SEARCH_RESULT_ALBUM=1;
 
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case SEARCH_RESULT_ALBUM:
+                    OnlineAudioAlbumPlayerFragment  fragment = findFragment(OnlineAudioAlbumPlayerFragment .class);
+                    if (fragment == null) {
+                        fragment = OnlineAudioAlbumPlayerFragment.newInstance((List< AlbumContentInfo>) msg.obj);
+                        UbtLog.d(TAG, "OnlineAudioAlbumPlayerFragment= " + fragment );
+                        loadRootFragment(R.id.search_container, fragment);
+                    }
+                    break;
+            }
+        }
+    };
     @OnClick({R.id.ib_return,R.id.ib_rearch})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -100,6 +118,7 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
                 this.finish();
                 break;
             case R.id.ib_rearch:
+                mSearchView.clearFocus();
                 int id = mSearchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
                 EditText textView = (EditText ) mSearchView.findViewById(id);
                 String cnt = textView.getText().toString();
@@ -111,10 +130,33 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
 
     //搜索
     public void search(String content) {
-        if(content == null || content.equals("")){
+        if(content == null || content.equals("") || content.contains("####")){
             ToastUtils.showShort("搜索内容不能为空");
             return;
         }
+        int recentSize = flowerList.size();
+
+        for(int j = 0;j<recentSize;j++){
+            if(flowerList.get(j).getDes().equals(content)){
+                flowerList.remove(j);
+                break;
+            }
+        }
+
+        flowerList.add(0,new ShowItem(content));
+        if(recentSize > 5){
+            recentSize = 5 ;
+        }
+        StringBuffer s = new StringBuffer();
+        for(int i = 0;i<recentSize;i++){
+            if(i + 1 == recentSize){
+                s.append(flowerList.get(i).getDes() );
+            }else {
+                s.append(flowerList.get(i).getDes() + "####");
+            }
+        }
+        UbtLog.d(TAG, "s:" + s.toString());
+        SPUtils.getInstance().put("recentSearchKey",s.toString());
         com.ubt.alpha1e.base.loading.LoadingDialog.show(this);
         OnlineResRearchRequest onlineResRearchRequest = new OnlineResRearchRequest();
         onlineResRearchRequest.setAlbumKeyword(content);
@@ -137,6 +179,7 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
                     case SEARCH:
                         com.ubt.alpha1e.base.loading.LoadingDialog.dismiss(OnlineResRearchActivity.this);
                         ToastUtils.showShort("请求失败");
+
                         break;
                     default:
                         break;
@@ -149,6 +192,7 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
                 switch (id) {
                     case SEARCH:
                         com.ubt.alpha1e.base.loading.LoadingDialog.dismiss(OnlineResRearchActivity.this);
+
                         BaseResponseModel<ArrayList<OnlineResSearch>> modle = GsonImpl.get().toObject(response,
                                 new TypeToken<BaseResponseModel<ArrayList<OnlineResSearch>>>() {
                                 }.getType());//加上type转换，避免泛型擦除
@@ -164,11 +208,11 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
                                 int size = modle.models.size();
                                 onlineResRearchList.clear();
                                 for(int i = 0;i < size ;i++){
-                                    OnlineResRearchList list = new OnlineResRearchList();
-                                    list.setRes_id(modle.models.get(i).getAlbumId());
-                                    list.setRes_name(modle.models.get(i).getAlbumName());
-                                    list.setGrade(modle.models.get(i).getGrade());
-                                    onlineResRearchList.add(list);
+                                    OnlineResRearchList lists = new OnlineResRearchList();
+                                    lists.setRes_id(modle.models.get(i).getAlbumId());
+                                    lists.setRes_name(modle.models.get(i).getAlbumName());
+                                    lists.setGrade(modle.models.get(i).getGrade());
+                                    onlineResRearchList.add(lists);
                                 }
                                 mAdapter.notifyDataSetChanged();
                             }
@@ -274,7 +318,7 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
         onlineResRearchList.add(o7);
         onlineResRearchList.add(o8);
 
-        mAdapter = new OnlineresRearchResultListAdpter(this.getApplicationContext(),onlineResRearchList);
+        mAdapter = new OnlineresRearchResultListAdpter(OnlineResRearchActivity.this,onlineResRearchList,mHandler);
         research_result_list.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
@@ -291,8 +335,8 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
             }
         });
         recent_search_content.setLayoutManager(new FlowLayoutManager());
-        list = DataConfig.getItems();
-        recent_search_content.setAdapter(flowAdapter = new FlowAdapter(list));
+        flowerList = DataConfig.getItems();
+        recent_search_content.setAdapter(flowAdapter = new FlowAdapter(flowerList));
         flowAdapter.notifyDataSetChanged();
 
     }
@@ -364,7 +408,8 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(OnlineResRearchActivity.this, list.get(position).des, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(OnlineResRearchActivity.this, list.get(position).des, Toast.LENGTH_SHORT).show();
+                    search(list.get(position).des);
                 }
             });
         }

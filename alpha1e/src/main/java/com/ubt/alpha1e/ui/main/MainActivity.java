@@ -12,6 +12,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -53,6 +54,7 @@ import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.Bluetoothandn
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity;
+import com.ubt.alpha1e.community.CommunityActivity;
 import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
@@ -95,12 +97,15 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.Call;
+import pl.droidsonroids.gif.AnimationListener;
+import pl.droidsonroids.gif.GifDrawable;
 
 
 /**
@@ -182,12 +187,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     ImageView ivCommunity;
     @BindView(R.id.rl_top_icon)
     RelativeLayout rlTopIcon;
-    @BindView(R.id.star1)
-    ImageView ivStar1;
-    @BindView(R.id.star2)
-    ImageView ivStar2;
-    @BindView(R.id.planet1)
-    ImageView ivPlant1;
+    @BindView(R.id.gif_main)
+    ImageView mMainGif;
+    GifDrawable gifDrawable;
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
@@ -331,6 +333,17 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG, "onStart");
 
         initUI();
+        try {
+            gifDrawable = new GifDrawable(getResources(), R.drawable.gif_main);
+            gifDrawable.addAnimationListener(new AnimationListener() {
+                @Override
+                public void onAnimationCompleted() {
+                }
+            });
+            mMainGif.setImageDrawable(gifDrawable);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -522,7 +535,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_community:
                 //BehaviorHabitsActivity.LaunchActivity(this);
-                ToastUtils.showShort("即将开放，敬请期待!");
+                //ToastUtils.showShort("即将开放，敬请期待!");
+
+                CommunityActivity.launchActivity(this);
+                this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 break;
             case R.id.cartoon_head:
                 UbtLog.d(TAG, "click head");
@@ -1766,8 +1782,6 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private void showAnimationEffect(boolean status ){
         if(status) {
             showCourseCenterAnimation(rlCourseCenter);
-            showStarAnimation();
-            showPlanetAnimation(ivPlant1);
         }
     }
 

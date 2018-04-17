@@ -12,7 +12,7 @@ import android.os.Message;
 
 import com.google.gson.reflect.TypeToken;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
-import com.sina.weibo.sdk.auth.WeiboAuthListener;
+//import com.sina.weibo.sdk.auth.WeiboAuthListener;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
@@ -52,7 +52,7 @@ import java.util.List;
 import twitter4j.auth.AccessToken;
 
 public class LoginHelper extends BaseHelper implements IJsonListener,
-        ISharedPreferensListenet, IUiListener, WeiboAuthListener,
+        ISharedPreferensListenet, IUiListener, /*WeiboAuthListener,*/
         IFaceBookLoginListener, ITwitterLoginListener {
 
     private static final String TAG = "LoginHelper";
@@ -241,7 +241,7 @@ public class LoginHelper extends BaseHelper implements IJsonListener,
         } else if (type == Thrid_login_type.SINABLOG) {
             MyLog.writeLog("΢����¼",
                     "com.ubt.alpha1e.ui.helper.LoginHelper.doLogin");
-            MyWeiBo.doLogin((Activity) this.mUI, this);
+//            MyWeiBo.doLogin((Activity) this.mUI, this);
         } else if (type == Thrid_login_type.FACEBOOK) {
             MyFaceBook.doLogin(mBaseActivity, this);
             MyFaceBook.isNeedOnResualt = true;
@@ -461,42 +461,42 @@ public class LoginHelper extends BaseHelper implements IJsonListener,
 
     }
 
-    @Override
-    public void onComplete(Bundle values) {
-        MyLog.writeLog("΢����¼", "onComplete-->΢����¼�յ�");
-        Oauth2AccessToken mAccessToken = Oauth2AccessToken
-                .parseAccessToken(values); // �� Bundle �н��� Token
-        if (mAccessToken.isSessionValid()) {
-            MyLog.writeLog("΢����¼", "token��Ч��" + mAccessToken.toString());
-
-            ((AlphaApplication) mBaseActivity.getApplicationContext())
-                    .setCurrentThridUserInfo(Thrid_login_type.SINABLOG,
-                            mAccessToken);
-
-            // ���󱾵ص�¼����ñ���token��
-            MyLog.writeLog("΢����¼", "���𱾵ص�¼��������");
-            GetDataFromWeb
-                    .getJsonByPost(do_thread_login_request, HttpAddress
-                                    .getRequestUrl(Request_type.thrid_login),
-                            HttpAddress.getParamsForPost(new String[]{
-                                            mAccessToken.getUid(),
-                                            getThridType(Thrid_login_type.SINABLOG)
-                                                    + ""}, Request_type.thrid_login,
-                                    this.mBaseActivity), this);
-            mUI.onThridLogin();
-
-        } else {
-            String code = values.getString("code", "");
-            MyLog.writeLog("΢����¼", "token��Ч��" + code);
-        }
-
-    }
-
-    @Override
-    public void onWeiboException(WeiboException arg0) {
-        // TODO Auto-generated method stub
-
-    }
+//    @Override
+//    public void onComplete(Bundle values) {
+//        MyLog.writeLog("΢����¼", "onComplete-->΢����¼�յ�");
+//        Oauth2AccessToken mAccessToken = Oauth2AccessToken
+//                .parseAccessToken(values); // �� Bundle �н��� Token
+//        if (mAccessToken.isSessionValid()) {
+//            MyLog.writeLog("΢����¼", "token��Ч��" + mAccessToken.toString());
+//
+//            ((AlphaApplication) mBaseActivity.getApplicationContext())
+//                    .setCurrentThridUserInfo(Thrid_login_type.SINABLOG,
+//                            mAccessToken);
+//
+//            // ���󱾵ص�¼����ñ���token��
+//            MyLog.writeLog("΢����¼", "���𱾵ص�¼��������");
+//            GetDataFromWeb
+//                    .getJsonByPost(do_thread_login_request, HttpAddress
+//                                    .getRequestUrl(Request_type.thrid_login),
+//                            HttpAddress.getParamsForPost(new String[]{
+//                                            mAccessToken.getUid(),
+//                                            getThridType(Thrid_login_type.SINABLOG)
+//                                                    + ""}, Request_type.thrid_login,
+//                                    this.mBaseActivity), this);
+//            mUI.onThridLogin();
+//
+//        } else {
+//            String code = values.getString("code", "");
+//            MyLog.writeLog("΢����¼", "token��Ч��" + code);
+//        }
+//
+//    }
+//
+//    @Override
+//    public void onWeiboException(WeiboException arg0) {
+//        // TODO Auto-generated method stub
+//
+//    }
 
     @Override
     public void onSendData(String mac, byte[] datas, int nLen) {

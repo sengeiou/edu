@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 //import com.ant.country.CountryTool;
 import com.facebook.Profile;
-import com.sina.weibo.sdk.openapi.models.User;
+//import com.sina.weibo.sdk.openapi.models.User;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.data.DataCheckTools;
 import com.ubt.alpha1e.data.FileTools;
@@ -377,11 +377,11 @@ public class PrivateInfoEditActivity extends BaseActivity implements
 
     }
 
-    @Override
-    public void onWeiBoPrivateInfo(User info) {
-        // TODO Auto-generated method stub
-
-    }
+//    @Override
+//    public void onWeiBoPrivateInfo(User info) {
+//        // TODO Auto-generated method stub
+//
+//    }
 
     @Override
     public void onPreEditFinish(boolean b, Object object) {

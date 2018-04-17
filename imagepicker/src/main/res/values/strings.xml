@@ -1,0 +1,27 @@
+<resources>
+    <string name="all_images">全部图片</string>
+    <string name="all_images_videos">图片和视频</string>
+    <string name="all_videos">全部视频</string>
+    <string name="folder_image_count">(%1$d)</string>
+    <string name="preview_image_count">%1$s/%2$s</string>
+    <string name="select_limit">最多只能选择%1$s张图片哦</string>
+    <string name="select_video_limit">最多选择%1$s个视频</string>
+    <string name="complete">完成</string>
+    <string name="select_complete">完成(%1$s/%2$s)</string>
+    <string name="select_complete_single">完成(%1$s)</string>
+    <string name="preview_count">预览(%1$s)</string>
+    <string name="preview">预览</string>
+    <string name="photo_crop">图片裁剪</string>
+    <string name="origin">原图</string>
+    <string name="origin_size">原图(%1$s)</string>
+    <string name="ui_common_cancel">取消</string>
+    <string name="select_video_image_limit">不能同时选择视频和图片</string>
+    <string name="select_video_one_limit">只能选择一个视频哦</string>
+
+    <string name="ui_distribute_start_recording">开始录制</string>
+    <string name="ui_distribute_pause_recording">暂停录制</string>
+    <string name="ui_distribute_resume_recording">继续录制</string>
+    <string name="ui_distribute_record_again">重新录制</string>
+
+    <string name="start_capture">开始拍摄</string>
+</resources>

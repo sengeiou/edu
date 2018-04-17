@@ -569,6 +569,14 @@
             android:screenOrientation="landscape"
             android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
+
+        <activity
+            android:name=".community.CommunityActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop"
+            android:theme="@style/NoTitleThemeFullScreen"/>
+
         //dicy.cheng
         //蓝牙联网---开机引导
         <activity
@@ -688,7 +696,7 @@
             android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
-            android:name=".onlineaudioplayer.playeventlist.OnlineAudioEventListActivity"
+            android:name=".onlineaudioplayer.playEventListActivity.OnlineAudioEventListActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:launchMode="singleTop"
@@ -833,7 +841,7 @@
 
 
 
-        <activity android:name=".onlineaudioplayer.OnlineAudioPlayerActivity"
+        <activity android:name=".onlineaudioplayer.categoryActivity.OnlineAudioPlayerActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:launchMode="singleTop"

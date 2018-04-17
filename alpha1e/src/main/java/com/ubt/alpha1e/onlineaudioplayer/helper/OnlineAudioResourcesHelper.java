@@ -31,21 +31,17 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         super.onReceiveData(mac, cmd, param, len);
 
         //UbtLog.d(TAG,"cmd = " + cmd + "    = " + param[0]);
-        if(cmd == ConstValue.DV_CONTROL_HIBITS_PLAY){
+        if(cmd == ConstValue.DV_ONLINEPLAYER_PLAY){
             UbtLog.d(TAG,"cmd = " + cmd + "    param[0] = " + param[0]);
-            HibitsEvent hibitsEvent = new HibitsEvent(HibitsEvent.Event.CONTROL_PLAY);
-            hibitsEvent.setStatus(param[0]);
-            EventBus.getDefault().post(hibitsEvent);
-        }else if(cmd == ConstValue.DV_READ_HIBITS_PLAY_STATUS){
-
+            EventBus.getDefault().post(ConstValue.DV_ONLINEPLAYER_PLAY);
+        }else if(cmd == ConstValue.DV_ONLINEPLAYER_STOP){
             String eventPlayStatusJson = BluetoothParamUtil.bytesToString(param);
-
             UbtLog.d(TAG,"cmd = " + cmd + "    eventPlayStatusJson = " + eventPlayStatusJson);
-            EventPlayStatus eventPlayStatus = GsonImpl.get().toObject(eventPlayStatusJson,EventPlayStatus.class);
+            EventBus.getDefault().post(ConstValue.DV_ONLINEPLAYER_STOP);
+        }else if(cmd==ConstValue.DV_ONLINEPLAYER_PAUSE){
 
-            HibitsEvent playStatusEvent = new HibitsEvent(HibitsEvent.Event.READ_EVENT_PLAY_STATUS);
-            playStatusEvent.setEventPlayStatus(eventPlayStatus);
-            EventBus.getDefault().post(playStatusEvent);
+        }else if(cmd==ConstValue.DV_ONLINEPLAYER_CONTINUE){
+
         }
 
     }
@@ -83,17 +79,37 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         doSendComm(ConstValue.DV_VOLUME, param);
     }
 
-    public void playEventSound(String eventId, String playAudioSeq, String audioState){
-
-        String params = BluetoothParamUtil.paramsToJsonString(new String[]{ eventId,playAudioSeq,audioState}, ConstValue.DV_CONTROL_HIBITS_PLAY);
+    public void playEventSound( String url){
+        String params = url;
         UbtLog.d(TAG,"playEventSound = " + params);
-        doSendComm(ConstValue.DV_CONTROL_HIBITS_PLAY, BluetoothParamUtil.stringToBytes(params));
+        doSendComm(ConstValue.DV_ONLINEPLAYER_PLAY, BluetoothParamUtil.stringToBytes(url));
+    }
+    public void stopEventSound( String url){
+        String params = url;
+        UbtLog.d(TAG,"stopEventSound = " + params);
+        byte[] mCmd={0};
+        mCmd[0]=0;
+        doSendComm(ConstValue.DV_ONLINEPLAYER_STOP, mCmd);
+    }
+    public void pauseEventSound( String url){
+        String params = url;
+        UbtLog.d(TAG,"pauseEventSound = " + params);
+        byte[] mCmd={0};
+        mCmd[0]=0;
+        doSendComm(ConstValue.DV_ONLINEPLAYER_PAUSE, mCmd);
+    }
+    public void continueEventSound( String url){
+        String params = url;
+        UbtLog.d(TAG,"continueEventSound = " + params);
+        byte[] mCmd={0};
+        mCmd[0]=0;
+        doSendComm(ConstValue.DV_ONLINEPLAYER_PAUSE, mCmd);
     }
 
     public void readPlayStatus(){
 
         UbtLog.d(TAG,"--readPlayStatus-->" + ConstValue.DV_READ_HIBITS_PLAY_STATUS);
-        doSendComm(ConstValue.DV_READ_HIBITS_PLAY_STATUS, null);
+      //  doSendComm(ConstValue.DV_READ_HIBITS_PLAY_STATUS, null);
     }
 
     @Override
@@ -122,4 +138,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     public void DistoryHelper() {
 
     }
+
+
 }

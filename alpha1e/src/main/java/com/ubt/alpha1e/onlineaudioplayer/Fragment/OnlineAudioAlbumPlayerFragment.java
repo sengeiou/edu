@@ -1,48 +1,35 @@
 package com.ubt.alpha1e.onlineaudioplayer.Fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Rect;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
-import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerContract;
-import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerPresenter;
+import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerContract;
+import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerPresenter;
 import com.ubt.alpha1e.onlineaudioplayer.adapter.GradeSelectedAdapter;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
-import com.ubt.alpha1e.ui.dialog.HibitsEventPlayDialog;
-import com.ubt.alpha1e.ui.dialog.OnlineAudioPlayDialog;
+import com.ubt.alpha1e.onlineaudioplayer.playerDialog.OnlineAudioPlayDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * @作者：ubt
@@ -62,15 +49,20 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
     ImageView mSearch;
     ImageView mGradeSort;
     ImageView mBack;
+    ListView  mGradeSelect;
     OnlineAudioPlayDialog mPlayDialogOnlineAudioPlayDialog;
-    List<PlayContentInfo> playContentInfoList;
     public static ArrayList<String> mGradData=new ArrayList<>();
     public static ArrayList<Boolean> mGradeSelectedData=new ArrayList<>();
     public static ArrayList<String>mSelectedGrade=new ArrayList<>();
     public static Context mContext;
     public final static int GRADE_SELECT_ADD = 1;
     public final static int GRADE_UNSELECT_DELETE= 2;
-    private static String mAlbumId;
+    private static String mCategoryId;
+    public final static int SEARCH_ENTER_FRAGMENT=1;
+    public final static int CATEGORY_ENTER_FRAGMENT=2;
+    public static int type=0;
+    public static List<AlbumContentInfo> mSearchDatas;
+    public String mAlbumId="";
 
 
     private Handler mHandler = new Handler() {
@@ -112,9 +104,17 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
             }
         }
     };
-    public static OnlineAudioAlbumPlayerFragment newInstance(String albumId) {
+    public static OnlineAudioAlbumPlayerFragment newInstance(String categoryId) {
+
         OnlineAudioAlbumPlayerFragment mOnlineAudioAlbumPlayerFragment  = new OnlineAudioAlbumPlayerFragment();
-        mAlbumId=albumId;
+        mCategoryId=categoryId;
+        type=CATEGORY_ENTER_FRAGMENT;
+        return mOnlineAudioAlbumPlayerFragment;
+    }
+    public static OnlineAudioAlbumPlayerFragment newInstance(List<AlbumContentInfo> mdatas){
+        OnlineAudioAlbumPlayerFragment mOnlineAudioAlbumPlayerFragment  = new OnlineAudioAlbumPlayerFragment();
+        mSearchDatas=mdatas;
+        type=SEARCH_ENTER_FRAGMENT;
         return mOnlineAudioAlbumPlayerFragment;
     }
     @Nullable
@@ -126,6 +126,7 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
         mGradeSort=(ImageView)mView.findViewById(R.id.iv_grade_sort);
         mSearch=(ImageView)mView.findViewById(R.id.iv_search);
         mBack=(ImageView)mView.findViewById(R.id.iv_back);
+        mGradeSelect=(ListView)mView.findViewById(R.id.grade_select_dialog);
 
         LinearLayoutManager mLinearLayoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         mAlbumView.setLayoutManager(mLinearLayoutManager);
@@ -141,25 +142,34 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
         });
         mAdapter = new AlbumAdapter();
         mAlbumView.setAdapter(mAdapter);
-        mPresenter.getCourseList();
-        mPresenter.getAlbumList(mAlbumId);
+        //P require data from back-end
+        if(type==SEARCH_ENTER_FRAGMENT){
+            UbtLog.d(TAG,"ENTER SEARCH ENTER FRAMENT");
+            showAlbumList(true,mSearchDatas,"success");
+        }else if(type==CATEGORY_ENTER_FRAGMENT){
+            UbtLog.d(TAG,"ENTER CATEGORY FRAGMENT ");
+            mPresenter.getAlbumList(mCategoryId);
+        }
         mGradeSort.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                final boolean[] states = {false, false, false};
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setAdapter(new GradeSelectedAdapter(mHandler),null);
-                final AlertDialog dialog = builder.create();
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
-               // wmlp.gravity = Gravity.TOP | Gravity.LEFT;
+                mGradeSelect.setVisibility(View.VISIBLE);
+                mGradeSelect.setAdapter(new GradeSelectedAdapter(mHandler));
+//                final boolean[] states = {false, false, false};
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                builder.setAdapter(new GradeSelectedAdapter(mHandler),null);
+//                final AlertDialog dialog = builder.create();
+//                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+//               // wmlp.gravity = Gravity.TOP | Gravity.LEFT;
+//
+//                wmlp.x = 503;   //x position
+//                wmlp.y = 48;   //y position
+//                wmlp.height=148;
+//                wmlp.width=140;
+//                dialog.getWindow().setAttributes(wmlp);
+//                dialog.show();
 
-                wmlp.x = 503;   //x position
-                wmlp.y = 48;   //y position
-                wmlp.height=148;
-                wmlp.width=140;
-                dialog.getWindow().setAttributes(wmlp);
-                dialog.show();
             }
         });
         mSearch.setOnClickListener(new View.OnClickListener(){
@@ -174,6 +184,17 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
                pop();
             }
         });
+        mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(view.getId()!=R.id.grade_select_dialog){
+                    mGradeSelect.setVisibility(View.GONE);
+                }else{
+                    UbtLog.d(TAG,"ID "+view.getId());
+                }
+            }
+        });
+
         return mView;
     }
 
@@ -237,7 +258,7 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
 
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
-
+        showPlayEventDialog(album,mAlbumId);
     }
 
 
@@ -271,7 +292,8 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
 
                 @Override
                 public void onClick(View view) {
-                    showPlayEventDialog(playContentInfoList,mAlbumDatas.get(position).albumId);
+                    mPresenter.getAudioList(mAlbumDatas.get(position).albumId);
+                    mAlbumId=mAlbumDatas.get(position).albumId;
                 }
             });
         }
@@ -285,8 +307,9 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
     /**
      * 选择播放事项
      */
-    private void showPlayEventDialog(List<PlayContentInfo> playContentInfoList, String albumId){
+    private void showPlayEventDialog(List<AudioContentInfo> playContentInfoList, String albumId){
         if(mPlayDialogOnlineAudioPlayDialog == null){
+
             mPlayDialogOnlineAudioPlayDialog= new OnlineAudioPlayDialog (getActivity())
                     .builder()
                     .setCancelable(true)

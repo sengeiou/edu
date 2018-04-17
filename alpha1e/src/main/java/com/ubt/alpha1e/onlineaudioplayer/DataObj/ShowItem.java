@@ -18,6 +18,22 @@ public class ShowItem {
         color = getBack();
     }
 
+    public Drawable getColor() {
+        return color;
+    }
+
+    public void setColor(Drawable color) {
+        this.color = color;
+    }
+
+    public String getDes() {
+        return des;
+    }
+
+    public void setDes(String des) {
+        this.des = des;
+    }
+
     private Drawable getBack() {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setCornerRadius(8);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_container"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,20 +24,20 @@
             android:layout_centerVertical="true" />
 
         <SearchView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:iconifiedByDefault="false"
-            android:background="@drawable/bg_serch"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="70dp"
-            android:layout_marginRight="80dp"
-            android:maxLines="1"
-            android:maxLength="100"
-            android:windowSoftInputMode="adjustPan"
-            android:imeOptions="flagNoExtractUi"
-            android:singleLine="true"
-            android:queryHint="请输入搜索内容" />
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
+        android:background="@drawable/bg_serch"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="80dp"
+        android:maxLines="1"
+        android:maxLength="100"
+        android:windowSoftInputMode="adjustPan"
+        android:imeOptions="flagNoExtractUi"
+        android:singleLine="true"
+        android:queryHint="请输入搜索内容" />
         <ImageButton
             android:id="@+id/ib_return"
             android:layout_width="40dp"

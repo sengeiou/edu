@@ -12,19 +12,28 @@
         android:id="@+id/rl_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_marginLeft="14dp"
-        android:layout_marginTop="120dp"
-        android:layout_marginRight="14dp"
-        android:layout_centerInParent="true">
+        android:layout_below="@+id/lay_title"
+        android:layout_centerHorizontal="true"
+        android:background="@color/white">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_albums"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:splitMotionEvents="false"></android.support.v7.widget.RecyclerView>
+            android:splitMotionEvents="false">
 
+        </android.support.v7.widget.RecyclerView>
+
+        <ListView
+            android:id="@+id/grade_select_dialog"
+            android:layout_width="230dp"
+            android:layout_height="200dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="55dp"
+            android:background="@drawable/grade_dialog"
+            android:visibility="invisible"></ListView>
     </RelativeLayout>
 
 </RelativeLayout>

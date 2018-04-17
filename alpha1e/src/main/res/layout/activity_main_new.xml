@@ -8,7 +8,12 @@
     >
 
     <!--android:background="#7fff0000"-->
-    <!--<pl.droidsonroids.gif.GifImageView-->
+    <ImageView
+        android:id="@+id/gif_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        />
     <ImageView
         android:id="@+id/cartoon_body_touch_bg"
         android:layout_width="wrap_content"

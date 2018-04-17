@@ -3,6 +3,7 @@ package com.ubt.alpha1e.webcontent;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -24,6 +25,7 @@ import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
+import java.io.File;
 import java.util.Stack;
 
 import butterknife.BindView;
@@ -62,6 +64,8 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
     private String mUrl;
     private boolean isShowBack = false;
     private Stack<String> mUrls;
+
+    private WebContentJsInterface mWebContentJsInterface;
 
     public static void launchActivity(Activity activity, String url, String mTitle) {
         launchActivity(activity,url,mTitle,false);
@@ -155,6 +159,8 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
             }
         };
 
+        mWebContentJsInterface = new WebContentJsInterface(WebContentActivity.this);
+        webContent.addJavascriptInterface(mWebContentJsInterface, "communityObject");
 
         UbtLog.d(TAG, "mUrl = " + mUrl);
         webContent.setWebViewClient(webViewClient);

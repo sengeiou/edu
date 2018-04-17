@@ -30,6 +30,7 @@ import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.userinfo.myrobot.MyRobotActivity;
 import com.ubt.alpha1e.userinfo.psdmanage.PsdManageActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.alpha1e.webcontent.WebContentActivity;
 import com.zhy.changeskin.SkinManager;
 
 import java.util.Arrays;
@@ -265,7 +266,9 @@ public class SettingFragment extends MVPBaseFragment<SettingContract.View, Setti
                 mPresenter.showLanguageDialog(getContext(), mCurrentLanguageIndex, mLanguageTitleList);
                 break;
             case R.id.rl_help_feedback:
-                HelpFeedbackActivity.LaunchActivity(getContext());
+
+                WebContentActivity.launchActivity(getActivity(),HttpEntity.HELP_FEEDBACK, "");
+                //HelpFeedbackActivity.LaunchActivity(getContext());
                 break;
             case R.id.rl_about:
                 AboutUsActivity.LaunchActivity(getContext());
