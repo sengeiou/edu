@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_title"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_alignParentTop="true"
+    android:background="#DEEFF5"
+    >
+
+    <LinearLayout
+        android:id="@+id/ll_base_back"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        >
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/imagepick_back_icon"></ImageView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_base_title_name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_base_title_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:maxWidth="150dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:maxEms="10"
+            android:textColor="@color/imagepick_T1"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/iv_title_up_down"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/imagepick_icon_arrow_down"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_base_right"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:background="@color/transparent"
+        android:gravity="center_vertical|right"
+        android:paddingRight="10dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/ui_common_cancel"
+        android:textColor="@color/imagepick_T2"
+        android:textSize="16sp"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/iv_title_right"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/imagepick_icon_commit"
+        android:visibility="invisible"></ImageView>
+
+</RelativeLayout>

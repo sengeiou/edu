@@ -9,7 +9,7 @@ import android.text.TextUtils;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
-import com.sina.weibo.sdk.openapi.models.User;
+//import com.sina.weibo.sdk.openapi.models.User;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
 import com.ubt.alpha1e.AlphaApplication;
@@ -308,7 +308,7 @@ public class PrivateInfoHelper extends BaseHelper implements
 			MyLog.writeLog("微博登录", "PrivateInfoHelper.doReadThridInfo");
 			Oauth2AccessToken info = (Oauth2AccessToken) ((AlphaApplication) mBaseActivity
 					.getApplicationContext()).getCurrentThridLoginInfo();
-			MyWeiBo.doGetUserInfo((Activity) mUI, info, this);
+//			MyWeiBo.doGetUserInfo((Activity) mUI, info, this);
 		} else if (type == Thrid_login_type.FACEBOOK) {
 			MyLog.writeLog("FaceBook登录", "PrivateInfoHelper.doReadThridInfo");
 			MyFaceBook.onGetUserProfile(mUI);
@@ -380,10 +380,10 @@ public class PrivateInfoHelper extends BaseHelper implements
 
 	@Override
 	public void onComplete(String response) {
-		if (!TextUtils.isEmpty(response)) {
-			User user = User.parse(response);
-			mUI.onWeiBoPrivateInfo(user);
-		}
+//		if (!TextUtils.isEmpty(response)) {
+//			User user = User.parse(response);
+//			mUI.onWeiBoPrivateInfo(user);
+//		}
 
 	}
 

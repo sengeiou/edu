@@ -2,6 +2,7 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url "https://dl.bintray.com/thelasterstar/maven/" }
         //google()
     }
     dependencies {
@@ -41,6 +42,7 @@ allprojects {
     repositories {
         jcenter()
         jcenter()
+        maven { url "https://dl.bintray.com/thelasterstar/maven/" }
         maven { url "https://jitpack.io" }
 //        maven {
 //            url "${artifactory_url}/${artifactory_alpha1e_release}"

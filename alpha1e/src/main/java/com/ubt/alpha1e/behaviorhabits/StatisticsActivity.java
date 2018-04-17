@@ -49,7 +49,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
     private void initWebView() {
         LoadingDialog.show(this);
-        mWebView = findViewById(R.id.statistic_webview);
+        mWebView = (WebView) findViewById(R.id.statistic_webview);
         String userId = SPUtils.getInstance().getString(Constant.SP_USER_ID);
         String token = SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN);
         //  mWebView.loadUrl("http://10.10.1.14:8080/alpha1e/index.html" + "?" + "userid=" + userId + "&" + "token=" + token);

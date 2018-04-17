@@ -11,6 +11,7 @@ weiboSDK/build/*
 alphaQRLib/build/*
 library/build/*
 BaseLib/build/*
+imagepicker/build/*
 alpha1e-android-app.iml
 .idea/*
 .gradle/*

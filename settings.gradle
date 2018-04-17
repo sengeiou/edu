@@ -1,4 +1,4 @@
-include ':alpha1sGifLib', ':ChangeSkin', ':library', ':BaseLib', ':testgradles'
+include ':alpha1sGifLib', ':ChangeSkin', ':library', ':BaseLib', ':testgradles', ':imagepicker'
 include ':alpha1sLib'
 //include ':alphaQRLib'
 //include ':choseCountryNum'

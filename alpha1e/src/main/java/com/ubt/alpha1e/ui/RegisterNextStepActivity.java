@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Profile;
-import com.sina.weibo.sdk.openapi.models.User;
+//import com.sina.weibo.sdk.openapi.models.User;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.AlphaApplicationValues;
 import com.ubt.alpha1e.R;
@@ -293,10 +293,10 @@ public class RegisterNextStepActivity extends BaseActivity implements IRegisterU
         ((RegisterSelectCountryFragment)mCurrentFragment).setUserInfo(mCurUserInfo);
     }
 
-    @Override
-    public void onWeiBoPrivateInfo(User info) {
-
-    }
+//    @Override
+//    public void onWeiBoPrivateInfo(User info) {
+//
+//    }
 
     @Override
     public void onFaceBookProfileInfo(Profile profile, String url) {
