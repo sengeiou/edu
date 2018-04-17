@@ -1,0 +1,52 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <include android:id="@+id/lay_title" layout="@layout/imagepick_layout_title_back" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <GridView
+            android:id="@+id/gridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:horizontalSpacing="3dp"
+            android:verticalSpacing="3dp"
+            android:listSelector="@android:color/transparent"
+            android:numColumns="5"
+            android:paddingBottom="50dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:stretchMode="columnWidth"
+            />
+
+        <RelativeLayout
+            android:id="@+id/footer_bar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:background="#FFFFFF">
+
+            <Button
+                android:id="@+id/btn_preview"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="@null"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="预览(3)"
+                android:textAllCaps="false"
+                android:textColor="@color/imagepick_T2"
+                android:textSize="16sp"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

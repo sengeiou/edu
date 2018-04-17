@@ -1,17 +1,38 @@
 package com.ubt.alpha1e.business.thrid_party;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.text.TextUtils;
+
+import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.data.model.ActionInfo;
+import com.ubt.alpha1e.utils.log.MyLog;
+import com.ubt.alpha1e.utils.log.UbtLog;
+
+import java.util.Date;
+
 public class MyWeiXin {
 
-	public final static String WEIXIN_APP_ID = "wxaccd90fe93e07aa6";
+	public final static String WEIXIN_APP_ID = "wxfa7003941d57a391";
 	public final static String WEIXIN_APP_SECRET = "7e8c318a8412261601056c30bf25f74b";
 	private final static String SCOPE = "snsapi_userinfo";
 	public final static String GRANTTYPE = "authorization_code";
 	public static final String ACTION_WEIXIN_API_CALLBACK = "ACTION_WEIXIN_API_CALLBACK";
 	// ---------------------------------------------------------
 	private static long DO_LOGIN_REQUEST = -1;
-//	private static IWXAPI mIWXAPI = null;
+	private static IWXAPI mIWXAPI = null;
 
-/*	private static void initMyWeiXin(Context mContext) {
+	private static void initMyWeiXin(Context mContext) {
 		if (mIWXAPI == null) {
 			mIWXAPI = WXAPIFactory.createWXAPI(mContext, WEIXIN_APP_ID, false);
 			mIWXAPI.registerApp(WEIXIN_APP_ID);
@@ -29,9 +50,7 @@ public class MyWeiXin {
 		SendAuth.Req req = new SendAuth.Req();
 		req.scope = SCOPE;
 		req.state = DO_LOGIN_REQUEST + "";
-		MyLog.writeLog("微信登录",
-				"com.ubtechic.alpha1blooth.thrid_party.MyWeiXin.doLogin："
-						+ mIWXAPI.toString());
+		MyLog.writeLog("微信登录", "com.ubtechic.alpha1blooth.thrid_party.MyWeiXin.doLogin：" + mIWXAPI.toString());
 		mIWXAPI.sendReq(req);
 	}
 
@@ -47,8 +66,7 @@ public class MyWeiXin {
 	}
 
 	// flag 0是朋友圈，1是好友
-	public static void doShareToWeiXin(String url, ActionInfo info,
-			Activity act, IWeiXinListener mListener, int flag) {
+	public static void doShareToWeiXin(String url, ActionInfo info, Activity act, IWeiXinListener mListener, int flag) {
 		UbtLog.d("Myweixin", "info=" + info);
 		initMyWeiXin(act);
 		if (!mIWXAPI.isWXAppInstalled()) {
@@ -67,8 +85,7 @@ public class MyWeiXin {
 			msg.description = info.actionDesciber;
 		}
 
-		Bitmap thumb = BitmapFactory.decodeResource(act.getResources(),
-				R.drawable.ic_launcher);
+		Bitmap thumb = BitmapFactory.decodeResource(act.getResources(), R.drawable.ic_launcher);
 		msg.setThumbImage(thumb);
 		SendMessageToWX.Req req = new SendMessageToWX.Req();
 		req.transaction = String.valueOf(System.currentTimeMillis());
@@ -78,8 +95,7 @@ public class MyWeiXin {
 
 	}
 
-	public static void doShareToWeiXin(String url,String title, Activity act,
-			IWeiXinListener mListener, int flag) {
+	public static void doShareToWeiXin(String url,String title,String des, Activity act, IWeiXinListener mListener, int flag) {
 		initMyWeiXin(act);
 		if (!mIWXAPI.isWXAppInstalled()) {
 			mListener.noteWeixinNotInstalled();
@@ -91,12 +107,14 @@ public class MyWeiXin {
 		if(!TextUtils.isEmpty(title) || !title .equals("")){
 			msg.title = title;
 		}else{
-			msg.title = "Alpha";
+			msg.title = "Alpha Ebot";
 		}
 
+		if(!TextUtils.isEmpty(des)){
+			msg.description = des;
+		}
 
-		Bitmap thumb = BitmapFactory.decodeResource(act.getResources(),
-				R.drawable.ic_launcher);
+		Bitmap thumb = BitmapFactory.decodeResource(act.getResources(), R.drawable.ic_launcher);
 		msg.setThumbImage(thumb);
 		SendMessageToWX.Req req = new SendMessageToWX.Req();
 		req.transaction = String.valueOf(System.currentTimeMillis());
@@ -104,5 +122,5 @@ public class MyWeiXin {
 		req.scene = flag;
 		mIWXAPI.sendReq(req);
 
-	}*/
+	}
 }

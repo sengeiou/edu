@@ -53,6 +53,7 @@ import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.Bluetoothandn
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netsearchresult.NetSearchResultActivity;
+import com.ubt.alpha1e.community.CommunityActivity;
 import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
@@ -512,7 +513,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_community:
                 //BehaviorHabitsActivity.LaunchActivity(this);
-                ToastUtils.showShort("即将开放，敬请期待!");
+                //ToastUtils.showShort("即将开放，敬请期待!");
+
+                CommunityActivity.launchActivity(this);
+                this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 break;
             case R.id.cartoon_head:
                 UbtLog.d(TAG, "click head");
