@@ -14,9 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.behaviorhabits.playeventlist.PlayEventListActivity;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.playeventlist.OnlineAudioEventListActivity;
+import com.ubt.alpha1e.onlineaudioplayer.playEventListActivity.OnlineAudioEventListActivity;
 
 import java.util.ArrayList;
 import java.util.List;

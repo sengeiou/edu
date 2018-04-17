@@ -51,7 +51,6 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
     ImageView mBack;
     ListView  mGradeSelect;
     OnlineAudioPlayDialog mPlayDialogOnlineAudioPlayDialog;
-    List<PlayContentInfo> playContentInfoList;
     public static ArrayList<String> mGradData=new ArrayList<>();
     public static ArrayList<Boolean> mGradeSelectedData=new ArrayList<>();
     public static ArrayList<String>mSelectedGrade=new ArrayList<>();
@@ -63,6 +62,7 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
     public final static int CATEGORY_ENTER_FRAGMENT=2;
     public static int type=0;
     public static List<AlbumContentInfo> mSearchDatas;
+    public String mAlbumId="";
 
 
     private Handler mHandler = new Handler() {
@@ -258,7 +258,7 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
 
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
-
+        showPlayEventDialog(album,mAlbumId);
     }
 
 
@@ -292,7 +292,8 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
 
                 @Override
                 public void onClick(View view) {
-                    showPlayEventDialog(playContentInfoList,mAlbumDatas.get(position).albumId);
+                    mPresenter.getAudioList(mAlbumDatas.get(position).albumId);
+                    mAlbumId=mAlbumDatas.get(position).albumId;
                 }
             });
         }
@@ -306,8 +307,9 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
     /**
      * 选择播放事项
      */
-    private void showPlayEventDialog(List<PlayContentInfo> playContentInfoList, String albumId){
+    private void showPlayEventDialog(List<AudioContentInfo> playContentInfoList, String albumId){
         if(mPlayDialogOnlineAudioPlayDialog == null){
+
             mPlayDialogOnlineAudioPlayDialog= new OnlineAudioPlayDialog (getActivity())
                     .builder()
                     .setCancelable(true)

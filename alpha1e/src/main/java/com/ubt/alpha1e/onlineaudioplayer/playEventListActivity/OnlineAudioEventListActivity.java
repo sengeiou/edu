@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.onlineaudioplayer.playeventlist;
+package com.ubt.alpha1e.onlineaudioplayer.playEventListActivity;
 
 
 import android.app.Activity;
@@ -158,10 +158,10 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
         }
     };
 
-    public static void launchActivity(Activity mActivity, List<PlayContentInfo> playContentInfoDatas,String eventId) {
+    public static void launchActivity(Activity mActivity, List<AudioContentInfo> playContentInfoDatas,String eventId) {
         ArrayList<Parcelable> playContentList = new ArrayList<>();
         if(playContentInfoDatas != null){
-            for(PlayContentInfo playContentInfo : playContentInfoDatas){
+            for(AudioContentInfo playContentInfo : playContentInfoDatas){
                 playContentList.add(PG.convertParcelable(playContentInfo));
             }
         }
@@ -202,22 +202,21 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
     @Override
     protected void onResume() {
         super.onResume();
-        ((HabitsHelper)mHelper).readPlayStatus();
     }
 
     @Subscribe
     public void onEventHibits(HibitsEvent event) {
         UbtLog.d(TAG,"event = " + event);
-        if(event.getEvent() == HibitsEvent.Event.CONTROL_PLAY){
-            UbtLog.d(TAG,"event = " + event.getStatus());
-        }else if(event.getEvent() == HibitsEvent.Event.READ_EVENT_PLAY_STATUS){
-            UbtLog.d(TAG,"EventPlayStatus = " + event.getEventPlayStatus());
-            EventPlayStatus eventPlayStatus = event.getEventPlayStatus();
-            Message msg = new Message();
-            msg.what = UPDATE_PLAY_STATUS;
-            msg.obj = eventPlayStatus;
-            mHandler.sendMessage(msg);
-        }
+//        if(event.getEvent() == HibitsEvent.Event.CONTROL_PLAY){
+//            UbtLog.d(TAG,"event = " + event.getStatus());
+//        }else if(event.getEvent() == HibitsEvent.Event.READ_EVENT_PLAY_STATUS){
+//            UbtLog.d(TAG,"EventPlayStatus = " + event.getEventPlayStatus());
+//            EventPlayStatus eventPlayStatus = event.getEventPlayStatus();
+//            Message msg = new Message();
+//            msg.what = UPDATE_PLAY_STATUS;
+//            msg.obj = eventPlayStatus;
+//            mHandler.sendMessage(msg);
+//        }
     }
 
     /**
@@ -279,7 +278,6 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
             }
             currentEventId = getIntent().getStringExtra(Constant.HIBITS_EVENT_ID);
         }
-        mHelper = new HabitsHelper(this);
         initUI();
         mPresenter.getAudioList(currentEventId);
     }

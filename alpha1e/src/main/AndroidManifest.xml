@@ -696,7 +696,7 @@
             android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
         <activity
-            android:name=".onlineaudioplayer.playeventlist.OnlineAudioEventListActivity"
+            android:name=".onlineaudioplayer.playEventListActivity.OnlineAudioEventListActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:launchMode="singleTop"

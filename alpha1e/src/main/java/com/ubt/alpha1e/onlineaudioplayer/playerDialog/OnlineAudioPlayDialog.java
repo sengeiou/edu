@@ -25,12 +25,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
-import com.ubt.alpha1e.behaviorhabits.helper.HabitsHelper;
 import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.helper.OnlineAudioResourcesHelper;
-import com.ubt.alpha1e.onlineaudioplayer.playeventlist.OnlineAudioEventListActivity;
+import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.playEventListActivity.OnlineAudioEventListActivity;
 import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
@@ -73,7 +71,7 @@ public class OnlineAudioPlayDialog {
     private Display mDisplay;
     private IHibitsEventPlayListener iHibitsEventPlayListener = null;
 
-    private List<PlayContentInfo> mPlayContentInfoList = null;
+    private List<AudioContentInfo> mPlayContentInfoList = null;
     private String currentAlbumId = "";
 
     public OnlineAudioResourcesHelper mHelper;
@@ -81,7 +79,7 @@ public class OnlineAudioPlayDialog {
     private boolean isChangeVol = false;
     private boolean isStartPlayProcess = true;//是否开启播放流程
     private String playStatus = "";//流程开启后的播放状态
-    private PlayContentInfo currentPlayInfo = null;
+    private AudioContentInfo currentPlayInfo = null;
     private int currentPlaySeq = -1;
     private boolean isPause = false;
     private int volumeProgress = 0;
@@ -127,7 +125,6 @@ public class OnlineAudioPlayDialog {
                         currentPlaySeq = -1;
                         currentPlayInfo = null;
                         tvPlayName.setText("暂无播放内容");
-
                     }
                     initState();
                     break;
@@ -446,7 +443,7 @@ public class OnlineAudioPlayDialog {
         return this;
     }
 
-    public OnlineAudioPlayDialog setPlayContent(List<PlayContentInfo> playContentInfoList) {
+    public OnlineAudioPlayDialog setPlayContent(List<AudioContentInfo> playContentInfoList) {
 
         if(playContentInfoList == null){
             mPlayContentInfoList = new ArrayList<>();

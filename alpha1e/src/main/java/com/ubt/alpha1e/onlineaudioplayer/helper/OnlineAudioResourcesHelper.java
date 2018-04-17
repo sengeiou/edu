@@ -86,18 +86,24 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     }
     public void stopEventSound( String url){
         String params = url;
-        UbtLog.d(TAG,"playEventSound = " + params);
-        doSendComm(ConstValue.DV_ONLINEPLAYER_STOP, BluetoothParamUtil.stringToBytes(url));
+        UbtLog.d(TAG,"stopEventSound = " + params);
+        byte[] mCmd={0};
+        mCmd[0]=0;
+        doSendComm(ConstValue.DV_ONLINEPLAYER_STOP, mCmd);
     }
     public void pauseEventSound( String url){
         String params = url;
-        UbtLog.d(TAG,"playEventSound = " + params);
-        doSendComm(ConstValue.DV_ONLINEPLAYER_PAUSE, BluetoothParamUtil.stringToBytes(url));
+        UbtLog.d(TAG,"pauseEventSound = " + params);
+        byte[] mCmd={0};
+        mCmd[0]=0;
+        doSendComm(ConstValue.DV_ONLINEPLAYER_PAUSE, mCmd);
     }
     public void continueEventSound( String url){
         String params = url;
-        UbtLog.d(TAG,"playEventSound = " + params);
-        doSendComm(ConstValue.DV_ONLINEPLAYER_PAUSE, BluetoothParamUtil.stringToBytes(url));
+        UbtLog.d(TAG,"continueEventSound = " + params);
+        byte[] mCmd={0};
+        mCmd[0]=0;
+        doSendComm(ConstValue.DV_ONLINEPLAYER_PAUSE, mCmd);
     }
 
     public void readPlayStatus(){

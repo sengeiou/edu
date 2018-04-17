@@ -12,6 +12,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -96,12 +97,15 @@ import com.zhy.http.okhttp.callback.StringCallback;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.Call;
+import pl.droidsonroids.gif.AnimationListener;
+import pl.droidsonroids.gif.GifDrawable;
 
 
 /**
@@ -183,6 +187,9 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     ImageView ivCommunity;
     @BindView(R.id.rl_top_icon)
     RelativeLayout rlTopIcon;
+    @BindView(R.id.gif_main)
+    ImageView mMainGif;
+    GifDrawable gifDrawable;
     private String TAG = "MainActivity";
     int screen_width = 0;
     int screen_height = 0;
@@ -324,6 +331,17 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG, "onStart");
 
         initUI();
+        try {
+            gifDrawable = new GifDrawable(getResources(), R.drawable.gif_main);
+            gifDrawable.addAnimationListener(new AnimationListener() {
+                @Override
+                public void onAnimationCompleted() {
+                }
+            });
+            mMainGif.setImageDrawable(gifDrawable);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override

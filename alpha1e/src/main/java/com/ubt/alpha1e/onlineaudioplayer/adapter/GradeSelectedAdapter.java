@@ -3,18 +3,15 @@ package com.ubt.alpha1e.onlineaudioplayer.adapter;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioAlbumPlayerFragment;
-import com.ubt.alpha1e.onlineaudioplayer.playeventlist.OnlineAudioEventListActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 /**
