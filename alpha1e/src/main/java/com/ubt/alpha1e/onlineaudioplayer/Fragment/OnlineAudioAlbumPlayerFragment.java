@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +63,7 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
     ImageView mSearch;
     ImageView mGradeSort;
     ImageView mBack;
+    ListView  mGradeSelect;
     OnlineAudioPlayDialog mPlayDialogOnlineAudioPlayDialog;
     List<PlayContentInfo> playContentInfoList;
     public static ArrayList<String> mGradData=new ArrayList<>();
@@ -126,6 +128,7 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
         mGradeSort=(ImageView)mView.findViewById(R.id.iv_grade_sort);
         mSearch=(ImageView)mView.findViewById(R.id.iv_search);
         mBack=(ImageView)mView.findViewById(R.id.iv_back);
+        mGradeSelect=(ListView)mView.findViewById(R.id.grade_select_dialog);
 
         LinearLayoutManager mLinearLayoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
         mAlbumView.setLayoutManager(mLinearLayoutManager);
@@ -141,25 +144,28 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
         });
         mAdapter = new AlbumAdapter();
         mAlbumView.setAdapter(mAdapter);
-        mPresenter.getCourseList();
+        //P require data from back-end
         mPresenter.getAlbumList(mAlbumId);
         mGradeSort.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                final boolean[] states = {false, false, false};
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setAdapter(new GradeSelectedAdapter(mHandler),null);
-                final AlertDialog dialog = builder.create();
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
-               // wmlp.gravity = Gravity.TOP | Gravity.LEFT;
+                mGradeSelect.setVisibility(View.VISIBLE);
+                mGradeSelect.setAdapter(new GradeSelectedAdapter(mHandler));
+//                final boolean[] states = {false, false, false};
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                builder.setAdapter(new GradeSelectedAdapter(mHandler),null);
+//                final AlertDialog dialog = builder.create();
+//                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+//               // wmlp.gravity = Gravity.TOP | Gravity.LEFT;
+//
+//                wmlp.x = 503;   //x position
+//                wmlp.y = 48;   //y position
+//                wmlp.height=148;
+//                wmlp.width=140;
+//                dialog.getWindow().setAttributes(wmlp);
+//                dialog.show();
 
-                wmlp.x = 503;   //x position
-                wmlp.y = 48;   //y position
-                wmlp.height=148;
-                wmlp.width=140;
-                dialog.getWindow().setAttributes(wmlp);
-                dialog.show();
             }
         });
         mSearch.setOnClickListener(new View.OnClickListener(){
@@ -172,6 +178,16 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
             @Override
             public void onClick(View view) {
                pop();
+            }
+        });
+        mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(view.getId()!=R.id.grade_select_dialog){
+                    mGradeSelect.setVisibility(View.GONE);
+                }else{
+                    UbtLog.d(TAG,"ID "+view.getId());
+                }
             }
         });
         return mView;
