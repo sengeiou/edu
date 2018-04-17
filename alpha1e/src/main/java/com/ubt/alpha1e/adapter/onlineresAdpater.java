@@ -78,7 +78,7 @@ public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
             @Override
             public void onClick(View v) {
                 Message msg = new Message();
-                msg.what = OnlineAudioResourcesFragment.LAUNCH_ALBUM_ITEM;
+                msg.what = OnlineAudioResourcesFragment.LAUNCH_CATEGORY_ITEM;
                 msg.obj = onlineres.getRes_id();
                 mHandler.sendMessage(msg);
             }

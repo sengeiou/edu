@@ -1,21 +1,18 @@
 package com.ubt.alpha1e.adapter;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineResRearchList;
-import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioAlbumPlayerFragment;
-import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioResourcesFragment;
-import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerActivity;
-import com.ubt.alpha1e.ui.dialog.WifiSelectAlertDialog;
+import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.onlineresrearch.OnlineResRearchActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
@@ -32,16 +29,18 @@ public class OnlineresRearchResultListAdpter extends RecyclerView.Adapter<Recycl
     private Context mContext;
     public List<OnlineResRearchList> mDatas = new ArrayList<>();
     private View mView;
+    Handler mHandler;
 
     /**
      * 类构造函数
      * @param mContext 上下文
      * @param list 数据列表
      */
-    public OnlineresRearchResultListAdpter(Context mContext, List<OnlineResRearchList> list) {
+    public OnlineresRearchResultListAdpter(Context mContext, List<OnlineResRearchList> list, Handler handler) {
         super();
         this.mContext = mContext;
         this.mDatas = list;
+        mHandler=handler;
     }
 
     @Override
@@ -71,11 +70,20 @@ public class OnlineresRearchResultListAdpter extends RecyclerView.Adapter<Recycl
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UbtLog.d(TAG, "onClick ......");
-//                OnlineAudioAlbumPlayerFragment mfragment = OnlineAudioAlbumPlayerFragment.newInstance(mDatas.get(position).getRes_id());
-//                mfragment.start(mfragment);
-                Intent i = new Intent(mContext, OnlineAudioPlayerActivity.class);
-                mContext.startActivity(i);
+
+                UbtLog.d(TAG, "onClick ......" +mDatas.get(position).res_id);
+                List<AlbumContentInfo> mAlbum=new ArrayList<>();
+                AlbumContentInfo mItem=new AlbumContentInfo();
+                mItem.grade=mDatas.get(position).getGrade();
+                mItem.albumName=mDatas.get(position).getRes_name();
+                mItem.albumId=mDatas.get(position).getRes_id();
+                mAlbum.add(0,mItem);
+                Message msg = new Message();
+                msg.what = OnlineResRearchActivity.SEARCH_RESULT_ALBUM;
+                msg.obj =mAlbum;
+                mHandler.sendMessage(msg);
+//                Intent i = new Intent(mContext,  OnlineAudioAlbumPlayerFragment.class);
+//                mContext.startActivity(i);
             }
         });
     }

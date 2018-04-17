@@ -1,20 +1,12 @@
-package com.ubt.alpha1e.onlineaudioplayer;
-
-import android.content.Context;
+package com.ubt.alpha1e.onlineaudioplayer.categoryActivity;
 
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.OnlineAudioPlayerAlbumRequest;
 import com.ubt.alpha1e.base.RequstMode.OnlineAudioPlayerAudiosRequest;
-import com.ubt.alpha1e.behaviorhabits.model.EventDetail;
-import com.ubt.alpha1e.behaviorhabits.model.HabitsEvent;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
-import com.ubt.alpha1e.behaviorhabits.model.UserScore;
-import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
-import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioAlbumPlayerFragment;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;

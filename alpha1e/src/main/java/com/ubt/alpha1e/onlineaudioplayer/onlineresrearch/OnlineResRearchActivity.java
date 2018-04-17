@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +36,9 @@ import com.ubt.alpha1e.onlineaudioplayer.DataObj.DataConfig;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineResRearchList;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineResSearch;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.ShowItem;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioAlbumPlayerFragment;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioResourcesFragment;
+import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -88,7 +93,24 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
     private FlowAdapter flowAdapter;
 
     private static final int SEARCH = 51;
+    public final static int SEARCH_RESULT_ALBUM=1;
 
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case SEARCH_RESULT_ALBUM:
+                    OnlineAudioAlbumPlayerFragment  fragment = findFragment(OnlineAudioAlbumPlayerFragment .class);
+                    if (fragment == null) {
+                        fragment = OnlineAudioAlbumPlayerFragment.newInstance((List< AlbumContentInfo>) msg.obj);
+                        UbtLog.d(TAG, "OnlineAudioAlbumPlayerFragment= " + fragment );
+                        loadRootFragment(R.id.search_container, fragment);
+                    }
+                    break;
+            }
+        }
+    };
     @OnClick({R.id.ib_return,R.id.ib_rearch})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -296,7 +318,7 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
         onlineResRearchList.add(o7);
         onlineResRearchList.add(o8);
 
-        mAdapter = new OnlineresRearchResultListAdpter(OnlineResRearchActivity.this,onlineResRearchList);
+        mAdapter = new OnlineresRearchResultListAdpter(OnlineResRearchActivity.this,onlineResRearchList,mHandler);
         research_result_list.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 

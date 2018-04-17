@@ -841,7 +841,7 @@
 
 
 
-        <activity android:name=".onlineaudioplayer.OnlineAudioPlayerActivity"
+        <activity android:name=".onlineaudioplayer.categoryActivity.OnlineAudioPlayerActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:launchMode="singleTop"

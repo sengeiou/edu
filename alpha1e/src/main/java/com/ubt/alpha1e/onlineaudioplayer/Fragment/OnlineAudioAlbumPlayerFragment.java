@@ -1,24 +1,16 @@
 package com.ubt.alpha1e.onlineaudioplayer.Fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Rect;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,23 +19,17 @@ import android.widget.Toast;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
-import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerContract;
-import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerPresenter;
+import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerContract;
+import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerPresenter;
 import com.ubt.alpha1e.onlineaudioplayer.adapter.GradeSelectedAdapter;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
-import com.ubt.alpha1e.ui.dialog.HibitsEventPlayDialog;
-import com.ubt.alpha1e.ui.dialog.OnlineAudioPlayDialog;
+import com.ubt.alpha1e.onlineaudioplayer.playerDialog.OnlineAudioPlayDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * @作者：ubt
@@ -72,7 +58,11 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
     public static Context mContext;
     public final static int GRADE_SELECT_ADD = 1;
     public final static int GRADE_UNSELECT_DELETE= 2;
-    private static String mAlbumId;
+    private static String mCategoryId;
+    public final static int SEARCH_ENTER_FRAGMENT=1;
+    public final static int CATEGORY_ENTER_FRAGMENT=2;
+    public static int type=0;
+    public static List<AlbumContentInfo> mSearchDatas;
 
 
     private Handler mHandler = new Handler() {
@@ -114,9 +104,17 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
             }
         }
     };
-    public static OnlineAudioAlbumPlayerFragment newInstance(String albumId) {
+    public static OnlineAudioAlbumPlayerFragment newInstance(String categoryId) {
+
         OnlineAudioAlbumPlayerFragment mOnlineAudioAlbumPlayerFragment  = new OnlineAudioAlbumPlayerFragment();
-        mAlbumId=albumId;
+        mCategoryId=categoryId;
+        type=CATEGORY_ENTER_FRAGMENT;
+        return mOnlineAudioAlbumPlayerFragment;
+    }
+    public static OnlineAudioAlbumPlayerFragment newInstance(List<AlbumContentInfo> mdatas){
+        OnlineAudioAlbumPlayerFragment mOnlineAudioAlbumPlayerFragment  = new OnlineAudioAlbumPlayerFragment();
+        mSearchDatas=mdatas;
+        type=SEARCH_ENTER_FRAGMENT;
         return mOnlineAudioAlbumPlayerFragment;
     }
     @Nullable
@@ -145,7 +143,13 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
         mAdapter = new AlbumAdapter();
         mAlbumView.setAdapter(mAdapter);
         //P require data from back-end
-        mPresenter.getAlbumList(mAlbumId);
+        if(type==SEARCH_ENTER_FRAGMENT){
+            UbtLog.d(TAG,"ENTER SEARCH ENTER FRAMENT");
+            showAlbumList(true,mSearchDatas,"success");
+        }else if(type==CATEGORY_ENTER_FRAGMENT){
+            UbtLog.d(TAG,"ENTER CATEGORY FRAGMENT ");
+            mPresenter.getAlbumList(mCategoryId);
+        }
         mGradeSort.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -190,6 +194,7 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
                 }
             }
         });
+
         return mView;
     }
 
