@@ -58,7 +58,17 @@ public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
         final OnlineresList onlineres = mDatas.get(position);
 
         myHolder.res_name.setText(onlineres.getRes_name());
-        myHolder.first_word.setText(onlineres.getRes_name().substring(0,1));
+        String word = onlineres.getRes_name().substring(0,1);
+        myHolder.first_word.setText(word);
+        if(word.equals("语") || word.equals("精") || word.equals("国")){
+            myHolder.online_res_swipe.setBackgroundResource(R.drawable.bg_resources_b);
+        }else if( word.equals("趣") || word.equals("经") ){
+            myHolder.online_res_swipe.setBackgroundResource(R.drawable.bg_resources_r);
+        }else if(word.equals("英") || word.equals("8")){
+            myHolder.online_res_swipe.setBackgroundResource(R.drawable.bg_resources_p);
+        }else if(word.equals("中") || word.equals("音") || word.equals("动")){
+            myHolder.online_res_swipe.setBackgroundResource(R.drawable.bg_resources_y);
+        }
         if(myHolder.res_name.length()==5){
             myHolder.res_name.setTextSize(15);
         }else if(myHolder.res_name.length()==6){
@@ -91,11 +101,13 @@ public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
     public static class OnlineResHolder extends RecyclerView.ViewHolder
     {
 
+        public RelativeLayout online_res_swipe;
         public TextView first_word;
         public TextView res_name;
         public OnlineResHolder(View view)
         {
             super(view);
+            online_res_swipe = (RelativeLayout) view.findViewById(R.id.online_res_swipe);
             first_word = (TextView) view.findViewById(R.id.first_word);
             res_name = (TextView) view.findViewById(R.id.res_name);
 

@@ -1,16 +1,22 @@
 package com.ubt.alpha1e.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineResRearchList;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioAlbumPlayerFragment;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioResourcesFragment;
+import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerActivity;
 import com.ubt.alpha1e.ui.dialog.WifiSelectAlertDialog;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +51,7 @@ public class OnlineresRearchResultListAdpter extends RecyclerView.Adapter<Recycl
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
         final OnlineresRearchResultListAdpter.OnlineResHolder myHolder  = (OnlineresRearchResultListAdpter.OnlineResHolder) holder;
         final OnlineResRearchList onlineres = mDatas.get(position);
@@ -53,12 +59,23 @@ public class OnlineresRearchResultListAdpter extends RecyclerView.Adapter<Recycl
 
         myHolder.online_res_name.setText(onlineres.getRes_name());
 
-        myHolder.online_res_name.setOnClickListener(new View.OnClickListener() {
+//        myHolder.online_res_name.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Message msg = new Message();
+////                msg.what = WifiSelectAlertDialog.SELECT_POSITION;
+////                msg.obj = onlineres;
+//            }
+//        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Message msg = new Message();
-                msg.what = WifiSelectAlertDialog.SELECT_POSITION;
-                msg.obj = onlineres;
+            public void onClick(View view) {
+                UbtLog.d(TAG, "onClick ......");
+//                OnlineAudioAlbumPlayerFragment mfragment = OnlineAudioAlbumPlayerFragment.newInstance(mDatas.get(position).getRes_id());
+//                mfragment.start(mfragment);
+                Intent i = new Intent(mContext, OnlineAudioPlayerActivity.class);
+                mContext.startActivity(i);
             }
         });
     }
