@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.onlineaudioplayer.DataObj;
 
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -14,7 +15,7 @@ public class DataConfig {
 
     public static List<ShowItem> getItems() {
         List<ShowItem> showItems = new ArrayList<>();
-        String recentSearchKey = SPUtils.getInstance().getString("recentSearchKey","");
+        String recentSearchKey = SPUtils.getInstance().getString(Constant.SP_RECENT_SEARCH_KEY,"");
         UbtLog.d("", "recentSearchKey:" + recentSearchKey);
         if(recentSearchKey.equals("")){
             return showItems;
