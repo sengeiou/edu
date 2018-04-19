@@ -464,7 +464,9 @@ public class VideoCameraActivity extends Activity {
 
             //Integer mSensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
 
+
             mVideoSize = chooseVideoSize(map.getOutputSizes(MediaRecorder.class),width, height);
+
             mPreviewSize = Camera2Util.getMinPreSize(map.getOutputSizes(SurfaceTexture.class), width, height, Camera2Config.PREVIEW_MAX_HEIGHT);
 
             //获取相机支持的最大拍照尺寸
@@ -877,7 +879,8 @@ public class VideoCameraActivity extends Activity {
         }
 
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        mMediaRecorder.setVideoEncodingBitRate(1200*1280);
+        //mMediaRecorder.setVideoEncodingBitRate(1200*1280);
+        mMediaRecorder.setVideoEncodingBitRate(1024*1024);
         mMediaRecorder.setVideoFrameRate(30);
         mMediaRecorder.setVideoSize(mVideoSize.getWidth(), mVideoSize.getHeight());
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);

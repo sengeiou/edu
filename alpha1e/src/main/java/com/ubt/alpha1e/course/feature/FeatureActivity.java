@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.animator.BezierView;
 import com.ubt.alpha1e.animator.FloatAnimator;
@@ -186,6 +187,8 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     private Date startTime = null;
     private boolean isShowHibitsDialog = false;
     private boolean hasReceiveHibitsStart = false;
+
+    private int mPadDelayTime = 0;//平板改变View位置后一会才能取得真实的位置，所有要延时一会，手机则为0
 
     private Handler mHandler = new Handler() {
         @Override
@@ -504,6 +507,10 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                 + "  height = " + this.getResources().getDisplayMetrics().heightPixels
                 + "  densityDpi = " + this.getResources().getDisplayMetrics().densityDpi);
 
+        if(AlphaApplication.isPad()){
+            mPadDelayTime = 130;
+        }
+
         rlRobot.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
             @Override
@@ -574,7 +581,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     private void showBezierView(){
         startTime = new Date(System.currentTimeMillis());
 
-        showView(bzvPrincipleSteeringEngine, 100);
+        showView(bzvPrincipleSteeringEngine, 150 + mPadDelayTime);
         showView(bzvPrincipleInfraredSensor, 400);
         showView(bzvPrincipleSoundbox, 700);
         showView(bzvPrincipleHead, 1000);
@@ -734,13 +741,56 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
 */
         }
 
-        initViewLine(ivRobot, ivPrincipleSteeringEngine);
-        initViewLine(ivRobot, ivPrincipleInfraredSensor);
-        initViewLine(ivRobot, ivPrincipleSoundbox);
-        initViewLine(ivRobot, ivPrincipleHead);
-        initViewLine(ivRobot, ivPrincipleEye);
-        initViewLine(ivRobot, ivPrincipleVoice);
-        initViewLine(ivRobot, ivPrincipleVoiceObstacleAvoidance);
+        if(AlphaApplication.isPad()){
+            float densityRatio = 3.0f / SizeUtils.getDensity(getContext());
+
+            RelativeLayout.LayoutParams ivEngineParams = (RelativeLayout.LayoutParams) ivPrincipleSteeringEngine.getLayoutParams();
+            ivEngineParams.topMargin = (int)(ivEngineParams.topMargin * densityRatio);
+            ivEngineParams.rightMargin = (int)(ivEngineParams.rightMargin * densityRatio);
+            ivPrincipleSteeringEngine.setLayoutParams(ivEngineParams);
+
+            RelativeLayout.LayoutParams ivSensorParams = (RelativeLayout.LayoutParams) ivPrincipleInfraredSensor.getLayoutParams();
+            ivSensorParams.rightMargin = (int)(ivSensorParams.rightMargin * densityRatio);
+            ivPrincipleInfraredSensor.setLayoutParams(ivSensorParams);
+
+            RelativeLayout.LayoutParams ivSoundboxParams = (RelativeLayout.LayoutParams) ivPrincipleSoundbox.getLayoutParams();
+            ivSoundboxParams.rightMargin = (int)(ivSoundboxParams.rightMargin * densityRatio);
+            ivSoundboxParams.bottomMargin = (int)(ivSoundboxParams.bottomMargin * densityRatio);
+            ivPrincipleSoundbox.setLayoutParams(ivSoundboxParams);
+
+            RelativeLayout.LayoutParams ivHeadParams = (RelativeLayout.LayoutParams) ivPrincipleHead.getLayoutParams();
+            ivHeadParams.bottomMargin = (int)(ivHeadParams.bottomMargin * densityRatio);
+            ivPrincipleHead.setLayoutParams(ivHeadParams);
+
+            RelativeLayout.LayoutParams ivEyeParams = (RelativeLayout.LayoutParams) ivPrincipleEye.getLayoutParams();
+            ivEyeParams.leftMargin = (int)(ivEyeParams.leftMargin * densityRatio);
+            ivEyeParams.bottomMargin = (int)(ivEyeParams.bottomMargin * densityRatio);
+            ivPrincipleEye.setLayoutParams(ivEyeParams);
+
+            RelativeLayout.LayoutParams ivVoiceParams = (RelativeLayout.LayoutParams) ivPrincipleVoice.getLayoutParams();
+            ivVoiceParams.leftMargin = (int)(ivVoiceParams.leftMargin * densityRatio);
+            ivPrincipleVoice.setLayoutParams(ivVoiceParams);
+
+            RelativeLayout.LayoutParams ivAvoidanceParams = (RelativeLayout.LayoutParams) ivPrincipleVoiceObstacleAvoidance.getLayoutParams();
+            ivAvoidanceParams.topMargin = (int)(ivAvoidanceParams.topMargin * densityRatio);
+            ivAvoidanceParams.leftMargin = (int)(ivAvoidanceParams.leftMargin * densityRatio);
+            ivPrincipleVoiceObstacleAvoidance.setLayoutParams(ivAvoidanceParams);
+
+        }
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initViewLine(ivRobot, ivPrincipleSteeringEngine);
+                initViewLine(ivRobot, ivPrincipleInfraredSensor);
+                initViewLine(ivRobot, ivPrincipleSoundbox);
+                initViewLine(ivRobot, ivPrincipleHead);
+                initViewLine(ivRobot, ivPrincipleEye);
+                initViewLine(ivRobot, ivPrincipleVoice);
+                initViewLine(ivRobot, ivPrincipleVoiceObstacleAvoidance);
+
+            }
+        }, mPadDelayTime);
 
         bzvPrincipleSteeringEngine.setCallbackListence(this);
         bzvPrincipleInfraredSensor.setCallbackListence(this);
@@ -749,8 +799,6 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
         bzvPrincipleEye.setCallbackListence(this);
         bzvPrincipleVoice.setCallbackListence(this);
         bzvPrincipleVoiceObstacleAvoidance.setCallbackListence(this);
-
-
     }
 
     /**

@@ -4,7 +4,7 @@
 
     <ScrollView
         android:id="@+id/sv_main"
-        android:layout_width="380dp"
+        android:layout_width="450dp"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
@@ -27,7 +27,7 @@
 
                 <TextView
                     android:id="@+id/tv_phone"
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:paddingRight="5dp"
                     android:paddingLeft="5dp"
@@ -40,7 +40,7 @@
 
                 <RelativeLayout
                     android:id="@+id/rl_base_search"
-                    android:layout_width="225dp"
+                    android:layout_width="250dp"
                     android:layout_height="50dp"
                     android:layout_toRightOf="@+id/tv_phone"
                     android:layout_centerVertical="true"
@@ -48,7 +48,7 @@
 
                     <com.ubt.alpha1e.ui.custom.ClearableEditText
                         android:id="@+id/edt_phone"
-                        android:layout_width="145dp"
+                        android:layout_width="165dp"
                         android:layout_height="50dp"
                         android:gravity="center_vertical"
                         android:background="@color/transparent"
@@ -92,7 +92,7 @@
 
                 <TextView
                     android:id="@+id/tv_verify_code"
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:paddingRight="5dp"
                     android:paddingLeft="5dp"
@@ -104,7 +104,7 @@
 
                 <com.ubt.alpha1e.ui.custom.ClearableEditText
                     android:id="@+id/edt_verify_code"
-                    android:layout_width="225dp"
+                    android:layout_width="250dp"
                     android:layout_height="50dp"
                     android:gravity="center_vertical"
                     android:layout_toRightOf="@+id/tv_verify_code"
@@ -126,10 +126,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
                 android:minWidth="140dp"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/rl_verify_code"
                 android:layout_marginBottom="30dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
                 android:gravity="center"
