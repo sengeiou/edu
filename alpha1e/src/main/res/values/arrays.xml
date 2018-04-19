@@ -34,26 +34,19 @@
         <item>没有电，机器人生很空虚</item>
     </array>
     <array name="greetting">
-         <item>@drawable/touch_rightarm_1</item>
-         <item>@drawable/touch_rightarm_2_c</item>
-        <item>@drawable/touch_rightarm_3_c</item>
-        <item>@drawable/touch_rightarm_4_c</item>
-        <item>@drawable/touch_rightarm_5_c</item>
-        <item>@drawable/touch_rightarm_6_c</item>
-        <item>@drawable/touch_rightarm_7_c</item>
-        <item>@drawable/touch_rightarm_8_c</item>
-        <item>@drawable/touch_rightarm_9_c</item>
-        <item>@drawable/touch_rightarm_10_c</item>
-        <item>@drawable/touch_rightarm_11_c</item>
-        <item>@drawable/touch_rightarm_12_c</item>
-        <item>@drawable/touch_rightarm_13_c</item>
-        <item>@drawable/touch_rightarm_14_c</item>
-        <item>@drawable/touch_rightarm_15_c</item>
-        <item>@drawable/touch_rightarm_16_c</item>
-        <item>@drawable/touch_rightarm_17_c</item>
-        <item>@drawable/touch_rightarm_18_c</item>
-        <item>@drawable/touch_rightarm_19_c</item>
-        <item>@drawable/touch_rightarm_20_c</item>
+         <item>@drawable/normal_1_c</item>
+         <item>@drawable/normal_2_c</item>
+        <item>@drawable/normal_3_c</item>
+        <item>@drawable/normal_4_c</item>
+        <item>@drawable/normal_5_c</item>
+        <item>@drawable/normal_6_c</item>
+        <item>@drawable/normal_7_c</item>
+        <item>@drawable/normal_8_c</item>
+        <item>@drawable/normal_9_c</item>
+        <item>@drawable/normal_10_c</item>
+        <item>@drawable/normal_11_c</item>
+        <item>@drawable/normal_12_c</item>
+        <item>@drawable/normal_13_c</item>
     </array>
 
 

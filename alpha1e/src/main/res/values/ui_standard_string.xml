@@ -1021,6 +1021,7 @@
     <string name="ui_habits_alert_set_success">设置提醒成功</string>
     <string name="ui_habits_alert_set_fail">设置提醒失败</string>
     <string name="ui_habits_event_list">事项列表</string>
+    <string name="ui_onlineaudio_event_list">在线资源库</string>
     <string name="ui_habits_process_starting">行为习惯正在进行中，请先完成</string>
     <string name="ui_habits_process_start">行为习惯开始了，请先完成</string>
 
