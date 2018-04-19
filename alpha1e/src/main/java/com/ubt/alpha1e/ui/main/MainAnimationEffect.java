@@ -24,8 +24,6 @@ import com.ubt.alpha1e.R;
 public class MainAnimationEffect {
     Animation bounceAnimiaton;
     Animation bounceCCAnimation;
-    Animation shrinkAnimaiton;
-    Animation planetAnimation;
     Context   mContext;
     public MainAnimationEffect(Context context) {
         mContext=context;
@@ -38,6 +36,7 @@ public class MainAnimationEffect {
      */
     public Animation getBounceAnimation() {
         bounceAnimiaton= AnimationUtils.loadAnimation(mContext, R.anim.hyperspace_jump);
+        bounceAnimiaton.setRepeatMode(Animation.REVERSE);
         bounceAnimiaton.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -69,7 +68,6 @@ public class MainAnimationEffect {
                 bounceCCAnimation= AnimationUtils.loadAnimation(mContext, R.anim.hyperspace_jump);
                 bounceCCAnimation.setAnimationListener(this);
                 mCourseCenter.startAnimation(bounceCCAnimation);
-
             }
             @Override
             public void onAnimationRepeat(Animation animation) {
@@ -78,49 +76,7 @@ public class MainAnimationEffect {
         });
         return bounceCCAnimation ;
     }
-    public Animation getShrinkAnimation(){
-        shrinkAnimaiton= AnimationUtils.loadAnimation(mContext, R.anim.shrink_animation);
-        shrinkAnimaiton.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
 
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        return shrinkAnimaiton ;
-    }
-
-    public Animation getPlanetAnimation(final ImageView mPlanet){
-        planetAnimation = new TranslateAnimation(0, 10,0, 10);
-        planetAnimation.setDuration(1000);
-        planetAnimation.setRepeatCount(Animation.INFINITE);
-        planetAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                planetAnimation = new TranslateAnimation(0, 50,0, 50);
-                planetAnimation.setAnimationListener(this);
-                mPlanet.startAnimation(planetAnimation);
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        return planetAnimation;
-
-    }
 
 
 

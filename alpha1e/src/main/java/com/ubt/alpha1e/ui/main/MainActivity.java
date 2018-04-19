@@ -115,8 +115,6 @@ import pl.droidsonroids.gif.GifDrawable;
 
 public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter> implements MainContract.View, HandlerCallback {
 
-    @BindView(R.id.cartoon_body_touch_bg)
-    ImageView cartoonBodyTouchBg;
     @BindView(R.id.charging)
     ImageView charging;
     @BindView(R.id.cartoon_action)
@@ -282,7 +280,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int ROBOT_HEAD_DOWN_SLEEP = 6;
     private int CARTOON_FRAME_INTERVAL = 4;
     boolean ANIMAITONSOLUTIONOOM = true;
-    boolean animation_running = false;
+    boolean animation_running = true;
     private int ROBOT_CHARGING_STATUS = 0x01;
     private int ROBOT_UNCHARGE_STATUS = 0x0;
     private int ROBOT_CHARGING_ENOUGH_STATUS = 0x03;
@@ -292,11 +290,21 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     AnimationDrawable mActionIndicator = null;
     long mClickTime = 0;
     int CLICK_THRESHOLD_DUPLICATE = 800;
-    Animation hyperspaceJump;
     MainAnimationEffect mMainAnimationEffect;
     private boolean hasInitUI = false;
     Context mContext;
-
+    public final static int CARTOON_ACTION_EXECTUION = 1;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case CARTOON_ACTION_EXECTUION:
+                    showCartoonAction_performance(cartoon_action_greeting);
+                    break;
+            }
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -502,8 +510,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_remote:
                 if (isBulueToothConnected()) {
-                    llRemote.setAnimation(mMainAnimationEffect.getBounceAnimation());
-                    llRemote.startAnimation(mMainAnimationEffect.getBounceAnimation());
+                    buttonClickAnimation(llRemote);
                     if (!removeDuplicateClickEvent()) {
                         mPresenter.resetGlobalActionPlayer();
                         mLaunch.setClass(this, RemoteSelActivity.class);
@@ -517,6 +524,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.ll_action:
                 if (isBulueToothConnected()) {
                     if (!removeDuplicateClickEvent()) {
+                        buttonClickAnimation(llAction);
                         mPresenter.resetGlobalActionPlayer();
                         APP_CURRENT_STATUS = ROBOT_default_gesture;
                         startActivity(new Intent(this, ActionTestActivity.class));
@@ -529,6 +537,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_program:
                 if(!removeDuplicateClickEvent()) {
+                    buttonClickAnimation(llProgram);
                     startActivity(new Intent(this, BlocklyActivity.class));
                     this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 }
@@ -536,7 +545,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.ll_community:
                 //BehaviorHabitsActivity.LaunchActivity(this);
                 //ToastUtils.showShort("即将开放，敬请期待!");
-
+                buttonClickAnimation(llCommunity);
                 CommunityActivity.launchActivity(this);
                 this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 break;
@@ -588,6 +597,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             default:
                 break;
         }
+    }
+
+    private void buttonClickAnimation(LinearLayout mLayout) {
+        mLayout.setAnimation(mMainAnimationEffect.getBounceAnimation());
+        mLayout.startAnimation(mMainAnimationEffect.getBounceAnimation());
     }
 
     //显示蓝牙连接对话框
@@ -818,29 +832,23 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
 
     private void showCartoonAction_performance(final int value) {
-        if (animation_running && CURRENT_ACTION_NAME == value) {
-            UbtLog.d(TAG, "animation is execution");
-            return;
-        }
-        if (value == cartoon_aciton_squat_reverse || value == cartoon_action_sleep) {
-            hiddenCartoonTouchView();
-        } else {
-            showCartoonTouchView();
-        }
         frameAnimationPro = new FrameAnimation(cartoonAction, mPresenter.requestCartoonAction(value), CARTOON_FRAME_INTERVAL, false);
         frameAnimationPro.setAnimationListener(new FrameAnimation.AnimationListener() {
             @Override
             public void onAnimationStart() {
                 UbtLog.d(TAG, "start");
-                animation_running = true;
             }
-
             @Override
             public void onAnimationEnd() {
                 UbtLog.d(TAG, "end");
-                animation_running = false;
+                frameAnimationPro.pauseAnimation();
+                if(mHandler.hasMessages(CARTOON_ACTION_EXECTUION)){
+                    mHandler.removeMessages(CARTOON_ACTION_EXECTUION);
+                }
+                Message msg=new Message();
+                msg.what=CARTOON_ACTION_EXECTUION;
+                mHandler.sendMessageDelayed(msg ,10000);
             }
-
             @Override
             public void onAnimationRepeat() {
                 UbtLog.d(TAG, "repeat");
@@ -860,12 +868,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     public void showCartoonAction(final int value) {
-        if (ANIMAITONSOLUTIONOOM & cartoon_enable) {
-            showCartoonAction_performance(value);
-        } else {
-            //Some time OOM BUG
-            // showCartoonAction_original(value);
-        }
+      //  showCartoonAction_performance(value);
     }
 
 
@@ -1499,7 +1502,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         buddleTextAsynchronousTask();
                         if(cartoonAction!=null) {
                             cartoonAction.setBackgroundResource(R.drawable.sleep21);
-                            cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
+                            cartoonAction.setBackgroundResource(R.drawable.normal_13_c);
                         }
                         hiddenCartoonTouchView();
                         recoveryCartoonBodyUi();
@@ -1517,8 +1520,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                             hiddenDisconnectIcon();
                         }
                         if(!cartoon_enable){
-                            cartoonAction.setBackgroundResource(R.drawable.main_robot);
-                            cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
+                            cartoonAction.setBackgroundResource(R.drawable.normal_13_c);
                         }
                         showCartoonAction(cartoon_action_squat);
                         showBuddleText(getString(R.string.buddle_bluetoothConnection));
@@ -1536,7 +1538,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         showBuddleText(getString(R.string.buddle_text_init_status));
                         //showCartoonAction(cartoon_action_sleep);
                         cartoonAction.setBackgroundResource(R.drawable.sleep21);
-                        cartoonAction.setBackgroundResource(R.drawable.img_hoem_robot);
+                        cartoonAction.setBackgroundResource(R.drawable.normal_13_c);
                         recoveryCartoonBodyUi();
                         hiddenBatteryUi();
                     }
@@ -1627,7 +1629,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run(){
-                        cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                        cartoonAction.setBackgroundResource(R.drawable.normal_13_c);
                     }
                 });
             case ROBOT_sleep_gesture:
@@ -1637,7 +1639,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         if(cartoon_enable) {
                             cartoonAction.setBackgroundResource(R.drawable.squat60);
                         }else {
-                            cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                            cartoonAction.setBackgroundResource(R.drawable.normal_13_c);
                         }
                     }
                 });
@@ -1649,13 +1651,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         if(APP_CURRENT_STATUS!=ROBOT_SLEEP_EVENT) {
                             // showCartoonAction(cartoon_action_squat);
                             //站立
-                            cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                            cartoonAction.setBackgroundResource(R.drawable.normal_13_c);
                         }else {
                             //蹲下
                             if(cartoon_enable) {
                                 cartoonAction.setBackgroundResource(R.drawable.squat60);
                             }else {
-                                cartoonAction.setBackgroundResource(R.drawable.main_robot);
+                                cartoonAction.setBackgroundResource(R.drawable.normal_13_c);
                             }
                         }
                     }
@@ -1712,7 +1714,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if(charging!=null) {
             //charging.setBackground(getDrawableRes("charging_normal"));
             //chargingDot.setBackground(getDrawableRes("charging_normal_dot"));
-            cartoonBodyTouchBg.setBackground(getDrawableRes("main_robot_background"));
+            //cartoonBodyTouchBg.setBackground(getDrawableRes("main_robot_background"));
         }
     }
     private void hiddenBatteryUi(){
@@ -1765,23 +1767,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         mCousrCenter.startAnimation(mMainAnimationEffect.getCourceCenterBounceAnimation(mCousrCenter));
     }
 
-    /**
-     * Star animation
-     */
-    private void showStarAnimation(){
-        ivStar1.startAnimation(mMainAnimationEffect.getShrinkAnimation());
-        ivStar2.startAnimation(mMainAnimationEffect.getShrinkAnimation());
-    }
-
-    /**
-     * Planet animation
-     */
-    private void showPlanetAnimation(ImageView mPlanet){
-        mPlanet.startAnimation(mMainAnimationEffect.getPlanetAnimation(mPlanet));
-    }
     private void showAnimationEffect(boolean status ){
         if(status) {
             showCourseCenterAnimation(rlCourseCenter);
+            showCartoonAction_performance(cartoon_action_greeting );
         }
     }
 

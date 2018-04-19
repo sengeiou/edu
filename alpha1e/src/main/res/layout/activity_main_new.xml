@@ -14,14 +14,6 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         />
-    <ImageView
-        android:id="@+id/cartoon_body_touch_bg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/main_robot_background"
-        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/charging"
@@ -154,7 +146,7 @@
         android:layout_height="250dp"
         android:layout_above="@+id/charging"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/img_hoem_robot"
+        android:background="@drawable/normal_13_c"
         android:visibility="visible" />
 
     <TextView
@@ -253,16 +245,6 @@
             android:layout_height="70dp"
             android:background="@drawable/ic_home_course"
             />
-
-        <ImageView
-            android:id="@+id/planet1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="332dp"
-            android:layout_marginTop="18dp"
-            android:src="@drawable/planet1" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -348,22 +330,6 @@
         android:layout_alignParentRight="true"
         android:background="@drawable/globalactionindicator_animation"
         android:visibility="visible"/>
-    <ImageView
-        android:id="@+id/star1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/star1"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="100dp"
-        />
-    <ImageView
-        android:id="@+id/star2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/star2"
-        android:layout_marginLeft="250dp"
-        android:layout_marginTop="100dp"
-        />
 
     <RelativeLayout
         android:id="@+id/touch_control"

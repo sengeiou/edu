@@ -49,16 +49,11 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
 
         final MyPlayContentHolder myHolder  = (MyPlayContentHolder) holder;
         AudioContentInfo playContentInfo = mDatas.get(position);
-//        if("1".equals(playContentInfo.isSelect)){
-//            myHolder.ivPlay.setBackgroundResource(R.drawable.ic_music_list_pause);
-//            myHolder.playStatusAnim.start();
-//            myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
-//        }else {
-//            myHolder.ivPlay.setBackgroundResource(R.drawable.ic_music_list_play);
-//            myHolder.playStatusAnim.stop();
-//            myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
-//        }
-
+        if(OnlineAudioEventListActivity.mPlayContentInfoDatas.get(position).isSelect){
+            myHolder.ivPlay.setChecked(true);
+        }else {
+            myHolder.ivPlay.setChecked(false);
+        }
         myHolder.tvPlayContent.setText(playContentInfo.contentName);
 
         myHolder.ivPlay.setOnClickListener(new View.OnClickListener() {

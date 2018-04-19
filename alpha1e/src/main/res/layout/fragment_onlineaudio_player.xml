@@ -25,6 +25,13 @@
 
         </android.support.v7.widget.RecyclerView>
 
+        <View
+            android:id="@+id/v_transparent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/translate"
+            android:visibility="invisible"/>
+
         <ListView
             android:id="@+id/grade_select_dialog"
             android:layout_width="230dp"
@@ -34,6 +41,7 @@
             android:layout_marginEnd="55dp"
             android:background="@drawable/grade_dialog"
             android:visibility="invisible"></ListView>
+
     </RelativeLayout>
 
 </RelativeLayout>

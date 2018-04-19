@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +22,10 @@ import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.adapter.onlineresAdpater;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.GotoBindRequest;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
@@ -42,6 +45,9 @@ import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,10 +144,8 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
 
     @Override
     protected void initUI() {
-
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerview.setLayoutManager(mLayoutManager);
-
         mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         DividerItemDecorationNew dividerItemDecoration = new DividerItemDecorationNew(getActivity(),DividerItemDecorationNew.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.linesharp));
@@ -160,6 +164,17 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
         mRecyclerview.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         getMaxCategory();
+
+        if(SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY)!=null) {
+            try {
+                JSONObject mHistory = (JSONObject)SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
+                player_name.setText(mHistory.get("albumName")+"");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            }else{
+                player_name.setText("暂无播放历史");
+            }
     }
 
 

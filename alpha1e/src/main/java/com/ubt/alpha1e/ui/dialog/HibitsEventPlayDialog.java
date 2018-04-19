@@ -12,7 +12,6 @@ import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.view.Display;
 import android.view.Gravity;
@@ -41,7 +40,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * 网络搜索选择类
@@ -215,7 +213,7 @@ public class HibitsEventPlayDialog {
         ivPlayStatus = view.findViewById(R.id.iv_play_status);
         ivPlayNone = view.findViewById(R.id.iv_play_status_none);
         ivMusicList = view.findViewById(R.id.iv_music_list);
-        ivMusicLast = view.findViewById(R.id.iv_music_last);
+        ivMusicLast = view.findViewById(R.id.iv_music_prev);
         ivMusicPlay = view.findViewById(R.id.iv_music_play);
         ivMusicStop = view.findViewById(R.id.iv_music_stop);
         ivMusicNext = view.findViewById(R.id.iv_music_next);
@@ -341,7 +339,7 @@ public class HibitsEventPlayDialog {
                     PlayEventListActivity.launchActivity(mActivity,mPlayContentInfoList,currentEventId);
 
                     break;
-                case R.id.iv_music_last:
+                case R.id.iv_music_prev:
                     if(isStartPlayProcess){
                         if((currentPlaySeq -1) >= 0){
                             currentPlaySeq--;
