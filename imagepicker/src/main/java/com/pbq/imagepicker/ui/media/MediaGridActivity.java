@@ -407,6 +407,7 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
         //根据是否有相机按钮确定位置
         position = imagePicker.isShowCamera() ? position - 1 : position;
         if (imagePicker.isMultiMode()) {
+
             Intent intent = new Intent(MediaGridActivity.this, ImagePreviewActivity.class);
             intent.putExtra(ImagePicker.EXTRA_SELECTED_IMAGE_POSITION, position);
             intent.putExtra(ImagePicker.EXTRA_IMAGE_ITEMS, imagePicker.getCurrentImageFolderItems());
@@ -503,6 +504,8 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
 
             }else if (resultCode == ImagePicker.RESULT_IMAGE_BACK) {
                 isOrigin = data.getBooleanExtra(ImagePreviewActivity.ISORIGIN, false);
+                mImageGridAdapter.notifyDataSetChanged();
+
             } else {
                 //从拍照界面返回
                 //点击 X , 没有选择照片

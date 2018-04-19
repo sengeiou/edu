@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
@@ -283,7 +284,11 @@ public class ParentManageCenterFragment extends MVPBaseFragment<BehaviorHabitsCo
 
     @Override
     public int getContentViewId() {
-        return R.layout.fragment_parent_manage_center;
+        if(AlphaApplication.isPad()){
+            return R.layout.fragment_parent_manage_center_pad;
+        }else {
+            return R.layout.fragment_parent_manage_center;
+        }
     }
 
     @Override

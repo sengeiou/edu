@@ -336,7 +336,12 @@ public class HibitsEventFragment extends MVPBaseFragment<BehaviorHabitsContract.
 
     @Override
     public int getContentViewId() {
-        return R.layout.fragment_hibits_event;
+        if(AlphaApplication.isPad()){
+            return R.layout.fragment_hibits_event_pad;
+        }else {
+            return R.layout.fragment_hibits_event;
+        }
+
     }
 
     @Override

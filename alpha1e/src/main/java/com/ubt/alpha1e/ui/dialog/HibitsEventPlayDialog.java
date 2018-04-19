@@ -26,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
 import com.ubt.alpha1e.behaviorhabits.helper.HabitsHelper;
@@ -195,8 +196,11 @@ public class HibitsEventPlayDialog {
         mDialog.setOnDismissListener(mOnDismissListener);
 
         // 调整dialog背景大小
-        rlBg.setLayoutParams(new FrameLayout.LayoutParams((int) (mDisplay
-                .getWidth()), (int)(mDisplay.getHeight() * 0.5)));
+        float heightRatio = 0.5f;
+        if(AlphaApplication.isPad()){
+            heightRatio = 0.35f;
+        }
+        rlBg.setLayoutParams(new FrameLayout.LayoutParams((int) (mDisplay.getWidth()), (int)(mDisplay.getHeight() * heightRatio)));
 
         return this;
     }

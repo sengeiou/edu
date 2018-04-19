@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,27 +43,30 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
     private boolean isOrigin;                      //是否选中原图
     private SuperCheckBox mCbCheck;                //是否选中当前图片的CheckBox
     private SuperCheckBox mCbOrigin;               //原图
-    private Button mBtnOk;                         //确认图片的选择
     private TextView tvFinish;                     //确认图片的选择
+    private ImageView ivBack;                     //返回
     private View bottomBar;
 
     private RecyclerView rvSelectPhoto = null;
     private PhotoSelectAdapter mAdapter;
     private List<ImageItem> mSelectImageList; //当前选择的所有图片
 
+    private ImagePreviewActivity mActivity = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mActivity = ImagePreviewActivity.this;
+
         isOrigin = getIntent().getBooleanExtra(ImagePreviewActivity.ISORIGIN, false);
         imagePicker.addOnImageSelectedListener(this);
 
-        mBtnOk = (Button) topBar.findViewById(R.id.btn_ok);
-        mBtnOk.setVisibility(View.VISIBLE);
-        mBtnOk.setOnClickListener(this);
-
         tvFinish = (TextView) findViewById(R.id.tv_finish);
         tvFinish.setOnClickListener(this);
+
+        ivBack = (ImageView) findViewById(R.id.iv_back);
+        ivBack.setOnClickListener(this);
 
         bottomBar = findViewById(R.id.bottom_bar);
         bottomBar.setVisibility(View.VISIBLE);
@@ -99,10 +103,30 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
             public void onClick(View v) {
                 ImageItem imageItem = mImageItems.get(mCurrentPosition);
                 int selectLimit = imagePicker.getSelectLimit();
-                if (mCbCheck.isChecked() && selectedImages.size() >= selectLimit) {
-                    Toast.makeText(ImagePreviewActivity.this, ImagePreviewActivity.this.getString(R.string.select_limit, selectLimit), Toast.LENGTH_SHORT).show();
-                    mCbCheck.setChecked(false);
-                } else {
+
+                if(mCbCheck.isChecked()){
+                    if(selectedImages.size() > 0){
+                        ImageItem imageItem0 =  selectedImages.get(0);
+                        if(imageItem0.isVideo() != imageItem.isVideo()){
+                            Toast.makeText(mActivity, mActivity.getString(R.string.select_video_image_limit), Toast.LENGTH_SHORT).show();
+                            mCbCheck.setChecked(false);
+                            return;
+                        }
+
+                        if(imageItem0.isVideo() && imageItem.isVideo()){
+                            Toast.makeText(mActivity, mActivity.getString(R.string.select_video_one_limit), Toast.LENGTH_SHORT).show();
+                            mCbCheck.setChecked(false);
+                            return;
+                        }
+                    }
+
+                    if(selectedImages.size() >= selectLimit){
+                        Toast.makeText(mActivity, mActivity.getString(R.string.select_limit, selectLimit), Toast.LENGTH_SHORT).show();
+                        mCbCheck.setChecked(false);
+                    }else {
+                        imagePicker.addSelectedImageItem(mCurrentPosition, imageItem, mCbCheck.isChecked());
+                    }
+                }else {
                     imagePicker.addSelectedImageItem(mCurrentPosition, imageItem, mCbCheck.isChecked());
                 }
             }
@@ -116,15 +140,11 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
     @Override
     public void onImageSelected(int position, ImageItem item, boolean isAdd) {
         if (imagePicker.getSelectImageCount() > 0) {
-            mBtnOk.setText(getString(R.string.select_complete, imagePicker.getSelectImageCount(), imagePicker.getSelectLimit()));
-            mBtnOk.setEnabled(true);
 
             //tvFinish.setText(getString(R.string.select_complete, imagePicker.getSelectImageCount(), imagePicker.getSelectLimit()));
             tvFinish.setText(getString(R.string.select_complete_single, imagePicker.getSelectImageCount()));
             tvFinish.setEnabled(true);
         } else {
-            mBtnOk.setText(getString(R.string.complete));
-            mBtnOk.setEnabled(false);
 
             tvFinish.setText(getString(R.string.complete));
             tvFinish.setEnabled(false);
@@ -136,8 +156,9 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
 
         if (mCbOrigin.isChecked()) {
             long size = 0;
-            for (ImageItem imageItem : selectedImages)
+            for (ImageItem imageItem : selectedImages){
                 size += imageItem.size;
+            }
             String fileSize = Formatter.formatFileSize(this, size);
             mCbOrigin.setText(getString(R.string.origin_size, fileSize));
         }
@@ -151,21 +172,21 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
             intent.putExtra(ImagePicker.EXTRA_RESULT_ITEMS, imagePicker.getSelectedImages());
             setResult(ImagePicker.RESULT_IMAGE_ITEMS, intent);
             finish();
-        } else if (id == R.id.btn_back) {
-            Intent intent = new Intent();
-            intent.putExtra(ImagePreviewActivity.ISORIGIN, isOrigin);
-            setResult(ImagePicker.RESULT_IMAGE_BACK, intent);
-            finish();
+        } else if (id == R.id.iv_back) {
+            onBack();
         }
     }
 
     @Override
     public void onBackPressed() {
+        onBack();
+    }
+
+    private void onBack(){
         Intent intent = new Intent();
         intent.putExtra(ImagePreviewActivity.ISORIGIN, isOrigin);
         setResult(ImagePicker.RESULT_IMAGE_BACK, intent);
         finish();
-        super.onBackPressed();
     }
 
     @Override
@@ -218,15 +239,10 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
     @Override
     public void onImageSingleTap() {
         if (bottomBar.getVisibility() == View.VISIBLE) {
-            //topBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.imagepick_top_out));
             bottomBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.imagepick_fade_out));
-            //topBar.setVisibility(View.GONE);
             bottomBar.setVisibility(View.GONE);
         } else {
-            //topBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.imagepick_top_in));
             bottomBar.setAnimation(AnimationUtils.loadAnimation(this, R.anim.imagepick_fade_in));
-            //topBar.setVisibility(View.VISIBLE);
-
             bottomBar.setVisibility(View.VISIBLE);
         }
     }

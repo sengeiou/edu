@@ -13,17 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
-import com.ubt.alpha1e.login.loginauth.CheckPhoneNumberUtil;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.custom.ClearableEditText;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
-import com.ubt.alpha1e.userinfo.aboutus.AboutUsActivity;
 import com.ubt.alpha1e.userinfo.psdmanage.PsdManageActivity;
-import com.ubt.alpha1e.userinfo.psdmanage.psdverifycode.PsdVerifyCodeFragment;
-import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import butterknife.BindView;
@@ -38,6 +35,8 @@ import butterknife.Unbinder;
 
 public class PsdModifyFragment extends MVPBaseFragment<PsdModifyContract.View, PsdModifyPresenter> implements PsdModifyContract.View {
 
+    private static final String TAG = PsdModifyFragment.class.getSimpleName();
+
     @BindView(R.id.tv_confirm)
     TextView tvConfirm;
     Unbinder unbinder;
@@ -47,15 +46,14 @@ public class PsdModifyFragment extends MVPBaseFragment<PsdModifyContract.View, P
     ClearableEditText edtNewPassword;
 
     protected Dialog mCoonLoadingDia;
-
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
         }
     };
 
-    public static PsdModifyFragment newInstance(){
+    public static PsdModifyFragment newInstance() {
         PsdModifyFragment psdModifyFragment = new PsdModifyFragment();
         return psdModifyFragment;
     }
@@ -63,7 +61,7 @@ public class PsdModifyFragment extends MVPBaseFragment<PsdModifyContract.View, P
     @Override
     protected void initUI() {
         mCoonLoadingDia = SLoadingDialog.getInstance(getContext());
-        setViewEnable(tvConfirm,false);
+        setViewEnable(tvConfirm, false);
 
         edtOldPassword.addTextChangedListener(new TextWatcher() {
             @Override
@@ -115,7 +113,11 @@ public class PsdModifyFragment extends MVPBaseFragment<PsdModifyContract.View, P
 
     @Override
     public int getContentViewId() {
-        return R.layout.fragment_pswmanage_modify;
+        if(AlphaApplication.isPad()){
+            return R.layout.fragment_pswmanage_modify_pad;
+        }else {
+            return R.layout.fragment_pswmanage_modify;
+        }
     }
 
     @Override
@@ -134,7 +136,7 @@ public class PsdModifyFragment extends MVPBaseFragment<PsdModifyContract.View, P
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(mCoonLoadingDia != null){
+        if (mCoonLoadingDia != null) {
             mCoonLoadingDia.cancel();
         }
         unbinder.unbind();
@@ -147,7 +149,7 @@ public class PsdModifyFragment extends MVPBaseFragment<PsdModifyContract.View, P
                 doModifyPassword();
                 break;
             case R.id.tv_forget_password:
-                ((PsdManageActivity)getActivity()).switchFragment(PsdManageActivity.FRAGMENT_FORGET_PASSWORD);
+                ((PsdManageActivity) getActivity()).switchFragment(PsdManageActivity.FRAGMENT_FORGET_PASSWORD);
                 break;
         }
     }
@@ -157,48 +159,48 @@ public class PsdModifyFragment extends MVPBaseFragment<PsdModifyContract.View, P
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if(mCoonLoadingDia != null){
+                if (mCoonLoadingDia != null) {
                     mCoonLoadingDia.cancel();
                 }
-                if(isSuccess){
-                    ToastUtils.showShort(((MVPBaseActivity)getActivity()).getStringResources("ui_setting_password_modify_success"));
+                if (isSuccess) {
+                    ToastUtils.showShort(((MVPBaseActivity) getActivity()).getStringResources("ui_setting_password_modify_success"));
                     getActivity().finish();
-                }else {
+                } else {
                     ToastUtils.showShort(msg);
                 }
             }
         });
     }
 
-    private boolean doCheck(){
+    private boolean doCheck() {
 
         String oldPassword = edtOldPassword.getText().toString();
         String newPassword = edtNewPassword.getText().toString();
 
-        if(TextUtils.isEmpty(oldPassword) || oldPassword.length() < 6){
+        if (TextUtils.isEmpty(oldPassword) || oldPassword.length() < 6) {
             //ToastUtils.showShort(getStringRes("ui_old_password_request"));
             return false;
         }
 
-        if(TextUtils.isEmpty(newPassword) || newPassword.length() < 6){
+        if (TextUtils.isEmpty(newPassword) || newPassword.length() < 6) {
             //ToastUtils.showShort(getStringRes("ui_new_password_request"));
             return false;
         }
         return true;
     }
 
-    private void doModifyPassword(){
+    private void doModifyPassword() {
 
-        if(mCoonLoadingDia == null){
+        if (mCoonLoadingDia == null) {
             mCoonLoadingDia = SLoadingDialog.getInstance(getContext());
         }
         mCoonLoadingDia.cancel();
         mCoonLoadingDia.show();
 
-        mPresenter.doModifyPassword(edtOldPassword.getText().toString(),edtNewPassword.getText().toString());
+        mPresenter.doModifyPassword(edtOldPassword.getText().toString(), edtNewPassword.getText().toString());
     }
 
-    private void setViewEnable(View mView, boolean enable){
+    private void setViewEnable(View mView, boolean enable) {
         mView.setEnabled(enable);
         if (enable) {
             mView.setAlpha(1f);

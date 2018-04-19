@@ -1,6 +1,5 @@
 package com.ubt.alpha1e.userinfo.psdmanage.psdverifycode;
 
-
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -14,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.login.loginauth.CheckPhoneNumberUtil;
@@ -21,7 +21,6 @@ import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.custom.ClearableEditText;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
 import com.ubt.alpha1e.userinfo.psdmanage.PsdManageActivity;
-import com.ubt.alpha1e.userinfo.psdmanage.psdsetting.PsdSettingFragment;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import butterknife.BindView;
@@ -56,19 +55,19 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
 
     protected Dialog mCoonLoadingDia;
 
-    public static PsdVerifyCodeFragment newInstance(){
+    public static PsdVerifyCodeFragment newInstance() {
         PsdVerifyCodeFragment psdVerifyCodeFragment = new PsdVerifyCodeFragment();
         return psdVerifyCodeFragment;
     }
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case GO_TO_NEXT:
                     requestCountDown.cancel();
-                    ((PsdManageActivity)getActivity()).switchFragment(PsdManageActivity.FRAGMENT_SETTING_PASSWORD);
+                    ((PsdManageActivity) getActivity()).switchFragment(PsdManageActivity.FRAGMENT_SETTING_PASSWORD);
                     break;
             }
         }
@@ -81,13 +80,14 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
 
     @Override
     protected void initUI() {
-        setViewEnable(tvGetVerifyCode,false);
-        setViewEnable(tvConfirm,false);
+        setViewEnable(tvGetVerifyCode, false);
+        setViewEnable(tvConfirm, false);
         requestCountDown = new RequestCountDown(REQUEST_TIME, 1000);
         mCoonLoadingDia = SLoadingDialog.getInstance(getContext());
 
         edtPhone.addTextChangedListener(new TextWatcher() {
             String telephone = "";
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -112,6 +112,7 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
 
         edtVerifyCode.addTextChangedListener(new TextWatcher() {
             String verifyCode = "";
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -143,7 +144,12 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
 
     @Override
     public int getContentViewId() {
-        return R.layout.fragment_pswmanage_verify_code;
+        if(AlphaApplication.isPad()){
+            return R.layout.fragment_pswmanage_verify_code_pad;
+        }else {
+            return R.layout.fragment_pswmanage_verify_code;
+        }
+
     }
 
     @Override
@@ -171,7 +177,7 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
             case R.id.tv_get_verify_code:
                 requestCountDown.cancel();
                 requestCountDown.start();
-                setViewEnable(tvGetVerifyCode,false);
+                setViewEnable(tvGetVerifyCode, false);
 
                 mCoonLoadingDia.cancel();
                 mCoonLoadingDia.show();
@@ -194,7 +200,7 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
             @Override
             public void run() {
 
-                if(mCoonLoadingDia != null){
+                if (mCoonLoadingDia != null) {
                     mCoonLoadingDia.cancel();
                 }
 
@@ -202,14 +208,14 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
                     edtPhone.setFocusable(false);
                     edtPhone.setFocusableInTouchMode(false);
                     ToastUtils.showShort(getStringRes("ui_setting_verify_code_send_success"));
-                }else {
+                } else {
                     edtPhone.setFocusable(true);
                     edtPhone.setFocusableInTouchMode(true);
 
                     ToastUtils.showShort(getStringRes("ui_setting_verify_code_send_fail"));
                     requestCountDown.cancel();
                     tvGetVerifyCode.setText(getStringRes("ui_register_get_vertify_code"));
-                    setViewEnable(tvGetVerifyCode,true);
+                    setViewEnable(tvGetVerifyCode, true);
                 }
             }
         });
@@ -220,13 +226,13 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if(mCoonLoadingDia != null){
+                if (mCoonLoadingDia != null) {
                     mCoonLoadingDia.cancel();
                 }
 
                 if (isSuccess) {
                     mHandler.sendEmptyMessage(GO_TO_NEXT);
-                }else {
+                } else {
                     ToastUtils.showShort(getStringRes("ui_setting_password_verify_fail"));
                 }
             }
@@ -246,7 +252,7 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
             edtPhone.setFocusableInTouchMode(true);
 
             tvGetVerifyCode.setText(getStringRes("ui_register_get_vertify_code"));
-            setViewEnable(tvGetVerifyCode,true);
+            setViewEnable(tvGetVerifyCode, true);
         }
 
         @Override
@@ -255,7 +261,7 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
         }
     }
 
-    private void setViewEnable(View mView, boolean enable){
+    private void setViewEnable(View mView, boolean enable) {
         mView.setEnabled(enable);
         if (enable) {
             mView.setAlpha(1f);
@@ -267,7 +273,7 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
     @Override
     public void onDestroy() {
         requestCountDown.cancel();
-        if(mCoonLoadingDia != null){
+        if (mCoonLoadingDia != null) {
             mCoonLoadingDia.cancel();
         }
         super.onDestroy();
