@@ -33,6 +33,21 @@
         <item>我没电了，不开心</item>
         <item>没有电，机器人生很空虚</item>
     </array>
+    <array name="greetting">
+         <item>@drawable/normal_1_c</item>
+         <item>@drawable/normal_2_c</item>
+        <item>@drawable/normal_3_c</item>
+        <item>@drawable/normal_4_c</item>
+        <item>@drawable/normal_5_c</item>
+        <item>@drawable/normal_6_c</item>
+        <item>@drawable/normal_7_c</item>
+        <item>@drawable/normal_8_c</item>
+        <item>@drawable/normal_9_c</item>
+        <item>@drawable/normal_10_c</item>
+        <item>@drawable/normal_11_c</item>
+        <item>@drawable/normal_12_c</item>
+        <item>@drawable/normal_13_c</item>
+    </array>
 
 
 

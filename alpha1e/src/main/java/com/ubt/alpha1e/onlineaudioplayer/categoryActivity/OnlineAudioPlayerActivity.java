@@ -1,14 +1,11 @@
-package com.ubt.alpha1e.onlineaudioplayer;
+package com.ubt.alpha1e.onlineaudioplayer.categoryActivity;
 
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.RelativeLayout;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsActivity;
-import com.ubt.alpha1e.behaviorhabits.fragment.HibitsEventFragment;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioResourcesFragment;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
@@ -17,9 +14,6 @@ import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
 /**

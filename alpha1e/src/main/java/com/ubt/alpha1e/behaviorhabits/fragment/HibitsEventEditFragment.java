@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baoyz.pg.PG;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.BehaviorHabitsContract;
@@ -354,7 +355,12 @@ public class HibitsEventEditFragment extends MVPBaseFragment<BehaviorHabitsContr
 
     @Override
     public int getContentViewId() {
-        return R.layout.fragment_hibits_event_edit;
+        if(AlphaApplication.isPad()){
+            return R.layout.fragment_hibits_event_edit_pad;
+        }else {
+            return R.layout.fragment_hibits_event_edit;
+        }
+
     }
 
     @Override

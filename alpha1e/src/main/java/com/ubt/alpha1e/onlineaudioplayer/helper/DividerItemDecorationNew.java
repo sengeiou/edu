@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.onlineaudioplayer;
+package com.ubt.alpha1e.onlineaudioplayer.helper;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -34,7 +34,6 @@ public abstract class ImagePreviewBaseActivity extends ImageBaseActivity {
     protected ArrayList<ImageItem> selectedImages;   //所有已经选中的图片
     protected View content;
     protected View topBar;
-    protected ImageView ivBack = null;
     protected ViewPagerFixed mViewPager;
     protected ImagePageAdapter mAdapter;
 
@@ -66,16 +65,6 @@ public abstract class ImagePreviewBaseActivity extends ImageBaseActivity {
                 finish();
             }
         });
-
-        ivBack = (ImageView) findViewById(R.id.iv_back);
-
-        ivBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
 
         mTitleCount = (TextView) findViewById(R.id.tv_des);
 

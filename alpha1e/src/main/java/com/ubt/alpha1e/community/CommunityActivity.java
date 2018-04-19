@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
@@ -79,8 +80,8 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
                             for(int i = 0; i<imageData.size(); i++){
                                 imageItem = imageData.get(i);
                                 path64 = ImageUtils.bitmapToString(imageItem.path);
-                                UbtLog.d(TAG,"imageItem.path = " + imageItem.path + "   path64 = " + path64);
-
+                                path64 = path64.replaceAll(" ","").replaceAll("\\n","");
+                                UbtLog.d(TAG,"imageItem.path => " + imageItem.path + "   path64 = " + path64);
                                 if(i < imageData.size()-1){
                                     paths += path64 + ",";
                                 }else {
@@ -89,7 +90,6 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
                             }
 
                             String js = "javascript:androidPicData('" + paths + "')";
-                            UbtLog.d(TAG,"SEND_IMAGE_TO_H5 androidPicData-> ");
                             webContent.loadUrl(js);
                         }
                     }

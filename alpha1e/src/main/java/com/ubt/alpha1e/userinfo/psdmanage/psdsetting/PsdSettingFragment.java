@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.login.loginauth.CheckPhoneNumberUtil;
@@ -147,7 +148,12 @@ public class PsdSettingFragment extends MVPBaseFragment<PsdSettingContract.View,
 
     @Override
     public int getContentViewId() {
-        return R.layout.fragment_pswmanage_setting;
+        if(AlphaApplication.isPad()){
+            return R.layout.fragment_pswmanage_setting_pad;
+        }else {
+            return R.layout.fragment_pswmanage_setting;
+        }
+
     }
 
     @Override

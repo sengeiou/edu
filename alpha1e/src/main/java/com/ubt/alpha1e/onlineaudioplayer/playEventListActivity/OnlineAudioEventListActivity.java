@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.onlineaudioplayer.playeventlist;
+package com.ubt.alpha1e.onlineaudioplayer.playEventListActivity;
 
 
 import android.app.Activity;
@@ -17,20 +17,19 @@ import android.widget.TextView;
 import com.baoyz.pg.PG;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
-import com.ubt.alpha1e.behaviorhabits.adapter.EventListRecyclerAdapter;
 import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
 import com.ubt.alpha1e.behaviorhabits.helper.HabitsHelper;
 import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
 import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
-import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerContract;
-import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerPresenter;
+import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerContract;
+import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerPresenter;
 import com.ubt.alpha1e.onlineaudioplayer.adapter.OnlineAudioListRecyclerAdapter;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.playerDialog.OnlineAudioPlayDialog;
 import com.ubt.alpha1e.ui.dialog.HibitsEventPlayDialog;
 import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -67,7 +66,7 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
 
     private LinearLayoutManager mLayoutManager = null;
     public OnlineAudioListRecyclerAdapter mAdapter;
-    private List<AudioContentInfo> mPlayContentInfoDatas = null;
+    public static List<AudioContentInfo> mPlayContentInfoDatas =  new ArrayList<>();
     private boolean isStartPlayProcess = true;//是否开启播放流程
     private String currentEventId = "";
     private int currentPlaySeq = -1;
@@ -81,9 +80,11 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
             switch (msg.what){
                 case SELECT_ADD:
                     UbtLog.d(TAG,"ADD");
+                    OnlineAudioEventListActivity.mPlayContentInfoDatas.get(msg.arg1).isSelect=true;
                     break;
                 case DESELECT_DELETE:
                     UbtLog.d(TAG,"DELETE");
+                    OnlineAudioEventListActivity.mPlayContentInfoDatas.get(msg.arg1).isSelect=false;
                     break;
                 case DO_PLAY_OR_PAUSE:
                     if(isStartPlayProcess){
@@ -160,25 +161,17 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
         }
     };
 
-    public static void launchActivity(Activity mActivity, List<PlayContentInfo> playContentInfoDatas,String eventId) {
-        ArrayList<Parcelable> playContentList = new ArrayList<>();
-        if(playContentInfoDatas != null){
-            for(PlayContentInfo playContentInfo : playContentInfoDatas){
-                playContentList.add(PG.convertParcelable(playContentInfo));
-            }
-        }
-
+    public static void launchActivity(Activity mActivity, List<AudioContentInfo> playContentInfoDatas,String eventId) {
+        mPlayContentInfoDatas.clear();
+        mPlayContentInfoDatas.addAll(playContentInfoDatas);
         Intent intent = new Intent(mActivity, OnlineAudioEventListActivity.class);
-        intent.putParcelableArrayListExtra(Constant.PLAY_CONTENT_INFO_LIST_KEY, playContentList);
-        intent.putExtra(Constant.HIBITS_EVENT_ID, eventId);
-
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mActivity.startActivity(intent);
     }
 
     @Override
     protected void initUI() {
-        tvBaseTitleName.setText(getStringResources("ui_habits_event_list"));
+        tvBaseTitleName.setText(getStringResources("ui_onlineaudio_event_list"));
 
         UbtLog.d(TAG, "rvHabitsEvent => " + rvEventList);
 
@@ -193,33 +186,34 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
         rvEventList.setAdapter(mAdapter);
 
         mConfirm.setVisibility(View.VISIBLE);
-        mConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pop();
+                mConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        OnlineAudioPlayDialog.updatePlayContentInfoList();
+                        finish();
             }
         });
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ((HabitsHelper)mHelper).readPlayStatus();
     }
 
     @Subscribe
     public void onEventHibits(HibitsEvent event) {
         UbtLog.d(TAG,"event = " + event);
-        if(event.getEvent() == HibitsEvent.Event.CONTROL_PLAY){
-            UbtLog.d(TAG,"event = " + event.getStatus());
-        }else if(event.getEvent() == HibitsEvent.Event.READ_EVENT_PLAY_STATUS){
-            UbtLog.d(TAG,"EventPlayStatus = " + event.getEventPlayStatus());
-            EventPlayStatus eventPlayStatus = event.getEventPlayStatus();
-            Message msg = new Message();
-            msg.what = UPDATE_PLAY_STATUS;
-            msg.obj = eventPlayStatus;
-            mHandler.sendMessage(msg);
-        }
+//        if(event.getEvent() == HibitsEvent.Event.CONTROL_PLAY){
+//            UbtLog.d(TAG,"event = " + event.getStatus());
+//        }else if(event.getEvent() == HibitsEvent.Event.READ_EVENT_PLAY_STATUS){
+//            UbtLog.d(TAG,"EventPlayStatus = " + event.getEventPlayStatus());
+//            EventPlayStatus eventPlayStatus = event.getEventPlayStatus();
+//            Message msg = new Message();
+//            msg.what = UPDATE_PLAY_STATUS;
+//            msg.obj = eventPlayStatus;
+//            mHandler.sendMessage(msg);
+//        }
     }
 
     /**
@@ -273,17 +267,19 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
-        mPlayContentInfoDatas = new ArrayList<>();
-        if(getIntent() != null){
-            ArrayList<? extends PlayContentInfo> playContentInfoList = getIntent().getParcelableArrayListExtra(Constant.PLAY_CONTENT_INFO_LIST_KEY);
-            if(playContentInfoList != null){
-              //  mPlayContentInfoDatas.addAll(playContentInfoList);
-            }
-            currentEventId = getIntent().getStringExtra(Constant.HIBITS_EVENT_ID);
-        }
-        mHelper = new HabitsHelper(this);
+//        if(getIntent() != null){
+//            ArrayList<? extends AudioContentInfo> playContentInfoList = getIntent().getParcelableArrayListExtra(Constant.PLAY_CONTENT_INFO_LIST_KEY);
+//            if (playContentInfoList != null) {
+//                mPlayContentInfoDatas.addAll(playContentInfoList);
+//                for(int i=0;i<mPlayContentInfoDatas.size();i++){
+//                    mPlayContentInfoDatas.get(i).isSelect=true;
+//                }
+//
+//            }
+//            currentEventId = getIntent().getStringExtra(Constant.HIBITS_EVENT_ID);
+//        }
         initUI();
-        mPresenter.getAudioList(currentEventId);
+        //mPresenter.getAudioList(currentEventId);
     }
 
     @OnClick({R.id.ll_base_back, R.id.tv_base_title_name})
@@ -311,8 +307,8 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
 
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
-        mPlayContentInfoDatas.addAll(album);
-        mAdapter.notifyDataSetChanged();
+        //mPlayContentInfoDatas.addAll(album);
+        //mAdapter.notifyDataSetChanged();
     }
 
     @Override

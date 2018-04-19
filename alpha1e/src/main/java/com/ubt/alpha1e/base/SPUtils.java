@@ -429,7 +429,6 @@ public final class SPUtils {
      */
     public void saveObject(String key, Object obj) {
         try {
-
             // 先将序列化结果写到byte缓存中，其实就分配一个内存空间
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream os = new ObjectOutputStream(bos);

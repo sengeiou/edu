@@ -8,7 +8,6 @@ android {
         applicationId "com.ubt.alpha1e"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-
         multiDexEnabled true
     }
 

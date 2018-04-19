@@ -20,6 +20,7 @@ public class AudioContentInfo extends BaseModel {
     public AudioContentInfo thiz;
     public String contentName;
     public String contentUrl;
+    public Boolean isSelect=true;
 
     @Override
     public AudioContentInfo getThiz(String json) {
@@ -32,12 +33,12 @@ public class AudioContentInfo extends BaseModel {
         }
     }
 
-    public static ArrayList<PlayContentInfo> getModelList(String json) {
-        ArrayList<PlayContentInfo> result = new ArrayList<PlayContentInfo>();
+    public static ArrayList<AudioContentInfo> getModelList(String json) {
+        ArrayList<AudioContentInfo> result = new ArrayList<AudioContentInfo>();
         try {
             JSONArray j_list = new JSONArray(json);
             for (int i = 0; i < j_list.length(); i++) {
-                result.add(new PlayContentInfo().getThiz(j_list.get(i).toString()));
+                result.add(new AudioContentInfo().getThiz(j_list.get(i).toString()));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -45,7 +46,7 @@ public class AudioContentInfo extends BaseModel {
         return result;
     }
 
-    public static String getModeslStr(ArrayList<PlayContentInfo> infos) {
+    public static String getModeslStr(ArrayList<AudioContentInfo> infos) {
 
         try {
             return mMapper.writeValueAsString(infos);
@@ -55,7 +56,7 @@ public class AudioContentInfo extends BaseModel {
         }
     }
 
-    public static String getString(PlayContentInfo info)
+    public static String getString(AudioContentInfo info)
     {
         try {
             return  GsonImpl.get().toJson(info);
@@ -71,6 +72,7 @@ public class AudioContentInfo extends BaseModel {
         return "AudioContentInfo{" +
                 "contentName=" + contentName +
                 ", contentUrl='" + contentUrl + '\'' +
+                ", isSelect='" + isSelect + '\'' +
                 '}';
     }
 }

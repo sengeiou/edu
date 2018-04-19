@@ -8,10 +8,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,35 +23,32 @@ import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.adapter.onlineresAdpater;
-import com.ubt.alpha1e.base.AppManager;
-import com.ubt.alpha1e.base.FileUtils;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.GotoBindRequest;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
-import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
-import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
-import com.ubt.alpha1e.data.model.BaseModel;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
 import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.CategoryMax;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineresList;
-import com.ubt.alpha1e.onlineaudioplayer.DividerItemDecorationNew;
-import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerContract;
-import com.ubt.alpha1e.onlineaudioplayer.OnlineAudioPlayerPresenter;
+import com.ubt.alpha1e.onlineaudioplayer.helper.DividerItemDecorationNew;
+import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerContract;
+import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerPresenter;
 import com.ubt.alpha1e.onlineaudioplayer.helper.OnlineAudioResourcesHelper;
 
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.onlineresrearch.OnlineResRearchActivity;
-import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
-import com.ubt.alpha1e.ui.main.MainActivity;
-import com.ubt.alpha1e.userinfo.model.MyRobotModel;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +91,7 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
     public LinearLayoutManager mLayoutManager;
     public onlineresAdpater mAdapter;
     public List<OnlineresList> onlineresList = new ArrayList<>();
-    public final static int LAUNCH_ALBUM_ITEM=1;
+    public final static int LAUNCH_CATEGORY_ITEM=1;
     private static final int GET_MAX_CATEGORY = 50;
     Unbinder unbinder;
     private  OnlineAudioResourcesHelper mHelper = null;
@@ -104,7 +101,7 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case LAUNCH_ALBUM_ITEM:
+                case LAUNCH_CATEGORY_ITEM:
                     OnlineAudioAlbumPlayerFragment mfragment = OnlineAudioAlbumPlayerFragment.newInstance(msg.obj.toString());
                     start(mfragment);
                     break;
@@ -148,11 +145,9 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
 
     @Override
     protected void initUI() {
-
         playing();
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerview.setLayoutManager(mLayoutManager);
-
         mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         DividerItemDecorationNew dividerItemDecoration = new DividerItemDecorationNew(getActivity(),DividerItemDecorationNew.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.linesharp));
@@ -171,6 +166,17 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
         mRecyclerview.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         getMaxCategory();
+
+        if(SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY)!=null) {
+            try {
+                JSONObject mHistory = (JSONObject)SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
+                player_name.setText(mHistory.get("albumName")+"");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            }else{
+                player_name.setText("暂无播放历史");
+            }
     }
 
 
