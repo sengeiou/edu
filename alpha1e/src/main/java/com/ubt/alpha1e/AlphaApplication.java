@@ -681,14 +681,14 @@ public class AlphaApplication extends LoginApplication {
     /**
      * 判断当前设备是手机还是平板，代码来自 Google I/O App for Android
      *
-     * @return 平板返回 True，手机返回 False
+     * @return 平板返回False True，手机返回
      */
     private void initIsPad(Context context){
         try {
             isPad = (context.getResources().getConfiguration().screenLayout
                     & Configuration.SCREENLAYOUT_SIZE_MASK)
                     >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-        }catch (Exception ex){}
+    }catch (Exception ex){}
     }
 
     /**

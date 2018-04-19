@@ -836,18 +836,17 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         frameAnimationPro.setAnimationListener(new FrameAnimation.AnimationListener() {
             @Override
             public void onAnimationStart() {
-                UbtLog.d(TAG, "start");
+
             }
             @Override
             public void onAnimationEnd() {
-                UbtLog.d(TAG, "end");
                 frameAnimationPro.pauseAnimation();
                 if(mHandler.hasMessages(CARTOON_ACTION_EXECTUION)){
                     mHandler.removeMessages(CARTOON_ACTION_EXECTUION);
                 }
                 Message msg=new Message();
                 msg.what=CARTOON_ACTION_EXECTUION;
-                mHandler.sendMessageDelayed(msg ,10000);
+                mHandler.sendMessageDelayed(msg ,5000);
             }
             @Override
             public void onAnimationRepeat() {
@@ -1209,7 +1208,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     @Override
     protected void initUI() {
 
-        if (SizeUtils.isComprehensiveScreen(getContext())) {
+        if (SizeUtils.isComprehensiveScreen(getContext())||AlphaApplication.isPad()) {
 
             rlHibitsEvent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
@@ -1228,11 +1227,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                     UbtLog.d(TAG, "isComprehensiveScreen = " + SizeUtils.isComprehensiveScreen(getContext()) + "/" + dm.density + "/" + dm.scaledDensity);
 
                                     float tensileRatio = 1.0f * dm.widthPixels / 1920;//屏幕拉升比例，以宽度1920为基准
+                                    float heightRatio = 1.0f * dm.heightPixels / 1080;//高度拉升比例，以宽度1080为基准，平板使用
                                     float densityRatio = 3.0f / dm.density;//屏幕密度比例，以密度3.0为基准
 
                                     //中间机器人UI
                                     RelativeLayout.LayoutParams robotLp = (RelativeLayout.LayoutParams) cartoonAction.getLayoutParams();
-                                    robotLp.topMargin = (int) (robotLp.topMargin * densityRatio * densityRatio);
+                                    robotLp.topMargin = (int) (robotLp.topMargin * densityRatio * tensileRatio);
                                     robotLp.width = (int) (cartoonAction.getWidth() * densityRatio * tensileRatio);
                                     robotLp.height = (int) (cartoonAction.getHeight() * densityRatio);
                                     UbtLog.d(TAG, "robotLp.topMargin =>>> " + robotLp.topMargin);
@@ -1320,14 +1320,14 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
                                     //电量按键R
                                     RelativeLayout.LayoutParams chargingLp = (RelativeLayout.LayoutParams) charging.getLayoutParams();
-                                    chargingLp.bottomMargin = (int) (chargingLp.bottomMargin * densityRatio);
+                                    chargingLp.bottomMargin = (int) (chargingLp.bottomMargin * densityRatio * heightRatio);
                                     chargingLp.width = (int) (charging.getWidth() * densityRatio * tensileRatio);
                                     chargingLp.height = (int) (charging.getHeight() * densityRatio);
                                     charging.setLayoutParams(chargingLp);
 
                                     //动作按键
                                     RelativeLayout.LayoutParams llActionLp = (RelativeLayout.LayoutParams) llAction.getLayoutParams();
-                                    llActionLp.bottomMargin = (int) (llActionLp.bottomMargin * densityRatio);
+                                    llActionLp.bottomMargin = (int) (llActionLp.bottomMargin * densityRatio * heightRatio);
                                     llActionLp.rightMargin = (int) (llActionLp.rightMargin * densityRatio);
                                     llAction.setLayoutParams(llActionLp);
 
@@ -1338,7 +1338,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
                                     //遥控器按键
                                     RelativeLayout.LayoutParams llRemoteLp = (RelativeLayout.LayoutParams) llRemote.getLayoutParams();
-                                    llRemoteLp.bottomMargin = (int) (llRemoteLp.bottomMargin * densityRatio);
+                                    llRemoteLp.bottomMargin = (int) (llRemoteLp.bottomMargin * densityRatio * heightRatio);
                                     llRemoteLp.rightMargin = (int) (llRemoteLp.rightMargin * densityRatio);
                                     llRemote.setLayoutParams(llRemoteLp);
 
@@ -1349,7 +1349,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
                                     //编程按键
                                     RelativeLayout.LayoutParams llProgramLp = (RelativeLayout.LayoutParams) llProgram.getLayoutParams();
-                                    llProgramLp.bottomMargin = (int) (llProgramLp.bottomMargin * densityRatio);
+                                    llProgramLp.bottomMargin = (int) (llProgramLp.bottomMargin * densityRatio * heightRatio);
                                     llProgramLp.leftMargin = (int) (llProgramLp.leftMargin * densityRatio);
                                     llProgram.setLayoutParams(llProgramLp);
 
@@ -1360,7 +1360,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
                                     //社区按键
                                     RelativeLayout.LayoutParams llCommunityLp = (RelativeLayout.LayoutParams) llCommunity.getLayoutParams();
-                                    llCommunityLp.bottomMargin = (int) (llCommunityLp.bottomMargin * densityRatio);
+                                    llCommunityLp.bottomMargin = (int) (llCommunityLp.bottomMargin * densityRatio * heightRatio);
                                     llCommunityLp.leftMargin = (int) (llCommunityLp.leftMargin * densityRatio);
                                     llCommunity.setLayoutParams(llCommunityLp);
 
