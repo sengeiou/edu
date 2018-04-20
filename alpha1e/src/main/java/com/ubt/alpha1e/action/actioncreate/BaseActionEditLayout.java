@@ -2726,5 +2726,22 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
         }
     }
 
+    public void doFinish(){
+        if (((ActionsEditHelper) mHelper).getNewPlayerState() == NewActionPlayer.PlayerState.PLAYING) {
+            ((ActionsEditHelper) mHelper).doActionCommand(ActionsEditHelper.Command_type.Do_Stop,
+                    getEditingPreviewActions());
+
+
+        }
+        doReset();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            playFinish = true;
+            mediaPlayer = null;
+        }
+        ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte) 0x04);
+        ((Activity) mContext).finish();
+    }
+
 
 }

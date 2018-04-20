@@ -7,6 +7,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.NewActionInfo;
@@ -136,6 +137,22 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
                     UbtLog.d(TAG, "confirmDialog dismiss ");
                     confirmDialog.dismiss();
                 }
+            }
+        }else if(event.getEvent() == RobotEvent.Event.LOW_BATTERY_LESS_FIVE_PERCENT){
+            if(BaseHelper.isLowBatteryNotExecuteAction){
+                new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                        .setTitle("提示")
+                        .setMsg("机器人电量低动作不能执行，请充电！")
+                        .setCancelable(true)
+                        .setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //调到主界面
+                                UbtLog.d(TAG, "确定 ");
+                                mActionEdit.doFinish();
+                            }
+                        }).show();
+                return;
             }
         }
     }
