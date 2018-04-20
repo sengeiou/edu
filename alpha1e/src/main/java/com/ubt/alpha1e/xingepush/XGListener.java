@@ -8,8 +8,12 @@ import com.tencent.android.tpush.XGPushClickedResult;
 import com.tencent.android.tpush.XGPushRegisterResult;
 import com.tencent.android.tpush.XGPushShowedResult;
 import com.tencent.android.tpush.XGPushTextMessage;
-import com.ubt.alpha1e.behaviorhabits.StatisticsActivity;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
+import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.alpha1e.webcontent.WebContentActivity;
 import com.ubt.xingemodule.IXGListener;
 
 import org.greenrobot.eventbus.EventBus;
@@ -71,8 +75,15 @@ public class XGListener implements IXGListener {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(UserCenterActivity.USER_CURRENT_POSITION, 2);
                     context.startActivity(intent);
-                }else if (mJson.getString("category").equals(XGCmdConstract.HABIT_TOTAL)) {
-                    StatisticsActivity.launchActivity(context);
+                } else if (mJson.getString("category").equals(XGCmdConstract.HABIT_TOTAL)) {
+                    // StatisticsActivity.launchActivity(context);
+                    String userId = SPUtils.getInstance().getString(Constant.SP_USER_ID);
+                    String token = SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN);
+                    String statisticsUrl = HttpEntity.HABIT_STATIS_URL + "?" + "userid=" + userId + "&" + "token=" + token;
+
+                    UbtLog.d(TAG, "statisticsUrl = " + statisticsUrl);
+
+                    WebContentActivity.launchActivity(context, statisticsUrl, "");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
