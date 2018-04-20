@@ -50,6 +50,9 @@ public class Constant {
 
     public final static String SP_ACTION_COURSE_CARD_TWO = "sp_action_course_two";
 
+
+    public final static String SP_RECENT_SEARCH_KEY = "recentSearchKey";
+
     /**
      * 信鸽信息
      */

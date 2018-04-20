@@ -6,9 +6,6 @@ import android.graphics.drawable.GradientDrawable;
 
 import java.util.Random;
 
-/**
- * Created by xiangcheng on 17/11/30.
- */
 public class ShowItem {
     public Drawable color;
     public String des;

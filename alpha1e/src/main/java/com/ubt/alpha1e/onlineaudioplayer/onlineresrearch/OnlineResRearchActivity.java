@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.adapter.OnlineresRearchResultListAdpter;
+import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.RequstMode.OnlineResRearchRequest;
 import com.ubt.alpha1e.base.SPUtils;
@@ -156,7 +157,7 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
             }
         }
         UbtLog.d(TAG, "s:" + s.toString());
-        SPUtils.getInstance().put("recentSearchKey",s.toString());
+        SPUtils.getInstance().put(Constant.SP_RECENT_SEARCH_KEY,s.toString());
         com.ubt.alpha1e.base.loading.LoadingDialog.show(this);
         OnlineResRearchRequest onlineResRearchRequest = new OnlineResRearchRequest();
         onlineResRearchRequest.setAlbumKeyword(content);
@@ -260,6 +261,14 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
         //设置图片
         searchButton.setImageResource(R.drawable.ic_search);
 
+
+        //获取close ImageView的id
+        int closeId = mSearchView.getContext().getResources().getIdentifier("android:id/search_close_btn",null,null);
+        //获取ImageView
+        ImageView closeButton = (ImageView)mSearchView.findViewById(closeId);
+        //设置图片
+        closeButton.setImageResource(R.drawable.ic_qingchu);
+
         //不使用默认
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setFocusable(false);
@@ -284,39 +293,39 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
             }
         });
 
-        OnlineResRearchList o1 = new OnlineResRearchList();
-        o1.setRes_id("1");
-        o1.setRes_name("语文课堂");
-        OnlineResRearchList o2 = new OnlineResRearchList();
-        o2.setRes_id("2");
-        o2.setRes_name("趣味科学");
-        OnlineResRearchList o3 = new OnlineResRearchList();
-        o3.setRes_id("3");
-        o3.setRes_name("英语名著");
-        OnlineResRearchList o4 = new OnlineResRearchList();
-        o4.setRes_id("4");
-        o4.setRes_name("儿童经典");
-        OnlineResRearchList o5 = new OnlineResRearchList();
-        o5.setRes_id("5");
-        o5.setRes_name("儿歌三百首");
-        OnlineResRearchList o6 = new OnlineResRearchList();
-        o6.setRes_id("6");
-        o6.setRes_name("英语启蒙教育");
-        OnlineResRearchList o7 = new OnlineResRearchList();
-        o7.setRes_id("7");
-        o7.setRes_name("语文课堂2");
-        OnlineResRearchList o8 = new OnlineResRearchList();
-        o8.setRes_id("8");
-        o8.setRes_name("语文课堂3");
-
-        onlineResRearchList.add(o1);
-        onlineResRearchList.add(o2);
-        onlineResRearchList.add(o3);
-        onlineResRearchList.add(o4);
-        onlineResRearchList.add(o5);
-        onlineResRearchList.add(o6);
-        onlineResRearchList.add(o7);
-        onlineResRearchList.add(o8);
+//        OnlineResRearchList o1 = new OnlineResRearchList();
+//        o1.setRes_id("1");
+//        o1.setRes_name("语文课堂");
+//        OnlineResRearchList o2 = new OnlineResRearchList();
+//        o2.setRes_id("2");
+//        o2.setRes_name("趣味科学");
+//        OnlineResRearchList o3 = new OnlineResRearchList();
+//        o3.setRes_id("3");
+//        o3.setRes_name("英语名著");
+//        OnlineResRearchList o4 = new OnlineResRearchList();
+//        o4.setRes_id("4");
+//        o4.setRes_name("儿童经典");
+//        OnlineResRearchList o5 = new OnlineResRearchList();
+//        o5.setRes_id("5");
+//        o5.setRes_name("儿歌三百首");
+//        OnlineResRearchList o6 = new OnlineResRearchList();
+//        o6.setRes_id("6");
+//        o6.setRes_name("英语启蒙教育");
+//        OnlineResRearchList o7 = new OnlineResRearchList();
+//        o7.setRes_id("7");
+//        o7.setRes_name("语文课堂2");
+//        OnlineResRearchList o8 = new OnlineResRearchList();
+//        o8.setRes_id("8");
+//        o8.setRes_name("语文课堂3");
+//
+//        onlineResRearchList.add(o1);
+//        onlineResRearchList.add(o2);
+//        onlineResRearchList.add(o3);
+//        onlineResRearchList.add(o4);
+//        onlineResRearchList.add(o5);
+//        onlineResRearchList.add(o6);
+//        onlineResRearchList.add(o7);
+//        onlineResRearchList.add(o8);
 
         mAdapter = new OnlineresRearchResultListAdpter(OnlineResRearchActivity.this,onlineResRearchList,mHandler);
         research_result_list.setAdapter(mAdapter);
@@ -408,7 +417,6 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    Toast.makeText(OnlineResRearchActivity.this, list.get(position).des, Toast.LENGTH_SHORT).show();
                     search(list.get(position).des);
                 }
             });

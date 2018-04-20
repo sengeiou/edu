@@ -2,6 +2,7 @@ package com.ubt.alpha1e.onlineaudioplayer.Fragment;
 
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -144,6 +145,7 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
 
     @Override
     protected void initUI() {
+        playing();
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerview.setLayoutManager(mLayoutManager);
         mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 4));
@@ -154,10 +156,10 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-                outRect.right = 90;
+                outRect.right = 100;
                 outRect.left = 1;
-                outRect.top = 40;
-                outRect.bottom = 40;
+                outRect.top = 45;
+                outRect.bottom = 45;
             }
         });
         mAdapter = new onlineresAdpater(getActivity().getApplicationContext(),onlineresList,mHandler);
@@ -283,6 +285,35 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
     @Override
     public void onRequestStatus(int requestType, int errorCode) {
 
+    }
+    private AnimationDrawable radiologicalWaveAnim = null;
+    //正在播放
+    public void playing(){
+        ig_player_state.setVisibility(View.VISIBLE);
+        ig_player_state.setBackground(getActivity().getDrawable(R.drawable.playindicator_animation));
+        radiologicalWaveAnim = (AnimationDrawable)ig_player_state.getBackground();
+        radiologicalWaveAnim.setOneShot(false);
+        radiologicalWaveAnim.setVisible(true,true);
+        player_name.setVisibility(View.VISIBLE);
+        ig_player_button.setVisibility(View.VISIBLE);
+
+    }
+
+    //没有播放
+    public void noPlaying(){
+        ig_player_state.setVisibility(View.VISIBLE);
+        ig_player_state.setBackgroundResource(R.drawable.cc_default_playindicator);
+        player_name.setVisibility(View.VISIBLE);
+        player_name.setText("当前无历史播放记录");
+        ig_player_button.setVisibility(View.INVISIBLE);
+    }
+
+    //停止播放
+    public void stopPlay(){
+        ig_player_state.setVisibility(View.VISIBLE);
+        ig_player_state.setBackgroundResource(R.drawable.cc_default_playindicator);
+        player_name.setVisibility(View.VISIBLE);
+        ig_player_button.setVisibility(View.VISIBLE);
     }
 }
 
