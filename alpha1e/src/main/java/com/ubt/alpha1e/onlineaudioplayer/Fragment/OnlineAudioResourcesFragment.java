@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,14 +40,16 @@ import com.ubt.alpha1e.onlineaudioplayer.helper.OnlineAudioResourcesHelper;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.onlineresrearch.OnlineResRearchActivity;
+import com.ubt.alpha1e.onlineaudioplayer.model.HistoryAudio;
+import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
+import com.ubt.alpha1e.onlineaudioplayer.onlinereSrearch.OnlineResRearchActivity;
+import com.ubt.alpha1e.onlineaudioplayer.playerDialog.OnlineAudioPlayDialog;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,10 +92,13 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
     public LinearLayoutManager mLayoutManager;
     public onlineresAdpater mAdapter;
     public List<OnlineresList> onlineresList = new ArrayList<>();
-    public final static int LAUNCH_CATEGORY_ITEM=1;
+    public final static int LAUNCH_CATEGORY_ITEM = 1;
     private static final int GET_MAX_CATEGORY = 50;
     Unbinder unbinder;
-    private  OnlineAudioResourcesHelper mHelper = null;
+    private boolean playStatus = false;
+    private OnlineAudioResourcesHelper mHelper = null;
+    OnlineAudioPlayDialog mPlayDialogOnlineAudioPlayDialog;
+    HistoryAudio mHistory;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -110,8 +114,6 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
     };
 
 
-
-
     public static OnlineAudioResourcesFragment newInstance() {
         OnlineAudioResourcesFragment onlineAudioResourcesFragment = new OnlineAudioResourcesFragment();
         return onlineAudioResourcesFragment;
@@ -122,19 +124,34 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ib_return:
+                if (mPlayDialogOnlineAudioPlayDialog != null) {
+                    mPlayDialogOnlineAudioPlayDialog.stopPlay();
+                }
                 getActivity().finish();
                 break;
             case R.id.ib_rearch:
-                UbtLog.d(TAG,"ib_rearch" );
+                UbtLog.d(TAG, "ib_rearch");
                 Intent i = new Intent();
                 i.setClass(getActivity(), OnlineResRearchActivity.class);
                 getActivity().startActivity(i);
                 break;
             case R.id.ig_player_button:
-                UbtLog.d(TAG,"ig_player_button" );
+                UbtLog.d(TAG, "ig_player_button");
+                if (!playStatus) {
+                    playStatus = true;
+                    ig_player_button.setImageResource(R.drawable.ic_ct_stop);
+                    mPresenter.getAudioList(mHistory.getAlbumId());
+                } else {
+                    ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
+                    if (mPlayDialogOnlineAudioPlayDialog != null) {
+                        mPlayDialogOnlineAudioPlayDialog.stopPlay();
+                    }
+                    playStatus = false;
+                }
                 break;
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
@@ -149,8 +166,8 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerview.setLayoutManager(mLayoutManager);
         mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 4));
-        DividerItemDecorationNew dividerItemDecoration = new DividerItemDecorationNew(getActivity(),DividerItemDecorationNew.VERTICAL);
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.linesharp));
+        DividerItemDecorationNew dividerItemDecoration = new DividerItemDecorationNew(getActivity(), DividerItemDecorationNew.VERTICAL);
+        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.linesharp));
         mRecyclerview.addItemDecoration(dividerItemDecoration);
         mRecyclerview.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -162,24 +179,17 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
                 outRect.bottom = 45;
             }
         });
-        mAdapter = new onlineresAdpater(getActivity().getApplicationContext(),onlineresList,mHandler);
+        mAdapter = new onlineresAdpater(getActivity().getApplicationContext(), onlineresList, mHandler);
         mRecyclerview.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         getMaxCategory();
-
-        if(SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY)!=null) {
-            try {
-                JSONObject mHistory = (JSONObject)SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
-                player_name.setText(mHistory.get("albumName")+"");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            }else{
-                player_name.setText("暂无播放历史");
-            }
+        mHistory = (HistoryAudio) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
+        if (SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY) != null) {
+            player_name.setText(mHistory.getAlbumName());
+        } else {
+            player_name.setText("暂无播放历史");
+        }
     }
-
-
 
     //拉最大的类别
     public void getMaxCategory() {
@@ -223,14 +233,14 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
                                 }.getType());//加上type转换，避免泛型擦除
                         if (modle.status) {
                             UbtLog.d(TAG, "请求成功");
-                            if(modle.models.size() == 0){
-                                UbtLog.d(TAG, "没有类别" );
+                            if (modle.models.size() == 0) {
+                                UbtLog.d(TAG, "没有类别");
                                 return;
-                            }else {
-                                UbtLog.d(TAG, "size = "+modle.models.size());
+                            } else {
+                                UbtLog.d(TAG, "size = " + modle.models.size());
                                 int size = modle.models.size();
                                 onlineresList.clear();
-                                for(int i =0;i<size;i++){
+                                for (int i = 0; i < size; i++) {
                                     OnlineresList s = new OnlineresList();
                                     s.setRes_id(modle.models.get(i).getCategoryId());
                                     s.setRes_name(modle.models.get(i).getCategoryName());
@@ -279,28 +289,30 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
 
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
-
+        playEvent(album, mHistory.getAlbumId());
     }
 
     @Override
     public void onRequestStatus(int requestType, int errorCode) {
 
     }
+
     private AnimationDrawable radiologicalWaveAnim = null;
+
     //正在播放
-    public void playing(){
+    public void playing() {
         ig_player_state.setVisibility(View.VISIBLE);
         ig_player_state.setBackground(getActivity().getDrawable(R.drawable.playindicator_animation));
-        radiologicalWaveAnim = (AnimationDrawable)ig_player_state.getBackground();
+        radiologicalWaveAnim = (AnimationDrawable) ig_player_state.getBackground();
         radiologicalWaveAnim.setOneShot(false);
-        radiologicalWaveAnim.setVisible(true,true);
+        radiologicalWaveAnim.setVisible(true, true);
         player_name.setVisibility(View.VISIBLE);
         ig_player_button.setVisibility(View.VISIBLE);
 
     }
 
     //没有播放
-    public void noPlaying(){
+    public void noPlaying() {
         ig_player_state.setVisibility(View.VISIBLE);
         ig_player_state.setBackgroundResource(R.drawable.cc_default_playindicator);
         player_name.setVisibility(View.VISIBLE);
@@ -309,11 +321,46 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
     }
 
     //停止播放
-    public void stopPlay(){
+    public void stopPlay() {
         ig_player_state.setVisibility(View.VISIBLE);
         ig_player_state.setBackgroundResource(R.drawable.cc_default_playindicator);
         player_name.setVisibility(View.VISIBLE);
         ig_player_button.setVisibility(View.VISIBLE);
+    }
+
+    private void playEvent(List<AudioContentInfo> playContentInfoList, String albumId) {
+        if (mPlayDialogOnlineAudioPlayDialog == null) {
+            mPlayDialogOnlineAudioPlayDialog = new OnlineAudioPlayDialog(getActivity())
+                    .builder()
+                    .setCancelable(true)
+                    .setPlayContent(playContentInfoList)
+                    .setCurrentAlbumId(albumId)
+                    .setCallbackListener(new OnlineAudioPlayDialog.IHibitsEventPlayListener() {
+                        @Override
+                        public void onDismissCallback() {
+                            UbtLog.d(TAG, "onDismissCallback");
+                            mPlayDialogOnlineAudioPlayDialog.hidden();
+                        }
+                    });
+        }
+        mPlayDialogOnlineAudioPlayDialog.startPlay();
+
+    }
+
+    @Subscribe
+    public void onEventOnlinePlayerEvent(final PlayerEvent mPlayerEvent) {
+        if (mPlayerEvent.getEvent() == PlayerEvent.Event.CONTROL_PLAY_NEXT) {
+            UbtLog.d(TAG, "CONTROL_PLAY event = next " + mPlayerEvent.getCurrentPlayingSongName());
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    player_name.setText(mPlayerEvent.getCurrentPlayingSongName());
+                }
+
+                ;
+            });
+
+        }
     }
 }
 

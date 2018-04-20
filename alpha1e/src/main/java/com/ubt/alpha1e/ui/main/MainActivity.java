@@ -832,28 +832,29 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
 
     private void showCartoonAction_performance(final int value) {
-        frameAnimationPro = new FrameAnimation(cartoonAction, mPresenter.requestCartoonAction(value), CARTOON_FRAME_INTERVAL, false);
-        frameAnimationPro.setAnimationListener(new FrameAnimation.AnimationListener() {
-            @Override
-            public void onAnimationStart() {
+            frameAnimationPro = new FrameAnimation(cartoonAction, mPresenter.requestCartoonAction(value), CARTOON_FRAME_INTERVAL, false);
+            frameAnimationPro.setAnimationListener(new FrameAnimation.AnimationListener() {
+                @Override
+                public void onAnimationStart() {
 
-            }
-            @Override
-            public void onAnimationEnd() {
-                frameAnimationPro.pauseAnimation();
-                if(mHandler.hasMessages(CARTOON_ACTION_EXECTUION)){
-                    mHandler.removeMessages(CARTOON_ACTION_EXECTUION);
                 }
-                Message msg=new Message();
-                msg.what=CARTOON_ACTION_EXECTUION;
-                mHandler.sendMessageDelayed(msg ,5000);
-            }
-            @Override
-            public void onAnimationRepeat() {
-                UbtLog.d(TAG, "repeat");
-                frameAnimationPro.pauseAnimation();
-            }
-        });
+
+                @Override
+                public void onAnimationEnd() {
+                    frameAnimationPro.pauseAnimation();
+                    if (mHandler.hasMessages(CARTOON_ACTION_EXECTUION)) {
+                        mHandler.removeMessages(CARTOON_ACTION_EXECTUION);
+                    }
+                    Message msg = new Message();
+                    msg.what = CARTOON_ACTION_EXECTUION;
+                    mHandler.sendMessageDelayed(msg, 5000);
+                }
+                @Override
+                public void onAnimationRepeat() {
+                    UbtLog.d(TAG, "repeat");
+                    frameAnimationPro.pauseAnimation();
+                }
+            });
         CURRENT_ACTION_NAME = value;
     }
 

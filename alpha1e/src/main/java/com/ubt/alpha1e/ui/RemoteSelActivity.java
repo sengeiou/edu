@@ -134,7 +134,11 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_remote_sel);
+        if(AlphaApplication.isPad()){
+            setContentView(R.layout.activity_remote_sel_pad);
+        }else {
+            setContentView(R.layout.activity_remote_sel);
+        }
         mHelper = new RemoteHelper(this, this);
         mAllRemoteRoleDatas = new ArrayList<>();
         initUI();

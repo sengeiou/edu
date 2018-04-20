@@ -151,7 +151,11 @@ public class NetconnectActivity extends MVPBaseActivity<NetconnectContract.View,
 
     @Override
     public int getContentViewId() {
-        return R.layout.activity_netconnect;
+        if(AlphaApplication.isPad()){
+            return R.layout.activity_netconnect_pad;
+        }else {
+            return R.layout.activity_netconnect;
+        }
     }
 
     int seePWD = 0; //1 看密码  0 隐藏
