@@ -25,6 +25,7 @@ import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.ResponseMode.CourseDetailScoreModule;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
@@ -47,6 +48,7 @@ import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
@@ -264,7 +266,20 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
             if (mActionCourseModels.get(position).getActionLockType() == 0) {
                 return;
             }
-
+            if (BaseHelper.isLowBatteryNotExecuteAction) {
+                new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                        .setTitle("提示")
+                        .setMsg("机器人电量低动作不能执行，请充电！")
+                        .setCancelable(true)
+                        .setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //调到主界面
+                                UbtLog.d("MainCourseActivty", "确定 ");
+                            }
+                        }).show();
+                return;
+            }
             View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_action_course_content, null);
             TextView title = contentView.findViewById(R.id.tv_card_name);
             title.setText(mActionCourseModels.get(position).getTitle());
@@ -377,7 +392,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
                     playAction(Constant.COURSE_ACTION_PATH + "AE_victory editor.hts");
                     myHandler.sendEmptyMessageDelayed(HANDLER_EXIT_COURSE, 4000);
                 } else {
-                    showStartHibitsProcess();
+                    showStartHibitsProcess(resulttype);
                 }
             }
         }
@@ -395,11 +410,14 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
     };
 
     //显示行为提醒弹出框
-    public void showStartHibitsProcess() {
+    public void showStartHibitsProcess(int type) {
         String msg = "行为习惯正在进行中，请先完成";
         String position = "好的";
-
-        msg = this.getStringResources("ui_habits_process_starting");
+        if (type == 1) {
+            msg = this.getStringResources("ui_habits_process_starting");
+        } else if (type == 2) {
+            msg = this.getStringResources("ui_low_battery_less");
+        }
         position = this.getStringResources("ui_common_ok");
 
         new ConfirmDialog(this)
