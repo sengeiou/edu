@@ -60,6 +60,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
     private static final int SHOW_NEXT_OVER_TIME = 6;
     private static final int BLUETOOTH_DISCONNECT = 7;
     private static final int RECIEVE_HIBITS_START = 8;
+    private static final int LOW_BATTERY_LESS_FIVE = 9;
 
     private final int ANIMATOR_TIME = 500;
     private final int OVER_TIME = (15 + 10) * 1000;//(15S音频+ 10S操作)超时
@@ -170,6 +171,21 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                     ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
                     MergeActivity.this.finish();
                     MergeActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                    break;
+                case LOW_BATTERY_LESS_FIVE:
+                    new ConfirmDialog(getContext()).builder()
+                            .setMsg(getStringResources("ui_low_battery_less"))
+                            .setCancelable(false)
+                            .setPositiveButton(getStringResources("ui_common_ok"), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    //调到主界面
+                                    MainCourseActivity.finishByMySelf();
+                                    ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                                    MergeActivity.this.finish();
+                                    MergeActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                                }
+                            }).show();
                     break;
             }
         }
@@ -328,6 +344,8 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                 hasReceiveHibitsStart = true;
                 mHandler.sendEmptyMessage(RECIEVE_HIBITS_START);
             }
+        }else if(event.getEvent() == RobotEvent.Event.LOW_BATTERY_LESS_FIVE_PERCENT){
+            mHandler.sendEmptyMessage(LOW_BATTERY_LESS_FIVE);
         }
     }
 

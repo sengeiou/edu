@@ -32,6 +32,7 @@ public class RobotEvent {
 
     private boolean hibitsProcessStatus = true;
 
+
     public RobotEvent(int power) {
         this.power = power;
     }

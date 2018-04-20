@@ -28,6 +28,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
 import com.ubt.alpha1e.onlineaudioplayer.helper.OnlineAudioResourcesHelper;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
 import com.ubt.alpha1e.onlineaudioplayer.playEventListActivity.OnlineAudioEventListActivity;
 import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -287,18 +288,11 @@ public class OnlineAudioPlayDialog {
     }
 
     @Subscribe
-    public void onEventHibits(OnlineAudioResourcesHelper.Event cmd) {
-        if(cmd==OnlineAudioResourcesHelper.Event.CONTROL_PLAY_NEXT){
-            UbtLog.d(TAG,"CONTROL_PLAY event = next ");
+    public void onEventOnlinePlayerEvent(PlayerEvent mPlayerEvent) {
+        if(mPlayerEvent.getEvent()==PlayerEvent.Event.CONTROL_PLAY_NEXT){
+            UbtLog.d(TAG,"CONTROL_PLAY event = next "+mPlayerEvent.getCurrentPlayingSongName());
             nextAudioPlay();
         }
-//        else if(cmd == OnlineAudioResourcesHelper.Event.CONTROL_PLAY_NEXT){
-//            UbtLog.d(TAG,"READ_EVENT_PLAY_STATUS EventPlayStatus = ");
-//            Message msg = new Message();
-//            msg.what = UPDATE_PLAY_STATUS;
-//            msg.obj = ConstValue.DV_ONLINEPLAYER_STOP;
-//            mHandler.sendMessage(msg);
-//        }
     }
 
 
@@ -353,13 +347,13 @@ public class OnlineAudioPlayDialog {
                         }
                         isPause = false;
                         currentPlayInfo = mPlayContentInfoList.get(currentPlaySeq);
-                        mHelper.stopEventSound();
+                        mHelper.stopEvent();
                         try{
                             Thread.sleep(200);
                         }catch(InterruptedException e){
                             e.printStackTrace();
                         }
-                        mHelper.playEventSound(mPlayContentInfoList.get(currentPlaySeq).contentUrl);
+                        mHelper.playEvent(mPlayContentInfoList.get(currentPlaySeq).contentUrl,currentPlaySeq);
                         ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
                         mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
                     }
@@ -372,7 +366,7 @@ public class OnlineAudioPlayDialog {
                 case R.id.iv_music_stop:
                     UbtLog.d(TAG,"doStop isStartPlayProcess = " + isStartPlayProcess + "  currentPlaySeq =" + currentPlaySeq );
                     if(isStartPlayProcess && currentPlaySeq >= 0){
-                        mHelper.stopEventSound();
+                        mHelper.stopEvent();
                         isPause = false;
                         mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
                     }
@@ -418,13 +412,13 @@ public class OnlineAudioPlayDialog {
         }
         isPause = false;
         currentPlayInfo = mPlayContentInfoList.get(currentPlaySeq);
-        mHelper.stopEventSound();
+        mHelper.stopEvent();
         try{
             Thread.sleep(200);
         }catch(InterruptedException e){
             e.printStackTrace();
         }
-        mHelper.playEventSound(mPlayContentInfoList.get(currentPlaySeq).contentUrl);
+        mHelper.playEvent(mPlayContentInfoList.get(currentPlaySeq).contentUrl,currentPlaySeq);
         ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
         mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
     }
@@ -434,14 +428,14 @@ public class OnlineAudioPlayDialog {
             if(currentPlaySeq < 0){
                 currentPlaySeq = 0;
             }
-            mHelper.stopEventSound();
+            mHelper.stopEvent();
             try{
                 Thread.sleep(200);
             }catch(InterruptedException e){
                 e.printStackTrace();
             }
             if(mPlayContentInfoList.size()!=0) {
-                mHelper.playEventSound(mPlayContentInfoList.get(currentPlaySeq).contentUrl);
+                mHelper.playEvent(mPlayContentInfoList.get(currentPlaySeq).contentUrl,currentPlaySeq);
             }
             isPause = false;
             ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
@@ -449,12 +443,12 @@ public class OnlineAudioPlayDialog {
         }else {
             if(isPause){
                 isPause = false;
-                mHelper.continueEventSound(mPlayContentInfoList.get(currentPlaySeq).contentUrl);
+                mHelper.continueEvent(mPlayContentInfoList.get(currentPlaySeq).contentUrl);
                 ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
                 playStatusAnim.start();
             }else {
                 isPause = true;
-                mHelper.pauseEventSound(mPlayContentInfoList.get(currentPlaySeq).contentUrl);
+                mHelper.pauseEvent(mPlayContentInfoList.get(currentPlaySeq).contentUrl);
                 ivMusicPlay.setImageResource(R.drawable.ic_ct_play_usable);
                 playStatusAnim.stop();
             }
@@ -507,7 +501,7 @@ public class OnlineAudioPlayDialog {
         for(int i = 0; i< mPlayContentInfoList.size();i++){
             UbtLog.d(TAG,"i = " + i + "     url = " /*+ mPlayContentInfoList.get(i).contentName + "/"*/ + mPlayContentInfoList.get(i).contentUrl);
         }
-
+        mHelper.setPlayContentInfo(mPlayContentInfoList);
         UbtLog.d(TAG,"mPlayContentInfoList.size() = " + mPlayContentInfoList.size());
         return this;
     }
@@ -581,10 +575,11 @@ public class OnlineAudioPlayDialog {
         }
     }
     public void startPlay(){
+        mHelper.RegisterHelper();
         onlineAudioPlayer();
     }
     public void stopPlay(){
-        mHelper.stopEventSound();
+        mHelper.stopEvent();
     }
     public void show() {
         mHelper.RegisterHelper();
@@ -605,9 +600,7 @@ public class OnlineAudioPlayDialog {
             mDialogIntance = null;
     }
 
-
     public interface IHibitsEventPlayListener{
-
         void onDismissCallback();
     }
     public static void updatePlayContentInfoList(){

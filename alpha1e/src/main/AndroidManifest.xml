@@ -846,7 +846,7 @@
             android:screenOrientation="landscape"
             android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
-        <activity android:name="com.ubt.alpha1e.onlineaudioplayer.onlineresrearch.OnlineResRearchActivity"
+        <activity android:name="com.ubt.alpha1e.onlineaudioplayer.onlinereSrearch.OnlineResRearchActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:launchMode="singleTop"

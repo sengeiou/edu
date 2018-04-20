@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.onlineaudioplayer.onlineresrearch;
+package com.ubt.alpha1e.onlineaudioplayer.onlinereSrearch;
 
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -38,7 +38,6 @@ import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineResRearchList;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineResSearch;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.ShowItem;
 import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioAlbumPlayerFragment;
-import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioResourcesFragment;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;

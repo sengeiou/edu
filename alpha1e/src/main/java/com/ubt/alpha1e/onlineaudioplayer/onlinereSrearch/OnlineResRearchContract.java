@@ -1,6 +1,4 @@
-package com.ubt.alpha1e.onlineaudioplayer.onlineresrearch;
-
-import android.content.Context;
+package com.ubt.alpha1e.onlineaudioplayer.onlinereSrearch;
 
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;

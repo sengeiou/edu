@@ -68,6 +68,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     private static final int BLUETOOTH_DISCONNECT = 10;
     private static final int OVER_TIME_FINISH = 11;
     private static final int RECIEVE_HIBITS_START = 12;
+    private static final int LOW_BATTERY_LESS_FIVE = 13;
 
     @BindView(R.id.tv_next)
     TextView tvNext;
@@ -434,6 +435,21 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                     FeatureActivity.this.finish();
                     FeatureActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
                     break;
+                case LOW_BATTERY_LESS_FIVE:
+                    new ConfirmDialog(getContext()).builder()
+                            .setMsg(getStringResources("ui_low_battery_less"))
+                            .setCancelable(false)
+                            .setPositiveButton(getStringResources("ui_common_ok"), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    //调到主界面
+                                    MainCourseActivity.finishByMySelf();
+                                    ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                                    FeatureActivity.this.finish();
+                                    FeatureActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                                }
+                            }).show();
+                    break;
             }
 
         }
@@ -640,6 +656,8 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                 hasReceiveHibitsStart = true;
                 mHandler.sendEmptyMessage(RECIEVE_HIBITS_START);
             }
+        }else if(event.getEvent() == RobotEvent.Event.LOW_BATTERY_LESS_FIVE_PERCENT){
+            mHandler.sendEmptyMessage(LOW_BATTERY_LESS_FIVE);
         }
     }
 

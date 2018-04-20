@@ -59,6 +59,7 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
     private static final int SHOW_NEXT_OVER_TIME = 8;
     private static final int BLUETOOTH_DISCONNECT = 9;
     private static final int RECIEVE_HIBITS_START = 10;
+    private static final int LOW_BATTERY_LESS_FIVE = 11;
 
     private final int OVER_TIME = 35 * 1000;//超时
 
@@ -181,6 +182,22 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
                     ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
                     PrincipleActivity.this.finish();
                     PrincipleActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                    break;
+                case LOW_BATTERY_LESS_FIVE:
+                    new ConfirmDialog(getContext()).builder()
+                            .setMsg(getStringResources("ui_low_battery_less"))
+                            .setCancelable(false)
+                            .setPositiveButton(getStringResources("ui_common_ok"), new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    //调到主界面
+                                    MainCourseActivity.finishByMySelf();
+                                    ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+                                    PrincipleActivity.this.finish();
+                                    PrincipleActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                                }
+                            }).show();
+
                     break;
             }
         }
@@ -323,6 +340,8 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
                 hasReceiveHibitsStart = true;
                 mHandler.sendEmptyMessage(RECIEVE_HIBITS_START);
             }
+        }else if(event.getEvent() == RobotEvent.Event.LOW_BATTERY_LESS_FIVE_PERCENT){
+            mHandler.sendEmptyMessage(LOW_BATTERY_LESS_FIVE);
         }
     }
 

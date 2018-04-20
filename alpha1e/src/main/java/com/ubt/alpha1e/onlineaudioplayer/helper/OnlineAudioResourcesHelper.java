@@ -2,9 +2,14 @@ package com.ubt.alpha1e.onlineaudioplayer.helper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
+import android.net.Uri;
 
 import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
+import com.ubt.alpha1e.event.RobotEvent;
+import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -14,6 +19,8 @@ import com.ubtechinc.base.ConstValue;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/11/20.
  */
@@ -22,11 +29,11 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     private static final String TAG = OnlineAudioResourcesHelper.class.getSimpleName();
 
-    public enum Event{
-        CONTROL_PLAY_NEXT,
-        READ_EVENT_PLAY_STATUS
-    }
 
+    MediaPlayer   mediaPlayer;
+    private boolean local_player=true;
+    private int songIndex=-1;
+    private List<AudioContentInfo> mSongList;
     public OnlineAudioResourcesHelper(Context context) {
         super(context);
     }
@@ -40,7 +47,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             UbtLog.d(TAG,"cmd = " + cmd + "    param[0] = " + param[0]);
             if(param[0]==0x01) {
             }else if(param[0]==0x02){
-                EventBus.getDefault().post(Event.CONTROL_PLAY_NEXT);
+                sendEventBusMesssage();
             }
         }else if(cmd == ConstValue.DV_ONLINEPLAYER_STOP){
             String eventPlayStatusJson = BluetoothParamUtil.bytesToString(param);
@@ -55,7 +62,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     }
 
     public void doTurnVol() {
-
         byte[] papram = new byte[1];
         if (mCurrentVoiceState) {
             papram[0] = 0;
@@ -64,13 +70,11 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             papram[0] = 1;
             mCurrentVoiceState = true;
         }
-
         doSendComm(ConstValue.DV_VOICE, papram);
 
     }
 
     public void doChangeVol(int _pow) {
-
         int pow = _pow * 255;
         int add_val = 0;
         if (_pow % 100 >= 50) {
@@ -87,25 +91,48 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         doSendComm(ConstValue.DV_VOLUME, param);
     }
 
-    public void playEventSound( String url){
+    public void playEvent( String url,int index){
         String params = url;
         UbtLog.d(TAG,"playEventSound = " + params);
+        setCurentPlayingAudioIndex(index);
         doSendComm(ConstValue.DV_ONLINEPLAYER_PLAY, BluetoothParamUtil.stringToBytes(url));
+        if(local_player) {
+            mediaPlayer = MediaPlayer.create(mContext, Uri.parse(url));
+            mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    sendEventBusMesssage();
+                }
+            });
+        }
     }
-    public void stopEventSound(){
+
+    private void sendEventBusMesssage() {
+        PlayerEvent mPlayerEvent=new PlayerEvent(PlayerEvent.Event.CONTROL_PLAY_NEXT);
+        mPlayerEvent.setCurrentPlayingSongName(mSongList.get(getCurrentPlayingAudioIndex()).contentName);
+        EventBus.getDefault().post(mPlayerEvent);
+    }
+
+    public void stopEvent(){
         UbtLog.d(TAG,"stopEventSound = " );
         byte[] mCmd={0};
         mCmd[0]=0;
         doSendComm(ConstValue.DV_ONLINEPLAYER_STOP, mCmd);
+        if(local_player) {
+            if(mediaPlayer!=null) {
+                mediaPlayer.stop();
+            }
+        }
     }
-    public void pauseEventSound( String url){
+    public void pauseEvent( String url){
         String params = url;
         UbtLog.d(TAG,"pauseEventSound = " + params);
         byte[] mCmd={0};
         mCmd[0]=0;
         doSendComm(ConstValue.DV_ONLINEPLAYER_PAUSE, mCmd);
     }
-    public void continueEventSound( String url){
+    public void continueEvent( String url){
         String params = url;
         UbtLog.d(TAG,"continueEventSound = " + params);
         byte[] mCmd={0};
@@ -144,6 +171,20 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     @Override
     public void DistoryHelper() {
 
+    }
+
+    public void setPlayContentInfo(List<AudioContentInfo> mAudioList){
+            mSongList=mAudioList;
+    }
+    public List<AudioContentInfo> getPlayContentInfo(){
+            return mSongList;
+    }
+
+    public void setCurentPlayingAudioIndex(int index){
+         songIndex=index;
+    }
+    public int getCurrentPlayingAudioIndex(){
+        return songIndex;
     }
 
 
