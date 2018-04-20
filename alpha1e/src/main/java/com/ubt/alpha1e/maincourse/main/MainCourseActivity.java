@@ -50,6 +50,7 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     RecyclerView mRecyleviewContent;
     private List<CourseModel> mCourseModels;
     private MainCoursedapter mMainCoursedapter;
+    public static int onlinePlayerEnable=1; //0 enable 1 disale
 
     private static MainCourseActivity mainCourseInstance = null;
 
@@ -166,10 +167,10 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (isFastClick()) {
-            if(position==0){
-                startActivity(new Intent(this, OnlineAudioPlayerActivity.class));
-            }
-            else if (position == 1) {
+                if (position == (0-onlinePlayerEnable)) {
+                    startActivity(new Intent(this, OnlineAudioPlayerActivity.class));
+                }
+            else if (position == (1-onlinePlayerEnable)) {
 
                 if (isBulueToothConnected()) {
                     String progressKey = Constant.PRINCIPLE_PROGRESS + SPUtils.getInstance().getString(Constant.SP_USER_ID);
@@ -193,10 +194,10 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
                     ToastUtils.showShort(getStringResources("ui_action_connect_robot"));
                 }
 
-            } else if (position == 2) {
+            } else if (position == (2-onlinePlayerEnable)) {
                 startActivity(new Intent(this, ActionCourseActivity.class));
 
-            } else if (position == 3) {
+            } else if (position == (3-onlinePlayerEnable)) {
                 startActivity(new Intent(this, CourseListActivity.class));
             }
             this.overridePendingTransition(R.anim.activity_open_up_down, 0);

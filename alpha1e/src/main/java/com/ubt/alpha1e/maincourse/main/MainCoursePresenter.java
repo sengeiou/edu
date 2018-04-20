@@ -18,10 +18,12 @@ public class MainCoursePresenter extends BasePresenterImpl<MainCourseContract.Vi
     public void getCourcesData() {
         List<CourseModel> list = new ArrayList<>();
         CourseModel courseModel0=new CourseModel();
-        courseModel0.setMainCourcesName("在线资源库");
-        courseModel0.setLockType(0);
-        courseModel0.setDrawableId(R.drawable.ic_lesson_online);
-        list.add(courseModel0);
+        if(MainCourseActivity.onlinePlayerEnable==0) {
+            courseModel0.setMainCourcesName("在线资源库");
+            courseModel0.setLockType(0);
+            courseModel0.setDrawableId(R.drawable.ic_lesson_online);
+            list.add(courseModel0);
+        }
         CourseModel courseModel1 = new CourseModel();
         courseModel1.setMainCourcesName("原理");
         courseModel1.setLockType(0);
