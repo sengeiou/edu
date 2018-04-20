@@ -115,6 +115,12 @@ public class CourseLevelFourActivity extends MVPBaseActivity<CourseOneContract.V
                 setResult(1, intent);
                 finish();
             }
+        }else if (event.getEvent() == RobotEvent.Event.LOW_BATTERY_LESS_FIVE_PERCENT) {
+            ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
+            Intent intent = new Intent();
+            intent.putExtra("resulttype", 2);//结束类型
+            setResult(1, intent);
+            finish();
         }
     }
     @Override

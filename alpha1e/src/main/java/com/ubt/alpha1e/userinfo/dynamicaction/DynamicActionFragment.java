@@ -23,6 +23,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
@@ -106,6 +107,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     private int offset = 8;
 
     private boolean isShowHibitsDialog = false;
+    private boolean isShowLowBarry = false;
 
     public DynamicActionFragment() {
     }
@@ -328,9 +330,30 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             return;
         }
 
+        if (BaseHelper.isLowBatteryNotExecuteAction) {
+            showLowBatteryDialog();
+            return;
+        }
+
         mPresenter.playAction(getActivity(), position, mDynamicActionModels);
         mDynamicActionAdapter.notifyDataSetChanged();
 
+    }
+
+    private void showLowBatteryDialog() {
+        isShowLowBarry = true;
+        new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                .setTitle("提示")
+                .setMsg("机器人电量低动作不能执行，请充电！")
+                .setCancelable(true)
+                .setPositiveButton("确定", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        isShowLowBarry = false;
+                        //调到主界面
+                        UbtLog.d(TAG, "确定 ");
+                    }
+                }).show();
     }
 
 
@@ -608,6 +631,17 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
                 });
                 //行为习惯流程未结束，退出当前流程
             }
+        } else if (event.getEvent() == RobotEvent.Event.LOW_BATTERY_LESS_FIVE_PERCENT) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    onBlutheDisconnected();
+                    if (!isShowLowBarry) {
+                        showLowBatteryDialog();
+                    }
+                }
+            });
+
         }
     }
 

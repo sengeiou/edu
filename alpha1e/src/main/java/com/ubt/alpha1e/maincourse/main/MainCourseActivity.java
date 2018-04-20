@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
@@ -27,6 +28,7 @@ import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerActivity;
 import com.ubt.alpha1e.services.SyncDataService;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
+import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
@@ -166,11 +168,25 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (isFastClick()) {
-            if(position==0){
-                startActivity(new Intent(this, OnlineAudioPlayerActivity.class));
-            }
-            else if (position == 1) {
 
+            if (BaseHelper.isLowBatteryNotExecuteAction) {
+                new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                        .setTitle("提示")
+                        .setMsg("机器人电量低动作不能执行，请充电！")
+                        .setCancelable(true)
+                        .setPositiveButton("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //调到主界面
+                                UbtLog.d("MainCourseActivty", "确定 ");
+                            }
+                        }).show();
+                return;
+            }
+
+            if (position == 0) {
+                startActivity(new Intent(this, OnlineAudioPlayerActivity.class));
+            } else if (position == 1) {
                 if (isBulueToothConnected()) {
                     String progressKey = Constant.PRINCIPLE_PROGRESS + SPUtils.getInstance().getString(Constant.SP_USER_ID);
                     int progress = SPUtils.getInstance().getInt(progressKey, 0);

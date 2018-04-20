@@ -116,6 +116,12 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
                 setResult(1, intent);
                 finish();
             }
+        } else if (event.getEvent() == RobotEvent.Event.LOW_BATTERY_LESS_FIVE_PERCENT) {
+            ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
+            Intent intent = new Intent();
+            intent.putExtra("resulttype", 2);//结束类型
+            setResult(1, intent);
+            finish();
         }
     }
 
@@ -219,7 +225,7 @@ public class CourseLevelOneActivity extends MVPBaseActivity<CourseOneContract.Vi
         UbtLog.d(TAG, "------------onDestroy------------");
         // ((ActionsEditHelper) mHelper).doEnterCourse((byte) 0);
         mActionEdit.onPause();
-        if (mHelper!=null){
+        if (mHelper != null) {
             mHelper.unRegister();
         }
     }
