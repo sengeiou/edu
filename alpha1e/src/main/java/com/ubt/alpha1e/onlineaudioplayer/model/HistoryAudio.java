@@ -9,5 +9,43 @@ import java.io.Serializable;
  */
 
 
-public class historyAudio implements Serializable {
+public class HistoryAudio implements Serializable {
+    private String grade;
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(String albumId) {
+        this.albumId = albumId;
+    }
+
+    public String getAlbumName() {
+        return albumName;
+    }
+
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
+    }
+
+    private String albumId;
+
+    @Override
+    public String toString() {
+        return "HistoryAudio{" +
+                "grade='" + grade + '\'' +
+                ", albumId='" + albumId + '\'' +
+                ", albumId='" + albumId + '\'' +
+                '}';
+    }
+
+    private String albumName;
 }

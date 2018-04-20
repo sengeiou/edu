@@ -2,7 +2,6 @@ package com.ubt.alpha1e.onlineaudioplayer.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,14 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerContract;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerPresenter;
@@ -31,12 +28,10 @@ import com.ubt.alpha1e.onlineaudioplayer.adapter.GradeSelectedAdapter;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.onlineresrearch.OnlineResRearchActivity;
+import com.ubt.alpha1e.onlineaudioplayer.model.HistoryAudio;
+import com.ubt.alpha1e.onlineaudioplayer.onlinereSrearch.OnlineResRearchActivity;
 import com.ubt.alpha1e.onlineaudioplayer.playerDialog.OnlineAudioPlayDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -292,22 +287,17 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             ((AlbumHolder) holder).txt_album_name.setText(mAlbumDatas.get(position).albumName);//+"GRADE"+mAlbumDatas.get(position).grade);
-            ((AlbumHolder) holder).txt_album_name.setOnClickListener(new View.OnClickListener(){
+            ((AlbumHolder) holder).txt_album_name.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
-                    try {
-                        JSONObject mHistory = new JSONObject();
-                        mHistory.put("grade", mAlbumDatas.get(position).grade);
-                        mHistory.put("albumId",mAlbumDatas.get(position).albumId);
-                        mHistory.put("albumName",mAlbumDatas.get(position).albumName);
-                      
-                        SPUtils.getInstance().saveObject(Constant.SP_ONLINEAUDIO_HISTORY, mHistory);
-                    }catch(JSONException e){
-                        e.printStackTrace();
-                    }
+                    HistoryAudio mHistory = new HistoryAudio();
+                    mHistory.setAlbumId(mAlbumDatas.get(position).albumId);
+                    mHistory.setAlbumName(mAlbumDatas.get(position).albumName);
+                    mHistory.setGrade(mAlbumDatas.get(position).grade);
+                    SPUtils.getInstance().saveObject(Constant.SP_ONLINEAUDIO_HISTORY,mHistory);
                     mPresenter.getAudioList(mAlbumDatas.get(position).albumId);
-                    mAlbumId=mAlbumDatas.get(position).albumId;
+                    mAlbumId = mAlbumDatas.get(position).albumId;
                 }
             });
         }
@@ -344,7 +334,6 @@ public class OnlineAudioAlbumPlayerFragment extends MVPBaseFragment<OnlineAudioP
         }
         mPlayDialogOnlineAudioPlayDialog.startPlay();
         mPlayDialogOnlineAudioPlayDialog.show();
-
     }
 
 }

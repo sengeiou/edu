@@ -97,7 +97,9 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 //                    actionName="fall";
 //                    break;
                 case Constant.cartoon_action_greeting:
-                    typedArray =mView.getContext().getResources().obtainTypedArray(R.array.greetting);
+                    if(mView.getContext()!=null) {
+                        typedArray = mView.getContext().getResources().obtainTypedArray(R.array.greetting);
+                    }
                     actionName="greetting";
                     break;
 //                case Constant. cartoon_action_hand_stand:
