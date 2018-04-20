@@ -467,9 +467,9 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
                         File videoFile = new File(videoPath);
                         VideoPicker.galleryAddPic(this, videoFile);
 
-                        ImageItem imageItem = new ImageItem();
-                        imageItem.path = videoFile.getAbsolutePath();
-                        imagePicker.addSelectedImageItem(0, imageItem, true);
+                        //ImageItem imageItem = new ImageItem();
+                        //imageItem.path = videoFile.getAbsolutePath();
+                        //imagePicker.addSelectedImageItem(0, imageItem, true);
                         mImageGridAdapter.notifyDataSetChanged();
 
                         /*Intent intent = new Intent();
@@ -489,10 +489,10 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
                     //发送广播通知图片增加了
                     ImagePicker.galleryAddPic(this, picFile);
 
-                    ImageItem imageItem = new ImageItem();
-                    imageItem.path = picFile.getAbsolutePath();
+                    //ImageItem imageItem = new ImageItem();
+                    //imageItem.path = picFile.getAbsolutePath();
                     //imagePicker.clearSelectedImages();
-                    imagePicker.addSelectedImageItem(0, imageItem, true);
+                    //imagePicker.addSelectedImageItem(0, imageItem, true);
                     mImageGridAdapter.notifyDataSetChanged();
 
                     /*if (imagePicker.isCrop() && false) {
