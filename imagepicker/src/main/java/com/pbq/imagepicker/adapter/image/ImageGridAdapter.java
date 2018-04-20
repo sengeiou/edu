@@ -131,6 +131,15 @@ public class ImageGridAdapter extends BaseAdapter {
 
                         Log.d(TAG,"mActivity = " + mActivity);
                         if(mActivity instanceof MediaGridActivity){
+                            if(imagePicker.getSelectImageCount() >= imagePicker.getSelectLimit()){
+                                Toast.makeText(mActivity,"选择个数已经超出了个数限制",Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            if(imagePicker.getSelectImageCount() > 0 && imagePicker.getSelectedImages().get(0).isVideo()){
+                                Toast.makeText(mActivity,"选择个数已经超出了个数限制",Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             ((MediaGridActivity)mActivity).startCapture();
                         }
                     }
@@ -176,6 +185,7 @@ public class ImageGridAdapter extends BaseAdapter {
                         Log.d(TAG,"selectLimit = " + selectLimit + "    mSelectedImages.size() => " + mSelectedImages.size());
                         if(mSelectedImages.size() > 0){
                             ImageItem imageItem0 =  mSelectedImages.get(0);
+
                             if(imageItem0.isVideo() != imageItem.isVideo()){
                                 Toast.makeText(mActivity, mActivity.getString(R.string.select_video_image_limit), Toast.LENGTH_SHORT).show();
                                 holder.cbCheck.setChecked(false);
@@ -184,6 +194,15 @@ public class ImageGridAdapter extends BaseAdapter {
 
                             if(imageItem0.isVideo() && imageItem.isVideo()){
                                 Toast.makeText(mActivity, mActivity.getString(R.string.select_video_one_limit), Toast.LENGTH_SHORT).show();
+                                holder.cbCheck.setChecked(false);
+                                return;
+                            }
+                        }
+
+                        if(imageItem.isVideo()){
+                            Log.d(TAG,"imageItem.timeLong = " + imageItem.timeLong);
+                            if(imageItem.timeLong > ImagePicker.VIDEO_TIME_LONG_LIMIT){
+                                Toast.makeText(mActivity, mActivity.getString(R.string.select_video_time_limit), Toast.LENGTH_SHORT).show();
                                 holder.cbCheck.setChecked(false);
                                 return;
                             }

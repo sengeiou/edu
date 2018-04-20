@@ -120,6 +120,15 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
                         }
                     }
 
+                    if(imageItem.isVideo()){
+                        Log.d(TAG,"imageItem.timeLong = " + imageItem.timeLong);
+                        if(imageItem.timeLong > ImagePicker.VIDEO_TIME_LONG_LIMIT){
+                            Toast.makeText(mActivity, mActivity.getString(R.string.select_video_time_limit), Toast.LENGTH_SHORT).show();
+                            mCbCheck.setChecked(false);
+                            return;
+                        }
+                    }
+
                     if(selectedImages.size() >= selectLimit){
                         Toast.makeText(mActivity, mActivity.getString(R.string.select_limit, selectLimit), Toast.LENGTH_SHORT).show();
                         mCbCheck.setChecked(false);
