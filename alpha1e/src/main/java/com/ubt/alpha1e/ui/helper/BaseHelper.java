@@ -293,6 +293,9 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                     if (power <= 5 && isNeedNoteLowPowerFive) {
                         UbtLog.d(TAG, "LESS 5 SHOW DIALOG");
                         AlphaApplication.getBaseActivity().onNoteLowPower(LOW_BATTERY_FIVE);
+                        //notify the others modules
+                        RobotEvent robotEvent = new RobotEvent(RobotEvent.Event.LOW_BATTERY_LESS_FIVE_PERCENT);
+                        EventBus.getDefault().post(robotEvent);
                         isLowBatteryNotExecuteAction=true;
                         isNeedNoteLowPowerFive = false;
                     }

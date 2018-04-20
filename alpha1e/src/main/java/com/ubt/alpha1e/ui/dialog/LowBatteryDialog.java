@@ -64,7 +64,7 @@ public class LowBatteryDialog {
         // 定义Dialog布局和参数
         dialog = new Dialog(context, R.style.AlertDialogStyle);
         dialog.setContentView(view);
-        //3秒后自动消失
+        //2秒后自动消失
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
