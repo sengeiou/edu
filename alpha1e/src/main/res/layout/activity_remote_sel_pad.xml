@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_remote_list">
+
+    <include layout="@layout/layout_title_back_mvp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_head_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="-15dp"
+        android:layout_below="@+id/rl_title"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/bg_bubble_remote"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_publish_title"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:text="@string/ui_control_role_title"
+            android:textColor="#36acf0"/>
+
+        <ImageView
+            android:id="@+id/iv_close_publish"
+            android:layout_width="9dp"
+            android:layout_height="9dp"
+            android:src="@drawable/icon_close_publish"
+            android:layout_toRightOf="@+id/tv_publish_title"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            />
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="40dp"
+        android:id="@+id/recyclerview_my_roles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_below="@+id/rl_head_tip"
+        android:splitMotionEvents="false"
+        ></android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

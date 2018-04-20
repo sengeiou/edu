@@ -128,14 +128,14 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         UbtLog.d(TAG,"layoutId isPad == " + isPad);
         if (RemoteHelper.mCurrentType == RemoteRecordOperater.ModelType.FIGHTER) {
             if(isPad){
-                layoutId = R.layout.activity_remote_football_1;
+                layoutId = R.layout.activity_remote_football_1_pad;
             }else {
                 //layoutId = R.layout.activity_remote_fighter;
                 layoutId = R.layout.activity_remote_football_1;
             }
         } else if(RemoteHelper.mCurrentType == RemoteRecordOperater.ModelType.FOOTBALL_PLAYER){
             if(isPad){
-                layoutId = R.layout.activity_remote_football_1;
+                layoutId = R.layout.activity_remote_football_1_pad;
             }else {
                 layoutId = R.layout.activity_remote_football_1;
             }

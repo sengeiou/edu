@@ -281,7 +281,12 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
 
     @Override
     public int getContentViewId() {
-        return R.layout.bluetooth_and_net_connect_state;
+
+        if(AlphaApplication.isPad()){
+            return R.layout.bluetooth_and_net_connect_state_pad;
+        }else {
+            return R.layout.bluetooth_and_net_connect_state;
+        }
     }
 
     @Subscribe
