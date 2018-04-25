@@ -12,10 +12,13 @@ import com.ubt.alpha1e.mvp.BaseView;
 
 public class CommunityContract {
     interface View extends BaseView {
-        
+        void onQiniuTokenFromServer(boolean status, String token);
+        void onloadFileToQiNiu(boolean status, String url);
     }
 
     interface  Presenter extends BasePresenter<View> {
-        
+        void getQiniuTokenFromServer();
+
+        void loadFileToQiNiu(String path);
     }
 }

@@ -47,6 +47,8 @@ public class ImagePicker {
     public static final String EXTRA_IMAGE_ITEMS = "extra_image_items";
     public static final String EXTRA_IMAGE_ITEM = "extra_image_item";
 
+    public static final int VIDEO_TIME_LONG_LIMIT = 15*1000;//视频最大时长限制
+
     private boolean multiMode = true;    //图片选择模式
     private int selectLimit = 6;         //最大选择图片数量
     private boolean crop = true;         //裁剪

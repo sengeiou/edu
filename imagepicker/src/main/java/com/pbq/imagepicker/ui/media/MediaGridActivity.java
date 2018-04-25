@@ -467,8 +467,18 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
                         File videoFile = new File(videoPath);
                         VideoPicker.galleryAddPic(this, videoFile);
 
+                        //ImageItem imageItem = new ImageItem();
+                        //imageItem.path = videoFile.getAbsolutePath();
+                        //imagePicker.addSelectedImageItem(0, imageItem, true);
+                        mImageGridAdapter.notifyDataSetChanged();
+
+                        /*Intent intent = new Intent();
+                        intent.putExtra(ImagePicker.EXTRA_RESULT_ITEMS, imagePicker.getSelectedImages());
+                        setResult(ImagePicker.RESULT_IMAGE_ITEMS, intent);   //单选不需要裁剪，返回数据
+                        finish();*/
+
                         //TODO 获取视频
-                        Toast.makeText(this,"视频文件："+videoPath,Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(this,"视频文件："+videoPath,Toast.LENGTH_SHORT).show();
                     }
                 }else {
                     String imageUrl = data.getStringExtra("imageUrl");
@@ -479,11 +489,13 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
                     //发送广播通知图片增加了
                     ImagePicker.galleryAddPic(this, picFile);
 
-                    ImageItem imageItem = new ImageItem();
-                    imageItem.path = picFile.getAbsolutePath();
-                    imagePicker.clearSelectedImages();
-                    imagePicker.addSelectedImageItem(0, imageItem, true);
-                    if (imagePicker.isCrop()) {
+                    //ImageItem imageItem = new ImageItem();
+                    //imageItem.path = picFile.getAbsolutePath();
+                    //imagePicker.clearSelectedImages();
+                    //imagePicker.addSelectedImageItem(0, imageItem, true);
+                    mImageGridAdapter.notifyDataSetChanged();
+
+                    /*if (imagePicker.isCrop() && false) {
                         Intent intent = new Intent(MediaGridActivity.this, ImageCropActivity.class);
                         startActivityForResult(intent, ImagePicker.REQUEST_IMAGE_CROP);  //单选需要裁剪，进入裁剪界面
                     } else {
@@ -491,10 +503,10 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
                         intent.putExtra(ImagePicker.EXTRA_RESULT_ITEMS, imagePicker.getSelectedImages());
                         setResult(ImagePicker.RESULT_IMAGE_ITEMS, intent);   //单选不需要裁剪，返回数据
                         finish();
-                    }
+                    }*/
 
                     //TODO 获取到图片
-                    Toast.makeText(this,"图片文件："+imageUrl,Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this,"图片文件："+imageUrl,Toast.LENGTH_SHORT).show();
                 }
             }else if(resultCode == ImagePicker.RESULT_VIDEO_BACK ){
                 Intent intent = new Intent();

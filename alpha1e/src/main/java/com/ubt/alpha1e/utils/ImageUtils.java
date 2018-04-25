@@ -1,8 +1,10 @@
 package com.ubt.alpha1e.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Base64;
 
@@ -11,6 +13,7 @@ import com.bumptech.glide.request.target.Target;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +24,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class ImageUtils {
 
-    private static final String TAG = "ImageUtils";
+    private static final String TAG = ImageUtils.class.getSimpleName();
 
     /**
      * 根据一个网络连接(String)获取bitmap图像
@@ -41,6 +44,29 @@ public class ImageUtils {
             e.printStackTrace();
         }
 
+        return bitmap;
+    }
+
+    /**
+     * 获取本地文件图片
+     * @param context
+     * @param path
+     * @return
+     */
+    public static Bitmap loadLocalFileBitmap(String path, Context context){
+        Bitmap bitmap = null;
+        try {
+            bitmap = Glide.with(context)
+                    .load(Uri.fromFile(new File(path)))
+                    .asBitmap()
+                    .into(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                    .get();
+            UbtLog.d(TAG,"bitmap = " + bitmap);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         return bitmap;
     }
 
@@ -87,7 +113,7 @@ public class ImageUtils {
 
         //1.5M的压缩后在100Kb以内，测试得值,压缩后的大小=94486字节,压缩后的大小=74473字节
         //这里的JPEG 如果换成PNG，那么压缩的就有600kB这样
-        bm.compress(Bitmap.CompressFormat.JPEG, 10, baos);
+        bm.compress(Bitmap.CompressFormat.JPEG, 30, baos);
         byte[] b = baos.toByteArray();
         UbtLog.d(TAG, "压缩后的大小=" + b.length);
         return Base64.encodeToString(b, Base64.DEFAULT);

@@ -1,9 +1,8 @@
 package com.ubt.alpha1e.webcontent;
 
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -25,7 +24,6 @@ import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
-import java.io.File;
 import java.util.Stack;
 
 import butterknife.BindView;
@@ -67,13 +65,14 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
 
     private WebContentJsInterface mWebContentJsInterface;
 
-    public static void launchActivity(Activity activity, String url, String mTitle) {
-        launchActivity(activity,url,mTitle,false);
+    public static void launchActivity(Context activity, String url, String mTitle) {
+        launchActivity(activity, url, mTitle, false);
     }
 
-    public static void launchActivity(Activity activity, String url, String mTitle,boolean isShowBack){
+    public static void launchActivity(Context activity, String url, String mTitle, boolean isShowBack) {
         Intent intent = new Intent();
         intent.setClass(activity, WebContentActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(WebContentActivity.WEB_URL, url);
         intent.putExtra(WebContentActivity.WEB_TITLE, mTitle);
         intent.putExtra(WebContentActivity.SHOW_BACK, isShowBack);
@@ -82,8 +81,8 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
 
     @Override
     protected void initUI() {
-        UbtLog.d(TAG,"initUI-->");
-        if(isShowBack){
+        UbtLog.d(TAG, "initUI-->");
+        if (isShowBack) {
             rlTitle.setVisibility(View.VISIBLE);
         }
 
@@ -103,7 +102,7 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
             webSettings.setMediaPlaybackRequiresUserGesture(true);
         }
 
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 
@@ -129,13 +128,13 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                UbtLog.d(TAG,"onPageFinished url = " + url);
+                UbtLog.d(TAG, "onPageFinished url = " + url);
                 super.onPageFinished(view, url);
             }
 
         };
 
-        WebChromeClient webChromeClient = new WebChromeClient(){
+        WebChromeClient webChromeClient = new WebChromeClient() {
             //扩展浏览器上传文件
             //3.0++版本
             public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
@@ -153,7 +152,7 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
 
             // For Android > 5.0
             @Override
-            public boolean onShowFileChooser (WebView webView, ValueCallback<Uri[]> uploadMsg, WebChromeClient.FileChooserParams fileChooserParams) {
+            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> uploadMsg, WebChromeClient.FileChooserParams fileChooserParams) {
                 openFileChooserImplForAndroid5(uploadMsg);
                 return true;
             }
@@ -260,14 +259,14 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
         if (requestCode == FILECHOOSER_RESULTCODE) {
             if (null == mUploadMessage)
                 return;
-            Uri result = intent == null || resultCode != RESULT_OK ? null: intent.getData();
+            Uri result = intent == null || resultCode != RESULT_OK ? null : intent.getData();
             mUploadMessage.onReceiveValue(result);
             mUploadMessage = null;
 
-        } else if (requestCode == FILECHOOSER_RESULTCODE_FOR_ANDROID_5){
+        } else if (requestCode == FILECHOOSER_RESULTCODE_FOR_ANDROID_5) {
             if (null == mUploadMessageForAndroid5)
                 return;
-            Uri result = (intent == null || resultCode != RESULT_OK) ? null: intent.getData();
+            Uri result = (intent == null || resultCode != RESULT_OK) ? null : intent.getData();
             if (result != null) {
                 mUploadMessageForAndroid5.onReceiveValue(new Uri[]{result});
             } else {
