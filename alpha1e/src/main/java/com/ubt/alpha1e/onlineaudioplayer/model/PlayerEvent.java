@@ -25,7 +25,9 @@ public class PlayerEvent {
     }
     public enum Event{
         CONTROL_PLAY_NEXT,
-        READ_EVENT_PLAY_STATUS
+        CONTROL_STOP,
+        READ_EVENT_PLAY_STATUS,
+        TAP_HEAD
     }
     public PlayerEvent.Event getEvent() {
         return event;

@@ -193,7 +193,7 @@ public class MainActivityGuideView{
 
     private void initView() {
         {
-            if (SizeUtils.isComprehensiveScreen(mContext)) {
+            if (SizeUtils.isComprehensiveScreen(mContext)||AlphaApplication.isPad()) {
                 rlHibitsEvent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
                     @Override

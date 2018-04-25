@@ -10,6 +10,16 @@ public class OnlineResSearch {
     private String albumName;
     private String grade;
 
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    private String categoryId;
+
     public String getAlbumId() {
         return albumId;
     }

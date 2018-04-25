@@ -42,13 +42,14 @@ import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.HistoryAudio;
 import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
-import com.ubt.alpha1e.onlineaudioplayer.onlinereSrearch.OnlineResRearchActivity;
+import com.ubt.alpha1e.onlineaudioplayer.searchActivity.OnlineResRearchActivity;
 import com.ubt.alpha1e.onlineaudioplayer.playerDialog.OnlineAudioPlayDialog;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -67,9 +68,9 @@ import okhttp3.Call;
  */
 
 
-public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPlayerContract.View, OnlineAudioPlayerPresenter> implements OnlineAudioPlayerContract.View {
+public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlayerContract.View, OnlineAudioPlayerPresenter> implements OnlineAudioPlayerContract.View {
 
-    String TAG = "OnlineAudioResourcesFragment";
+    String TAG = "OnlineCategoryListFragment";
 
     @BindView(R.id.online_res_list)
     RecyclerView mRecyclerview;
@@ -106,7 +107,7 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
             super.handleMessage(msg);
             switch (msg.what) {
                 case LAUNCH_CATEGORY_ITEM:
-                    OnlineAudioAlbumPlayerFragment mfragment = OnlineAudioAlbumPlayerFragment.newInstance(msg.obj.toString());
+                    OnlineAlbumListFragment mfragment = OnlineAlbumListFragment.newInstance(msg.obj.toString());
                     start(mfragment);
                     break;
             }
@@ -114,8 +115,8 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
     };
 
 
-    public static OnlineAudioResourcesFragment newInstance() {
-        OnlineAudioResourcesFragment onlineAudioResourcesFragment = new OnlineAudioResourcesFragment();
+    public static OnlineCategoryListFragment newInstance() {
+        OnlineCategoryListFragment onlineAudioResourcesFragment = new OnlineCategoryListFragment();
         return onlineAudioResourcesFragment;
     }
 
@@ -124,9 +125,10 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ib_return:
-                if (mPlayDialogOnlineAudioPlayDialog != null) {
-                    mPlayDialogOnlineAudioPlayDialog.stopPlay();
+                if(mHelper!=null) {
+                    mHelper.stopEvent();
                 }
+                EventBus.getDefault().unregister(this);
                 getActivity().finish();
                 break;
             case R.id.ib_rearch:
@@ -142,10 +144,10 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
                     ig_player_button.setImageResource(R.drawable.ic_ct_stop);
                     mPresenter.getAudioList(mHistory.getAlbumId());
                 } else {
-                    ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
-                    if (mPlayDialogOnlineAudioPlayDialog != null) {
-                        mPlayDialogOnlineAudioPlayDialog.stopPlay();
+                    if(mHelper!=null) {
+                        mHelper.stopEvent();
                     }
+                    ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
                     playStatus = false;
                 }
                 break;
@@ -156,7 +158,8 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
-        mHelper = new OnlineAudioResourcesHelper(getContext());
+        EventBus.getDefault().register(this);
+        mHelper = OnlineAudioResourcesHelper.getInstance(getContext());
         return rootView;
     }
 
@@ -329,28 +332,30 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
     }
 
     private void playEvent(List<AudioContentInfo> playContentInfoList, String albumId) {
-        if (mPlayDialogOnlineAudioPlayDialog == null) {
-            mPlayDialogOnlineAudioPlayDialog = new OnlineAudioPlayDialog(getActivity())
-                    .builder()
-                    .setCancelable(true)
-                    .setPlayContent(playContentInfoList)
-                    .setCurrentAlbumId(albumId)
-                    .setCallbackListener(new OnlineAudioPlayDialog.IHibitsEventPlayListener() {
-                        @Override
-                        public void onDismissCallback() {
-                            UbtLog.d(TAG, "onDismissCallback");
-                            mPlayDialogOnlineAudioPlayDialog.hidden();
-                        }
-                    });
-        }
-        mPlayDialogOnlineAudioPlayDialog.startPlay();
+//        if (mPlayDialogOnlineAudioPlayDialog == null) {
+//            mPlayDialogOnlineAudioPlayDialog = new OnlineAudioPlayDialog(getActivity())
+//                    .builder()
+//                    .setCancelable(true)
+//                    .setPlayContent(playContentInfoList)
+//                    .setCurrentAlbumId(albumId)
+//                    .setCallbackListener(new OnlineAudioPlayDialog.IHibitsEventPlayListener() {
+//                        @Override
+//                        public void onDismissCallback() {
+//                            UbtLog.d(TAG, "onDismissCallback");
+//                            mPlayDialogOnlineAudioPlayDialog.hidden();
+//                        }
+//                    });
+//        }
+//        mPlayDialogOnlineAudioPlayDialog.startPlay();
 
+        mHelper.autoAudioPlay();
     }
 
     @Subscribe
-    public void onEventOnlinePlayerEvent(final PlayerEvent mPlayerEvent) {
+    public void onEvent(final PlayerEvent mPlayerEvent) {
         if (mPlayerEvent.getEvent() == PlayerEvent.Event.CONTROL_PLAY_NEXT) {
             UbtLog.d(TAG, "CONTROL_PLAY event = next " + mPlayerEvent.getCurrentPlayingSongName());
+            mHelper.autoNextAudioPlay();
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -359,7 +364,6 @@ public class OnlineAudioResourcesFragment extends MVPBaseFragment<OnlineAudioPla
 
                 ;
             });
-
         }
     }
 }

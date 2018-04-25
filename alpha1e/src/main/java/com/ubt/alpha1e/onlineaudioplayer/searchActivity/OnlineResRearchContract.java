@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.onlineaudioplayer.onlinereSrearch;
+package com.ubt.alpha1e.onlineaudioplayer.searchActivity;
 
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;

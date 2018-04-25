@@ -5,11 +5,13 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
+import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
 import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
+import com.ubt.alpha1e.onlineaudioplayer.playerDialog.OnlineAudioPlayDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -19,6 +21,7 @@ import com.ubtechinc.base.ConstValue;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,14 +31,34 @@ import java.util.List;
 public class OnlineAudioResourcesHelper extends BaseHelper {
 
     private static final String TAG = OnlineAudioResourcesHelper.class.getSimpleName();
+    private static List<AudioContentInfo> mPlayContentInfoList =  new ArrayList<>();
+    private static List<AudioContentInfo> mPlayContentOriginInfoList =new ArrayList<>();
+    private int currentPlaySeq = -1;
+    private boolean isRecyclePlaying=false;
+    private int mAlbumId;
 
+    private static OnlineAudioResourcesHelper mOnlineAudioResourcesHelper=null;
 
+    public int getPlayType() {
+        return mPlayType;
+    }
+
+    public void setPlayType(int mPlayType) {
+        this.mPlayType = mPlayType;
+    }
+
+    private int mPlayType=-1;
     MediaPlayer   mediaPlayer;
+    //TEST PURPOSE LOCAL PLAYRING AUDIO
     private boolean local_player=true;
-    private int songIndex=-1;
-    private List<AudioContentInfo> mSongList;
     public OnlineAudioResourcesHelper(Context context) {
         super(context);
+    }
+    public static OnlineAudioResourcesHelper getInstance(Context mContext){
+        if(mOnlineAudioResourcesHelper==null){
+            mOnlineAudioResourcesHelper=new OnlineAudioResourcesHelper(mContext);
+        }
+        return mOnlineAudioResourcesHelper;
     }
 
     @Override
@@ -57,6 +80,9 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
         }else if(cmd==ConstValue.DV_ONLINEPLAYER_CONTINUE){
 
+        }else if(cmd==ConstValue.DV_TAP_HEAD){
+            PlayerEvent mPlayerEvent=new PlayerEvent(PlayerEvent.Event.TAP_HEAD);
+            EventBus.getDefault().post(mPlayerEvent);
         }
 
     }
@@ -93,27 +119,24 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     public void playEvent( String url,int index){
         String params = url;
-        UbtLog.d(TAG,"playEventSound = " + params);
+        UbtLog.d(TAG,"playEventSound = " + params+"index"+index);
         setCurentPlayingAudioIndex(index);
         doSendComm(ConstValue.DV_ONLINEPLAYER_PLAY, BluetoothParamUtil.stringToBytes(url));
         if(local_player) {
+            if(mediaPlayer!=null){
+                mediaPlayer.stop();
+            }
             mediaPlayer = MediaPlayer.create(mContext, Uri.parse(url));
             mediaPlayer.start();
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
+                    UbtLog.d(TAG,"EMULATE THE PALY ENDING");
                     sendEventBusMesssage();
                 }
             });
         }
     }
-
-    private void sendEventBusMesssage() {
-        PlayerEvent mPlayerEvent=new PlayerEvent(PlayerEvent.Event.CONTROL_PLAY_NEXT);
-        mPlayerEvent.setCurrentPlayingSongName(mSongList.get(getCurrentPlayingAudioIndex()).contentName);
-        EventBus.getDefault().post(mPlayerEvent);
-    }
-
     public void stopEvent(){
         UbtLog.d(TAG,"stopEventSound = " );
         byte[] mCmd={0};
@@ -138,6 +161,12 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         byte[] mCmd={0};
         mCmd[0]=0;
         doSendComm(ConstValue.DV_ONLINEPLAYER_CONTINUE, mCmd);
+    }
+    private void sendEventBusMesssage() {
+        PlayerEvent mPlayerEvent=new PlayerEvent(PlayerEvent.Event.CONTROL_PLAY_NEXT);
+        //NEXT AUDIO NAME INFORMATION
+        mPlayerEvent.setCurrentPlayingSongName(mPlayContentInfoList.get(getCurrentPlayingAudioIndex()+1).contentName);
+        EventBus.getDefault().post(mPlayerEvent);
     }
 
     public void readPlayStatus(){
@@ -173,18 +202,126 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     }
 
-    public void setPlayContentInfo(List<AudioContentInfo> mAudioList){
-            mSongList=mAudioList;
-    }
-    public List<AudioContentInfo> getPlayContentInfo(){
-            return mSongList;
+
+    public void setCurentPlayingAudioIndex(int index) {
+        currentPlaySeq = index;
     }
 
-    public void setCurentPlayingAudioIndex(int index){
-         songIndex=index;
+    public int getCurrentPlayingAudioIndex() {
+        return  currentPlaySeq;
     }
-    public int getCurrentPlayingAudioIndex(){
-        return songIndex;
+    public void autoNextAudioPlay(){
+        if(getPlayType()== OnlineAudioPlayDialog.ORDER_AUDIO_LIST_PLAYING) {
+            if ((currentPlaySeq + 1) < mPlayContentInfoList.size()) {
+                currentPlaySeq++;
+            } else {
+                    PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_STOP);
+                    EventBus.getDefault().post(mPlayerEvent);
+            }
+            stopEvent();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }else if(getPlayType()==OnlineAudioPlayDialog.RECYCLE_AUDIO_LIST_PLAYING){
+            if ((currentPlaySeq + 1) > mPlayContentInfoList.size()) {
+                currentPlaySeq = 0;
+            }
+        }else if(getPlayType()==OnlineAudioPlayDialog.SINGLE_AUDIO_PLAYING){
+
+        }
+        playEvent(mPlayContentInfoList.get(currentPlaySeq).contentUrl, currentPlaySeq);
+    }
+    public void nextAudioPlay(){
+            if((currentPlaySeq + 1) < mPlayContentInfoList.size()){
+                currentPlaySeq++;
+            }
+            else {
+            if(isRecyclePlaying) {
+                currentPlaySeq = 0;
+            }else{
+                PlayerEvent mPlayerEvent=new PlayerEvent(PlayerEvent.Event.CONTROL_STOP);
+                EventBus.getDefault().post(mPlayerEvent);
+            }
+        }
+            stopEvent();
+            try{
+                Thread.sleep(200);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+        playEvent(mPlayContentInfoList.get(currentPlaySeq).contentUrl, currentPlaySeq);
+    }
+    public void prevAudioPlay(){
+            if((currentPlaySeq -1) >= 0){
+                currentPlaySeq--;
+            }else {
+                currentPlaySeq = mPlayContentInfoList.size() -1;
+            }
+           // isPause = false;
+           // currentPlayInfo = mPlayContentInfoList.get(currentPlaySeq);
+            stopEvent();
+            try{
+                Thread.sleep(200);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+            playEvent(mPlayContentInfoList.get(currentPlaySeq).contentUrl,currentPlaySeq);
+         //   ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
+         //   mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
+    }
+    public void autoAudioPlay(){
+        if(currentPlaySeq < 0){
+            currentPlaySeq = 0;
+        }
+        stopEvent();
+        try{
+                Thread.sleep(200);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+        }
+        if(mPlayContentInfoList.size()!=0) {
+            playEvent(mPlayContentInfoList.get(currentPlaySeq).contentUrl,currentPlaySeq);
+        }
+
+
+    }
+
+
+    public  void updatePlayContentInfoList(){
+        mPlayContentInfoList.clear();
+        for(int i=0;i<mPlayContentOriginInfoList.size();i++) {
+            if (mPlayContentOriginInfoList.get(i).isSelect){
+                mPlayContentInfoList.add(mPlayContentOriginInfoList.get(i));
+            }
+        }
+    }
+    public List<AudioContentInfo> getPlayContent() {
+        return mPlayContentInfoList;
+    }
+
+    public void setPlayContent(List<AudioContentInfo> playContentInfoList) {
+        mPlayContentInfoList = playContentInfoList;
+        mPlayContentOriginInfoList.clear();
+        currentPlaySeq=-1;
+
+        for(int i=0;i<mPlayContentInfoList.size();i++){
+            mPlayContentOriginInfoList.add(mPlayContentInfoList.get(i));
+        }
+        for(int i = 0; i< mPlayContentInfoList.size();i++){
+            UbtLog.d(TAG,"i = " + i + "     url = " /*+ mPlayContentInfoList.get(i).contentName + "/"*/ + mPlayContentInfoList.get(i).contentUrl);
+        }
+        UbtLog.d(TAG,"mPlayContentInfoList.size() = " + mPlayContentInfoList.size());
+    }
+
+    public void setAlbumId(int albumId) {
+        mAlbumId = albumId;
+
+    }
+
+    public int getAlbumId() {
+        return mAlbumId;
     }
 
 

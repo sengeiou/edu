@@ -50,7 +50,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="80dp"
         android:background="@drawable/ic_screening"
-        android:visibility="visible"></ImageView>
+        android:visibility="gone"></ImageView>
 
     <ImageView
         android:id="@+id/iv_search"
