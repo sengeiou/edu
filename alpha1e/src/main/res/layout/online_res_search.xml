@@ -71,6 +71,15 @@
                 android:textSize="13sp"
                 android:textColor="@color/gray_dft"
                 android:text="最近搜索"/>
+            <TextView
+                android:id="@+id/tv_no_rearch"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="1dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_below="@id/tv_ad7"
+                android:text="无搜索历史记录"/>
             <android.support.v7.widget.RecyclerView
                 android:layout_marginTop="50dp"
                 android:id="@+id/recent_search_content"
