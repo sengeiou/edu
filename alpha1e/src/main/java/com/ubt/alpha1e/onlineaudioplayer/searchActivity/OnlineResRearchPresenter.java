@@ -8,5 +8,6 @@ import com.ubt.alpha1e.mvp.BasePresenterImpl;
  */
 
 public class OnlineResRearchPresenter extends BasePresenterImpl<OnlineResRearchContract.View> implements OnlineResRearchContract.Presenter{
+
     
 }

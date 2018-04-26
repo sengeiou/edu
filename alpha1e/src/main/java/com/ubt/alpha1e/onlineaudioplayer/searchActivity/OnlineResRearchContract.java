@@ -10,7 +10,8 @@ import com.ubt.alpha1e.mvp.BaseView;
 
 public class OnlineResRearchContract {
     interface View extends BaseView {
-        
+
+
     }
 
     interface  Presenter extends BasePresenter<View> {
