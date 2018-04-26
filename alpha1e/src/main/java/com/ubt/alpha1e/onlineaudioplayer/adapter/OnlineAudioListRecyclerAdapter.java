@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.playEventListActivity.OnlineAudioEventListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +32,7 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
     private View mView;
     private Handler mHandler = null;
 
+
     public OnlineAudioListRecyclerAdapter(Context mContext, List<AudioContentInfo> list, Handler handler) {
         super();
         this.mContext = mContext;
@@ -49,28 +49,28 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
 
         final MyPlayContentHolder myHolder  = (MyPlayContentHolder) holder;
         AudioContentInfo playContentInfo = mDatas.get(position);
-        if(OnlineAudioEventListActivity.mPlayContentInfoDatas.get(position).isSelect){
-            myHolder.ivPlay.setChecked(true);
-        }else {
-            myHolder.ivPlay.setChecked(false);
-        }
+//        if(OnlineAudioEventListActivity.mPlayContentInfoDatas.get(position).isSelect){
+//            myHolder.ivPlay.setChecked(true);
+//        }else {
+//            myHolder.ivPlay.setChecked(false);
+//        }
         myHolder.tvPlayContent.setText(playContentInfo.contentName);
 
         myHolder.ivPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(myHolder.ivPlay.isChecked()){
-                                        Message msg = new Message();
-                    msg.what = OnlineAudioEventListActivity.SELECT_ADD;
-                    msg.arg1 = position;
-                    mHandler.sendMessage(msg);
-                }else {
-                    Message msg = new Message();
-                    msg.what = OnlineAudioEventListActivity.DESELECT_DELETE;
-                    msg.arg1 = position;
-                    mHandler.sendMessage(msg);
-                }
+//                if(myHolder.ivPlay.isChecked()){
+//                                        Message msg = new Message();
+//                    msg.what = OnlineAudioEventListActivity.SELECT_ADD;
+//                    msg.arg1 = position;
+//                    mHandler.sendMessage(msg);
+//                }else {
+//                    Message msg = new Message();
+//                    msg.what = OnlineAudioEventListActivity.DESELECT_DELETE;
+//                    msg.arg1 = position;
+//                    mHandler.sendMessage(msg);
+//                }
             }
         });
     }

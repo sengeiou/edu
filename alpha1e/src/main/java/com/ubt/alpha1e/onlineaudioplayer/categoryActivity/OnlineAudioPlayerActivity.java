@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
-import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioResourcesFragment;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineCategoryListFragment;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
@@ -24,15 +24,18 @@ import java.util.List;
 public class OnlineAudioPlayerActivity extends MVPBaseActivity<OnlineAudioPlayerContract.View, OnlineAudioPlayerPresenter> implements OnlineAudioPlayerContract.View {
 
     private String TAG="OnlineAudioPlayerActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OnlineAudioResourcesFragment fragment = findFragment(OnlineAudioResourcesFragment.class);
+        OnlineCategoryListFragment fragment = findFragment(OnlineCategoryListFragment.class);
         UbtLog.d(TAG, "OnlineAudioPlayerActivity = " + fragment);
         if (fragment == null) {
-            fragment = OnlineAudioResourcesFragment.newInstance();
+            fragment = OnlineCategoryListFragment.newInstance();
             loadRootFragment(R.id.rl_content, fragment);
         }
+
+
     }
 
     @Override

@@ -24,6 +24,17 @@ public class AlbumContentInfo  extends BaseModel implements Serializable {
     public String albumId;
     public String albumName;
     public String grade;
+
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String categoryId;
     @Override
     public AlbumContentInfo getThiz(String json) {
         try {
@@ -75,6 +86,7 @@ public class AlbumContentInfo  extends BaseModel implements Serializable {
                 "albumId=" + albumId +
                 ", albumName='" + albumName + '\'' +
                 ", grade='" + grade + '\'' +
+                ", categoryId='" + categoryId + '\'' +
                 '}';
     }
 }

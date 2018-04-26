@@ -11,7 +11,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioAlbumPlayerFragment;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAlbumListFragment;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 /**
@@ -29,12 +29,13 @@ public class GradeSelectedAdapter extends BaseAdapter {
     }
     @Override
     public int getCount() {
-        return OnlineAudioAlbumPlayerFragment.mGradData.size();
+        return OnlineAlbumListFragment.mGradData.size();
     }
+
 
     @Override
     public Object getItem(int i) {
-        return OnlineAudioAlbumPlayerFragment.mGradData.get(i);
+        return OnlineAlbumListFragment.mGradData.get(i);
     }
 
     @Override
@@ -45,30 +46,30 @@ public class GradeSelectedAdapter extends BaseAdapter {
     @Override
     public View getView(final int i, View convertView, ViewGroup viewGroup) {
             if (convertView == null) {
-                LayoutInflater infalInflater = (LayoutInflater) OnlineAudioAlbumPlayerFragment.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater infalInflater = (LayoutInflater) OnlineAlbumListFragment.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = infalInflater.inflate(R.layout.dialog_online_player, null);
             }
-            if(OnlineAudioAlbumPlayerFragment.mGradData.get(i)!=null)
-            ((TextView) convertView.findViewById(R.id.grade_name)).setText(mTextGrade[Integer.parseInt(OnlineAudioAlbumPlayerFragment.mGradData.get(i))]);
+            if(OnlineAlbumListFragment.mGradData.get(i)!=null)
+            ((TextView) convertView.findViewById(R.id.grade_name)).setText(mTextGrade[Integer.parseInt(OnlineAlbumListFragment.mGradData.get(i))]);
             final CheckBox mCheckBox = ((CheckBox) convertView.findViewById(R.id.grade_select));
-            mCheckBox.setChecked(OnlineAudioAlbumPlayerFragment.mGradeSelectedData.get(i));
+            mCheckBox.setChecked(OnlineAlbumListFragment.mGradeSelectedData.get(i));
             mCheckBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mCheckBox.isChecked()) {
                         Message msg = new Message();
-                        msg.what = OnlineAudioAlbumPlayerFragment.GRADE_SELECT_ADD;
-                        msg.obj = OnlineAudioAlbumPlayerFragment.mGradData.get(i);
+                        msg.what = OnlineAlbumListFragment.GRADE_SELECT_ADD;
+                        msg.obj = OnlineAlbumListFragment.mGradData.get(i);
                         mHandler.sendMessage(msg);
-                        OnlineAudioAlbumPlayerFragment.mGradeSelectedData.add(i, true);
+                        OnlineAlbumListFragment.mGradeSelectedData.add(i, true);
                     } else {
                         Message msg = new Message();
-                        msg.what = OnlineAudioAlbumPlayerFragment.GRADE_UNSELECT_DELETE;
-                        msg.obj = OnlineAudioAlbumPlayerFragment.mGradData.get(i);
+                        msg.what = OnlineAlbumListFragment.GRADE_UNSELECT_DELETE;
+                        msg.obj = OnlineAlbumListFragment.mGradData.get(i);
                         mHandler.sendMessage(msg);
-                        OnlineAudioAlbumPlayerFragment.mGradeSelectedData.add(i, false);
+                        OnlineAlbumListFragment.mGradeSelectedData.add(i, false);
                     }
-                    UbtLog.d("GradeSelectedAdapter", "POSITION " + i + "state "+OnlineAudioAlbumPlayerFragment.mGradeSelectedData.get(i));
+                    UbtLog.d("GradeSelectedAdapter", "POSITION " + i + "state "+ OnlineAlbumListFragment.mGradeSelectedData.get(i));
 
                 }
             });

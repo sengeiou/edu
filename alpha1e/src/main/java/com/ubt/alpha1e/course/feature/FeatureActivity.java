@@ -54,6 +54,7 @@ import butterknife.Unbinder;
 
 public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, FeaturePresenter> implements FeatureContract.View, IBezierView {
 
+
     private static final String TAG = FeatureActivity.class.getSimpleName();
 
     private static final int SHOW_VIEW = 1;
@@ -381,7 +382,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                                     @Override
                                     public void onClick(View view) {
 
-                                        finish();
+                                        exitPrincipleProcess();
                                     }
                                 }).show();
                     } else {
@@ -870,11 +871,9 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                     .setPositiveButton(getStringResources("ui_common_yes"), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            ((PrincipleHelper) mHelper).doInit();
-                            ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
+
                             MainCourseActivity.finishByMySelf();
-                            FeatureActivity.this.finish();
-                            FeatureActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                            exitPrincipleProcess();
                         }
                     }).setNegativeButton(getStringResources("ui_common_no"), new View.OnClickListener() {
                         @Override
@@ -1052,11 +1051,8 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                             .setPositiveButton(getStringResources("ui_common_confirm"), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    ((PrincipleHelper) mHelper).doInit();
-                                    ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
                                     doSaveCourseProgress(1, 1, 4);
-                                    FeatureActivity.this.finish();
-                                    FeatureActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                                    exitPrincipleProcess();
                                 }
                             }).setNegativeButton(getStringResources("ui_common_cancel"), new View.OnClickListener() {
                         @Override
@@ -1065,8 +1061,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                         }
                     }).show();
                 } else {
-                    FeatureActivity.this.finish();
-                    this.overridePendingTransition(0, R.anim.activity_close_down_up);
+                    exitPrincipleProcess();
                 }
                 break;
 

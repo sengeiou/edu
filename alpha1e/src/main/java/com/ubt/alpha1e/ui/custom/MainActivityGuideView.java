@@ -55,6 +55,7 @@ public class MainActivityGuideView{
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams wmParams;
 
+
     private RelativeLayout rlGuideLayout;
 
     private boolean created = false;
@@ -193,7 +194,7 @@ public class MainActivityGuideView{
 
     private void initView() {
         {
-            if (SizeUtils.isComprehensiveScreen(mContext)) {
+            if (SizeUtils.isComprehensiveScreen(mContext)||AlphaApplication.isPad()) {
                 rlHibitsEvent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
                     @Override

@@ -7,15 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineresList;
-import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioResourcesFragment;
-import com.ubt.alpha1e.ui.dialog.WifiSelectAlertDialog;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineCategoryListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +24,7 @@ import java.util.List;
 public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private static final String TAG = "onlineresAdpater";
+
 
     private Context mContext;
     public List<OnlineresList> mDatas = new ArrayList<>();
@@ -78,7 +76,7 @@ public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
             @Override
             public void onClick(View v) {
                 Message msg = new Message();
-                msg.what = OnlineAudioResourcesFragment.LAUNCH_CATEGORY_ITEM;
+                msg.what = OnlineCategoryListFragment.LAUNCH_CATEGORY_ITEM;
                 msg.obj = onlineres.getRes_id();
                 mHandler.sendMessage(msg);
             }

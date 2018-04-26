@@ -38,6 +38,7 @@ import butterknife.OnClick;
 
 public class WebContentActivity extends MVPBaseActivity<WebContentContract.View, WebContentPresenter> implements WebContentContract.View {
 
+
     private static final String TAG = WebContentActivity.class.getSimpleName();
     public static final String WEB_TITLE = "WEB_TITLE";
     public static final String WEB_URL = "WEB_URL";

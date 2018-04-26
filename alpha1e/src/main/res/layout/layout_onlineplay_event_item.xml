@@ -18,7 +18,8 @@
             android:layout_marginLeft="10dp"
             android:button="@drawable/checkbox_selected"
             android:layout_centerVertical="true"
-            android:checked="true"/>
+            android:checked="true"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_play_content"

@@ -28,6 +28,8 @@ public class CommunityPresenter extends BasePresenterImpl<CommunityContract.View
 
     public static final int GET_QINIU_TOKEN = 1;
 
+
+
     private String mQiniuTokenUrl = "https://test79.ubtrobot.com/community/app/sys/getQiniuToken";
 
     private String mQiNiuPublicUrl = "https://video.ubtrobot.com/";

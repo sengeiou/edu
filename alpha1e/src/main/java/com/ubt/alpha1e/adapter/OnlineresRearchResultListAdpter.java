@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineResRearchList;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.onlinereSrearch.OnlineResRearchActivity;
+import com.ubt.alpha1e.onlineaudioplayer.searchActivity.OnlineResRearchActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
@@ -30,6 +30,7 @@ public class OnlineresRearchResultListAdpter extends RecyclerView.Adapter<Recycl
     public List<OnlineResRearchList> mDatas = new ArrayList<>();
     private View mView;
     Handler mHandler;
+
 
     /**
      * 类构造函数
@@ -72,17 +73,17 @@ public class OnlineresRearchResultListAdpter extends RecyclerView.Adapter<Recycl
             public void onClick(View view) {
 
                 UbtLog.d(TAG, "onClick ......" +mDatas.get(position).res_id);
-                List<AlbumContentInfo> mAlbum=new ArrayList<>();
                 AlbumContentInfo mItem=new AlbumContentInfo();
                 mItem.grade=mDatas.get(position).getGrade();
                 mItem.albumName=mDatas.get(position).getRes_name();
                 mItem.albumId=mDatas.get(position).getRes_id();
-                mAlbum.add(0,mItem);
+                mItem.categoryId=mDatas.get(position).getCategory_id();
+
                 Message msg = new Message();
                 msg.what = OnlineResRearchActivity.SEARCH_RESULT_ALBUM;
-                msg.obj =mAlbum;
+                msg.obj =mItem;
                 mHandler.sendMessage(msg);
-//                Intent i = new Intent(mContext,  OnlineAudioAlbumPlayerFragment.class);
+//                Intent i = new Intent(mContext,  OnlineAudioAlbumFragment.class);
 //                mContext.startActivity(i);
             }
         });
