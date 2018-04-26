@@ -127,6 +127,8 @@ public class VideoCameraActivity extends Activity {
     private CustomVideoView video_preview;
     private Intent resultIntent;
 
+    private boolean isCanRecordVideo = true;
+
     //旋转角度
     static {
         /*DEFAULT_ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -177,9 +179,15 @@ public class VideoCameraActivity extends Activity {
         iv_switch = findViewById(R.id.iv_switch);//切换摄像头
         video_preview = findViewById(R.id.video_preview);
         tvCancel = findViewById(R.id.tv_cancel);
+        Log.d(TAG,"getSelectType = " + ImagePicker.getInstance().getSelectType());
+        if(ImagePicker.getInstance().getSelectType() == 1){
+            isCanRecordVideo = false;
+        }
+        Log.d(TAG,"isCanRecordVideo = " + isCanRecordVideo);
     }
 
     private void initListener(){
+
         //拍照 录像
         mCaptureLayout.setCaptureLisenter(new CaptureListener2() {
             //拍照

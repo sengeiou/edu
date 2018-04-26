@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioListFragment;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +37,6 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
     private View mView;
     private Handler mHandler = null;
 
-
     public OnlineAudioListRecyclerAdapter(Context mContext, List<AudioContentInfo> list, Handler handler) {
         super();
         this.mContext = mContext;
@@ -49,28 +53,21 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
 
         final MyPlayContentHolder myHolder  = (MyPlayContentHolder) holder;
         AudioContentInfo playContentInfo = mDatas.get(position);
-//        if(OnlineAudioEventListActivity.mPlayContentInfoDatas.get(position).isSelect){
-//            myHolder.ivPlay.setChecked(true);
-//        }else {
-//            myHolder.ivPlay.setChecked(false);
-//        }
+        if(OnlineAudioListFragment.mPlayContentInfoDatas.get(position).isPlaying){
+            myHolder.ivPlay.setBackgroundResource(R.drawable.ic_music_list_pause);
+            myHolder.playStatusAnim.start();
+            myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
+        }else {
+            myHolder.ivPlay.setBackgroundResource(R.drawable.ic_music_list_play);
+            myHolder.playStatusAnim.stop();
+            myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
+        }
         myHolder.tvPlayContent.setText(playContentInfo.contentName);
 
         myHolder.ivPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-//                if(myHolder.ivPlay.isChecked()){
-//                                        Message msg = new Message();
-//                    msg.what = OnlineAudioEventListActivity.SELECT_ADD;
-//                    msg.arg1 = position;
-//                    mHandler.sendMessage(msg);
-//                }else {
-//                    Message msg = new Message();
-//                    msg.what = OnlineAudioEventListActivity.DESELECT_DELETE;
-//                    msg.arg1 = position;
-//                    mHandler.sendMessage(msg);
-//                }
             }
         });
     }
@@ -89,7 +86,7 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
     }
 
 
-    public static class MyPlayContentHolder extends RecyclerView.ViewHolder
+    public static class MyPlayContentHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
 
         public RelativeLayout rlPlayContentItem;
@@ -97,11 +94,12 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
         public CheckBox ivPlay;
         public TextView tvPlayContent;
         private AnimationDrawable playStatusAnim = null;
+        private SparseBooleanArray selectedItems = new SparseBooleanArray();
 
         public MyPlayContentHolder(View view)
         {
             super(view);
-
+            view.setOnClickListener(this);
             rlPlayContentItem  = (RelativeLayout) view.findViewById(R.id.rl_play_content_item);
             ivPlay = (CheckBox) view.findViewById(R.id.iv_play);
             ivPlayStatus = (ImageView) view.findViewById(R.id.iv_play_status);
@@ -110,6 +108,22 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             playStatusAnim = (AnimationDrawable)ivPlayStatus.getBackground();
             playStatusAnim.setOneShot(false);
             playStatusAnim.setVisible(true,true);
+        }
+
+        @Override
+        public void onClick(View view) {
+            PlayerEvent playStatusEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_PLAYER_SHOW);
+            playStatusEvent.setCurrentPlayingIndex(getAdapterPosition());
+            EventBus.getDefault().post(playStatusEvent);
+//            if (selectedItems.get(getAdapterPosition(), false)) {
+//                selectedItems.delete(getAdapterPosition());
+//                view.setSelected(false);
+//            }
+//            else {
+//                selectedItems.put(getAdapterPosition(), true);
+//                view.setSelected(true);
+//
+//            }
         }
     }
 

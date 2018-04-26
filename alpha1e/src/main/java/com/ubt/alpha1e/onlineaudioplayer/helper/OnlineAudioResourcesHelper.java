@@ -5,16 +5,12 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
-import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
-import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
-import com.ubt.alpha1e.event.RobotEvent;
+
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioListFragment;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
-import com.ubt.alpha1e.onlineaudioplayer.playerDialog.OnlineAudioPlayDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
-import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
@@ -34,9 +30,8 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     private static List<AudioContentInfo> mPlayContentInfoList =  new ArrayList<>();
     private static List<AudioContentInfo> mPlayContentOriginInfoList =new ArrayList<>();
     private int currentPlaySeq = -1;
-    private boolean isRecyclePlaying=false;
+    private boolean isRecyclePlaying=true;
     private int mAlbumId;
-
 
     private static OnlineAudioResourcesHelper mOnlineAudioResourcesHelper=null;
 
@@ -48,10 +43,10 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         this.mPlayType = mPlayType;
     }
 
-    private int mPlayType=-1;
+    private int mPlayType= OnlineAudioListFragment.ORDER_AUDIO_LIST_PLAYING;
     MediaPlayer   mediaPlayer;
     //TEST PURPOSE LOCAL PLAYRING AUDIO
-    private boolean local_player=true;
+    private boolean local_player=false;
     public OnlineAudioResourcesHelper(Context context) {
         super(context);
     }
@@ -123,19 +118,28 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         UbtLog.d(TAG,"playEventSound = " + params+"index"+index);
         setCurentPlayingAudioIndex(index);
         doSendComm(ConstValue.DV_ONLINEPLAYER_PLAY, BluetoothParamUtil.stringToBytes(url));
+        for(AudioContentInfo mPlayContentInfo : getPlayContent()){
+            mPlayContentInfo.isPlaying = false;
+        }
+        getPlayContent().get(index).isPlaying =true;
+        PlayerEvent playStatusEvent = new PlayerEvent(PlayerEvent.Event.READ_EVENT_PLAY_STATUS);
+        playStatusEvent.setCurrentPlayingIndex(index);
+        EventBus.getDefault().post(playStatusEvent);
         if(local_player) {
             if(mediaPlayer!=null){
                 mediaPlayer.stop();
             }
             mediaPlayer = MediaPlayer.create(mContext, Uri.parse(url));
-            mediaPlayer.start();
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mediaPlayer) {
-                    UbtLog.d(TAG,"EMULATE THE PALY ENDING");
-                    sendEventBusMesssage();
-                }
-            });
+            if(mediaPlayer!=null) {
+                mediaPlayer.start();
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        UbtLog.d(TAG, "EMULATE THE PALY ENDING");
+                        sendEventBusMesssage();
+                    }
+                });
+            }
         }
     }
     public void stopEvent(){
@@ -212,7 +216,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         return  currentPlaySeq;
     }
     public void autoNextAudioPlay(){
-        if(getPlayType()== OnlineAudioPlayDialog.ORDER_AUDIO_LIST_PLAYING) {
+        if(getPlayType()== OnlineAudioListFragment.ORDER_AUDIO_LIST_PLAYING) {
             if ((currentPlaySeq + 1) < mPlayContentInfoList.size()) {
                 currentPlaySeq++;
             } else {
@@ -225,12 +229,13 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }else if(getPlayType()==OnlineAudioPlayDialog.RECYCLE_AUDIO_LIST_PLAYING){
+        }else if(getPlayType()==OnlineAudioListFragment.RECYCLE_AUDIO_LIST_PLAYING){
             if ((currentPlaySeq + 1) > mPlayContentInfoList.size()) {
                 currentPlaySeq = 0;
             }
-        }else if(getPlayType()==OnlineAudioPlayDialog.SINGLE_AUDIO_PLAYING){
-
+            currentPlaySeq++;
+        }else if(getPlayType()==OnlineAudioListFragment.SINGLE_AUDIO_PLAYING){
+             //NOTHING TO DO
         }
         playEvent(mPlayContentInfoList.get(currentPlaySeq).contentUrl, currentPlaySeq);
     }
@@ -291,12 +296,12 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
 
     public  void updatePlayContentInfoList(){
-        mPlayContentInfoList.clear();
-        for(int i=0;i<mPlayContentOriginInfoList.size();i++) {
-            if (mPlayContentOriginInfoList.get(i).isSelect){
-                mPlayContentInfoList.add(mPlayContentOriginInfoList.get(i));
-            }
-        }
+//        mPlayContentInfoList.clear();
+//        for(int i=0;i<mPlayContentOriginInfoList.size();i++) {
+//            if (mPlayContentOriginInfoList.get(i).isSelect){
+//                mPlayContentInfoList.add(mPlayContentOriginInfoList.get(i));
+//            }
+//        }
     }
     public List<AudioContentInfo> getPlayContent() {
         return mPlayContentInfoList;
@@ -318,7 +323,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     public void setAlbumId(int albumId) {
         mAlbumId = albumId;
-
     }
 
     public int getAlbumId() {

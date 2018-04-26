@@ -20,7 +20,7 @@ public class AudioContentInfo extends BaseModel {
     public AudioContentInfo thiz;
     public String contentName;
     public String contentUrl;
-    public Boolean isSelect=true;
+    public Boolean isPlaying=false;
 
     @Override
     public AudioContentInfo getThiz(String json) {
@@ -72,7 +72,7 @@ public class AudioContentInfo extends BaseModel {
         return "AudioContentInfo{" +
                 "contentName=" + contentName +
                 ", contentUrl='" + contentUrl + '\'' +
-                ", isSelect='" + isSelect + '\'' +
+                ", isSelect='" + isPlaying + '\'' +
                 '}';
     }
 }

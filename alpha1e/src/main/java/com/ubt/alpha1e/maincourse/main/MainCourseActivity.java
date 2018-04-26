@@ -52,10 +52,9 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     RecyclerView mRecyleviewContent;
     private List<CourseModel> mCourseModels;
     private MainCoursedapter mMainCoursedapter;
-    public static int onlinePlayerEnable=0; //0 enable 1 disale
+    public static int onlinePlayerEnable=1; //0 enable 1 disale
 
     private static MainCourseActivity mainCourseInstance = null;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

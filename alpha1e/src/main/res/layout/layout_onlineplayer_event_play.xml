@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_hibits_event_play"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="65dp"
     >
 
     <RelativeLayout
@@ -13,17 +13,15 @@
 
         <LinearLayout
             android:id="@+id/ll_play_content"
-            android:layout_width="match_parent"
-            android:layout_marginTop="15dp"
+            android:layout_width="171dp"
             android:layout_height="45dp"
-            android:layout_marginRight="130dp"
-            android:layout_marginLeft="130dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
             android:background="@color/B5"
-            android:orientation="horizontal"
             android:gravity="center"
-            >
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <ImageView
                 android:id="@+id/iv_play_status"
@@ -47,19 +45,17 @@
                 android:ellipsize="end"
                 android:lines="1"
                 android:text="暂无播放内容"
-                android:textColor="@color/T1"
-                />
+                android:textColor="@color/T1" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ll_play_control"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ll_play_content"
-            android:layout_marginTop="20dp"
-            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@+id/ll_play_content"
+            android:layout_toRightOf="@+id/ll_play_content"
+            android:layout_marginLeft="50dp"
             android:orientation="horizontal"
-            android:gravity="center"
             >
 
             <ImageView
@@ -67,6 +63,7 @@
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_music_list"
+                android:visibility="gone"
                 />
 
             <ImageView
@@ -81,7 +78,7 @@
                 android:id="@+id/iv_music_play"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="31dp"
                 android:src="@drawable/ic_ct_play_disable"
                 />
 
@@ -89,16 +86,9 @@
                 android:id="@+id/iv_music_stop"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="31dp"
                 android:src="@drawable/ic_ct_stop_disable"
                 android:visibility="gone"
-                />
-            <ImageView
-                android:id="@+id/iv_music_circle"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_resources_cycle_disable"
                 />
 
             <ImageView
@@ -108,6 +98,13 @@
                 android:layout_marginLeft="10dp"
                 android:src="@drawable/ic_music_next_disable"
                 />
+            <ImageView
+                android:id="@+id/iv_music_circle"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="129dp"
+                android:layout_marginRight="55dp"
+                android:src="@drawable/ic_circle_single" />
 
         </LinearLayout>
 
@@ -119,6 +116,7 @@
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"
             android:orientation="horizontal"
+            android:visibility="gone"
             >
 
             <ImageView

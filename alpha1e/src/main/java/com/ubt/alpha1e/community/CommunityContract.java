@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.ubt.alpha1e.mvp.BasePresenter;
 import com.ubt.alpha1e.mvp.BaseView;
+import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
+
+import java.util.List;
 
 /**
  * MVPPlugin
@@ -12,15 +15,19 @@ import com.ubt.alpha1e.mvp.BaseView;
 
 public class CommunityContract {
     interface View extends BaseView {
-
         void onQiniuTokenFromServer(boolean status, String token);
+        void onLoadFileToQiNiu(boolean status, String url);
+        void onActionStatus(int actionId, int isDownload, int actionStatus, String downloadPercent);
 
-        void onloadFileToQiNiu(boolean status, String url);
     }
 
     interface  Presenter extends BasePresenter<View> {
         void getQiniuTokenFromServer();
 
         void loadFileToQiNiu(String path);
+
+        void playAction(Context context, DynamicActionModel actionModel);
+
+        void getActionStatus(Context context, DynamicActionModel actionModel,List<String> mRobotDownActionList);
     }
 }
