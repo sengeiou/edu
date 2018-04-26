@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.community;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.qiniu.android.http.ResponseInfo;
@@ -9,11 +10,15 @@ import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
+import com.ubt.alpha1e.userinfo.dynamicaction.DownLoadActionManager;
+import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.json.JSONObject;
+
+import java.util.List;
 
 import okhttp3.Call;
 
@@ -44,8 +49,11 @@ public class CommunityPresenter extends BasePresenterImpl<CommunityContract.View
     @Override
     public void loadFileToQiNiu(String path) {
         mLoadFilePath = path;
-
-        getQiniuTokenFromServer();
+        if(TextUtils.isEmpty(mQiniuToken)){
+            getQiniuTokenFromServer();
+        }else {
+            uploadVideoToQiNiuServer();
+        }
     }
 
     /**
@@ -117,9 +125,9 @@ public class CommunityPresenter extends BasePresenterImpl<CommunityContract.View
                         if(mView != null){
                             UbtLog.d(TAG,"onResponse:" + key + "," + info.isOK());
                             if(info != null && info.isOK()){
-                                mView.onloadFileToQiNiu(true, mQiNiuPublicUrl + key);
+                                mView.onLoadFileToQiNiu(true, mQiNiuPublicUrl + key);
                             }else {
-                                mView.onloadFileToQiNiu(false,"");
+                                mView.onLoadFileToQiNiu(false,"");
                             }
                         }
                     }
@@ -131,5 +139,85 @@ public class CommunityPresenter extends BasePresenterImpl<CommunityContract.View
 
                     }
                 },null));
+    }
+
+    /**
+     * 播放动作文件
+     *
+     * @param context
+     * @param dynamicActionModel
+     */
+    @Override
+    public void playAction(Context context, DynamicActionModel dynamicActionModel) {
+        int actionStatus = dynamicActionModel.getActionStatu();
+        UbtLog.d(TAG, "actionName==" + dynamicActionModel.getActionName() + "  actionStatus = " + dynamicActionModel.getActionStatu());
+        if (actionStatus == 0) {
+            if (dynamicActionModel.isDownload()) {//已经下载
+
+                DownLoadActionManager.getInstance(context).playAction(false, dynamicActionModel);
+                mView.onActionStatus(dynamicActionModel.getActionId(), 1, 1, "0");
+            } else {//没有下载，需要下载
+                DownLoadActionManager.getInstance(context).readNetworkStatus();
+                DownLoadActionManager.getInstance(context).downRobotAction(dynamicActionModel);
+                mView.onActionStatus(dynamicActionModel.getActionId(), 2, 0, "0");
+            }
+        } else if (actionStatus == 1) {//正在播放
+            DownLoadActionManager.getInstance(context).stopAction(false);
+            mView.onActionStatus(dynamicActionModel.getActionId(), 1, 0, "0");
+        } else if (actionStatus == 2) {//正在下载
+
+        }
+    }
+
+    /**
+     * 获取动作状态
+     * @param context
+     * @param dynamicActionModel
+     */
+    @Override
+    public void getActionStatus(Context context, DynamicActionModel dynamicActionModel, List<String> mRobotDownActionList) {
+        boolean hasDown = false;
+        for(String actionName : mRobotDownActionList){
+            if(actionName.equals(dynamicActionModel.getActionOriginalId())){
+                hasDown = true;
+                break;
+            }
+        }
+
+        boolean isPlaying = false;
+        if(hasDown){
+            //获取正在播放的PlayingInfo，下次进来的时候可以直接显示播放状态
+            DynamicActionModel actionInfo = DownLoadActionManager.getInstance(context).getPlayingInfo();
+            if (actionInfo != null) {
+                UbtLog.d(TAG,"actionInfo = " + actionInfo.getActionId() + "/" + actionInfo.getActionOriginalId() + "/" +  actionInfo.getActionName() );
+                if(actionInfo.getActionId() == dynamicActionModel.getActionId()){
+                    isPlaying = true;
+                }
+            }
+
+            if(isPlaying){
+                mView.onActionStatus(dynamicActionModel.getActionId(), 1, 1,"0");
+            }else {
+                mView.onActionStatus(dynamicActionModel.getActionId(), 1, 0,"0");
+            }
+        }else {
+            boolean hasDowning = false;
+            //获取下载类中正在下载的列表数据
+            List<DynamicActionModel> downIngList = DownLoadActionManager.getInstance(context).getRobotDownList();
+            if (downIngList != null && downIngList.size() > 0) {
+                for(DynamicActionModel downingModel : downIngList){
+                    if(dynamicActionModel.getActionId() == downingModel.getActionId()){
+                        hasDowning = true;
+                        break;
+                    }
+                }
+            }
+
+            if(hasDowning){
+                mView.onActionStatus(dynamicActionModel.getActionId(), 2, 0,"0");
+            }else {
+                mView.onActionStatus(dynamicActionModel.getActionId(), 0, 0,"0");
+            }
+        }
     }
 }
