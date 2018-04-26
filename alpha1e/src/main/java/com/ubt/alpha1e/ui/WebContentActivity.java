@@ -60,6 +60,7 @@ public class WebContentActivity extends BaseActivity implements IActionsLibUI,IU
     public static final String FROM_NOTICE = "FROM_NOTICE";
 
 
+
     public static final String SCREEN_ORIENTATION = "SCREEN_ORIENTATION";
     private int mScreenOrientation = 0;
 
