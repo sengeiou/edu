@@ -1,4 +1,4 @@
-package com.ubt.alpha1e.onlineaudioplayer.onlinereSrearch;
+package com.ubt.alpha1e.onlineaudioplayer.searchActivity;
 
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -37,7 +37,9 @@ import com.ubt.alpha1e.onlineaudioplayer.DataObj.DataConfig;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineResRearchList;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineResSearch;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.ShowItem;
-import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioAlbumPlayerFragment;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAlbumListFragment;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioListFragment;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineCategoryListFragment;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -101,10 +103,11 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
             super.handleMessage(msg);
             switch (msg.what) {
                 case SEARCH_RESULT_ALBUM:
-                    OnlineAudioAlbumPlayerFragment  fragment = findFragment(OnlineAudioAlbumPlayerFragment .class);
+                    AlbumContentInfo mItem=(AlbumContentInfo)msg.obj;
+                    OnlineAlbumListFragment fragment = findFragment(OnlineAlbumListFragment.class);
+                    UbtLog.d(TAG, "OnlineAudioPlayerActivity = " + fragment);
                     if (fragment == null) {
-                        fragment = OnlineAudioAlbumPlayerFragment.newInstance((List< AlbumContentInfo>) msg.obj);
-                        UbtLog.d(TAG, "OnlineAudioAlbumPlayerFragment= " + fragment );
+                        fragment = OnlineAlbumListFragment.newInstance(mItem);
                         loadRootFragment(R.id.search_container, fragment);
                     }
                     break;
@@ -212,6 +215,7 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
                                     lists.setRes_id(modle.models.get(i).getAlbumId());
                                     lists.setRes_name(modle.models.get(i).getAlbumName());
                                     lists.setGrade(modle.models.get(i).getGrade());
+                                    lists.setCategory_id(modle.models.get(i).getCategoryId());
                                     onlineResRearchList.add(lists);
                                 }
                                 mAdapter.notifyDataSetChanged();

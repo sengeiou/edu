@@ -2,6 +2,7 @@ package com.ubt.alpha1e.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
@@ -33,7 +34,13 @@ import com.ubt.alpha1e.base.Constant;
 
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.behaviorhabits.model.behaviourHabitModel;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
+import com.ubt.alpha1e.course.feature.FeatureActivity;
+import com.ubt.alpha1e.course.merge.MergeActivity;
+import com.ubt.alpha1e.course.principle.PrincipleActivity;
+import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.data.FileTools;
 import com.ubt.alpha1e.data.model.ActionColloInfo;
 import com.ubt.alpha1e.data.model.ActionInfo;
@@ -1156,7 +1163,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
     @Subscribe
     public void onEventRobot(RobotEvent event) {
-        UbtLog.d(TAG, "onEventRobot = obj == 1");
         if (event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS) {
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
             UbtLog.d(TAG, "onEventRobot = obj == 2" + event.isHibitsProcessStatus());
@@ -1184,9 +1190,61 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             }
         }else if(event.getEvent() == RobotEvent.Event.DISCONNECT){
             UbtLog.d(TAG,"DISCONNECT THE BLUETOOTH");
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setActionPlayType(false);
+                    showBluetoothDisconnect();
+                }
+            });
+
         }
     }
+    void showBluetoothDisconnect() {
+        ConfirmDialog dialog = null;
+        dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                .setTitle("提示")
+                .setMsg("蓝牙连接断开，请重新连接")
+                .setCancelable(true)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接蓝牙 ");
+                        gotoConnectBluetooth();
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "取消 ");
+                        AppManager.getInstance().finishUseBluetoothActivity();
+                    }
+                });
+        dialog.show();
+    }
+    //去连接蓝牙
+    void gotoConnectBluetooth() {
+        boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
+        Intent bluetoothConnectIntent = new Intent();
+        if (isfirst) {
+            UbtLog.d(TAG, "第一次蓝牙连接");
+            SPUtils.getInstance().put("firstBluetoothConnect", false);
+            bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothguidestartrobotActivity.class);
+        } else {
+            bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothandnetconnectstateActivity.class);
+        }
+        startActivityForResult(bluetoothConnectIntent, 100);
 
+        if (AppManager.getInstance().currentActivity() != null
+                && (AppManager.getInstance().currentActivity() instanceof PrincipleActivity
+                || AppManager.getInstance().currentActivity() instanceof SplitActivity
+                || AppManager.getInstance().currentActivity() instanceof MergeActivity
+                || AppManager.getInstance().currentActivity() instanceof FeatureActivity)) {
+            UbtLog.d(TAG, "有需要关闭的课程界面 ");
+            AlphaApplication.setmNeedOpenActivity(AppManager.getInstance().currentActivity().getClass().getSimpleName());
+            AppManager.getInstance().currentActivity().finish();
+        }
+        getActivity().overridePendingTransition(R.anim.activity_open_up_down, 0);
+    }
   private boolean  lowBatteryNotExecutedAction(){
       if(BaseHelper.isLowBatteryNotExecuteAction){
           new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()

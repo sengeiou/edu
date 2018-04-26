@@ -17,6 +17,7 @@
     <string name="ui_common_cancel">取消</string>
     <string name="select_video_image_limit">不能同时选择视频和图片</string>
     <string name="select_video_one_limit">只能选择一个视频哦</string>
+    <string name="select_video_time_limit">选择视频时长不能大于15S哦</string>
 
     <string name="ui_distribute_start_recording">开始录制</string>
     <string name="ui_distribute_pause_recording">暂停录制</string>

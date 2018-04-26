@@ -74,16 +74,20 @@ public class VideoDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader cursorLoader = null;
         Log.d(TAG,"id = " + id);
+
+        String selection = IMAGE_PROJECTION[7] + " > 0 ";
+
         //扫描所有视频
         //查询ContentResolver并返回一个Cursor对象
         if (id == Constant.LOADER_VIDEO_ALL){
             Log.d(TAG,"EXTERNAL_CONTENT_URI = " + MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-            cursorLoader = new CursorLoader(activity, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, null, null, IMAGE_PROJECTION[6] + " DESC");
+            cursorLoader = new CursorLoader(activity, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, selection, null, IMAGE_PROJECTION[6] + " DESC");
         }
 
         //扫描某个视频文件夹
         if (id == Constant.LOADER_VIDEO_CATEGORY){
-            cursorLoader = new CursorLoader(activity, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, IMAGE_PROJECTION[1] + " like '%" + args.getString("path") + "%'", null, IMAGE_PROJECTION[6] + " DESC");
+            selection = selection + " and " + IMAGE_PROJECTION[1] + " like '%" + args.getString("path") + "%' ";
+            cursorLoader = new CursorLoader(activity, MediaStore.Video.Media.EXTERNAL_CONTENT_URI, IMAGE_PROJECTION, selection, null, IMAGE_PROJECTION[6] + " DESC");
         }
 
         return cursorLoader;

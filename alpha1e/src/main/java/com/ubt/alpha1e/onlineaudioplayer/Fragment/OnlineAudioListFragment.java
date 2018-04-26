@@ -1,31 +1,28 @@
-package com.ubt.alpha1e.onlineaudioplayer.playEventListActivity;
+package com.ubt.alpha1e.onlineaudioplayer.Fragment;
 
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.baoyz.pg.PG;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.behaviorhabits.event.HibitsEvent;
-import com.ubt.alpha1e.behaviorhabits.helper.HabitsHelper;
 import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
-import com.ubt.alpha1e.behaviorhabits.model.PlayContentInfo;
-import com.ubt.alpha1e.data.Constant;
-import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerContract;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerPresenter;
 import com.ubt.alpha1e.onlineaudioplayer.adapter.OnlineAudioListRecyclerAdapter;
+import com.ubt.alpha1e.onlineaudioplayer.helper.OnlineAudioResourcesHelper;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
@@ -49,9 +46,9 @@ import butterknife.OnClick;
  * 邮箱 784787081@qq.com
  */
 
-public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPlayerContract.View, OnlineAudioPlayerPresenter> implements OnlineAudioPlayerContract.View {
+public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerContract.View, OnlineAudioPlayerPresenter> implements OnlineAudioPlayerContract.View {
 
-    private static final String TAG = OnlineAudioEventListActivity.class.getSimpleName();
+    private static final String TAG = OnlineAudioListFragment.class.getSimpleName();
     public static final int DO_PLAY_OR_PAUSE = 1;
     private static final int UPDATE_PLAY_STATUS = 2;
     public static final int SELECT_ADD=3;
@@ -59,18 +56,19 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
 
     @BindView(R.id.tv_base_title_name)
     TextView tvBaseTitleName;
-    @BindView(R.id.rv_event_list)
     RecyclerView rvEventList;
-    @BindView(R.id.iv_title_right)
     ImageView mConfirm;
 
     private LinearLayoutManager mLayoutManager = null;
     public OnlineAudioListRecyclerAdapter mAdapter;
     public static List<AudioContentInfo> mPlayContentInfoDatas =  new ArrayList<>();
     private boolean isStartPlayProcess = true;//是否开启播放流程
-    private String currentEventId = "";
+    private static String currentAlbumId = "";
     private int currentPlaySeq = -1;
     private boolean isFirstPlay = true;
+    private View mView;
+    private static OnlineAudioResourcesHelper mHelper;
+    OnlineAudioPlayDialog mPlayDialogOnlineAudioPlayDialog;
 
 
     private Handler mHandler = new Handler(){
@@ -80,11 +78,11 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
             switch (msg.what){
                 case SELECT_ADD:
                     UbtLog.d(TAG,"ADD");
-                    OnlineAudioEventListActivity.mPlayContentInfoDatas.get(msg.arg1).isSelect=true;
+                    OnlineAudioListFragment.mPlayContentInfoDatas.get(msg.arg1).isSelect=true;
                     break;
                 case DESELECT_DELETE:
                     UbtLog.d(TAG,"DELETE");
-                    OnlineAudioEventListActivity.mPlayContentInfoDatas.get(msg.arg1).isSelect=false;
+                    OnlineAudioListFragment.mPlayContentInfoDatas.get(msg.arg1).isSelect=false;
                     break;
                 case DO_PLAY_OR_PAUSE:
                     if(isStartPlayProcess){
@@ -120,7 +118,7 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
                         if(StringUtils.isInteger(eventPlayStatus.playAudioSeq)){
                             int seqNo = Integer.parseInt(eventPlayStatus.playAudioSeq);
                             currentPlaySeq = seqNo;
-                            if(currentEventId.equals(eventPlayStatus.eventId) && "1".equals(eventPlayStatus.eventState) && seqNo >= 0){
+                            if(currentAlbumId.equals(eventPlayStatus.eventId) && "1".equals(eventPlayStatus.eventState) && seqNo >= 0){
                                 isStartPlayProcess = true;
                                 if("playing".equals(eventPlayStatus.audioState) || "pause".equals(eventPlayStatus.audioState)){
                                     if(mPlayContentInfoDatas != null && seqNo < mPlayContentInfoDatas.size()){
@@ -161,45 +159,42 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
         }
     };
 
-    public static void launchActivity(Activity mActivity, List<AudioContentInfo> playContentInfoDatas,String eventId) {
-        mPlayContentInfoDatas.clear();
-        mPlayContentInfoDatas.addAll(playContentInfoDatas);
-        Intent intent = new Intent(mActivity, OnlineAudioEventListActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mActivity.startActivity(intent);
+    public static OnlineAudioListFragment newInstance(String mAlbumId) {
+        OnlineAudioListFragment mOnlineAudioEventListFragment=new OnlineAudioListFragment();
+        currentAlbumId=mAlbumId;
+        return mOnlineAudioEventListFragment;
     }
 
     @Override
     protected void initUI() {
-        tvBaseTitleName.setText(getStringResources("ui_onlineaudio_event_list"));
+       // tvBaseTitleName.setText(getContext().getStringResources("ui_onlineaudio_event_list"));
 
         UbtLog.d(TAG, "rvHabitsEvent => " + rvEventList);
 
-        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        rvEventList.setLayoutManager(mLayoutManager);
+
         RecyclerView.ItemAnimator animator = rvEventList.getItemAnimator();
         if (animator instanceof SimpleItemAnimator) {
             ((SimpleItemAnimator) animator).setSupportsChangeAnimations(false);
         }
 
-        mAdapter = new OnlineAudioListRecyclerAdapter(getContext(),mPlayContentInfoDatas, mHandler);
-        rvEventList.setAdapter(mAdapter);
 
-        mConfirm.setVisibility(View.VISIBLE);
-                mConfirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        OnlineAudioPlayDialog.updatePlayContentInfoList();
-                        finish();
-            }
-        });
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void initControlListener() {
+
     }
+
+    @Override
+    public int getContentViewId() {
+        return 0;
+    }
+
+    @Override
+    protected void initBoardCastListener() {
+
+    }
+
 
     @Subscribe
     public void onEventHibits(HibitsEvent event) {
@@ -247,46 +242,37 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
         isFirstPlay = false;
     }
 
+
+    @Nullable
     @Override
-    protected void initControlListener() {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        mView = inflater.inflate(R.layout.activity_play_event_list, container, false);
+        ButterKnife.bind(getActivity());
+        mHelper=OnlineAudioResourcesHelper.getInstance(getContext());
+        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        rvEventList=(RecyclerView)mView.findViewById(R.id.rv_event_list);
+        mConfirm=(ImageView)mView.findViewById(R.id.iv_back);
+        rvEventList.setLayoutManager(mLayoutManager);
+        mAdapter = new OnlineAudioListRecyclerAdapter(getContext(),mPlayContentInfoDatas, mHandler);
+        rvEventList.setAdapter(mAdapter);
 
-    }
-
-    @Override
-    protected void initBoardCastListener() {
-
-    }
-
-    @Override
-    public int getContentViewId() {
-        return R.layout.activity_play_event_list;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-//        if(getIntent() != null){
-//            ArrayList<? extends AudioContentInfo> playContentInfoList = getIntent().getParcelableArrayListExtra(Constant.PLAY_CONTENT_INFO_LIST_KEY);
-//            if (playContentInfoList != null) {
-//                mPlayContentInfoDatas.addAll(playContentInfoList);
-//                for(int i=0;i<mPlayContentInfoDatas.size();i++){
-//                    mPlayContentInfoDatas.get(i).isSelect=true;
-//                }
-//
-//            }
-//            currentEventId = getIntent().getStringExtra(Constant.HIBITS_EVENT_ID);
-//        }
-        initUI();
-        //mPresenter.getAudioList(currentEventId);
+        mConfirm.setVisibility(View.VISIBLE);
+        mConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mHelper.updatePlayContentInfoList();
+                pop();
+            }
+        });
+        mPresenter.getAudioList(currentAlbumId);
+        return mView;
     }
 
     @OnClick({R.id.ll_base_back, R.id.tv_base_title_name})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_back:
-                OnlineAudioEventListActivity.this.finish();
+                pop();
                 HibitsEventPlayDialog.refreshStatus();
                 break;
             case R.id.tv_base_title_name:
@@ -307,12 +293,42 @@ public class OnlineAudioEventListActivity extends MVPBaseActivity<OnlineAudioPla
 
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
-        //mPlayContentInfoDatas.addAll(album);
-        //mAdapter.notifyDataSetChanged();
+        mPlayContentInfoDatas.clear();
+        mPlayContentInfoDatas.addAll(album);
+        showPlayEventDialog(album,"");
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onRequestStatus(int requestType, int errorCode) {
 
+    }
+
+    /**
+     * 选择播放事项
+     */
+    private void showPlayEventDialog(List<AudioContentInfo> playContentInfoList, String albumId){
+        if(mPlayDialogOnlineAudioPlayDialog == null){
+            mPlayDialogOnlineAudioPlayDialog= new OnlineAudioPlayDialog (getActivity())
+                    .builder()
+                    .setCancelable(true)
+                    .setPlayContent(playContentInfoList)
+                    .setCurrentAlbumId(albumId)
+                    .setCallbackListener(new OnlineAudioPlayDialog.IHibitsEventPlayListener() {
+                        @Override
+                        public void onDismissCallback() {
+                            UbtLog.d(TAG,"onDismissCallback");
+                            mPlayDialogOnlineAudioPlayDialog.hidden();
+                        }
+                    });
+        }else {
+            if (albumId != mPlayDialogOnlineAudioPlayDialog.getCurrentAlbumId()) {
+                mPlayDialogOnlineAudioPlayDialog.setCurrentAlbumId(albumId);
+                mPlayDialogOnlineAudioPlayDialog.setPlayContent(playContentInfoList);
+                mPlayDialogOnlineAudioPlayDialog.recoveryPlayerUi();
+            }
+        }
+        mPlayDialogOnlineAudioPlayDialog.startPlay();
+        mPlayDialogOnlineAudioPlayDialog.show();
     }
 }

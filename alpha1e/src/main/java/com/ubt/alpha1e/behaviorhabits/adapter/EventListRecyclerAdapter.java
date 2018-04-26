@@ -50,15 +50,15 @@ public class EventListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         MyPlayContentHolder myHolder  = (MyPlayContentHolder) holder;
         PlayContentInfo playContentInfo = mDatas.get(position);
-//        if("1".equals(playContentInfo.isSelect)){
-//            myHolder.ivPlay.setBackgroundResource(R.drawable.ic_music_list_pause);
-//            myHolder.playStatusAnim.start();
-//            myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
-//        }else {
-//            myHolder.ivPlay.setBackgroundResource(R.drawable.ic_music_list_play);
-//            myHolder.playStatusAnim.stop();
-//            myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
-//        }
+        if("1".equals(playContentInfo.isSelect)){
+            myHolder.ivPlay.setBackgroundResource(R.drawable.ic_music_list_pause);
+            myHolder.playStatusAnim.start();
+            myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
+        }else {
+            myHolder.ivPlay.setBackgroundResource(R.drawable.ic_music_list_play);
+            myHolder.playStatusAnim.stop();
+            myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
+        }
 
         myHolder.tvPlayContent.setText(playContentInfo.contentName);
 

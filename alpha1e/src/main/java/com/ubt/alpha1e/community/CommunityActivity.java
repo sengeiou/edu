@@ -2,12 +2,12 @@ package com.ubt.alpha1e.community;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
@@ -23,11 +23,10 @@ import com.sina.weibo.sdk.share.WbShareCallback;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
-import com.ubt.alpha1e.blockly.BlocklyActivity;
 import com.ubt.alpha1e.business.thrid_party.IWeiXinListener;
 import com.ubt.alpha1e.business.thrid_party.MyTencent;
-import com.ubt.alpha1e.business.thrid_party.MyWeiBo;
 import com.ubt.alpha1e.business.thrid_party.MyWeiBoNew;
 import com.ubt.alpha1e.business.thrid_party.MyWeiXin;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -51,8 +50,10 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
 
     private static final int REQUEST_IMAGE_SELECT = 100;
     private static final int SEND_IMAGE_TO_H5 = 1;
+    private static final int DEAL_IMAGE_TO_H2 = 2;
 
-    String communityUrl = "http://10.10.32.149:8080/community/index.html";
+    //String communityUrl = "http://10.10.32.149:8080/community/index.html";
+    String communityUrl = "https://test79.ubtrobot.com/community/alphaEbot/index.html?";
 
     private CommunityJsInterface mCommunityJsInterface;
 
@@ -64,19 +65,27 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case SEND_IMAGE_TO_H5:
-                    if(webContent != null){
-                        ArrayList<ImageItem> imageData = (ArrayList<ImageItem>)msg.obj;
-                        if(imageData != null && imageData.size() > 0){
-                            String paths = "";
-                            ImageItem imageItem = null;
-                            String path64 = "";
+                case DEAL_IMAGE_TO_H2:
+                    ArrayList<ImageItem> imageData = (ArrayList<ImageItem>)msg.obj;
+                    if(imageData != null && imageData.size() > 0){
+                        String paths = "";
+                        ImageItem imageItem = null;
+                        String path64 = "";
 
-                            if(imageData.get(0).isVideo()){
-                                ToastUtils.showShort("前端暂时不支持上传视频");
-                                return;
-                            }
+                        if(imageData.get(0).isVideo()){//视频
+                            final String videoPath = imageData.get(0).path;
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //mPresenter.loadFileToQiNiu(videoPath);
 
+                                    //Bitmap bitmap = ImageUtils.loadLocalFileBitmap(videoPath, CommunityActivity.this);
+                                    //UbtLog.d(TAG,"bitmap = " + bitmap);
+                                    ToastUtils.showShort("前端暂时不支持上传视频");
+                                }
+                            }).start();
+
+                        }else {//图片
                             for(int i = 0; i<imageData.size(); i++){
                                 imageItem = imageData.get(i);
                                 path64 = ImageUtils.bitmapToString(imageItem.path);
@@ -89,9 +98,17 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
                                 }
                             }
 
-                            String js = "javascript:androidPicData('" + paths + "')";
-                            webContent.loadUrl(js);
+                            Message imageMsg = new Message();
+                            imageMsg.what = SEND_IMAGE_TO_H5;
+                            imageMsg.obj = paths;
+                            mHandler.sendMessage(imageMsg);
                         }
+                    }
+                    break;
+                case SEND_IMAGE_TO_H5:
+                    if(webContent != null){
+                        String js = "javascript:androidPicData('" + msg.obj + "')";
+                        webContent.loadUrl(js);
                     }
                     break;
             }
@@ -151,15 +168,18 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
                 UbtLog.d(TAG,"onPageFinished url = " + url);
                 super.onPageFinished(view, url);
             }
-
         };
 
         mCommunityJsInterface = new CommunityJsInterface(CommunityActivity.this);
         webContent.addJavascriptInterface(mCommunityJsInterface, "communityObject");
 
+        communityUrl = communityUrl
+                + "userid=" + SPUtils.getInstance().getString(com.ubt.alpha1e.base.Constant.SP_USER_ID)
+                + "&token=" + SPUtils.getInstance().getString(com.ubt.alpha1e.base.Constant.SP_LOGIN_TOKEN);
         UbtLog.d(TAG, "communityUrl = " + communityUrl);
         webContent.setWebViewClient(webViewClient);
         webContent.loadUrl(communityUrl);
+
     }
 
     private void doGotoPage(String url) {
@@ -270,7 +290,7 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
                 ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                 UbtLog.d(TAG,"images = " + images);
                 Message msg = new Message();
-                msg.what = SEND_IMAGE_TO_H5;
+                msg.what = DEAL_IMAGE_TO_H2;
                 msg.obj = images;
                 mHandler.sendMessage(msg);
             }
@@ -313,5 +333,22 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
     public void onWbShareFail() {
         UbtLog.d(TAG,"onWbShareFail");
         ToastUtils.showShort(getStringResources("ui_share_failed"));
+    }
+
+    @Override
+    public void onQiniuTokenFromServer(boolean status, String token) {
+        if(!status){
+            UbtLog.d(TAG,"获取七牛token失败");
+        }
+    }
+
+    @Override
+    public void onloadFileToQiNiu(boolean status, String url) {
+        if(status){
+            UbtLog.d(TAG,"上传视频成功：" + url);
+            //ToastUtils.showShort("上传视频成功：" + url);
+        }else {
+            UbtLog.d(TAG,"上传视频失败");
+        }
     }
 }

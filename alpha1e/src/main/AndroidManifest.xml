@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ubt.alpha1e"
           android:versionCode="1"
-          android:versionName="V1.0.2.5">
+          android:versionName="V1.0.3.2">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -846,7 +846,7 @@
             android:screenOrientation="landscape"
             android:launchMode="singleTop"
             android:theme="@style/NoTitleThemeFullScreen"/>
-        <activity android:name="com.ubt.alpha1e.onlineaudioplayer.onlinereSrearch.OnlineResRearchActivity"
+        <activity android:name="com.ubt.alpha1e.onlineaudioplayer.searchActivity.OnlineResRearchActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:screenOrientation="landscape"
             android:launchMode="singleTop"
