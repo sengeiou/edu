@@ -32,7 +32,6 @@ import java.util.Locale;
  */
 public class ImagePicker {
 
-
     public static final String TAG = ImagePicker.class.getSimpleName();
     public static final int REQUEST_IMAGE_TAKE = 1001;
     public static final int REQUEST_IMAGE_CROP = 1002;
@@ -69,10 +68,12 @@ public class ImagePicker {
     private List<ImageFolder> mImageFolders;      //所有的图片文件夹
     private int mCurrentImageFolderPosition = 0;  //当前选中的文件夹位置 0表示所有图片
     private List<OnImageSelectedListener> mImageSelectedListeners;          // 图片选中的监听回调
+    private int selectType = 0;// 0:all, 1:image 2:video
 
     private static ImagePicker mInstance;
 
     private ImagePicker() {
+
     }
 
     public static ImagePicker getInstance() {
@@ -100,6 +101,14 @@ public class ImagePicker {
 
     public void setSelectLimit(int selectLimit) {
         this.selectLimit = selectLimit;
+    }
+
+    public int getSelectType() {
+        return selectType;
+    }
+
+    public void setSelectType(int selectType) {
+        this.selectType = selectType;
     }
 
     public boolean isCrop() {

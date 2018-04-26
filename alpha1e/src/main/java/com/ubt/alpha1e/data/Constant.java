@@ -41,6 +41,10 @@ public class Constant {
     public static final int HIBITS_PARENT_CENTER_REQUEST_CODE = 10017;
     public static final int HIBITS_PARENT_CENTER_RESPONSE_CODE = 10018;
 
+    //动作选择
+    public static final int ACTION_SELECT_REQUEST_CODE = 10019;
+    public static final int ACTION_SELECT_RESPONSE_CODE = 10020;
+
     //定义字符串常量KEY
     public static final String SCREEN_ORIENTATION = "SCREEN_ORIENTATION";
     public static final String INSTRUCTION_INFO_KEY = "INSTRUCTION_INFO_KEY";
@@ -62,6 +66,7 @@ public class Constant {
     public static final String HIBITS_EVENT_DETAIL = "HIBITS_EVENT_DETAIL";
     public static final String HIBITS_EVENT_ID = "HIBITS_EVENT_ID";
     public static final String INDEX_KEY = "INDEX_KEY";
+    public static final String DYNAMIC_ACTION_MODEL = "DYNAMIC_ACTION_MODEL";
     public static final String WakeUpActionName="初始化";
 
     public static final int powerThreshold[] = {5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};

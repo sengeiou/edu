@@ -104,7 +104,12 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
             super.handleMessage(msg);
             switch (msg.what){
                 case LOAD_IMAGE_FINISH:
-                    new VideoDataSource(MediaGridActivity.this, null, MediaGridActivity.this);
+                    if(ImagePicker.getInstance().getSelectType() == 1){//单选图片
+                        mVideoFolders = new ArrayList<>();
+                        mHandler.sendEmptyMessage(LOAD_VIDEO_FINISH);
+                    }else {
+                        new VideoDataSource(MediaGridActivity.this, null, MediaGridActivity.this);
+                    }
 
                     break;
                 case LOAD_VIDEO_FINISH:
@@ -151,6 +156,9 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
                                 }
                             });
 
+                            mImageGridAdapter.refreshData(imageItems);
+                            mImageFolderAdapter.refreshData(mImageFolders);
+                        }else {
                             mImageGridAdapter.refreshData(imageItems);
                             mImageFolderAdapter.refreshData(mImageFolders);
                         }
