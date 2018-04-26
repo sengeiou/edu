@@ -56,6 +56,7 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
 
     private static MainCourseActivity mainCourseInstance = null;
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

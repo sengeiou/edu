@@ -59,6 +59,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     RecyclerView rvEventList;
     ImageView mConfirm;
 
+
     private LinearLayoutManager mLayoutManager = null;
     public OnlineAudioListRecyclerAdapter mAdapter;
     public static List<AudioContentInfo> mPlayContentInfoDatas =  new ArrayList<>();

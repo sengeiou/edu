@@ -31,6 +31,7 @@ public class OnlineresRearchResultListAdpter extends RecyclerView.Adapter<Recycl
     private View mView;
     Handler mHandler;
 
+
     /**
      * 类构造函数
      * @param mContext 上下文

@@ -38,6 +38,7 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
 
     private static final String TAG = ImagePreviewActivity.class.getSimpleName();
 
+
     public static final String ISORIGIN = "isOrigin";
 
     private boolean isOrigin;                      //是否选中原图

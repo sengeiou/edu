@@ -50,6 +50,7 @@ import butterknife.Unbinder;
 
 public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPresenter> implements SplitContract.View {
 
+
     private static final String TAG = SplitActivity.class.getSimpleName();
 
     private static final int HIDE_VIEW = 1;

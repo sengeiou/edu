@@ -54,6 +54,7 @@ import butterknife.Unbinder;
 
 public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, FeaturePresenter> implements FeatureContract.View, IBezierView {
 
+
     private static final String TAG = FeatureActivity.class.getSimpleName();
 
     private static final int SHOW_VIEW = 1;

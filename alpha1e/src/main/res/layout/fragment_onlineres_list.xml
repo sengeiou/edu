@@ -59,14 +59,14 @@
             android:id="@+id/rl_content_player"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginLeft="35dp"
-            android:layout_marginRight="35dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="1dp"
             android:background="@drawable/bg_onlineres_player">
             <RelativeLayout
                 android:id="@+id/rl_content_player_name"
-                android:layout_width="180dp"
+                android:layout_width="230dp"
                 android:layout_height="60dp"
                 android:layout_centerInParent="true"
                 android:background="@drawable/bg_onlineres_player">
@@ -97,8 +97,17 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_toLeftOf="@id/rl_content_player_name"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="28dp"
                 android:background="@drawable/ic_ct_play_usable"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/ig_player_list"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_toRightOf="@id/rl_content_player_name"
+                android:layout_marginRight="28dp"
+                android:background="@drawable/ic_list"
                 android:layout_centerVertical="true"/>
 
         </RelativeLayout>

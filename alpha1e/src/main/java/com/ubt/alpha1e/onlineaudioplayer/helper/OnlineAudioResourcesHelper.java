@@ -37,6 +37,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     private boolean isRecyclePlaying=false;
     private int mAlbumId;
 
+
     private static OnlineAudioResourcesHelper mOnlineAudioResourcesHelper=null;
 
     public int getPlayType() {

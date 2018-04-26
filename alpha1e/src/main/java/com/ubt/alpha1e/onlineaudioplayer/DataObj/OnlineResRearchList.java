@@ -8,6 +8,7 @@ public class OnlineResRearchList {
     public String res_name;
     public String res_id;
 
+
     public String getCategory_id() {
         return category_id;
     }

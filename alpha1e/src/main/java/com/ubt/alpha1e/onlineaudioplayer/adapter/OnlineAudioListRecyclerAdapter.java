@@ -32,6 +32,7 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
     private View mView;
     private Handler mHandler = null;
 
+
     public OnlineAudioListRecyclerAdapter(Context mContext, List<AudioContentInfo> list, Handler handler) {
         super();
         this.mContext = mContext;

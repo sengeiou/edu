@@ -25,6 +25,7 @@ public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private static final String TAG = "onlineresAdpater";
 
+
     private Context mContext;
     public List<OnlineresList> mDatas = new ArrayList<>();
     private View mView;

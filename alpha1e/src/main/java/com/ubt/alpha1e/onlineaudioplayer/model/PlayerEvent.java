@@ -10,6 +10,7 @@ package com.ubt.alpha1e.onlineaudioplayer.model;
 
 public class PlayerEvent {
     Event event;
+
     public String getCurrentPlayingSongName() {
         return currentPlayingSongName;
     }

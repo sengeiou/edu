@@ -49,6 +49,7 @@ public class OnlineAudioPlayDialog {
     private static final int UPDATE_CURRENT_PLAY = 2;
     private static final int STOP_CURRENT_PLAY = 3;
 
+
     private static OnlineAudioPlayDialog mDialogIntance = null;
     private Activity mActivity;
     private Dialog mDialog;

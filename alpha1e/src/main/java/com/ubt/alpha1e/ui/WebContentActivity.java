@@ -51,12 +51,15 @@ import java.util.regex.Pattern;
 
 public class WebContentActivity extends BaseActivity implements IActionsLibUI,IUiListener,
         IWeiXinListener {
+
     private static final String TAG = "WebContentActivity";
     public static final String WEB_TITLE = "WEB_TITLE";
     public static final String WEB_URL = "WEB_URL";
     public static final String WEB_IS_SHARE = "WEB_IS_SHARE";
     public static final String WEB_SCHEME_ID = "WEB_SCHEME_ID";
     public static final String FROM_NOTICE = "FROM_NOTICE";
+
+
 
     public static final String SCREEN_ORIENTATION = "SCREEN_ORIENTATION";
     private int mScreenOrientation = 0;

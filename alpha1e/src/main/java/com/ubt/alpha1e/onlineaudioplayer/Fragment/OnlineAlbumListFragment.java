@@ -57,6 +57,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     ImageView mGradeSort;
     ImageView mBack;
     ListView  mGradeSelect;
+
     OnlineAudioPlayDialog mPlayDialogOnlineAudioPlayDialog;
     public static ArrayList<String> mGradData=new ArrayList<>();
     public static ArrayList<Boolean> mGradeSelectedData=new ArrayList<>();

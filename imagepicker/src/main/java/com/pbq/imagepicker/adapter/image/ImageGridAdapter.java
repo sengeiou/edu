@@ -39,6 +39,7 @@ public class ImageGridAdapter extends BaseAdapter {
 
     private static final String TAG = ImageGridAdapter.class.getSimpleName();
 
+
     private static final int ITEM_TYPE_CAMERA = 0;  //第一个条目是相机
     private static final int ITEM_TYPE_NORMAL = 1;  //第一个条目不是相机
 

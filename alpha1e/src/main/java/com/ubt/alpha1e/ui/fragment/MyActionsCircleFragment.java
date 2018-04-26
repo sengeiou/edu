@@ -87,6 +87,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
 
     private static final String TAG = "MyActionsCircleFragment";
 
+
     private OnFragmentInteractionListener mListener;
     private RecyclerView mSyncRecyclerview;
     private LinearLayoutManager mLayoutManager;
