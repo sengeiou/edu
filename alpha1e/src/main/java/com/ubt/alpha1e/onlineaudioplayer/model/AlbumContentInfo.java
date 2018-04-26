@@ -25,6 +25,7 @@ public class AlbumContentInfo  extends BaseModel implements Serializable {
     public String albumName;
     public String grade;
 
+
     public String getCategoryId() {
         return categoryId;
     }

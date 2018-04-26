@@ -82,6 +82,8 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
     @BindView(R.id.recent_search_content)
     RecyclerView recent_search_content;
 
+    @BindView(R.id.tv_no_rearch)
+    TextView tv_no_rearch;
     public LinearLayoutManager mLayoutManager;
     public OnlineresRearchResultListAdpter mAdapter;
     public List<OnlineResRearchList> onlineResRearchList = new ArrayList<>();
@@ -348,6 +350,9 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
         });
         recent_search_content.setLayoutManager(new FlowLayoutManager());
         flowerList = DataConfig.getItems();
+        if(flowerList.size() == 0){
+            tv_no_rearch.setVisibility(View.INVISIBLE);
+        }
         recent_search_content.setAdapter(flowAdapter = new FlowAdapter(flowerList));
         flowAdapter.notifyDataSetChanged();
 
@@ -382,7 +387,10 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
         rl_recent_search.setVisibility(View.INVISIBLE);
         rl_search_result.setVisibility(View.VISIBLE);
         rl_search_noresult.setVisibility(View.INVISIBLE);
+        tv_no_rearch.setVisibility(View.INVISIBLE);
     }
+
+
 
 
     //显示没有搜索到结果
@@ -390,6 +398,7 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
         rl_recent_search.setVisibility(View.INVISIBLE);
         rl_search_result.setVisibility(View.INVISIBLE);
         rl_search_noresult.setVisibility(View.VISIBLE);
+        tv_no_rearch.setVisibility(View.INVISIBLE);
     }
 
 

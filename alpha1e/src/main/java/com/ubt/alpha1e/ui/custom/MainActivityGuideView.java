@@ -55,6 +55,7 @@ public class MainActivityGuideView{
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams wmParams;
 
+
     private RelativeLayout rlGuideLayout;
 
     private boolean created = false;

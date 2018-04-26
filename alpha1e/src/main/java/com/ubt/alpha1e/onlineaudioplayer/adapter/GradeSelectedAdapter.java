@@ -32,6 +32,7 @@ public class GradeSelectedAdapter extends BaseAdapter {
         return OnlineAlbumListFragment.mGradData.size();
     }
 
+
     @Override
     public Object getItem(int i) {
         return OnlineAlbumListFragment.mGradData.get(i);

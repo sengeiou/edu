@@ -90,7 +90,7 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
                                 imageItem = imageData.get(i);
                                 path64 = ImageUtils.bitmapToString(imageItem.path);
                                 path64 = path64.replaceAll(" ","").replaceAll("\\n","");
-                                UbtLog.d(TAG,"imageItem.path => " + imageItem.path + "   path64 = " + path64);
+                                UbtLog.d(TAG," imageItem.path => " + imageItem.path + "   path64 = " + path64);
                                 if(i < imageData.size()-1){
                                     paths += path64 + ",";
                                 }else {
@@ -107,7 +107,7 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
                     break;
                 case SEND_IMAGE_TO_H5:
                     if(webContent != null){
-                        String js = "javascript:androidPicData('" + msg.obj + "')";
+                        String js = "javascript :androidPicData('" + msg.obj + "')";
                         webContent.loadUrl(js);
                     }
                     break;

@@ -313,3 +313,4 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
 
 
 }
+

@@ -34,6 +34,7 @@ public class EventListRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     private View mView;
     private Handler mHandler = null;
 
+
     public EventListRecyclerAdapter(Context mContext, List<PlayContentInfo> list, Handler handler) {
         super();
         this.mContext = mContext;

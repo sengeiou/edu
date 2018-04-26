@@ -28,7 +28,6 @@ import org.json.JSONObject;
 
 public class XGListener implements IXGListener {
     public static final String TAG = "XGListener";
-
     @Override
     public void onRegisterResult(Context context, int i, XGPushRegisterResult xgPushRegisterResult) {
         Log.d(TAG, "onRegisterResult");

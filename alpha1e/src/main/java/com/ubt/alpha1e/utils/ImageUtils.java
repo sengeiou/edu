@@ -28,7 +28,6 @@ public class ImageUtils {
 
     /**
      * 根据一个网络连接(String)获取bitmap图像
-     *
      * @param imageUri
      * @return Bitmap
      */

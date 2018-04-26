@@ -25,6 +25,7 @@ public class VideoDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = VideoDataSource.class.getSimpleName();
 
+
     private final String[] IMAGE_PROJECTION = {     //查询视频需要的数据列
             MediaStore.Video.Media.DISPLAY_NAME,   //视频的显示名称  aaa.jpg
             MediaStore.Video.Media.DATA,           //视频的真实路径  /storage/emulated/0/pp/downloader/wallpaper/aaa.jpg

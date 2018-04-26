@@ -10,6 +10,7 @@ public class OnlineResSearch {
     private String albumName;
     private String grade;
 
+
     public String getCategoryId() {
         return categoryId;
     }

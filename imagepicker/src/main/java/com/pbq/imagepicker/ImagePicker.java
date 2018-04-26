@@ -32,6 +32,7 @@ import java.util.Locale;
  */
 public class ImagePicker {
 
+
     public static final String TAG = ImagePicker.class.getSimpleName();
     public static final int REQUEST_IMAGE_TAKE = 1001;
     public static final int REQUEST_IMAGE_CROP = 1002;
