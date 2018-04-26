@@ -298,6 +298,7 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                     UbtLog.d("onDismissCallback","obj = " +obj);
                     if((boolean)obj){
                         //行为习惯流程未结束，退出当前流程
+                        ((PrincipleHelper) mHelper).doEnterCourse((byte) 0);
                         SplitActivity.this.finish();
                         SplitActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
                     }else {
