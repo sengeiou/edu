@@ -199,7 +199,7 @@ public class OnlineAudioPlayDialog {
 
         // 调整dialog背景大小
         rlBg.setLayoutParams(new FrameLayout.LayoutParams((int) (mDisplay
-                .getWidth()), (int)(mDisplay.getHeight() * 0.5)));
+                .getWidth()), (int)(mDisplay.getHeight() * 0.17)));
 
         return this;
     }
@@ -369,17 +369,18 @@ public class OnlineAudioPlayDialog {
                     if(isRecycleType==ORDER_AUDIO_LIST_PLAYING) {
                         isRecycleType=RECYCLE_AUDIO_LIST_PLAYING;
                         mHelper.setPlayType(RECYCLE_AUDIO_LIST_PLAYING);
-                        ivRecycleButton.setImageResource(R.drawable.ic_resources_cycle_usable);
-                        Toast.makeText(mActivity,"ORDER", Toast.LENGTH_LONG).show();
+                        ivRecycleButton.setImageResource(R.drawable.ic_circle_list);
+                        Toast.makeText(mActivity,"RECYCLE", Toast.LENGTH_LONG).show();
                     }else if(isRecycleType==RECYCLE_AUDIO_LIST_PLAYING){
                         isRecycleType=SINGLE_AUDIO_PLAYING;
                         mHelper.setPlayType(SINGLE_AUDIO_PLAYING);
-                        ivRecycleButton.setImageResource(R.drawable.ic_resources_cycle_disable);
-                        Toast.makeText(mActivity,"RECYCLE", Toast.LENGTH_LONG).show();
+                        ivRecycleButton.setImageResource(R.drawable.ic_circle_single);
+                        Toast.makeText(mActivity,"SINGLE", Toast.LENGTH_LONG).show();
                     }else if(isRecycleType==SINGLE_AUDIO_PLAYING){
                         isRecycleType=ORDER_AUDIO_LIST_PLAYING;
                         mHelper.setPlayType(ORDER_AUDIO_LIST_PLAYING);
-                        Toast.makeText(mActivity,"SINGLE", Toast.LENGTH_LONG).show();
+                        ivRecycleButton.setImageResource(R.drawable.ic_circle_list);
+                        Toast.makeText(mActivity,"ORDER", Toast.LENGTH_LONG).show();
                      }
                     break;
                 default:

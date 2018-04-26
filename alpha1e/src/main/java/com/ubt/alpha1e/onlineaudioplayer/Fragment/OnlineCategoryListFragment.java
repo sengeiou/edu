@@ -107,7 +107,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             super.handleMessage(msg);
             switch (msg.what) {
                 case LAUNCH_CATEGORY_ITEM:
-                    OnlineAlbumListFragment mfragment = OnlineAlbumListFragment.newInstance(msg.obj.toString());
+                    OnlineresList mCategory=(OnlineresList)msg.obj;
+                    OnlineAlbumListFragment mfragment = OnlineAlbumListFragment.newInstance(mCategory);
                     start(mfragment);
                     break;
             }

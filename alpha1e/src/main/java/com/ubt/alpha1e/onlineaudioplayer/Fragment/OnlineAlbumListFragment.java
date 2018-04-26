@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
+import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineresList;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerContract;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerPresenter;
 import com.ubt.alpha1e.onlineaudioplayer.adapter.GradeSelectedAdapter;
@@ -57,6 +59,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     ImageView mGradeSort;
     ImageView mBack;
     ListView  mGradeSelect;
+    TextView mTitleName;
     OnlineAudioPlayDialog mPlayDialogOnlineAudioPlayDialog;
     public static ArrayList<String> mGradData=new ArrayList<>();
     public static ArrayList<Boolean> mGradeSelectedData=new ArrayList<>();
@@ -65,11 +68,13 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     public final static int GRADE_SELECT_ADD = 1;
     public final static int GRADE_UNSELECT_DELETE= 2;
     private static String mCategoryId;
+    private static String mCategoryName;
     public final static int SEARCH_ENTER_FRAGMENT=1;
     public final static int CATEGORY_ENTER_FRAGMENT=2;
     public static int type=0;
     public static List<AlbumContentInfo> mSearchDatas;
     public static String mAlbumId="";
+    public static AlbumContentInfo mAlbumContentInfo;
     OnlineAudioResourcesHelper mHelper;
 
 
@@ -112,17 +117,19 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             }
         }
     };
-    public static OnlineAlbumListFragment newInstance(String categoryId){
+    public static OnlineAlbumListFragment newInstance(OnlineresList mCategory){
         OnlineAlbumListFragment mOnlineAudioAlbumPlayerFragment  = new OnlineAlbumListFragment();
-        mCategoryId=categoryId;
+        mCategoryId=mCategory.getRes_id();
+        mCategoryName  =mCategory.getRes_name();
         type = CATEGORY_ENTER_FRAGMENT;
         return mOnlineAudioAlbumPlayerFragment;
     }
-    public static OnlineAlbumListFragment newInstance(AlbumContentInfo mAlbumContentInfo) {
+    public static OnlineAlbumListFragment newInstance(AlbumContentInfo albumContentInfo) {
 
         OnlineAlbumListFragment mOnlineAudioAlbumPlayerFragment  = new OnlineAlbumListFragment();
-        mCategoryId=mAlbumContentInfo.getCategoryId();
-        mAlbumId=mAlbumContentInfo.albumId;
+        mAlbumContentInfo=albumContentInfo;
+        mCategoryId=albumContentInfo.getCategoryId();
+        mAlbumId=albumContentInfo.albumId;
         type=SEARCH_ENTER_FRAGMENT;
         return mOnlineAudioAlbumPlayerFragment;
     }
@@ -138,10 +145,10 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         mSearch=(ImageView)mView.findViewById(R.id.iv_search);
         mBack=(ImageView)mView.findViewById(R.id.iv_back);
         mGradeSelect=(ListView)mView.findViewById(R.id.grade_select_dialog);
-
-
-        LinearLayoutManager mLinearLayoutManager=new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
-        mAlbumView.setLayoutManager(mLinearLayoutManager);
+        mTitleName=mView.findViewById(R.id.tv_base_title_name);
+        mTitleName.setText(mCategoryName);
+        GridLayoutManager mGridLayoutManager=new GridLayoutManager(getActivity(),2);
+        mAlbumView.setLayoutManager(mGridLayoutManager);
       //  mAlbumView.addItemDecoration(new DividerItemDecoration(mAlbumView.getContext(),mLinearLayoutManager.getOrientation()));
         mAlbumView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -158,7 +165,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         UbtLog.d(TAG, "ENTER CATEGORY FRAGMENT ");
         mPresenter.getAlbumList(mCategoryId);
         if(type==SEARCH_ENTER_FRAGMENT){
-            OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumId);
+            OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumContentInfo);
             start(mfragment);
         }
         mGradeSort.setOnClickListener(new View.OnClickListener() {
@@ -298,7 +305,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     mHistory.setGrade(mAlbumDatas.get(position).grade);
                     SPUtils.getInstance().saveObject(Constant.SP_ONLINEAUDIO_HISTORY,mHistory);
                     mAlbumId = mAlbumDatas.get(position).albumId;
-                    OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumId);
+                    OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumDatas.get(position));
                     start(mfragment);
                 }
             });

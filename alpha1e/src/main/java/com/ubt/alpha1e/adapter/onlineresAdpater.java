@@ -76,7 +76,7 @@ public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
             public void onClick(View v) {
                 Message msg = new Message();
                 msg.what = OnlineCategoryListFragment.LAUNCH_CATEGORY_ITEM;
-                msg.obj = onlineres.getRes_id();
+                msg.obj = onlineres;
                 mHandler.sendMessage(msg);
             }
         });
