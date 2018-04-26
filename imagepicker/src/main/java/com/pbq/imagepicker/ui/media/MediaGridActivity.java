@@ -60,7 +60,7 @@ import java.util.Locale;
 public class MediaGridActivity extends ImageBaseActivity implements ImageDataSource.OnImagesLoadedListener,VideoDataSource.OnVideosLoadedListener, ImageGridAdapter.OnImageItemClickListener, ImagePicker.OnImageSelectedListener, View.OnClickListener {
 
     private static final String TAG = MediaGridActivity.class.getSimpleName();
-    
+
     public static final int REQUEST_PERMISSION_STORAGE = 0x01;
     public static final int REQUEST_PERMISSION_CAMERA = 0x02;
     private static final int LOAD_IMAGE_FINISH = 0x03;

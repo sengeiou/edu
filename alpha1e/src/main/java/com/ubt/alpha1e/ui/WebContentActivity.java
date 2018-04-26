@@ -51,6 +51,7 @@ import java.util.regex.Pattern;
 
 public class WebContentActivity extends BaseActivity implements IActionsLibUI,IUiListener,
         IWeiXinListener {
+
     private static final String TAG = "WebContentActivity";
     public static final String WEB_TITLE = "WEB_TITLE";
     public static final String WEB_URL = "WEB_URL";
