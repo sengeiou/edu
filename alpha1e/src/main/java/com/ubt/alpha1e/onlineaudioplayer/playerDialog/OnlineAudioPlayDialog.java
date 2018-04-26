@@ -49,7 +49,6 @@ public class OnlineAudioPlayDialog {
     private static final int UPDATE_CURRENT_PLAY = 2;
     private static final int STOP_CURRENT_PLAY = 3;
 
-
     private static OnlineAudioPlayDialog mDialogIntance = null;
     private Activity mActivity;
     private Dialog mDialog;
@@ -88,6 +87,7 @@ public class OnlineAudioPlayDialog {
     public static int ORDER_AUDIO_LIST_PLAYING=3;
     private int  isRecycleType=ORDER_AUDIO_LIST_PLAYING;
     private int volumeProgress = 0;
+    private boolean isShow=false;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -200,7 +200,7 @@ public class OnlineAudioPlayDialog {
 
         // 调整dialog背景大小
         rlBg.setLayoutParams(new FrameLayout.LayoutParams((int) (mDisplay
-                .getWidth()), (int)(mDisplay.getHeight() * 0.5)));
+                .getWidth()), (int)(mDisplay.getHeight() * 0.17)));
 
         return this;
     }
@@ -370,17 +370,18 @@ public class OnlineAudioPlayDialog {
                     if(isRecycleType==ORDER_AUDIO_LIST_PLAYING) {
                         isRecycleType=RECYCLE_AUDIO_LIST_PLAYING;
                         mHelper.setPlayType(RECYCLE_AUDIO_LIST_PLAYING);
-                        ivRecycleButton.setImageResource(R.drawable.ic_resources_cycle_usable);
-                        Toast.makeText(mActivity,"ORDER", Toast.LENGTH_LONG).show();
+                        ivRecycleButton.setImageResource(R.drawable.ic_circle_list);
+                        Toast.makeText(mActivity,"RECYCLE", Toast.LENGTH_LONG).show();
                     }else if(isRecycleType==RECYCLE_AUDIO_LIST_PLAYING){
                         isRecycleType=SINGLE_AUDIO_PLAYING;
                         mHelper.setPlayType(SINGLE_AUDIO_PLAYING);
-                        ivRecycleButton.setImageResource(R.drawable.ic_resources_cycle_disable);
-                        Toast.makeText(mActivity,"RECYCLE", Toast.LENGTH_LONG).show();
+                        ivRecycleButton.setImageResource(R.drawable.ic_circle_single);
+                        Toast.makeText(mActivity,"SINGLE", Toast.LENGTH_LONG).show();
                     }else if(isRecycleType==SINGLE_AUDIO_PLAYING){
                         isRecycleType=ORDER_AUDIO_LIST_PLAYING;
                         mHelper.setPlayType(ORDER_AUDIO_LIST_PLAYING);
-                        Toast.makeText(mActivity,"SINGLE", Toast.LENGTH_LONG).show();
+                        ivRecycleButton.setImageResource(R.drawable.ic_circle_list);
+                        Toast.makeText(mActivity,"ORDER", Toast.LENGTH_LONG).show();
                      }
                     break;
                 default:
@@ -553,10 +554,16 @@ public class OnlineAudioPlayDialog {
         mHelper.RegisterHelper();
         initState();
         setLayout();
+        isShow=true;
         mDialog.show();
     }
     public void hidden(){
+        isShow=false;
         mDialog.hide();
+
+    }
+    public boolean isShow(){
+         return isShow;
     }
     public void destroy(){
            if(mDialogIntance!=null)
@@ -573,5 +580,4 @@ public class OnlineAudioPlayDialog {
     }
 
 }
-
 

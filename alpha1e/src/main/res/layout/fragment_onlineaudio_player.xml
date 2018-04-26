@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/lay_title"
         android:layout_centerHorizontal="true"
-        android:background="@color/white">
+      >
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_albums"

@@ -25,7 +25,6 @@ public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private static final String TAG = "onlineresAdpater";
 
-
     private Context mContext;
     public List<OnlineresList> mDatas = new ArrayList<>();
     private View mView;
@@ -77,7 +76,7 @@ public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
             public void onClick(View v) {
                 Message msg = new Message();
                 msg.what = OnlineCategoryListFragment.LAUNCH_CATEGORY_ITEM;
-                msg.obj = onlineres.getRes_id();
+                msg.obj = onlineres;
                 mHandler.sendMessage(msg);
             }
         });
@@ -113,3 +112,4 @@ public class onlineresAdpater extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 }
+

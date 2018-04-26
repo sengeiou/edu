@@ -10,7 +10,6 @@ package com.ubt.alpha1e.onlineaudioplayer.model;
 
 public class PlayerEvent {
     Event event;
-
     public String getCurrentPlayingSongName() {
         return currentPlayingSongName;
     }
@@ -21,6 +20,26 @@ public class PlayerEvent {
 
     private String currentPlayingSongName;
 
+    public int getCurrentPlayingIndex() {
+        return currentPlayingIndex;
+    }
+
+    public void setCurrentPlayingIndex(int currentPlayingIndex) {
+        this.currentPlayingIndex = currentPlayingIndex;
+    }
+
+    private int currentPlayingIndex;
+
+    public int getCurrentClickingIndex() {
+        return currentClickingIndex;
+    }
+
+    public void setCurrentClickingIndex(int currentClickingIndex) {
+        this.currentClickingIndex = currentClickingIndex;
+    }
+
+    private int currentClickingIndex;
+
     public PlayerEvent(Event event) {
         this.event = event;
     }
@@ -28,9 +47,11 @@ public class PlayerEvent {
         CONTROL_PLAY_NEXT,
         CONTROL_STOP,
         READ_EVENT_PLAY_STATUS,
+        CONTROL_PLAYER_SHOW,
         TAP_HEAD
     }
     public PlayerEvent.Event getEvent() {
         return event;
     }
 }
+

@@ -43,7 +43,6 @@ import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.HistoryAudio;
 import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
 import com.ubt.alpha1e.onlineaudioplayer.searchActivity.OnlineResRearchActivity;
-import com.ubt.alpha1e.onlineaudioplayer.playerDialog.OnlineAudioPlayDialog;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -75,7 +74,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     @BindView(R.id.online_res_list)
     RecyclerView mRecyclerview;
 
-
     @BindView(R.id.ib_return)
     ImageButton ib_return;
 
@@ -91,9 +89,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     @BindView(R.id.ig_player_button)
     ImageView ig_player_button;
 
-    @BindView(R.id.ig_player_list)
-    ImageView ig_player_list;
-
     public LinearLayoutManager mLayoutManager;
     public onlineresAdpater mAdapter;
     public List<OnlineresList> onlineresList = new ArrayList<>();
@@ -102,7 +97,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     Unbinder unbinder;
     private boolean playStatus = false;
     private OnlineAudioResourcesHelper mHelper = null;
-    OnlineAudioPlayDialog mPlayDialogOnlineAudioPlayDialog;
     HistoryAudio mHistory;
 
     private Handler mHandler = new Handler() {
@@ -111,7 +105,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             super.handleMessage(msg);
             switch (msg.what) {
                 case LAUNCH_CATEGORY_ITEM:
-                    OnlineAlbumListFragment mfragment = OnlineAlbumListFragment.newInstance(msg.obj.toString());
+                    OnlineresList mCategory=(OnlineresList)msg.obj;
+                    OnlineAlbumListFragment mfragment = OnlineAlbumListFragment.newInstance(mCategory);
                     start(mfragment);
                     break;
             }
@@ -125,7 +120,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     }
 
 
-    @OnClick({R.id.ib_return, R.id.ib_rearch, R.id.ig_player_button, R.id.ig_player_list})
+    @OnClick({R.id.ib_return, R.id.ib_rearch, R.id.ig_player_button})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ib_return:
@@ -145,20 +140,15 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 UbtLog.d(TAG, "ig_player_button");
                 if (!playStatus) {
                     playStatus = true;
-//                    ig_player_button.setImageResource(R.drawable.ic_ct_stop);
-                    stopPlay();
+                    ig_player_button.setImageResource(R.drawable.ic_ct_stop);
                     mPresenter.getAudioList(mHistory.getAlbumId());
                 } else {
                     if(mHelper!=null) {
                         mHelper.stopEvent();
                     }
-//                    ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
-                    playing();
+                    ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
                     playStatus = false;
                 }
-                break;
-            case R.id.ig_player_list:
-                UbtLog.d(TAG, "ig_player_list");
                 break;
         }
     }
@@ -320,8 +310,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         radiologicalWaveAnim.setVisible(true, true);
         player_name.setVisibility(View.VISIBLE);
         ig_player_button.setVisibility(View.VISIBLE);
-        ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
-        ig_player_list.setBackgroundResource(R.drawable.ic_list);
 
     }
 
@@ -332,7 +320,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         player_name.setVisibility(View.VISIBLE);
         player_name.setText("当前无历史播放记录");
         ig_player_button.setVisibility(View.INVISIBLE);
-        ig_player_list.setBackgroundResource(R.drawable.ic_list_disable);
     }
 
     //停止播放
@@ -341,8 +328,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         ig_player_state.setBackgroundResource(R.drawable.cc_default_playindicator);
         player_name.setVisibility(View.VISIBLE);
         ig_player_button.setVisibility(View.VISIBLE);
-        ig_player_button.setImageResource(R.drawable.ic_ct_stop);
-        ig_player_list.setBackgroundResource(R.drawable.ic_list_disable);
     }
 
     private void playEvent(List<AudioContentInfo> playContentInfoList, String albumId) {
