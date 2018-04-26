@@ -33,7 +33,6 @@ import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.HistoryAudio;
 import com.ubt.alpha1e.onlineaudioplayer.searchActivity.OnlineResRearchActivity;
-import com.ubt.alpha1e.onlineaudioplayer.playerDialog.OnlineAudioPlayDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
@@ -60,7 +59,6 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     ImageView mBack;
     ListView  mGradeSelect;
     TextView mTitleName;
-    OnlineAudioPlayDialog mPlayDialogOnlineAudioPlayDialog;
     public static ArrayList<String> mGradData=new ArrayList<>();
     public static ArrayList<Boolean> mGradeSelectedData=new ArrayList<>();
     public static ArrayList<String>mSelectedGrade=new ArrayList<>();
@@ -188,10 +186,6 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         mBack.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                if(mPlayDialogOnlineAudioPlayDialog!=null) {
-                     mPlayDialogOnlineAudioPlayDialog.stopPlay();
-                    mPlayDialogOnlineAudioPlayDialog.destroy();
-                }
                pop();
             }
         });

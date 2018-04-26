@@ -43,7 +43,6 @@ import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.HistoryAudio;
 import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
 import com.ubt.alpha1e.onlineaudioplayer.searchActivity.OnlineResRearchActivity;
-import com.ubt.alpha1e.onlineaudioplayer.playerDialog.OnlineAudioPlayDialog;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -98,7 +97,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     Unbinder unbinder;
     private boolean playStatus = false;
     private OnlineAudioResourcesHelper mHelper = null;
-    OnlineAudioPlayDialog mPlayDialogOnlineAudioPlayDialog;
     HistoryAudio mHistory;
 
     private Handler mHandler = new Handler() {

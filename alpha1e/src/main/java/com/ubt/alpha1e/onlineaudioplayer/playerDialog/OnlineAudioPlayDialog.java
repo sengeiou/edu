@@ -87,6 +87,7 @@ public class OnlineAudioPlayDialog {
     public static int ORDER_AUDIO_LIST_PLAYING=3;
     private int  isRecycleType=ORDER_AUDIO_LIST_PLAYING;
     private int volumeProgress = 0;
+    private boolean isShow=false;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -553,10 +554,16 @@ public class OnlineAudioPlayDialog {
         mHelper.RegisterHelper();
         initState();
         setLayout();
+        isShow=true;
         mDialog.show();
     }
     public void hidden(){
+        isShow=false;
         mDialog.hide();
+
+    }
+    public boolean isShow(){
+         return isShow;
     }
     public void destroy(){
            if(mDialogIntance!=null)
