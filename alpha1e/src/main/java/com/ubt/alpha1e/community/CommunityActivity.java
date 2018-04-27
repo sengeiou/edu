@@ -74,8 +74,8 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
     @BindView(R.id.web_content)
     WebView webContent;
 
-    String communityUrl = "http://10.10.32.19:8080/community/index.html?";
-    //String communityUrl = "https://test79.ubtrobot.com/community/alphaEbot/index.html?";
+    //String communityUrl = "http://10.10.32.19:8080/community/index.html?";
+    String communityUrl = "https://test79.ubtrobot.com/community/alphaEbot/index.html?";
 
     private List<String> mRobotDownActionList = new ArrayList<>();//机器人下载列表
 
