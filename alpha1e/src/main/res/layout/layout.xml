@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="305dp"
     android:layout_height="58dp"
-    android:background="@color/white">
+    android:background="@drawable/bg_album_list">
 
     <TextView
         android:id="@+id/item_album"
@@ -17,6 +17,7 @@
        android:layout_height="wrap_content"
        android:src="@drawable/ic_arrow"
        android:layout_alignParentEnd="true"
+       android:layout_marginRight="15dp"
        android:layout_centerInParent="true"
        />
     <View

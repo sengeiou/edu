@@ -21,6 +21,7 @@ public class AudioContentInfo extends BaseModel {
     public String contentName;
     public String contentUrl;
     public Boolean isPlaying=false;
+    public int index=-1;
 
     @Override
     public AudioContentInfo getThiz(String json) {

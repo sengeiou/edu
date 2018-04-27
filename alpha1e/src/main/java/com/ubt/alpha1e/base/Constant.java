@@ -34,6 +34,7 @@ public class Constant {
     public static final String SP_SHOW_COMMON_GUIDE = "sp_show_common_guide";
     public static final String SP_SHOW_MAINUI_GUIDE="sp_show_mainui_guide";
     public static final String SP_SHOW_SERVO_GUIDE="sp_show_servo_guide";
+    public static final String SP_ONLINEAlBUM_HISTORY="sp_onlinealbum_history";
     public static final String SP_ONLINEAUDIO_HISTORY="sp_onlineaudio_history";
 
     /**

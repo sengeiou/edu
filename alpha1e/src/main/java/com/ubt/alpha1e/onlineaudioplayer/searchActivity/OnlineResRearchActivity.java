@@ -105,6 +105,7 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
             super.handleMessage(msg);
             switch (msg.what) {
                 case SEARCH_RESULT_ALBUM:
+                    //Add Search Function
                     AlbumContentInfo mItem=(AlbumContentInfo)msg.obj;
                     OnlineAlbumListFragment fragment = findFragment(OnlineAlbumListFragment.class);
                     UbtLog.d(TAG, "OnlineAudioPlayerActivity = " + fragment);

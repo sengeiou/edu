@@ -15,7 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.Constant;
+import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioListFragment;
+import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
 
@@ -54,16 +57,15 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
         final MyPlayContentHolder myHolder  = (MyPlayContentHolder) holder;
         AudioContentInfo playContentInfo = mDatas.get(position);
         if(OnlineAudioListFragment.mPlayContentInfoDatas.get(position).isPlaying){
-            myHolder.ivPlay.setBackgroundResource(R.drawable.ic_music_list_pause);
             myHolder.playStatusAnim.start();
             myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
+            myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_blue_color) );
         }else {
-            myHolder.ivPlay.setBackgroundResource(R.drawable.ic_music_list_play);
             myHolder.playStatusAnim.stop();
             myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
+            myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
         }
         myHolder.tvPlayContent.setText(playContentInfo.contentName);
-
         myHolder.ivPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,9 +114,6 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
 
         @Override
         public void onClick(View view) {
-            PlayerEvent playStatusEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_PLAYER_SHOW);
-            playStatusEvent.setCurrentPlayingIndex(getAdapterPosition());
-            EventBus.getDefault().post(playStatusEvent);
 //            if (selectedItems.get(getAdapterPosition(), false)) {
 //                selectedItems.delete(getAdapterPosition());
 //                view.setSelected(false);

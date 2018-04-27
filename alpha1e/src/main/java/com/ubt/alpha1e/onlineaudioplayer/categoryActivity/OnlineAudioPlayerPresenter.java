@@ -50,11 +50,7 @@ public class OnlineAudioPlayerPresenter extends BasePresenterImpl<OnlineAudioPla
         OnlineAudioPlayerAlbumRequest mAlbumRequest=new OnlineAudioPlayerAlbumRequest();
         mAlbumRequest.setCategoryId(courseName);
         doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+getAlbumContents,mAlbumRequest,GETALBUMREQUEST);
-//
-//        for(int i=0;i<100;i++){
-//            albumList.add("四大名著之西游记");
-//        }
-//        mView.showAlbumList(albumList);
+
     }
 
     @Override

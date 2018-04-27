@@ -40,7 +40,6 @@ import com.ubt.alpha1e.onlineaudioplayer.helper.OnlineAudioResourcesHelper;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.model.HistoryAudio;
 import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
 import com.ubt.alpha1e.onlineaudioplayer.searchActivity.OnlineResRearchActivity;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -97,8 +96,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     Unbinder unbinder;
     private boolean playStatus = false;
     private OnlineAudioResourcesHelper mHelper = null;
-    HistoryAudio mHistory;
-
+    AlbumContentInfo mAlbumHistory;
+    List<AudioContentInfo> mAudioContentList;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -120,7 +119,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     }
 
 
-    @OnClick({R.id.ib_return, R.id.ib_rearch, R.id.ig_player_button})
+    @OnClick({R.id.ib_return, R.id.ib_rearch, R.id.ig_player_button,R.id.ig_player_list})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ib_return:
@@ -141,7 +140,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 if (!playStatus) {
                     playStatus = true;
                     ig_player_button.setImageResource(R.drawable.ic_ct_stop);
-                    mPresenter.getAudioList(mHistory.getAlbumId());
+                    mHelper.setPlayContent(mAudioContentList);
+                    mHelper.autoAudioPlay();
                 } else {
                     if(mHelper!=null) {
                         mHelper.stopEvent();
@@ -149,6 +149,14 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                     ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
                     playStatus = false;
                 }
+                break;
+            case R.id.ig_player_list:
+                mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
+                if(mAlbumHistory!=null) {
+                    OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumHistory);
+                    start(mfragment);
+                }
+
                 break;
         }
     }
@@ -171,6 +179,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         DividerItemDecorationNew dividerItemDecoration = new DividerItemDecorationNew(getActivity(), DividerItemDecorationNew.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.linesharp));
         mRecyclerview.addItemDecoration(dividerItemDecoration);
+        player_name.setText("暂无播放历史");
         mRecyclerview.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -185,12 +194,12 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         mRecyclerview.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         getMaxCategory();
-        mHistory = (HistoryAudio) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
-        if (SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY) != null) {
-            player_name.setText(mHistory.getAlbumName());
-        } else {
-            player_name.setText("暂无播放历史");
+        mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY);
+        if (SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY) != null) {
+           // player_name.setText(mAlbumHistory.getAlbumName());
+            mPresenter.getAudioList(mAlbumHistory.albumId);
         }
+
     }
 
     //拉最大的类别
@@ -291,7 +300,13 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
-        playEvent(album, mHistory.getAlbumId());
+       // playEvent(album, mAlbumHistory.getAlbumId());
+      AudioContentInfo  mAudioHistory = (AudioContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
+      if(mAudioHistory!=null){
+          player_name.setText(album.get(mAudioHistory.index).contentName);
+      }
+      mAudioContentList=album;
+
     }
 
     @Override
@@ -310,7 +325,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         radiologicalWaveAnim.setVisible(true, true);
         player_name.setVisibility(View.VISIBLE);
         ig_player_button.setVisibility(View.VISIBLE);
-
     }
 
     //没有播放
@@ -331,38 +345,24 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     }
 
     private void playEvent(List<AudioContentInfo> playContentInfoList, String albumId) {
-//        if (mPlayDialogOnlineAudioPlayDialog == null) {
-//            mPlayDialogOnlineAudioPlayDialog = new OnlineAudioPlayDialog(getActivity())
-//                    .builder()
-//                    .setCancelable(true)
-//                    .setPlayContent(playContentInfoList)
-//                    .setCurrentAlbumId(albumId)
-//                    .setCallbackListener(new OnlineAudioPlayDialog.IHibitsEventPlayListener() {
-//                        @Override
-//                        public void onDismissCallback() {
-//                            UbtLog.d(TAG, "onDismissCallback");
-//                            mPlayDialogOnlineAudioPlayDialog.hidden();
-//                        }
-//                    });
-//        }
-//        mPlayDialogOnlineAudioPlayDialog.startPlay();
-
+        mHelper.setPlayContent(playContentInfoList);
         mHelper.autoAudioPlay();
     }
 
     @Subscribe
-    public void onEvent(final PlayerEvent mPlayerEvent) {
-        if (mPlayerEvent.getEvent() == PlayerEvent.Event.CONTROL_PLAY_NEXT) {
-            UbtLog.d(TAG, "CONTROL_PLAY event = next " + mPlayerEvent.getCurrentPlayingSongName());
-            mHelper.autoNextAudioPlay();
+    public void onEvent(final PlayerEvent event) {
+        if (event.getEvent() == PlayerEvent.Event.CONTROL_PLAY_NEXT) {
+            UbtLog.d(TAG, "CONTROL_PLAY event = next " + event.getCurrentPlayingSongName());
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    player_name.setText(mPlayerEvent.getCurrentPlayingSongName());
-                }
-
-                ;
+                    player_name.setText(event.getCurrentPlayingSongName());
+                };
             });
+        } else if(event.getEvent()==PlayerEvent.Event.CONTROL_STOP){
+            //mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
+        }else if(event.getEvent()==PlayerEvent.Event.TAP_HEAD){
+            //mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         }
     }
 }

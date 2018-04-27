@@ -26,7 +26,6 @@
             android:paddingRight="20dp"
             android:splitMotionEvents="false"
             >
-
         </android.support.v7.widget.RecyclerView>
     </RelativeLayout>
     <RelativeLayout
@@ -66,10 +65,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:textSize="15sp"
                 android:ellipsize="end"
                 android:lines="1"
                 android:text="暂无播放内容"
-                android:textColor="@color/T1" />
+                android:textColor="#62717A" />
         </LinearLayout>
 
         <LinearLayout
@@ -119,14 +119,14 @@
                 android:id="@+id/iv_music_next"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="31dp"
                 android:src="@drawable/ic_music_next_disable"
                 />
             <ImageView
                 android:id="@+id/iv_music_circle"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="129dp"
+                android:layout_marginLeft="115dp"
                 android:layout_marginRight="55dp"
                 android:src="@drawable/ic_circle_single" />
 

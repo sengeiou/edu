@@ -46,8 +46,7 @@ public class PlayerEvent {
     public enum Event{
         CONTROL_PLAY_NEXT,
         CONTROL_STOP,
-        READ_EVENT_PLAY_STATUS,
-        CONTROL_PLAYER_SHOW,
+        GET_PLAYING_INDEX,
         TAP_HEAD
     }
     public PlayerEvent.Event getEvent() {
