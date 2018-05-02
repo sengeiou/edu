@@ -6,13 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ubt.alpha1e.R;
-import com.ubt.alpha1e.behaviorhabits.model.EventPlayStatus;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerContract;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerPresenter;
@@ -29,9 +24,8 @@ import com.ubt.alpha1e.onlineaudioplayer.adapter.OnlineAudioListRecyclerAdapter;
 import com.ubt.alpha1e.onlineaudioplayer.helper.OnlineAudioResourcesHelper;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.CategoryContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
-import com.ubt.alpha1e.utils.StringUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,7 +36,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 /**
@@ -318,7 +311,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
 
 
     @Override
-    public void showCourseList(List<CourseContentInfo> album) {
+    public void showCourseList(List<CategoryContentInfo> album) {
 
     }
 
@@ -331,12 +324,16 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
         UbtLog.d(TAG,"request result from back-end "+album);
-        mPlayContentInfoDatas.clear();
-        mPlayContentInfoDatas.addAll(album);
-        mHelper.setPlayContent(album);
-        mAdapter.notifyDataSetChanged();
-        initState();
-        onlineAudioPlayer();
+        if(album!=null) {
+            mPlayContentInfoDatas.clear();
+            mPlayContentInfoDatas.addAll(album);
+            mHelper.setPlayContent(album);
+            mAdapter.notifyDataSetChanged();
+            initState();
+            onlineAudioPlayer();
+        }else {
+            Toast.makeText(getActivity(),"后台出错，没有配置数据",Toast.LENGTH_LONG).show();
+        }
 
     }
 

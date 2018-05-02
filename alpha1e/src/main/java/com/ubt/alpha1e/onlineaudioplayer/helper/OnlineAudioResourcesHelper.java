@@ -21,6 +21,9 @@ import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubtechinc.base.ConstValue;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.litepal.util.Const;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +55,8 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     MediaPlayer mediaPlayer;
     //TEST PURPOSE LOCAL PLAYRING AUDIO
     private boolean local_player = true;
+    //NEW PROTOCOL
+    private boolean offlinePlaying_protocol=true;
 
     public OnlineAudioResourcesHelper(Context context) {
         super(context);
@@ -67,10 +72,23 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
-
         //UbtLog.d(TAG,"cmd = " + cmd + "    = " + param[0]);
+        if(offlinePlaying_protocol){
+
+        }
         if (cmd == ConstValue.DV_ONLINEPLAYER_PLAY) {
             UbtLog.d(TAG, "cmd = " + cmd + "    param[0] = " + param[0]);
+            if(offlinePlaying_protocol){
+                try {
+                    JSONObject mCmd = new JSONObject(param.toString());
+                    mCmd.get("status");//play, pause, continue, stop, complete
+                    mCmd.get("categoryId");
+                    mCmd.get("albumId");
+                    mCmd.get("indexs");
+                }catch(JSONException e){
+                    e.printStackTrace();
+                }
+            }
             if (param[0] == 0x01) {
             } else if (param[0] == 0x02) {
                 sendEventBusMesssage();
@@ -87,7 +105,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD);
             EventBus.getDefault().post(mPlayerEvent);
         }
-
     }
 
     public void doTurnVol() {
@@ -136,22 +153,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
         if (local_player) {
             localAudioplay(url);
-//            if (mediaPlayer != null) {
-//                mediaPlayer.stop();
-//                mediaPlayer.release();
-//                mediaPlayer = null;
-//            }
-//            mediaPlayer = MediaPlayer.create(mContext, Uri.parse(url));
-//            if (mediaPlayer != null) {
-//                mediaPlayer.start();
-//                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                    @Override
-//                    public void onCompletion(MediaPlayer mediaPlayer) {
-//                        UbtLog.d(TAG, "EMULATE THE PALY ENDING");
-//                        sendEventBusMesssage();
-//                    }
-//                });
-//            }
         }
     }
 
@@ -319,17 +320,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             playEvent(mPlayContentInfoList.get(currentPlaySeq).contentUrl, currentPlaySeq);
         }
 
-
-    }
-
-
-    public void updatePlayContentInfoList() {
-//        mPlayContentInfoList.clear();
-//        for(int i=0;i<mPlayContentOriginInfoList.size();i++) {
-//            if (mPlayContentOriginInfoList.get(i).isSelect){
-//                mPlayContentInfoList.add(mPlayContentOriginInfoList.get(i));
-//            }
-//        }
     }
 
     public List<AudioContentInfo> getPlayContent() {
@@ -404,6 +394,75 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             Toast.makeText(mContext, "播放失败", Toast.LENGTH_LONG).show();
         }
     }
+
+    /**
+     * get the robot currently oneline playing status
+     */
+    private void getRobotOnlineAudioStatus() {
+
+        doSendComm(ConstValue.DV_ONLINEPLAYER_PLAY, BluetoothParamUtil.stringToBytes(""));
+    }
+
+    /**
+     * tell the robot oneline playing loop mode
+     *
+     * @param mode : "1" --single song mode
+     *             "2"----order song mode
+     *             "3"----loop song mode
+     */
+    private void sendOnlineAudioLoopMode(String mode) {
+
+        doSendComm(ConstValue.DV_ONLINEPLAYER_PLAY, BluetoothParamUtil.stringToBytes(""));
+
+    }
+
+    /**
+     * tell the robot category and album Information
+     *
+     * @param categoryId
+     * @param albumId
+     */
+    private void sendCategoryInfoCommand(String categoryId, String albumId) {
+        JSONObject mCmd = new JSONObject();
+        try {
+            mCmd.put("categoryId", categoryId);
+            mCmd.put("albumId", albumId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        doSendComm(ConstValue.DV_ONLINEPLAYER_PLAY, BluetoothParamUtil.stringToBytes(mCmd.toString()));
+    }
+
+    /**
+     * control play or jump to category/album/some songs
+     *
+     * @param playStatus: play, pause, continue
+     * @param categoryId: id number
+     * @param albumId:    id number
+     * @param index:      song index
+     */
+    private void sendControlCommand(String playStatus, String categoryId, String albumId, String index) {
+        JSONObject mCmd = new JSONObject();
+        try {
+            mCmd.put("status", playStatus);
+            mCmd.put("categoryId", categoryId);
+            mCmd.put("albumId", albumId);
+            mCmd.put("index", index);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        doSendComm(ConstValue.DV_ONLINEPLAYER_PLAY, BluetoothParamUtil.stringToBytes(mCmd.toString()));
+    }
+
+    /**
+     * exit the online playing status
+     */
+    private void sendExitOnlineAudioStatus() {
+
+        doSendComm(ConstValue.DV_ONLINEPLAYER_PLAY, BluetoothParamUtil.stringToBytes(""));
+    }
+
+
 
 
 }

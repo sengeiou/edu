@@ -9,7 +9,7 @@ import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.CategoryContentInfo;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -87,8 +87,8 @@ public class OnlineAudioPlayerPresenter extends BasePresenterImpl<OnlineAudioPla
                     }
                     switch (id) {
                         case GETCOURSElISTREQUIRE:
-                            BaseResponseModel<ArrayList<CourseContentInfo>> mbaseResponseModel = GsonImpl.get().toObject(response,
-                                    new TypeToken<BaseResponseModel<ArrayList<CourseContentInfo>>>() {
+                            BaseResponseModel<ArrayList<CategoryContentInfo>> mbaseResponseModel = GsonImpl.get().toObject(response,
+                                    new TypeToken<BaseResponseModel<ArrayList<CategoryContentInfo>>>() {
                                     }.getType());//加上type转换，避免泛型擦除
                             UbtLog.d(TAG,"GET COURSE REQUIRE"+mbaseResponseModel.models.get(0));
                             mView.showCourseList(mbaseResponseModel.models);

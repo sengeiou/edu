@@ -10,7 +10,7 @@ import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineCategoryListFragment;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.CategoryContentInfo;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.List;
@@ -74,7 +74,7 @@ public class OnlineAudioPlayerActivity extends MVPBaseActivity<OnlineAudioPlayer
 
 
     @Override
-    public void showCourseList(List<CourseContentInfo> album) {
+    public void showCourseList(List<CategoryContentInfo> album) {
 
     }
 

@@ -29,7 +29,7 @@ import com.ubt.alpha1e.onlineaudioplayer.adapter.GradeSelectedAdapter;
 import com.ubt.alpha1e.onlineaudioplayer.helper.OnlineAudioResourcesHelper;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.CategoryContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.searchActivity.OnlineResRearchActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -223,7 +223,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
 
 
     @Override
-    public void showCourseList(List<CourseContentInfo> album) {
+    public void showCourseList(List<CategoryContentInfo> album) {
 
     }
 
@@ -296,7 +296,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     AlbumContentInfo mHistory = new AlbumContentInfo();
                     mHistory.setCategoryId(mAlbumDatas.get(position).categoryId);
                     mHistory.setAlbumId(mAlbumDatas.get(position).albumId);
-                    mHistory.setAlbumName(mAlbumDatas.get(position).albumName);
+                         mHistory.setAlbumName(mAlbumDatas.get(position).albumName);
                     mHistory.setGrade(mAlbumDatas.get(position).grade);
                     SPUtils.getInstance().saveObject(Constant.SP_ONLINEAlBUM_HISTORY,mHistory);
                     mAlbumId = mAlbumDatas.get(position).albumId;

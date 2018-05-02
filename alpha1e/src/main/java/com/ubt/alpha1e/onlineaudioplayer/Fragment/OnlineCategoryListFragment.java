@@ -39,7 +39,7 @@ import com.ubt.alpha1e.onlineaudioplayer.helper.OnlineAudioResourcesHelper;
 
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.CategoryContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
 import com.ubt.alpha1e.onlineaudioplayer.searchActivity.OnlineResRearchActivity;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -151,8 +151,12 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 }
                 break;
             case R.id.ig_player_list:
-                mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
+                mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY);
                 if(mAlbumHistory!=null) {
+                    AudioContentInfo mAudioContentInfo=(AudioContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
+                    if(mAudioContentInfo!=null) {
+                        mHelper.setCurentPlayingAudioIndex(mAudioContentInfo.index);
+                    }
                     OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumHistory);
                     start(mfragment);
                 }
@@ -289,7 +293,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
 
     @Override
-    public void showCourseList(List<CourseContentInfo> album) {
+    public void showCourseList(List<CategoryContentInfo> album) {
 
     }
 
