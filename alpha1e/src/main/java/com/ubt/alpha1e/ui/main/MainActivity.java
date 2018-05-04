@@ -341,19 +341,19 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG, "onStart");
 
         initUI();
-        try {
-            gifDrawable = new GifDrawable(getResources(), R.drawable.gif_main);
-            gifDrawable.addAnimationListener(new AnimationListener() {
-                @Override
-                public void onAnimationCompleted() {
-
-
-                }
-            });
-            mMainGif.setImageDrawable(gifDrawable);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+//        try {
+//            gifDrawable = new GifDrawable(getResources(), R.drawable.gif_main);
+//            gifDrawable.addAnimationListener(new AnimationListener() {
+//                @Override
+//                public void onAnimationCompleted() {
+//
+//
+//                }
+//            });
+//            mMainGif.setImageDrawable(gifDrawable);
+//        }catch(IOException e){
+//            e.printStackTrace();
+//        }
     }
 
     @Override

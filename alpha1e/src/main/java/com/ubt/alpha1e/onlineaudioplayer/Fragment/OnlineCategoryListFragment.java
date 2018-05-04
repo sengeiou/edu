@@ -99,6 +99,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     private OnlineAudioResourcesHelper mHelper = null;
     AlbumContentInfo mAlbumHistory;
     List<AudioContentInfo> mAudioContentList;
+    private boolean isPause = false;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -152,9 +153,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ib_return:
-////                if(mHelper!=null) {
-//                    mHelper.stopEvent();
-////                }
                 EventBus.getDefault().unregister(this);
                 getActivity().finish();
                 break;
@@ -166,20 +164,17 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 break;
             case R.id.ig_player_button:
                 UbtLog.d(TAG, "ig_player_button");
-                if (!playStatus) {
-                    playStatus = true;
-                    ig_player_button.setImageResource(R.drawable.ic_ct_stop);
-                    mHelper.setPlayContent(mAudioContentList);
-                    mHelper.pauseEvent();
-                  //  mHelper.autoAudioPlay();
-                } else {
-//                    if(mHelper!=null) {
-//                        mHelper.stopEvent();
-//                    }
-                    mHelper.continueEvent();
-                    ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
-                    playStatus = false;
-                }
+                onlineAudioPlayerStatus();
+//                if (!playStatus) {
+//                    playStatus = true;
+//                    ig_player_button.setImageResource(R.drawable.ic_ct_stop);
+//                    mHelper.setPlayContent(mAudioContentList);
+//                    mHelper.pauseEvent();
+//                } else {
+//                    mHelper.continueEvent();
+//                    ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
+//                    playStatus = false;
+//                }
                 break;
             case R.id.ig_player_list:
                 mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY);
@@ -194,6 +189,18 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
                 break;
         }
+    }
+
+    private void onlineAudioPlayerStatus() {
+            if(isPause){
+                isPause = false;
+                mHelper.continueEvent();
+                ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
+            }else {
+                isPause = true;
+                mHelper.pauseEvent();
+                ig_player_button.setImageResource(R.drawable.ic_ct_pause);
+            }
     }
 
     @Override
@@ -232,11 +239,11 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         mAdapter.notifyDataSetChanged();
         getMaxCategory();
         mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY);
-        if (SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY) != null) {
-           // player_name.setText(mAlbumHistory.getAlbumName());
+        ;if (SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY) != null) {
+            // player_name.setText(mAlbumHistory.getAlbumName())
             mPresenter.getAudioList(mAlbumHistory.albumId);
         }
-
+        mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
     }
 
     //拉最大的类别
@@ -408,9 +415,9 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         }else if(event.getEvent()==PlayerEvent.Event.TAP_HEAD){
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         }else if(event.getEvent()==PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS){
-            playStatus = true;
+//            playStatus = true;
+            isPause=false;
             mPresenter.getAudioList(event.getAlbumId());
-
             if (getActivity() != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override

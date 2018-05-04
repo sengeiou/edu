@@ -72,7 +72,6 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     public static String mAlbumId="";
     public static AlbumContentInfo mAlbumContentInfo;
     OnlineAudioResourcesHelper mHelper;
-    private String audio_index="0";
 
 
     private Handler mHandler = new Handler() {
@@ -303,6 +302,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     mAlbumId = mAlbumDatas.get(position).albumId;
                     mHelper.setmCategoryId(mAlbumDatas.get(position).categoryId);
                     mHelper.setAlbumId(mAlbumId);
+                    mHelper.setCurentPlayingAudioIndex(0);
                     OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumDatas.get(position));
                     start(mfragment);
                 }

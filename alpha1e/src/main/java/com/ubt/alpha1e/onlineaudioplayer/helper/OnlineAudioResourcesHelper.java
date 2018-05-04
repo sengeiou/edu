@@ -91,7 +91,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
                     mCmd.get("loop");
                     UbtLog.d(TAG, "cmd = " + cmd + "  get Robot Status notify" + mCmd.get("status") +"index : "+   mCmd.get("index")+"loop mode :"+        mCmd.get("loop"));
                     //SAVE TO THE SP
-
                     if(mCmd.get("status").equals("playing")) {
                         notifyUiCurrentRobotStatus(mCmd);
                     }else {
@@ -363,10 +362,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     protected void localAudioplay(String url) {
         try {
-            if(mediaPlayer!=null){
-                mediaPlayer.stop();
-                mediaPlayer=null;
-            }
             mediaPlayer = new MediaPlayer();
             // 设置指定的流媒体地址
             mediaPlayer.setDataSource(url);

@@ -54,8 +54,7 @@ public class OnlineAudioPlayerPresenter extends BasePresenterImpl<OnlineAudioPla
         mAudioRequest.setAlbumId(albumId);
         doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+getAudioContents,mAudioRequest,GETAUDIOREQUEST);
     }
-
-
+    
     /**
      * 请求网络操作
      */
