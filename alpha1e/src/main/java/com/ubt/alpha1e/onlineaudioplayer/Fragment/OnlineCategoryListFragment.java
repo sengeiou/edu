@@ -434,9 +434,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                         public void run() {
                             UbtLog.d(TAG, "ONLINE STATUS PLAYING");
                             playing(event.getCurrentPlayingSongName());
-                        }
-
-                        ;
+                        };
                     });
                 }
             }

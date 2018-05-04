@@ -68,9 +68,9 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     private ImageView ivMusicNext;
     private ImageView ivRecycleButton;
     public static boolean isPause = false;
-    public static int SINGLE_AUDIO_PLAYING=1;
-    public static int RECYCLE_AUDIO_LIST_PLAYING=2;
-    public static int ORDER_AUDIO_LIST_PLAYING=3;
+    public static int SINGLE_AUDIO_PLAYING=2;
+    public static int RECYCLE_AUDIO_LIST_PLAYING=1;
+    public static int ORDER_AUDIO_LIST_PLAYING=0;
     private int  isRecycleType=ORDER_AUDIO_LIST_PLAYING;
     private AnimationDrawable playStatusAnim = null;
     private TextView tvPlayName;
@@ -396,6 +396,10 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     ivPlayNone.setVisibility(View.VISIBLE);
                     ivPlayStatus.setVisibility(View.GONE);
                     playStatusAnim.stop();
+                    for (AudioContentInfo mPlayContentInfo : mHelper.getPlayContent()) {
+                        mPlayContentInfo.isPlaying = false;
+                    }
+                    mAdapter.notifyDataSetChanged();
                     break;
                 default:
                     break;

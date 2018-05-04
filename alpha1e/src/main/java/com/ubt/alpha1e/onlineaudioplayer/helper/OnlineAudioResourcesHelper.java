@@ -135,6 +135,10 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         } else if (cmd == ConstValue.DV_TAP_HEAD) {
             PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD);
             EventBus.getDefault().post(mPlayerEvent);
+        }else if(cmd==ConstValue.DV_VOICE){
+            UbtLog.d(TAG, "cmd = " + cmd + "  VOICE ");
+//            PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD);
+//            EventBus.getDefault().post(mPlayerEvent);
         }
     }
 
@@ -346,9 +350,9 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         for (int i = 0; i < mPlayContentInfoList.size(); i++) {
             mPlayContentOriginInfoList.add(mPlayContentInfoList.get(i));
         }
-        for (int i = 0; i < mPlayContentInfoList.size(); i++) {
-            UbtLog.d(TAG, "i = " + i + "     url = " /*+ mPlayContentInfoList.get(i).contentName + "/"*/ + mPlayContentInfoList.get(i).contentUrl);
-        }
+//        for (int i = 0; i < mPlayContentInfoList.size(); i++) {
+//            UbtLog.d(TAG, "i = " + i + "     url = " /*+ mPlayContentInfoList.get(i).contentName + "/"*/ + mPlayContentInfoList.get(i).contentUrl);
+//        }
         UbtLog.d(TAG, "mPlayContentInfoList.size() = " + mPlayContentInfoList.size());
     }
 
