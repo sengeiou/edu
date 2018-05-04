@@ -50,6 +50,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.pbq.imagepicker.Constant;
 import com.pbq.imagepicker.ImagePicker;
 import com.pbq.imagepicker.R;
 import com.pbq.imagepicker.camera2.AutoFitTextureView;
@@ -74,6 +75,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import static com.pbq.imagepicker.jcamera.JCameraView.BUTTON_STATE_BOTH;
+import static com.pbq.imagepicker.jcamera.JCameraView.BUTTON_STATE_ONLY_CAPTURE;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class VideoCameraActivity extends Activity {
@@ -127,7 +131,7 @@ public class VideoCameraActivity extends Activity {
     private CustomVideoView video_preview;
     private Intent resultIntent;
 
-    private boolean isCanRecordVideo = true;
+    private int mCameraType = BUTTON_STATE_BOTH;
 
     //旋转角度
     static {
@@ -153,6 +157,11 @@ public class VideoCameraActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.imagepick_activity_video_camera);
+
+        if(getIntent() != null){
+            mCameraType = getIntent().getIntExtra(Constant.CAMERA_TYPE, BUTTON_STATE_BOTH);
+        }
+
         init();
         initView();
         initListener();
@@ -173,6 +182,8 @@ public class VideoCameraActivity extends Activity {
         int maxRecordTime = 15 * 1000;
         mCaptureLayout.setDuration(maxRecordTime);
         mCaptureLayout.setIconSrc(0, 0);
+        Log.d(TAG,"mCameraType = " + mCameraType);
+        mCaptureLayout.setButtonFeatures(mCameraType);
 
         rl_preview = findViewById(R.id.rl_preview);
         iv_preview = findViewById(R.id.iv_preview);//展示拍照
@@ -180,10 +191,7 @@ public class VideoCameraActivity extends Activity {
         video_preview = findViewById(R.id.video_preview);
         tvCancel = findViewById(R.id.tv_cancel);
         Log.d(TAG,"getSelectType = " + ImagePicker.getInstance().getSelectType());
-        if(ImagePicker.getInstance().getSelectType() == 1){
-            isCanRecordVideo = false;
-        }
-        Log.d(TAG,"isCanRecordVideo = " + isCanRecordVideo);
+
     }
 
     private void initListener(){
@@ -785,7 +793,9 @@ public class VideoCameraActivity extends Activity {
             setUpMediaRecorder();
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
-            texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+            //texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+            //设置为其宽高，不然长按录像时，会突然变高
+            texture.setDefaultBufferSize(width, height);
             mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
             List<Surface> surfaces = new ArrayList<>();
 
@@ -958,7 +968,8 @@ public class VideoCameraActivity extends Activity {
     private static Size chooseVideoSize(Size[] choices, int width, int height) {
         for (Size size : choices) {
             float ft=(float)size.getWidth()/(float)size.getHeight();
-            if (size.getWidth() <= 1300 && size.getWidth() <= height && ft > 1.5 && ft < 1.9) {
+            //if (size.getWidth() <= 1300 && size.getWidth() <= height && ft > 1.5 && ft < 1.9) {
+            if (size.getWidth() <= 1300 && size.getWidth() <= height && ft > 1.3 && ft < 1.51) {
                 return size;
             }
         }

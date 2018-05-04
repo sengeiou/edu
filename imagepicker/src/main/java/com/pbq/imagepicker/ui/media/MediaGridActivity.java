@@ -1,6 +1,7 @@
 package com.pbq.imagepicker.ui.media;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -21,6 +22,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pbq.imagepicker.Constant;
 import com.pbq.imagepicker.ImageDataSource;
 import com.pbq.imagepicker.ImagePicker;
 import com.pbq.imagepicker.R;
@@ -39,6 +41,11 @@ import com.pbq.imagepicker.ui.image.ImageCropActivity;
 import com.pbq.imagepicker.ui.image.ImagePreviewActivity;
 import com.pbq.imagepicker.ui.video.VideoPlayPreviewActivity;
 import com.pbq.imagepicker.view.FolderPopUpWindow;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.permission.Rationale;
+import com.yanzhenjie.permission.RationaleListener;
 
 import java.io.File;
 import java.text.Collator;
@@ -47,6 +54,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+
+import static com.pbq.imagepicker.jcamera.JCameraView.BUTTON_STATE_BOTH;
+import static com.pbq.imagepicker.jcamera.JCameraView.BUTTON_STATE_ONLY_CAPTURE;
 
 /**
  * ================================================
@@ -66,6 +76,8 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
     private static final int LOAD_IMAGE_FINISH = 0x03;
     private static final int LOAD_VIDEO_FINISH = 0x04;
     private static final int REQUEST_VIDEO_PERMISSIONS = 0x05;
+
+    public static Context mContext = null;
 
     //视频权限
     private static final String[] VIDEO_PERMISSIONS = {
@@ -174,6 +186,8 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.imagepick_activity_media_grid);
+
+        mContext = getApplicationContext();
 
         imagePicker = ImagePicker.getInstance();
         imagePicker.clear();
@@ -563,19 +577,29 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
 
     public void startCapture(){
 
-        if (!hasPermissionsGranted(VIDEO_PERMISSIONS) && CheckPermission.getRecordState() != CheckPermission.STATE_SUCCESS) {
+        /*if (!hasPermissionsGranted(VIDEO_PERMISSIONS) && CheckPermission.getRecordState() != CheckPermission.STATE_SUCCESS) {
             requestVideoPermissions();
             return;
-        }
+        }*/
 
         if(Build.VERSION.SDK_INT >= 21){
+
             Intent intent = new Intent(this, VideoCameraActivity.class);
+            if(ImagePicker.getInstance().getSelectImageCount() > 0 || ImagePicker.getInstance().getSelectType() == 1){//如果已经选择，则只能拍照
+                intent.putExtra(Constant.CAMERA_TYPE, BUTTON_STATE_ONLY_CAPTURE);
+            }else {
+                intent.putExtra(Constant.CAMERA_TYPE, BUTTON_STATE_BOTH);
+            }
             startActivityForResult(intent, 1);
         }else {
             Intent intent = new Intent();
             intent.setClass(this, CaptureImageVideoActivity.class);
             startActivityForResult(intent, 1);
         }
+    }
+
+    public static Context getContextInstanse(){
+        return mContext;
     }
 
     /********************** 权限相关********************************/

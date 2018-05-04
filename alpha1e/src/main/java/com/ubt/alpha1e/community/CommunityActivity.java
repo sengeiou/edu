@@ -24,8 +24,10 @@ import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.share.WbShareCallback;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
+import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
@@ -248,11 +250,18 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
     @Override
     protected void onResume() {
         super.onResume();
-
-        if(isBulueToothConnected() && !hasReadRobotDownAction){
-            hasReadRobotDownAction = true;
-            DownLoadActionManager.getInstance(this).getRobotAction();
+        if(isBulueToothConnected()){
+            DownLoadActionManager.getInstance(this).registerBluetoothListener();
+            if(!hasReadRobotDownAction){
+                hasReadRobotDownAction = true;
+                DownLoadActionManager.getInstance(this).getRobotAction();
+            }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -260,6 +269,7 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
         super.onEventRobot(event);
         if(event.getEvent() == RobotEvent.Event.CONNECT_SUCCESS){
             hasReadRobotDownAction = true;
+            DownLoadActionManager.getInstance(this).registerBluetoothListener();
             DownLoadActionManager.getInstance(this).getRobotAction();
         }
     }
@@ -298,6 +308,7 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+
         DownLoadActionManager.getInstance(this).addDownLoadActionListener(this);
 
         WbSdk.install(this,new AuthInfo(this, MyWeiBoNew.APP_KEY, MyWeiBoNew.REDIRECT_URL, MyWeiBoNew.SCOPE));
@@ -416,12 +427,34 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
         startActivityForResult(intent, Constant.ACTION_SELECT_REQUEST_CODE);
     }
 
-    public void showImagePicker(int type, int num){
+    public void showImagePicker(final int type,final int num){
         if(num > 0){
-            ImagePicker.getInstance().setSelectLimit(num);
-            ImagePicker.getInstance().setSelectType(type);
-            Intent intent = new Intent(this, MediaGridActivity.class);
-            startActivityForResult(intent, REQUEST_IMAGE_SELECT);
+            PermissionUtils.getInstance(this).request(new PermissionUtils.PermissionLocationCallback() {
+                @Override
+                public void onSuccessful() {
+                    UbtLog.d(TAG,"onSuccessful");
+                    ImagePicker.getInstance().setSelectLimit(num);
+                    ImagePicker.getInstance().setSelectType(type);
+                    Intent intent = new Intent(CommunityActivity.this, MediaGridActivity.class);
+                    startActivityForResult(intent, REQUEST_IMAGE_SELECT);
+                }
+
+                @Override
+                public void onFailure() {
+                    UbtLog.d(TAG,"onFailure");
+                }
+
+                @Override
+                public void onRationSetting() {
+                    UbtLog.d(TAG,"onRationSetting");
+                }
+
+                @Override
+                public void onCancelRationSetting() {
+                    UbtLog.d(TAG,"onCancelRationSetting");
+                }
+
+            }, PermissionUtils.PermissionEnum.STORAGE, this);
         }
     }
 

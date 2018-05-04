@@ -25,4 +25,10 @@
     <string name="ui_distribute_record_again">重新录制</string>
 
     <string name="start_capture">开始拍摄</string>
+
+    <string name="imagepick_dialog_permission_location_setting">您尚未开启\"ALpha 1E\"位置权限,请到设置中开启</string>
+    <string name="imagepick_dialog_permission_camera_setting">您尚未开启\"ALpha 1E\"相机权限,请到设置中开启</string>
+    <string name="imagepick_dialog_permission_storage_setting">您尚未开启\"ALpha 1E\"存储权限,请到设置中开启</string>
+    <string name="imagepick_dialog_permission_microphone_setting">您尚未开启\"ALpha 1E\"录音权限,请到设置中开启</string>
+    <string name="imagepick_dialog_go_setting">去设置</string>
 </resources>
