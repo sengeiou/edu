@@ -76,6 +76,7 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
     private static final int LOAD_IMAGE_FINISH = 0x03;
     private static final int LOAD_VIDEO_FINISH = 0x04;
     private static final int REQUEST_VIDEO_PERMISSIONS = 0x05;
+    private static final int REFRESH_CAMERA_SELECT_DATA = 0x06;
 
     public static Context mContext = null;
 
@@ -106,6 +107,9 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
     private List<ImageFolder> mImageFolders;   //所有的图片文件夹
     private ImageGridAdapter mImageGridAdapter;  //图片九宫格展示的适配器
 
+    private ImageItem mDoCameraBackItem = null; //拍照或录像返回选择的对象，返回到此页面后默认选择
+    private ImageFolder mCurrentImageFolder = null; //当前显示的目录
+
     private List<VideoFolder> mVideoFolders;   //所有的视频文件夹
 
     private boolean mLoadingAllImage = false;
@@ -130,6 +134,8 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
                         ArrayList<ImageItem> imageItems = mImageFolders.get(0).images;
 
                         if(mVideoFolders.size() > 0){
+
+
 
                             ArrayList<ImageItem> imageItemTemp = new ArrayList<>();
                             ArrayList<VideoItem> videoItems = mVideoFolders.get(0).videos;
@@ -156,7 +162,16 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
                                 //把第一张设置缩略图
                                 allImagesFolder.cover = imageItemTemp.get(0);
                                 allImagesFolder.images = imageItemTemp;
-                                mImageFolders.add(1, allImagesFolder);  //确保第一条是所有图片
+
+                                //有就更新，无就添加
+                                if(mImageFolders.size() > 1 && mImageFolders.get(1).path.equals("/")
+                                        && mImageFolders.get(1).name.equals(getResources().getString(R.string.all_videos)) ){
+                                    mImageFolders.get(1).cover = imageItemTemp.get(0);
+                                    mImageFolders.get(1).images = allImagesFolder.images;
+                                    Log.d(TAG,"mImageFolders.get(1) = " + mImageFolders.get(1));
+                                }else {
+                                    mImageFolders.add(1, allImagesFolder);  //确保第一条是所有图片
+                                }
                             }
 
                             imageItems.addAll(imageItemTemp);
@@ -168,16 +183,45 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
                                 }
                             });
 
-                            mImageGridAdapter.refreshData(imageItems);
-                            mImageFolderAdapter.refreshData(mImageFolders);
+                            if(mCurrentImageFolder != null){
+                                for(ImageFolder imageFolder : mImageFolders){
+                                    if(imageFolder.path.equals(mCurrentImageFolder.path) && imageFolder.name.equals(mCurrentImageFolder.name)){
+                                        mImageGridAdapter.refreshData(imageFolder.images);
+                                        mImageFolderAdapter.refreshData(mImageFolders);
+                                        break;
+                                    }
+                                }
+                            }else {
+                                mImageGridAdapter.refreshData(imageItems);
+                                mImageFolderAdapter.refreshData(mImageFolders);
+                            }
                         }else {
                             mImageGridAdapter.refreshData(imageItems);
                             mImageFolderAdapter.refreshData(mImageFolders);
                         }
                     }
-
                     break;
-
+                case REFRESH_CAMERA_SELECT_DATA:
+                    Log.d(TAG,"REFRESH_CAMERA_SELECT_DATA mDoCameraBackItem = "  + mDoCameraBackItem);
+                    if(mDoCameraBackItem != null){
+                        String itemPath = mDoCameraBackItem.path;
+                        if(mImageFolders.size() > 0) {
+                            ArrayList<ImageItem> imageItems = mImageFolders.get(0).images;
+                            ImageItem imageItem = null;
+                            for(int i = 0;i<imageItems.size(); i++){
+                                imageItem = imageItems.get(i);
+                                if(imageItem.path.equals(itemPath)){
+                                    imagePicker.addSelectedImageItem(i, imageItem, true);
+                                    mImageGridAdapter.notifyDataSetChanged();
+                                    mDoCameraBackItem = null;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     };
@@ -361,6 +405,7 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
 
                 ImageFolder imageFolder = (ImageFolder) adapterView.getAdapter().getItem(position);
                 if (null != imageFolder) {
+                    mCurrentImageFolder = imageFolder;
                     mImageGridAdapter.refreshData(imageFolder.images);
                     tvTitleName.setText(imageFolder.name);
                 }
@@ -385,24 +430,32 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
         if (imageFolders.size() == 0){
             mImageGridAdapter.refreshData(null);
         }  else {
-            mImageGridAdapter.refreshData(imageFolders.get(0).images);
-
-            for(ImageItem imageItem : imageFolders.get(0).images){
-                //Log.d(TAG,"imageItem = " + imageItem.path + "   = " + imageItem.mimeType);
+            if(mCurrentImageFolder == null){
+                mImageGridAdapter.refreshData(imageFolders.get(0).images);
+            }else {
+                for(ImageFolder imageFolder : imageFolders){
+                    if(imageFolder.path.equals(mCurrentImageFolder.path) && imageFolder.name.equals(mCurrentImageFolder.name)){
+                        mImageGridAdapter.refreshData(imageFolder.images);
+                        break;
+                    }
+                }
             }
+
+            /*for(ImageItem imageItem : imageFolders.get(0).images){
+                Log.d(TAG,"imageItem = " + imageItem.path + "   = " + imageItem.mimeType);
+            }*/
         }
         mImageGridAdapter.setOnImageItemClickListener(this);
         mGridView.setAdapter(mImageGridAdapter);
         mImageFolderAdapter.refreshData(imageFolders);
 
-        Log.d(TAG,"imageFolders = " + imageFolders.size());
-        for(ImageFolder ifm : imageFolders){
-            //Log.d(TAG,"ifm = " + ifm.path + "   ");
-        }
-
         if(mLoadingAllImage){
             mLoadingAllImage = false;
             mHandler.sendEmptyMessage(LOAD_IMAGE_FINISH);
+        }
+
+        if(mDoCameraBackItem != null && !mDoCameraBackItem.isVideo()){
+            mHandler.sendEmptyMessage(REFRESH_CAMERA_SELECT_DATA);
         }
     }
 
@@ -418,6 +471,11 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
             //mVideoGridAdapter.refreshData(videoFolders.get(0).videos);
         }
         mHandler.sendEmptyMessage(LOAD_VIDEO_FINISH);
+
+        if(mDoCameraBackItem != null && mDoCameraBackItem.isVideo()){
+            mHandler.sendEmptyMessage(REFRESH_CAMERA_SELECT_DATA);
+        }
+
         //视频点击的监听事件
         //mVideoGridAdapter.setOnVideoItemClickListener(this);
         //mGridView.setAdapter(mVideoGridAdapter);
@@ -486,13 +544,17 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
 
                     if (FileUtil.isNotEmpty(videoPath)) {
 
+                        mDoCameraBackItem = new ImageItem();
+                        mDoCameraBackItem.path = videoPath;
+                        mDoCameraBackItem.mimeType = "video/mp4";
+
                         File videoFile = new File(videoPath);
                         VideoPicker.galleryAddPic(this, videoFile);
 
                         //ImageItem imageItem = new ImageItem();
                         //imageItem.path = videoFile.getAbsolutePath();
                         //imagePicker.addSelectedImageItem(0, imageItem, true);
-                        mImageGridAdapter.notifyDataSetChanged();
+                        //mImageGridAdapter.notifyDataSetChanged();
 
                         /*Intent intent = new Intent();
                         intent.putExtra(ImagePicker.EXTRA_RESULT_ITEMS, imagePicker.getSelectedImages());
@@ -508,6 +570,10 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
                     File picFile = new File(imageUrl);
 
                     Log.d(TAG,"imageUrl = " + imageUrl);
+                    mDoCameraBackItem = new ImageItem();
+                    mDoCameraBackItem.path = imageUrl;
+                    mDoCameraBackItem.mimeType = "image/jpeg";
+
                     //发送广播通知图片增加了
                     ImagePicker.galleryAddPic(this, picFile);
 
@@ -515,7 +581,7 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
                     //imageItem.path = picFile.getAbsolutePath();
                     //imagePicker.clearSelectedImages();
                     //imagePicker.addSelectedImageItem(0, imageItem, true);
-                    mImageGridAdapter.notifyDataSetChanged();
+                    //mImageGridAdapter.notifyDataSetChanged();
 
                     /*if (imagePicker.isCrop() && false) {
                         Intent intent = new Intent(MediaGridActivity.this, ImageCropActivity.class);
