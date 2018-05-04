@@ -346,6 +346,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             gifDrawable.addAnimationListener(new AnimationListener() {
                 @Override
                 public void onAnimationCompleted() {
+
+
                 }
             });
             mMainGif.setImageDrawable(gifDrawable);
