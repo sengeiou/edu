@@ -340,6 +340,9 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
        mHelper.setPlayContent(album);
       AudioContentInfo  mAudioHistory = (AudioContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
       if(mAudioHistory!=null){
+          if(album == null || album.get(mAudioHistory.index) == null){
+              return;
+          }
           player_name.setText(album.get(mAudioHistory.index).contentName);
       }
       mAudioContentList=album;
