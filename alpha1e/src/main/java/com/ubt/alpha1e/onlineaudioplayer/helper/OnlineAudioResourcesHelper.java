@@ -143,17 +143,14 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         setCurentPlayingAudioIndex(Integer.parseInt(mCmd.get("index").toString())+1);
         notifyCurrentRobotOnlineStatus(mCmd);
     }
-    private void notifyUiLoopMode(JSONObject mCmd) throws JSONException {
-        PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.GET_LOOP_MODE);
-        mPlayerEvent.setLoop(mCmd.get("loop").toString());
-        EventBus.getDefault().post(mPlayerEvent);
-    }
 
     private void notifyCurrentRobotOnlineStatus(JSONObject mCmd) throws JSONException {
         PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS);
         mPlayerEvent.setAlbumId(mCmd.get("albumId").toString());
         mPlayerEvent.setCurrentPlayingIndex(Integer.parseInt( mCmd.get("index").toString()));
         mPlayerEvent.setStatus(mCmd.get("status").toString());
+        mPlayerEvent.setLoop(mCmd.get("loop").toString());
+        setPlayType(Integer.parseInt(mCmd.get("loop").toString()));
         EventBus.getDefault().post(mPlayerEvent);
     }
 

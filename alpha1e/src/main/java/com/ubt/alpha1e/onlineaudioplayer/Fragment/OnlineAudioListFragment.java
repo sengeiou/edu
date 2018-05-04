@@ -126,27 +126,13 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
         } else if(event.getEvent()==PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS){
             playingAudioName(mPlayContentInfoDatas.get(event.getCurrentPlayingIndex()).contentName);
+            UbtLog.d(TAG,"LOOP MODE "+event.getLoop());
         }else if(event.getEvent()==PlayerEvent.Event.CONTROL_STOP){
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         }else if(event.getEvent()==PlayerEvent.Event.TAP_HEAD){
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         }else if(event.getEvent()==PlayerEvent.Event.GET_LOOP_MODE){
-            UbtLog.d(TAG,"LOOP MODE "+event.getLoop());
-            if(event.getLoop().equals(ORDER_LOOP)){
-                isRecycleType=ORDER_AUDIO_LIST_PLAYING;
-            }else if(event.getLoop().equals(SINGLE_LOOP)){
-                isRecycleType=SINGLE_AUDIO_PLAYING;
-            }else if(event.getLoop().equals(RECYCLE_LOOP)){
-                isRecycleType=RECYCLE_AUDIO_LIST_PLAYING;
-            }
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loopModeUiShow();
-                    };
-                });
-            }
+
 
         }
     }
@@ -230,6 +216,9 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         rvEventList.setAdapter(mAdapter);
         mBack.setVisibility(View.VISIBLE);
         mPresenter.getAudioList(currentAlbumId);
+        //TODO REFACTOR
+        isRecycleType=mHelper.getPlayType();
+        loopModeStatusShow();
         return mView;
     }
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -270,22 +259,34 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             mHelper.setPlayType(RECYCLE_AUDIO_LIST_PLAYING);
             ivRecycleButton.setImageResource(R.drawable.ic_circle_list);
             mHelper.sendOnlineAudioLoopMode(RECYCLE_LOOP);
-            Toast.makeText(getActivity(),"RECYCLE", Toast.LENGTH_LONG).show();
+           // Toast.makeText(getActivity(),"RECYCLE", Toast.LENGTH_LONG).show();
         }else if(isRecycleType==RECYCLE_AUDIO_LIST_PLAYING){
             isRecycleType=SINGLE_AUDIO_PLAYING;
             mHelper.setPlayType(SINGLE_AUDIO_PLAYING);
             ivRecycleButton.setImageResource(R.drawable.ic_circle_single);
             mHelper.sendOnlineAudioLoopMode(SINGLE_LOOP);
-            Toast.makeText(getActivity(),"SINGLE", Toast.LENGTH_LONG).show();
+          //  Toast.makeText(getActivity(),"SINGLE", Toast.LENGTH_LONG).show();
         }else if(isRecycleType==SINGLE_AUDIO_PLAYING){
             isRecycleType=ORDER_AUDIO_LIST_PLAYING;
             mHelper.setPlayType(ORDER_AUDIO_LIST_PLAYING);
-            ivRecycleButton.setImageResource(R.drawable.ic_circle_list);
+            ivRecycleButton.setImageResource(R.drawable.ic_circle_listplay);
             mHelper.sendOnlineAudioLoopMode(ORDER_LOOP);
-            Toast.makeText(getActivity(),"ORDER", Toast.LENGTH_LONG).show();
+          //  Toast.makeText(getActivity(),"ORDER", Toast.LENGTH_LONG).show();
         }
     }
 
+    private void loopModeStatusShow() {
+        if(isRecycleType==ORDER_AUDIO_LIST_PLAYING) {
+            ivRecycleButton.setImageResource(R.drawable.ic_circle_listplay);
+            // Toast.makeText(getActivity(),"RECYCLE", Toast.LENGTH_LONG).show();
+        }else if(isRecycleType==RECYCLE_AUDIO_LIST_PLAYING){
+            ivRecycleButton.setImageResource(R.drawable.ic_circle_list);
+            //  Toast.makeText(getActivity(),"SINGLE", Toast.LENGTH_LONG).show();
+        }else if(isRecycleType==SINGLE_AUDIO_PLAYING){
+            ivRecycleButton.setImageResource(R.drawable.ic_circle_single);
+            //  Toast.makeText(getActivity(),"ORDER", Toast.LENGTH_LONG).show();
+        }
+    }
     private void prevAudioPlay() {
         if(isStartPlayProcess){
             isPause = false;
