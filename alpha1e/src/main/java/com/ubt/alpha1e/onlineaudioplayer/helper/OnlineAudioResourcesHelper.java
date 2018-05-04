@@ -63,7 +63,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     private int mPlayType = OnlineAudioListFragment.ORDER_AUDIO_LIST_PLAYING;
     MediaPlayer mediaPlayer;
     //TEST PURPOSE LOCAL PLAYRING AUDIO
-    private boolean local_player = true;
+    private boolean local_player = false;
     //NEW PROTOCOL
     private boolean offlinePlaying_protocol=true;
 
