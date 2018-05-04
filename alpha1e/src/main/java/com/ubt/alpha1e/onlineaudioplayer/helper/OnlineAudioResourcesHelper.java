@@ -93,7 +93,9 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
                     //SAVE TO THE SP
                     if(mCmd.get("status").equals("playing")) {
                         notifyUiCurrentRobotStatus(mCmd);
-                    }else {
+                    }else if(mCmd.get("status").equals("pause")){
+                        notifyUiCurrentRobotStatus(mCmd);
+                    }else if(mCmd.get("status").equals("quit")) {
                         //GET ROBOT ONLINE PLAY STATUS STOP
                         UbtLog.d(TAG,"0X55 "+mCmd.get("status"));
                         notifyPlayerStop();
@@ -151,6 +153,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS);
         mPlayerEvent.setAlbumId(mCmd.get("albumId").toString());
         mPlayerEvent.setCurrentPlayingIndex(Integer.parseInt( mCmd.get("index").toString()));
+        mPlayerEvent.setStatus(mCmd.get("status").toString());
         EventBus.getDefault().post(mPlayerEvent);
     }
 

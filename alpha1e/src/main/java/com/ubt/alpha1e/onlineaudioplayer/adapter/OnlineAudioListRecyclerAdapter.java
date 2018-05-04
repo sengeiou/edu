@@ -76,6 +76,10 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
             myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
         }
+        //TODO  DECOUPLE
+        if(OnlineAudioListFragment.isPause){
+            myHolder.playStatusAnim.stop();
+        }
          myHolder.tvPlayContent.setText(playContentInfo.contentName);
 
     }

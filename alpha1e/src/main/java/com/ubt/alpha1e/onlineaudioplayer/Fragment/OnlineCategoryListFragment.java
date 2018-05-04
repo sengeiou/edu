@@ -195,11 +195,18 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             if(isPause){
                 isPause = false;
                 mHelper.continueEvent();
-                ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
+                if(radiologicalWaveAnim!=null) {
+                    radiologicalWaveAnim.start();
+                }
+                mHelper.playEvent("playing",mHelper.getmCategoryId(),mHelper.getAlbumId(),mHelper.getCurrentPlayingAudioIndex());
+                ig_player_button.setImageResource(R.drawable.ic_ct_pause);
             }else {
                 isPause = true;
                 mHelper.pauseEvent();
-                ig_player_button.setImageResource(R.drawable.ic_ct_pause);
+                if(radiologicalWaveAnim!=null) {
+                    radiologicalWaveAnim.stop();
+                }
+                ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
             }
     }
 
@@ -374,7 +381,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         player_name.setVisibility(View.VISIBLE);
         player_name.setText(name);
         ig_player_button.setVisibility(View.VISIBLE);
-        ig_player_button.setImageResource(R.drawable.ic_ct_stop);
+        ig_player_button.setImageResource(R.drawable.ic_ct_pause);
     }
 
     //没有播放
@@ -417,21 +424,36 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         }else if(event.getEvent()==PlayerEvent.Event.TAP_HEAD){
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
-        }else if(event.getEvent()==PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS){
-//            playStatus = true;
-            isPause=false;
-            mPresenter.getAudioList(event.getAlbumId());
+        }else if(event.getEvent()==PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
+            if (event.getStatus().equals("playing")) {
+                isPause = false;
+                mPresenter.getAudioList(event.getAlbumId());
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            UbtLog.d(TAG, "ONLINE STATUS PLAYING");
+                            playing(event.getCurrentPlayingSongName());
+                        }
+
+                        ;
+                    });
+                }
+            }
+        }else if(event.getStatus().equals("pause")) {
+            isPause = true;
             if (getActivity() != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        UbtLog.d(TAG,"ONLINE STATUS PLAYING");
-                        playing(event.getCurrentPlayingSongName());
-                    };
+                        UbtLog.d(TAG, "ONLINE STATUS PAUSE");
+                        onlineAudioPlayerStatus();
+                    }
+
+                    ;
                 });
             }
-
-        }
+      }
     }
 }
 

@@ -14,6 +14,16 @@ public class PlayerEvent {
     private int currentClickingIndex;
     private String currentPlayingSongName;
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    private String status;
+
     public String getLoop() {
         return loop;
     }
