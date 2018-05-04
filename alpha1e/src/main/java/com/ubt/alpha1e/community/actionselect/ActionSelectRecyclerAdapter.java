@@ -3,6 +3,9 @@ package com.ubt.alpha1e.community.actionselect;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -61,15 +64,26 @@ public class ActionSelectRecyclerAdapter extends BaseQuickAdapter<DynamicActionM
             progressBar.setVisibility(View.GONE);
             ivPlay.setImageResource(R.drawable.ic_btn_play);
 
+            ivPlayStatus.clearAnimation();
             ivPlayStatus.setImageResource(R.drawable.ic_community_play_s);
+
         } else if (item.getActionStatu() == 1) {//播放状态
             ivPlay.setVisibility(View.VISIBLE);
             tvDownProgress.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
             ivPlay.setImageResource(R.drawable.ic_btn_stop);
+
+            ivPlayStatus.clearAnimation();
             ivPlayStatus.setImageResource(R.drawable.ic_community_stop_s);
         } else if (item.getActionStatu() == 2) {//下载状态
+
+            Animation mOperatingAnim = AnimationUtils.loadAnimation(mContext, R.anim.rotate_cycle);
+            LinearInterpolator mLinearInterpolator = new LinearInterpolator();
+            mOperatingAnim.setInterpolator(mLinearInterpolator);
+
             ivPlayStatus.setImageResource(R.drawable.ic_downloading);
+            ivPlayStatus.startAnimation(mOperatingAnim);
+
             ivPlay.setVisibility(View.GONE);
             int progress = (int) item.getDownloadProgress();
             if (progress > 0) {

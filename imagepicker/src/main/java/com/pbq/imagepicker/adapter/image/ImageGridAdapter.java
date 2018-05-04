@@ -2,6 +2,7 @@ package com.pbq.imagepicker.adapter.image;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +23,12 @@ import com.pbq.imagepicker.bean.ImageItem;
 import com.pbq.imagepicker.ui.image.ImageBaseActivity;
 import com.pbq.imagepicker.ui.image.ImageGridActivity;
 import com.pbq.imagepicker.ui.media.MediaGridActivity;
+import com.pbq.imagepicker.utils.PermissionUtils;
 import com.pbq.imagepicker.view.SuperCheckBox;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
+import com.yanzhenjie.permission.Rationale;
+import com.yanzhenjie.permission.RationaleListener;
 
 import java.util.ArrayList;
 
@@ -125,25 +131,7 @@ public class ImageGridAdapter extends BaseAdapter {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!((ImageBaseActivity) mActivity).checkPermission(Manifest.permission.CAMERA)) {
-                        ActivityCompat.requestPermissions(mActivity, new String[]{Manifest.permission.CAMERA}, ImageGridActivity.REQUEST_PERMISSION_CAMERA);
-                    } else {
-                        //imagePicker.takePicture(mActivity, ImagePicker.REQUEST_IMAGE_TAKE);
-
-                        Log.d(TAG,"mActivity = " + mActivity);
-                        if(mActivity instanceof MediaGridActivity){
-                            if(imagePicker.getSelectImageCount() >= imagePicker.getSelectLimit()){
-                                Toast.makeText(mActivity,"选择个数已经超出了个数限制",Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            if(imagePicker.getSelectImageCount() > 0 && imagePicker.getSelectedImages().get(0).isVideo()){
-                                Toast.makeText(mActivity,"选择个数已经超出了个数限制",Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            ((MediaGridActivity)mActivity).startCapture();
-                        }
-                    }
+                    requestPermission(PermissionUtils.PermissionEnum.CAMERA);
                 }
             });
         } else {
@@ -239,6 +227,51 @@ public class ImageGridAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void requestPermission(final PermissionUtils.PermissionEnum permissionEnum){
+        PermissionUtils.getInstance(mActivity).request(new PermissionUtils.PermissionLocationCallback() {
+            @Override
+            public void onSuccessful() {
+                Log.d(TAG,"onSuccessful = " + permissionEnum);
+
+                if(permissionEnum == PermissionUtils.PermissionEnum.STORAGE){
+                    requestPermission(PermissionUtils.PermissionEnum.CAMERA);
+                }else if(permissionEnum == PermissionUtils.PermissionEnum.CAMERA){
+                    requestPermission(PermissionUtils.PermissionEnum.MICROPHONE);
+                }else {
+                    Log.d(TAG,"mActivity = " + mActivity);
+                    if(mActivity instanceof MediaGridActivity){
+                        if(imagePicker.getSelectImageCount() >= imagePicker.getSelectLimit()){
+                            Toast.makeText(mActivity,"选择个数已经超出了个数限制",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if(imagePicker.getSelectImageCount() > 0 && imagePicker.getSelectedImages().get(0).isVideo()){
+                            Toast.makeText(mActivity,"选择个数已经超出了个数限制",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        ((MediaGridActivity)mActivity).startCapture();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure() {
+                Log.d(TAG,"onFailure");
+            }
+
+            @Override
+            public void onRationSetting() {
+                Log.d(TAG,"onRationSetting");
+            }
+
+            @Override
+            public void onCancelRationSetting() {
+                Log.d(TAG,"onCancelRationSetting");
+            }
+
+        }, permissionEnum, mActivity);
+    }
+
     private class ViewHolder {
         public View rootView;
         public ImageView ivThumb;
@@ -264,4 +297,6 @@ public class ImageGridAdapter extends BaseAdapter {
     public interface OnImageItemClickListener {
         void onImageItemClick(View view, ImageItem imageItem, int position);
     }
+
+
 }
