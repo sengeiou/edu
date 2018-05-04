@@ -170,11 +170,13 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                     playStatus = true;
                     ig_player_button.setImageResource(R.drawable.ic_ct_stop);
                     mHelper.setPlayContent(mAudioContentList);
+                    mHelper.pauseEvent();
                   //  mHelper.autoAudioPlay();
                 } else {
 //                    if(mHelper!=null) {
 //                        mHelper.stopEvent();
 //                    }
+                    mHelper.continueEvent();
                     ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
                     playStatus = false;
                 }
@@ -358,6 +360,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         radiologicalWaveAnim = (AnimationDrawable) ig_player_state.getBackground();
         radiologicalWaveAnim.setOneShot(false);
         radiologicalWaveAnim.setVisible(true, true);
+        radiologicalWaveAnim.start();
         player_name.setVisibility(View.VISIBLE);
         player_name.setText(name);
         ig_player_button.setVisibility(View.VISIBLE);
@@ -383,8 +386,11 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         player_name.setVisibility(View.VISIBLE);
         if(ig_player_button!=null)
         ig_player_button.setVisibility(View.VISIBLE);
+        if(radiologicalWaveAnim!=null) {
+            radiologicalWaveAnim.stop();
+        }
     }
-    
+
     @Subscribe
     public void onEvent(final PlayerEvent event) {
         if (event.getEvent() == PlayerEvent.Event.CONTROL_PLAY_NEXT) {

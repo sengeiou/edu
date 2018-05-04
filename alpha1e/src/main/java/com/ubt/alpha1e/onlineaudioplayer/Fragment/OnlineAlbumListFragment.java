@@ -303,7 +303,6 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     mAlbumId = mAlbumDatas.get(position).albumId;
                     mHelper.setmCategoryId(mAlbumDatas.get(position).categoryId);
                     mHelper.setAlbumId(mAlbumId);
-                    mHelper.playEvent("playing",mAlbumDatas.get(position).categoryId,mAlbumId,Integer.parseInt(audio_index));
                     OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumDatas.get(position));
                     start(mfragment);
                 }

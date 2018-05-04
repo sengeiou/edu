@@ -77,7 +77,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         }
         return mOnlineAudioResourcesHelper;
     }
-
     @Override
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
@@ -108,16 +107,16 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             if (param[0] == 0x01) {
                 UbtLog.d(TAG, "cmd = " + cmd + "    reply" + param[0]);
             }else {
-                UbtLog.d(TAG, "cmd = " + cmd + "  next audio notify" + param[0]);
+                UbtLog.d(TAG, "cmd = " + cmd + "  next audio notify" + BluetoothParamUtil.bytesToString(param));
                     try {
                         JSONObject mCmd = new JSONObject(BluetoothParamUtil.bytesToString(param));
                         mCmd.get("status");//play, pause, continue, stop, complete,next
                         mCmd.get("categoryId");
                         mCmd.get("albumId");
                         mCmd.get("index");
-                        UbtLog.d(TAG, "cmd = " + cmd + "  next audio notify:   " + mCmd.get("status") +" complete index : "+   mCmd.get("index"));
+                        UbtLog.d(TAG, "cmd = " + cmd + "  next audio notify:   " + mCmd.get("status") +" next index : "+   mCmd.get("index"));
                         if (mCmd.get("status").equals("next")) {
-                            notifyUiNextAudio(Integer.parseInt(mCmd.get("index").toString())+1);
+                            notifyUiNextAudio(Integer.parseInt(mCmd.get("index").toString()));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -190,10 +189,10 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         notifyUiNextAudio(index);
        // doSendComm(ConstValue.DV_NOTIFYONLINEPLAYER_PLAY, BluetoothParamUtil.stringToBytes(url));
         sendControlCommand(playStatus,categoryId,albumId,Integer.toString(index));
-        for (AudioContentInfo mPlayContentInfo : getPlayContent()) {
-            mPlayContentInfo.isPlaying = false;
-        }
-        getPlayContent().get(index).isPlaying = true;
+//        for (AudioContentInfo mPlayContentInfo : getPlayContent()) {
+//            mPlayContentInfo.isPlaying = false;
+//        }
+//        getPlayContent().get(index).isPlaying = true;
         if (local_player) {
             localAudioplay(mPlayContentInfoList.get(index).contentUrl);
         }
@@ -223,17 +222,15 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         }
     }
 
-    public void pauseEvent(String url) {
-        String params = url;
-        UbtLog.d(TAG, "pauseEventSound = " + params);
+    public void pauseEvent() {
+        UbtLog.d(TAG, "pauseEventSound = ");
         byte[] mCmd = {0};
         mCmd[0] = 0;
         doSendComm(ConstValue.DV_NOTIFYONLINEPLAYER_PAUSE, mCmd);
     }
 
-    public void continueEvent(String url) {
-        String params = url;
-        UbtLog.d(TAG, "continueEventSound = " + params);
+    public void continueEvent() {
+        UbtLog.d(TAG, "continueEventSound = ");
         byte[] mCmd = {0};
         mCmd[0] = 0;
         doSendComm(ConstValue.DV_NOTIFYONLINEPLAYER_CONTINUE, mCmd);
@@ -242,10 +239,10 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     private void notifyNextAudioMesssage(int index) {
         PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_PLAY_NEXT);
         //NEXT AUDIO NAME INFORMATION
+        if(mPlayContentInfoList.size()!=0)
         mPlayerEvent.setCurrentPlayingSongName(mPlayContentInfoList.get(index).contentName);
         mPlayerEvent.setCurrentPlayingIndex(index);
         EventBus.getDefault().post(mPlayerEvent);
-       // autoNextAudioPlay();
     }
 
     public void readPlayStatus() {
@@ -366,6 +363,10 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     protected void localAudioplay(String url) {
         try {
+            if(mediaPlayer!=null){
+                mediaPlayer.stop();
+                mediaPlayer=null;
+            }
             mediaPlayer = new MediaPlayer();
             // 设置指定的流媒体地址
             mediaPlayer.setDataSource(url);

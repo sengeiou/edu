@@ -39,11 +39,6 @@ public class OnlineAudioPlayerPresenter extends BasePresenterImpl<OnlineAudioPla
     public static final int NETWORK_ERROR=1000;
     public static final int NETWORK_SUCCESS=2000;
 
-    @Override
-    public void getCourseList() {
-         BaseRequest  mBaseRequest=new BaseRequest();
-         doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+getCourseContents,mBaseRequest,GETCOURSElISTREQUIRE);
-    }
 
     @Override
     public void getAlbumList(final String courseName) {
@@ -60,10 +55,6 @@ public class OnlineAudioPlayerPresenter extends BasePresenterImpl<OnlineAudioPla
         doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+getAudioContents,mAudioRequest,GETAUDIOREQUEST);
     }
 
-    @Override
-    public void getSearchList() {
-
-    }
 
     /**
      * 请求网络操作

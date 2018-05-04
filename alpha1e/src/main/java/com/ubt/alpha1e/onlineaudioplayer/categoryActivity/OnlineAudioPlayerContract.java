@@ -25,9 +25,7 @@ public class OnlineAudioPlayerContract {
     }
 
    public interface  Presenter extends BasePresenter<View> {
-        void getCourseList();
         void getAlbumList(String courseName);
         void getAudioList(String albumId);
-        void getSearchList();
     }
 }
