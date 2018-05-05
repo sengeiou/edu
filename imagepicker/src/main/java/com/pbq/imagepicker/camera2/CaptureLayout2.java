@@ -25,6 +25,8 @@ import com.pbq.imagepicker.jcamera.listener.ClickListener;
 import com.pbq.imagepicker.jcamera.listener.ReturnListener;
 import com.pbq.imagepicker.jcamera.listener.TypeListener;
 
+import static com.pbq.imagepicker.jcamera.JCameraView.BUTTON_STATE_ONLY_CAPTURE;
+
 public class CaptureLayout2 extends FrameLayout {
 
     private static final String TAG = CaptureLayout2.class.getSimpleName();
@@ -358,6 +360,9 @@ public class CaptureLayout2 extends FrameLayout {
 
     public void setButtonFeatures(int state) {
         btn_capture.setButtonFeatures(state);
+        if(state == BUTTON_STATE_ONLY_CAPTURE){
+            hideTip();
+        }
     }
 
     public void setTip(String tip) {
@@ -366,6 +371,10 @@ public class CaptureLayout2 extends FrameLayout {
 
     public void showTip() {
         txt_tip.setVisibility(VISIBLE);
+    }
+
+    public void hideTip() {
+        txt_tip.setVisibility(GONE);
     }
 
     public void setIconSrc(int iconLeft, int iconRight) {

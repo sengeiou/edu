@@ -294,9 +294,32 @@ public class DownLoadActionManager {
      * 注册蓝牙监听
      */
     public void addBluetoothListener() {
-        ((AlphaApplication) mContext.getApplicationContext())
-                .getBlueToothManager().addBlueToothInteraction(mBluetoothListener);
+        if(((AlphaApplication) mContext.getApplicationContext()).getBlueToothManager() != null){
+            ((AlphaApplication) mContext.getApplicationContext())
+                    .getBlueToothManager().addBlueToothInteraction(mBluetoothListener);
+        }
     }
+
+    /**
+     * 注册蓝牙监听
+     */
+    public void registerBluetoothListener(){
+        if(((AlphaApplication) mContext.getApplicationContext()).getBlueToothManager() != null){
+            ((AlphaApplication) mContext.getApplicationContext())
+                    .getBlueToothManager().addBlueToothInteraction(mBluetoothListener);
+        }
+    }
+
+    /**
+     * 解除注册蓝牙监听
+     */
+    public void unRegisterBluetoothListener(){
+        if(((AlphaApplication) mContext.getApplicationContext()).getBlueToothManager() != null){
+            ((AlphaApplication) mContext.getApplicationContext())
+                    .getBlueToothManager().removeBlueToothInteraction(mBluetoothListener);
+        }
+    }
+
 
 
     /**

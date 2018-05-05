@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -30,8 +29,7 @@ import com.ubt.alpha1e.onlineaudioplayer.adapter.GradeSelectedAdapter;
 import com.ubt.alpha1e.onlineaudioplayer.helper.OnlineAudioResourcesHelper;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.model.HistoryAudio;
+import com.ubt.alpha1e.onlineaudioplayer.model.CategoryContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.searchActivity.OnlineResRearchActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -47,7 +45,7 @@ import java.util.List;
 
 public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerContract.View,OnlineAudioPlayerPresenter> implements OnlineAudioPlayerContract.View {
 
-    private String TAG="OnlineAlbumListFragment";
+    private static String TAG="OnlineAlbumListFragment";
     private View mActivityView;
     private View mView;
     RecyclerView  mAlbumView;
@@ -120,6 +118,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         mCategoryId=mCategory.getRes_id();
         mCategoryName  =mCategory.getRes_name();
         type = CATEGORY_ENTER_FRAGMENT;
+        UbtLog.d(TAG,"Category click enter "+mCategoryId +"Category name "+mCategoryName);
         return mOnlineAudioAlbumPlayerFragment;
     }
     public static OnlineAlbumListFragment newInstance(AlbumContentInfo albumContentInfo) {
@@ -129,6 +128,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         mCategoryId=albumContentInfo.getCategoryId();
         mAlbumId=albumContentInfo.albumId;
         type=SEARCH_ENTER_FRAGMENT;
+        UbtLog.d(TAG,"SEARCH click enter "+mCategoryId+"Category name "+mCategoryName);
         return mOnlineAudioAlbumPlayerFragment;
     }
     @Nullable
@@ -223,14 +223,14 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
 
 
     @Override
-    public void showCourseList(List<CourseContentInfo> album) {
+    public void showCourseList(List<CategoryContentInfo> album) {
 
     }
 
     @Override
     public void showAlbumList(Boolean status, List<AlbumContentInfo> album, String errorMsgs) {
         if(status) {
-            UbtLog.d(TAG,"showAlbumList"+album.size());
+            UbtLog.d(TAG,"request result from back-end"+album);
             mAlbumDatas.clear();
             mGradData.clear();
             mOriginalDatas.clear();
@@ -293,12 +293,16 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             ((AlbumHolder) holder).txt_album_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HistoryAudio mHistory = new HistoryAudio();
+                    AlbumContentInfo mHistory = new AlbumContentInfo();
+                    mHistory.setCategoryId(mAlbumDatas.get(position).categoryId);
                     mHistory.setAlbumId(mAlbumDatas.get(position).albumId);
                     mHistory.setAlbumName(mAlbumDatas.get(position).albumName);
                     mHistory.setGrade(mAlbumDatas.get(position).grade);
-                    SPUtils.getInstance().saveObject(Constant.SP_ONLINEAUDIO_HISTORY,mHistory);
+                    SPUtils.getInstance().saveObject(Constant.SP_ONLINEAlBUM_HISTORY,mHistory);
                     mAlbumId = mAlbumDatas.get(position).albumId;
+                    mHelper.setmCategoryId(mAlbumDatas.get(position).categoryId);
+                    mHelper.setAlbumId(mAlbumId);
+                    mHelper.setCurentPlayingAudioIndex(0);
                     OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumDatas.get(position));
                     start(mfragment);
                 }

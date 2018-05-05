@@ -105,6 +105,7 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
             super.handleMessage(msg);
             switch (msg.what) {
                 case SEARCH_RESULT_ALBUM:
+                    //Add Search Function
                     AlbumContentInfo mItem=(AlbumContentInfo)msg.obj;
                     OnlineAlbumListFragment fragment = findFragment(OnlineAlbumListFragment.class);
                     UbtLog.d(TAG, "OnlineAudioPlayerActivity = " + fragment);
@@ -351,6 +352,8 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
         recent_search_content.setLayoutManager(new FlowLayoutManager());
         flowerList = DataConfig.getItems();
         if(flowerList.size() == 0){
+            tv_no_rearch.setVisibility(View.VISIBLE);
+        }else {
             tv_no_rearch.setVisibility(View.INVISIBLE);
         }
         recent_search_content.setAdapter(flowAdapter = new FlowAdapter(flowerList));

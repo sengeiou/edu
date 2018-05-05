@@ -7,6 +7,7 @@ import com.ubt.alpha1e.utils.GsonImpl;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -16,11 +17,12 @@ import java.util.ArrayList;
  */
 
 
-public class AudioContentInfo extends BaseModel {
+public class AudioContentInfo extends BaseModel implements Serializable {
     public AudioContentInfo thiz;
     public String contentName;
     public String contentUrl;
     public Boolean isPlaying=false;
+    public int index=-1;
 
     @Override
     public AudioContentInfo getThiz(String json) {
@@ -73,6 +75,7 @@ public class AudioContentInfo extends BaseModel {
                 "contentName=" + contentName +
                 ", contentUrl='" + contentUrl + '\'' +
                 ", isSelect='" + isPlaying + '\'' +
+                ", index='" + index+ '\'' +
                 '}';
     }
 }

@@ -438,10 +438,12 @@ public class ConstValue {
 	 */
 	public static final byte DV_CONTROL_HIBITS_PLAY = (byte) 0x99;
 
+    public static final byte DV_GETONLINEPLAYER_ROBOTSTATUS=0x55;
+    public static final byte DV_NOTIFYONLINEPLAYER_ROBOTLOOPMODE=0x56;
+	public static final byte DV_NOTIFYONLINEPLAYER_PLAY=0x57;  //发送URL 字符串
+	public static final byte DV_NOTIFYONLINEPLAYER_PAUSE=0x58;
+	public static final byte DV_NOTIFYONLINEPLAYER_CONTINUE=0x59;
+	public static final byte DV_NOTIFYONLINEPLAYER_EXIT=0x5a;
 
-	public static final byte DV_ONLINEPLAYER_PLAY=0x7A;  //发送URL 字符串
-	public static final byte DV_ONLINEPLAYER_STOP=0x7B;
-	public static final byte DV_ONLINEPLAYER_PAUSE=0x7C;
-	public static final byte DV_ONLINEPLAYER_CONTINUE=0x7D;
 
 }

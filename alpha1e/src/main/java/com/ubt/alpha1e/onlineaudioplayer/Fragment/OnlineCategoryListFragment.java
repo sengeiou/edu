@@ -39,8 +39,7 @@ import com.ubt.alpha1e.onlineaudioplayer.helper.OnlineAudioResourcesHelper;
 
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.model.HistoryAudio;
+import com.ubt.alpha1e.onlineaudioplayer.model.CategoryContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
 import com.ubt.alpha1e.onlineaudioplayer.searchActivity.OnlineResRearchActivity;
 import com.ubt.alpha1e.utils.GsonImpl;
@@ -93,12 +92,14 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     public onlineresAdpater mAdapter;
     public List<OnlineresList> onlineresList = new ArrayList<>();
     public final static int LAUNCH_CATEGORY_ITEM = 1;
+    public final static int STOP_CURRENT_PLAY=2;
     private static final int GET_MAX_CATEGORY = 50;
     Unbinder unbinder;
     private boolean playStatus = false;
     private OnlineAudioResourcesHelper mHelper = null;
-    HistoryAudio mHistory;
-
+    AlbumContentInfo mAlbumHistory;
+    List<AudioContentInfo> mAudioContentList;
+    private boolean isPause = false;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -108,6 +109,9 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                     OnlineresList mCategory=(OnlineresList)msg.obj;
                     OnlineAlbumListFragment mfragment = OnlineAlbumListFragment.newInstance(mCategory);
                     start(mfragment);
+                    break;
+                case STOP_CURRENT_PLAY:
+                    stopPlay();
                     break;
             }
         }
@@ -120,13 +124,35 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     }
 
 
-    @OnClick({R.id.ib_return, R.id.ib_rearch, R.id.ig_player_button})
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mHelper != null) {
+            mHelper.DistoryHelper();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mHelper != null) {
+            UbtLog.d(TAG, "--wmma--mHelper UnRegisterHelper! " + mHelper.getClass().getSimpleName());
+            mHelper.UnRegisterHelper();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mHelper != null) {
+            mHelper.RegisterHelper();
+        }
+    }
+
+    @OnClick({R.id.ib_return, R.id.ib_rearch, R.id.ig_player_button,R.id.ig_player_list})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ib_return:
-                if(mHelper!=null) {
-                    mHelper.stopEvent();
-                }
                 EventBus.getDefault().unregister(this);
                 getActivity().finish();
                 break;
@@ -138,39 +164,73 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 break;
             case R.id.ig_player_button:
                 UbtLog.d(TAG, "ig_player_button");
-                if (!playStatus) {
-                    playStatus = true;
-                    ig_player_button.setImageResource(R.drawable.ic_ct_stop);
-                    mPresenter.getAudioList(mHistory.getAlbumId());
-                } else {
-                    if(mHelper!=null) {
-                        mHelper.stopEvent();
+                onlineAudioPlayerStatus();
+//                if (!playStatus) {
+//                    playStatus = true;
+//                    ig_player_button.setImageResource(R.drawable.ic_ct_stop);
+//                    mHelper.setPlayContent(mAudioContentList);
+//                    mHelper.pauseEvent();
+//                } else {
+//                    mHelper.continueEvent();
+//                    ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
+//                    playStatus = false;
+//                }
+                break;
+            case R.id.ig_player_list:
+                mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY);
+                if(mAlbumHistory!=null) {
+                    AudioContentInfo mAudioContentInfo=(AudioContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
+                    if(mAudioContentInfo!=null) {
+                        mHelper.setCurentPlayingAudioIndex(mAudioContentInfo.index);
                     }
-                    ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
-                    playStatus = false;
+                    OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumHistory);
+                    start(mfragment);
                 }
+
                 break;
         }
+    }
+
+    private void onlineAudioPlayerStatus() {
+            if(isPause){
+                isPause = false;
+                mHelper.continueEvent();
+                if(radiologicalWaveAnim!=null) {
+                    radiologicalWaveAnim.start();
+                }
+                mHelper.playEvent("playing",mHelper.getmCategoryId(),mHelper.getAlbumId(),mHelper.getCurrentPlayingAudioIndex());
+                ig_player_button.setImageResource(R.drawable.ic_ct_pause);
+            }else {
+                isPause = true;
+                mHelper.pauseEvent();
+                if(radiologicalWaveAnim!=null) {
+                    radiologicalWaveAnim.stop();
+                }
+                ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
+            }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
-        EventBus.getDefault().register(this);
-        mHelper = OnlineAudioResourcesHelper.getInstance(getContext());
         return rootView;
     }
 
     @Override
     protected void initUI() {
-        playing();
+       // playing();
+        EventBus.getDefault().register(this);
+        mHelper = OnlineAudioResourcesHelper.getInstance(getContext());
+        //获取机器人当前播放状态
+        mHelper.getRobotOnlineAudioStatus();
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerview.setLayoutManager(mLayoutManager);
         mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         DividerItemDecorationNew dividerItemDecoration = new DividerItemDecorationNew(getActivity(), DividerItemDecorationNew.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.linesharp));
         mRecyclerview.addItemDecoration(dividerItemDecoration);
+        player_name.setText("暂无播放历史");
         mRecyclerview.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -185,12 +245,12 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         mRecyclerview.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         getMaxCategory();
-        mHistory = (HistoryAudio) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
-        if (SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY) != null) {
-            player_name.setText(mHistory.getAlbumName());
-        } else {
-            player_name.setText("暂无播放历史");
+        mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY);
+        ;if (SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY) != null) {
+            // player_name.setText(mAlbumHistory.getAlbumName())
+            mPresenter.getAudioList(mAlbumHistory.albumId);
         }
+        mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
     }
 
     //拉最大的类别
@@ -280,7 +340,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
 
     @Override
-    public void showCourseList(List<CourseContentInfo> album) {
+    public void showCourseList(List<CategoryContentInfo> album) {
 
     }
 
@@ -291,7 +351,16 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
-        playEvent(album, mHistory.getAlbumId());
+       mHelper.setPlayContent(album);
+      AudioContentInfo  mAudioHistory = (AudioContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
+      if(mAudioHistory!=null){
+          if(album == null || album.get(mAudioHistory.index) == null){
+              return;
+          }
+          player_name.setText(album.get(mAudioHistory.index).contentName);
+      }
+      mAudioContentList=album;
+
     }
 
     @Override
@@ -302,15 +371,17 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     private AnimationDrawable radiologicalWaveAnim = null;
 
     //正在播放
-    public void playing() {
+    public void playing(String name) {
         ig_player_state.setVisibility(View.VISIBLE);
         ig_player_state.setBackground(getActivity().getDrawable(R.drawable.playindicator_animation));
         radiologicalWaveAnim = (AnimationDrawable) ig_player_state.getBackground();
         radiologicalWaveAnim.setOneShot(false);
         radiologicalWaveAnim.setVisible(true, true);
+        radiologicalWaveAnim.start();
         player_name.setVisibility(View.VISIBLE);
+        player_name.setText(name);
         ig_player_button.setVisibility(View.VISIBLE);
-
+        ig_player_button.setImageResource(R.drawable.ic_ct_pause);
     }
 
     //没有播放
@@ -324,46 +395,63 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     //停止播放
     public void stopPlay() {
-        ig_player_state.setVisibility(View.VISIBLE);
-        ig_player_state.setBackgroundResource(R.drawable.cc_default_playindicator);
+        if(ig_player_state!=null) {
+            ig_player_state.setVisibility(View.VISIBLE);
+            ig_player_state.setBackgroundResource(R.drawable.cc_default_playindicator);
+        }
+        if(player_name!=null)
         player_name.setVisibility(View.VISIBLE);
+        if(ig_player_button!=null)
         ig_player_button.setVisibility(View.VISIBLE);
-    }
-
-    private void playEvent(List<AudioContentInfo> playContentInfoList, String albumId) {
-//        if (mPlayDialogOnlineAudioPlayDialog == null) {
-//            mPlayDialogOnlineAudioPlayDialog = new OnlineAudioPlayDialog(getActivity())
-//                    .builder()
-//                    .setCancelable(true)
-//                    .setPlayContent(playContentInfoList)
-//                    .setCurrentAlbumId(albumId)
-//                    .setCallbackListener(new OnlineAudioPlayDialog.IHibitsEventPlayListener() {
-//                        @Override
-//                        public void onDismissCallback() {
-//                            UbtLog.d(TAG, "onDismissCallback");
-//                            mPlayDialogOnlineAudioPlayDialog.hidden();
-//                        }
-//                    });
-//        }
-//        mPlayDialogOnlineAudioPlayDialog.startPlay();
-
-        mHelper.autoAudioPlay();
+        if(radiologicalWaveAnim!=null) {
+            radiologicalWaveAnim.stop();
+        }
     }
 
     @Subscribe
-    public void onEvent(final PlayerEvent mPlayerEvent) {
-        if (mPlayerEvent.getEvent() == PlayerEvent.Event.CONTROL_PLAY_NEXT) {
-            UbtLog.d(TAG, "CONTROL_PLAY event = next " + mPlayerEvent.getCurrentPlayingSongName());
-            mHelper.autoNextAudioPlay();
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    player_name.setText(mPlayerEvent.getCurrentPlayingSongName());
+    public void onEvent(final PlayerEvent event) {
+        if (event.getEvent() == PlayerEvent.Event.CONTROL_PLAY_NEXT) {
+            UbtLog.d(TAG, "CONTROL_PLAY event = next " + event.getCurrentPlayingSongName());
+            if(getActivity()!=null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        playing(event.getCurrentPlayingSongName());
+                    };
+                });
+            }
+        } else if(event.getEvent()==PlayerEvent.Event.CONTROL_STOP){
+            mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
+        }else if(event.getEvent()==PlayerEvent.Event.TAP_HEAD){
+            mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
+        }else if(event.getEvent()==PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
+            if (event.getStatus().equals("playing")) {
+                isPause = false;
+                mPresenter.getAudioList(event.getAlbumId());
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            UbtLog.d(TAG, "ONLINE STATUS PLAYING");
+                            playing(event.getCurrentPlayingSongName());
+                        };
+                    });
                 }
+            }
+        }else if(event.getStatus().equals("pause")) {
+            isPause = true;
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        UbtLog.d(TAG, "ONLINE STATUS PAUSE");
+                        onlineAudioPlayerStatus();
+                    }
 
-                ;
-            });
-        }
+                    ;
+                });
+            }
+      }
     }
 }
 

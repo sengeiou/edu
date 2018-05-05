@@ -103,7 +103,7 @@ public class Camera2Util {
         List<Size> sizeList = new ArrayList<>();
         Size retSize = null;
         for (Size size : sizeMap) {
-            curRatio = ((float) size.getHeight()) / size.getWidth();
+            curRatio = ((float) size.getWidth()) / size.getHeight();
             if (reqRatio == curRatio) {
                 sizeList.add(size);
             }

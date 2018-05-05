@@ -9,7 +9,7 @@ import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
-import com.ubt.alpha1e.onlineaudioplayer.model.CourseContentInfo;
+import com.ubt.alpha1e.onlineaudioplayer.model.CategoryContentInfo;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -39,22 +39,13 @@ public class OnlineAudioPlayerPresenter extends BasePresenterImpl<OnlineAudioPla
     public static final int NETWORK_ERROR=1000;
     public static final int NETWORK_SUCCESS=2000;
 
-    @Override
-    public void getCourseList() {
-         BaseRequest  mBaseRequest=new BaseRequest();
-         doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+getCourseContents,mBaseRequest,GETCOURSElISTREQUIRE);
-    }
 
     @Override
     public void getAlbumList(final String courseName) {
         OnlineAudioPlayerAlbumRequest mAlbumRequest=new OnlineAudioPlayerAlbumRequest();
         mAlbumRequest.setCategoryId(courseName);
         doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+getAlbumContents,mAlbumRequest,GETALBUMREQUEST);
-//
-//        for(int i=0;i<100;i++){
-//            albumList.add("四大名著之西游记");
-//        }
-//        mView.showAlbumList(albumList);
+
     }
 
     @Override
@@ -63,12 +54,7 @@ public class OnlineAudioPlayerPresenter extends BasePresenterImpl<OnlineAudioPla
         mAudioRequest.setAlbumId(albumId);
         doRequestFromWeb(HttpEntity.BASIC_UBX_SYS+getAudioContents,mAudioRequest,GETAUDIOREQUEST);
     }
-
-    @Override
-    public void getSearchList() {
-
-    }
-
+    
     /**
      * 请求网络操作
      */
@@ -91,8 +77,8 @@ public class OnlineAudioPlayerPresenter extends BasePresenterImpl<OnlineAudioPla
                     }
                     switch (id) {
                         case GETCOURSElISTREQUIRE:
-                            BaseResponseModel<ArrayList<CourseContentInfo>> mbaseResponseModel = GsonImpl.get().toObject(response,
-                                    new TypeToken<BaseResponseModel<ArrayList<CourseContentInfo>>>() {
+                            BaseResponseModel<ArrayList<CategoryContentInfo>> mbaseResponseModel = GsonImpl.get().toObject(response,
+                                    new TypeToken<BaseResponseModel<ArrayList<CategoryContentInfo>>>() {
                                     }.getType());//加上type转换，避免泛型擦除
                             UbtLog.d(TAG,"GET COURSE REQUIRE"+mbaseResponseModel.models.get(0));
                             mView.showCourseList(mbaseResponseModel.models);

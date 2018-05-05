@@ -195,8 +195,13 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
         if (url.startsWith("alpha1e:goBack")) {//
             this.finish();
         } else {
-            mUrls.push(url);
-            webContent.loadUrl(url);
+            if(webContent != null){
+                mUrls.push(url);
+                webContent.loadUrl(url);
+            }else {
+                //华为平板出现过一次webContent为null, 故作此判断
+                UbtLog.e(TAG,"webContent is null");
+            }
         }
     }
 

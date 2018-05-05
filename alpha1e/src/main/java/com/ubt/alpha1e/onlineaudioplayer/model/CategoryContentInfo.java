@@ -16,15 +16,15 @@ import java.util.ArrayList;
  */
 
 
-public class CourseContentInfo extends BaseModel {
-    public CourseContentInfo thiz;
+public class CategoryContentInfo extends BaseModel {
+    public CategoryContentInfo thiz;
     public String categoryId;
     public String categoryName;
 
     @Override
-    public CourseContentInfo getThiz(String json) {
+    public CategoryContentInfo getThiz(String json) {
         try {
-            thiz = mMapper.readValue(json, CourseContentInfo.class);
+            thiz = mMapper.readValue(json, CategoryContentInfo.class);
             return thiz;
         } catch (Exception e) {
             thiz = null;
@@ -68,7 +68,7 @@ public class CourseContentInfo extends BaseModel {
 
     @Override
     public String toString() {
-        return "CourseContentInfo{" +
+        return "CategoryContentInfo{" +
                 "categoryId=" + categoryId +
                 ", categoryName='" + categoryName + '\'' +
                 '}';
