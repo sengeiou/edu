@@ -52,7 +52,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     ImageView mBack;
     private LinearLayoutManager mLayoutManager = null;
     public OnlineAudioListRecyclerAdapter mAdapter;
-    public static List<AudioContentInfo> mPlayContentInfoDatas =  new ArrayList<>();
+   // public static List<AudioContentInfo> mPlayContentInfoDatas =  new ArrayList<>();
     private boolean isStartPlayProcess = true;//是否开启播放流程
     private static String currentAlbumId = "";
     private static String mAlbumName="";
@@ -125,16 +125,39 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
         } else if(event.getEvent()==PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS){
             if (event.getStatus().equals("playing")) {
-                setplayingAudioName(mPlayContentInfoDatas.get(event.getCurrentPlayingIndex()).contentName);
+                setplayingAudioName(mHelper.getPlayContent().get(event.getCurrentPlayingIndex()).contentName);
                 initState("playing");
-                isPause=true;
-                onlineAudioPlayPauseStatus();
-            }else if(event.getStatus().equals("pause")){
-                initState("pause");
                 isPause=false;
-                onlineAudioPlayPauseStatus();
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            initState("playing");
+                            onlineAudioPlayPauseStatus();
+                        };
+                    });
+                }
+            }else if(event.getStatus().equals("pause")){
+                isPause=true;
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            initState("pause");
+                            onlineAudioPlayPauseStatus();
+                        };
+                    });
+                }
             }else if(event.getStatus().equals("quit")){
-                initState("quit");
+
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            initState("quit");
+                        };
+                    });
+                }
                 mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
             }
             UbtLog.d(TAG,"LOOP MODE "+event.getLoop());
@@ -194,8 +217,10 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         mView = inflater.inflate(R.layout.activity_play_event_list, container, false);
         ButterKnife.bind(getActivity());
         EventBus.getDefault().register(this);
+        mPresenter.getAudioList(currentAlbumId);
         mHelper=OnlineAudioResourcesHelper.getInstance(getContext());
         mHelper.getRobotOnlineAudioStatus();
+        mAdapter = new OnlineAudioListRecyclerAdapter(getContext(), mHandler,mHelper);
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvEventList=(RecyclerView)mView.findViewById(R.id.rv_event_list);
         mBack=(ImageView)mView.findViewById(R.id.iv_back);
@@ -221,10 +246,8 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         playStatusAnim.setVisible(true,true);
         tvBaseTitleName.setText(mAlbumName);
         rvEventList.setLayoutManager(mLayoutManager);
-        mAdapter = new OnlineAudioListRecyclerAdapter(getContext(),mPlayContentInfoDatas, mHandler,mHelper);
-        rvEventList.setAdapter(mAdapter);
         mBack.setVisibility(View.VISIBLE);
-        mPresenter.getAudioList(currentAlbumId);
+
         //TODO REFACTOR
         isRecycleType=mHelper.getPlayType();
         loopModeStatusShow();
@@ -355,9 +378,9 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
         UbtLog.d(TAG,"request result from back-end "+album);
         if(album!=null) {
-            mPlayContentInfoDatas.clear();
-            mPlayContentInfoDatas.addAll(album);
             mHelper.setPlayContent(album);
+            mAdapter.setData(album);
+            rvEventList.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
         }else {
             Toast.makeText(getActivity(),"后台出错，没有配置数据",Toast.LENGTH_LONG).show();
@@ -406,7 +429,9 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     for (AudioContentInfo mPlayContentInfo : mHelper.getPlayContent()) {
                         mPlayContentInfo.isPlaying = false;
                     }
-                    mAdapter.notifyDataSetChanged();
+                    if(mAdapter!=null) {
+                        mAdapter.notifyDataSetChanged();
+                    }
                     break;
                 default:
                     break;

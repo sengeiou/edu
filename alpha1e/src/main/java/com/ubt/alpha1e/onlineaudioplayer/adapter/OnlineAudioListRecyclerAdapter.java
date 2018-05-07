@@ -42,13 +42,16 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
     private Handler mHandler = null;
     private OnlineAudioResourcesHelper mHelper;
 
-    public OnlineAudioListRecyclerAdapter(Context mContext, List<AudioContentInfo> list, Handler handler, OnlineAudioResourcesHelper helper) {
+    public OnlineAudioListRecyclerAdapter(Context mContext, Handler handler, OnlineAudioResourcesHelper helper) {
         super();
         this.mContext = mContext;
-        this.mDatas = list;
+
         this.mHandler = handler;
         this.mHelper=helper;
 
+    }
+    public void setDatas(List<AudioContentInfo> list){
+        this.mDatas = list;
     }
 
     public void setData(List<AudioContentInfo>  data) {
@@ -63,11 +66,11 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
         myHolder.tvPlayContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnlineAudioListFragment.mPlayContentInfoDatas.get(position).isPlaying=true;
+                mHelper.getPlayContent().get(position).isPlaying=true;
                 mHelper.playEvent("playing",mHelper.getmCategoryId(),mHelper.getAlbumId(), position);
             }
         });
-        if(OnlineAudioListFragment.mPlayContentInfoDatas.get(position).isPlaying){
+        if(mHelper.getPlayContent().get(position).isPlaying){
             myHolder.playStatusAnim.start();
             myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
             myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_blue_color) );

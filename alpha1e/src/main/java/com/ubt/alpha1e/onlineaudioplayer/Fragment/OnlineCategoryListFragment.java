@@ -173,8 +173,10 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 //                    if(mAudioContentInfo!=null) {
 //                        mHelper.setCurentPlayingAudioIndex(mAudioContentInfo.index);
 //                    }
+                if(mAlbumHistory!=null) {
                     OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumHistory);
                     start(mfragment);
+                }
                 break;
         }
     }
@@ -207,7 +209,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     @Override
     protected void initUI() {
-       // playing();
         EventBus.getDefault().register(this);
         mHelper = OnlineAudioResourcesHelper.getInstance(getContext());
         //获取机器人当前播放状态
@@ -412,13 +413,14 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         } else if(event.getEvent()==PlayerEvent.Event.TAP_HEAD){
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         }else if(event.getEvent()==PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
+            UbtLog.d(TAG, "GET_ROBOT_ONLINEPLAYING_STATUS  "+event.toString());
             mPresenter.getAudioList(event.getAlbumId());
             mAlbumHistory=new AlbumContentInfo();
             mAlbumHistory.setAlbumId(event.getAlbumId());
             mAlbumHistory.setAlbumName(event.getCurrentPlayingSongName());
             if (event.getStatus().equals("playing")) {
                 isPause = false;
-                mPresenter.getAudioList(event.getAlbumId());
+                //mPresenter.getAudioList(event.getAlbumId());
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
