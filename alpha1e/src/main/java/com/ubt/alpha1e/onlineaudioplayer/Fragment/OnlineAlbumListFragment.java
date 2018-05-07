@@ -293,12 +293,12 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             ((AlbumHolder) holder).txt_album_name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AlbumContentInfo mHistory = new AlbumContentInfo();
-                    mHistory.setCategoryId(mAlbumDatas.get(position).categoryId);
-                    mHistory.setAlbumId(mAlbumDatas.get(position).albumId);
-                    mHistory.setAlbumName(mAlbumDatas.get(position).albumName);
-                    mHistory.setGrade(mAlbumDatas.get(position).grade);
-                    SPUtils.getInstance().saveObject(Constant.SP_ONLINEAlBUM_HISTORY,mHistory);
+//                    AlbumContentInfo mHistory = new AlbumContentInfo();
+//                    mHistory.setCategoryId(mAlbumDatas.get(position).categoryId);
+//                    mHistory.setAlbumId(mAlbumDatas.get(position).albumId);
+//                    mHistory.setAlbumName(mAlbumDatas.get(position).albumName);
+//                    mHistory.setGrade(mAlbumDatas.get(position).grade);
+//                    SPUtils.getInstance().saveObject(Constant.SP_ONLINEAlBUM_HISTORY,mHistory);
                     mAlbumId = mAlbumDatas.get(position).albumId;
                     mHelper.setmCategoryId(mAlbumDatas.get(position).categoryId);
                     mHelper.setAlbumId(mAlbumId);

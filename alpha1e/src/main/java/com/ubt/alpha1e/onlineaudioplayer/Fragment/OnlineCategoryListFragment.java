@@ -165,28 +165,16 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             case R.id.ig_player_button:
                 UbtLog.d(TAG, "ig_player_button");
                 onlineAudioPlayerStatus();
-//                if (!playStatus) {
-//                    playStatus = true;
-//                    ig_player_button.setImageResource(R.drawable.ic_ct_stop);
-//                    mHelper.setPlayContent(mAudioContentList);
-//                    mHelper.pauseEvent();
-//                } else {
-//                    mHelper.continueEvent();
-//                    ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
-//                    playStatus = false;
-//                }
                 break;
             case R.id.ig_player_list:
-                mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY);
-                if(mAlbumHistory!=null) {
-                    AudioContentInfo mAudioContentInfo=(AudioContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
-                    if(mAudioContentInfo!=null) {
-                        mHelper.setCurentPlayingAudioIndex(mAudioContentInfo.index);
-                    }
+//                mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY);
+//                if(mAlbumHistory!=null) {
+//                    AudioContentInfo mAudioContentInfo=(AudioContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
+//                    if(mAudioContentInfo!=null) {
+//                        mHelper.setCurentPlayingAudioIndex(mAudioContentInfo.index);
+//                    }
                     OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumHistory);
                     start(mfragment);
-                }
-
                 break;
         }
     }
@@ -245,11 +233,11 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         mRecyclerview.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         getMaxCategory();
-        mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY);
-        ;if (SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY) != null) {
-            // player_name.setText(mAlbumHistory.getAlbumName())
-            mPresenter.getAudioList(mAlbumHistory.albumId);
-        }
+//        mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY);
+//        if (SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY) != null) {
+//            // player_name.setText(mAlbumHistory.getAlbumName())
+//            mPresenter.getAudioList(mAlbumHistory.albumId);
+//        }
         mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
     }
 
@@ -352,13 +340,13 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
        mHelper.setPlayContent(album);
-      AudioContentInfo  mAudioHistory = (AudioContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
-      if(mAudioHistory!=null){
-          if(album == null || album.get(mAudioHistory.index) == null){
-              return;
-          }
-          player_name.setText(album.get(mAudioHistory.index).contentName);
-      }
+//      AudioContentInfo  mAudioHistory = (AudioContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
+//      if(mAudioHistory!=null){
+//          if(album == null || album.get(mAudioHistory.index) == null){
+//              return;
+//          }
+//          player_name.setText(album.get(mAudioHistory.index).contentName);
+//      }
       mAudioContentList=album;
 
     }
@@ -416,15 +404,18 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        playing(event.getCurrentPlayingSongName());
+                        //playing(event.getCurrentPlayingSongName());
+                        player_name.setText(event.getCurrentPlayingSongName());
                     };
                 });
             }
-        } else if(event.getEvent()==PlayerEvent.Event.CONTROL_STOP){
-            mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
-        }else if(event.getEvent()==PlayerEvent.Event.TAP_HEAD){
+        } else if(event.getEvent()==PlayerEvent.Event.TAP_HEAD){
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         }else if(event.getEvent()==PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
+            mPresenter.getAudioList(event.getAlbumId());
+            mAlbumHistory=new AlbumContentInfo();
+            mAlbumHistory.setAlbumId(event.getAlbumId());
+            mAlbumHistory.setAlbumName(event.getCurrentPlayingSongName());
             if (event.getStatus().equals("playing")) {
                 isPause = false;
                 mPresenter.getAudioList(event.getAlbumId());
@@ -445,13 +436,13 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                     @Override
                     public void run() {
                         UbtLog.d(TAG, "ONLINE STATUS PAUSE");
-                        onlineAudioPlayerStatus();
-                    }
-
-                    ;
+                        stopPlay();
+                    };
                 });
             }
-      }
+      }else if(event.getStatus().equals("quit")){
+            mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
+        }
     }
 }
 

@@ -90,15 +90,16 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
                     mCmd.get("index");
                     mCmd.get("loop");
                     UbtLog.d(TAG, "cmd = " + cmd + "  get Robot Status notify" + mCmd.get("status") +"index : "+   mCmd.get("index")+"loop mode :"+        mCmd.get("loop"));
-                    //SAVE TO THE SP
+                    setCurentPlayingAudioIndex(Integer.parseInt(mCmd.get("index").toString()));
                     if(mCmd.get("status").equals("playing")) {
                         notifyUiCurrentRobotStatus(mCmd);
                     }else if(mCmd.get("status").equals("pause")){
                         notifyUiCurrentRobotStatus(mCmd);
                     }else if(mCmd.get("status").equals("quit")) {
                         //GET ROBOT ONLINE PLAY STATUS STOP
+                        notifyUiCurrentRobotStatus(mCmd);
+                    }else {
                         UbtLog.d(TAG,"0X55 "+mCmd.get("status"));
-                        notifyPlayerStop();
                     }
                 }catch(JSONException e){
                     e.printStackTrace();
@@ -132,18 +133,15 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
         } else if (cmd == ConstValue.DV_NOTIFYONLINEPLAYER_CONTINUE) {
 
-        } else if (cmd == ConstValue.DV_TAP_HEAD) {
+        } else if (cmd == ConstValue.DV_TAP_HEAD&&cmd==ConstValue.DV_VOICE) {
+            UbtLog.d(TAG, "cmd = " + cmd + "  VOICE & TAP" );
             PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD);
             EventBus.getDefault().post(mPlayerEvent);
-        }else if(cmd==ConstValue.DV_VOICE){
-            UbtLog.d(TAG, "cmd = " + cmd + "  VOICE ");
-//            PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD);
-//            EventBus.getDefault().post(mPlayerEvent);
         }
     }
 
     private void notifyUiCurrentRobotStatus(JSONObject mCmd) throws JSONException {
-        saveAudioHistory(Integer.parseInt(mCmd.get("index").toString()));
+//        saveAudioHistory(Integer.parseInt(mCmd.get("index").toString()));
         setCurentPlayingAudioIndex(Integer.parseInt(mCmd.get("index").toString())+1);
         notifyCurrentRobotOnlineStatus(mCmd);
     }
@@ -190,28 +188,23 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     public void playEvent(String playStatus, String categoryId, String albumId, int index) {
         notifyUiNextAudio(index);
-       // doSendComm(ConstValue.DV_NOTIFYONLINEPLAYER_PLAY, BluetoothParamUtil.stringToBytes(url));
         sendControlCommand(playStatus,categoryId,albumId,Integer.toString(index));
-//        for (AudioContentInfo mPlayContentInfo : getPlayContent()) {
-//            mPlayContentInfo.isPlaying = false;
-//        }
-//        getPlayContent().get(index).isPlaying = true;
         if (local_player) {
             localAudioplay(mPlayContentInfoList.get(index).contentUrl);
         }
     }
 
     private void notifyUiNextAudio(int index) {
+//        saveAudioHistory(index);
         setCurentPlayingAudioIndex(index);
-        saveAudioHistory(index);
         notifyNextAudioMesssage(index);
     }
 
-    private void saveAudioHistory(int index) {
-        AudioContentInfo mHistory = new AudioContentInfo();
-        mHistory.index = index;
-        SPUtils.getInstance().saveObject(Constant.SP_ONLINEAUDIO_HISTORY, mHistory);
-    }
+//    private void saveAudioHistory(int index) {
+//        AudioContentInfo mHistory = new AudioContentInfo();
+//        mHistory.index = index;
+//        SPUtils.getInstance().saveObject(Constant.SP_ONLINEAUDIO_HISTORY, mHistory);
+//    }
 
     public void exitEvent() {
         UbtLog.d(TAG, "stopEventSound = ");
@@ -290,20 +283,16 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     }
 
 
-    private void notifyPlayerStop() {
-        PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_STOP);
-        EventBus.getDefault().post(mPlayerEvent);
-    }
+//    private void notifyPlayerStop() {
+//        PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_STOP);
+//        EventBus.getDefault().post(mPlayerEvent);
+//    }
 
     public void nextAudioPlay() {
         if ((currentPlaySeq + 1) < mPlayContentInfoList.size()) {
             currentPlaySeq++;
         } else {
-            if (isRecyclePlaying) {
-                currentPlaySeq = 0;
-            } else {
-                notifyPlayerStop();
-            }
+            currentPlaySeq = 0;
         }
         exitEvent();
         try {
