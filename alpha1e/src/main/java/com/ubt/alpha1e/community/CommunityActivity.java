@@ -102,7 +102,7 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
                                 public void run() {
 
                                     Bitmap bitmap = ImageUtils.loadLocalFileBitmap(mVideoFilePath, CommunityActivity.this);
-                                    UbtLog.d(TAG,"bitmap = " + bitmap);
+                                    UbtLog.d(TAG,"bitmap == " + bitmap);
                                     String image64 = "";
                                     if(bitmap != null){
                                         image64 = ImageUtils.bitmapToString(bitmap);
