@@ -90,24 +90,17 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
                     mCmd.get("index");
                     mCmd.get("loop");
                     UbtLog.d(TAG, "cmd = " + cmd + " mCmd.get(\"index\")" + mCmd.get("status") +"index : "+   mCmd.get("index")+"loop mode :"+        mCmd.get("loop")+"cmd "+mCmd.toString());
-                    if(!mCmd.get("index").equals("")) {
-                        try {
-                            setCurentPlayingAudioIndex(Integer.parseInt(mCmd.get("index").toString()));
-                        }catch(Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                    if(mCmd.get("status").equals("playing")) {
+                    if (mCmd.get("status").equals("playing")) {
                         notifyUiCurrentRobotStatus(mCmd);
-                    }else if(mCmd.get("status").equals("pause")){
+                    } else if (mCmd.get("status").equals("pause")) {
                         notifyUiCurrentRobotStatus(mCmd);
-                    }else if(mCmd.get("status").equals("quit")) {
+                    } else if (mCmd.get("status").equals("quit")) {
                         //GET ROBOT ONLINE PLAY STATUS STOP
                         notifyUiCurrentRobotStatus(mCmd);
-                    }else {
-                        UbtLog.d(TAG,"0X55 "+mCmd.get("status"));
+                    } else {
+                        UbtLog.d(TAG, "0X55 " + mCmd.get("status"));
                     }
-                }catch(JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
         } else if (cmd == ConstValue.DV_NOTIFYONLINEPLAYER_PLAY) {
@@ -148,7 +141,9 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     private void notifyUiCurrentRobotStatus(JSONObject mCmd) throws JSONException {
 //        saveAudioHistory(Integer.parseInt(mCmd.get("index").toString()));
-        setCurentPlayingAudioIndex(Integer.parseInt(mCmd.get("index").toString())+1);
+//        if(!mCmd.get("index").toString().equals("")) {
+//            setCurentPlayingAudioIndex(Integer.parseInt(mCmd.get("index").toString()));
+//        }
         notifyCurrentRobotOnlineStatus(mCmd);
     }
 
@@ -241,7 +236,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     private void notifyNextAudioMesssage(int index) {
         PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_PLAY_NEXT);
         //NEXT AUDIO NAME INFORMATION
-        if(mPlayContentInfoList.size()!=0)
         mPlayerEvent.setCurrentPlayingSongName(mPlayContentInfoList.get(index).contentName);
         mPlayerEvent.setCurrentPlayingIndex(index);
         EventBus.getDefault().post(mPlayerEvent);
@@ -346,9 +340,9 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 //        for (int i = 0; i < mPlayContentInfoList.size(); i++) {
 //            mPlayContentOriginInfoList.add(mPlayContentInfoList.get(i));
 //        }
-//        for (int i = 0; i < mPlayContentInfoList.size(); i++) {
-//            UbtLog.d(TAG, "i = " + i + "     url = " /*+ mPlayContentInfoList.get(i).contentName + "/"*/ + mPlayContentInfoList.get(i).contentUrl);
-//        }
+        for (int i = 0; i < mPlayContentInfoList.size(); i++) {
+            UbtLog.d(TAG, "i = " + i + "     name = " + mPlayContentInfoList.get(i).contentName + "url: " + mPlayContentInfoList.get(i).contentUrl);
+        }
         UbtLog.d(TAG, "mPlayContentInfoList.size() = " + mPlayContentInfoList.size());
     }
 

@@ -125,8 +125,10 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
         } else if(event.getEvent()==PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS){
             if (event.getStatus().equals("playing")) {
-                setplayingAudioName(mHelper.getPlayContent().get(event.getCurrentPlayingIndex()).contentName);
-                initState("playing");
+                if(currentAlbumId.equals(event.getAlbumId())) {
+                    setplayingAudioName(mHelper.getPlayContent().get(event.getCurrentPlayingIndex()).contentName);
+                    mHelper.setCurentPlayingAudioIndex(event.getCurrentClickingIndex());
+                }
                 isPause=false;
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
