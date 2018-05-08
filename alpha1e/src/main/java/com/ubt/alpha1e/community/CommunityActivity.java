@@ -24,7 +24,6 @@ import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.share.WbShareCallback;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
-import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.PermissionUtils;
@@ -530,7 +529,9 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
                         + "\",\"actionId\":\"" + actionModel.getActionId()
                         + "\",\"actionUrl\":\"" + actionModel.getActionUrl()
                         + "\",\"actionName\":\"" + actionModel.getActionName()
-                        + "\",\"actionOriginalId\":\"" + actionModel.getActionOriginalId() +"\"}";
+                        + "\",\"actionOriginalId\":\"" + actionModel.getActionOriginalId()
+                        + "\",\"actionType\":\"" + actionModel.getActionType()
+                        +"\"}";
 
                 UbtLog.d(TAG,"selectAction = " + params);
                 Message msg = new Message();
@@ -645,7 +646,13 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
             if(!mRobotDownActionList.contains(info.getActionOriginalId())){
                 mRobotDownActionList.add(info.getActionOriginalId());
             }
-            UbtLog.d(TAG,"mRobotDownActionList.contains(info.getActionOriginalId()) => " + mRobotDownActionList.contains(info.getActionOriginalId()) + "/" + info.getActionOriginalId()+"/" + mRobotDownActionList.size());
+
+            if(mPlayActionModel != null && mPlayActionModel.getActionId() == info.getActionId()){
+                //下载完成后自动播放
+                mPlayActionModel.setDownload(true);
+                UbtLog.d(TAG,"download finish and play == " + mPlayActionModel);
+                mPresenter.playAction(this, mPlayActionModel);
+            }
         }else if(progressInfo.status == 3){//未联网
             sendActionStatus(info.getActionId(), 0, 0, "0");
         }
