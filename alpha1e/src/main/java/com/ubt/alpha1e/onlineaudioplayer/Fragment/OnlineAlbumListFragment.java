@@ -49,6 +49,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     private View mActivityView;
     private View mView;
     RecyclerView  mAlbumView;
+
     AlbumAdapter mAdapter;
     List<AlbumContentInfo> mOriginalDatas=new ArrayList<>();
     List<AlbumContentInfo> mAlbumDatas=new ArrayList<>();

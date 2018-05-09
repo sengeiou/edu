@@ -81,6 +81,18 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     private String  RECYCLE_LOOP="1";
     private String SINGLE_LOOP ="2";
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
     private String audio_index="0";
 
     public static OnlineAudioListFragment newInstance(AlbumContentInfo mAlbum) {
@@ -218,7 +230,6 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.activity_play_event_list, container, false);
         ButterKnife.bind(getActivity());
-        EventBus.getDefault().register(this);
         mPresenter.getAudioList(currentAlbumId);
         mHelper=OnlineAudioResourcesHelper.getInstance(getContext());
         mHelper.getRobotOnlineAudioStatus();

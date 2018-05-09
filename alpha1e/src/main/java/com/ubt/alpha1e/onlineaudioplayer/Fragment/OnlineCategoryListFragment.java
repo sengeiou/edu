@@ -98,6 +98,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     private boolean playStatus = false;
     private OnlineAudioResourcesHelper mHelper = null;
     AlbumContentInfo mAlbumHistory;
+    int index=-1;
     List<AudioContentInfo> mAudioContentList;
     private boolean isPause = false;
     private Handler mHandler = new Handler() {
@@ -147,6 +148,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         if (mHelper != null) {
             mHelper.RegisterHelper();
         }
+        EventBus.getDefault().register(this);
     }
 
     @OnClick({R.id.ib_return, R.id.ib_rearch, R.id.ig_player_button,R.id.ig_player_list})
@@ -167,12 +169,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 onlineAudioPlayerStatus();
                 break;
             case R.id.ig_player_list:
-//                mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY);
-//                if(mAlbumHistory!=null) {
-//                    AudioContentInfo mAudioContentInfo=(AudioContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
-//                    if(mAudioContentInfo!=null) {
-//                        mHelper.setCurentPlayingAudioIndex(mAudioContentInfo.index);
-//                    }
                 if(mAlbumHistory!=null) {
                     OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumHistory);
                     start(mfragment);
@@ -209,7 +205,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     @Override
     protected void initUI() {
-        EventBus.getDefault().register(this);
         mHelper = OnlineAudioResourcesHelper.getInstance(getContext());
         //获取机器人当前播放状态
         mHelper.getRobotOnlineAudioStatus();
@@ -327,6 +322,11 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         return R.layout.fragment_onlineres_list;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 
     @Override
     public void showCourseList(List<CategoryContentInfo> album) {
@@ -340,7 +340,11 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
-       mHelper.setPlayContent(album);
+        UbtLog.d(TAG,"album");
+        if(album!=null) {
+            playing(album.get(index).contentName);
+        }
+//       mHelper.setPlayContent(album);
 //      AudioContentInfo  mAudioHistory = (AudioContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
 //      if(mAudioHistory!=null){
 //          if(album == null || album.get(mAudioHistory.index) == null){
@@ -348,7 +352,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 //          }
 //          player_name.setText(album.get(mAudioHistory.index).contentName);
 //      }
-      mAudioContentList=album;
+//      mAudioContentList=album;
 
     }
 
@@ -414,10 +418,10 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         }else if(event.getEvent()==PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
             UbtLog.d(TAG, "GET_ROBOT_ONLINEPLAYING_STATUS  "+event.toString());
-            mPresenter.getAudioList(event.getAlbumId());
+             mPresenter.getAudioList(event.getAlbumId());
             mAlbumHistory=new AlbumContentInfo();
             mAlbumHistory.setAlbumId(event.getAlbumId());
-            mAlbumHistory.setAlbumName(event.getCurrentPlayingSongName());
+            index=event.getCurrentPlayingIndex();
             if (event.getStatus().equals("playing")) {
                 isPause = false;
                 //mPresenter.getAudioList(event.getAlbumId());
