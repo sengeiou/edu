@@ -208,6 +208,9 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
+        //获取机器人当前播放状态 TODO ONRESUME  NO EXECTUION ??
+        mHelper=OnlineAudioResourcesHelper.getInstance(getContext());
+        mHelper.getRobotOnlineAudioStatus();
         return rootView;
     }
 
@@ -341,7 +344,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
-        UbtLog.d(TAG,"album");
+        UbtLog.d(TAG,"show song name");
         if(album!=null) {
             player_name.setText(album.get(index).contentName);
         }
@@ -410,6 +413,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         } else if (event.getEvent() == PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
             UbtLog.d(TAG, "123  GET_ROBOT_ONLINEPLAYING_STATUS  " + event.getAlbumId() + event.getStatus());
+            //GET AUDIO SONG
             mPresenter.getAudioList(event.getAlbumId());
             mAlbumHistory = new AlbumContentInfo();
             mAlbumHistory.setAlbumId(event.getAlbumId());
@@ -422,7 +426,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                         public void run() {
                             UbtLog.d(TAG, "ONLINE STATUS PLAYING");
                             playing();
-                            player_name.setText(event.getCurrentPlayingSongName());
                         }
 
                         ;

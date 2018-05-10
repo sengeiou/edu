@@ -92,10 +92,10 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        //获取机器人当前播放状态
-        mHelper.getRobotOnlineAudioStatus();
         //获取列表
         mPresenter.getAudioList(currentAlbumId);
+        //获取机器人当前播放状态
+//        mHelper.getRobotOnlineAudioStatus();
     }
 
     @Override
@@ -200,6 +200,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         ivMusicStop.setOnClickListener(mOnClickListener);
         ivMusicNext.setOnClickListener(mOnClickListener);
         ivRecycleButton.setOnClickListener(mOnClickListener);
+        tvPlayName.setOnClickListener(mOnClickListener);
         mBack.setOnClickListener(mOnClickListener);
 
         playStatusAnim = (AnimationDrawable)ivPlayStatus.getBackground();
@@ -242,6 +243,9 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     break;
                 case R.id.iv_music_circle:
                     loopModeUiShow();
+                    break;
+                case R.id.tv_play_name:
+                    UbtLog.d(TAG,"JUMP TO ALBUM ");
                     break;
                 case R.id.iv_back:
                     EventBus.getDefault().unregister(this);
@@ -320,6 +324,8 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             mAdapter.setData(album);
             rvEventList.setAdapter(mAdapter);
             mAdapter.notifyDataSetChanged();
+            //获取机器人当前播放状态 TODO: SOMETIME CAN'T SHOW ANIMATION EFFECTS.
+            mHelper.getRobotOnlineAudioStatus();
         }else {
             Toast.makeText(getActivity(),"后台出错，没有配置数据",Toast.LENGTH_LONG).show();
         }
@@ -377,7 +383,6 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
      */
     private void initState(String playStatus){
         UbtLog.d(TAG,"initRobotState mCurrentVolume = " + mHelper.mCurrentVolume + "   mCurrentVoiceState " + mHelper.mCurrentVoiceState + "   mLightState = " + mHelper.mLightState);
-//        if(isStartPlayProcess){
             if("playing".equals(playStatus)){
                 ivPlayNone.setVisibility(View.GONE);
                 ivPlayStatus.setVisibility(View.VISIBLE);
@@ -404,7 +409,6 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                 ivMusicStop.setImageResource(R.drawable.ic_ct_stop);
                 ivMusicNext.setImageResource(R.drawable.ic_music_next_disable);
             }
-
         }
 
 
@@ -413,7 +417,14 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         UbtLog.d(TAG,"event = " + event.toString());
         if (event.getEvent() == PlayerEvent.Event.CONTROL_PLAY_NEXT) {
             UbtLog.d(TAG, "CONTROL_PLAY event = next " + event.getCurrentPlayingSongName());
-            initState("playing");
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initState("playing");
+                    };
+                });
+            }
             mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
         } else if(event.getEvent()==PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS){
             UbtLog.d(TAG,"ONELINE STATUS "+event.getStatus());

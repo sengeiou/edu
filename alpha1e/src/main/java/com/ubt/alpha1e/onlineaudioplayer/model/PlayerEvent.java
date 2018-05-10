@@ -87,12 +87,12 @@ public class PlayerEvent {
 
     @Override
     public String toString() {
-        return  "categoryId:"+cateogryId
-                +",albumId:"+albumId
-                +"currentPlayingIndex:"+currentPlayingIndex
-                +",currentPlayingSongName:"+currentPlayingSongName
-                +",status:"+status
-                +",loop:"+loop
+        return  "categoryId: "+cateogryId
+                +", albumId: "+albumId
+                +", currentPlayingIndex: "+currentPlayingIndex
+                +", currentPlayingSongName: "+currentPlayingSongName
+                +", status: "+status
+                +", loop: "+loop
 
 
 
