@@ -94,6 +94,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     public final static int LAUNCH_CATEGORY_ITEM = 1;
     public final static int STOP_CURRENT_PLAY=2;
     private static final int GET_MAX_CATEGORY = 50;
+    private static final int REQUEST_RESULT=1001;
+    private static final int REQUEST_RESULT_PLAYLIST=1002;
     Unbinder unbinder;
     private boolean playStatus = false;
     private OnlineAudioResourcesHelper mHelper = null;
@@ -109,10 +111,11 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 case LAUNCH_CATEGORY_ITEM:
                     OnlineresList mCategory=(OnlineresList)msg.obj;
                     OnlineAlbumListFragment mfragment = OnlineAlbumListFragment.newInstance(mCategory);
-                    start(mfragment);
+                    startForResult(mfragment,REQUEST_RESULT);
+                    onPause();
                     break;
                 case STOP_CURRENT_PLAY:
-                    stopPlay();
+                    pausePlay();
                     break;
             }
         }
@@ -123,7 +126,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         OnlineCategoryListFragment onlineAudioResourcesFragment = new OnlineCategoryListFragment();
         return onlineAudioResourcesFragment;
     }
-
 
     @Override
     public void onDestroy() {
@@ -146,9 +148,15 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     public void onResume() {
         super.onResume();
         if (mHelper != null) {
+            UbtLog.d(TAG, "--wmma--mHelper RegisterHelper! " + mHelper.getClass().getSimpleName());
             mHelper.RegisterHelper();
         }
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+        //获取机器人当前播放状态
+        mHelper=OnlineAudioResourcesHelper.getInstance(getContext());
+        mHelper.getRobotOnlineAudioStatus();
     }
 
     @OnClick({R.id.ib_return, R.id.ib_rearch, R.id.ig_player_button,R.id.ig_player_list})
@@ -170,8 +178,10 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 break;
             case R.id.ig_player_list:
                 if(mAlbumHistory!=null) {
+                    UbtLog.d(TAG,"456  mAlbumHistory  "+mAlbumHistory.getAlbumId());
                     OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumHistory);
-                    start(mfragment);
+                    startForResult(mfragment,REQUEST_RESULT_PLAYLIST);
+                    onPause();
                 }
                 break;
         }
@@ -181,9 +191,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             if(isPause){
                 isPause = false;
                 mHelper.continueEvent();
-                if(radiologicalWaveAnim!=null) {
-                    radiologicalWaveAnim.start();
-                }
+                playing();
                 mHelper.playEvent("playing",mHelper.getmCategoryId(),mHelper.getAlbumId(),mHelper.getCurrentPlayingAudioIndex());
                 ig_player_button.setImageResource(R.drawable.ic_ct_pause);
             }else {
@@ -205,9 +213,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     @Override
     protected void initUI() {
-        mHelper = OnlineAudioResourcesHelper.getInstance(getContext());
-        //获取机器人当前播放状态
-        mHelper.getRobotOnlineAudioStatus();
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerview.setLayoutManager(mLayoutManager);
         mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 4));
@@ -229,11 +234,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         mRecyclerview.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         getMaxCategory();
-//        mAlbumHistory = (AlbumContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY);
-//        if (SPUtils.getInstance().readObject(Constant.SP_ONLINEAlBUM_HISTORY) != null) {
-//            // player_name.setText(mAlbumHistory.getAlbumName())
-//            mPresenter.getAudioList(mAlbumHistory.albumId);
-//        }
         mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
     }
 
@@ -325,6 +325,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     @Override
     public void onStop() {
         super.onStop();
+        UbtLog.d(TAG,"onStop  ");
         EventBus.getDefault().unregister(this);
     }
 
@@ -342,17 +343,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
         UbtLog.d(TAG,"album");
         if(album!=null) {
-            playing(album.get(index).contentName);
+            player_name.setText(album.get(index).contentName);
         }
-//       mHelper.setPlayContent(album);
-//      AudioContentInfo  mAudioHistory = (AudioContentInfo) SPUtils.getInstance().readObject(Constant.SP_ONLINEAUDIO_HISTORY);
-//      if(mAudioHistory!=null){
-//          if(album == null || album.get(mAudioHistory.index) == null){
-//              return;
-//          }
-//          player_name.setText(album.get(mAudioHistory.index).contentName);
-//      }
-//      mAudioContentList=album;
 
     }
 
@@ -364,7 +356,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     private AnimationDrawable radiologicalWaveAnim = null;
 
     //正在播放
-    public void playing(String name) {
+    public void playing() {
         ig_player_state.setVisibility(View.VISIBLE);
         ig_player_state.setBackground(getActivity().getDrawable(R.drawable.playindicator_animation));
         radiologicalWaveAnim = (AnimationDrawable) ig_player_state.getBackground();
@@ -372,7 +364,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         radiologicalWaveAnim.setVisible(true, true);
         radiologicalWaveAnim.start();
         player_name.setVisibility(View.VISIBLE);
-        player_name.setText(name);
         ig_player_button.setVisibility(View.VISIBLE);
         ig_player_button.setImageResource(R.drawable.ic_ct_pause);
     }
@@ -387,7 +378,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     }
 
     //停止播放
-    public void stopPlay() {
+    public void pausePlay() {
         if(ig_player_state!=null) {
             ig_player_state.setVisibility(View.VISIBLE);
             ig_player_state.setBackgroundResource(R.drawable.cc_default_playindicator);
@@ -396,6 +387,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         player_name.setVisibility(View.VISIBLE);
         if(ig_player_button!=null)
         ig_player_button.setVisibility(View.VISIBLE);
+        ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
         if(radiologicalWaveAnim!=null) {
             radiologicalWaveAnim.stop();
         }
@@ -403,51 +395,65 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     @Subscribe
     public void onEvent(final PlayerEvent event) {
+        UbtLog.d(TAG,"event = " + event.toString());
         if (event.getEvent() == PlayerEvent.Event.CONTROL_PLAY_NEXT) {
             UbtLog.d(TAG, "CONTROL_PLAY event = next " + event.getCurrentPlayingSongName());
-            if(getActivity()!=null) {
+            if (getActivity() != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //playing(event.getCurrentPlayingSongName());
                         player_name.setText(event.getCurrentPlayingSongName());
                     };
                 });
             }
-        } else if(event.getEvent()==PlayerEvent.Event.TAP_HEAD){
+        } else if (event.getEvent() == PlayerEvent.Event.TAP_HEAD) {
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
-        }else if(event.getEvent()==PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
-            UbtLog.d(TAG, "GET_ROBOT_ONLINEPLAYING_STATUS  "+event.toString());
-             mPresenter.getAudioList(event.getAlbumId());
-            mAlbumHistory=new AlbumContentInfo();
+        } else if (event.getEvent() == PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
+            UbtLog.d(TAG, "123  GET_ROBOT_ONLINEPLAYING_STATUS  " + event.getAlbumId() + event.getStatus());
+            mPresenter.getAudioList(event.getAlbumId());
+            mAlbumHistory = new AlbumContentInfo();
             mAlbumHistory.setAlbumId(event.getAlbumId());
-            index=event.getCurrentPlayingIndex();
+            index = event.getCurrentPlayingIndex();
             if (event.getStatus().equals("playing")) {
                 isPause = false;
-                //mPresenter.getAudioList(event.getAlbumId());
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             UbtLog.d(TAG, "ONLINE STATUS PLAYING");
-                            playing(event.getCurrentPlayingSongName());
-                        };
+                            playing();
+                            player_name.setText(event.getCurrentPlayingSongName());
+                        }
+
+                        ;
                     });
                 }
+            } else if (event.getStatus().equals("pause")) {
+                isPause = true;
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            UbtLog.d(TAG, "ONLINE STATUS PAUSE");
+                            pausePlay();
+                        }
+
+                        ;
+                    });
+                }
+            } else if (event.getStatus().equals("quit")) {
+                mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
             }
-        }else if(event.getStatus().equals("pause")) {
-            isPause = true;
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        UbtLog.d(TAG, "ONLINE STATUS PAUSE");
-                        stopPlay();
-                    };
-                });
-            }
-      }else if(event.getStatus().equals("quit")){
-            mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
+        }
+    }
+
+    @Override
+    public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
+        super.onFragmentResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_RESULT){
+            onResume();
+        }else if(requestCode==REQUEST_RESULT_PLAYLIST){
+            onResume();
         }
     }
 }

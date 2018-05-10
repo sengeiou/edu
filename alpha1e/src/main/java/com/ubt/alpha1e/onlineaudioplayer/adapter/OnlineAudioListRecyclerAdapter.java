@@ -22,6 +22,7 @@ import com.ubt.alpha1e.onlineaudioplayer.helper.OnlineAudioResourcesHelper;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
+import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -70,6 +71,7 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
                 mHelper.playEvent("playing",mHelper.getmCategoryId(),mHelper.getAlbumId(), position);
             }
         });
+        UbtLog.d(TAG,"POSITION  "+position +"mHelper.getPlayContent().get(position).isPlaying  "+mHelper.getPlayContent().get(position).isPlaying);
         if(mHelper.getPlayContent().get(position).isPlaying){
             myHolder.playStatusAnim.start();
             myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
@@ -84,7 +86,6 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             myHolder.playStatusAnim.stop();
         }
          myHolder.tvPlayContent.setText(playContentInfo.contentName);
-
     }
 
     @Override

@@ -132,7 +132,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
         } else if (cmd == ConstValue.DV_NOTIFYONLINEPLAYER_CONTINUE) {
 
-        } else if (cmd == ConstValue.DV_TAP_HEAD&&cmd==ConstValue.DV_VOICE) {
+        } else if (cmd == ConstValue.DV_TAP_HEAD||cmd==ConstValue.DV_VOICE) {
             UbtLog.d(TAG, "cmd = " + cmd + "  VOICE & TAP" );
             PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD);
             EventBus.getDefault().post(mPlayerEvent);
