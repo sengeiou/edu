@@ -895,6 +895,8 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             final MyCircleHolder holder = (MyCircleHolder) mHolder;
             final Map<String, Object> actionList = mDatas.get(position);
             String action_name = actionList.get(ActionsLibHelper.map_val_action_name) + "";
+            String action_time = actionList.get(ActionsLibHelper.map_val_action_time) + "";
+            String action_headurl = actionList.get(ActionsLibHelper.map_val_action_type_logo_res) + "";
             String action_player_name=actionList.get(ActionsLibHelper.map_val_action) + "";
             RobotInnerActionInfoUtil.getImageIcon(action_player_name);
             if(!TextUtils.isEmpty(RobotInnerActionInfoUtil.getImageIcon(action_player_name))){
@@ -909,16 +911,31 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
             }}else {
                 imageLogo=R.drawable.sec_action_logo;
             }
-            Glide.with(mContext)
-                    .load(imageLogo)
-                    .fitCenter()
-                    .into(holder.img_action_logo);
+            if(imageLogo!=R.drawable.sec_action_logo) {
+                Glide.with(mContext)
+                        .load(imageLogo)
+                        .fitCenter()
+                        .into(holder.img_action_logo);
+            }else {
+                Glide.with(mContext)
+                        .load(action_headurl)
+                        .fitCenter()
+                        .into(holder.img_action_logo);
+            }
             if (action_name.startsWith("@") || action_name.startsWith("#") || action_name.startsWith("%")) {
                 action_name = action_name.substring(1);
             }
             holder.txt_action_name.setText(action_name);
             if(TextUtils.isEmpty(RobotInnerActionInfoUtil.getTime(action_player_name))){
-                holder.txt_action_time.setText("未知");
+                String action_time_adapter="未知";
+                if(Integer.parseInt(action_time)<60){
+                    if(Integer.parseInt(action_time)<10){
+                        action_time_adapter = "0:0"+action_time;
+                    }else {
+                        action_time_adapter="0:"+action_time;
+                    }
+                }
+                holder.txt_action_time.setText(action_time_adapter+"");
             }else {
                 holder.txt_action_time.setText(RobotInnerActionInfoUtil.getTime(action_player_name));
             }
