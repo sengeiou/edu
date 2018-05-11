@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -273,9 +274,11 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
 
     public class AlbumHolder extends RecyclerView.ViewHolder{
         public TextView txt_album_name;
+        public RelativeLayout rl_online_albumlist_item ;
         public AlbumHolder(View itemView) {
             super(itemView);
             txt_album_name=(TextView)itemView.findViewById(R.id.item_album);
+            rl_online_albumlist_item = (RelativeLayout)itemView.findViewById(R.id.online_albumlist_item);
         }
     }
 
@@ -292,7 +295,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             ((AlbumHolder) holder).txt_album_name.setText(mAlbumDatas.get(position).albumName);//+"GRADE"+mAlbumDatas.get(position).grade);
-            ((AlbumHolder) holder).txt_album_name.setOnClickListener(new View.OnClickListener() {
+            ((AlbumHolder) holder).rl_online_albumlist_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mAlbumId = mAlbumDatas.get(position).albumId;

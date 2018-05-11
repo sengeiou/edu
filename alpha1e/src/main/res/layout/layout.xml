@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="265dp"
     android:layout_height="58dp"
+    android:id="@+id/online_albumlist_item"
     android:background="@drawable/bg_album_list">
 
     <TextView

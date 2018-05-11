@@ -89,6 +89,9 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     @BindView(R.id.ig_player_button)
     ImageView ig_player_button;
 
+    @BindView(R.id.ig_player_list)
+    ImageView ig_player_list;
+
     public LinearLayoutManager mLayoutManager;
     public onlineresAdpater mAdapter;
     public List<OnlineresList> onlineresList = new ArrayList<>();
@@ -175,6 +178,9 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 break;
             case R.id.ig_player_button:
                 UbtLog.d(TAG, "ig_player_button");
+                if(player_name != null && player_name.getVisibility() == View.VISIBLE && player_name.getText().toString().equals("暂无播放历史")){
+                    return;
+                }
                 onlineAudioPlayerStatus();
                 break;
             case R.id.ig_player_list:
@@ -355,6 +361,16 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             player_name.setText(album.get(index).contentName);
             //set playing content
             mHelper.setPlayingContent(album);
+            if(ig_player_button!=null){
+                ig_player_button.setVisibility(View.VISIBLE);
+                ig_player_list.setImageResource(R.drawable.ic_list);
+                ig_player_button.setVisibility(View.VISIBLE);
+                if(isPause){
+                    ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
+                }else{
+                    ig_player_button.setImageResource(R.drawable.ic_ct_pause);
+                }
+            }
         }}catch(Exception e){
             e.printStackTrace();
         }
@@ -379,6 +395,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         player_name.setVisibility(View.VISIBLE);
         ig_player_button.setVisibility(View.VISIBLE);
         ig_player_button.setImageResource(R.drawable.ic_ct_pause);
+        ig_player_list.setImageResource(R.drawable.ic_list);
     }
 
     //没有播放
@@ -398,11 +415,18 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         }
         if(player_name!=null)
         player_name.setVisibility(View.VISIBLE);
-        if(ig_player_button!=null)
-        ig_player_button.setVisibility(View.VISIBLE);
-        ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
+        if(ig_player_button!=null){
+            ig_player_button.setVisibility(View.VISIBLE);
+            ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
+            ig_player_list.setImageResource(R.drawable.ic_list);
+        }
         if(radiologicalWaveAnim!=null) {
             radiologicalWaveAnim.stop();
+        }
+
+        if(player_name != null && player_name.getVisibility() == View.VISIBLE && player_name.getText().toString().equals("暂无播放历史")){
+            ig_player_button.setImageResource(R.drawable.ic_play_disable);
+            ig_player_list.setImageResource(R.drawable.ic_list_disable);
         }
     }
 
@@ -451,7 +475,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            UbtLog.d(TAG, "ONLINE STATUS PAUSE");
+                            UbtLog.d(TAG, "ONLINE STATUS PAUSE : " +player_name.getText().toString());
                             pausePlay();
                         }
 
