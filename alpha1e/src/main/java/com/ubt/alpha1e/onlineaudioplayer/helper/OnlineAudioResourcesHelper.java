@@ -35,9 +35,10 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     private static final String TAG = OnlineAudioResourcesHelper.class.getSimpleName();
     private static List<AudioContentInfo> mPlayContentInfoList = new ArrayList<>();
-    private static List<AudioContentInfo> mPlayContentOriginInfoList = new ArrayList<>();
+    private static List<AudioContentInfo> mPlayingContentInfoList = new ArrayList<>();
+//    private static List<AudioContentInfo> mPlayContentOriginInfoList = new ArrayList<>();
     private int currentPlaySeq = 0;
-    private boolean isRecyclePlaying = true;
+//    private boolean isRecyclePlaying = true;
     private String mAlbumId;
 
     public String getmCategoryId() {
@@ -52,15 +53,34 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     private static OnlineAudioResourcesHelper mOnlineAudioResourcesHelper = null;
 
+
+    /**
+     * get loop mode
+     * @return
+     */
     public int getPlayType() {
         return mPlayType;
     }
 
+    /**
+     * set loop mode
+     * @param mPlayType
+     */
     public void setPlayType(int mPlayType) {
         this.mPlayType = mPlayType;
     }
 
     private int mPlayType = OnlineAudioListFragment.ORDER_AUDIO_LIST_PLAYING;
+
+    public boolean ismPlayStatus() {
+        return mPlayStatus;
+    }
+
+    public void setmPlayStatus(boolean mPlayStatus) {
+        this.mPlayStatus = mPlayStatus;
+    }
+
+    private boolean mPlayStatus=false;  //false play true pause;
     MediaPlayer mediaPlayer;
     //TEST PURPOSE LOCAL PLAYRING AUDIO
     private boolean local_player = false;
@@ -89,18 +109,18 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
                     mCmd.get("albumId");
                     mCmd.get("index");
                     mCmd.get("loop");
-                    UbtLog.d(TAG, "cmd = " + cmd + "  get Robot Status notify" + mCmd.get("status") +"index : "+   mCmd.get("index")+"loop mode :"+        mCmd.get("loop"));
-                    //SAVE TO THE SP
-                    if(mCmd.get("status").equals("playing")) {
+                    UbtLog.d(TAG, "cmd = " + cmd + " mCmd.get(\"index\")" + mCmd.get("status") +"index : "+   mCmd.get("index")+"loop mode :"+        mCmd.get("loop")+"cmd "+mCmd.toString());
+                    if (mCmd.get("status").equals("playing")) {
                         notifyUiCurrentRobotStatus(mCmd);
-                    }else if(mCmd.get("status").equals("pause")){
+                    } else if (mCmd.get("status").equals("pause")) {
                         notifyUiCurrentRobotStatus(mCmd);
-                    }else if(mCmd.get("status").equals("quit")) {
+                    } else if (mCmd.get("status").equals("quit")) {
                         //GET ROBOT ONLINE PLAY STATUS STOP
-                        UbtLog.d(TAG,"0X55 "+mCmd.get("status"));
-                        notifyPlayerStop();
+                        notifyUiCurrentRobotStatus(mCmd);
+                    } else {
+                        UbtLog.d(TAG, "0X55 " + mCmd.get("status"));
                     }
-                }catch(JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
         } else if (cmd == ConstValue.DV_NOTIFYONLINEPLAYER_PLAY) {
@@ -132,24 +152,24 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
         } else if (cmd == ConstValue.DV_NOTIFYONLINEPLAYER_CONTINUE) {
 
-        } else if (cmd == ConstValue.DV_TAP_HEAD) {
+        } else if (cmd == ConstValue.DV_TAP_HEAD||cmd==ConstValue.DV_VOICE) {
+            UbtLog.d(TAG, "cmd = " + cmd + "  VOICE & TAP" );
             PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD);
             EventBus.getDefault().post(mPlayerEvent);
-        }else if(cmd==ConstValue.DV_VOICE){
-            UbtLog.d(TAG, "cmd = " + cmd + "  VOICE ");
-//            PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD);
-//            EventBus.getDefault().post(mPlayerEvent);
         }
     }
 
     private void notifyUiCurrentRobotStatus(JSONObject mCmd) throws JSONException {
-        saveAudioHistory(Integer.parseInt(mCmd.get("index").toString()));
-        setCurentPlayingAudioIndex(Integer.parseInt(mCmd.get("index").toString())+1);
+//        saveAudioHistory(Integer.parseInt(mCmd.get("index").toString()));
+//        if(!mCmd.get("index").toString().equals("")) {
+//            setCurentPlayingAudioIndex(Integer.parseInt(mCmd.get("index").toString()));
+//        }
         notifyCurrentRobotOnlineStatus(mCmd);
     }
 
     private void notifyCurrentRobotOnlineStatus(JSONObject mCmd) throws JSONException {
         PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS);
+        mPlayerEvent.setCateogryId(mCmd.get("categoryId").toString());
         mPlayerEvent.setAlbumId(mCmd.get("albumId").toString());
         mPlayerEvent.setCurrentPlayingIndex(Integer.parseInt( mCmd.get("index").toString()));
         mPlayerEvent.setStatus(mCmd.get("status").toString());
@@ -190,28 +210,27 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     public void playEvent(String playStatus, String categoryId, String albumId, int index) {
         notifyUiNextAudio(index);
-       // doSendComm(ConstValue.DV_NOTIFYONLINEPLAYER_PLAY, BluetoothParamUtil.stringToBytes(url));
-        sendControlCommand(playStatus,categoryId,albumId,Integer.toString(index));
-//        for (AudioContentInfo mPlayContentInfo : getPlayContent()) {
-//            mPlayContentInfo.isPlaying = false;
-//        }
-//        getPlayContent().get(index).isPlaying = true;
+        if(categoryId!=null&&albumId!=null) {
+            sendControlCommand(playStatus, categoryId, albumId, Integer.toString(index));
+        }else {
+            UbtLog.e(TAG,"ALBUMID IS NULL");
+        }
         if (local_player) {
             localAudioplay(mPlayContentInfoList.get(index).contentUrl);
         }
     }
 
     private void notifyUiNextAudio(int index) {
+//        saveAudioHistory(index);
         setCurentPlayingAudioIndex(index);
-        saveAudioHistory(index);
         notifyNextAudioMesssage(index);
     }
 
-    private void saveAudioHistory(int index) {
-        AudioContentInfo mHistory = new AudioContentInfo();
-        mHistory.index = index;
-        SPUtils.getInstance().saveObject(Constant.SP_ONLINEAUDIO_HISTORY, mHistory);
-    }
+//    private void saveAudioHistory(int index) {
+//        AudioContentInfo mHistory = new AudioContentInfo();
+//        mHistory.index = index;
+//        SPUtils.getInstance().saveObject(Constant.SP_ONLINEAUDIO_HISTORY, mHistory);
+//    }
 
     public void exitEvent() {
         UbtLog.d(TAG, "stopEventSound = ");
@@ -242,16 +261,13 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     private void notifyNextAudioMesssage(int index) {
         PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_PLAY_NEXT);
         //NEXT AUDIO NAME INFORMATION
-        if(mPlayContentInfoList.size()!=0)
-        mPlayerEvent.setCurrentPlayingSongName(mPlayContentInfoList.get(index).contentName);
+        if(mPlayContentInfoList.size()>0) {
+            mPlayerEvent.setCurrentPlayingSongName(mPlayContentInfoList.get(index).contentName);
+        }
         mPlayerEvent.setCurrentPlayingIndex(index);
         EventBus.getDefault().post(mPlayerEvent);
     }
 
-    public void readPlayStatus() {
-        UbtLog.d(TAG, "--readPlayStatus-->" + ConstValue.DV_READ_HIBITS_PLAY_STATUS);
-        //  doSendComm(ConstValue.DV_READ_HIBITS_PLAY_STATUS, null);
-    }
 
     @Override
     public void onDeviceDisConnected(String mac) {
@@ -289,21 +305,11 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         return currentPlaySeq;
     }
 
-
-    private void notifyPlayerStop() {
-        PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_STOP);
-        EventBus.getDefault().post(mPlayerEvent);
-    }
-
     public void nextAudioPlay() {
         if ((currentPlaySeq + 1) < mPlayContentInfoList.size()) {
             currentPlaySeq++;
         } else {
-            if (isRecyclePlaying) {
-                currentPlaySeq = 0;
-            } else {
-                notifyPlayerStop();
-            }
+            currentPlaySeq = 0;
         }
         exitEvent();
         try {
@@ -312,6 +318,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             e.printStackTrace();
         }
         UbtLog.d(TAG,"NEXTS AUDIO "+currentPlaySeq);
+        //NEXT AUDIO PLAY
         playEvent("playing",getmCategoryId(),getAlbumId(),currentPlaySeq);
     }
 
@@ -330,29 +337,55 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             e.printStackTrace();
         }
         UbtLog.d(TAG,"PRE AUDIO "+currentPlaySeq);
+        //PREV AUDIO PLAY
         playEvent("playing",getmCategoryId(),getAlbumId(),currentPlaySeq);
         //   ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
         //   mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
     }
 
+    /**
+     * set current playing content
+     * @param playContentInfoList
+     */
+
+    public void setPlayingContent(List<AudioContentInfo> playContentInfoList){
+        if (playContentInfoList == null) {
+            UbtLog.d(TAG, "setPlayContent is null");
+            return;
+        }
+        mPlayingContentInfoList.clear();
+        mPlayingContentInfoList.addAll(playContentInfoList);
+    }
+
+    /**
+     *
+     * @return playing content mPlaying...
+     */
+    public  List<AudioContentInfo> getPlayingContent(){
+        return  mPlayingContentInfoList;
+    }
+
+    /**
+     * Return ready to play contents mPlay...
+     * @return
+     */
     public List<AudioContentInfo> getPlayContent() {
         return mPlayContentInfoList;
     }
-
+    /**
+     * Ready to play content
+     * @param playContentInfoList
+     */
     public void setPlayContent(List<AudioContentInfo> playContentInfoList) {
         if (playContentInfoList == null) {
             UbtLog.d(TAG, "setPlayContent is null");
             return;
         }
-        mPlayContentInfoList = playContentInfoList;
-        mPlayContentOriginInfoList.clear();
-      //  currentPlaySeq = -1;
+        mPlayContentInfoList.clear();
+        mPlayContentInfoList.addAll(playContentInfoList);
         for (int i = 0; i < mPlayContentInfoList.size(); i++) {
-            mPlayContentOriginInfoList.add(mPlayContentInfoList.get(i));
+            UbtLog.d(TAG, "i = " + i + "     name = " + mPlayContentInfoList.get(i).contentName + "url: " + mPlayContentInfoList.get(i).contentUrl);
         }
-//        for (int i = 0; i < mPlayContentInfoList.size(); i++) {
-//            UbtLog.d(TAG, "i = " + i + "     url = " /*+ mPlayContentInfoList.get(i).contentName + "/"*/ + mPlayContentInfoList.get(i).contentUrl);
-//        }
         UbtLog.d(TAG, "mPlayContentInfoList.size() = " + mPlayContentInfoList.size());
     }
 

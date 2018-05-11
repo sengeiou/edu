@@ -86,8 +86,6 @@ import java.util.TimerTask;
 public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*ActionPlayerListener ,*/IActionsUI{
 
     private static final String TAG = "MyActionsCircleFragment";
-
-
     private OnFragmentInteractionListener mListener;
     private RecyclerView mSyncRecyclerview;
     private LinearLayoutManager mLayoutManager;
