@@ -154,8 +154,9 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
                 outRect.bottom = 36;
-                outRect.left = 18;
-                outRect.right = 18;
+                outRect.left = 15;
+                outRect.right = 1;
+
             }
         });
         mAdapter = new AlbumAdapter();

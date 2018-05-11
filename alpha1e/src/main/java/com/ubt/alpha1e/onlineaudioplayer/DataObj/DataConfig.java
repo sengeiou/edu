@@ -7,10 +7,6 @@ import com.ubt.alpha1e.utils.log.UbtLog;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by xiangcheng on 17/4/13.
- */
-
 public class DataConfig {
 
     public static List<ShowItem> getItems() {
@@ -30,6 +26,9 @@ public class DataConfig {
         }
         for(int i=0;i<len;i++){
             System.out.println(strs[i].toString());
+            if(null == strs[i] || strs[i].toString().trim().equals("")){
+                continue;
+            }
             showItems.add(new ShowItem(strs[i].toString()));
         }
 
