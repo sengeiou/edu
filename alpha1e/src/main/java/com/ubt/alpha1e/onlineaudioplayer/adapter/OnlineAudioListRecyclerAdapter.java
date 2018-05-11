@@ -68,6 +68,7 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             @Override
             public void onClick(View view) {
                 mHelper.getPlayContent().get(position).isPlaying=true;
+                //CLICK AUDIO LIST
                 mHelper.playEvent("playing",mHelper.getmCategoryId(),mHelper.getAlbumId(), position);
             }
         });
@@ -81,8 +82,7 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
             myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
         }
-        //TODO  DECOUPLE
-        if(OnlineAudioListFragment.isPause){
+        if(mHelper.ismPlayStatus()){
             myHolder.playStatusAnim.stop();
         }
          myHolder.tvPlayContent.setText(playContentInfo.contentName);

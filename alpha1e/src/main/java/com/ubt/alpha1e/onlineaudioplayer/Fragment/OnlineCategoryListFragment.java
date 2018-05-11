@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.ubt.alpha1e.AlphaApplication;
@@ -179,9 +180,13 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             case R.id.ig_player_list:
                 if(mAlbumHistory!=null) {
                     UbtLog.d(TAG,"456  mAlbumHistory  "+mAlbumHistory.getAlbumId());
-                    OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumHistory);
-                    startForResult(mfragment,REQUEST_RESULT_PLAYLIST);
-                    onPause();
+                    if(!mAlbumHistory.getAlbumId().equals("")) {
+                        OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumHistory);
+                        startForResult(mfragment, REQUEST_RESULT_PLAYLIST);
+                        onPause();
+                    }else {
+                         Toast.makeText(getActivity(),"SERVICE REPLY NULL ALBUMID", Toast.LENGTH_LONG).show();
+                    }
                 }
                 break;
         }
@@ -344,9 +349,14 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
-        UbtLog.d(TAG,"show song name");
+        UbtLog.d(TAG,"show song name" + album.size());
+        try{
         if(album!=null) {
             player_name.setText(album.get(index).contentName);
+            //set playing content
+            mHelper.setPlayingContent(album);
+        }}catch(Exception e){
+            e.printStackTrace();
         }
 
     }
@@ -412,11 +422,14 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         } else if (event.getEvent() == PlayerEvent.Event.TAP_HEAD) {
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         } else if (event.getEvent() == PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
-            UbtLog.d(TAG, "123  GET_ROBOT_ONLINEPLAYING_STATUS  " + event.getAlbumId() + event.getStatus());
+            UbtLog.d(TAG, "show albumId  " + event.getAlbumId() + "    status:   "+event.getStatus());
             //GET AUDIO SONG
             mPresenter.getAudioList(event.getAlbumId());
             mAlbumHistory = new AlbumContentInfo();
             mAlbumHistory.setAlbumId(event.getAlbumId());
+            //SET CURRENT PLAY INFORMATION
+            mHelper.setmCategoryId(event.getCateogryId());
+            mHelper.setAlbumId(event.getAlbumId());
             index = event.getCurrentPlayingIndex();
             if (event.getStatus().equals("playing")) {
                 isPause = false;

@@ -35,6 +35,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     private static final String TAG = OnlineAudioResourcesHelper.class.getSimpleName();
     private static List<AudioContentInfo> mPlayContentInfoList = new ArrayList<>();
+    private static List<AudioContentInfo> mPlayingContentInfoList = new ArrayList<>();
 //    private static List<AudioContentInfo> mPlayContentOriginInfoList = new ArrayList<>();
     private int currentPlaySeq = 0;
 //    private boolean isRecyclePlaying = true;
@@ -52,15 +53,34 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     private static OnlineAudioResourcesHelper mOnlineAudioResourcesHelper = null;
 
+
+    /**
+     * get loop mode
+     * @return
+     */
     public int getPlayType() {
         return mPlayType;
     }
 
+    /**
+     * set loop mode
+     * @param mPlayType
+     */
     public void setPlayType(int mPlayType) {
         this.mPlayType = mPlayType;
     }
 
     private int mPlayType = OnlineAudioListFragment.ORDER_AUDIO_LIST_PLAYING;
+
+    public boolean ismPlayStatus() {
+        return mPlayStatus;
+    }
+
+    public void setmPlayStatus(boolean mPlayStatus) {
+        this.mPlayStatus = mPlayStatus;
+    }
+
+    private boolean mPlayStatus=false;  //false play true pause;
     MediaPlayer mediaPlayer;
     //TEST PURPOSE LOCAL PLAYRING AUDIO
     private boolean local_player = false;
@@ -149,6 +169,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     private void notifyCurrentRobotOnlineStatus(JSONObject mCmd) throws JSONException {
         PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS);
+        mPlayerEvent.setCateogryId(mCmd.get("categoryId").toString());
         mPlayerEvent.setAlbumId(mCmd.get("albumId").toString());
         mPlayerEvent.setCurrentPlayingIndex(Integer.parseInt( mCmd.get("index").toString()));
         mPlayerEvent.setStatus(mCmd.get("status").toString());
@@ -189,7 +210,11 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     public void playEvent(String playStatus, String categoryId, String albumId, int index) {
         notifyUiNextAudio(index);
-        sendControlCommand(playStatus,categoryId,albumId,Integer.toString(index));
+        if(categoryId!=null&&albumId!=null) {
+            sendControlCommand(playStatus, categoryId, albumId, Integer.toString(index));
+        }else {
+            UbtLog.e(TAG,"ALBUMID IS NULL");
+        }
         if (local_player) {
             localAudioplay(mPlayContentInfoList.get(index).contentUrl);
         }
@@ -236,15 +261,13 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     private void notifyNextAudioMesssage(int index) {
         PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_PLAY_NEXT);
         //NEXT AUDIO NAME INFORMATION
-        mPlayerEvent.setCurrentPlayingSongName(mPlayContentInfoList.get(index).contentName);
+        if(mPlayContentInfoList.size()>0) {
+            mPlayerEvent.setCurrentPlayingSongName(mPlayContentInfoList.get(index).contentName);
+        }
         mPlayerEvent.setCurrentPlayingIndex(index);
         EventBus.getDefault().post(mPlayerEvent);
     }
 
-    public void readPlayStatus() {
-        UbtLog.d(TAG, "--readPlayStatus-->" + ConstValue.DV_READ_HIBITS_PLAY_STATUS);
-        //  doSendComm(ConstValue.DV_READ_HIBITS_PLAY_STATUS, null);
-    }
 
     @Override
     public void onDeviceDisConnected(String mac) {
@@ -282,12 +305,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         return currentPlaySeq;
     }
 
-
-//    private void notifyPlayerStop() {
-//        PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_STOP);
-//        EventBus.getDefault().post(mPlayerEvent);
-//    }
-
     public void nextAudioPlay() {
         if ((currentPlaySeq + 1) < mPlayContentInfoList.size()) {
             currentPlaySeq++;
@@ -301,6 +318,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             e.printStackTrace();
         }
         UbtLog.d(TAG,"NEXTS AUDIO "+currentPlaySeq);
+        //NEXT AUDIO PLAY
         playEvent("playing",getmCategoryId(),getAlbumId(),currentPlaySeq);
     }
 
@@ -319,15 +337,45 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             e.printStackTrace();
         }
         UbtLog.d(TAG,"PRE AUDIO "+currentPlaySeq);
+        //PREV AUDIO PLAY
         playEvent("playing",getmCategoryId(),getAlbumId(),currentPlaySeq);
         //   ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
         //   mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
     }
 
+    /**
+     * set current playing content
+     * @param playContentInfoList
+     */
+
+    public void setPlayingContent(List<AudioContentInfo> playContentInfoList){
+        if (playContentInfoList == null) {
+            UbtLog.d(TAG, "setPlayContent is null");
+            return;
+        }
+        mPlayingContentInfoList.clear();
+        mPlayingContentInfoList.addAll(playContentInfoList);
+    }
+
+    /**
+     *
+     * @return playing content mPlaying...
+     */
+    public  List<AudioContentInfo> getPlayingContent(){
+        return  mPlayingContentInfoList;
+    }
+
+    /**
+     * Return ready to play contents mPlay...
+     * @return
+     */
     public List<AudioContentInfo> getPlayContent() {
         return mPlayContentInfoList;
     }
-
+    /**
+     * Ready to play content
+     * @param playContentInfoList
+     */
     public void setPlayContent(List<AudioContentInfo> playContentInfoList) {
         if (playContentInfoList == null) {
             UbtLog.d(TAG, "setPlayContent is null");
@@ -335,11 +383,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         }
         mPlayContentInfoList.clear();
         mPlayContentInfoList.addAll(playContentInfoList);
-//        mPlayContentOriginInfoList.clear();
-      //  currentPlaySeq = -1;
-//        for (int i = 0; i < mPlayContentInfoList.size(); i++) {
-//            mPlayContentOriginInfoList.add(mPlayContentInfoList.get(i));
-//        }
         for (int i = 0; i < mPlayContentInfoList.size(); i++) {
             UbtLog.d(TAG, "i = " + i + "     name = " + mPlayContentInfoList.get(i).contentName + "url: " + mPlayContentInfoList.get(i).contentUrl);
         }
