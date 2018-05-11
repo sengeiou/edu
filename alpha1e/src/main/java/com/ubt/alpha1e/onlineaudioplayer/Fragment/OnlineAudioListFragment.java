@@ -55,6 +55,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
    // public static List<AudioContentInfo> mPlayContentInfoDatas =  new ArrayList<>();
     private boolean isStartPlayProcess = true;//是否开启播放流程
     private static String currentAlbumId = "";
+    private static String currentCategoryId="";
     private static String mAlbumName="";
     private int currentPlaySeq = -1;
     private boolean isFirstPlay = true;
@@ -111,9 +112,11 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     }
 
     public static OnlineAudioListFragment newInstance(AlbumContentInfo mAlbum) {
-        UbtLog.d(TAG,"current album ID"+mAlbum.getAlbumId() +"albumName "+mAlbumName);
+        UbtLog.d(TAG,"current album ID"+mAlbum.getAlbumId() +"albumName "+mAlbumName+ "mCategoryId"+mAlbum.getCategoryId());
         OnlineAudioListFragment mOnlineAudioEventListFragment=new OnlineAudioListFragment();
         currentAlbumId=mAlbum.getAlbumId();
+        if(mAlbum.getCategoryId()!=null)
+        currentCategoryId=mAlbum.getCategoryId();
         mAlbumName=mAlbum.albumName;
         return mOnlineAudioEventListFragment;
     }
@@ -179,7 +182,9 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         mView = inflater.inflate(R.layout.activity_play_event_list, container, false);
         UbtLog.d(TAG,"onCreatView  ");
         ButterKnife.bind(getActivity());
-        mHelper=OnlineAudioResourcesHelper.getInstance(getContext());
+        mHelper = OnlineAudioResourcesHelper.getInstance(getContext());
+        mHelper.setmCategoryId(currentCategoryId);
+        mHelper.setAlbumId(currentAlbumId);
         mAdapter = new OnlineAudioListRecyclerAdapter(getContext(), mHandler,mHelper);
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvEventList=(RecyclerView)mView.findViewById(R.id.rv_event_list);
@@ -396,7 +401,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     break;
                 case DIFFALBUM_CURRENT_PLAY:
                     mPlayingalbumID=(String)msg.obj;
-                    UbtLog.d(TAG,"DIFFALBUM_CURRENT_PLAY   "+mPlayingalbumID);
+                    UbtLog.d(TAG,"DIFFALBUM_CURRENT_PLAY   "+mPlayingalbumID +mHelper.getAlbumId());
                     ivPlayNone.setVisibility(View.GONE);
                     ivPlayStatus.setVisibility(View.VISIBLE);
                     playStatusAnim.start();
@@ -470,8 +475,8 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             if (event.getStatus().equals("playing")) {
                 if(currentAlbumId.equals(event.getAlbumId())) {
                     mHelper.setCurentPlayingAudioIndex(event.getCurrentPlayingIndex());
-                    mHelper.setmCategoryId(event.getCateogryId());
-                    mHelper.setAlbumId(event.getAlbumId());
+//                    mHelper.setmCategoryId(event.getCateogryId());
+//                    mHelper.setAlbumId(event.getAlbumId());
                     mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
