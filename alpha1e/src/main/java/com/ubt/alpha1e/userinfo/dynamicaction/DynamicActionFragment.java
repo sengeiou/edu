@@ -28,6 +28,8 @@ import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
+import com.ubt.alpha1e.community.CommunityActivity;
+import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.model.DownloadProgressInfo;
 import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
@@ -35,6 +37,7 @@ import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubt.alpha1e.webcontent.WebContentActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -97,7 +100,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     private LinearLayout llError;
     private ImageView ivStatu;
     private int playingPosition = -1;
-    private String mParam1;
+    private int mParam1 = 0;
     private String mParam2;
 
     private int currentType = 0;//上拉下拉类型
@@ -113,10 +116,10 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     }
 
 
-    public static DynamicActionFragment newInstance(String param1, String param2) {
+    public static DynamicActionFragment newInstance(int param1, String param2) {
         DynamicActionFragment fragment = new DynamicActionFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putInt(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -126,7 +129,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam1 = getArguments().getInt(ARG_PARAM1, 0);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -150,6 +153,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
 
     @Override
     protected void initUI() {
+        UbtLog.d(TAG,"mParam1 = " + mParam1);
         mDynamicActionAdapter = new DynamicActionAdapter(R.layout.layout_dynamic_action_item, mDynamicActionModels);
         mDynamicActionAdapter.setOnItemChildClickListener(this);
         mDynamicActionAdapter.setOnItemClickListener(this);
@@ -165,7 +169,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             @Override
             public void onClick(View v) {
                 page = 1;
-                mPresenter.getDynamicData(0, page, offset);
+                mPresenter.getDynamicData(0, mParam1, page, offset);
                 UbtLog.d("tvRetry", "重试一次");
                 LoadingDialog.show(getActivity());
 
@@ -179,7 +183,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             @Override
             public void onRefresh(final RefreshLayout refreshlayout) {
                 page = 1;
-                mPresenter.getDynamicData(0, page, offset);
+                mPresenter.getDynamicData(0, mParam1, page, offset);
 
             }
         });
@@ -187,10 +191,9 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             @Override
             public void onLoadmore(final RefreshLayout refreshlayout) {
                 ++page;
-                mPresenter.getDynamicData(1, page, offset);
+                mPresenter.getDynamicData(1, mParam1, page, offset);
             }
         });
-
 
     }
 
@@ -282,6 +285,11 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
             llError.setVisibility(View.GONE);
             tvEmpty.setText(ResourceManager.getInstance(getActivity()).getStringResources("empty_no_dynamiaction"));
             ivStatu.setImageResource(R.drawable.ic_setting_action_deafult);
+            if (mParam1 == 1) {
+                ivStatu.setImageResource(R.drawable.ic_download_none);
+                tvEmpty.setText("你目前没有任何下载");
+            }
+
         } else if (status == 2) {
             tvRetry.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG); //下划线
             tvRetry.getPaint().setAntiAlias(true);//抗锯齿
@@ -382,9 +390,19 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         // ActionDetailActivity.launch(getActivity(), mDynamicActionModels.get(position));
-        Intent intent = new Intent(getActivity(), ActionDetailActivity.class);
-        intent.putExtra(dynamicModel, mDynamicActionModels.get(position));
-        startActivityForResult(intent, 1);
+        Intent intent = null;
+        if(mParam1 == 1){
+            intent = new Intent();
+            intent.setClass(getActivity(), CommunityActivity.class);
+            intent.putExtra(Constant.COMMUNITY_SOURCE, 2);
+            intent.putExtra(Constant.COMMUNITY_POST_ID, mDynamicActionModels.get(position).getPostId());
+            startActivityForResult(intent,1);
+
+        }else {
+            intent = new Intent(getActivity(), ActionDetailActivity.class);
+            intent.putExtra(dynamicModel, mDynamicActionModels.get(position));
+            startActivityForResult(intent, 1);
+        }
     }
 
     /**
@@ -614,10 +632,9 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
 
     @Subscribe
     public void onEventRobot(RobotEvent event) {
-        UbtLog.d(TAG, "onEventRobot = obj == 1");
+        //UbtLog.d(TAG, "onEventRobot = " + event.getEvent());
         if (event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS) {
             //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
-            UbtLog.d(TAG, "onEventRobot = obj == 2" + event.isHibitsProcessStatus());
             if (event.isHibitsProcessStatus()) {
                 UbtLog.d(TAG, "onEventRobot = obj == 3");
                 mHandler.post(new Runnable() {
