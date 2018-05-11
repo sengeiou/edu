@@ -70,6 +70,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     private static final int OVER_TIME_FINISH = 11;
     private static final int RECIEVE_HIBITS_START = 12;
     private static final int LOW_BATTERY_LESS_FIVE = 13;
+    private static final int SHOW_BEZIER_VIEW = 14;
 
     @BindView(R.id.tv_next)
     TextView tvNext;
@@ -192,11 +193,20 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
 
     private int mPadDelayTime = 0;//平板改变View位置后一会才能取得真实的位置，所有要延时一会，手机则为0
 
+    private boolean hasInitBezierView = false;
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
+                case SHOW_BEZIER_VIEW:
+                    if(hasInitBezierView){
+                        showBezierView();
+                    }else {
+                        mHandler.sendEmptyMessageDelayed(SHOW_BEZIER_VIEW, 100);
+                    }
+                    break;
                 case SHOW_VIEW: {
                     int viewId = msg.arg1;
                     if (viewId == R.id.bzv_principle_steering_engine) {
@@ -566,7 +576,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                         FeatureActivity.this.overridePendingTransition(0, R.anim.activity_close_down_up);
                     }else {
                         //行为习惯流程结束，该干啥干啥
-                        showBezierView();
+                        mHandler.sendEmptyMessage(SHOW_BEZIER_VIEW);
                     }
                 }
             });
@@ -574,7 +584,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
             //行为习惯流程未开始，该干啥干啥
             ((PrincipleHelper) mHelper).doInit();
             ((PrincipleHelper) mHelper).doEnterCourse((byte) 1);
-            showBezierView();
+            mHandler.sendEmptyMessage(SHOW_BEZIER_VIEW);
         }
 
     }
@@ -598,13 +608,13 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
     private void showBezierView(){
         startTime = new Date(System.currentTimeMillis());
 
-        showView(bzvPrincipleSteeringEngine, 150 + mPadDelayTime);
-        showView(bzvPrincipleInfraredSensor, 400);
-        showView(bzvPrincipleSoundbox, 700);
-        showView(bzvPrincipleHead, 1000);
-        showView(bzvPrincipleEye, 1300);
-        showView(bzvPrincipleVoice, 1600);
-        showView(bzvPrincipleVoiceObstacleAvoidance, 1900);
+        showView(bzvPrincipleSteeringEngine, 0);
+        showView(bzvPrincipleInfraredSensor, 300);
+        showView(bzvPrincipleSoundbox, 600);
+        showView(bzvPrincipleHead, 900);
+        showView(bzvPrincipleEye, 1200);
+        showView(bzvPrincipleVoice, 1500);
+        showView(bzvPrincipleVoiceObstacleAvoidance, 1800);
     }
 
     private void showView(View view, int delayTime) {
@@ -720,6 +730,10 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
             mHandler.removeMessages(SHOW_VIEW);
         }
 
+        if (mHandler.hasMessages(SHOW_BEZIER_VIEW)) {
+            mHandler.removeMessages(SHOW_BEZIER_VIEW);
+        }
+
         if (mHandler.hasMessages(ENABLE_ALL_VIEW)) {
             mHandler.removeMessages(ENABLE_ALL_VIEW);
         }
@@ -807,6 +821,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                 initViewLine(ivRobot, ivPrincipleEye);
                 initViewLine(ivRobot, ivPrincipleVoice);
                 initViewLine(ivRobot, ivPrincipleVoiceObstacleAvoidance);
+                hasInitBezierView = true;
 
             }
         }, mPadDelayTime);

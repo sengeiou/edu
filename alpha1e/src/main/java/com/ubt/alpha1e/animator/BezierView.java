@@ -613,12 +613,11 @@ public class BezierView extends View {
             if (size >= MAX_COUNT + 1) {
                 return false;
             }
-            UbtLog.d("FeatureFragment", "mControlPoints == " + mControlPoints.size());
+            UbtLog.d("FeatureActivity", "mControlPoints == " + mControlPoints.size());
             //if (isLegalTouchRegion(px, py)) {
                 mControlPoints.add(new PointF(px, py));
                 invalidate();
             //}
-            UbtLog.d("FeatureFragment", "mControlPoints => " + mControlPoints.size());
             return true;
         }
         return false;

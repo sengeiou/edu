@@ -341,19 +341,18 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG, "onStart");
 
         initUI();
-//        try {
-//            gifDrawable = new GifDrawable(getResources(), R.drawable.gif_main);
-//            gifDrawable.addAnimationListener(new AnimationListener() {
-//                @Override
-//                public void onAnimationCompleted() {
-//
-//
-//                }
-//            });
-//            mMainGif.setImageDrawable(gifDrawable);
-//        }catch(IOException e){
-//            e.printStackTrace();
-//        }
+        try {
+            gifDrawable = new GifDrawable(getResources(), R.drawable.gif_main);
+            gifDrawable.addAnimationListener(new AnimationListener() {
+                @Override
+                public void onAnimationCompleted() {
+
+                }
+            });
+            mMainGif.setImageDrawable(gifDrawable);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -601,9 +600,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
     }
 
-    private void buttonClickAnimation(LinearLayout mLayout) {
-        mLayout.setAnimation(mMainAnimationEffect.getBounceAnimation());
-        mLayout.startAnimation(mMainAnimationEffect.getBounceAnimation());
+    private void buttonClickAnimation(View mView) {
+        if(mView.getAnimation() == null){
+            mView.setAnimation(mMainAnimationEffect.getBounceAnimation());
+        }
+
+        mView.getAnimation().start();
     }
 
     //显示蓝牙连接对话框
@@ -1756,8 +1758,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         if(topIcon2Disconnect!=null) {
             topIcon2Disconnect.setVisibility(View.VISIBLE);
             if(animationRunning) {
-                topIcon2Disconnect.startAnimation(mMainAnimationEffect.getBounceAnimation());
-                topIcon2.startAnimation(mMainAnimationEffect.getBounceAnimation());
+                buttonClickAnimation(topIcon2Disconnect);
+                buttonClickAnimation(topIcon2);
             }
         }
     }
@@ -1767,7 +1769,14 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
      * @param
      */
     private void showCourseCenterAnimation(RelativeLayout mCousrCenter){
-        mCousrCenter.startAnimation(mMainAnimationEffect.getCourceCenterBounceAnimation(mCousrCenter));
+        if(mCousrCenter.getAnimation() == null){
+            mCousrCenter.setAnimation(mMainAnimationEffect.getCourceCenterBounceAnimation(mCousrCenter));
+        }
+        UbtLog.d(TAG,"showCourseCenterAnimation = " + mCousrCenter.getAnimation().hasStarted());
+        if(!mCousrCenter.getAnimation().hasStarted()){
+            mCousrCenter.getAnimation().start();
+            //mCousrCenter.startAnimation(mMainAnimationEffect.getCourceCenterBounceAnimation(mCousrCenter));
+        }
     }
 
     private void showAnimationEffect(boolean status ){

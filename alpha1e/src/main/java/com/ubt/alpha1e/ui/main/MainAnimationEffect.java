@@ -1,15 +1,8 @@
 package com.ubt.alpha1e.ui.main;
 
 import android.content.Context;
-import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.ubt.alpha1e.R;
@@ -35,49 +28,33 @@ public class MainAnimationEffect {
      * @return animation effect.
      */
     public Animation getBounceAnimation() {
-        bounceAnimiaton= AnimationUtils.loadAnimation(mContext, R.anim.hyperspace_jump);
-        bounceAnimiaton.setRepeatMode(Animation.REVERSE);
-        bounceAnimiaton.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
+        if(bounceAnimiaton == null){
+            bounceAnimiaton= AnimationUtils.loadAnimation(mContext, R.anim.hyperspace_jump);
+            bounceAnimiaton.setRepeatMode(Animation.RESTART);
 
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
+            /*bounceAnimiaton.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
 
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
+                }
+                @Override
+                public void onAnimationEnd(Animation animation) {
 
-            }
-        });
+                }
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });*/
+        }
         return bounceAnimiaton ;
     }
     public Animation getCourceCenterBounceAnimation(final RelativeLayout mCourseCenter) {
-        bounceCCAnimation= AnimationUtils.loadAnimation(mContext, R.anim.hyperspace_jump);
-        bounceCCAnimation.setRepeatCount(Animation.INFINITE);
-        bounceCCAnimation.setRepeatMode(Animation.REVERSE);
-
-        bounceCCAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                bounceCCAnimation= AnimationUtils.loadAnimation(mContext, R.anim.hyperspace_jump);
-                bounceCCAnimation.setAnimationListener(this);
-                mCourseCenter.startAnimation(bounceCCAnimation);
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
+        if(bounceCCAnimation == null){
+            bounceCCAnimation= AnimationUtils.loadAnimation(mContext, R.anim.hyperspace_jump_infinite);
+            bounceCCAnimation.setRepeatMode(Animation.RESTART);
+        }
         return bounceCCAnimation ;
     }
-
-
-
 
 }
