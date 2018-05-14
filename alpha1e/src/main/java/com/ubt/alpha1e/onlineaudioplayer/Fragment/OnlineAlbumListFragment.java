@@ -313,7 +313,5 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             return mAlbumDatas.size();
         }
     }
-
-
 }
 
