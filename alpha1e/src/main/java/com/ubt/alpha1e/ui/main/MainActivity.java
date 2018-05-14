@@ -547,7 +547,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 //BehaviorHabitsActivity.LaunchActivity(this);
                 //ToastUtils.showShort("即将开放，敬请期待!");
                 buttonClickAnimation(llCommunity);
-                CommunityActivity.launchActivity(this);
+                CommunityActivity.launchActivity(this,0);
                 this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                 break;
             case R.id.cartoon_head:

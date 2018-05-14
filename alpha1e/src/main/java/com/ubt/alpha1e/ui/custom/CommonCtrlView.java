@@ -336,6 +336,7 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 if(AlphaApplication.isCycleActionFragment()){
                     return;
                 }
+                UbtLog.d(TAG,"btn_actionList");
                 MyActionsActivity.launchActivity(mBaseActivity, 4);
             }
         });

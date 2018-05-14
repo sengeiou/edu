@@ -446,14 +446,15 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         } else if (event.getEvent() == PlayerEvent.Event.TAP_HEAD) {
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         } else if (event.getEvent() == PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
-            UbtLog.d(TAG, "show albumId  " + event.getAlbumId() + "    status:   "+event.getStatus());
+            UbtLog.d(TAG, "show albumId  " + event.getAlbumId() + "    status:   "+event.getStatus()+"categoryID"+event.getCateogryId());
             //GET AUDIO SONG
             mPresenter.getAudioList(event.getAlbumId());
             mAlbumHistory = new AlbumContentInfo();
             mAlbumHistory.setAlbumId(event.getAlbumId());
+            mAlbumHistory.setCategoryId(event.getCateogryId());
             //SET CURRENT PLAY INFORMATION
-            mHelper.setmCategoryId(event.getCateogryId());
-            mHelper.setAlbumId(event.getAlbumId());
+//            mHelper.setmCategoryId(event.getCateogryId());
+//            mHelper.setAlbumId(event.getAlbumId());
             index = event.getCurrentPlayingIndex();
             if (event.getStatus().equals("playing")) {
                 isPause = false;

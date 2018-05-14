@@ -20,6 +20,8 @@ import java.util.ArrayList;
 public class MyDownloadName extends BaseModel {
     public String actionOriginalId;
     public String actionName;
+    public String actionTime;
+    public String actionHeadUrl;
     behaviourHabitModel thiz;
     @Override
     public BaseModel getThiz(String json) {
@@ -70,6 +72,8 @@ public class MyDownloadName extends BaseModel {
         return "behaviourHabitModel{" +
                 "actionOriginalId=" + actionOriginalId +
                 ", actionName='" + actionName+
+                ",actionTime='"+actionTime+
+                ",actionHeadUrl'"+actionHeadUrl+
                 '}';
     }
 

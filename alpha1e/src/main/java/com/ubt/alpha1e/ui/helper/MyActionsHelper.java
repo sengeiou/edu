@@ -2040,20 +2040,25 @@ public class MyActionsHelper extends BaseHelper implements
 
                         if(baseResponseModel.models!=null) {
                             List<MyDownloadName> myDownloadNameList = baseResponseModel.models;
+                            UbtLog.d(TAG,"baseResponseModel.models  "+baseResponseModel.models);
                             if(myDownloadNameList != null){
-
                                 for(String numName : numberNameList){
                                     String needAddActionName = "";
+                                    String needAddTime="";
+                                    String needAddLogo="";
                                     UbtLog.d(TAG, "numName = " + numName + " fnumberNameList = " + numberNameList.size() );
                                     for(int i=0;i<myDownloadNameList.size();i++) {
                                         String actionOriginalId = myDownloadNameList.get(i).actionOriginalId;
                                         UbtLog.d(TAG, "actionOriginalId = " + actionOriginalId + " myDownloadNameList.get(i).actionName =  "+ myDownloadNameList.get(i).actionName);
                                         if(actionOriginalId.equals(numName)){
+                                            UbtLog.d(TAG, "actionOriginalId = " + actionOriginalId + " myDownloadNameList.get(i).actionTime=  "+ myDownloadNameList.get(i).actionTime);
+                                            UbtLog.d(TAG, "actionOriginalId = " + actionOriginalId + " myDownloadNameList.get(i).actionHeadUrl=  "+ myDownloadNameList.get(i).actionHeadUrl);
                                             needAddActionName = myDownloadNameList.get(i).actionName;
+                                            needAddTime=myDownloadNameList.get(i).actionTime;
+                                            needAddLogo=myDownloadNameList.get(i).actionHeadUrl;
                                             break;
                                         }
                                     }
-
                                     if(!TextUtils.isEmpty(needAddActionName)){
                                         Map<String, Object> action_item = new HashMap<String, Object>();
 
@@ -2062,9 +2067,10 @@ public class MyActionsHelper extends BaseHelper implements
                                         action_item.put(MyActionsHelper.map_val_action,numName);
                                         action_item.put(MyActionsHelper.map_val_action_name, name);
 
-                                        action_item.put(MyActionsHelper.map_val_action_type_logo_res, R.drawable.actions_item_unkown);
+                                        //action_item.put(MyActionsHelper.map_val_action_type_logo_res, R.drawable.actions_item_unkown);
+                                        action_item.put(MyActionsHelper.map_val_action_type_logo_res, needAddLogo);
                                         action_item.put(MyActionsHelper.map_val_action_type_name, ((BaseActivity)mActivity).getStringResources("ui_square_unknown"));
-                                        action_item.put(MyActionsHelper.map_val_action_time, 0);
+                                        action_item.put(MyActionsHelper.map_val_action_time, needAddTime);
                                         action_item.put(MyActionsHelper.map_val_action_disc, ((BaseActivity)mActivity).getStringResources("ui_action_no_description"));
                                         action_item.put(MyActionsHelper.map_val_action_is_playing, false);
                                         action_item.put(MyActionsHelper.map_val_action_selected, false);

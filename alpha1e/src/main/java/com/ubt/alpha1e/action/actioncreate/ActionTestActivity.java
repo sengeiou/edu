@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 
+import com.baoyz.pg.PG;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.SPUtils;
@@ -264,7 +265,9 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
                     ((ActionsEditHelper) mHelper).doEnterOrExitActionEdit((byte)0x04);
                 }
                 NewActionInfo actionInfo = ((ActionsEditHelper)mHelper).getNewActionInfo();
+
                 Intent intent = new Intent(this, SaveSuccessActivity.class);
+                intent.putExtra("NewActionInfo", PG.convertParcelable(actionInfo));
                 startActivity(intent);
                 finish();
             }

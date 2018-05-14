@@ -43,21 +43,29 @@ public class DynamicActionPresenter extends BasePresenterImpl<DynamicActionContr
     /**
      * 获取原创列表
      *
-     * @param type   上拉0 下拉1
+     * @param pullType   上拉0 下拉1
+     * @param dataType   原创数据0 下载数据1
      * @param page   页数
      * @param offset 数量
      */
     @Override
-    public void getDynamicData(final int type, int page, int offset) {
+    public void getDynamicData(final int pullType,int dataType, int page, int offset) {
         GetMessageListRequest messageListRequest = new GetMessageListRequest();
         messageListRequest.setOffset(page);
         messageListRequest.setLimit(offset);
-        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.ACTION_DYNAMIC_LIST, messageListRequest, 0).execute(new StringCallback() {
+        String actionUrl ;
+        if(dataType == 1){
+            actionUrl = HttpEntity.ACTION_DOWNLOAD_LIST;
+        }else {
+            actionUrl = HttpEntity.ACTION_DYNAMIC_LIST;
+        }
+
+        OkHttpClientUtils.getJsonByPostRequest(actionUrl, messageListRequest, 0).execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, " getNoticeData onError:" + e.getMessage());
                 if (mView != null) {
-                    mView.setDynamicData(false, type, null);
+                    mView.setDynamicData(false, pullType, null);
                 }
             }
 
@@ -71,11 +79,11 @@ public class DynamicActionPresenter extends BasePresenterImpl<DynamicActionContr
                 if (baseResponseModel.status) {
                     if (mView != null) {
                         UbtLog.d(TAG, "getDynamicData.models==" + baseResponseModel.models);
-                        mView.setDynamicData(true, type, baseResponseModel.models);
+                        mView.setDynamicData(true, pullType, baseResponseModel.models);
                     }
                 } else {
                     if (mView != null) {
-                        mView.setDynamicData(false, type, null);
+                        mView.setDynamicData(false, pullType, null);
                     }
                 }
             }
