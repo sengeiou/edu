@@ -113,6 +113,13 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
                 int imageHeight = data.getInt(data.getColumnIndexOrThrow(IMAGE_PROJECTION[4]));
                 String imageMimeType = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[5]));
                 long imageAddTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[6]));
+
+                File imageFile = new File(imagePath);
+                if(!imageFile.exists()){
+                    Log.d(TAG,"imagePath = " + imagePath + "    imageFile.exists() = " + imageFile.exists() + "/");
+                    continue;
+                }
+
                 //封装实体
                 ImageItem imageItem = new ImageItem();
                 imageItem.name = imageName;
@@ -126,11 +133,12 @@ public class ImageDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
 
                 //根据父路径分类存放图片
                 //根据图片的路径获取到图片所在文件夹的路径和名称
-                File imageFile = new File(imagePath);
+
                 File imageParentFile = imageFile.getParentFile();
                 ImageFolder imageFolder = new ImageFolder();
                 imageFolder.name = imageParentFile.getName();
                 imageFolder.path = imageParentFile.getAbsolutePath();
+
                 //判断这个文件夹是否已经存在  如果存在直接添加图片进去  否则将文件夹添加到文件夹的集合中
                 if (!imageFolders.contains(imageFolder)) {
                     ArrayList<ImageItem> images = new ArrayList<>();
