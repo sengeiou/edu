@@ -51,6 +51,7 @@ android {
             buildConfigField 'String', 'WebServiceUbx', '"http://10.10.1.14:8080/alpha1e/"'
             buildConfigField 'String', 'WebServiceBind', '"http://10.10.1.12:8085/equipment/"'
             buildConfigField 'String', 'WebServiceCodeMao', '"https://dev-ubt.codemao.cn/"'
+            buildConfigField 'String', 'WebServiceCommunity', '"https://test79.ubtrobot.com/community/alphaEbot/"'
         }
 
         ubt_robot {
@@ -60,6 +61,7 @@ android {
             buildConfigField 'String', 'WebServiceUbx', '"https://prodapi.ubtrobot.com/alpha1e/"'
             buildConfigField 'String', 'WebServiceBind', '"https://prodapi.ubtrobot.com/equipment/"'
             buildConfigField 'String', 'WebServiceCodeMao', '"https://ubt.codemao.cn/"'
+            buildConfigField 'String', 'WebServiceCommunity', '"https://apis.ubtrobot.com/community/alphaEbot/"'
         }
 
     }
