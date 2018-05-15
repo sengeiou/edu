@@ -1,9 +1,14 @@
 package com.ubt.alpha1e.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +36,10 @@ public class OnlineresRearchResultListAdpter extends RecyclerView.Adapter<Recycl
     private View mView;
     Handler mHandler;
 
+    private String mKey = "";
+    public void setKeyword(String key){
+        mKey = key ;
+    }
 
     /**
      * 类构造函数
@@ -57,7 +66,21 @@ public class OnlineresRearchResultListAdpter extends RecyclerView.Adapter<Recycl
         final OnlineResRearchList onlineres = mDatas.get(position);
 
 
-        myHolder.online_res_name.setText(onlineres.getRes_name());
+//        myHolder.online_res_name.setText(onlineres.getRes_name());
+
+
+        int len = mKey.length() ;
+        if(len == 0){
+            return;
+        }
+
+        SpannableString ss = new SpannableString(onlineres.getRes_name());
+        if(onlineres.getRes_name().contains(mKey)){
+            int index  = onlineres.getRes_name().indexOf(mKey);
+            ss.setSpan(new ForegroundColorSpan(Color.RED), index, index+len, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        myHolder.online_res_name.setText(ss);
+//        TextView.setText(ss);
 
 //        myHolder.online_res_name.setOnClickListener(new View.OnClickListener() {
 //            @Override
