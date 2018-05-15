@@ -24,6 +24,7 @@ import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.share.WbShareCallback;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
+import com.ubt.alpha1e.BuildConfig;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.PermissionUtils;
@@ -82,9 +83,9 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
     //String postReplyUrl = "http://10.10.32.22:8080/community/postReply.html?source=1&class=active";
     //String postDetailUrl = "http://10.10.32.22:8080/community/postDetails.html?source=2";
 
-    String mainUrl = "https://test79.ubtrobot.com/community/alphaEbot/index.html?source=0";
-    String postReplyUrl = "https://test79.ubtrobot.com/community/alphaEbot/postReply.html?source=1&class=active";
-    String postDetailUrl = "https://test79.ubtrobot.com/community/alphaEbot/postDetails.html?source=2";
+    String mainUrl = BuildConfig.WebServiceCommunity + "index.html?source=0";
+    String postReplyUrl = BuildConfig.WebServiceCommunity + "postReply.html?source=1&class=active";
+    String postDetailUrl = BuildConfig.WebServiceCommunity + "postDetails.html?source=2";
     //String communityUrl = "https://test79.ubtrobot.com/community/alphaEbot/index.html?source=0";
 
     private int mCommunitySource = 0;//0 首页 1 发贴 2 贴子详情
@@ -213,7 +214,7 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
 
     @Override
     protected void initUI() {
-        UbtLog.d(TAG,"initUI-->");
+        UbtLog.d(TAG,"initUI-->>");
 
         WebSettings webSettings = webContent.getSettings();
         webSettings.setJavaScriptEnabled(true);
