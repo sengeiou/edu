@@ -116,7 +116,7 @@ public class MyTencent {
 		}
 
 		params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, url);
-		params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "");
+		params.putString(QQShare.SHARE_TO_QQ_IMAGE_URL, "http://p3o5ggwuq.bkt.clouddn.com/ic_launcher.png");
 		params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "Alpha Ebot");
 		mTencent.shareToQQ(act, params, listener);
 
