@@ -29,6 +29,7 @@ import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.business.thrid_party.IWeiXinListener;
@@ -86,7 +87,6 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
     String postDetailUrl = "https://test79.ubtrobot.com/community/alphaEbot/postDetails.html?source=2";
     //String communityUrl = "https://test79.ubtrobot.com/community/alphaEbot/index.html?source=0";
 
-
     private int mCommunitySource = 0;//0 首页 1 发贴 2 贴子详情
     private int mCommunityPostId = -1; //贴子ID
     private DynamicActionModel mReplyActionModel = null;
@@ -101,6 +101,8 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
     private boolean isClickPlayAction = false;
 
     private boolean needReSendAction = false;//动作详情读动作，会有延迟，读完再重新发一次
+
+    private boolean isFirst = true;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -254,6 +256,11 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
             @Override
             public void onPageFinished(WebView view, String url) {
                 UbtLog.d(TAG,"onPageFinished url = " + url);
+                if(!TextUtils.isEmpty(url) && url.contains(communityUrl) && isFirst){
+                    isFirst = false;
+                    LoadingDialog.dismiss(CommunityActivity.this);
+                }
+
                 super.onPageFinished(view, url);
             }
         };
@@ -273,6 +280,10 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
                 + "&userid=" + SPUtils.getInstance().getString(com.ubt.alpha1e.base.Constant.SP_USER_ID)
                 + "&token=" + SPUtils.getInstance().getString(com.ubt.alpha1e.base.Constant.SP_LOGIN_TOKEN);
         UbtLog.d(TAG, "communityUrl = " + communityUrl);
+
+
+        isFirst = true;
+        LoadingDialog.show(this);
 
         webContent.setWebViewClient(webViewClient);
         webContent.loadUrl(communityUrl);
@@ -350,10 +361,15 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
         UbtLog.d(TAG,"mCommunitySource = " + mCommunitySource + " mCommunityPostId = " + mCommunityPostId + " mReplyActionModel = " + mReplyActionModel);
         DownLoadActionManager.getInstance(this).addDownLoadActionListener(this);
 
-        WbSdk.install(this,new AuthInfo(this, MyWeiBoNew.APP_KEY, MyWeiBoNew.REDIRECT_URL, MyWeiBoNew.SCOPE));
-
         MyWeiBoNew.initMyWeiBoShare(this);
         initUI();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        //设置weibo回调
+        MyWeiBoNew.doResultIntent(intent, this);
     }
 
     @Override
@@ -625,24 +641,25 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
     @Override
     public void noteWeixinNotInstalled() {
         UbtLog.d(TAG,"-noteWeixinNotInstalled-" );
+        ToastUtils.showShort("请先安装微信客户端");
     }
 
     @Override
     public void onWbShareSuccess() {
         UbtLog.d(TAG,"onWbShareSuccess");
-        ToastUtils.showShort(getStringResources("ui_share_success"));
+        //ToastUtils.showShort(getStringResources("ui_share_success"));
     }
 
     @Override
     public void onWbShareCancel() {
         UbtLog.d(TAG,"onWbShareCancel");
-        ToastUtils.showShort(getStringResources("ui_share_canceled"));
+        //ToastUtils.showShort(getStringResources("ui_share_canceled"));
     }
 
     @Override
     public void onWbShareFail() {
         UbtLog.d(TAG,"onWbShareFail");
-        ToastUtils.showShort(getStringResources("ui_share_failed"));
+        //ToastUtils.showShort(getStringResources("ui_share_failed"));
     }
 
     @Override

@@ -3,6 +3,8 @@ package com.pbq.imagepicker.ui.image;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +40,8 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
 
     private static final String TAG = ImagePreviewActivity.class.getSimpleName();
 
+    public static final int SELECT_CLICK = 100;
+
 
     public static final String ISORIGIN = "isOrigin";
 
@@ -49,10 +53,33 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
     private View bottomBar;
 
     private RecyclerView rvSelectPhoto = null;
-    private PhotoSelectAdapter mAdapter;
+    private PhotoSelectAdapter mSelectAdapter;
     private List<ImageItem> mSelectImageList; //当前选择的所有图片
 
     private ImagePreviewActivity mActivity = null;
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case SELECT_CLICK:
+                    ImageItem imageItem = (ImageItem) msg.obj;
+
+                    ImageItem tmpItem = null;
+                    for(int i = 0;i<mImageItems.size();i++){
+                        tmpItem = mImageItems.get(i);
+                        if(imageItem.path.equals(tmpItem.path)){
+                            mCurrentPosition = i;
+                            break;
+                        }
+                    }
+
+                    mViewPager.setCurrentItem(mCurrentPosition, false);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +189,7 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
 
         mSelectImageList.clear();
         mSelectImageList.addAll(imagePicker.getSelectedImages());
-        mAdapter.notifyDataSetChanged();
+        mSelectAdapter.notifyDataSetChanged();
 
         if (mCbOrigin.isChecked()) {
             long size = 0;
@@ -230,12 +257,12 @@ public class ImagePreviewActivity extends ImagePreviewBaseActivity implements Im
             }
         });
 
-        mAdapter = new PhotoSelectAdapter(this, mSelectImageList, null);
-        rvSelectPhoto.setAdapter(mAdapter);
+        mSelectAdapter = new PhotoSelectAdapter(this, mSelectImageList, mHandler);
+        rvSelectPhoto.setAdapter(mSelectAdapter);
         Log.d(TAG,"imagePicker.getSelectImageCount() = " +imagePicker.getSelectImageCount());
         if(imagePicker.getSelectImageCount() > 0){
             mSelectImageList.addAll(imagePicker.getSelectedImages());
-            mAdapter.notifyDataSetChanged();
+            mSelectAdapter.notifyDataSetChanged();
         }
     }
 
