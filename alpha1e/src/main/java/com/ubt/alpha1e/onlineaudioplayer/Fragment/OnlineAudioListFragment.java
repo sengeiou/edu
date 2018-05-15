@@ -144,7 +144,6 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
 
     }
 
-
     /**
      * 移动到某个下标
      * @param playIndex
@@ -250,7 +249,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     break;
                 case R.id.tv_play_name:
                     //DESTROY PREVIOUS AND TO NEXT
-                    if(!mPlayingalbumID.equals(currentAlbumId)) {
+                    if(mPlayingalbumID != null || !mPlayingalbumID.equals(currentAlbumId)) {
                         UbtLog.d(TAG,"JUMP TO ALBUM DIFF ");
                         EventBus.getDefault().unregister(this);
                         pop();

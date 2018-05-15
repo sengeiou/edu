@@ -76,9 +76,10 @@ public class UserCenterImpPresenter extends BasePresenterImpl<UserCenterContact.
                 } else if (i == 2) {
                     fragmentList.add(NoticeFragment.newInstance("2", ""));
                 } else if (i == 3) {
-                    fragmentList.add(DynamicActionFragment.newInstance("", ""));
+                    fragmentList.add(DynamicActionFragment.newInstance(0, ""));
                 } else if (i == 4) {
-                    fragmentList.add(NoticeFragment1.newInstance("5", ""));
+                    //fragmentList.add(NoticeFragment1.newInstance("5", ""));
+                    fragmentList.add(DynamicActionFragment.newInstance(1, ""));
                 } else if (i == 5) {
                     Fragment fragment = DingDangFragment.newInstance("", "");
                     fragmentList.add(fragment);

@@ -67,6 +67,11 @@ public class DynamicActionModel implements Serializable {
 
     private String actionImagePath;
 
+    /**
+     * 帖子ID
+     */
+    private int postId;
+
     public int getActionId() {
         return actionId;
     }
@@ -187,6 +192,14 @@ public class DynamicActionModel implements Serializable {
         this.actionImagePath = actionImagePath;
     }
 
+    public int getPostId() {
+        return postId;
+    }
+
+    public void setPostId(int postId) {
+        this.postId = postId;
+    }
+
     @Override
     public String toString() {
         return "DynamicActionModel{" +
@@ -205,6 +218,7 @@ public class DynamicActionModel implements Serializable {
                 ", actionUserId=" + actionUserId +
                 ", actionStatus='" + actionStatus + '\'' +
                 ", actionImagePath='" + actionImagePath + '\'' +
+                ", postId='" + postId + '\'' +
                 '}';
     }
 }

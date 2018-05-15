@@ -136,10 +136,28 @@ public class HttpEntity {
      * 获取原创列表
      */
     public static final String ACTION_DYNAMIC_LIST = BASIC_UBX_SYS + "original/listByPage";
+
+    /**
+     * 获取下载列表
+     */
+    public static final String ACTION_DOWNLOAD_LIST = BASIC_UBX_SYS + "download/listByPage";
+
+    /**
+     * 新增下载动作
+     */
+    public static final String ACTION_DOWNLOAD_ADD = BASIC_UBX_SYS + "download/addByActionId";
+
+
     /**
      * 删除动作ByID
      */
     public static final String ACTION_DYNAMIC_DELETE = BASIC_UBX_SYS + "original/deleteByActionId";
+
+    /**
+     * 删除下载动作ByID
+     */
+    public static final String ACTION_DOWNLOWD_DELETE = BASIC_UBX_SYS + "download/deleteByActionId";
+
     /**
      * 保存动作
      */

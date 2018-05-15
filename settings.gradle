@@ -2,6 +2,6 @@ include ':alpha1sGifLib', ':ChangeSkin', ':library', ':BaseLib', ':testgradles',
 include ':alpha1sLib'
 //include ':alphaQRLib'
 //include ':choseCountryNum'
-include ':weiboSDK'
+//include ':weiboSDK'
 include ':alpha1e'
 include ':highlight'

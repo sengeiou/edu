@@ -8,7 +8,10 @@ import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UpProgressHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qiniu.android.storage.UploadOptions;
+import com.ubt.alpha1e.base.RequstMode.AddActionDownloadRecordRequest;
+import com.ubt.alpha1e.base.RequstMode.BaseActionRequest;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.BasePresenterImpl;
 import com.ubt.alpha1e.userinfo.dynamicaction.DownLoadActionManager;
 import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
@@ -31,7 +34,8 @@ public class CommunityPresenter extends BasePresenterImpl<CommunityContract.View
 
     private static final String TAG = CommunityPresenter.class.getSimpleName();
 
-    public static final int GET_QINIU_TOKEN = 1;
+    private static final int GET_QINIU_TOKEN = 1;
+    private static final int ADD_DOWNLOAD_ACTION = 2;
 
     private String mQiniuTokenUrl = "https://test79.ubtrobot.com/community/app/sys/getQiniuToken";
 
@@ -60,50 +64,51 @@ public class CommunityPresenter extends BasePresenterImpl<CommunityContract.View
      * 请求网络操作
      */
     private void doRequestFromWeb(String url, BaseRequest baseRequest, int requestId) {
-        synchronized (this) {
-            OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
-                @Override
-                public void onError(Call call, Exception e, int id) {
-                    UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage() + "  mView = " + mView);
-                    if(mView == null){
-                        return;
-                    }
-                    switch (id) {
-                        case GET_QINIU_TOKEN:
-                            // mView.showBehaviourList(false,null,"network error");
-                            mView.onQiniuTokenFromServer(false,"");
-                            break;
-                        default:
-                            break;
-                    }
+        OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d(TAG, "doRequestFromWeb onError:" + e.getMessage() + "  mView = " + mView + "  id = " + id);
+                if(mView == null){
+                    return;
+                }
+                switch (id) {
+                    case GET_QINIU_TOKEN:
+                        // mView.showBehaviourList(false,null,"network error");
+                        mView.onQiniuTokenFromServer(false,"");
+                        break;
+                    case ADD_DOWNLOAD_ACTION:
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d(TAG, "response = " + response + "  id = " + id);
+                if(mView == null){
+                    return;
                 }
 
-                @Override
-                public void onResponse(String response, int id) {
-                    UbtLog.d(TAG, "response = " + response);
-                    if(mView == null){
-                        return;
-                    }
+                switch (id) {
+                    case GET_QINIU_TOKEN:
 
-                    switch (id) {
-                        case GET_QINIU_TOKEN:
-
-                            UbtLog.d(TAG, "mbaseResponseModel = " + response);
-                            if(!TextUtils.isEmpty(response)){
-                                mQiniuToken = response;
-                                uploadVideoToQiNiuServer();
-                                mView.onQiniuTokenFromServer(true, response);
-                            }else {
-                                mView.onQiniuTokenFromServer(false, "");
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
+                        UbtLog.d(TAG, "mbaseResponseModel = " + response);
+                        if(!TextUtils.isEmpty(response)){
+                            mQiniuToken = response;
+                            uploadVideoToQiNiuServer();
+                            mView.onQiniuTokenFromServer(true, response);
+                        }else {
+                            mView.onQiniuTokenFromServer(false, "");
+                        }
+                        break;
+                    case ADD_DOWNLOAD_ACTION:
+                        break;
+                    default:
+                        break;
                 }
-            });
-        }
+            }
+        });
     }
 
 
@@ -160,6 +165,8 @@ public class CommunityPresenter extends BasePresenterImpl<CommunityContract.View
                 DownLoadActionManager.getInstance(context).readNetworkStatus();
                 DownLoadActionManager.getInstance(context).downRobotAction(dynamicActionModel);
                 mView.onActionStatus(dynamicActionModel.getActionId(), 2, 0, "0");
+
+                addDownloadActionRecord(dynamicActionModel.getActionId(), dynamicActionModel.getPostId());
             }
         } else if (actionStatus == 1) {//正在播放
             DownLoadActionManager.getInstance(context).stopAction(false);
@@ -219,5 +226,18 @@ public class CommunityPresenter extends BasePresenterImpl<CommunityContract.View
                 mView.onActionStatus(dynamicActionModel.getActionId(), 0, 0,"0");
             }
         }
+    }
+
+    /**
+     * 添加下载记录
+     * @param actionId 动作id
+     * @param actionId 帖子id
+     */
+    private void addDownloadActionRecord(int actionId,int postId){
+        AddActionDownloadRecordRequest addRecordRequest = new AddActionDownloadRecordRequest();
+        addRecordRequest.setActionId(actionId);
+        addRecordRequest.setPostId(postId);
+
+        doRequestFromWeb(HttpEntity.ACTION_DOWNLOAD_ADD, addRecordRequest, ADD_DOWNLOAD_ACTION);
     }
 }

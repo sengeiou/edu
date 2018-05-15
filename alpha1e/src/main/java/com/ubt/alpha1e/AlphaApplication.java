@@ -16,6 +16,8 @@ import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreater;
 import com.scwang.smartrefresh.layout.api.RefreshFooter;
 import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.sina.weibo.sdk.WbSdk;
+import com.sina.weibo.sdk.auth.AuthInfo;
 import com.tencent.ai.tvs.LoginApplication;
 import com.ubt.alpha1e.AlphaApplicationValues.Thrid_login_type;
 import com.ubt.alpha1e.base.AppManager;
@@ -29,6 +31,7 @@ import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.Bluetoothandn
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.business.ActionPlayer;
 import com.ubt.alpha1e.business.ActionsDownLoadManager;
+import com.ubt.alpha1e.business.thrid_party.MyWeiBoNew;
 import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.ISharedPreferensListenet;
 import com.ubt.alpha1e.data.model.NetworkInfo;
@@ -161,6 +164,7 @@ public class AlphaApplication extends LoginApplication {
         initConnectClient();
         startGlobalMsgService(); //处理全局消息，包括信鸽，必须在信鸽前初始化
         initXG();
+        initWb();
         initLanguage();
         initIsPad(this);
         LitePal.initialize(this);
@@ -212,6 +216,11 @@ public class AlphaApplication extends LoginApplication {
 
     public static Context getmContext() {
         return mContext;
+    }
+
+
+    private void initWb(){
+        WbSdk.install(this,new AuthInfo(this, MyWeiBoNew.APP_KEY, MyWeiBoNew.REDIRECT_URL, MyWeiBoNew.SCOPE));
     }
 
     /**

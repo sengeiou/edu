@@ -20,7 +20,7 @@ public class DynamicActionContract {
     interface  Presenter extends BasePresenter<View> {
         void getDynamicData(int type);
 
-        void getDynamicData(int type,int page,int offset);
+        void getDynamicData(int pullType, int dataType, int page, int offset);
 
         void deleteActionById(int actionId);
     }

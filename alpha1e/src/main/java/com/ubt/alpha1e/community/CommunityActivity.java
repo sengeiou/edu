@@ -24,11 +24,13 @@ import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.share.WbShareCallback;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
+import com.ubt.alpha1e.BuildConfig;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.base.loading.LoadingDialog;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothconnect.BluetoothconnectActivity;
 import com.ubt.alpha1e.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.business.thrid_party.IWeiXinListener;
@@ -72,11 +74,23 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
     private static final int ROBOT_NOT_NETWORK = 5;
 
 
+
     @BindView(R.id.web_content)
     WebView webContent;
 
-    //String communityUrl = "http://10.10.32.19:8080/community/index.html?";
-    String communityUrl = "https://test79.ubtrobot.com/community/alphaEbot/index.html?";
+    String communityUrl = null;
+    //String mainUrl = "http://10.10.32.22:8080/community/index.html?source=0";
+    //String postReplyUrl = "http://10.10.32.22:8080/community/postReply.html?source=1&class=active";
+    //String postDetailUrl = "http://10.10.32.22:8080/community/postDetails.html?source=2";
+
+    String mainUrl = BuildConfig.WebServiceCommunity + "index.html?source=0";
+    String postReplyUrl = BuildConfig.WebServiceCommunity + "postReply.html?source=1&class=active";
+    String postDetailUrl = BuildConfig.WebServiceCommunity + "postDetails.html?source=2";
+    //String communityUrl = "https://test79.ubtrobot.com/community/alphaEbot/index.html?source=0";
+
+    private int mCommunitySource = 0;//0 首页 1 发贴 2 贴子详情
+    private int mCommunityPostId = -1; //贴子ID
+    private DynamicActionModel mReplyActionModel = null;
 
     private List<String> mRobotDownActionList = new ArrayList<>();//机器人下载列表
 
@@ -86,6 +100,10 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
     private boolean hasReadRobotDownAction = false;
     private DynamicActionModel mPlayActionModel = null;
     private boolean isClickPlayAction = false;
+
+    private boolean needReSendAction = false;//动作详情读动作，会有延迟，读完再重新发一次
+
+    private boolean isFirst = true;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -179,15 +197,24 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
         }
     };
 
-    public static void launchActivity(Activity activity) {
+    public static void launchActivity(Activity activity,int type) {
         Intent intent = new Intent();
         intent.setClass(activity, CommunityActivity.class);
+        intent.putExtra(Constant.COMMUNITY_SOURCE, type);
+        activity.startActivity(intent);
+    }
+
+    public static void launchToReplyAction(Activity activity,DynamicActionModel dynamicActionModel){
+        Intent intent = new Intent();
+        intent.setClass(activity, CommunityActivity.class);
+        intent.putExtra(Constant.COMMUNITY_SOURCE, 1);
+        intent.putExtra(Constant.DYNAMIC_ACTION_MODEL, dynamicActionModel);
         activity.startActivity(intent);
     }
 
     @Override
     protected void initUI() {
-        UbtLog.d(TAG,"initUI-->");
+        UbtLog.d(TAG,"initUI-->>");
 
         WebSettings webSettings = webContent.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -230,6 +257,11 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
             @Override
             public void onPageFinished(WebView view, String url) {
                 UbtLog.d(TAG,"onPageFinished url = " + url);
+                if(!TextUtils.isEmpty(url) && url.contains(communityUrl) && isFirst){
+                    isFirst = false;
+                    LoadingDialog.dismiss(CommunityActivity.this);
+                }
+
                 super.onPageFinished(view, url);
             }
         };
@@ -237,10 +269,23 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
         mCommunityJsInterface = new CommunityJsInterface(CommunityActivity.this);
         webContent.addJavascriptInterface(mCommunityJsInterface, "communityObject");
 
+        if(mCommunitySource == 1){//1 发帖
+            communityUrl = postReplyUrl;
+        }else if(mCommunitySource == 2){// 2 详情
+            communityUrl = postDetailUrl + "&postId=" + mCommunityPostId;
+        }else {//0 首页
+            communityUrl = mainUrl;
+        }
+
         communityUrl = communityUrl
-                + "userid=" + SPUtils.getInstance().getString(com.ubt.alpha1e.base.Constant.SP_USER_ID)
+                + "&userid=" + SPUtils.getInstance().getString(com.ubt.alpha1e.base.Constant.SP_USER_ID)
                 + "&token=" + SPUtils.getInstance().getString(com.ubt.alpha1e.base.Constant.SP_LOGIN_TOKEN);
         UbtLog.d(TAG, "communityUrl = " + communityUrl);
+
+
+        isFirst = true;
+        LoadingDialog.show(this);
+
         webContent.setWebViewClient(webViewClient);
         webContent.loadUrl(communityUrl);
 
@@ -307,13 +352,25 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+        UbtLog.d(TAG,"getIntent() => " + getIntent());
+        if(getIntent() != null){
+            mCommunitySource = getIntent().getExtras().getInt(Constant.COMMUNITY_SOURCE, 0);
+            mCommunityPostId = getIntent().getExtras().getInt(Constant.COMMUNITY_POST_ID, -1);
+            mReplyActionModel = (DynamicActionModel) getIntent().getExtras().getSerializable(Constant.DYNAMIC_ACTION_MODEL);
+        }
 
+        UbtLog.d(TAG,"mCommunitySource = " + mCommunitySource + " mCommunityPostId = " + mCommunityPostId + " mReplyActionModel = " + mReplyActionModel);
         DownLoadActionManager.getInstance(this).addDownLoadActionListener(this);
-
-        WbSdk.install(this,new AuthInfo(this, MyWeiBoNew.APP_KEY, MyWeiBoNew.REDIRECT_URL, MyWeiBoNew.SCOPE));
 
         MyWeiBoNew.initMyWeiBoShare(this);
         initUI();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        //设置weibo回调
+        MyWeiBoNew.doResultIntent(intent, this);
     }
 
     @Override
@@ -361,10 +418,12 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
 
     public void getActionStatus(DynamicActionModel actionModel){
         if (isBulueToothConnected()) {
+            mPlayActionModel = actionModel;
             UbtLog.d(TAG,"mRobotDownActionList = " + mRobotDownActionList.size() + "     actionModel = " + actionModel.getActionOriginalId());
             for(String name : mRobotDownActionList){
                 UbtLog.d(TAG, "name = " + name);
             }
+
             mPresenter.getActionStatus(getContext(), actionModel, mRobotDownActionList);
         }else {
             sendActionStatus(actionModel.getActionId(), 0, 0, "0");
@@ -402,6 +461,14 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
         mHandler.post(new Runnable() {
             @Override
             public void run() {
+                if(mCommunitySource == 2){
+                    if(isDownload == 0){
+                        needReSendAction = true;
+                    }else {
+                        needReSendAction = false;
+                    }
+                }
+
                 String params = "{\"actionId\":"+ actionId +",\"isDownload\":" + isDownload + ",\"actionStatus\":" + actionStatus + ",\"downloadPercent\":\"" + downloadPercent + "\"}";
                 UbtLog.d(TAG,"sendActionStatus = " + params);
                 if(webContent != null){
@@ -419,6 +486,30 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
         if(!TextUtils.isEmpty(mVideoFilePath)){
             mPresenter.loadFileToQiNiu(mVideoFilePath);
         }
+    }
+
+    public void getReplyAction(){
+        UbtLog.d(TAG, "getReplyAction mReplyActionModel = " + mReplyActionModel);
+        if(mReplyActionModel != null){
+            sendActionToH5(mReplyActionModel);
+        }
+    }
+
+    private void sendActionToH5(DynamicActionModel actionModel){
+        String params = "{\"actionDesciber\":\""+ actionModel .getActionDesciber()
+                + "\",\"actionHeadUrl\":\"" + actionModel.getActionHeadUrl()
+                + "\",\"actionId\":\"" + actionModel.getActionId()
+                + "\",\"actionUrl\":\"" + actionModel.getActionUrl()
+                + "\",\"actionName\":\"" + actionModel.getActionName()
+                + "\",\"actionOriginalId\":\"" + actionModel.getActionOriginalId()
+                + "\",\"actionType\":\"" + actionModel.getActionType()
+                +"\"}";
+
+        UbtLog.d(TAG,"selectAction = " + params);
+        Message msg = new Message();
+        msg.what = SEND_ACTION_TO_H5;
+        msg.obj = params;
+        mHandler.sendMessage(msg);
     }
 
     public void showActionSelect(){
@@ -524,20 +615,7 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
         }else if(requestCode == Constant.ACTION_SELECT_REQUEST_CODE && resultCode == Constant.ACTION_SELECT_RESPONSE_CODE){
             if(resultCode == Constant.ACTION_SELECT_RESPONSE_CODE && data != null){
                 DynamicActionModel actionModel = (DynamicActionModel)data.getSerializableExtra(Constant.DYNAMIC_ACTION_MODEL);
-                String params = "{\"actionDesciber\":\""+ actionModel .getActionDesciber()
-                        + "\",\"actionHeadUrl\":\"" + actionModel.getActionHeadUrl()
-                        + "\",\"actionId\":\"" + actionModel.getActionId()
-                        + "\",\"actionUrl\":\"" + actionModel.getActionUrl()
-                        + "\",\"actionName\":\"" + actionModel.getActionName()
-                        + "\",\"actionOriginalId\":\"" + actionModel.getActionOriginalId()
-                        + "\",\"actionType\":\"" + actionModel.getActionType()
-                        +"\"}";
-
-                UbtLog.d(TAG,"selectAction = " + params);
-                Message msg = new Message();
-                msg.what = SEND_ACTION_TO_H5;
-                msg.obj = params;
-                mHandler.sendMessage(msg);
+                sendActionToH5(actionModel);
             }
             if(isBulueToothConnected()){
                 UbtLog.d(TAG,"getRobotAction");
@@ -564,24 +642,25 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
     @Override
     public void noteWeixinNotInstalled() {
         UbtLog.d(TAG,"-noteWeixinNotInstalled-" );
+        ToastUtils.showShort("请先安装微信客户端");
     }
 
     @Override
     public void onWbShareSuccess() {
         UbtLog.d(TAG,"onWbShareSuccess");
-        ToastUtils.showShort(getStringResources("ui_share_success"));
+        //ToastUtils.showShort(getStringResources("ui_share_success"));
     }
 
     @Override
     public void onWbShareCancel() {
         UbtLog.d(TAG,"onWbShareCancel");
-        ToastUtils.showShort(getStringResources("ui_share_canceled"));
+        //ToastUtils.showShort(getStringResources("ui_share_canceled"));
     }
 
     @Override
     public void onWbShareFail() {
         UbtLog.d(TAG,"onWbShareFail");
-        ToastUtils.showShort(getStringResources("ui_share_failed"));
+        //ToastUtils.showShort(getStringResources("ui_share_failed"));
     }
 
     @Override
@@ -630,6 +709,16 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
 
             mRobotDownActionList.clear();
             mRobotDownActionList.addAll(list);
+
+            UbtLog.d(TAG,"mCommunitySource = " + mCommunitySource + "   needReSendAction = " + needReSendAction + " mPlayActionModel = " + mPlayActionModel);
+            if(mCommunitySource == 2 && needReSendAction && mPlayActionModel != null){
+                for(String actionName : mRobotDownActionList){
+                    if(actionName.equals(mPlayActionModel.getActionOriginalId())){
+                        sendActionStatus(mPlayActionModel.getActionId(),1, 0,"0");
+                        break;
+                    }
+                }
+            }
         }
     }
 

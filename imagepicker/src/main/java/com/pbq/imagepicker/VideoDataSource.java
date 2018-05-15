@@ -118,6 +118,13 @@ public class VideoDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
                 long videoAddTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[6]));
                 //Log.d(TAG,"videoMimeType = " + videoMimeType + "    videoPath = " + videoPath);
                 long videoTimeLong = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[7]));
+
+                File videoFile = new File(videoPath);
+                if(!videoFile.exists()){
+                    Log.d(TAG,"videoPath = " + videoPath + "    videoFile.exists() = " + videoFile.exists());
+                    continue;
+                }
+
                 //封装实体
                 VideoItem videoItem = new VideoItem();
                 videoItem.name = videoName;
@@ -132,7 +139,7 @@ public class VideoDataSource implements LoaderManager.LoaderCallbacks<Cursor> {
 
                 //根据父路径分类存放视频
                 //根据视频的路径获取到视频所在文件夹的路径和名称
-                File videoFile = new File(videoPath);
+
                 File videoParentFile = videoFile.getParentFile();
                 VideoFolder videoFolder = new VideoFolder();
                 videoFolder.name = videoParentFile.getName();

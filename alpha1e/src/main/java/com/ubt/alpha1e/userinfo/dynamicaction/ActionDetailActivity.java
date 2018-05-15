@@ -19,6 +19,8 @@ import com.ubt.alpha1e.base.GlideRoundTransform;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.base.loading.LoadingDialog;
+import com.ubt.alpha1e.community.CommunityActivity;
+import com.ubt.alpha1e.data.Constant;
 import com.ubt.alpha1e.data.TimeTools;
 import com.ubt.alpha1e.data.model.DownloadProgressInfo;
 import com.ubt.alpha1e.event.RobotEvent;
@@ -149,7 +151,7 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
 
     }
 
-    @OnClick({R.id.iv_back, R.id.rl_play_action, R.id.iv_delete})
+    @OnClick({R.id.iv_back, R.id.rl_play_action, R.id.iv_delete,R.id.btn_publish})
     public void onClickView(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -160,9 +162,12 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
                 break;
             case R.id.iv_delete:
                 showDeleteDialog();
-
+                break;
+            case R.id.btn_publish:
+                goActionReply();
                 break;
             default:
+                break;
         }
     }
 
@@ -350,6 +355,10 @@ public class ActionDetailActivity extends MVPBaseActivity<DynamicActionContract.
 
             }
         }
+    }
+
+    private void goActionReply(){
+        CommunityActivity.launchToReplyAction(this, mDynamicActionModel);
     }
 
     //显示蓝牙连接对话框
