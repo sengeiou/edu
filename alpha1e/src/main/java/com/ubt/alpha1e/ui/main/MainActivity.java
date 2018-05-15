@@ -278,7 +278,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private int ROBOT_RIGHT_SHOULDER_SLEEP = 4;
     private int ROBOT_HEAD_UP_SLEEP = 5;
     private int ROBOT_HEAD_DOWN_SLEEP = 6;
-    private int CARTOON_FRAME_INTERVAL = 4;
+    private int CARTOON_FRAME_INTERVAL = 60;
     boolean ANIMAITONSOLUTIONOOM = true;
     boolean animation_running = true;
     private int ROBOT_CHARGING_STATUS = 0x01;
@@ -300,7 +300,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             super.handleMessage(msg);
             switch (msg.what) {
                 case CARTOON_ACTION_EXECTUION:
-                    showCartoonAction_performance(cartoon_action_greeting);
+//                    showCartoonAction_performance(cartoon_action_greeting);
                     break;
             }
         }
@@ -333,26 +333,15 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             MainActivityGuideView.getInstant(this);
         }
         mMainAnimationEffect=new MainAnimationEffect(mContext);
+        //GLOBAL ANIMATION EFFECT
+        showAnimationEffect(true);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         UbtLog.d(TAG, "onStart");
-
         initUI();
-        try {
-            gifDrawable = new GifDrawable(getResources(), R.drawable.gif_main);
-            gifDrawable.addAnimationListener(new AnimationListener() {
-                @Override
-                public void onAnimationCompleted() {
-
-                }
-            });
-            mMainGif.setImageDrawable(gifDrawable);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -394,8 +383,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             }
             getCurrentPower();
         }
-        //GLOBAL ANIMATION EFFECT
-         showAnimationEffect(true);
+
     }
 
     private void getCurrentPower() {
@@ -837,30 +825,36 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
 
     private void showCartoonAction_performance(final int value) {
-            frameAnimationPro = new FrameAnimation(cartoonAction, mPresenter.requestCartoonAction(value), CARTOON_FRAME_INTERVAL, false);
+        if(cartoonAction!=null) {
+            frameAnimationPro = new FrameAnimation(cartoonAction, mPresenter.requestCartoonAction(value), CARTOON_FRAME_INTERVAL, 5 * 1000);
             frameAnimationPro.setAnimationListener(new FrameAnimation.AnimationListener() {
                 @Override
                 public void onAnimationStart() {
-
+                    UbtLog.d(TAG, "Start");
                 }
 
                 @Override
                 public void onAnimationEnd() {
-                    frameAnimationPro.pauseAnimation();
-                    if (mHandler.hasMessages(CARTOON_ACTION_EXECTUION)) {
-                        mHandler.removeMessages(CARTOON_ACTION_EXECTUION);
-                    }
-                    Message msg = new Message();
-                    msg.what = CARTOON_ACTION_EXECTUION;
-                    mHandler.sendMessageDelayed(msg, 5000);
+                    UbtLog.d(TAG, "End");
+//                    frameAnimationPro.pauseAnimation();
+//                    if (mHandler.hasMessages(CARTOON_ACTION_EXECTUION)) {
+//                        mHandler.removeMessages(CARTOON_ACTION_EXECTUION);
+//                    }
+//                    Message msg = new Message();
+//                    msg.what = CARTOON_ACTION_EXECTUION;
+//                    mHandler.sendMessageDelayed(msg, 5000);
                 }
+
                 @Override
                 public void onAnimationRepeat() {
-                    UbtLog.d(TAG, "repeat");
-                    frameAnimationPro.pauseAnimation();
+                    UbtLog.d(TAG, "Repeat");
+                    // frameAnimationPro.pauseAnimation();
                 }
             });
-        CURRENT_ACTION_NAME = value;
+        }
+            CURRENT_ACTION_NAME = value;
+
+
     }
 
     @Override
@@ -1776,15 +1770,26 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         UbtLog.d(TAG,"showCourseCenterAnimation = " + mCousrCenter.getAnimation().hasStarted());
         if(!mCousrCenter.getAnimation().hasStarted()){
             mCousrCenter.getAnimation().start();
-            //mCousrCenter.startAnimation(mMainAnimationEffect.getCourceCenterBounceAnimation(mCousrCenter));
         }
     }
 
-    private void showAnimationEffect(boolean status ){
-        if(status) {
-            showCourseCenterAnimation(rlCourseCenter);
-            showCartoonAction_performance(cartoon_action_greeting );
-        }
+    private void showAnimationEffect(final boolean status ){
+                    if (status) {
+                         // showCourseCenterAnimation(rlCourseCenter);
+                         // showCartoonAction_performance(cartoon_action_greeting);
+                            try {
+                                gifDrawable = new GifDrawable(getResources(), R.drawable.gif_main);
+                                gifDrawable.addAnimationListener(new AnimationListener() {
+                                    @Override
+                                    public void onAnimationCompleted() {
+
+                                    }
+                                });
+                                mMainGif.setImageDrawable(gifDrawable);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
     }
 
     private void sendCommandToRobot(String absouteActionPath){
