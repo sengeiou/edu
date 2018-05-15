@@ -593,6 +593,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.rl_hibits_event:
 //                BehaviorHabitsActivity.LaunchActivity(this);
+                UbtLog.d(TAG, "click rl_hibits_event");
                 mPresenter.checkMyRobotState();
                 break;
             default:
@@ -1052,7 +1053,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     //若要使用此功能，需先绑定机器人！
     public void habitAdviceGotoBindDialog() {
-        new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+        new ConfirmDialog(MainActivity.this).builder()
                 .setTitle("提示")
                 .setMsg("若要使用此功能，需先绑定机器人！")
                 .setCancelable(false)
