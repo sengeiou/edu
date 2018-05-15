@@ -316,10 +316,12 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
         btn_actionList.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                if(!BaseHelper.hasSdcard){
-                    Toast.makeText(mBaseActivity,mBaseActivity.getStringResources("ui_remote_synchoronize_no_sd"),Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                    UbtLog.d(TAG, "btn_actionList 000");
+                    if (!BaseHelper.hasSdcard) {
+                        Toast.makeText(mBaseActivity, mBaseActivity.getStringResources("ui_remote_synchoronize_no_sd"), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    UbtLog.d(TAG, "btn_actionList 001");
                 if(BaseHelper.isLowBatteryNotExecuteAction){
                     new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
                             .setTitle("提示")
@@ -333,11 +335,13 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                             }).show();
                     return;
                 }
+                    UbtLog.d(TAG,"btn_actionList 123");
                 if(AlphaApplication.isCycleActionFragment()){
                     return;
                 }
                 UbtLog.d(TAG,"btn_actionList");
                 MyActionsActivity.launchActivity(mBaseActivity, 4);
+                
             }
         });
 
@@ -352,9 +356,6 @@ public class CommonCtrlView implements IActionsUI, IMainUI {
                 mMainPresenter.requestGlobalButtonControl(false);
                 mHelper.clearPlayingInfo();
                 stopActionEffect();
-                //Toast.makeText(mBaseActivity,"机器人已经服务",Toast.LENGTH_SHORT).show();
-               // btn_pause_or_continue.setBackground(mBaseActivity.getDrawableRes("action_control_play_icon_ft"));
-               // gifImageView.setVisibility(View.INVISIBLE);
 
             }
         });

@@ -120,8 +120,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         UbtLog.d(TAG,"isStartLooping flag"+isStartLooping);
         initViews();
         EventBus.getDefault().register(this);
-
-
         return mView;
     }
 
@@ -139,6 +137,7 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         img_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {                //没有使用功能换皮肤功能
+                UbtLog.d(TAG,"onClick finished ");
                 getActivity().finish();
             }
         });
@@ -259,7 +258,11 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         super.onResume();
         UbtLog.d(TAG,"MyActionsCircleFragment----onResume--");
         if(mHelper!=null) {
-            //mHelper.doReadActions();
+           // mHelper.doReadActions();
+        }
+        if(mAdapter!=null){
+            UbtLog.d(TAG,"MyActionsCircleFragment---notifydataset");
+            mAdapter.notifyDataSetChanged();
         }
         if(mHelper.isStartHibitsProcess()){
             isShowHibitsDialog = true;
