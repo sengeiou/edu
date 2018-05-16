@@ -183,7 +183,7 @@ public class UserEditActivity extends MVPBaseActivity<UserEditContract.View, Use
     public void onClickView(View view) {
         switch (view.getId()) {
             case R.id.img_head:
-                mPresenter.showImageHeadDialog(UserEditActivity.this);
+                mPresenter.showImageCenterHeadDialog(UserEditActivity.this);
                 break;
             case R.id.tv_user_age:
                 if(ageList.size()==0){
