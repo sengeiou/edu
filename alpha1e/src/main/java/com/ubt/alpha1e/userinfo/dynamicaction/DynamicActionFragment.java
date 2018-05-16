@@ -37,7 +37,6 @@ import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
 import com.ubt.alpha1e.utils.log.UbtLog;
-import com.ubt.alpha1e.webcontent.WebContentActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -153,7 +152,7 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
 
     @Override
     protected void initUI() {
-        UbtLog.d(TAG,"mParam1 = " + mParam1);
+        UbtLog.d(TAG, "mParam1 = " + mParam1);
         mDynamicActionAdapter = new DynamicActionAdapter(R.layout.layout_dynamic_action_item, mDynamicActionModels);
         mDynamicActionAdapter.setOnItemChildClickListener(this);
         mDynamicActionAdapter.setOnItemClickListener(this);
@@ -391,14 +390,14 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         // ActionDetailActivity.launch(getActivity(), mDynamicActionModels.get(position));
         Intent intent = null;
-        if(mParam1 == 1){
+        if (mParam1 == 1) {
             intent = new Intent();
             intent.setClass(getActivity(), CommunityActivity.class);
             intent.putExtra(Constant.COMMUNITY_SOURCE, 2);
             intent.putExtra(Constant.COMMUNITY_POST_ID, mDynamicActionModels.get(position).getPostId());
-            startActivityForResult(intent,1);
+            startActivityForResult(intent, 1);
 
-        }else {
+        } else {
             intent = new Intent(getActivity(), ActionDetailActivity.class);
             intent.putExtra(dynamicModel, mDynamicActionModels.get(position));
             startActivityForResult(intent, 1);
@@ -500,8 +499,10 @@ public class DynamicActionFragment extends MVPBaseFragment<DynamicActionContract
      */
     @Override
     public void getDownLoadProgress(DynamicActionModel info, DownloadProgressInfo progressInfo) {
-        mPresenter.praseDownloadData(getActivity(), progressInfo, mDynamicActionModels);
-        mDynamicActionAdapter.notifyDataSetChanged();
+        if (mDynamicActionModels != null && mDynamicActionModels.size() > 0) {
+            mPresenter.praseDownloadData(getActivity(), progressInfo, mDynamicActionModels);
+            mDynamicActionAdapter.notifyDataSetChanged();
+        }
     }
 
     /**

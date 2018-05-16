@@ -50,7 +50,7 @@ import java.util.Map;
 
 
 public class ActionsEditSaveActivity extends BaseActivity implements
-        IEditActionUI,FileUploadListener,BaseDiaUI {
+        IEditActionUI, FileUploadListener, BaseDiaUI {
 
     private static final String TAG = "ActionsEditSaveActivity";
 
@@ -72,13 +72,13 @@ public class ActionsEditSaveActivity extends BaseActivity implements
     private SimpleAdapter simpleAdapter;
     private TextView txt_actions_type_des;
     private TextView txt_action_type;
-    private int[] imageIds = {R.drawable.mynew_publish_dance,R.drawable.mynew_publish_story,R.drawable.myniew_publish_sport,
-            R.drawable.mynew_publish_childsong,R.drawable.mynew_publish_science};
+    private int[] imageIds = {R.drawable.mynew_publish_dance, R.drawable.mynew_publish_story, R.drawable.myniew_publish_sport,
+            R.drawable.mynew_publish_childsong, R.drawable.mynew_publish_science};
     private String[] desHintKeys = {"ui_distribute_desc_dance",
-                                    "ui_distribute_desc_story",
-                                    "ui_distribute_desc_sport",
-                                    "ui_distribute_desc_song",
-                                    "ui_distribute_desc_education"};
+            "ui_distribute_desc_story",
+            "ui_distribute_desc_sport",
+            "ui_distribute_desc_song",
+            "ui_distribute_desc_education"};
 
     private LoadingDialog mLoadingDialog;
 
@@ -106,14 +106,13 @@ public class ActionsEditSaveActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
 
         mScreenOrientation = getIntent().getIntExtra(Constant.SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        if(mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+        if (mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             setContentView(R.layout.activity_actions_new_edit_save);
-        }else{
+        } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             setContentView(R.layout.activity_actions_edit_save);
         }
-
 
         mCurrentAction = getIntent().getParcelableExtra(ActionsEditHelper.NewActionInfo);//get parcelable object
         mSchemeId = getIntent().getStringExtra(SCHEME_ID);
@@ -121,15 +120,14 @@ public class ActionsEditSaveActivity extends BaseActivity implements
         dubTag = getIntent().getLongExtra(DubActivity.DUB_TAG, -1);
         UbtLog.d(TAG, "dubTag=" + dubTag);
         type = getIntent().getIntExtra(DubActivity.ACTION_TYPE, -1);
-        if(dubTag != -1){
+        if (dubTag != -1) {
             mHelper = new ActionsEditHelper(this, this, dubTag);
-        }else{
+        } else {
             mHelper = new ActionsEditHelper(this, this);
         }
 
         musicDir = getIntent().getStringExtra(MUSIC_DIR);
         UbtLog.d(TAG, "musicDir:" + musicDir);
-
 
         initUI();
         initControlListener();
@@ -139,16 +137,14 @@ public class ActionsEditSaveActivity extends BaseActivity implements
     protected void onResume() {
         setCurrentActivityLable(ActionsEditSaveActivity.class.getSimpleName());
 
-
         super.onResume();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if(mLoadingDialog!=null)
-        {
-            if(mLoadingDialog.isShowing()&&!this.isFinishing()){
+        if (mLoadingDialog != null) {
+            if (mLoadingDialog.isShowing() && !this.isFinishing()) {
                 mLoadingDialog.dismiss();
             }
             mLoadingDialog = null;
@@ -157,9 +153,8 @@ public class ActionsEditSaveActivity extends BaseActivity implements
 
     @Override
     protected void onDestroy() {
-        if(mLoadingDialog!=null)
-        {
-            if(mLoadingDialog.isShowing()&&!this.isFinishing()){
+        if (mLoadingDialog != null) {
+            if (mLoadingDialog.isShowing() && !this.isFinishing()) {
                 mLoadingDialog.dismiss();
             }
             mLoadingDialog = null;
@@ -172,8 +167,8 @@ public class ActionsEditSaveActivity extends BaseActivity implements
     @Override
     protected void initUI() {
 
-        ivBack = (ImageView)findViewById(R.id.iv_back) ;
-        ivSave = (ImageView)findViewById(R.id.iv_save);
+        ivBack = (ImageView) findViewById(R.id.iv_back);
+        ivSave = (ImageView) findViewById(R.id.iv_save);
 
         ivBack.setOnClickListener(new OnClickListener() {
             @Override
@@ -189,10 +184,9 @@ public class ActionsEditSaveActivity extends BaseActivity implements
             }
         });
 
-
-        mGridView = (GridView)findViewById(R.id.grid_actions_type);
-        txt_actions_type_des = (TextView)findViewById(R.id.txt_action_type_des);
-        txt_action_type = (TextView)findViewById(R.id.txt_action_type);
+        mGridView = (GridView) findViewById(R.id.grid_actions_type);
+        txt_actions_type_des = (TextView) findViewById(R.id.txt_action_type_des);
+        txt_action_type = (TextView) findViewById(R.id.txt_action_type);
         img_action_logo = (ImageView) findViewById(R.id.img_action_logo);
         lay_head_sel = (RelativeLayout) findViewById(R.id.lay_head_sel);
         txt_shooting = (TextView) findViewById(R.id.txt_shooting);
@@ -210,9 +204,9 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                     mCurrentAction.actionImagePath);
         }
         generateBitmap(this);
-        mLoadingDialog = LoadingDialog.getInstance(this,this);
+        mLoadingDialog = LoadingDialog.getInstance(this, this);
 
-        if(mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+        if (mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             ivDemo1 = (ImageView) findViewById(R.id.iv_demo1);
             ivDemo2 = (ImageView) findViewById(R.id.iv_demo2);
             ivDemo3 = (ImageView) findViewById(R.id.iv_demo3);
@@ -222,15 +216,15 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                 public void onClick(View v) {
                     mCurrentActionImg = null;
                     int imageId = R.drawable.action_dance_1b;
-                    if(actionType == 1){
+                    if (actionType == 1) {
                         imageId = R.drawable.action_dance_1b;
-                    }else if(actionType == 2){
+                    } else if (actionType == 2) {
                         imageId = R.drawable.action_story_1b;
-                    }else if(actionType ==3){
+                    } else if (actionType == 3) {
                         imageId = R.drawable.action_sport_1b;
-                    }else if(actionType ==4){
+                    } else if (actionType == 4) {
                         imageId = R.drawable.action_er_1b;
-                    }else if(actionType == 5){
+                    } else if (actionType == 5) {
                         imageId = R.drawable.action_science_1b;
                     }
                     mCurrentActionImg = getBitmap(imageId);
@@ -243,15 +237,15 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                 public void onClick(View v) {
                     mCurrentActionImg = null;
                     int imageId = R.drawable.action_dance_2b;
-                    if(actionType == 1){
+                    if (actionType == 1) {
                         imageId = R.drawable.action_dance_2b;
-                    }else if(actionType == 2){
+                    } else if (actionType == 2) {
                         imageId = R.drawable.action_story_2b;
-                    }else if(actionType ==3){
+                    } else if (actionType == 3) {
                         imageId = R.drawable.action_sport_2b;
-                    }else if(actionType ==4){
+                    } else if (actionType == 4) {
                         imageId = R.drawable.action_er_2b;
-                    }else if(actionType == 5){
+                    } else if (actionType == 5) {
                         imageId = R.drawable.action_science_2b;
                     }
 
@@ -265,15 +259,15 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                 public void onClick(View v) {
                     mCurrentActionImg = null;
                     int imageId = R.drawable.action_dance_3b;
-                    if(actionType == 1){
+                    if (actionType == 1) {
                         imageId = R.drawable.action_dance_3b;
-                    }else if(actionType == 2){
+                    } else if (actionType == 2) {
                         imageId = R.drawable.action_story_3b;
-                    }else if(actionType ==3){
+                    } else if (actionType == 3) {
                         imageId = R.drawable.action_sport_3b;
-                    }else if(actionType ==4){
+                    } else if (actionType == 4) {
                         imageId = R.drawable.action_er_3b;
-                    }else if(actionType == 5){
+                    } else if (actionType == 5) {
                         imageId = R.drawable.action_science_3b;
 
                     }
@@ -284,43 +278,38 @@ public class ActionsEditSaveActivity extends BaseActivity implements
             });
         }
 
-        if(mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+        if (mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             mCurrentActionImg = getBitmap(R.drawable.action_dance_1b);
             img_action_logo.setImageResource(R.drawable.action_dance_1b);
         }
 
     }
 
-    private Bitmap getBitmap(int imageId){
-        Bitmap bitmap = ImageTools.compressImage(getResources(),imageId, 2);
+    private Bitmap getBitmap(int imageId) {
+        Bitmap bitmap = ImageTools.compressImage(getResources(), imageId, 2);
 
         return bitmap;
     }
 
-    private void showProgress()
-    {
-        if(mLoadingDialog == null){
-            mLoadingDialog = LoadingDialog.getInstance(this,this);
+    private void showProgress() {
+        if (mLoadingDialog == null) {
+            mLoadingDialog = LoadingDialog.getInstance(this, this);
         }
 
-        if(mLoadingDialog!=null&&!mLoadingDialog.isShowing())
-        {
+        if (mLoadingDialog != null && !mLoadingDialog.isShowing()) {
             mLoadingDialog.show();
         }
     }
 
-    private void dismissProgress()
-    {
-        if(mLoadingDialog!=null&&mLoadingDialog.isShowing()&&!this.isFinishing())
-        {
+    private void dismissProgress() {
+        if (mLoadingDialog != null && mLoadingDialog.isShowing() && !this.isFinishing()) {
             mLoadingDialog.cancel();
         }
 
     }
 
 
-    private void initGrids(Context ctx)
-    {
+    private void initGrids(Context ctx) {
         final ArrayList<Map<String, Object>> listItems = new ArrayList<>();
         final String[] imageNames = {
                 getStringResources("ui_square_dance"),
@@ -331,25 +320,24 @@ public class ActionsEditSaveActivity extends BaseActivity implements
         for (int i = 0; i < 5; i++) {
             Map<String, Object> item = new HashMap<>();
             item.put("image", imageIds[i]);
-            item.put("name",imageNames[i]);
-            item.put("select",false);
+            item.put("name", imageNames[i]);
+            item.put("select", false);
             listItems.add(item);
         }
-        simpleAdapter =  new SimpleAdapter(ctx,listItems, R.layout.layout_actions_type_select,
+        simpleAdapter = new SimpleAdapter(ctx, listItems, R.layout.layout_actions_type_select,
                 new String[]{
-                        "image","name","select"
+                        "image", "name", "select"
                 }, new int[]{
-                R.id.img_type_item,R.id.txt_action_select_type,R.id.img_select_item
-        }){
+                R.id.img_type_item, R.id.txt_action_select_type, R.id.img_select_item
+        }) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View thiz = super.getView(position, convertView, parent);
-                ImageView img = (ImageView)thiz.findViewById(R.id.img_select_item);
-                if((boolean)listItems.get(position).get("select"))
-                {
+                ImageView img = (ImageView) thiz.findViewById(R.id.img_select_item);
+                if ((boolean) listItems.get(position).get("select")) {
                     img.setImageResource(R.drawable.mynew_publish_choose);
                     img.setVisibility(View.VISIBLE);
-                }else
+                } else
                     img.setVisibility(View.GONE);
                 return thiz;
             }
@@ -359,18 +347,17 @@ public class ActionsEditSaveActivity extends BaseActivity implements
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                for(int i = 0;i<listItems.size();i++)
-                {
-                    listItems.get(i).put("select",i==position?true:false);
+                for (int i = 0; i < listItems.size(); i++) {
+                    listItems.get(i).put("select", i == position ? true : false);
                 }
-                actionType = position+1;
+                actionType = position + 1;
                 simpleAdapter.notifyDataSetChanged();
 
                 ActionsEditSaveActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
-                        UbtLog.d(TAG,"txt_action_type.getText() = " + txt_action_type.getText());
+                        UbtLog.d(TAG, "txt_action_type.getText() = " + txt_action_type.getText());
                         txt_action_type.setText(getStringResources("ui_readback_save_action_type") + " " + imageNames[position]);
 
                         txt_actions_type_des.setText(imageNames[position]);
@@ -379,29 +366,29 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                     }
                 });
 
-                if(mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+                if (mScreenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
                     int imageId = R.drawable.action_dance_1b;
-                    if(actionType == 1){
+                    if (actionType == 1) {
                         imageId = R.drawable.action_dance_1b;
                         ivDemo1.setImageResource(R.drawable.action_dance_1b);
                         ivDemo2.setImageResource(R.drawable.action_dance_2b);
                         ivDemo3.setImageResource(R.drawable.action_dance_3b);
-                    }else if(actionType == 2){
+                    } else if (actionType == 2) {
                         imageId = R.drawable.action_story_1b;
                         ivDemo1.setImageResource(R.drawable.action_story_1b);
                         ivDemo2.setImageResource(R.drawable.action_story_2b);
                         ivDemo3.setImageResource(R.drawable.action_story_3b);
-                    }else if(actionType == 3){
+                    } else if (actionType == 3) {
                         imageId = R.drawable.action_sport_1b;
                         ivDemo1.setImageResource(R.drawable.action_sport_1b);
                         ivDemo2.setImageResource(R.drawable.action_sport_2b);
                         ivDemo3.setImageResource(R.drawable.action_sport_3b);
-                    }else if(actionType == 4){
+                    } else if (actionType == 4) {
                         imageId = R.drawable.action_er_1b;
                         ivDemo1.setImageResource(R.drawable.action_er_1b);
                         ivDemo2.setImageResource(R.drawable.action_er_2b);
                         ivDemo3.setImageResource(R.drawable.action_er_3b);
-                    }else if(actionType == 5){
+                    } else if (actionType == 5) {
                         imageId = R.drawable.action_science_1b;
                         ivDemo1.setImageResource(R.drawable.action_science_1b);
                         ivDemo2.setImageResource(R.drawable.action_science_2b);
@@ -414,9 +401,9 @@ public class ActionsEditSaveActivity extends BaseActivity implements
             }
         });
 
-        if(actionType == -1){
+        if (actionType == -1) {
             actionType = 1;
-            listItems.get(0).put("select",true);
+            listItems.get(0).put("select", true);
             simpleAdapter.notifyDataSetChanged();
 
             txt_actions_type_des.setText(imageNames[0]);
@@ -430,7 +417,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
 
     private void saveNewAction() {
 
-        if(mCurrentActionImg == null || img_action_logo.getDrawable() == null){
+        if (mCurrentActionImg == null || img_action_logo.getDrawable() == null) {
             this.showToast("ui_distribute_lack_picture");
             return;
         }
@@ -451,38 +438,41 @@ public class ActionsEditSaveActivity extends BaseActivity implements
             return;
         }
 
-        if(TextUtils.isEmpty(txt_actions_type_des.getText()))
-        {
+        if (TextUtils.isEmpty(txt_actions_type_des.getText())) {
             this.showToast("ui_save_action_choose_type");
             return;
         }
         showProgress();
-        if(TextUtils.isEmpty(edt_disc.getText().toString())){
+        if (TextUtils.isEmpty(edt_disc.getText().toString())) {
             mCurrentAction.actionDesciber = edt_disc.getHint().toString();
-        }else{
+        } else {
             mCurrentAction.actionDesciber = edt_disc.getText().toString();
         }
         mCurrentAction.actionName = edt_name.getText().toString().replace("\n", "");
         mCurrentAction.actionSonType = actionType;
         mCurrentAction.actionType = actionType;
-        if(dubTag != -1){
-            ((ActionsEditHelper) mHelper).saveMyNewAction(mCurrentAction,mCurrentActionImg , dubTag, type);
-        }else{
-            mCurrentAction.actionTime =  mCurrentAction.getTitleTime()/1000;
+        if (dubTag != -1) {
+            ((ActionsEditHelper) mHelper).saveMyNewAction(mCurrentAction, mCurrentActionImg, dubTag, type);
+        } else {
+            long time = mCurrentAction.getTitleTime() / 1000;
+            if (time == 0) {
+                mCurrentAction.actionTime = 1;
+            } else {
+                mCurrentAction.actionTime = time;
+            }
             ((ActionsEditHelper) mHelper).saveMyNewAction(mCurrentAction, mCurrentActionImg, musicDir);
         }
 
     }
 
 
-    public void generateBitmap(final Context mContext)
-    {
-        new AsyncTask<Void, Void, Void>()
-        {
+    public void generateBitmap(final Context mContext) {
+        new AsyncTask<Void, Void, Void>() {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
             }
+
             @Override
             protected Void doInBackground(Void... params) {
 
@@ -493,8 +483,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                             asBitmap().into(90, 90).get();
                     FileTools.writeImage(bitmap,
                             path, false);
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
 
                 }
                 return null;
@@ -525,7 +514,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                 }
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if(imm.isActive() ){
+                if (imm.isActive()) {
                     imm.hideSoftInputFromWindow(getCurrentFocus().getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             }
@@ -573,7 +562,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                             }
 
 
-                        }, PermissionUtils.PermissionEnum.CAMERA,ActionsEditSaveActivity.this);
+                        }, PermissionUtils.PermissionEnum.CAMERA, ActionsEditSaveActivity.this);
 
 
             }
@@ -610,7 +599,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
             if (resultCode == RESULT_OK) {
                 ContentResolver cr = this.getContentResolver();
                 if (requestCode == PrivateInfoHelper.GetUserHeadRequestCodeByFile) {
-                    if (data == null){
+                    if (data == null) {
                         return;
                     }
 
@@ -618,8 +607,8 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                     String h_type = cr.getType(data.getData());
                     //android di ban ben
                     String l_type = data.getType();
-                    UbtLog.d(TAG,"h_type:"+h_type  + "   l_type:"+l_type);
-                    if (h_type == null && l_type == null){
+                    UbtLog.d(TAG, "h_type:" + h_type + "   l_type:" + l_type);
+                    if (h_type == null && l_type == null) {
                         return;
                     }
                     mImageUri = data.getData();
@@ -654,7 +643,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
         }
     }
 
-    private void setImage(final Uri uri){
+    private void setImage(final Uri uri) {
         mHandler.post(new Runnable() {
 
             @Override
@@ -713,7 +702,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
     @Override
     public void onChangeActionFinish() {
         UbtLog.d(TAG, "wmma onChangeActionFinish");
-        boolean state = ((ActionsEditHelper)mHelper).getActionSaveState();
+        boolean state = ((ActionsEditHelper) mHelper).getActionSaveState();
 //
         edt_name.post(new Runnable() {
             @Override
@@ -721,15 +710,13 @@ public class ActionsEditSaveActivity extends BaseActivity implements
                 dismissProgress();
             }
         });
-        if(state)
-        {
-            UbtLog.d("wilson","onChangeActionFinish");
+        if (state) {
+            UbtLog.d("wilson", "onChangeActionFinish");
             Intent intent = new Intent();
-            intent.putExtra(ActionsEditHelper.SaveActionResult,state);
+            intent.putExtra(ActionsEditHelper.SaveActionResult, state);
             setResult(ActionsEditHelper.SaveActionReq, intent);
             finish();
-        }else
-        {
+        } else {
             FileTools.DeleteFile(new File(mCurrentAction.actionDir_local));
             FileTools.DeleteFile(new File(mCurrentAction.actionZip_local));
             mCurrentAction.actionId = -1;

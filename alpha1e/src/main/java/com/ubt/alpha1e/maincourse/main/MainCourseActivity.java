@@ -169,7 +169,7 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (isFastClick()) {
-            if (BaseHelper.isLowBatteryNotExecuteAction) {
+            if (BaseHelper.isLowBatteryNotExecuteAction&&position != (3-onlinePlayerEnable)) {
                 new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
                         .setTitle("提示")
                         .setMsg("机器人电量低动作不能执行，请充电！")
