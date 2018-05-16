@@ -71,7 +71,7 @@ public class SensorHelper extends BaseHelper {
                 UbtLog.d(TAG, "emoji:" + ByteHexHelper.bytesToHexString(param) + "param[0]:" + param[0]);
                 if(param[0] == 1){
                     //表情播放完成后通知js，js端音效和表情完成是同一个方法
-                    EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_ROBOT_PLAY_SOUND_FINISH));
+                    EventBus.getDefault().post(new BlocklyEvent(BlocklyEvent.CALL_ROBOT_PLAY_EMOJI_FINISH));
                 }
             }
         }else if(cmd == ConstValue.DV_SET_LED_LIGHT){
