@@ -1303,7 +1303,7 @@ public abstract class BaseActionEditLayout extends LinearLayout implements View.
     private NewActionInfo getEditingActions() {
 
         List<FrameActionInfo> frames = new ArrayList<FrameActionInfo>();
-        frames.add(FrameActionInfo.getDefaultFrame());
+        //frames.add(FrameActionInfo.getDefaultFrame());
         if (musicTimes == 0) {
             for (int i = 0; i < list_frames.size(); i++) {
                 frames.add(((FrameActionInfo) list_frames.get(i).get(
