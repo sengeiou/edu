@@ -366,8 +366,10 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 ig_player_list.setImageResource(R.drawable.ic_list);
                 ig_player_button.setVisibility(View.VISIBLE);
                 if(isPause){
+                    UbtLog.d(TAG,"isPause 1");
                     ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
                 }else{
+                    UbtLog.d(TAG,"isPause 2");
                     ig_player_button.setImageResource(R.drawable.ic_ct_pause);
                 }
             }
@@ -409,13 +411,15 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     //停止播放
     public void pausePlay() {
+        isPause = true ;
         if(ig_player_state!=null) {
             ig_player_state.setVisibility(View.VISIBLE);
-            ig_player_state.setBackgroundResource(R.drawable.cc_default_playindicator);
+            ig_player_state.setBackground(getActivity().getDrawable(R.drawable.playindicator_animation));
         }
         if(player_name!=null)
         player_name.setVisibility(View.VISIBLE);
         if(ig_player_button!=null){
+            UbtLog.d(TAG,"PAUSEPLAY");
             ig_player_button.setVisibility(View.VISIBLE);
             ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
             ig_player_list.setImageResource(R.drawable.ic_list);
@@ -443,7 +447,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                     };
                 });
             }
-        } else if (event.getEvent() == PlayerEvent.Event.TAP_HEAD) {
+        } else if (event.getEvent() == PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE) {
+            UbtLog.d(TAG,"TAP_HEAD_OR_VOICE_WAKE");
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         } else if (event.getEvent() == PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
             UbtLog.d(TAG, "show albumId  " + event.getAlbumId() + "    status:   "+event.getStatus()+"categoryID"+event.getCateogryId());
