@@ -3,7 +3,6 @@ package com.ubt.alpha1e.community.actionselect;
 import android.content.Context;
 
 import com.google.gson.reflect.TypeToken;
-import com.ubt.alpha1e.base.RequstMode.DeleteActionRequest;
 import com.ubt.alpha1e.base.RequstMode.GetMessageListRequest;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.data.model.BaseResponseModel;
@@ -17,7 +16,6 @@ import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
@@ -31,6 +29,8 @@ public class ActionSelectPresenter extends BasePresenterImpl<ActionSelectContrac
 
     private static final String TAG = ActionSelectPresenter.class.getSimpleName();
 
+    private static final int GET_DYNAMIC_LIST = 0;
+
     /**
      * 获取原创列表
      *
@@ -43,7 +43,8 @@ public class ActionSelectPresenter extends BasePresenterImpl<ActionSelectContrac
         GetMessageListRequest messageListRequest = new GetMessageListRequest();
         messageListRequest.setOffset(page);
         messageListRequest.setLimit(offset);
-        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.ACTION_DYNAMIC_LIST, messageListRequest, 0).execute(new StringCallback() {
+
+        OkHttpClientUtils.getJsonByPostRequest(HttpEntity.ACTION_DYNAMIC_LIST, messageListRequest, GET_DYNAMIC_LIST).execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 UbtLog.d(TAG, " getNoticeData onError:" + e.getMessage());
@@ -145,7 +146,7 @@ public class ActionSelectPresenter extends BasePresenterImpl<ActionSelectContrac
         int position = getPositionById(actionId, mDynamicActionModels);//根据ID获取当前位置
         if (downloadProgressInfo.status == 1) {//正在下载
             String progress = downloadProgressInfo.progress;
-            UbtLog.d("praseDownloadData", "progress=====" + progress);
+            UbtLog.d(TAG, "progress=====" + progress);
             mDynamicActionModels.get(position).setActionStatu(2);
             mDynamicActionModels.get(position).setDownloadProgress(Double.parseDouble(progress));
         } else if (downloadProgressInfo.status == 2) {//下载成功后立即播放
@@ -154,7 +155,7 @@ public class ActionSelectPresenter extends BasePresenterImpl<ActionSelectContrac
             dynamicActionModel.setActionStatu(0);
             for (int i = 0; i < mDynamicActionModels.size(); i++) {
                 if (mDynamicActionModels.get(i).getActionStatu() == 1) {
-                    UbtLog.d("praseDownloadData", "actionName==" + mDynamicActionModels.get(i));
+                    UbtLog.d(TAG, "actionName==" + mDynamicActionModels.get(i));
                     mDynamicActionModels.get(i).setActionStatu(0);
                 }
             }
@@ -180,12 +181,12 @@ public class ActionSelectPresenter extends BasePresenterImpl<ActionSelectContrac
     public void playAction(Context context, int position, List<DynamicActionModel> mDynamicActionModels) {
         DynamicActionModel dynamicActionModel = mDynamicActionModels.get(position);
         int actionStatu = dynamicActionModel.getActionStatu();
-        UbtLog.d("", "actionName==" + dynamicActionModel.getActionName() + "  actionStatu===" + dynamicActionModel.getActionStatu());
+        UbtLog.d(TAG, "actionName==" + dynamicActionModel.getActionName() + "  actionStatu===" + dynamicActionModel.getActionStatu());
         if (actionStatu == 0) {
             if (dynamicActionModel.isDownload()) {//已经下载
                 for (int i = 0; i < mDynamicActionModels.size(); i++) {
                     if (mDynamicActionModels.get(i).getActionStatu() == 1) {
-                        UbtLog.d("DynamicActionFragment", "actionName==" + mDynamicActionModels.get(i));
+                        UbtLog.d(TAG, "actionName==" + mDynamicActionModels.get(i));
                         mDynamicActionModels.get(i).setActionStatu(0);
                     }
                 }
@@ -195,6 +196,7 @@ public class ActionSelectPresenter extends BasePresenterImpl<ActionSelectContrac
                 DownLoadActionManager.getInstance(context).readNetworkStatus();
                 DownLoadActionManager.getInstance(context).downRobotAction(dynamicActionModel);
                 mDynamicActionModels.get(position).setActionStatu(2);
+
             }
         } else if (actionStatu == 1) {//正在播放
             DownLoadActionManager.getInstance(context).stopAction(false);
@@ -203,4 +205,5 @@ public class ActionSelectPresenter extends BasePresenterImpl<ActionSelectContrac
 
         }
     }
+
 }

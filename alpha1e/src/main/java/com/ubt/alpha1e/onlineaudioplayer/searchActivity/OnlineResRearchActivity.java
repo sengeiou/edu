@@ -134,12 +134,14 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
         }
     }
 
+    String keyWord = "";
     //搜索
     public void search(String content) {
         if(content == null || content.trim().equals("") || content.trim().contains("####")){
             ToastUtils.showShort("搜索内容不能为空");
             return;
         }
+        keyWord = content ;
         int recentSize = flowerList.size();
         UbtLog.d(TAG, "recentSize1:" + recentSize);
         for(int j = 0;j<recentSize;j++){
@@ -223,6 +225,7 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
                                     lists.setCategory_id(modle.models.get(i).getCategoryId());
                                     onlineResRearchList.add(lists);
                                 }
+                                mAdapter.setKeyword(keyWord);
                                 mAdapter.notifyDataSetChanged();
                             }
                         } else {

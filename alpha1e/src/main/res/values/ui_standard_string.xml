@@ -1085,5 +1085,8 @@
 
     <string name="ui_webview_network_error">网络出错，轻触屏幕重新加载</string>
     <string name="ui_low_battery_less">机器人电量低动作不能执行，请充电！</string>
+    <string name="ui_share_success">分享成功</string>
+    <string name="ui_share_failed">分享失败</string>
+    <string name="ui_share_canceled">分享取消</string>
 
 </resources>

@@ -64,6 +64,18 @@ public class CommunityJsInterface {
     }
 
     /**
+     * 发贴，主动获取发布的动作信息
+     */
+    @JavascriptInterface
+    public void getReplyAction() {
+        UbtLog.d(TAG,"-getReplyAction-" );
+
+        if(mMVPBaseActivity instanceof CommunityActivity){
+            ((CommunityActivity)mMVPBaseActivity).getReplyAction();
+        }
+    }
+
+    /**
      * 从社区进入nativeApp的照片选择界面
      */
     @JavascriptInterface
@@ -128,6 +140,7 @@ public class CommunityJsInterface {
             String actionName = jsonObject.getString("actionName");
             String actionUrl = jsonObject.getString("actionUrl");
             String actionOriginalId = jsonObject.getString("actionOriginalId");
+            int postId = jsonObject.getInt("postId");
 
             DynamicActionModel actionModel = new DynamicActionModel();
             actionModel.setActionId(actionId);
@@ -136,6 +149,7 @@ public class CommunityJsInterface {
             actionModel.setDownload("1".equals(isDownload) ? true : false);
             actionModel.setActionStatu(actionStatus);
             actionModel.setActionOriginalId(actionOriginalId);
+            actionModel.setPostId(postId);
 
             if(mMVPBaseActivity instanceof CommunityActivity){
                 ((CommunityActivity)mMVPBaseActivity).playAction(actionModel);

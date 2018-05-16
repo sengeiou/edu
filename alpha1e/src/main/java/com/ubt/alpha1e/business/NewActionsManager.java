@@ -315,6 +315,8 @@ public class NewActionsManager implements IFileListener {
                                     NewActionInfo newActionInfo = new Gson().fromJson(json.get("models").toString(), NewActionInfo.class);
                                     mChangeNewActionInfo.actionHeadUrl = newActionInfo.actionHeadUrl;
                                     mChangeNewActionInfo.actionUrl = newActionInfo.actionUrl;
+                                    mChangeNewActionInfo.actionId = newActionInfo.actionId;
+
                                     FileTools.readFileString(FileTools.actions_new_cache,
                                             FileTools.actions_new_log_name,
                                             do_read_new_actions_for_save, thiz);

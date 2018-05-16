@@ -2,9 +2,11 @@ package com.ubt.alpha1e.business.thrid_party;
 
 
 import android.app.Activity;
+import android.content.Intent;
 
 import com.sina.weibo.sdk.api.TextObject;
 import com.sina.weibo.sdk.api.WeiboMultiMessage;
+import com.sina.weibo.sdk.share.WbShareCallback;
 import com.sina.weibo.sdk.share.WbShareHandler;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
@@ -32,6 +34,12 @@ public class MyWeiBoNew {
         shareHandler.registerApp();
         shareHandler.setProgressColor(0xff33b5e5);
 
+    }
+
+    public static void doResultIntent(Intent intent, WbShareCallback callback){
+        if(shareHandler != null){
+            shareHandler.doResultIntent(intent, callback);
+        }
     }
 
     public static void doShareWeiBo(Activity act,String msg, String url) {

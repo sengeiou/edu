@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
+import com.ubt.alpha1e.community.CommunityActivity;
+import com.ubt.alpha1e.data.model.NewActionInfo;
+import com.ubt.alpha1e.userinfo.model.DynamicActionModel;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 /**
@@ -30,6 +33,7 @@ public class SaveSuccessActivity extends Activity implements View.OnClickListene
     ImageView ivClose;
     Button btn_to_other;
 
+    private NewActionInfo actionInfo = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +43,10 @@ public class SaveSuccessActivity extends Activity implements View.OnClickListene
         ivClose.setOnClickListener(this);
         btn_to_other = (Button) findViewById(R.id.btn_to_other) ;
         btn_to_other.setOnClickListener(this);
+
+        if(getIntent() != null){
+            actionInfo = getIntent().getParcelableExtra("NewActionInfo");
+        }
     }
 
 
@@ -54,7 +62,8 @@ public class SaveSuccessActivity extends Activity implements View.OnClickListene
                 }
                 break;
             case R.id.btn_to_other:
-                ToastUtils.showShort("社区暂未开放");
+                //ToastUtils.showShort("社区暂未开放");
+                goReplyAction();
                 break;
             default:
                 break;
@@ -85,6 +94,21 @@ public class SaveSuccessActivity extends Activity implements View.OnClickListene
         }
     }
 
+    private void goReplyAction(){
+        if(actionInfo != null){
+            DynamicActionModel replyActionModel = new DynamicActionModel();
+            replyActionModel.setActionDesciber(actionInfo.actionDesciber);
+            replyActionModel.setActionHeadUrl(actionInfo.actionHeadUrl);
+            replyActionModel.setActionId((int) actionInfo.actionId);
+            replyActionModel.setActionUrl(actionInfo.actionUrl);
+            replyActionModel.setActionName(actionInfo.actionName);
+            replyActionModel.setActionOriginalId(actionInfo.actionOriginalId + "");
+            replyActionModel.setActionType(actionInfo.actionType);
+
+            CommunityActivity.launchToReplyAction(this,replyActionModel);
+        }
+
+    }
 
 
 }

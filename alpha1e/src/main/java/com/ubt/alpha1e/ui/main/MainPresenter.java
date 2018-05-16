@@ -456,6 +456,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     @Override
     public void checkMyRobotState() {
+        UbtLog.d(TAG, "click rl_hibits_event 2");
         LoadingDialog.show(AppManager.getInstance().currentActivity());
         CheckIsBindRequest checkRobotInfo = new CheckIsBindRequest();
         checkRobotInfo.setSystemType("3");
