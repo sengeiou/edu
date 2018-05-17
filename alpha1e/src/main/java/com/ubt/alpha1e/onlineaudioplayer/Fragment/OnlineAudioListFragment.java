@@ -222,34 +222,46 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                 case R.id.iv_music_list:
                     break;
                 case R.id.iv_music_prev:
+                    if(tvPlayName.getText() !=null && tvPlayName.getText().toString().equals("暂无播放内容")){
+                        return;
+                    }
                     prevAudioPlay();
                     break;
                 case R.id.iv_music_play:
-                            if(mHelper.ismPlayStatus()){
-                                mHelper.setmPlayStatus(false);
-                                mHelper.continueEvent();
-                                ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
-                                playStatusAnim.start();
-                                mAdapter.notifyDataSetChanged();
-                            }else {
-                                mHelper.setmPlayStatus(true);
-                                mHelper.pauseEvent();
-                                ivMusicPlay.setImageResource(R.drawable.ic_ct_play_usable);
-                                playStatusAnim.stop();
-                                mAdapter.notifyDataSetChanged();
-                            }
+                    if(tvPlayName.getText() !=null && tvPlayName.getText().toString().equals("暂无播放内容")){
+                        return;
+                    }
+                    if(mHelper.ismPlayStatus()){
+                        mHelper.setmPlayStatus(false);
+                        mHelper.continueEvent();
+                        ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
+                        playStatusAnim.start();
+                        mAdapter.notifyDataSetChanged();
+                    }else {
+                        mHelper.setmPlayStatus(true);
+                        mHelper.pauseEvent();
+                        ivMusicPlay.setImageResource(R.drawable.ic_ct_play_usable);
+                        playStatusAnim.stop();
+                        mAdapter.notifyDataSetChanged();
+                    }
                     break;
                 case R.id.iv_music_next:
+                    if(tvPlayName.getText() !=null && tvPlayName.getText().toString().equals("暂无播放内容")){
+                        return;
+                    }
                     if(isStartPlayProcess){
                         nextAudioPlay();
                     }
                     break;
                 case R.id.iv_music_circle:
+                    if(tvPlayName.getText() !=null && tvPlayName.getText().toString().equals("暂无播放内容")){
+                        return;
+                    }
                     loopModeUiShow();
                     break;
                 case R.id.tv_play_name:
                     //DESTROY PREVIOUS AND TO NEXT
-                    if(mPlayingalbumID != null || !mPlayingalbumID.equals(currentAlbumId)) {
+                    if(mPlayingalbumID != null && !mPlayingalbumID.equals(currentAlbumId)) {
                         UbtLog.d(TAG,"JUMP TO ALBUM DIFF ");
                         EventBus.getDefault().unregister(this);
                         pop();
@@ -397,6 +409,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     if(mAdapter!=null) {
                         mAdapter.notifyDataSetChanged();
                     }
+                    initState("quit");
                     break;
                 case DIFFALBUM_CURRENT_PLAY:
                     mPlayingalbumID=(String)msg.obj;
@@ -519,7 +532,8 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                 }
                 mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
             }
-        }else if(event.getEvent()==PlayerEvent.Event.TAP_HEAD){
+        }else if(event.getEvent()==PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE){
+            UbtLog.d(TAG,"TAP_HEAD_OR_VOICE_WAKE");
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         }
     }

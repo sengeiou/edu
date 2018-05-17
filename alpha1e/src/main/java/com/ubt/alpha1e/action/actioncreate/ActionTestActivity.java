@@ -21,6 +21,7 @@ import com.ubt.alpha1e.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.IEditActionUI;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ConstValue;
 
 import static com.ubt.alpha1e.base.Constant.SP_GUIDE_STEP;
 
@@ -78,6 +79,10 @@ public class ActionTestActivity extends BaseActivity implements IEditActionUI, B
                         finish();
                     }
                 });
+        UbtLog.d(TAG, "stopEventSound = ");
+        byte[] mCmd = {0};
+        mCmd[0] = 0;
+        mHelper.doSendComm(ConstValue.DV_NOTIFYONLINEPLAYER_EXIT, mCmd);
     }
 
     @Override

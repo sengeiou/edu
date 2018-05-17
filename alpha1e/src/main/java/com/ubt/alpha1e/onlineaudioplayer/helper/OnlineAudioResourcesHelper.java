@@ -127,8 +127,11 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             UbtLog.d(TAG, "cmd = " + cmd + "    param[0] = " + param[0]);
             if (param[0] == 0x01) {
                 UbtLog.d(TAG, "cmd = " + cmd + "    reply" + param[0]);
+            }else if(param[0]==0x02) {
+                PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE);
+                EventBus.getDefault().post(mPlayerEvent);
             }else {
-                UbtLog.d(TAG, "cmd = " + cmd + "  next audio notify" + BluetoothParamUtil.bytesToString(param));
+                    UbtLog.d(TAG, "cmd = " + cmd + "  next audio notify" + BluetoothParamUtil.bytesToString(param));
                     try {
                         JSONObject mCmd = new JSONObject(BluetoothParamUtil.bytesToString(param));
                         mCmd.get("status");//play, pause, continue, stop, complete,next
@@ -142,7 +145,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-            }
+                }
 
         } else if (cmd == ConstValue.DV_NOTIFYONLINEPLAYER_EXIT) {
             String eventPlayStatusJson = BluetoothParamUtil.bytesToString(param);
@@ -152,9 +155,9 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
         } else if (cmd == ConstValue.DV_NOTIFYONLINEPLAYER_CONTINUE) {
 
-        } else if (cmd == ConstValue.DV_TAP_HEAD||cmd==ConstValue.DV_VOICE) {
+        } else if (cmd == ConstValue.DV_TAP_HEAD||cmd==ConstValue.DV_VOICE_WAIT) {
             UbtLog.d(TAG, "cmd = " + cmd + "  VOICE & TAP" );
-            PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD);
+            PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE);
             EventBus.getDefault().post(mPlayerEvent);
         }
     }
@@ -234,14 +237,14 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     public void exitEvent() {
         UbtLog.d(TAG, "stopEventSound = ");
-//        byte[] mCmd = {0};
-//        mCmd[0] = 0;
-//        doSendComm(ConstValue.DV_NOTIFYONLINEPLAYER_EXIT, mCmd);
-        if (local_player) {
-            if (mediaPlayer != null) {
-                mediaPlayer.stop();
-            }
-        }
+        byte[] mCmd = {0};
+        mCmd[0] = 0;
+        doSendComm(ConstValue.DV_NOTIFYONLINEPLAYER_EXIT, mCmd);
+//        if (local_player) {
+//            if (mediaPlayer != null) {
+//                mediaPlayer.stop();
+//            }
+//        }
     }
 
     public void pauseEvent() {
@@ -311,7 +314,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         } else {
             currentPlaySeq = 0;
         }
-        exitEvent();
+       // exitEvent();
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
@@ -330,7 +333,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         }
         // isPause = false;
         // currentPlayInfo = mPlayContentInfoList.get(currentPlaySeq);
-        exitEvent();
+       // exitEvent();
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {

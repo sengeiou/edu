@@ -150,6 +150,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     public static final int DO_DOWNLOAD_BLOCKLY = 6011;
     public static final int DO_PLAY_AGAIN = 6012;
     public static final int DO_PLAY_SOUND_EFFECT_FINISH = 6013;
+    public static final int DO_PLAY_EMOJI_FINISH = 6014;
 
 
     private WebView mWebView;
@@ -293,8 +294,17 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 //                    }
                     break;
                 case DO_PLAY_SOUND_EFFECT_FINISH:
+                    playSoundAudio = false;
                     if(mWebView != null){
-                        UbtLog.d(TAG, "play sound or emoji finish!");
+                        UbtLog.d(TAG, "play sound  finish!");
+                        mWebView.loadUrl("javascript:continueSteps()");
+//                        mWebView.loadUrl("javascript:playSoundEffectFinish()");
+                    }
+                    break;
+                case DO_PLAY_EMOJI_FINISH:
+                    showEmoji = false;
+                    if(mWebView != null){
+                        UbtLog.d(TAG, "play  emoji finish!");
                         mWebView.loadUrl("javascript:continueSteps()");
 //                        mWebView.loadUrl("javascript:playSoundEffectFinish()");
                     }
@@ -1511,6 +1521,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         }else if(event.getType() == BlocklyEvent.CALL_ROBOT_PLAY_SOUND_FINISH){
 
             mHandler.sendEmptyMessage(DO_PLAY_SOUND_EFFECT_FINISH);
+        }else if(event.getType() == BlocklyEvent.CALL_ROBOT_PLAY_EMOJI_FINISH){
+            mHandler.sendEmptyMessage(DO_PLAY_EMOJI_FINISH);
         }else if(event.getType() == BlocklyEvent.CALL_ROBOT_GET_GYROSCOPE_DATA){
             //给js上报陀螺仪数据
             final String gyroData = new String((byte[])(event.getMessage()));
@@ -2107,10 +2119,13 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
      * @param params  js传递来的json数据
      */
 
+    private boolean playSoundAudio = false;
     public void playSoundAudio(String params) {
+        UbtLog.d(TAG, "playSoundAudio");
         //{"type":"animal", "key":"id_elephant.wav", "description":"大象"，"playcount":3}
 //        if(((AlphaApplication) getApplicationContext()).isAlpha1E()){
-            if(mSensorHelper != null){
+            if(mSensorHelper != null && !playSoundAudio){
+                playSoundAudio = true;
                 mSensorHelper.playSoundAudio(params);
             }
 //        }else {
@@ -2142,8 +2157,11 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
      * 显示表情
      * @param params
      */
+    private boolean showEmoji = false;
     public void showEmoji(String params) {
-        if(mSensorHelper != null){
+        if(mSensorHelper != null && !showEmoji){
+            UbtLog.d(TAG, "showEmoji");
+            showEmoji = true;
             mSensorHelper.showEmoji(params);
         }
     }

@@ -38,6 +38,7 @@ import com.ubt.alpha1e.ui.helper.IActionsUI;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.SettingHelper;
 import com.ubt.alpha1e.utils.GsonImpl;
+import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -132,6 +133,13 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
         initTabLayout();
         initControlListener();
 
+        mHelper =  MyActionsHelper.getInstance(this);
+        mHelper.setManagerListeners(this);
+        mHelper.registerListeners(this);
+
+        if(requestPosition == 4){
+            startCycleActionFragment();
+        }
     }
 
     @Override
@@ -248,9 +256,9 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
 
         if(requestPosition == 4){
 //            fragment = new MyActionsCircleFragment();
-            if(!AlphaApplication.isCycleActionFragment()){
+            /*if(!AlphaApplication.isCycleActionFragment()){
                 startCycleActionFragment();
-            }
+            }*/
 
         }else if(requestPosition == 3){
             if(getIntent().getExtras() != null){
@@ -288,6 +296,7 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
     //fragment closed
     @Override
     public void onFragmentInteraction() {
+        UbtLog.d(TAG,"myActionsCircleFragment = " + myActionsCircleFragment);
         if(myActionsCircleFragment!=null&&!myActionsCircleFragment.isHidden())
             getSupportFragmentManager().beginTransaction().hide(myActionsCircleFragment).commit();
 //        if(btn_start_cycle!=null)
@@ -1115,6 +1124,7 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
 
         private Fragment getNeedFragment(int pos)
         {
+            UbtLog.d(TAG,"getNeedFragment = " + pos);
             switch (pos)
             {
                 case 0:
@@ -1133,7 +1143,6 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
 
         @Override
         public Fragment getItem(int position) {
-
             Fragment f = mFragmentCache.containsKey(position) ? mFragmentCache.get(position)
                     : getNeedFragment(position);
             if (!mFragmentCache.containsKey(position))
@@ -1161,7 +1170,7 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
         @Override
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             super.setPrimaryItem(container, position, object);
-            fragment = (BaseMyActionsFragment) object;
+            /*fragment = (BaseMyActionsFragment) object;
             if(fragment instanceof MyActionsLocalFragment)
             {
                 mCurrentActionType = MyActionsHelper.Action_type.Base_type;
@@ -1171,8 +1180,10 @@ public class MyActionsActivity extends BaseActivity implements BaseDiaUI,View.On
             }else if(fragment instanceof  MyActionsCreateFragment)
             {
                 mCurrentActionType = MyActionsHelper.Action_type.My_new;
-            }
-            AlphaApplication.setActionType(mCurrentActionType);
+            }*/
+            //AlphaApplication.setActionType(mCurrentActionType);
+
+            AlphaApplication.setActionType(MyActionsHelper.Action_type.Base_type);
 
         }
 
