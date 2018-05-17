@@ -79,6 +79,7 @@ import com.ubt.alpha1e.ui.custom.MainActivityGuideView;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.dialog.RobotBindingDialog;
 import com.ubt.alpha1e.ui.dialog.alertview.RobotBindDialog;
+import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.helper.BluetoothHelper;
 import com.ubt.alpha1e.ui.helper.BluetoothStateHelper;
 import com.ubt.alpha1e.userinfo.mainuser.UserCenterActivity;
@@ -499,6 +500,21 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_remote:
                 if (isBulueToothConnected()) {
+                    if(BaseHelper.isLowBatteryNotExecuteAction){
+                        new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                                .setTitle("提示")
+                                .setMsg("机器人电量低动作不能执行，请充电！")
+                                .setCancelable(true)
+                                .setPositiveButton("确定", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        //调到主界面
+                                        UbtLog.d(TAG, "确定 ");
+                                    }
+                                }).show();
+                        return;
+                    }
+
                     buttonClickAnimation(llRemote);
                     if (!removeDuplicateClickEvent()) {
                         mPresenter.resetGlobalActionPlayer();
@@ -512,6 +528,20 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 break;
             case R.id.ll_action:
                 if (isBulueToothConnected()) {
+                    if(BaseHelper.isLowBatteryNotExecuteAction){
+                        new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                                .setTitle("提示")
+                                .setMsg("机器人电量低动作不能执行，请充电！")
+                                .setCancelable(true)
+                                .setPositiveButton("确定", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        //调到主界面
+                                        UbtLog.d(TAG, "确定 ");
+                                    }
+                                }).show();
+                        return;
+                    }
                     if (!removeDuplicateClickEvent()) {
                         buttonClickAnimation(llAction);
                         mPresenter.resetGlobalActionPlayer();
