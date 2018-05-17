@@ -355,9 +355,9 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     @Override
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
-        UbtLog.d(TAG,"show song name" + album.size());
         try{
         if(album!=null) {
+            UbtLog.d(TAG,"show song name" + album.size());
             player_name.setText(album.get(index).contentName);
             //set playing content
             mHelper.setPlayingContent(album);

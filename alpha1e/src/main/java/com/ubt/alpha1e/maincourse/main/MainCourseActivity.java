@@ -2,6 +2,7 @@ package com.ubt.alpha1e.maincourse.main;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,12 +24,14 @@ import com.ubt.alpha1e.course.principle.PrincipleActivity;
 import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.MainCoursedapter;
+import com.ubt.alpha1e.maincourse.helper.MainCourseHelper;
 import com.ubt.alpha1e.maincourse.model.CourseModel;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerActivity;
 import com.ubt.alpha1e.services.SyncDataService;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import java.util.ArrayList;
@@ -61,6 +64,7 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
         super.onCreate(savedInstanceState);
         mainCourseInstance = this;
         initUI();
+        mHelper = new MainCourseHelper(MainCourseActivity.this);
         mPresenter.getCourcesData();
     }
 
@@ -190,6 +194,8 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
                 }
             else if (position == (1-onlinePlayerEnable)) {
                 if (isBulueToothConnected()) {
+
+                    ((MainCourseHelper)mHelper).stopOnlineRes();
                     String progressKey = Constant.PRINCIPLE_PROGRESS + SPUtils.getInstance().getString(Constant.SP_USER_ID);
                     int progress = SPUtils.getInstance().getInt(progressKey, 0);
                     UbtLog.d("progress", "progress = " + progress);
@@ -212,9 +218,10 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
                 }
 
             } else if (position == (2-onlinePlayerEnable)) {
+                ((MainCourseHelper)mHelper).stopOnlineRes();
                 startActivity(new Intent(this, ActionCourseActivity.class));
-
             } else if (position == (3-onlinePlayerEnable)) {
+                ((MainCourseHelper)mHelper).stopOnlineRes();
                 startActivity(new Intent(this, CourseListActivity.class));
             }
             this.overridePendingTransition(R.anim.activity_open_up_down, 0);

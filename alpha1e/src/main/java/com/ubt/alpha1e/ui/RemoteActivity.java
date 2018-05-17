@@ -29,6 +29,7 @@ import com.ubt.alpha1e.ui.helper.IRemoteUI;
 import com.ubt.alpha1e.ui.helper.MyActionsHelper;
 import com.ubt.alpha1e.ui.helper.RemoteHelper;
 import com.ubt.alpha1e.utils.log.UbtLog;
+import com.ubtechinc.base.ConstValue;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -155,6 +156,11 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
         mHelper = new RemoteHelper(this, this);
         startOrStopRun((byte)0x05);
+
+        UbtLog.d(TAG, "stopEventSound = ");
+        byte[] mCmd = {0};
+        mCmd[0] = 0;
+        mHelper.doSendComm(ConstValue.DV_NOTIFYONLINEPLAYER_EXIT, mCmd);
     }
 
     @Override
