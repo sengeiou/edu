@@ -397,7 +397,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     tvPlayName.setText("正在播放:"+mHelper.getPlayingContent().get(msg.arg1).contentName);
                     clearPlayingStatusFlag();
                     UbtLog.d(TAG,"INDEX "+msg.arg1);
-                    if(currentAlbumId==mHelper.getmAlbumPlayingId()) {
+                    if(currentAlbumId.equals(mHelper.getmAlbumPlayingId())) {
                         setPlayingStatusFlag(true);
                     }
                     moveToPosition(mHelper.getCurrentPlayingAudioIndex());
@@ -426,6 +426,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         UbtLog.d(TAG,"setPlayingStatusFlag "+mHelper.getCurrentPlayingAudioIndex());
         UbtLog.d(TAG,"mHelper.getPlayingContent() "+mHelper.getPlayingContent().size());
         mHelper.getPlayingContent().get(mHelper.getCurrentPlayingAudioIndex()).isPlaying = status;
+        UbtLog.d(TAG,"mHelper isPlaying "+mHelper.getPlayingContent().get(mHelper.getCurrentPlayingAudioIndex()).isPlaying);
     }
 
     private void clearPlayingStatusFlag() {

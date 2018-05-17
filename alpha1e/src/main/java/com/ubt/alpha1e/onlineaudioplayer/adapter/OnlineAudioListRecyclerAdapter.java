@@ -67,7 +67,6 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
         myHolder.tvPlayContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mHelper.getPlayContent().get(position).isPlaying=true;
                 if(mHelper.getAlbumId()!=mHelper.getmAlbumPlayingId()){
                     UbtLog.d(TAG,"SWITCH ID TO "+mHelper.getAlbumId());
                     setPlayingIdInfo(position);
@@ -77,13 +76,14 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             }
         });
 
-            if (mHelper.getPlayContent().get(position).isPlaying) {
-                UbtLog.d(TAG,"POSITION  "+position  );
-                UbtLog.d(TAG,"isPlaying  "+mHelper.getPlayContent().get(position).isPlaying);
-                UbtLog.d(TAG,"isPlayingStatus" +mHelper.ismPlayStatus());
-                    myHolder.playStatusAnim.start();
-                    myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
-                    myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_blue_color));
+        if(mHelper.getAlbumId()==mHelper.getmAlbumPlayingId()) {
+            if (mHelper.getPlayingContent().get(position).isPlaying) {
+                UbtLog.d(TAG, "POSITION  " + position);
+                UbtLog.d(TAG, "isPlaying  " + mHelper.getPlayingContent().get(position).isPlaying);
+                UbtLog.d(TAG, "isPlayingStatus" + mHelper.ismPlayStatus());
+                myHolder.playStatusAnim.start();
+                myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
+                myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_blue_color));
             } else {
                 myHolder.playStatusAnim.stop();
                 myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
@@ -92,7 +92,11 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             if (mHelper.ismPlayStatus()) {
                 myHolder.playStatusAnim.stop();
             }
-
+        }else {
+            myHolder.playStatusAnim.stop();
+            myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
+            myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
+        }
          myHolder.tvPlayContent.setText(playContentInfo.contentName);
     }
 
@@ -104,6 +108,7 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             UbtLog.d(TAG,"set playing info "+mHelper.getPlayContent().size());
             mHelper.setPlayingContent(mHelper.getPlayContent());
         }
+        mHelper.getPlayingContent().get(position).isPlaying=true;
     }
 
     @Override
