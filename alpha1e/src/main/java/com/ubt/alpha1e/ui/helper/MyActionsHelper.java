@@ -99,6 +99,7 @@ public class MyActionsHelper extends BaseHelper implements
     public static final String action_info_all = "action_info_all";
     private int page = 1;
     private int offset = 8;
+    List<Map<String,Object>> mPlayList=new ArrayList<>();
 
 
     public  enum Action_type {
@@ -2763,7 +2764,12 @@ public class MyActionsHelper extends BaseHelper implements
 
     public void setPlayContent(List<Map<String,Object>> nameList){
         mPlayer.setPlayContent(nameList);
+        mPlayList.addAll(nameList);
     }
+    public List<Map<String,Object>> getPlayContent(){
+        return mPlayList;
+    }
+
 
     public void setSensorStatus(boolean status) {
         mSensorState = status;

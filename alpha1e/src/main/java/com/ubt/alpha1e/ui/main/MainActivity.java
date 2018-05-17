@@ -334,7 +334,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         }
         mMainAnimationEffect=new MainAnimationEffect(mContext);
         //GLOBAL ANIMATION EFFECT
-        showAnimationEffect(true);
+        showAnimationEffect(false);
     }
 
     @Override
@@ -1774,8 +1774,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     private void showAnimationEffect(final boolean status ){
                     if (status) {
-                         // showCourseCenterAnimation(rlCourseCenter);
-                         // showCartoonAction_performance(cartoon_action_greeting);
+                          showCourseCenterAnimation(rlCourseCenter);
+                          showCartoonAction_performance(cartoon_action_greeting);
                             try {
                                 gifDrawable = new GifDrawable(getResources(), R.drawable.gif_main);
                                 gifDrawable.addAnimationListener(new AnimationListener() {

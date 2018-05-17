@@ -90,7 +90,7 @@ public class ActionPlayer implements BlueToothInteracter {
                 case UI_NOTE_PLAY_CYCLE_STOP:
                     UbtLog.d(TAG,"20 分钟时间到，自动停止循环播放");
                     mBtManager.sendCommand(mBtMac, ConstValue.DV_SET_PLAY_SOUND, BluetoothParamUtil.stringToBytes(Servo_protection_indication),BluetoothParamUtil.stringToBytes(Servo_protection_indication).length,false);
-                    thiz.doStopCycle(false);
+                    thiz.doStopCycle(true);
                     break;
 
                 default:
@@ -212,11 +212,9 @@ public class ActionPlayer implements BlueToothInteracter {
             if (thiz.mCurrentPlayType == Play_type.single_action) {
                 mCyclePlayThread = null;
                // new Exception().printStackTrace();
-                thiz.doStopSingleAction(needSendComm);
+                thiz.doStopAction(needSendComm);
             } else {
-               // new Exception().printStackTrace();
-                //thiz.doStopSingleAction(true);
-                  thiz.doStopCycle(false);
+                thiz.doStopCycle(needSendComm);
             }
         }
         if (mSourceActionNameList == null) {
@@ -240,7 +238,7 @@ public class ActionPlayer implements BlueToothInteracter {
             thiz.mCurrentPlayState = Play_state.action_finish;
             UbtLog.d(TAG, "---wmma mCurrentPlayType=" + mCurrentPlayType);
             if (mCurrentPlayType == Play_type.cycle_action) {
-                thiz.doStopCycle(false);
+                thiz.doStopCycle(true);
             }else{
                 doStopCurrentPlay(false);
             }
@@ -312,7 +310,7 @@ public class ActionPlayer implements BlueToothInteracter {
             thiz.mCurrentPlayState = Play_state.action_finish;
             UbtLog.d(TAG, "---wmma mCurrentPlayType=" + mCurrentPlayType);
             if (mCurrentPlayType == Play_type.cycle_action) {
-                thiz.doStopCycle(false);
+                thiz.doStopCycle(true);
             }else{
                 doStopCurrentPlay(false);
             }
@@ -418,10 +416,10 @@ public class ActionPlayer implements BlueToothInteracter {
      * needSendComm=true, robot need reply the command
      * needSendComm=false robot donot reply the command
      */
-    private void doStopSingleAction(boolean needSendComm) {
+    private void doStopAction(boolean needSendComm) {
 
         if (needSendComm) {
-            UbtLog.d(TAG,"doStopSingleAction : " + ConstValue.DV_STOPPLAY+" time is      :"+System.currentTimeMillis());
+            UbtLog.d(TAG,"doStopAction : " + ConstValue.DV_STOPPLAY+" time is      :"+System.currentTimeMillis());
             time=System.currentTimeMillis();
             mBtManager.sendCommand(mBtMac, ConstValue.DV_STOPPLAY, null, 0, false);
         }
@@ -429,13 +427,13 @@ public class ActionPlayer implements BlueToothInteracter {
             return;
         }
         notePlayFinish();
-        UbtLog.d(TAG, "doStopSingleAction-->" + thiz.mCurrentPlayState + " to action_finish");
+        UbtLog.d(TAG, "doStopAction-->" + thiz.mCurrentPlayState + " to action_finish");
     }
 /**
  *  shit code
  *  DOSTOPCYCLE
  */
-    private void doStopCycle(boolean is_low_power) {
+    private void doStopCycle(boolean needSendCommand) {
 
         if(mCyclePlayThread == null){
             return;
@@ -450,12 +448,13 @@ public class ActionPlayer implements BlueToothInteracter {
         mIsCycleContinuePlay = false;
         mCyclePlayThread.isShutDowm = true;
         //发送给机器人停止播放
-        doStopSingleAction(true);
-        continueCycle();
+        UbtLog.d(TAG,"doStopCycle "+needSendCommand);
+        doStopAction(true);
+        notifyUnlockCycle();
     }
 
     private void notePlayFinish() {
-        UbtLog.d(TAG, "-->notePlayFinish!");
+        UbtLog.d(TAG, "notePlayFinish!");
         if(thiz == null){
             return;
         }
@@ -474,7 +473,7 @@ public class ActionPlayer implements BlueToothInteracter {
 
 
 
-    private void continueCycle() {
+    private void notifyUnlockCycle() {
         try {
             synchronized (mCyclePlaylock) {
                 UbtLog.d(TAG, "---mCyclePlaylock.notify");
@@ -603,7 +602,7 @@ public class ActionPlayer implements BlueToothInteracter {
                 }
             }
         }else if(cmd==ConstValue.DV_TAP_HEAD||cmd==ConstValue.DV_VOICE_WAIT){
-            UbtLog.d(TAG,"DV_TAP_HEAD");
+            UbtLog.d(TAG,"bt receive robot reply: DV_TAP_HEAD");
             //解决拍头循环播放还进入下一首的问题，直接停止
             stopPlayingAndClearPlayingList(true);
             notifyMainActivityEvent(mCurrentPlayActionName, ActionEvent.Event.ACTION_PLAY_FINISH);
@@ -611,9 +610,9 @@ public class ActionPlayer implements BlueToothInteracter {
 
         }else if (cmd == ConstValue.DV_ACTION_FINISH)// 动作播放完毕
         {
-            UbtLog.d(TAG,"DV_ACTION_FINISH");
             String finishPlayActionName = BluetoothParamUtil.bytesToString(param);
-            UbtLog.d(TAG, "DV_ACTION_FINISH:   finishPlayActionName = " + finishPlayActionName + "    mCurrentPlayActionName = " + mCurrentPlayActionName);
+            UbtLog.d(TAG, "bt receive robot reply: DV_ACTION_FINISH:   finishPlayActionName = " + finishPlayActionName + "    mCurrentPlayActionName = " + mCurrentPlayActionName);
+            UbtLog.d(TAG, "bt receive robot reply: DV_ACTION_FINISH:   mCurrentPlayType = " + mCurrentPlayType);
             boolean isStopLocal = false;
             if(finishPlayActionName.contains(mCurrentPlayActionName)){
                 isStopLocal = true;
@@ -622,62 +621,47 @@ public class ActionPlayer implements BlueToothInteracter {
                 //如果回复播放完成的动作名称与本地当前播放动作名称不一致，则不予处理
                 return;
             }
-            UbtLog.d(TAG, "mCurrentPlayType = " + mCurrentPlayType);
             if (mCurrentPlayType == Play_type.cycle_action) {
-                UbtLog.d(TAG, "DV_ACTION_FINISH ：-->notePlayFinish Play_type.cycle_action");
                 if (thiz != null) {
-                    continueCycle();
-                    UbtLog.d(TAG,"DV_ACTION_FINISH");
+                    notifyUnlockCycle();
                 }
             } else if (mCurrentPlayType == Play_type.single_action) {
-                UbtLog.d(TAG, "-->notePlayFinish Play_type.single_action");
                 doStopCurrentPlay(true);
-                // 防止暂停循环播放后点击普通动作
-//                if (mCyclePlayThread == null) {
-//                    UbtLog.d(TAG, "-->notePlayFinish onReceiveData");
-//                    doStopCurrentPlay(true);
-//                } else {
-////                    if (!mCyclePlayThread.isShutDowm) {
-////                        UbtLog.d(TAG, "-->notePlayFinish onReceiveData 2");
-////                        doStopCurrentPlay(true);
-////                    }
-//                    doStopCurrentPlay(true);
-//                }
             }
-
             notifyMainActivityEvent(finishPlayActionName, ActionEvent.Event.ACTION_PLAY_FINISH);
 
         } else if (cmd == ConstValue.DV_PLAYACTION) {
-            UbtLog.d(TAG, "-->notePlay ConstValue.DV_PLAYACTION " + param[0] + "    = " + mCurrentPlayType);
-            if (param[0] == 2) {
-                if (mCurrentPlayType == Play_type.cycle_action)
-                    thiz.doStopCycle(true);
-            }
+            UbtLog.d(TAG, "bt receive robot reply: DV_PLAYACTION " + param[0] + "    = " + mCurrentPlayType);
+            //TODO ???
+//            if (param[0] == 2) {
+//                if (mCurrentPlayType == Play_type.cycle_action) {
+//                    thiz.doStopCycle(true);
+//                }
+//            }
         }
         // 如果禁止边充边玩
         else if (cmd == ConstValue.SET_PALYING_CHARGING) {
-            if (param[0] == 0 && thiz.mCurrentPlayState == Play_state.action_playing) {
-                if(mIsCycleContinuePlay){
-                    UbtLog.d(TAG,"SET_PALYING_CHARGING  ");
-                    mIsCycleContinuePlay = false;
-                }
-
-                if (thiz.mListeners != null){
-                    for (int i = 0; i < mListeners.size(); i++) {
-                        thiz.mListeners.get(i).notePlayChargingError();
-                    }
-                }
-            }
+//            if (param[0] == 0 && thiz.mCurrentPlayState == Play_state.action_playing) {
+//                if(mIsCycleContinuePlay){
+//                    UbtLog.d(TAG,"SET_PALYING_CHARGING  ");
+//                    mIsCycleContinuePlay = false;
+//                }
+//                if (thiz.mListeners != null){
+//                    for (int i = 0; i < mListeners.size(); i++) {
+//                        thiz.mListeners.get(i).notePlayChargingError();
+//                    }
+//                }
+//            }
         }else if(cmd == ConstValue.DV_STOPPLAY){
-            UbtLog.d(TAG,"DV_STOPPLAY :reply stop  time "+(System.currentTimeMillis()-time)+" mCurrentPlayType:  "+ mCurrentPlayType+"MyActionsHelper.mCurrentLocalPlayType: "+MyActionsHelper.mCurrentLocalPlayType);
-            if(System.currentTimeMillis()-mCurrentExecuteTime>1){
-                stopPlayingAndClearPlayingList(false);
-                notifyMainActivityEvent(mCurrentPlayActionName, ActionEvent.Event.ACTION_PLAY_FINISH);
-            }
+            UbtLog.d(TAG,"bt receive robot reply:DV_STOPPLAY reply stop  time "+(System.currentTimeMillis()-time)+" mCurrentPlayType:  "+ mCurrentPlayType+"MyActionsHelper.mCurrentLocalPlayType: "+MyActionsHelper.mCurrentLocalPlayType);
+//            if(System.currentTimeMillis()-mCurrentExecuteTime>1){
+//                stopPlayingAndClearPlayingList(false);
+//                notifyMainActivityEvent(mCurrentPlayActionName, ActionEvent.Event.ACTION_PLAY_FINISH);
+//            }
 
         }else if(cmd == ConstValue.DV_CURRENT_PLAY_NAME){
             String robotCurrentPlayName = BluetoothParamUtil.bytesToString(param);
-            UbtLog.d(TAG, "robotCurrentPlayName : " + robotCurrentPlayName + "    mCurrentPlayActionName = " + mCurrentPlayActionName);
+            UbtLog.d(TAG, "bt receive robot reply: DV_CURRENT_PLAY_NAME robotCurrentPlayName : " + robotCurrentPlayName + "    mCurrentPlayActionName = " + mCurrentPlayActionName);
         }
     }
 
@@ -723,14 +707,14 @@ public class ActionPlayer implements BlueToothInteracter {
 
         public void run() {
 
-            UbtLog.d(TAG, "---mCyclePlaylock.run");
             //最长播放时长
             mHandler.sendEmptyMessageDelayed(UI_NOTE_PLAY_CYCLE_STOP,AUTO_STOP_PLAY_CYCLE_TIME);
-
             int i = 0;
-            UbtLog.d(TAG, "BEFORE 循环播放功能，播放动作：" + mActionNameList[i] + "   isShutDowm：" + isShutDowm+"    mIsCycleContinuePlay:   "+mIsCycleContinuePlay+"  isStopCycleThread:  "+isStopCycleThread);
+            UbtLog.d(TAG, "mCyclePlaylock BEFORE " + mActionNameList[i] );
+            UbtLog.d(TAG, "mCyclePlaylock BEFORE isShutDowm：" + isShutDowm);
+            UbtLog.d(TAG, "mCyclePlaylock BEFORE mIsCycleContinuePlay:   "+mIsCycleContinuePlay);
+            UbtLog.d(TAG, "mCyclePlaylock BEFORE isStopCycleThread:  "+isStopCycleThread);
             while (mIsCycleContinuePlay && !isStopCycleThread ) {
-               // UbtLog.d(TAG, "AFTER 循环播放功能，播放动作：" + mActionNameList[i] + "   isShutDowm：" + isShutDowm+"    mIsCycleContinuePlay:   "+mIsCycleContinuePlay+"  isStopCycleThread:  "+isStopCycleThread);
                 if (!isShutDowm && thiz.mCurrentPlayState == Play_state.action_playing) {
                     String action_name = mActionNameList[i];
                     String actionName = mActionNameList[i];
@@ -738,13 +722,12 @@ public class ActionPlayer implements BlueToothInteracter {
                         ActionInfo actionInfo = MyActionsHelper.mCurrentSeletedActionInfoMap.get(action_name);
                         if(actionInfo == null){
                             //线上友盟crash报null,但是找不到规律，判null处理
-                           // UbtLog.d(TAG,"ACTIONINFO NULL");
+                            UbtLog.d(TAG,"mCyclePlaylock ACTIONINFO NULL");
                             continue;
                         }
                         actionName = actionInfo.actionName;
 //                        //全局控制按钮消失DESTROY后，需要通过这个变量来获取正在播放的
                         AlphaApplication.getBaseActivity().saveCurrentPlayingActionName(actionInfo.actionName);
-                        //setActionShowName(mDatas,action_name);
                         int pos = actionInfo.actionSize;
                         if(pos < MyActionsHelper.localSize){
                             action_name = FileTools.action_robot_file_path + "/"+action_name+".hts";
@@ -758,7 +741,7 @@ public class ActionPlayer implements BlueToothInteracter {
                         action_name = FileTools.action_robot_file_path + "/"+action_name+".hts";
                     }
 
-                    UbtLog.d(TAG,"doCycle mCurrentPlayActionName = " + action_name);
+                    UbtLog.d(TAG,"mCyclePlaylock mCurrentPlayActionName = " + action_name);
                     doPlay(action_name);
 
                     Message msg = new Message();
@@ -768,7 +751,7 @@ public class ActionPlayer implements BlueToothInteracter {
                     mHandler.sendMessage(msg);
 
                 }else {
-                    UbtLog.d(TAG,"not loop");
+                    UbtLog.d(TAG,"mCyclePlaylock not loop");
                 }
                 i++;
                 if (i == mActionNameList.length){
@@ -783,16 +766,17 @@ public class ActionPlayer implements BlueToothInteracter {
                         e.printStackTrace();
                     }
                 }
-                UbtLog.d(TAG,"not loop two   "+thiz.mCurrentPlayState);
-            }
+                UbtLog.d(TAG,"CycleThread unlock   mCurrentPlayState "+thiz.mCurrentPlayState);
+                UbtLog.d(TAG,"CycleThread unlock   mIsCycleContinuePlay "+mIsCycleContinuePlay );
+                UbtLog.d(TAG,"CycleThread unlock   isStopCycleThread "+isStopCycleThread );
 
+            }
+            UbtLog.d(TAG,"CycleThread exit    "+thiz.mCurrentPlayState);
             if(mHandler.hasMessages(UI_NOTE_PLAY_CYCLE_STOP)){
                 mHandler.removeMessages(UI_NOTE_PLAY_CYCLE_STOP);
             }
             mIsCycleContinuePlay = false;
             mCyclePlayThread.isShutDowm = true;
-           // doStopCycle(false);
-            // mCyclePlayThread = null;
         }
     }
 
@@ -823,7 +807,8 @@ public class ActionPlayer implements BlueToothInteracter {
 
     public static boolean isStopCycleThread = false;
     public static void StopCycleThread(boolean stop){
-        UbtLog.d(TAG, "StopCycleThread -1");
+        UbtLog.d(TAG, "StopCycleThread isStopCycleThread "+stop );
+       // new Exception().printStackTrace();
         isStopCycleThread = stop;
     }
 
@@ -835,7 +820,6 @@ public class ActionPlayer implements BlueToothInteracter {
             item.put(MyActionsHelper.map_val_action_is_playing, false);
             item.put(MyActionsHelper.map_val_action_selected, false);
         }
-        //mDatas.clear();
     }
     private void clearSinglePlayStatus(){
         for (Map<String, Object> item : mDatas) {
@@ -847,16 +831,6 @@ public class ActionPlayer implements BlueToothInteracter {
         mDatas=nameList;
     }
 
-//    private void setActionShowName(List<Map<String, Object>> list,String action_name_id) {
-//        for ( int i = 0 ; i < list.size() - 1 ; i ++ ) {
-//            UbtLog.d(TAG,"INDEX "+list.get(i).get(ActionsHelper.map_val_action));
-//            if(list.get(i).get(ActionsHelper.map_val_action).equals(action_name_id)){
-//                UbtLog.d(TAG,"setActionShowNa"+list.get(i).get(ActionsHelper.map_val_action_name).toString());
-//                AlphaApplication.getBaseActivity().saveCurrentPlayingActionName(list.get(i).get(ActionsHelper.map_val_action_name).toString());
-//                break;
-//            }
-//        }
-//    }
     /**
      * 是否发送给机器人停止执行动作的命令
      * @param isSendStop
