@@ -121,11 +121,11 @@ public class RobotInnerActionInfoUtil {
     }
 
     public static String  getImageIcon(String actionName){
-        UbtLog.d(TAG,"actionName"+actionName+"getImageIcon        "+mActionIconInfo.get(actionName));
+        //UbtLog.d(TAG,"actionName"+actionName+"getImageIcon        "+mActionIconInfo.get(actionName));
         return mActionIconInfo.get(actionName);
     };
     public static String getTime(String actionName){
-        UbtLog.d(TAG,"actionName"+actionName+"getTime        "+mActionTimeInfo.get(actionName));
+       // UbtLog.d(TAG,"actionName"+actionName+"getTime        "+mActionTimeInfo.get(actionName));
         return mActionTimeInfo.get(actionName);
     }
 
