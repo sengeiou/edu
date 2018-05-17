@@ -377,35 +377,35 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     //set pause/play status false is equal playing
                     mHelper.setmPlayStatus(false);
                     ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
-                    String playName = "正在播放：" + mHelper.getPlayContent().get(mHelper.getCurrentPlayingAudioIndex()).contentName /*+ "_" + currentPlaySeq*/;
+                    String playName = "正在播放：" + mHelper.getPlayingContent().get(mHelper.getCurrentPlayingAudioIndex()).contentName /*+ "_" + currentPlaySeq*/;
                     tvPlayName.setText(playName);
                     ivPlayNone.setVisibility(View.GONE);
                     ivPlayStatus.setVisibility(View.VISIBLE);
                     playStatusAnim.start();
-                    for (AudioContentInfo mPlayContentInfo : mHelper.getPlayContent()) {
-                        mPlayContentInfo.isPlaying = false;
+                    clearPlayingStatusFlag();
+                    UbtLog.d(TAG,"UPDATE_CURRENT_PLAY "+mHelper.getCurrentPlayingAudioIndex());
+                    UbtLog.d(TAG,"UPDATE_CURRENT_PLAY  currentAlbumId  "+currentAlbumId);
+                    UbtLog.d(TAG,"UPDATE_CURRENT_PLAY  getmAlbumPlayingId"+mHelper.getmAlbumPlayingId());
+                    if(currentAlbumId.equals(mHelper.getmAlbumPlayingId())) {
+                        setPlayingStatusFlag(true);
+                        moveToPosition(mHelper.getCurrentPlayingAudioIndex());
                     }
-                    UbtLog.d(TAG,"INDEX "+mHelper.getCurrentPlayingAudioIndex());
-                    mHelper.getPlayContent().get(mHelper.getCurrentPlayingAudioIndex()).isPlaying = true;
-                    moveToPosition(mHelper.getCurrentPlayingAudioIndex());
                     mAdapter.notifyDataSetChanged();
                     break;
                 case PAUSE_CURRENT_PLAY:
                     mHelper.setmPlayStatus(true);
                     tvPlayName.setText("正在播放:"+mHelper.getPlayingContent().get(msg.arg1).contentName);
-                    for (AudioContentInfo mPlayContentInfo : mHelper.getPlayContent()) {
-                        mPlayContentInfo.isPlaying = false;
-                    }
+                    clearPlayingStatusFlag();
                     UbtLog.d(TAG,"INDEX "+msg.arg1);
-                    mHelper.getPlayContent().get(msg.arg1).isPlaying = true;
+                    if(currentAlbumId==mHelper.getmAlbumPlayingId()) {
+                        setPlayingStatusFlag(true);
+                    }
                     moveToPosition(mHelper.getCurrentPlayingAudioIndex());
                     mAdapter.notifyDataSetChanged();
                     break;
                 case STOP_CURRENT_PLAY:
                     UbtLog.d(TAG,"STOP PLAYING STATUS ");
-                    for (AudioContentInfo mPlayContentInfo : mHelper.getPlayContent()) {
-                        mPlayContentInfo.isPlaying = false;
-                    }
+                    clearPlayingStatusFlag();
                     if(mAdapter!=null) {
                         mAdapter.notifyDataSetChanged();
                     }
@@ -414,9 +414,6 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                 case DIFFALBUM_CURRENT_PLAY:
                     mPlayingalbumID=(String)msg.obj;
                     UbtLog.d(TAG,"DIFFALBUM_CURRENT_PLAY   "+mPlayingalbumID +mHelper.getAlbumId());
-                    ivPlayNone.setVisibility(View.GONE);
-                    ivPlayStatus.setVisibility(View.VISIBLE);
-                    playStatusAnim.start();
                     tvPlayName.setText("正在播放:"+mHelper.getPlayingContent().get(msg.arg1).contentName);
                     break;
                 default:
@@ -424,6 +421,19 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             }
         }
     };
+
+    private void setPlayingStatusFlag(boolean status) {
+        UbtLog.d(TAG,"setPlayingStatusFlag "+mHelper.getCurrentPlayingAudioIndex());
+        UbtLog.d(TAG,"mHelper.getPlayingContent() "+mHelper.getPlayingContent().size());
+        mHelper.getPlayingContent().get(mHelper.getCurrentPlayingAudioIndex()).isPlaying = status;
+    }
+
+    private void clearPlayingStatusFlag() {
+        for (AudioContentInfo mPlayContentInfo : mHelper.getPlayingContent()) {
+            mPlayContentInfo.isPlaying = false;
+        }
+    }
+
     /**
      * 初始化机器人状态
      */
@@ -486,18 +496,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
              }
             if (event.getStatus().equals("playing")) {
                 if(currentAlbumId.equals(event.getAlbumId())) {
-                    mHelper.setCurentPlayingAudioIndex(event.getCurrentPlayingIndex());
-//                    mHelper.setmCategoryId(event.getCateogryId());
-//                    mHelper.setAlbumId(event.getAlbumId());
                     mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                initState("playing");
-                            };
-                        });
-                    }
                 }else {
                      //TODO NEW REQUIREMENT FROM PRODUCT MANAGER
                     Message mDiffAlbum = new Message();
@@ -506,8 +505,18 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     mDiffAlbum.obj=event.getAlbumId();
                     mHandler.sendMessage(mDiffAlbum);
                 }
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            initState("playing");
+                        };
+                    });
+                }
+                //SET CURRENT PLAYING ID
+                setPlayingIdInfo(event);
             }else if(event.getStatus().equals("pause")){
-                if (currentAlbumId.equals(event.getAlbumId())) {
+                //if (currentAlbumId.equals(event.getAlbumId())) {
                     Message pauseInfo = new Message();
                     pauseInfo.what = PAUSE_CURRENT_PLAY;
                     pauseInfo.arg1 = event.getCurrentPlayingIndex();
@@ -520,7 +529,9 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                             };
                         });
                     }
-                }
+                //SET CURRENT PLAYING ID
+                setPlayingIdInfo(event);
+              //  }
             }else if(event.getStatus().equals("quit")){
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
@@ -536,6 +547,12 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             UbtLog.d(TAG,"TAP_HEAD_OR_VOICE_WAKE");
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         }
+    }
+
+    private void setPlayingIdInfo(PlayerEvent event) {
+        mHelper.setmCategoryPlayingId(event.getCateogryId());
+        mHelper.setmAlbumPlayingId(event.getAlbumId());
+        mHelper.setCurentPlayingAudioIndex(event.getCurrentPlayingIndex());
     }
 }
 

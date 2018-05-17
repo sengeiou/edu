@@ -439,7 +439,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         UbtLog.d(TAG,"event = " + event.toString());
         if (event.getEvent() == PlayerEvent.Event.CONTROL_PLAY_NEXT) {
             UbtLog.d(TAG, "CONTROL_PLAY event = next " + event.getCurrentPlayingSongName());
-            if (getActivity() != null) {
+            if (getActivity() != null&&event.getCurrentPlayingSongName()!=null) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

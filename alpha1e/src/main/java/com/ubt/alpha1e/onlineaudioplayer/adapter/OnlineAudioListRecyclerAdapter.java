@@ -68,24 +68,42 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             @Override
             public void onClick(View view) {
                 mHelper.getPlayContent().get(position).isPlaying=true;
+                if(mHelper.getAlbumId()!=mHelper.getmAlbumPlayingId()){
+                    UbtLog.d(TAG,"SWITCH ID TO "+mHelper.getAlbumId());
+                    setPlayingIdInfo(position);
+                }
                 //CLICK AUDIO LIST
-                mHelper.playEvent("playing",mHelper.getmCategoryId(),mHelper.getAlbumId(), position);
+                mHelper.playEvent("playing",mHelper.getmCategoryPlayingId(),mHelper.getmAlbumPlayingId(), position);
             }
         });
-        UbtLog.d(TAG,"POSITION  "+position +"mHelper.getPlayContent().get(position).isPlaying  "+mHelper.getPlayContent().get(position).isPlaying);
-        if(mHelper.getPlayContent().get(position).isPlaying){
-            myHolder.playStatusAnim.start();
-            myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
-            myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_blue_color) );
-        }else {
-            myHolder.playStatusAnim.stop();
-            myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
-            myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
-        }
-        if(mHelper.ismPlayStatus()){
-            myHolder.playStatusAnim.stop();
-        }
+
+            if (mHelper.getPlayContent().get(position).isPlaying) {
+                UbtLog.d(TAG,"POSITION  "+position  );
+                UbtLog.d(TAG,"isPlaying  "+mHelper.getPlayContent().get(position).isPlaying);
+                UbtLog.d(TAG,"isPlayingStatus" +mHelper.ismPlayStatus());
+                    myHolder.playStatusAnim.start();
+                    myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
+                    myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_blue_color));
+            } else {
+                myHolder.playStatusAnim.stop();
+                myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
+                myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
+            }
+            if (mHelper.ismPlayStatus()) {
+                myHolder.playStatusAnim.stop();
+            }
+
          myHolder.tvPlayContent.setText(playContentInfo.contentName);
+    }
+
+    private void setPlayingIdInfo(int position) {
+        mHelper.setmCategoryPlayingId(mHelper.getmCategoryId());
+        mHelper.setmAlbumPlayingId(mHelper.getAlbumId());
+        mHelper.setCurentPlayingAudioIndex(position);
+        if(mHelper.getPlayContent().size()>0) {
+            UbtLog.d(TAG,"set playing info "+mHelper.getPlayContent().size());
+            mHelper.setPlayingContent(mHelper.getPlayContent());
+        }
     }
 
     @Override

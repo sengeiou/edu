@@ -40,6 +40,28 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     private int currentPlaySeq = 0;
 //    private boolean isRecyclePlaying = true;
     private String mAlbumId;
+    private String mCategoryId;
+
+    public String getmAlbumPlayingId() {
+        return mAlbumPlayingId;
+    }
+
+    public void setmAlbumPlayingId(String mAlbumPlayingId) {
+        this.mAlbumPlayingId = mAlbumPlayingId;
+    }
+
+    private String mAlbumPlayingId;
+
+    public String getmCategoryPlayingId() {
+        return mCategoryPlayingId;
+    }
+
+    public void setmCategoryPlayingId(String mCategoryPlayingId) {
+        this.mCategoryPlayingId = mCategoryPlayingId;
+    }
+
+    private String mCategoryPlayingId;
+
 
     public String getmCategoryId() {
         return mCategoryId;
@@ -49,7 +71,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         this.mCategoryId = mCategoryId;
     }
 
-    private String mCategoryId;
+
 
     private static OnlineAudioResourcesHelper mOnlineAudioResourcesHelper = null;
 
@@ -128,8 +150,8 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             if (param[0] == 0x01) {
                 UbtLog.d(TAG, "cmd = " + cmd + "    reply" + param[0]);
             }else if(param[0]==0x02) {
-                PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE);
-                EventBus.getDefault().post(mPlayerEvent);
+//                PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE);
+//                EventBus.getDefault().post(mPlayerEvent);
             }else {
                     UbtLog.d(TAG, "cmd = " + cmd + "  next audio notify" + BluetoothParamUtil.bytesToString(param));
                     try {
@@ -140,6 +162,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
                         mCmd.get("index");
                         UbtLog.d(TAG, "cmd = " + cmd + "  next audio notify:   " + mCmd.get("status") +" next index : "+   mCmd.get("index"));
                         if (mCmd.get("status").equals("next")) {
+                            setCurentPlayingAudioIndex(Integer.parseInt(mCmd.get("index").toString()));
                             notifyUiNextAudio(Integer.parseInt(mCmd.get("index").toString()));
                         }
                     } catch (JSONException e) {
@@ -163,13 +186,8 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     }
 
     private void notifyUiCurrentRobotStatus(JSONObject mCmd) throws JSONException {
-//        saveAudioHistory(Integer.parseInt(mCmd.get("index").toString()));
-//        if(!mCmd.get("index").toString().equals("")) {
-//            setCurentPlayingAudioIndex(Integer.parseInt(mCmd.get("index").toString()));
-//        }
         notifyCurrentRobotOnlineStatus(mCmd);
     }
-
     private void notifyCurrentRobotOnlineStatus(JSONObject mCmd) throws JSONException {
         PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS);
         mPlayerEvent.setCateogryId(mCmd.get("categoryId").toString());
@@ -225,7 +243,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     private void notifyUiNextAudio(int index) {
 //        saveAudioHistory(index);
-        setCurentPlayingAudioIndex(index);
+        //setCurentPlayingAudioIndex(index);
         notifyNextAudioMesssage(index);
     }
 
@@ -264,8 +282,8 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     private void notifyNextAudioMesssage(int index) {
         PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_PLAY_NEXT);
         //NEXT AUDIO NAME INFORMATION
-        if(mPlayContentInfoList.size()>0) {
-            mPlayerEvent.setCurrentPlayingSongName(mPlayContentInfoList.get(index).contentName);
+        if(getPlayingContent().size()>0) {
+            mPlayerEvent.setCurrentPlayingSongName(getPlayingContent().get(index).contentName);
         }
         mPlayerEvent.setCurrentPlayingIndex(index);
         EventBus.getDefault().post(mPlayerEvent);
@@ -322,7 +340,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         }
         UbtLog.d(TAG,"NEXTS AUDIO "+currentPlaySeq);
         //NEXT AUDIO PLAY
-        playEvent("playing",getmCategoryId(),getAlbumId(),currentPlaySeq);
+        playEvent("playing",getmCategoryPlayingId(),getmAlbumPlayingId(),currentPlaySeq);
     }
 
     public void prevAudioPlay() {
@@ -341,7 +359,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         }
         UbtLog.d(TAG,"PRE AUDIO "+currentPlaySeq);
         //PREV AUDIO PLAY
-        playEvent("playing",getmCategoryId(),getAlbumId(),currentPlaySeq);
+        playEvent("playing",getmCategoryPlayingId(),getmAlbumPlayingId(),currentPlaySeq);
         //   ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
         //   mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
     }
@@ -386,9 +404,9 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         }
         mPlayContentInfoList.clear();
         mPlayContentInfoList.addAll(playContentInfoList);
-        for (int i = 0; i < mPlayContentInfoList.size(); i++) {
-            UbtLog.d(TAG, "i = " + i + "     name = " + mPlayContentInfoList.get(i).contentName + "url: " + mPlayContentInfoList.get(i).contentUrl);
-        }
+//        for (int i = 0; i < mPlayContentInfoList.size(); i++) {
+//            UbtLog.d(TAG, "i = " + i + "     name = " + mPlayContentInfoList.get(i).contentName + "url: " + mPlayContentInfoList.get(i).contentUrl);
+//        }
         UbtLog.d(TAG, "mPlayContentInfoList.size() = " + mPlayContentInfoList.size());
     }
 
