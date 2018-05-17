@@ -119,6 +119,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                     onPause();
                     break;
                 case STOP_CURRENT_PLAY:
+                    isPause = true ;
                     pausePlay();
                     break;
             }
@@ -248,7 +249,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         mRecyclerview.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         getMaxCategory();
-        mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
+//        mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
+        pausePlay();
     }
 
     //拉最大的类别
@@ -411,7 +413,6 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     //停止播放
     public void pausePlay() {
-        isPause = true ;
         if(ig_player_state!=null) {
             ig_player_state.setVisibility(View.VISIBLE);
             ig_player_state.setBackground(getActivity().getDrawable(R.drawable.playindicator_animation));
@@ -431,6 +432,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         if(player_name != null && player_name.getVisibility() == View.VISIBLE && player_name.getText().toString().equals("暂无播放历史")){
             ig_player_button.setImageResource(R.drawable.ic_play_disable);
             ig_player_list.setImageResource(R.drawable.ic_list_disable);
+//            ig_player_state.setImageResource(R.drawable.cc_default_playindicator);
         }
     }
 
@@ -439,6 +441,9 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         UbtLog.d(TAG,"event = " + event.toString());
         if (event.getEvent() == PlayerEvent.Event.CONTROL_PLAY_NEXT) {
             UbtLog.d(TAG, "CONTROL_PLAY event = next " + event.getCurrentPlayingSongName());
+            if(event.getCurrentPlayingSongName() == null ){
+                return;
+            }
             if (getActivity() != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
