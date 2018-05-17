@@ -431,6 +431,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         if(player_name != null && player_name.getVisibility() == View.VISIBLE && player_name.getText().toString().equals("暂无播放历史")){
             ig_player_button.setImageResource(R.drawable.ic_play_disable);
             ig_player_list.setImageResource(R.drawable.ic_list_disable);
+            ig_player_state.setImageResource(R.drawable.cc_default_playindicator);
         }
     }
 
