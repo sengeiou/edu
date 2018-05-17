@@ -96,7 +96,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     public onlineresAdpater mAdapter;
     public List<OnlineresList> onlineresList = new ArrayList<>();
     public final static int LAUNCH_CATEGORY_ITEM = 1;
-    public final static int STOP_CURRENT_PLAY=2;
+    public final static int PAUSE_CURRENT_PLAY=2;
+    public final static int STOP_CURRENT_PLAY=3;
     private static final int GET_MAX_CATEGORY = 50;
     private static final int REQUEST_RESULT=1001;
     private static final int REQUEST_RESULT_PLAYLIST=1002;
@@ -118,9 +119,12 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                     startForResult(mfragment,REQUEST_RESULT);
                     onPause();
                     break;
-                case STOP_CURRENT_PLAY:
+                case PAUSE_CURRENT_PLAY:
                     isPause = true ;
                     pausePlay();
+                    break;
+                case STOP_CURRENT_PLAY:
+                    noPlaying();
                     break;
             }
         }
@@ -147,6 +151,10 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             UbtLog.d(TAG, "--wmma--mHelper UnRegisterHelper! " + mHelper.getClass().getSimpleName());
             mHelper.UnRegisterHelper();
         }
+        if(EventBus.getDefault().isRegistered(this)) {
+            UbtLog.d(TAG, "UnRegisterHelper EventBus!");
+            EventBus.getDefault().unregister(this);
+        }
     }
 
     @Override
@@ -157,6 +165,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             mHelper.RegisterHelper();
         }
         if(!EventBus.getDefault().isRegistered(this)) {
+            UbtLog.d(TAG, "RegisterHelper EventBus!");
             EventBus.getDefault().register(this);
         }
         //获取机器人当前播放状态
@@ -204,7 +213,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 isPause = false;
                 mHelper.continueEvent();
                 playing();
-                mHelper.playEvent("playing",mHelper.getmCategoryId(),mHelper.getAlbumId(),mHelper.getCurrentPlayingAudioIndex());
+                mHelper.playEvent("playing",mHelper.getmCategoryPlayingId(),mHelper.getmAlbumPlayingId(),mHelper.getCurrentPlayingAudioIndex());
                 ig_player_button.setImageResource(R.drawable.ic_ct_pause);
             }else {
                 isPause = true;
@@ -454,8 +463,11 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             }
         } else if (event.getEvent() == PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE) {
             UbtLog.d(TAG,"TAP_HEAD_OR_VOICE_WAKE");
+            mHandler.sendEmptyMessage(PAUSE_CURRENT_PLAY);
+        }else if(event.getEvent()==PlayerEvent.Event.CONTROL_STOP){
+            UbtLog.d(TAG, "CONTROL_STOPSTOP STATUS ");
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
-        } else if (event.getEvent() == PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
+        }else  if (event.getEvent() == PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
             UbtLog.d(TAG, "show albumId  " + event.getAlbumId() + "    status:   "+event.getStatus()+"categoryID"+event.getCateogryId());
             //GET AUDIO SONG
             mPresenter.getAudioList(event.getAlbumId());
@@ -463,11 +475,11 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             mAlbumHistory.setAlbumId(event.getAlbumId());
             mAlbumHistory.setCategoryId(event.getCateogryId());
             //SET CURRENT PLAY INFORMATION
-//            mHelper.setmCategoryId(event.getCateogryId());
-//            mHelper.setAlbumId(event.getAlbumId());
             index = event.getCurrentPlayingIndex();
             if (event.getStatus().equals("playing")) {
+                UbtLog.d(TAG, "PLAYING STATUS PLAYING");
                 isPause = false;
+                setPlayingIdInfo(event);
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -480,7 +492,9 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                     });
                 }
             } else if (event.getStatus().equals("pause")) {
+                UbtLog.d(TAG, "PAUSE STATUS PLAYING");
                 isPause = true;
+                setPlayingIdInfo(event);
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -493,6 +507,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                     });
                 }
             } else if (event.getStatus().equals("quit")) {
+                UbtLog.d(TAG, "QUIT STATUS PLAYING");
                 mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
             }
         }
@@ -506,6 +521,12 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         }else if(requestCode==REQUEST_RESULT_PLAYLIST){
             onResume();
         }
+    }
+
+    private void setPlayingIdInfo(PlayerEvent event) {
+        mHelper.setmCategoryPlayingId(event.getCateogryId());
+        mHelper.setmAlbumPlayingId(event.getAlbumId());
+        mHelper.setCurentPlayingAudioIndex(event.getCurrentPlayingIndex());
     }
 }
 

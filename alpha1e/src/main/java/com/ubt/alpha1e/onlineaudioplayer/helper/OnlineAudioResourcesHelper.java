@@ -150,8 +150,8 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             if (param[0] == 0x01) {
                 UbtLog.d(TAG, "cmd = " + cmd + "    reply" + param[0]);
             }else if(param[0]==0x02) {
-//                PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE);
-//                EventBus.getDefault().post(mPlayerEvent);
+                PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_STOP);
+                EventBus.getDefault().post(mPlayerEvent);
             }else {
                     UbtLog.d(TAG, "cmd = " + cmd + "  next audio notify" + BluetoothParamUtil.bytesToString(param));
                     try {
@@ -374,6 +374,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             UbtLog.d(TAG, "setPlayContent is null");
             return;
         }
+        new Exception().printStackTrace();
         mPlayingContentInfoList.clear();
         mPlayingContentInfoList.addAll(playContentInfoList);
     }
