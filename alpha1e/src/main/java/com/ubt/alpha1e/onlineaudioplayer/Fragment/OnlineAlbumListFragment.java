@@ -74,7 +74,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     public static String mAlbumId="";
     public static AlbumContentInfo mAlbumContentInfo;
     OnlineAudioResourcesHelper mHelper;
-
+    static OnlineAlbumListFragment mOnlineAudioAlbumPlayerFragment;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -116,7 +116,9 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         }
     };
     public static OnlineAlbumListFragment newInstance(OnlineresList mCategory){
-        OnlineAlbumListFragment mOnlineAudioAlbumPlayerFragment  = new OnlineAlbumListFragment();
+        if(mOnlineAudioAlbumPlayerFragment==null) {
+            mOnlineAudioAlbumPlayerFragment = new OnlineAlbumListFragment();
+        }
         mCategoryId=mCategory.getRes_id();
         mCategoryName  =mCategory.getRes_name();
         type = CATEGORY_ENTER_FRAGMENT;
@@ -124,8 +126,9 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         return mOnlineAudioAlbumPlayerFragment;
     }
     public static OnlineAlbumListFragment newInstance(AlbumContentInfo albumContentInfo) {
-
-        OnlineAlbumListFragment mOnlineAudioAlbumPlayerFragment  = new OnlineAlbumListFragment();
+        if(mOnlineAudioAlbumPlayerFragment==null) {
+            mOnlineAudioAlbumPlayerFragment = new OnlineAlbumListFragment();
+        }
         mAlbumContentInfo=albumContentInfo;
         mCategoryId=albumContentInfo.getCategoryId();
         mAlbumId=albumContentInfo.albumId;

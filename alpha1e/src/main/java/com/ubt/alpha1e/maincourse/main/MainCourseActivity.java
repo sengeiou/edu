@@ -56,8 +56,9 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     private List<CourseModel> mCourseModels;
     private MainCoursedapter mMainCoursedapter;
     public static int onlinePlayerEnable=0; //0 enable 1 disale
-
+    public static boolean ADD_CONFICT_SOLUTION=true;
     private static MainCourseActivity mainCourseInstance = null;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +67,9 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
         initUI();
         mHelper = new MainCourseHelper(MainCourseActivity.this);
         mPresenter.getCourcesData();
+        if(ADD_CONFICT_SOLUTION) {
+            ((MainCourseHelper) mHelper).stopActionPlayRes();
+        }
     }
 
     @OnClick(R.id.iv_main_back)
@@ -194,7 +198,6 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
                 }
             else if (position == (1-onlinePlayerEnable)) {
                 if (isBulueToothConnected()) {
-
                     ((MainCourseHelper)mHelper).stopOnlineRes();
                     String progressKey = Constant.PRINCIPLE_PROGRESS + SPUtils.getInstance().getString(Constant.SP_USER_ID);
                     int progress = SPUtils.getInstance().getInt(progressKey, 0);

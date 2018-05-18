@@ -20,8 +20,6 @@ public class OnlineAudioPlayerContract {
        void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs);
        //网络请求错误回调  requestType 网络请求的标识，errorCode 错误码
        void onRequestStatus(int requestType, int errorCode);
-
-
     }
 
    public interface  Presenter extends BasePresenter<View> {

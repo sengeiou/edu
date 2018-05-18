@@ -1,6 +1,7 @@
 package com.ubt.alpha1e.onlineaudioplayer.Fragment;
 
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,7 +17,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.AppManager;
+import com.ubt.alpha1e.base.ResourceManager;
+import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
+import com.ubt.alpha1e.course.feature.FeatureActivity;
+import com.ubt.alpha1e.course.merge.MergeActivity;
+import com.ubt.alpha1e.course.principle.PrincipleActivity;
+import com.ubt.alpha1e.course.split.SplitActivity;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerContract;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerPresenter;
@@ -26,6 +38,7 @@ import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.CategoryContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
+import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -83,6 +96,10 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     private String  RECYCLE_LOOP="1";
     private String SINGLE_LOOP ="2";
     private String mPlayingalbumID;
+    private String mInitTextName="暂无播放内容";
+    private String PLAYING_STATE="playing";
+    private String PAUSE_STATE="pause";
+    private String STOP_STATE="quit";
 
     @Override
     public void onResume() {
@@ -222,13 +239,13 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                 case R.id.iv_music_list:
                     break;
                 case R.id.iv_music_prev:
-                    if(tvPlayName.getText() !=null && tvPlayName.getText().toString().equals("暂无播放内容")){
+                    if(tvPlayName.getText() !=null && tvPlayName.getText().toString().equals(mInitTextName)){
                         return;
                     }
                     prevAudioPlay();
                     break;
                 case R.id.iv_music_play:
-                    if(tvPlayName.getText() !=null && tvPlayName.getText().toString().equals("暂无播放内容")){
+                    if(tvPlayName.getText() !=null && tvPlayName.getText().toString().equals(mInitTextName)){
                         return;
                     }
                     if(mHelper.ismPlayStatus()){
@@ -236,17 +253,19 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                         mHelper.continueEvent();
                         ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
                         playStatusAnim.start();
+                        initState(PLAYING_STATE);
                         mAdapter.notifyDataSetChanged();
                     }else {
                         mHelper.setmPlayStatus(true);
                         mHelper.pauseEvent();
                         ivMusicPlay.setImageResource(R.drawable.ic_ct_play_usable);
                         playStatusAnim.stop();
+                        initState(PAUSE_STATE);
                         mAdapter.notifyDataSetChanged();
                     }
                     break;
                 case R.id.iv_music_next:
-                    if(tvPlayName.getText() !=null && tvPlayName.getText().toString().equals("暂无播放内容")){
+                    if(tvPlayName.getText() !=null && tvPlayName.getText().toString().equals(mInitTextName)){
                         return;
                     }
                     if(isStartPlayProcess){
@@ -254,7 +273,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     }
                     break;
                 case R.id.iv_music_circle:
-                    if(tvPlayName.getText() !=null && tvPlayName.getText().toString().equals("暂无播放内容")){
+                    if(tvPlayName.getText() !=null && tvPlayName.getText().toString().equals(mInitTextName)){
                         return;
                     }
                     loopModeUiShow();
@@ -377,8 +396,6 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     //set pause/play status false is equal playing
                     mHelper.setmPlayStatus(false);
                     ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
-                    String playName = "正在播放：" + mHelper.getPlayingContent().get(mHelper.getCurrentPlayingAudioIndex()).contentName /*+ "_" + currentPlaySeq*/;
-                    tvPlayName.setText(playName);
                     ivPlayNone.setVisibility(View.GONE);
                     ivPlayStatus.setVisibility(View.VISIBLE);
                     playStatusAnim.start();
@@ -390,33 +407,31 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                         setPlayingStatusFlag(true);
                         moveToPosition(mHelper.getCurrentPlayingAudioIndex());
                     }
+                    initState(PLAYING_STATE);
                     mAdapter.notifyDataSetChanged();
                     break;
                 case STOP_CURRENT_PLAY:
                     mHelper.setmPlayStatus(true);
-                    tvPlayName.setText("播放完成"+mHelper.getPlayingContent().get(msg.arg1).contentName);
+//                    tvPlayName.setText("暂无播放内容"+mHelper.getPlayingContent().get(msg.arg1).contentName);
                     clearPlayingStatusFlag();
                     UbtLog.d(TAG,"INDEX "+msg.arg1);
-                    if(currentAlbumId.equals(mHelper.getmAlbumPlayingId())) {
-                        setPlayingStatusFlag(true);
-                    }
-                    moveToPosition(mHelper.getCurrentPlayingAudioIndex());
+                    //moveToPosition(mHelper.getCurrentPlayingAudioIndex());
+                    initState(STOP_STATE);
                     mAdapter.notifyDataSetChanged();
                     break;
                 case PAUSE_CURRENT_PLAY:
-                    UbtLog.d(TAG,"PAUSE PLAYING STATUS ");
-                    tvPlayName.setText("暂停播放:"+mHelper.getPlayingContent().get(msg.arg1).contentName);
+                    UbtLog.d(TAG,"PAUSE PLAYING STATUS");
                     //clearPlayingStatusFlag();
                     mHelper.setmPlayStatus(true);
-                    if(mAdapter!=null) {
+                    if (mAdapter != null) {
                         mAdapter.notifyDataSetChanged();
                     }
-                    initState("quit");
+                    initState(PAUSE_STATE);
                     break;
                 case DIFFALBUM_CURRENT_PLAY:
                     mPlayingalbumID=(String)msg.obj;
                     UbtLog.d(TAG,"DIFFALBUM_CURRENT_PLAY   "+mPlayingalbumID +mHelper.getAlbumId());
-                    tvPlayName.setText("正在播放:"+mHelper.getPlayingContent().get(msg.arg1).contentName);
+                    initState(PLAYING_STATE);
                     break;
                 default:
                     break;
@@ -425,8 +440,6 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     };
 
     private void setPlayingStatusFlag(boolean status) {
-        UbtLog.d(TAG,"setPlayingStatusFlag "+mHelper.getCurrentPlayingAudioIndex());
-        UbtLog.d(TAG,"mHelper.getPlayingContent() "+mHelper.getPlayingContent().size());
         mHelper.getPlayingContent().get(mHelper.getCurrentPlayingAudioIndex()).isPlaying = status;
         UbtLog.d(TAG,"mHelper isPlaying "+mHelper.getPlayingContent().get(mHelper.getCurrentPlayingAudioIndex()).isPlaying);
     }
@@ -450,6 +463,8 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                 ivMusicLast.setImageResource(R.drawable.ic_music_last_usable);
                 ivMusicStop.setImageResource(R.drawable.ic_ct_stop);
                 ivMusicNext.setImageResource(R.drawable.ic_music_next_usable);
+                String playName = "正在播放：" + mHelper.getPlayingContent().get(mHelper.getCurrentPlayingAudioIndex()).contentName /*+ "_" + currentPlaySeq*/;
+                tvPlayName.setText(playName);
             }else if("pause".equals(playStatus)){
                 ivPlayNone.setVisibility(View.GONE);
                 ivPlayStatus.setVisibility(View.VISIBLE);
@@ -458,6 +473,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                 ivMusicLast.setImageResource(R.drawable.ic_music_last_usable);
                 ivMusicStop.setImageResource(R.drawable.ic_ct_stop);
                 ivMusicNext.setImageResource(R.drawable.ic_music_next_usable);
+                tvPlayName.setText("暂停播放:"+mHelper.getPlayingContent().get(mHelper.getCurrentPlayingAudioIndex()).contentName);
             } else if("quit".equals(playStatus)){
                 //noPlay
                 ivPlayNone.setVisibility(View.VISIBLE);
@@ -467,94 +483,84 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                 ivMusicLast.setImageResource(R.drawable.ic_music_last_disable);
                 ivMusicStop.setImageResource(R.drawable.ic_ct_stop);
                 ivMusicNext.setImageResource(R.drawable.ic_music_next_disable);
+                tvPlayName.setText(mInitTextName);
             }
         }
 
 
     @Subscribe
     public void onEventPlayerEvent(final PlayerEvent event) {
-        UbtLog.d(TAG,"event = " + event.toString());
+        UbtLog.d(TAG, "event = " + event.toString());
         if (event.getEvent() == PlayerEvent.Event.CONTROL_PLAY_NEXT) {
-            UbtLog.d(TAG, "CONTROL_PLAY event = next " + event.getCurrentPlayingSongName());
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        initState("playing");
-                    };
-                });
-            }
+            UbtLog.d(TAG, "EventBus Receive: CONTROL_PLAY event = next " + event.getCurrentPlayingSongName());
             mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
-        } else if(event.getEvent()==PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS){
-            UbtLog.d(TAG,"ONELINE STATUS "+event.getStatus());
+        } else if (event.getEvent() == PlayerEvent.Event.GET_ROBOT_ONLINEPLAYING_STATUS) {
+            UbtLog.d(TAG, "EventBus Receive: ONELINE STATUS " + event.getStatus());
             //TODO REFACTOR
-            isRecycleType=mHelper.getPlayType();
+            isRecycleType = mHelper.getPlayType();
             if (getActivity() != null) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         loopModeStatusShow();
-                    };
+                    }
+
+                    ;
                 });
-             }
+            }
             if (event.getStatus().equals("playing")) {
                 UbtLog.d(TAG, "PLAYING STATUS PLAYING");
-                if(currentAlbumId.equals(event.getAlbumId())) {
+                if (currentAlbumId.equals(event.getAlbumId())) {
                     mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
-                }else {
-                     //TODO NEW REQUIREMENT FROM PRODUCT MANAGER
+                } else {
+                    //TODO NEW REQUIREMENT FROM PRODUCT MANAGER
                     Message mDiffAlbum = new Message();
                     mDiffAlbum.what = DIFFALBUM_CURRENT_PLAY;
-                    mDiffAlbum.arg1=event.getCurrentPlayingIndex();
-                    mDiffAlbum.obj=event.getAlbumId();
+                    mDiffAlbum.arg1 = event.getCurrentPlayingIndex();
+                    mDiffAlbum.obj = event.getAlbumId();
                     mHandler.sendMessage(mDiffAlbum);
                 }
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            initState("playing");
-                        };
-                    });
-                }
                 //SET CURRENT PLAYING ID
                 setPlayingIdInfo(event);
-            }else if(event.getStatus().equals("pause")){
+            } else if (event.getStatus().equals("pause")) {
                 UbtLog.d(TAG, "PAUSE STATUS PLAYING");
                 //if (currentAlbumId.equals(event.getAlbumId())) {
-                    Message pauseInfo = new Message();
-                    pauseInfo.what = PAUSE_CURRENT_PLAY;
-                    pauseInfo.arg1 = event.getCurrentPlayingIndex();
-                    mHandler.sendMessage(pauseInfo);
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                initState("pause");
-                            };
-                        });
-                    }
+                Message pauseInfo = new Message();
+                pauseInfo.what = PAUSE_CURRENT_PLAY;
+                pauseInfo.arg1 = event.getCurrentPlayingIndex();
+                mHandler.sendMessage(pauseInfo);
+//                if (getActivity() != null) {
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            initState("pause");
+//                        }
+//
+//                        ;
+//                    });
+//                }
                 //SET CURRENT PLAYING ID
                 setPlayingIdInfo(event);
-              //  }
-            }else if(event.getStatus().equals("quit")){
+                //  }
+            } else if (event.getStatus().equals("quit")) {
                 UbtLog.d(TAG, "QUIT STATUS PLAYING");
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            initState("quit");
-                        };
-                    });
-                }
+//                if (getActivity() != null) {
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            initState("quit");
+//                        }
+//
+//                        ;
+//                    });
+//                }
                 mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
             }
-        }else if(event.getEvent()==PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE){
-            UbtLog.d(TAG,"TAP_HEAD_OR_VOICE_WAKE");
-            mHandler.sendEmptyMessage(PAUSE_CURRENT_PLAY);
-        }else if(event.getEvent()==PlayerEvent.Event.CONTROL_STOP){
-            UbtLog.d(TAG, "CONTROL_STOP STATUS");
+        } else if (event.getEvent() == PlayerEvent.Event.CONTROL_STOP) {
+            UbtLog.d(TAG, "EventBus Receive: CONTROL_STOP STATUS");
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
+        } else if (event.getEvent() == PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE) {
+            UbtLog.d(TAG, "EventBus Receive: TAP_HEAD_OR_VOICE_WAKE");
         }
     }
 
@@ -562,6 +568,96 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         mHelper.setmCategoryPlayingId(event.getCateogryId());
         mHelper.setmAlbumPlayingId(event.getAlbumId());
         mHelper.setCurentPlayingAudioIndex(event.getCurrentPlayingIndex());
+    }
+
+    //Conflict Deal: habit behaviour and bluetooth disconnect
+    @Subscribe
+    public void onEventRobot(RobotEvent event) {
+        if (event.getEvent() == RobotEvent.Event.HIBITS_PROCESS_STATUS) {
+            //流程开始，收到行为提醒状态改变，开始则退出流程，并Toast提示
+            UbtLog.d(TAG, "onEventRobot = obj == 2" + event.isHibitsProcessStatus());
+            if (event.isHibitsProcessStatus()) {
+                UbtLog.d(TAG, "onEventRobot = obj == 3");
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String msg = "行为习惯正在进行中，请先完成";
+                        String position = "好的";
+                        msg = ResourceManager.getInstance(getActivity()).getStringResources("ui_habits_process_starting");
+                        position = ResourceManager.getInstance(getActivity()).getStringResources("ui_common_ok");
+                        new ConfirmDialog(getActivity()).builder()
+                                .setTitle("提示")
+                                .setMsg(msg)
+                                .setCancelable(false)
+                                .setPositiveButton("确定", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        UbtLog.d(TAG, "确定");
+                                        if(getActivity() != null){
+                                            getActivity().finish();
+                                        }
+                                    }
+                                }).show();
+                    }
+                });
+                //行为习惯流程未结束，退出当前流程
+            }
+        }else if(event.getEvent() == RobotEvent.Event.DISCONNECT){
+            UbtLog.d(TAG,"DISCONNECT THE BLUETOOTH");
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showBluetoothDisconnect();
+                }
+            });
+
+        }
+    }
+    void showBluetoothDisconnect() {
+        ConfirmDialog dialog = null;
+        dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                .setTitle("提示")
+                .setMsg("蓝牙连接断开，请重新连接")
+                .setCancelable(true)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接蓝牙 ");
+                        gotoConnectBluetooth();
+                    }
+                }).setNegativeButton("取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "取消 ");
+                        AppManager.getInstance().finishUseBluetoothActivity();
+                    }
+                });
+        dialog.show();
+    }
+
+    //去连接蓝牙
+    void gotoConnectBluetooth() {
+        boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
+        Intent bluetoothConnectIntent = new Intent();
+        if (isfirst) {
+            UbtLog.d(TAG, "第一次蓝牙连接");
+            SPUtils.getInstance().put("firstBluetoothConnect", false);
+            bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothguidestartrobotActivity.class);
+        } else {
+            bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothandnetconnectstateActivity.class);
+        }
+        startActivityForResult(bluetoothConnectIntent, 100);
+
+        if (AppManager.getInstance().currentActivity() != null
+                && (AppManager.getInstance().currentActivity() instanceof PrincipleActivity
+                || AppManager.getInstance().currentActivity() instanceof SplitActivity
+                || AppManager.getInstance().currentActivity() instanceof MergeActivity
+                || AppManager.getInstance().currentActivity() instanceof FeatureActivity)) {
+            UbtLog.d(TAG, "有需要关闭的课程界面 ");
+            AlphaApplication.setmNeedOpenActivity(AppManager.getInstance().currentActivity().getClass().getSimpleName());
+            AppManager.getInstance().currentActivity().finish();
+        }
+        getActivity().overridePendingTransition(R.anim.activity_open_up_down, 0);
     }
 }
 

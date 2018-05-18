@@ -37,6 +37,12 @@ public class MainCourseHelper extends BaseHelper {
         mCmd[0] = 0;
         doSendComm(ConstValue.DV_NOTIFYONLINEPLAYER_EXIT, mCmd);
     }
+    public void stopActionPlayRes(){
+        UbtLog.d(TAG, "stopActionPlayRes = ");
+        byte[] mCmd = {0};
+        mCmd[0] = 0;
+        doSendComm(ConstValue.DV_STOPPLAY, mCmd);
+    }
 
     @Override
     public void onDeviceDisConnected(String mac) {

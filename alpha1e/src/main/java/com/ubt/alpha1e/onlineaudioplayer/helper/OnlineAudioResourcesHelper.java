@@ -41,6 +41,8 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 //    private boolean isRecyclePlaying = true;
     private String mAlbumId;
     private String mCategoryId;
+    //TAP THE HEADP, VOICE WAKE, ORDER PLAY FINISHED
+    private int STOP_PLAYING=0x02;
 
     public String getmAlbumPlayingId() {
         return mAlbumPlayingId;
@@ -123,7 +125,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     public void onReceiveData(String mac, byte cmd, byte[] param, int len) {
         super.onReceiveData(mac, cmd, param, len);
         if(cmd==ConstValue.DV_GETONLINEPLAYER_ROBOTSTATUS){
-            UbtLog.d(TAG, "cmd = " + cmd + "    param[0] = " + param[0]);
+            UbtLog.d(TAG, "BT receive: cmd = " + cmd + "    param[0] = " + param[0]);
                 try {
                     JSONObject mCmd = new JSONObject(BluetoothParamUtil.bytesToString(param));
                     mCmd.get("status");//play, pause, continue, stop, complete
@@ -132,12 +134,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
                     mCmd.get("index");
                     mCmd.get("loop");
                     UbtLog.d(TAG, "cmd = " + cmd + " mCmd.get(\"index\")" + mCmd.get("status") +"index : "+   mCmd.get("index")+"loop mode :"+        mCmd.get("loop")+"cmd "+mCmd.toString());
-                    if (mCmd.get("status").equals("playing")) {
-                        notifyUiCurrentRobotStatus(mCmd);
-                    } else if (mCmd.get("status").equals("pause")) {
-                        notifyUiCurrentRobotStatus(mCmd);
-                    } else if (mCmd.get("status").equals("quit")) {
-                        //GET ROBOT ONLINE PLAY STATUS STOP
+                    if (mCmd.get("status").equals("playing")||mCmd.get("status").equals("pause")||mCmd.get("status").equals("quit")) {
                         notifyUiCurrentRobotStatus(mCmd);
                     } else {
                         UbtLog.d(TAG, "0X55 " + mCmd.get("status"));
@@ -146,10 +143,11 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
                     e.printStackTrace();
                 }
         } else if (cmd == ConstValue.DV_NOTIFYONLINEPLAYER_PLAY) {
-            UbtLog.d(TAG, "cmd = " + cmd + "    param[0] = " + param[0]);
+            UbtLog.d(TAG, "BT receive: cmd = " + cmd + "    param[0] = " + param[0]);
             if (param[0] == 0x01) {
                 UbtLog.d(TAG, "cmd = " + cmd + "    reply" + param[0]);
-            }else if(param[0]==0x02) {
+            }else if(param[0]==STOP_PLAYING) {
+                UbtLog.d(TAG, "cmd = " + cmd + "  CONTROL_STOP" );
                 PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.CONTROL_STOP);
                 EventBus.getDefault().post(mPlayerEvent);
             }else {
@@ -161,10 +159,10 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
                         mCmd.get("albumId");
                         mCmd.get("index");
                         UbtLog.d(TAG, "cmd = " + cmd + "  next audio notify:   " + mCmd.get("status") +" next index : "+   mCmd.get("index"));
-                        if (mCmd.get("status").equals("next")) {
+//                        if (mCmd.get("status").equals("next")) {
                             setCurentPlayingAudioIndex(Integer.parseInt(mCmd.get("index").toString()));
                             notifyUiNextAudio(Integer.parseInt(mCmd.get("index").toString()));
-                        }
+//                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -172,17 +170,18 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
         } else if (cmd == ConstValue.DV_NOTIFYONLINEPLAYER_EXIT) {
             String eventPlayStatusJson = BluetoothParamUtil.bytesToString(param);
-            UbtLog.d(TAG, "cmd = " + cmd + "    eventPlayStatusJson = " + eventPlayStatusJson);
+            UbtLog.d(TAG, "BT receive: cmd = " + cmd + "eventPlayStatusJson = " + eventPlayStatusJson);
             EventBus.getDefault().post(ConstValue.DV_NOTIFYONLINEPLAYER_EXIT);
         } else if (cmd == ConstValue.DV_NOTIFYONLINEPLAYER_PAUSE) {
 
         } else if (cmd == ConstValue.DV_NOTIFYONLINEPLAYER_CONTINUE) {
 
-        } else if (cmd == ConstValue.DV_TAP_HEAD||cmd==ConstValue.DV_VOICE_WAIT) {
-            UbtLog.d(TAG, "cmd = " + cmd + "  VOICE & TAP" );
-            PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE);
-            EventBus.getDefault().post(mPlayerEvent);
         }
+//        else if (cmd == ConstValue.DV_TAP_HEAD||cmd==ConstValue.DV_VOICE_WAIT) {
+////            UbtLog.d(TAG, "cmd = " + cmd + "  VOICE & TAP" );
+////            PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE);
+////            EventBus.getDefault().post(mPlayerEvent);
+//        }
     }
 
     private void notifyUiCurrentRobotStatus(JSONObject mCmd) throws JSONException {
@@ -242,27 +241,15 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
     }
 
     private void notifyUiNextAudio(int index) {
-//        saveAudioHistory(index);
-        //setCurentPlayingAudioIndex(index);
         notifyNextAudioMesssage(index);
     }
 
-//    private void saveAudioHistory(int index) {
-//        AudioContentInfo mHistory = new AudioContentInfo();
-//        mHistory.index = index;
-//        SPUtils.getInstance().saveObject(Constant.SP_ONLINEAUDIO_HISTORY, mHistory);
-//    }
 
     public void exitEvent() {
         UbtLog.d(TAG, "stopEventSound = ");
         byte[] mCmd = {0};
         mCmd[0] = 0;
         doSendComm(ConstValue.DV_NOTIFYONLINEPLAYER_EXIT, mCmd);
-//        if (local_player) {
-//            if (mediaPlayer != null) {
-//                mediaPlayer.stop();
-//            }
-//        }
     }
 
     public void pauseEvent() {
@@ -332,7 +319,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         } else {
             currentPlaySeq = 0;
         }
-       // exitEvent();
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
@@ -349,9 +335,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         } else {
             currentPlaySeq = mPlayContentInfoList.size() - 1;
         }
-        // isPause = false;
-        // currentPlayInfo = mPlayContentInfoList.get(currentPlaySeq);
-       // exitEvent();
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
@@ -360,8 +343,6 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
         UbtLog.d(TAG,"PRE AUDIO "+currentPlaySeq);
         //PREV AUDIO PLAY
         playEvent("playing",getmCategoryPlayingId(),getmAlbumPlayingId(),currentPlaySeq);
-        //   ivMusicPlay.setImageResource(R.drawable.ic_ct_pause);
-        //   mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);
     }
 
     /**

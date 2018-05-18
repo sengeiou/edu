@@ -75,22 +75,25 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
                 mHelper.playEvent("playing",mHelper.getmCategoryPlayingId(),mHelper.getmAlbumPlayingId(), position);
             }
         });
-
-        UbtLog.d(TAG, "POSITION  " + position);
-        UbtLog.d(TAG, "isPlaying  " + mHelper.getPlayingContent().get(position).isPlaying);
-        UbtLog.d(TAG, "isPlayingStatus" + mHelper.ismPlayStatus());
+        if(mHelper.getPlayingContent().size()==0){
+            return;
+        }
         if (mHelper.getPlayingContent().get(position).isPlaying) {
-            myHolder.playStatusAnim.start();
-            myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
+            if(mHelper.getAlbumId().equals(mHelper.getmAlbumPlayingId())) {
+                myHolder.playStatusAnim.start();
+                myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
                 myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_blue_color));
-            } else {
-                myHolder.playStatusAnim.stop();
-                myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
-                myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
+            }else {
+                UbtLog.d(TAG, "ID IS NOT SAME, NO ANIMATION aLBUM ID" +mHelper.getAlbumId() +"PLAYING ALBUM ID"+mHelper.getmAlbumPlayingId());
             }
-            if (mHelper.ismPlayStatus()) {
-                myHolder.playStatusAnim.stop();
-            }
+        } else {
+            myHolder.playStatusAnim.stop();
+            myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
+            myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
+        }
+        if (mHelper.ismPlayStatus()) {
+            myHolder.playStatusAnim.stop();
+        }
 
          myHolder.tvPlayContent.setText(playContentInfo.contentName);
     }
