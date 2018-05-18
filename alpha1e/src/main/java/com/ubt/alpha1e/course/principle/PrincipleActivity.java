@@ -263,6 +263,7 @@ public class PrincipleActivity extends MVPBaseActivity<PrincipleContract.View, P
 
         mFloatAnimator = FloatAnimator.getIntanse();
         mFloatAnimator.setDistance(30F);
+        mFloatAnimator.clear();
 
         biggerAnimation = AnimationUtils.loadAnimation(getContext(),R.anim.scan_bigger_anim);
         biggerAnimation.setDuration(500);

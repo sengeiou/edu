@@ -601,7 +601,7 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UbtLog.d(TAG,"onActivityResult requestCode = " + requestCode);
+        UbtLog.d(TAG,"onActivityResult requestCode = " + requestCode + "    resultCode = " + resultCode + " data = " + data);
         if (requestCode == REQUEST_IMAGE_SELECT && resultCode == ImagePicker.RESULT_IMAGE_ITEMS) {
             //添加图片返回
             if (data != null ) {
@@ -648,19 +648,19 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
     @Override
     public void onWbShareSuccess() {
         UbtLog.d(TAG,"onWbShareSuccess");
-        //ToastUtils.showShort(getStringResources("ui_share_success"));
+        ToastUtils.showShort(getStringResources("ui_share_success"));
     }
 
     @Override
     public void onWbShareCancel() {
         UbtLog.d(TAG,"onWbShareCancel");
-        //ToastUtils.showShort(getStringResources("ui_share_canceled"));
+        ToastUtils.showShort(getStringResources("ui_share_canceled"));
     }
 
     @Override
     public void onWbShareFail() {
         UbtLog.d(TAG,"onWbShareFail");
-        //ToastUtils.showShort(getStringResources("ui_share_failed"));
+        ToastUtils.showShort(getStringResources("ui_share_failed"));
     }
 
     @Override
