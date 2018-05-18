@@ -56,7 +56,7 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     private List<CourseModel> mCourseModels;
     private MainCoursedapter mMainCoursedapter;
     public static int onlinePlayerEnable=0; //0 enable 1 disale
-    public static boolean ADD_CONFICT_SOLUTION=true;
+    public static boolean ADD_CONFICT_SOLUTION=false;
     private static MainCourseActivity mainCourseInstance = null;
 
 

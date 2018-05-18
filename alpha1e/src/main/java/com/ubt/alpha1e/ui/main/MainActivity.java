@@ -562,7 +562,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
                 break;
             case R.id.ll_community:
-                //BehaviorHabitsActivity.LaunchActivity(this);
+                //OnlineSearchActivity.LaunchActivity(this);
                 //ToastUtils.showShort("即将开放，敬请期待!");
                 buttonClickAnimation(llCommunity);
                 CommunityActivity.launchActivity(this,0);
@@ -610,7 +610,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 }
                 break;
             case R.id.rl_hibits_event:
-//                BehaviorHabitsActivity.LaunchActivity(this);
+//                OnlineSearchActivity.LaunchActivity(this);
                 UbtLog.d(TAG, "click rl_hibits_event");
                 mPresenter.checkMyRobotState();
                 break;

@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.onlineaudioplayer.searchActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.GradientDrawable;
@@ -40,6 +41,7 @@ import com.ubt.alpha1e.onlineaudioplayer.DataObj.ShowItem;
 import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAlbumListFragment;
 import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioListFragment;
 import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineCategoryListFragment;
+import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerActivity;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.utils.GsonImpl;
 import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
@@ -98,6 +100,7 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
 
     private static final int SEARCH = 51;
     public final static int SEARCH_RESULT_ALBUM=1;
+    OnlineAlbumListFragment fragment;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -106,13 +109,22 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
             switch (msg.what) {
                 case SEARCH_RESULT_ALBUM:
                     //Add Search Function
+
+
                     AlbumContentInfo mItem=(AlbumContentInfo)msg.obj;
-                    OnlineAlbumListFragment fragment = findFragment(OnlineAlbumListFragment.class);
+                    /*fragment = findFragment(OnlineAlbumListFragment.class);
                     UbtLog.d(TAG, "OnlineAudioPlayerActivity = " + fragment);
                     if (fragment == null) {
                         fragment = OnlineAlbumListFragment.newInstance(mItem);
                         loadRootFragment(R.id.search_container, fragment);
-                    }
+                    }*/
+
+                    Intent mIntent = new Intent();
+                    mIntent.setClass(OnlineResRearchActivity.this,OnlineAudioPlayerActivity.class);
+                    mIntent.putExtra("TYPE",1);
+                    mIntent.putExtra("AlbumContentInfo",mItem);
+                    startActivity(mIntent);
+
                     break;
             }
         }

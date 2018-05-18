@@ -7,6 +7,9 @@ import android.os.Bundle;
 
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.mvp.MVPBaseFragment;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAlbumListFragment;
+import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioListFragment;
 import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineCategoryListFragment;
 import com.ubt.alpha1e.onlineaudioplayer.model.AlbumContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
@@ -25,17 +28,30 @@ public class OnlineAudioPlayerActivity extends MVPBaseActivity<OnlineAudioPlayer
 
     private String TAG="OnlineAudioPlayerActivity";
 
+    private int TYPE = 0;
+
+    private MVPBaseFragment fragment = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OnlineCategoryListFragment fragment = findFragment(OnlineCategoryListFragment.class);
-        UbtLog.d(TAG, "OnlineAudioPlayerActivity = " + fragment);
-        if (fragment == null) {
-            fragment = OnlineCategoryListFragment.newInstance();
-            loadRootFragment(R.id.rl_content, fragment);
+
+        TYPE = getIntent().getIntExtra("TYPE",0);
+
+        if(TYPE == 0){
+            fragment = findFragment(OnlineCategoryListFragment.class);
+            if (fragment == null) {
+                fragment = OnlineCategoryListFragment.newInstance();
+            }
+        }else if(TYPE == 1){
+            fragment = findFragment(OnlineAlbumListFragment.class);
+            AlbumContentInfo info = (AlbumContentInfo)getIntent().getExtras().getSerializable("AlbumContentInfo");
+            if (fragment == null) {
+                fragment = OnlineAlbumListFragment.newInstance(info);
+            }
         }
-
-
+        UbtLog.d(TAG, "OnlineAudioPlayerActivity = " + fragment);
+        loadRootFragment(R.id.rl_content, fragment);
     }
 
     @Override

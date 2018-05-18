@@ -192,7 +192,11 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         mBack.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-               pop();
+               if(type!=SEARCH_ENTER_FRAGMENT) {
+                   pop();
+               }else {
+                   getActivity().finish();
+               }
             }
         });
         mActivityView.setOnTouchListener(new View.OnTouchListener(){

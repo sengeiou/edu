@@ -1211,25 +1211,29 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
         }
     }
     void showBluetoothDisconnect() {
-        ConfirmDialog dialog = null;
-        dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
-                .setTitle("提示")
-                .setMsg("蓝牙连接断开，请重新连接")
-                .setCancelable(true)
-                .setPositiveButton("去连接", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        UbtLog.d(TAG, "去连接蓝牙 ");
-                        gotoConnectBluetooth();
-                    }
-                }).setNegativeButton("取消", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        UbtLog.d(TAG, "取消 ");
-                        AppManager.getInstance().finishUseBluetoothActivity();
-                    }
-                });
-        dialog.show();
+       try {
+           ConfirmDialog dialog = null;
+           dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                   .setTitle("提示")
+                   .setMsg("蓝牙连接断开，请重新连接")
+                   .setCancelable(true)
+                   .setPositiveButton("去连接", new View.OnClickListener() {
+                       @Override
+                       public void onClick(View view) {
+                           UbtLog.d(TAG, "去连接蓝牙 ");
+                           gotoConnectBluetooth();
+                       }
+                   }).setNegativeButton("取消", new View.OnClickListener() {
+                       @Override
+                       public void onClick(View view) {
+                           UbtLog.d(TAG, "取消 ");
+                           getActivity().finish();
+                       }
+                   });
+           dialog.show();
+       }catch(Exception e){
+           e.printStackTrace();
+       }
     }
     //去连接蓝牙
     void gotoConnectBluetooth() {
