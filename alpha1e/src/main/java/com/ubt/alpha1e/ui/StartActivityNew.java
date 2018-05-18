@@ -16,7 +16,9 @@ import com.ubt.alpha1e.base.PermissionUtils;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.data.model.AlphaStatics;
 import com.ubt.alpha1e.data.model.UserInfo;
+import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.login.LoginActivity;
+import com.ubt.alpha1e.login.LoginManger;
 import com.ubt.alpha1e.ui.dialog.BaseDiaUI;
 import com.ubt.alpha1e.ui.dialog.LoadingDialog;
 import com.ubt.alpha1e.ui.helper.IStartUI;
@@ -25,13 +27,19 @@ import com.ubt.alpha1e.ui.helper.StartHelper;
 import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.userinfo.model.UserModel;
 import com.ubt.alpha1e.userinfo.useredit.UserEditActivity;
+import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.umeng.analytics.MobclickAgent;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.Call;
 import pl.droidsonroids.gif.AnimationListener;
 import pl.droidsonroids.gif.GifDrawable;
 
@@ -161,24 +169,7 @@ public class StartActivityNew extends BaseActivity implements IStartUI, BaseDiaU
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 0x111) {
-                Intent inte = new Intent();
-                MobclickAgent.onEvent(StartActivityNew.this.getApplicationContext(), AlphaStatics.ACTIONS_LIB);//动作库页面次数
-                UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
-                if (null == userModel) {
-                    inte.setClass(StartActivityNew.this, com.ubt.alpha1e.login.LoginActivity.class);
-                } else {
-                    if (TextUtils.isEmpty(userModel.getPhone())) {
-                        inte.setClass(StartActivityNew.this, LoginActivity.class);
-                    } else {
-                        if (TextUtils.isEmpty(userModel.getAge())) {
-                            inte.setClass(StartActivityNew.this, UserEditActivity.class);
-                        } else {
-                            inte.setClass(StartActivityNew.this, MainActivity.class);
-                        }
-                    }
-                }
-                StartActivityNew.this.startActivity(inte);
-                StartActivityNew.this.finish();
+                refreshToken();
             }
         }
     };
@@ -220,5 +211,60 @@ public class StartActivityNew extends BaseActivity implements IStartUI, BaseDiaU
         } else {
             gotoNext();
         }
+    }
+
+    private void startActivitySkip(){
+        Intent inte = new Intent();
+        MobclickAgent.onEvent(StartActivityNew.this.getApplicationContext(), AlphaStatics.ACTIONS_LIB);//动作库页面次数
+        UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
+        if (null == userModel) {
+            inte.setClass(StartActivityNew.this, com.ubt.alpha1e.login.LoginActivity.class);
+        } else {
+            if (TextUtils.isEmpty(userModel.getPhone())) {
+                inte.setClass(StartActivityNew.this, LoginActivity.class);
+            } else {
+                if (TextUtils.isEmpty(userModel.getAge())) {
+                    inte.setClass(StartActivityNew.this, UserEditActivity.class);
+                } else {
+                    inte.setClass(StartActivityNew.this, MainActivity.class);
+                }
+            }
+        }
+        StartActivityNew.this.startActivity(inte);
+        StartActivityNew.this.finish();
+    }
+
+    private void refreshToken() {
+        String token = SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN);
+        if(TextUtils.isEmpty(token)){
+            UbtLog.e(TAG, "SP_LOGIN_TOKEN is null");
+            return;
+        }
+        UbtLog.d(TAG, "SP_LOGIN_TOKEN="+token);
+        OkHttpClientUtils.getJsonByPutRequestToken(HttpEntity.THRID_LOGIN_URL_REFRESH_TOKEN, token, 1)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        UbtLog.d(TAG, "refreshToken failed:" +e.getMessage());
+                        SPUtils.getInstance().remove(Constant.SP_USER_INFO);
+                        LoginManger.getInstance().loginOut();
+                        LoginActivity.LaunchActivity(StartActivityNew.this);
+                        StartActivityNew.this.finish();
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        UbtLog.d(TAG, "refreshToken onResponse:" + response);
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String spToken = jsonObject.getString("token");
+                            SPUtils.getInstance().put(Constant.SP_LOGIN_TOKEN, spToken);
+                            startActivitySkip();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 }

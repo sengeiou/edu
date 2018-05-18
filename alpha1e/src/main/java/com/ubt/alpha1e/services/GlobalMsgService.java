@@ -11,22 +11,16 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.tencent.android.tpush.XGPushShowedResult;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
-import com.ubt.alpha1e.base.Constant;
-import com.ubt.alpha1e.base.SPUtils;
-import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.ui.StartInitSkinActivity;
 import com.ubt.alpha1e.ui.dialog.HibitsAlertDialog;
 import com.ubt.alpha1e.utils.NotifyUtil;
-import com.ubt.alpha1e.utils.connect.OkHttpClientUtils;
 import com.ubt.alpha1e.utils.log.UbtLog;
 import com.ubt.alpha1e.xingepush.XGCmdConstract;
-import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,8 +28,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
-import okhttp3.Call;
 
 /**
  * @作者：bin.zhang@ubtrobot.com
@@ -66,7 +58,6 @@ public class GlobalMsgService extends Service {
         super.onCreate();
         EventBus.getDefault().register(this);
         UbtLog.i(TAG, "onCreate");
-        refreshToken();
     }
 
     @Override
@@ -151,34 +142,5 @@ public class GlobalMsgService extends Service {
             }
         }
     };
-
-    private void refreshToken() {
-        String token = SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN);
-        if(TextUtils.isEmpty(token)){
-            UbtLog.e(TAG, "SP_LOGIN_TOKEN is null");
-            return;
-        }
-        UbtLog.d(TAG, "SP_LOGIN_TOKEN="+token);
-        OkHttpClientUtils.getJsonByPutRequestToken(HttpEntity.THRID_LOGIN_URL_REFRESH_TOKEN, token, 1)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        UbtLog.d(TAG, "refreshToken failed:" +e.getMessage());
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        UbtLog.d(TAG, "refreshToken onResponse:" + response);
-
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String spToken = jsonObject.getString("token");
-                            SPUtils.getInstance().put(Constant.SP_LOGIN_TOKEN, spToken);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-    }
 
 }
