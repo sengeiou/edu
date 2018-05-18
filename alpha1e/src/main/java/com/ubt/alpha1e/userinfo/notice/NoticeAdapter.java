@@ -34,7 +34,7 @@ public class NoticeAdapter extends BaseQuickAdapter<NoticeModel, BaseViewHolder>
         TextView tvTitle = helper.getView(R.id.tv_notice_title);
         String title = "系统消息";
         if (item.getType().equals("1")) {
-            title = "通知消息";
+            title = "系统消息";
             ((ImageView) helper.getView(R.id.iv_right_icon)).setImageResource(R.drawable.ic_setting_system_push);
         } else if (item.getType().equals("2")) {
             title = "活动消息";

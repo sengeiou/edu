@@ -201,4 +201,18 @@ public class OkHttpClientUtils {
                 .build();
     }
 
+
+    /**
+     * 刷新token
+     */
+    public static RequestCall getJsonByPutRequestToken(String url, String token, int id) {
+        return OkHttpUtils.put()
+                .url(url)
+                .id(id)
+                .addHeader("Accept", "*/*")
+                .requestBody(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), ""))
+                .addHeader("authorization", token)
+                .build();
+
+    }
 }

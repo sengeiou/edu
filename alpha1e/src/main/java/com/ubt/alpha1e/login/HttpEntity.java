@@ -48,8 +48,10 @@ public class HttpEntity {
 
 
     public static final String THRID_LOGIN_URL = BASIC_THIRD_LOGIN_URL + "user/login/third";
+    public static final String THRID_LOGIN_URL_REFRESH_TOKEN = BASIC_THIRD_LOGIN_URL + "user/token/refresh";
 
-     public static final String BASIC_UBX_SYS = BuildConfig.WebServiceUbx; //测试环境
+
+    public static final String BASIC_UBX_SYS = BuildConfig.WebServiceUbx; //测试环境
     // public static final String BASIC_UBX_SYS = "http://10.10.1.14:8080/alpha1e/"; //测试环境
      //public static final String BASIC_UBX_SYS = "https://prodapi.ubtrobot.com/alpha1e/";//正式环境
 
