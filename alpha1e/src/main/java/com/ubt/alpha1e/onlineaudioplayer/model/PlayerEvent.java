@@ -79,7 +79,8 @@ public class PlayerEvent {
         GET_PLAYING_INDEX,
         GET_ROBOT_ONLINEPLAYING_STATUS,
         TAP_HEAD_OR_VOICE_WAKE,
-        GET_LOOP_MODE
+        GET_LOOP_MODE,
+        ROBOT_NETWORK_DISCONNECT
     }
     public PlayerEvent.Event getEvent() {
         return event;

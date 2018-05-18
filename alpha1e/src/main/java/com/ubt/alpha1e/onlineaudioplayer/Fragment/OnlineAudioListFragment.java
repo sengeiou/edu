@@ -22,6 +22,7 @@ import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.AppManager;
 import com.ubt.alpha1e.base.ResourceManager;
 import com.ubt.alpha1e.base.SPUtils;
+import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
 import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.course.feature.FeatureActivity;
@@ -588,6 +589,9 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         } else if (event.getEvent() == PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE) {
             UbtLog.d(TAG, "EventBus Receive: TAP_HEAD_OR_VOICE_WAKE");
+        }else if(event.getEvent()==PlayerEvent.Event.ROBOT_NETWORK_DISCONNECT){
+            UbtLog.d(TAG, "ROBOT_NETWORK_DISCONNECT");
+            ToastUtils.showShort("机器人网络未连接，请给机器人配网");
         }
     }
 

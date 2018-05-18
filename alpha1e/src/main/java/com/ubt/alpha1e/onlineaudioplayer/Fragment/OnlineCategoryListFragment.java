@@ -541,10 +541,12 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 UbtLog.d(TAG, "QUIT STATUS PLAYING");
                 mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
             }
-        }
-        if (event.getEvent() == PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE) {
+        } else if (event.getEvent() == PlayerEvent.Event.TAP_HEAD_OR_VOICE_WAKE) {
             UbtLog.d(TAG, "TAP_HEAD_OR_VOICE_WAKE");
             // mHandler.sendEmptyMessage(PAUSE_CURRENT_PLAY);
+        }else if(event.getEvent()==PlayerEvent.Event.ROBOT_NETWORK_DISCONNECT){
+            UbtLog.d(TAG, "ROBOT_NETWORK_DISCONNECT");
+            ToastUtils.showShort("机器人网络未连接，请给机器人配网");
         }
     }
 
