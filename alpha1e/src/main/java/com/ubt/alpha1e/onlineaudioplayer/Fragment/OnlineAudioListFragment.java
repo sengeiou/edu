@@ -391,6 +391,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
         UbtLog.d(TAG, "request result from back-end " + album);
         if (album != null) {
+            UbtLog.d(TAG, "request result from back-end notnull " + album);
             mHelper.setPlayContent(album);
             mAdapter.setData(album);
             rvEventList.setAdapter(mAdapter);
