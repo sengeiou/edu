@@ -85,6 +85,9 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
                 myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_blue_color));
             }else {
                 UbtLog.d(TAG, "ID IS NOT SAME, NO ANIMATION aLBUM ID" +mHelper.getAlbumId() +"PLAYING ALBUM ID"+mHelper.getmAlbumPlayingId());
+                myHolder.playStatusAnim.stop();
+                myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
+                myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
             }
         } else {
             myHolder.playStatusAnim.stop();
