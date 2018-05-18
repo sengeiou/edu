@@ -140,6 +140,9 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
                     } else {
                         UbtLog.d(TAG, "0X55 " + mCmd.get("status"));
                     }
+                    if(mCmd.get("status").equals("")&&!mCmd.get("categoryId").equals("")){
+                        notifyUiCurrentRobotStatus(mCmd);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

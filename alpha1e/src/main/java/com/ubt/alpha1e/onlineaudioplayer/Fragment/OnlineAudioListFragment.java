@@ -537,7 +537,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     ;
                 });
             }
-            if (event.getStatus().equals("playing")) {
+            if (event.getStatus().equals("playing")||event.getStatus().equals("")) {
                 UbtLog.d(TAG, "PLAYING STATUS PLAYING");
                 if (currentAlbumId.equals(event.getAlbumId())) {
                     mHandler.sendEmptyMessage(UPDATE_CURRENT_PLAY);

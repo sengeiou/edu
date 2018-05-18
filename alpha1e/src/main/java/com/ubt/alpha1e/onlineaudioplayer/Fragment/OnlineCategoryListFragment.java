@@ -529,7 +529,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             mAlbumHistory.setCategoryId(event.getCateogryId());
             //SET CURRENT PLAY INFORMATION
             index = event.getCurrentPlayingIndex();
-            if (event.getStatus().equals("playing")) {
+            if (event.getStatus().equals("playing")||event.getStatus().equals("")) {
                 UbtLog.d(TAG, "PLAYING STATUS PLAYING");
                 setPlayingIdInfo(event);
                 mHandler.sendEmptyMessage(PLAY_CURRENT_PLAY);

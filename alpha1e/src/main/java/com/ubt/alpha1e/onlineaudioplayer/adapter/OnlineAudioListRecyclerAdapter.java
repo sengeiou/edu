@@ -75,26 +75,29 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
                 mHelper.playEvent("playing",mHelper.getmCategoryPlayingId(),mHelper.getmAlbumPlayingId(), position);
             }
         });
-        if(mHelper.getPlayingContent().size()==0){
-            return;
-        }
         try {
-                if (mHelper.getPlayingContent().get(position).isPlaying) {
-                    if (mHelper.getAlbumId().equals(mHelper.getmAlbumPlayingId())) {
-                        myHolder.playStatusAnim.start();
-                        myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
-                        myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_blue_color));
-                    } else {
-                        UbtLog.d(TAG, "ID IS NOT SAME, NO ANIMATION aLBUM ID" + mHelper.getAlbumId() + "PLAYING ALBUM ID" + mHelper.getmAlbumPlayingId());
-                        myHolder.playStatusAnim.stop();
-                        myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
-                        myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
-                    }
-                } else {
-                    myHolder.playStatusAnim.stop();
-                    myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
-                    myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
-                }
+               if(mHelper.getPlayingContent().size()>0) {
+                   if (mHelper.getPlayingContent().get(position).isPlaying) {
+                       if (mHelper.getAlbumId().equals(mHelper.getmAlbumPlayingId())) {
+                           myHolder.playStatusAnim.start();
+                           myHolder.ivPlayStatus.setVisibility(View.VISIBLE);
+                           myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_blue_color));
+                       } else {
+                           UbtLog.d(TAG, "ID IS NOT SAME, NO ANIMATION aLBUM ID" + mHelper.getAlbumId() + "PLAYING ALBUM ID" + mHelper.getmAlbumPlayingId());
+                           myHolder.playStatusAnim.stop();
+                           myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
+                           myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
+                       }
+                   } else {
+                       myHolder.playStatusAnim.stop();
+                       myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
+                       myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
+                   }
+               }else {
+                   myHolder.playStatusAnim.stop();
+                   myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
+                   myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
+               }
         }catch(Exception e){
             e.printStackTrace();
         }
