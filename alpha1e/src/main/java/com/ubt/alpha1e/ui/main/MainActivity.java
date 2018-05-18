@@ -271,7 +271,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     private String sleepState = "sleep.hts"; //  睡觉
     private String sayHi = "say hi.hts";   //打招呼
     boolean isBtConnect = false;
-    boolean isNetworkConnect = false;
+    public static boolean isNetworkConnect = false;
     String WakeUpActionName = "初始化";
     private int ROBOT_HEAD_UP_STAND = 1;
     private int ROBOT_HEAD_DOWN = 2;

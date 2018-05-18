@@ -14,6 +14,7 @@ import com.ubt.alpha1e.onlineaudioplayer.Fragment.OnlineAudioListFragment;
 import com.ubt.alpha1e.onlineaudioplayer.model.AudioContentInfo;
 import com.ubt.alpha1e.onlineaudioplayer.model.PlayerEvent;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
+import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.MyLog;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -230,6 +231,12 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
 
     public void playEvent(String playStatus, String categoryId, String albumId, int index) {
         notifyUiNextAudio(index);
+        if(!MainActivity.isNetworkConnect){
+            UbtLog.d(TAG,"Network disconnect");
+            PlayerEvent mPlayerEvent = new PlayerEvent(PlayerEvent.Event.ROBOT_NETWORK_DISCONNECT);
+            EventBus.getDefault().post(mPlayerEvent);
+            return;
+        }
         if(categoryId!=null&&albumId!=null) {
             sendControlCommand(playStatus, categoryId, albumId, Integer.toString(index));
         }else {

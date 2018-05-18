@@ -79,7 +79,6 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
             return;
         }
         try {
-            if (mHelper.getPlayingContent().size() > position) {
                 if (mHelper.getPlayingContent().get(position).isPlaying) {
                     if (mHelper.getAlbumId().equals(mHelper.getmAlbumPlayingId())) {
                         myHolder.playStatusAnim.start();
@@ -96,7 +95,6 @@ public class OnlineAudioListRecyclerAdapter extends RecyclerView.Adapter<Recycle
                     myHolder.ivPlayStatus.setVisibility(View.INVISIBLE);
                     myHolder.tvPlayContent.setTextColor(mContext.getResources().getColor(R.color.tv_center_color));
                 }
-            }
         }catch(Exception e){
             e.printStackTrace();
         }
