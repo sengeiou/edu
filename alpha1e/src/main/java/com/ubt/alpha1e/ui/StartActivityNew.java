@@ -215,7 +215,6 @@ public class StartActivityNew extends BaseActivity implements IStartUI, BaseDiaU
 
     private void startActivitySkip(){
         Intent inte = new Intent();
-        MobclickAgent.onEvent(StartActivityNew.this.getApplicationContext(), AlphaStatics.ACTIONS_LIB);//动作库页面次数
         UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
         if (null == userModel) {
             inte.setClass(StartActivityNew.this, com.ubt.alpha1e.login.LoginActivity.class);
@@ -238,6 +237,7 @@ public class StartActivityNew extends BaseActivity implements IStartUI, BaseDiaU
         String token = SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN);
         if(TextUtils.isEmpty(token)){
             UbtLog.e(TAG, "SP_LOGIN_TOKEN is null");
+            startActivitySkip();
             return;
         }
         UbtLog.d(TAG, "SP_LOGIN_TOKEN="+token);
