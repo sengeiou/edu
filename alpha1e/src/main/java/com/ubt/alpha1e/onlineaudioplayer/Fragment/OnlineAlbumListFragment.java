@@ -119,6 +119,8 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         if(mOnlineAudioAlbumPlayerFragment==null) {
             mOnlineAudioAlbumPlayerFragment = new OnlineAlbumListFragment();
         }
+       // OnlineAlbumListFragment  mOnlineAudioAlbumPlayerFragment= new OnlineAlbumListFragment();
+        mOnlineAudioAlbumPlayerFragment= new OnlineAlbumListFragment();
         mCategoryId=mCategory.getRes_id();
         mCategoryName  =mCategory.getRes_name();
         type = CATEGORY_ENTER_FRAGMENT;
@@ -129,6 +131,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         if(mOnlineAudioAlbumPlayerFragment==null) {
             mOnlineAudioAlbumPlayerFragment = new OnlineAlbumListFragment();
         }
+        //OnlineAlbumListFragment  mOnlineAudioAlbumPlayerFragment= new OnlineAlbumListFragment();
         mAlbumContentInfo=albumContentInfo;
         mCategoryId=albumContentInfo.getCategoryId();
         mAlbumId=albumContentInfo.albumId;
@@ -187,6 +190,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                 Intent i = new Intent();
                 i.setClass(getActivity(), OnlineResRearchActivity.class);
                 getActivity().startActivity(i);
+                pop();
             }
         });
         mBack.setOnClickListener(new View.OnClickListener(){
