@@ -648,7 +648,7 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
             return;
         }*/
 
-        if(Build.VERSION.SDK_INT >= 21){
+        //if(Build.VERSION.SDK_INT >= 21){
 
             Intent intent = new Intent(this, VideoCameraActivity.class);
             if(ImagePicker.getInstance().getSelectImageCount() > 0 || ImagePicker.getInstance().getSelectType() == 1){//如果已经选择，则只能拍照
@@ -657,11 +657,11 @@ public class MediaGridActivity extends ImageBaseActivity implements ImageDataSou
                 intent.putExtra(Constant.CAMERA_TYPE, BUTTON_STATE_BOTH);
             }
             startActivityForResult(intent, 1);
-        }else {
+        /*}else {
             Intent intent = new Intent();
             intent.setClass(this, CaptureImageVideoActivity.class);
             startActivityForResult(intent, 1);
-        }
+        }*/
     }
 
     public static Context getContextInstanse(){
