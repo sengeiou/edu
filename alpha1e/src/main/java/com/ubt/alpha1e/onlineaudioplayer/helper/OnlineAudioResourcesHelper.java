@@ -365,7 +365,7 @@ public class OnlineAudioResourcesHelper extends BaseHelper {
             UbtLog.d(TAG, "setPlayContent is null");
             return;
         }
-        new Exception().printStackTrace();
+      //  new Exception().printStackTrace();
         mPlayingContentInfoList.clear();
         mPlayingContentInfoList.addAll(playContentInfoList);
     }

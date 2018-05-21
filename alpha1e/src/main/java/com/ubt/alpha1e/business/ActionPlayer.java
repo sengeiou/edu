@@ -434,7 +434,6 @@ public class ActionPlayer implements BlueToothInteracter {
  *  DOSTOPCYCLE
  */
     private void doStopCycle(boolean needSendCommand) {
-
         if(mCyclePlayThread == null){
             return;
         }
