@@ -240,13 +240,13 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                     UbtLog.d(TAG, "456  mAlbumHistory  " + mAlbumHistory.getAlbumId());
                     if (!mAlbumHistory.getAlbumId().equals("")) {
                         AlbumContentInfo mItem=mAlbumHistory;
-                        Intent mIntent = new Intent();
-                        mIntent.setClass(mContext,OnlineAudioPlayerActivity.class);
-                        mIntent.putExtra("TYPE",1);
-                        mIntent.putExtra("AlbumContentInfo",mItem);
-                        startActivityForResult(mIntent,REQUEST_RESULT_PLAYLIST);
-//                        OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumHistory);
-//                        startForResult(mfragment, REQUEST_RESULT_PLAYLIST);
+//                        Intent mIntent = new Intent();
+//                        mIntent.setClass(mContext,OnlineAudioPlayerActivity.class);
+//                        mIntent.putExtra("TYPE",1);
+//                        mIntent.putExtra("AlbumContentInfo",mItem);
+//                        startActivityForResult(mIntent,REQUEST_RESULT_PLAYLIST);
+                        OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumHistory);
+                        startForResult(mfragment, REQUEST_RESULT_PLAYLIST);
                         onPause();
                     } else {
                         Toast.makeText(getActivity(), "SERVICE REPLY NULL ALBUMID", Toast.LENGTH_LONG).show();
