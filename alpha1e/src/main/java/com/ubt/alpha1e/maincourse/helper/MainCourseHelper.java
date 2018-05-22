@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 
 import com.ubt.alpha1e.course.event.PrincipleEvent;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.utils.BluetoothParamUtil;
 import com.ubt.alpha1e.utils.log.UbtLog;
@@ -12,6 +13,7 @@ import com.ubtechinc.base.ByteHexHelper;
 import com.ubtechinc.base.ConstValue;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by Administrator on 2017/11/20.
@@ -71,4 +73,5 @@ public class MainCourseHelper extends BaseHelper {
     public void DistoryHelper() {
 
     }
+
 }

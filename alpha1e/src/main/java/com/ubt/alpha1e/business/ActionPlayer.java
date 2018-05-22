@@ -90,7 +90,13 @@ public class ActionPlayer implements BlueToothInteracter {
                 case UI_NOTE_PLAY_CYCLE_STOP:
                     UbtLog.d(TAG,"20 分钟时间到，自动停止循环播放");
                     mBtManager.sendCommand(mBtMac, ConstValue.DV_SET_PLAY_SOUND, BluetoothParamUtil.stringToBytes(Servo_protection_indication),BluetoothParamUtil.stringToBytes(Servo_protection_indication).length,false);
-                    thiz.doStopCycle(true);
+                    //bug22702
+                    try {
+                        stopPlayingAndClearPlayingList(true);
+                        notifyMainActivityEvent(mCurrentPlayActionName, ActionEvent.Event.ACTION_PLAY_FINISH);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
                     break;
 
                 default:
