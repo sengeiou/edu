@@ -7,7 +7,32 @@
     <include
         android:id="@+id/lay_title"
         layout="@layout/layout_title_back_onlineaudioplayer" />
+    <RelativeLayout
+        android:layout_below="@id/lay_title"
+        android:id="@+id/rl_no_net"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/iv_advice_re"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/img_network_error"
+            android:layout_centerVertical="true"/>
+        <TextView
+            android:layout_below="@id/iv_advice_re"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textColor="#AFBFC8"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="14sp"
+            android:text="网络出错，轻触屏幕重新加载"/>
 
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rl_content"
         android:layout_width="match_parent"

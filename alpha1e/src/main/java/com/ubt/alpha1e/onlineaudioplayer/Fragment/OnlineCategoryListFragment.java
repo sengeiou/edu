@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -102,6 +103,12 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     @BindView(R.id.ig_player_list)
     ImageView ig_player_list;
+
+    @BindView(R.id.rl_no_net)
+    RelativeLayout rl_no_net;
+
+    @BindView(R.id.rl_content)
+    RelativeLayout rl_content;
 
     public LinearLayoutManager mLayoutManager;
     public onlineresAdpater mAdapter;
@@ -213,7 +220,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         }
     }
 
-    @OnClick({R.id.ib_return, R.id.ib_rearch, R.id.ig_player_button, R.id.ig_player_list})
+    @OnClick({R.id.ib_return, R.id.ib_rearch, R.id.ig_player_button, R.id.ig_player_list,R.id.rl_no_net})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ib_return:
@@ -244,6 +251,9 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                         Toast.makeText(getActivity(), "SERVICE REPLY NULL ALBUMID", Toast.LENGTH_LONG).show();
                     }
                 }
+                break;
+            case R.id.rl_no_net:
+                getMaxCategory();
                 break;
         }
     }
@@ -326,6 +336,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                     case GET_MAX_CATEGORY:
                         com.ubt.alpha1e.base.loading.LoadingDialog.dismiss(getActivity());
                         ToastUtils.showShort("请求失败");
+                        rl_content.setVisibility(View.INVISIBLE);
+                        rl_no_net.setVisibility(View.VISIBLE);
                         break;
                     default:
                         break;
@@ -342,6 +354,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                                 new TypeToken<BaseResponseModel<ArrayList<CategoryMax>>>() {
                                 }.getType());//加上type转换，避免泛型擦除
                         if (modle.status) {
+                            rl_content.setVisibility(View.VISIBLE);
+                            rl_no_net.setVisibility(View.INVISIBLE);
                             UbtLog.d(TAG, "请求成功");
                             if (modle.models.size() == 0) {
                                 UbtLog.d(TAG, "没有类别");
@@ -361,6 +375,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                         } else {
                             UbtLog.d(TAG, "请求失败");
                             ToastUtils.showShort("请求失败");
+                            rl_content.setVisibility(View.INVISIBLE);
+                            rl_no_net.setVisibility(View.VISIBLE);
                         }
                         break;
                     default:

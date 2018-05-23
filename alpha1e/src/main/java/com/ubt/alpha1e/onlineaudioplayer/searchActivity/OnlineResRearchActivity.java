@@ -449,6 +449,9 @@ public class OnlineResRearchActivity extends MVPBaseActivity<OnlineResRearchCont
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    int id = mSearchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+                    EditText textView = (EditText ) mSearchView.findViewById(id);
+                    textView.setText(list.get(position).des);
                     search(list.get(position).des);
                 }
             });

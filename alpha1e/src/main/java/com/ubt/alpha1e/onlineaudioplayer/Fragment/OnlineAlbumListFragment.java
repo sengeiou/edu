@@ -37,6 +37,8 @@ import com.ubt.alpha1e.utils.log.UbtLog;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+
 /**
  * @作者：ubt
  * @日期: 2018/4/4 10:35
@@ -59,6 +61,8 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     ImageView mBack;
     ListView  mGradeSelect;
     TextView mTitleName;
+    RelativeLayout rl_no_net;
+    RelativeLayout rl_content;
     public static ArrayList<String> mGradData=new ArrayList<>();
     public static ArrayList<Boolean> mGradeSelectedData=new ArrayList<>();
     public static ArrayList<String>mSelectedGrade=new ArrayList<>();
@@ -153,6 +157,8 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         mGradeSelect=(ListView)mView.findViewById(R.id.grade_select_dialog);
         mTitleName=mView.findViewById(R.id.tv_base_title_name);
         mTitleName.setText(mCategoryName);
+        rl_no_net=mView.findViewById(R.id.rl_no_net);
+        rl_content =mView.findViewById(R.id.rl_content);
         GridLayoutManager mGridLayoutManager=new GridLayoutManager(getActivity(),2);
         mAlbumView.setLayoutManager(mGridLayoutManager);
       //  mAlbumView.addItemDecoration(new DividerItemDecoration(mAlbumView.getContext(),mLinearLayoutManager.getOrientation()));
@@ -212,6 +218,12 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                 return false;
             }
         });
+        rl_no_net.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.getAlbumList(mCategoryId);
+            }
+        });
         return mView;
     }
 
@@ -244,6 +256,8 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     @Override
     public void showAlbumList(Boolean status, List<AlbumContentInfo> album, String errorMsgs) {
         if(status) {
+            rl_content.setVisibility(View.VISIBLE);
+            rl_no_net.setVisibility(View.INVISIBLE);
             UbtLog.d(TAG,"request result from back-end"+album);
             mAlbumDatas.clear();
             mGradData.clear();
@@ -270,6 +284,8 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             mAdapter.notifyDataSetChanged();
         }else {
             Toast.makeText(getActivity(),"后台出错，没有配置数据",Toast.LENGTH_LONG).show();
+            rl_content.setVisibility(View.INVISIBLE);
+            rl_no_net.setVisibility(View.VISIBLE);
         }
     }
 
@@ -281,6 +297,8 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     @Override
     public void onRequestStatus(int requestType, int errorCode) {
 
+        rl_content.setVisibility(View.INVISIBLE);
+        rl_no_net.setVisibility(View.VISIBLE);
     }
 
     public class AlbumHolder extends RecyclerView.ViewHolder{
