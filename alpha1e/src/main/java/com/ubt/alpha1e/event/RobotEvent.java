@@ -58,7 +58,8 @@ public class RobotEvent {
         BLUETOOTH_GET_ROBOT_UPGRADE,
         ENTER_CONNECT_DEVICE,
         HIBITS_PROCESS_STATUS,
-        LOW_BATTERY_LESS_FIVE_PERCENT
+        LOW_BATTERY_LESS_FIVE_PERCENT,
+        ROBOT_BIND_SUCCESS
     }
 
     public int getPower() {

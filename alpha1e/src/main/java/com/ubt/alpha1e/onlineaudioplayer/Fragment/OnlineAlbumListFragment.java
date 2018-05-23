@@ -197,6 +197,7 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                 i.setClass(getActivity(), OnlineResRearchActivity.class);
                 getActivity().startActivity(i);
                 pop();
+
             }
         });
         mBack.setOnClickListener(new View.OnClickListener(){

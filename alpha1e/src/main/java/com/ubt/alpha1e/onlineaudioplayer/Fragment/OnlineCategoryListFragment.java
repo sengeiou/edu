@@ -44,6 +44,7 @@ import com.ubt.alpha1e.login.HttpEntity;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.CategoryMax;
 import com.ubt.alpha1e.onlineaudioplayer.DataObj.OnlineresList;
+import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerActivity;
 import com.ubt.alpha1e.onlineaudioplayer.helper.DividerItemDecorationNew;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerContract;
 import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerPresenter;
@@ -129,6 +130,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     private String PLAYING_STATE = "playing";
     private String PAUSE_STATE = "pause";
     private String STOP_STATE = "quit";
+    private String INIT_STATE="init";
     private boolean isShowHibitsDialog = false;
     private Handler mHandler = new Handler() {
         @Override
@@ -244,6 +246,12 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                 if (mAlbumHistory != null) {
                     UbtLog.d(TAG, "456  mAlbumHistory  " + mAlbumHistory.getAlbumId());
                     if (!mAlbumHistory.getAlbumId().equals("")) {
+                        AlbumContentInfo mItem=mAlbumHistory;
+//                        Intent mIntent = new Intent();
+//                        mIntent.setClass(mContext,OnlineAudioPlayerActivity.class);
+//                        mIntent.putExtra("TYPE",1);
+//                        mIntent.putExtra("AlbumContentInfo",mItem);
+//                        startActivityForResult(mIntent,REQUEST_RESULT_PLAYLIST);
                         OnlineAudioListFragment mfragment = OnlineAudioListFragment.newInstance(mAlbumHistory);
                         startForResult(mfragment, REQUEST_RESULT_PLAYLIST);
                         onPause();
@@ -307,8 +315,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         mRecyclerview.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         getMaxCategory();
-//        mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
-        initState(PAUSE_STATE);
+        initState(INIT_STATE);
+
     }
 
     //拉最大的类别
@@ -461,7 +469,24 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             pausePlay();
         } else if (state.equals(STOP_STATE)) {
             isPause = true;
-            noPlaying();
+            stopPlaying();
+        }else if(state.equals(INIT_STATE)){
+            isPause = true;
+            initPlayState();
+        }
+    }
+
+    public void initPlayState(){
+        if (ig_player_state != null) {
+            ig_player_state.setVisibility(View.VISIBLE);
+            ig_player_state.setBackgroundResource(R.drawable.cc_default_playindicator);
+        }
+        if (player_name != null)
+            player_name.setVisibility(View.VISIBLE);
+        if (ig_player_button != null) {
+            ig_player_button.setVisibility(View.VISIBLE);
+            ig_player_button.setImageResource(R.drawable.ic_play_disable);
+            ig_player_list.setImageResource(R.drawable.ic_list_disable);
         }
     }
 
@@ -480,12 +505,12 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
     }
 
     //没有播放
-    public void noPlaying() {
+    public void stopPlaying() {
         ig_player_state.setVisibility(View.VISIBLE);
         ig_player_state.setBackgroundResource(R.drawable.cc_default_playindicator);
         player_name.setVisibility(View.VISIBLE);
         if (TextUtils.isEmpty(player_name.getText())) {
-            player_name.setText("当前无历史播放记录");
+            player_name.setText("暂无播放历史");
         }
         ig_player_button.setVisibility(View.VISIBLE);
         ig_player_button.setImageResource(R.drawable.ic_ct_play_usable);
@@ -617,69 +642,10 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             }
         } else if (event.getEvent() == RobotEvent.Event.DISCONNECT) {
             UbtLog.d(TAG, "DISCONNECT THE BLUETOOTH");
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    showBluetoothDisconnect();
-                }
-            });
-
+            //BUG 25855
+            mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         }
     }
 
-    void showBluetoothDisconnect() {
-        try {
-            ConfirmDialog dialog = null;
-            dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
-                    .setTitle("提示")
-                    .setMsg("蓝牙连接断开，请重新连接")
-                    .setCancelable(true)
-                    .setPositiveButton("去连接", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            UbtLog.d(TAG, "去连接蓝牙 ");
-                            gotoConnectBluetooth();
-                        }
-                    }).setNegativeButton("取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            UbtLog.d(TAG, "取消 ");
-                            getActivity().finish();
-                        }
-                    });
-            dialog.show();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    //去连接蓝牙
-    void gotoConnectBluetooth() {
-        try {
-            boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
-            Intent bluetoothConnectIntent = new Intent();
-            if (isfirst) {
-                UbtLog.d(TAG, "第一次蓝牙连接");
-                SPUtils.getInstance().put("firstBluetoothConnect", false);
-                bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothguidestartrobotActivity.class);
-            } else {
-                bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothandnetconnectstateActivity.class);
-            }
-            startActivityForResult(bluetoothConnectIntent, 100);
-
-            if (AppManager.getInstance().currentActivity() != null
-                    && (AppManager.getInstance().currentActivity() instanceof PrincipleActivity
-                    || AppManager.getInstance().currentActivity() instanceof SplitActivity
-                    || AppManager.getInstance().currentActivity() instanceof MergeActivity
-                    || AppManager.getInstance().currentActivity() instanceof FeatureActivity)) {
-                UbtLog.d(TAG, "有需要关闭的课程界面 ");
-                AlphaApplication.setmNeedOpenActivity(AppManager.getInstance().currentActivity().getClass().getSimpleName());
-                AppManager.getInstance().currentActivity().finish();
-            }
-            getActivity().overridePendingTransition(R.anim.activity_open_up_down, 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
 

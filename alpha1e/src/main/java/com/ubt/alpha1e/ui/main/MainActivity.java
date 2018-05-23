@@ -69,8 +69,10 @@ import com.ubt.alpha1e.login.loginauth.LoginAuthActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
+import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerActivity;
 import com.ubt.alpha1e.services.AutoScanConnectService;
 import com.ubt.alpha1e.services.SendClientIdService;
+import com.ubt.alpha1e.ui.MyActionsActivity;
 import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 import com.ubt.alpha1e.ui.custom.CommonCtrlView;
@@ -758,6 +760,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                                 || mActivity instanceof ActionCourseActivity
                                 || mActivity instanceof NetconnectActivity
                                 || mActivity instanceof NetSearchResultActivity
+                                || mActivity instanceof OnlineAudioPlayerActivity
+                                || mActivity instanceof MyActionsActivity
 //                                || mActivity instanceof CourseLevelOneActivity
 //                                || mActivity instanceof CourseLevelTwoActivity
 //                                || mActivity instanceof CourseLevelThreeActivity

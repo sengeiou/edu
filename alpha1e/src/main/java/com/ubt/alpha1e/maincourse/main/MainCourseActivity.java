@@ -22,6 +22,7 @@ import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
 import com.ubt.alpha1e.course.split.SplitActivity;
+import com.ubt.alpha1e.event.RobotEvent;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.adapter.MainCoursedapter;
 import com.ubt.alpha1e.maincourse.helper.MainCourseHelper;
@@ -33,6 +34,8 @@ import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
 import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,7 +197,8 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
         }
 
                 if (position == (0-onlinePlayerEnable)) {
-                    startActivity(new Intent(this, OnlineAudioPlayerActivity.class));
+                     mHelper.checkMyRobotState();
+                   // startActivity(new Intent(this, OnlineAudioPlayerActivity.class));
                 }
             else if (position == (1-onlinePlayerEnable)) {
                 if (isBulueToothConnected()) {
@@ -229,4 +233,13 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
             }
             this.overridePendingTransition(R.anim.activity_open_up_down, 0);
         }
+
+
+    @Subscribe
+    public void onEventRobot(RobotEvent event) {
+        if (event.getEvent() == RobotEvent.Event.ROBOT_BIND_SUCCESS) {
+            UbtLog.d("MainCourseActivity", "--BIND_SUCCESS--");
+            startActivity(new Intent(this, OnlineAudioPlayerActivity.class));
+        }
+    }
 }

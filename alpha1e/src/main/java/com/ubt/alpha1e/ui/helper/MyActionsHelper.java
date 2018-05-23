@@ -2758,7 +2758,7 @@ public class MyActionsHelper extends BaseHelper implements
         MyActionsHelper.mCurrentSeletedActionInfoMap.clear();
         mCurrentSeletedNameList.clear();
     }
-    public boolean getLoopingFlag(){
+    public static boolean getLoopingFlag(){
         return isLooping;
     }
 
