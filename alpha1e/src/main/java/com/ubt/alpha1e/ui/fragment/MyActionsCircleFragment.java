@@ -1215,7 +1215,6 @@ public class MyActionsCircleFragment extends BaseMyActionsFragment implements /*
       if(BaseHelper.isLowBatteryNotExecuteAction){
           new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
                   .setTitle("提示")
-                 // .setMsg("机器人电量低不能够执行动作，请充电！")
                   .setMsg("电量低于5%,请充电后播放动作!")
                   .setCancelable(true)
                   .setPositiveButton("确定", new View.OnClickListener() {
