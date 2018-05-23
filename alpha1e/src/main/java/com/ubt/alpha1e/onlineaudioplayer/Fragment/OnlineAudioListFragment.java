@@ -636,69 +636,12 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             }
         } else if (event.getEvent() == RobotEvent.Event.DISCONNECT) {
             UbtLog.d(TAG, "DISCONNECT THE BLUETOOTH");
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    showBluetoothDisconnect();
-                }
-            });
-
+            mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         }
     }
 
-    void showBluetoothDisconnect() {
-        try {
-            ConfirmDialog dialog = null;
-            dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
-                    .setTitle("提示")
-                    .setMsg("蓝牙连接断开，请重新连接")
-                    .setCancelable(true)
-                    .setPositiveButton("去连接", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            UbtLog.d(TAG, "去连接蓝牙 ");
-                            gotoConnectBluetooth();
-                        }
-                    }).setNegativeButton("取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            UbtLog.d(TAG, "取消 ");
-                            AppManager.getInstance().finishUseBluetoothActivity();
-                        }
-                    });
-            dialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    //去连接蓝牙
-    void gotoConnectBluetooth() {
-        try {
-            boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
-            Intent bluetoothConnectIntent = new Intent();
-            if (isfirst) {
-                UbtLog.d(TAG, "第一次蓝牙连接");
-                SPUtils.getInstance().put("firstBluetoothConnect", false);
-                bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothguidestartrobotActivity.class);
-            } else {
-                bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothandnetconnectstateActivity.class);
-            }
-            startActivityForResult(bluetoothConnectIntent, 100);
 
-            if (AppManager.getInstance().currentActivity() != null
-                    && (AppManager.getInstance().currentActivity() instanceof PrincipleActivity
-                    || AppManager.getInstance().currentActivity() instanceof SplitActivity
-                    || AppManager.getInstance().currentActivity() instanceof MergeActivity
-                    || AppManager.getInstance().currentActivity() instanceof FeatureActivity)) {
-                UbtLog.d(TAG, "有需要关闭的课程界面 ");
-                AlphaApplication.setmNeedOpenActivity(AppManager.getInstance().currentActivity().getClass().getSimpleName());
-                AppManager.getInstance().currentActivity().finish();
-            }
-            getActivity().overridePendingTransition(R.anim.activity_open_up_down, 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 }
 
