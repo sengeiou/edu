@@ -331,7 +331,11 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                     pop();
                     break;
                 case R.id.rl_no_net:
-                    mPresenter.getAudioList(currentAlbumId);
+                    try {
+                        mPresenter.getAudioList(currentAlbumId);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     break;

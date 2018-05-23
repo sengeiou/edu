@@ -222,7 +222,11 @@ public class OnlineAlbumListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         rl_no_net.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.getAlbumList(mCategoryId);
+                try {
+                    mPresenter.getAlbumList(mCategoryId);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
             }
         });
         return mView;
