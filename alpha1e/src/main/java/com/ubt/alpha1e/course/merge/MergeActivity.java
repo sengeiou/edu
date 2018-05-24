@@ -163,7 +163,7 @@ public class MergeActivity extends MVPBaseActivity<MergeContract.View, MergePres
                     break;
                 case BLUETOOTH_DISCONNECT:
                     ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
-                    MainCourseActivity.finishByMySelf();
+                    //MainCourseActivity.finishByMySelf();
                     finish();
                     break;
                 case RECIEVE_HIBITS_START:
