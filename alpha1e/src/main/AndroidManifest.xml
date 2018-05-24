@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ubt.alpha1e"
           android:versionCode="2"
-          android:versionName="V1.0.3.5">
+          android:versionName="V1.0.3.7">
 
     <uses-sdk
         android:minSdkVersion="14"
