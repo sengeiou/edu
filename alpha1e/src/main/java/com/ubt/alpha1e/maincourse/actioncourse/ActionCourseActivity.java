@@ -43,7 +43,6 @@ import com.ubt.alpha1e.maincourse.courseone.CourseLevelSixActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelTenActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelThreeActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelTwoActivity;
-import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.maincourse.model.ActionCourseModel;
 import com.ubt.alpha1e.maincourse.model.LocalActionRecord;
 import com.ubt.alpha1e.mvp.MVPBaseActivity;
@@ -495,7 +494,7 @@ public class ActionCourseActivity extends MVPBaseActivity<ActionCourseContract.V
 
             @Override
             public void onClick(View v) {
-                MainCourseActivity.finishByMySelf();
+                //MainCourseActivity.finishByMySelf();
                 ActionCourseActivity.finishByMySelf();
                 ActionCourseActivity.this.finish();
                 //关闭窗体动画显示

@@ -82,6 +82,7 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
 
     @Override
     public void finish() {
+        UbtLog.d("MainCourseActivity","-----finish---");
         super.finish();
         this.overridePendingTransition(0, R.anim.activity_close_down_up);
     }
@@ -163,10 +164,10 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     }
 
     // 两次点击按钮之间的点击间隔不能少于1000毫秒
-    private static final int MIN_CLICK_DELAY_TIME = 1000;
+    private static final int MIN_CLICK_DELAY_TIME = 500;
     private static long lastClickTime;
 
-    public static boolean isFastClick() {
+    public static boolean isNotFastClick() {
         boolean flag = false;
         long curClickTime = System.currentTimeMillis();
         if ((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME) {
@@ -180,26 +181,28 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
 
-        if (!isBulueToothConnected()&& position != (3 - onlinePlayerEnable)) {
+        if (!isNotFastClick()) {
+            return;
+        }
+
+        if (!isBulueToothConnected() && position != (3 - onlinePlayerEnable)) {
             showBluetoothConnectDialog();
             return;
         }
 
-        if (isFastClick()) {
-            if (BaseHelper.isLowBatteryNotExecuteAction && position != (3 - onlinePlayerEnable)) {
-                new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
-                        .setTitle("提示")
-                        .setMsg("机器人电量低动作不能执行，请充电！")
-                        .setCancelable(true)
-                        .setPositiveButton("确定", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                //调到主界面
-                                UbtLog.d("MainCourseActivty", "确定 ");
-                            }
-                        }).show();
-                return;
-            }
+        if (BaseHelper.isLowBatteryNotExecuteAction && position != (3 - onlinePlayerEnable)) {
+            new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
+                    .setTitle("提示")
+                    .setMsg("机器人电量低动作不能执行，请充电！")
+                    .setCancelable(true)
+                    .setPositiveButton("确定", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //调到主界面
+                            UbtLog.d("MainCourseActivty", "确定 ");
+                        }
+                    }).show();
+            return;
         }
 
         if (position == (0 - onlinePlayerEnable)) {

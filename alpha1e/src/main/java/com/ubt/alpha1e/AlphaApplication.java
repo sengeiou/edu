@@ -36,6 +36,7 @@ import com.ubt.alpha1e.data.BasicSharedPreferencesOperator;
 import com.ubt.alpha1e.data.ISharedPreferensListenet;
 import com.ubt.alpha1e.data.model.NetworkInfo;
 import com.ubt.alpha1e.data.model.UserInfo;
+import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.services.AutoScanConnectService;
 import com.ubt.alpha1e.services.GlobalMsgService;
 import com.ubt.alpha1e.services.MyLifecycleHandler;
@@ -452,7 +453,7 @@ public class AlphaApplication extends LoginApplication {
                         || mActivity instanceof NetconnectActivity //add by dicy.cheng  当在网络连接页面时，如果蓝牙掉线，则该网络连接页面也关掉
                         || mActivity instanceof MainActivity
                         || mActivity instanceof BluetoothandnetconnectstateActivity
-
+                         ||mActivity instanceof MainCourseActivity
                         ) {
                     if (mActivity instanceof MyActionsActivity) {
                         if (MyActionsActivity.requestPosition == 1

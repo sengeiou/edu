@@ -130,7 +130,7 @@ public class TimeUtils {
 			flag = true;
 		}
 		lastClickTime = curClickTime;
-		UbtLog.d("isFastClick", "lastclickTime===" + lastClickTime + "         ++++flag==" + flag);
+		UbtLog.d("isNotFastClick", "lastclickTime===" + lastClickTime + "         ++++flag==" + flag);
 		return flag;
 	}
 

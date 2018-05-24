@@ -11,7 +11,6 @@ import com.ubt.alpha1e.course.principle.PrincipleActivity;
 import com.ubt.alpha1e.course.split.SplitActivity;
 import com.ubt.alpha1e.maincourse.actioncourse.ActionCourseActivity;
 import com.ubt.alpha1e.maincourse.courseone.CourseLevelOneActivity;
-import com.ubt.alpha1e.maincourse.main.MainCourseActivity;
 import com.ubt.alpha1e.ui.RemoteActivity;
 import com.ubt.alpha1e.ui.RemoteSelActivity;
 
@@ -84,7 +83,7 @@ public class AppManager {
                 mActivity = activityStack.get(i);
                 if (mActivity instanceof RemoteActivity
                         || mActivity instanceof RemoteSelActivity
-                        || mActivity instanceof MainCourseActivity
+                       // || mActivity instanceof MainCourseActivity
                         || mActivity instanceof PrincipleActivity
                         || mActivity instanceof SplitActivity
                         || mActivity instanceof MergeActivity
