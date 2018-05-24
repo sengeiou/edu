@@ -433,7 +433,7 @@ public class FeatureActivity extends MVPBaseActivity<FeatureContract.View, Featu
                     break;
                 case BLUETOOTH_DISCONNECT:
                     ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
-                    MainCourseActivity.finishByMySelf();
+                    //MainCourseActivity.finishByMySelf();
                     finish();
                     break;
                 case OVER_TIME_FINISH:

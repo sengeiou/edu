@@ -154,7 +154,7 @@ public class SplitActivity extends MVPBaseActivity<SplitContract.View, SplitPres
                     break;
                 case BLUETOOTH_DISCONNECT:
                     ToastUtils.showShort(getStringResources("ui_robot_disconnect"));
-                    MainCourseActivity.finishByMySelf();
+                    //MainCourseActivity.finishByMySelf();
                     finish();
                     break;
                 case RECIEVE_HIBITS_START:
