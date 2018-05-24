@@ -2,7 +2,6 @@ package com.ubt.alpha1e.maincourse.main;
 
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +17,8 @@ import com.ubt.alpha1e.base.Constant;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.base.ToastUtils;
 import com.ubt.alpha1e.blocklycourse.courselist.CourseListActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
+import com.ubt.alpha1e.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.course.feature.FeatureActivity;
 import com.ubt.alpha1e.course.merge.MergeActivity;
 import com.ubt.alpha1e.course.principle.PrincipleActivity;
@@ -32,7 +33,6 @@ import com.ubt.alpha1e.onlineaudioplayer.categoryActivity.OnlineAudioPlayerActiv
 import com.ubt.alpha1e.services.SyncDataService;
 import com.ubt.alpha1e.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.ui.helper.BaseHelper;
-import com.ubt.alpha1e.ui.main.MainActivity;
 import com.ubt.alpha1e.utils.log.UbtLog;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -58,8 +58,8 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     RecyclerView mRecyleviewContent;
     private List<CourseModel> mCourseModels;
     private MainCoursedapter mMainCoursedapter;
-    public static int onlinePlayerEnable=0; //0 enable 1 disale
-    public static boolean ADD_CONFICT_SOLUTION=false;
+    public static int onlinePlayerEnable = 0; //0 enable 1 disale
+    public static boolean ADD_CONFICT_SOLUTION = false;
     private static MainCourseActivity mainCourseInstance = null;
 
 
@@ -70,7 +70,7 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
         initUI();
         mHelper = new MainCourseHelper(MainCourseActivity.this);
         mPresenter.getCourcesData();
-        if(ADD_CONFICT_SOLUTION) {
+        if (ADD_CONFICT_SOLUTION) {
             ((MainCourseHelper) mHelper).stopActionPlayRes();
         }
     }
@@ -179,8 +179,14 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+        if (!isBulueToothConnected()&& position != (3 - onlinePlayerEnable)) {
+            showBluetoothConnectDialog();
+            return;
+        }
+
         if (isFastClick()) {
-            if (BaseHelper.isLowBatteryNotExecuteAction&&position != (3-onlinePlayerEnable)) {
+            if (BaseHelper.isLowBatteryNotExecuteAction && position != (3 - onlinePlayerEnable)) {
                 new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
                         .setTitle("提示")
                         .setMsg("机器人电量低动作不能执行，请充电！")
@@ -196,43 +202,42 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
             }
         }
 
-                if (position == (0-onlinePlayerEnable)) {
-                     mHelper.checkMyRobotState();
-                   // startActivity(new Intent(this, OnlineAudioPlayerActivity.class));
-                }
-            else if (position == (1-onlinePlayerEnable)) {
-                if (isBulueToothConnected()) {
-                    ((MainCourseHelper)mHelper).stopOnlineRes();
-                    String progressKey = Constant.PRINCIPLE_PROGRESS + SPUtils.getInstance().getString(Constant.SP_USER_ID);
-                    int progress = SPUtils.getInstance().getInt(progressKey, 0);
-                    UbtLog.d("progress", "progress = " + progress);
-                    if (progress == 1) {
-                        SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
-                        SplitActivity.launchActivity(this, false);
-                    } else if (progress == 2) {
-                        SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
-                        MergeActivity.launchActivity(this, false);
-                    } else if (progress == 3) {
-                        SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
-                        FeatureActivity.launchActivity(this, false);
-                    } else {
-                        SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, 0);
-                        PrincipleActivity.launchActivity(this, false);
-                    }
-
+        if (position == (0 - onlinePlayerEnable)) {
+            mHelper.checkMyRobotState();
+            // startActivity(new Intent(this, OnlineAudioPlayerActivity.class));
+        } else if (position == (1 - onlinePlayerEnable)) {
+            if (isBulueToothConnected()) {
+                ((MainCourseHelper) mHelper).stopOnlineRes();
+                String progressKey = Constant.PRINCIPLE_PROGRESS + SPUtils.getInstance().getString(Constant.SP_USER_ID);
+                int progress = SPUtils.getInstance().getInt(progressKey, 0);
+                UbtLog.d("progress", "progress = " + progress);
+                if (progress == 1) {
+                    SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
+                    SplitActivity.launchActivity(this, false);
+                } else if (progress == 2) {
+                    SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
+                    MergeActivity.launchActivity(this, false);
+                } else if (progress == 3) {
+                    SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, progress);
+                    FeatureActivity.launchActivity(this, false);
                 } else {
-                    ToastUtils.showShort(getStringResources("ui_action_connect_robot"));
+                    SPUtils.getInstance().put(Constant.PRINCIPLE_ENTER_PROGRESS, 0);
+                    PrincipleActivity.launchActivity(this, false);
                 }
 
-            } else if (position == (2-onlinePlayerEnable)) {
-                ((MainCourseHelper)mHelper).stopOnlineRes();
-                startActivity(new Intent(this, ActionCourseActivity.class));
-            } else if (position == (3-onlinePlayerEnable)) {
-                ((MainCourseHelper)mHelper).stopOnlineRes();
-                startActivity(new Intent(this, CourseListActivity.class));
+            } else {
+                ToastUtils.showShort(getStringResources("ui_action_connect_robot"));
             }
-            this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+
+        } else if (position == (2 - onlinePlayerEnable)) {
+            ((MainCourseHelper) mHelper).stopOnlineRes();
+            startActivity(new Intent(this, ActionCourseActivity.class));
+        } else if (position == (3 - onlinePlayerEnable)) {
+            ((MainCourseHelper) mHelper).stopOnlineRes();
+            startActivity(new Intent(this, CourseListActivity.class));
         }
+        this.overridePendingTransition(R.anim.activity_open_up_down, 0);
+    }
 
 
     @Subscribe
@@ -241,5 +246,37 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
             UbtLog.d("MainCourseActivity", "--BIND_SUCCESS--");
             startActivity(new Intent(this, OnlineAudioPlayerActivity.class));
         }
+    }
+
+    //显示蓝牙连接对话框
+    void showBluetoothConnectDialog() {
+        new ConfirmDialog(this).builder()
+                .setTitle("提示")
+                .setMsg("请先连接蓝牙和Wi-Fi")
+                .setCancelable(true)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d("MainCourseActivity", "去连接蓝牙 ");
+                        gotoConnectBluetooth();
+                    }
+                }).show();
+    }
+
+    //去连接蓝牙
+    void gotoConnectBluetooth() {
+        boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
+        Intent bluetoothConnectIntent = new Intent();
+        if (isfirst) {
+            UbtLog.d("MainCourse", "第一次蓝牙连接");
+            SPUtils.getInstance().put("firstBluetoothConnect", false);
+            bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothguidestartrobotActivity.class);
+        } else {
+            UbtLog.d("MainCourse", "非第一次蓝牙连接 ");
+            bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothandnetconnectstateActivity.class);
+        }
+
+        startActivityForResult(bluetoothConnectIntent, 100);
+        this.overridePendingTransition(R.anim.activity_open_up_down, 0);
     }
 }

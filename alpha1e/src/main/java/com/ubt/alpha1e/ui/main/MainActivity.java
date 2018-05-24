@@ -12,7 +12,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,8 +22,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -599,15 +596,13 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 showCartoonAction(cartoon_action_swing_right_leg);
                 break;
             case R.id.rl_course_center:
-                if (isBulueToothConnected()) {
+
                     if(!removeDuplicateClickEvent()) {
                         mPresenter.resetGlobalActionPlayer();
                         startActivity(new Intent(this, MainCourseActivity.class));
                         this.overridePendingTransition(R.anim.activity_open_up_down, 0);
                     }
-                } else {
-                    showBluetoothConnectDialog();
-                }
+
                 break;
             case R.id.rl_hibits_event:
 //                OnlineSearchActivity.LaunchActivity(this);
@@ -730,7 +725,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         Activity mActivity = AppManager.getInstance().currentActivity();
                         if (!(mActivity instanceof RemoteActivity
                                 || mActivity instanceof RemoteSelActivity
-                                || mActivity instanceof MainCourseActivity
+                                //|| mActivity instanceof MainCourseActivity
                                 || mActivity instanceof PrincipleActivity
                                 || mActivity instanceof SplitActivity
                                 || mActivity instanceof MergeActivity
