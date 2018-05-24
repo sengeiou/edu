@@ -485,7 +485,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             player_name.setVisibility(View.VISIBLE);
         if (ig_player_button != null) {
             ig_player_button.setVisibility(View.VISIBLE);
-            ig_player_button.setImageResource(R.drawable.ic_play_disable);
+            ig_player_button.setImageResource(R.drawable.ic_ct_play_disable);
             ig_player_list.setImageResource(R.drawable.ic_list_disable);
         }
     }
