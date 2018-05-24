@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -103,6 +104,12 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
 
     @BindView(R.id.ig_player_list)
     ImageView ig_player_list;
+
+    @BindView(R.id.rl_no_net)
+    RelativeLayout rl_no_net;
+
+    @BindView(R.id.rl_content)
+    RelativeLayout rl_content;
 
     public LinearLayoutManager mLayoutManager;
     public onlineresAdpater mAdapter;
@@ -215,7 +222,7 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
         }
     }
 
-    @OnClick({R.id.ib_return, R.id.ib_rearch, R.id.ig_player_button, R.id.ig_player_list})
+    @OnClick({R.id.ib_return, R.id.ib_rearch, R.id.ig_player_button, R.id.ig_player_list,R.id.rl_no_net})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ib_return:
@@ -252,6 +259,9 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                         Toast.makeText(getActivity(), "SERVICE REPLY NULL ALBUMID", Toast.LENGTH_LONG).show();
                     }
                 }
+                break;
+            case R.id.rl_no_net:
+                getMaxCategory();
                 break;
         }
     }
@@ -334,6 +344,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                     case GET_MAX_CATEGORY:
                         com.ubt.alpha1e.base.loading.LoadingDialog.dismiss(getActivity());
                         ToastUtils.showShort("请求失败");
+                        rl_content.setVisibility(View.INVISIBLE);
+                        rl_no_net.setVisibility(View.VISIBLE);
                         break;
                     default:
                         break;
@@ -350,6 +362,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                                 new TypeToken<BaseResponseModel<ArrayList<CategoryMax>>>() {
                                 }.getType());//加上type转换，避免泛型擦除
                         if (modle.status) {
+                            rl_content.setVisibility(View.VISIBLE);
+                            rl_no_net.setVisibility(View.INVISIBLE);
                             UbtLog.d(TAG, "请求成功");
                             if (modle.models.size() == 0) {
                                 UbtLog.d(TAG, "没有类别");
@@ -369,6 +383,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
                         } else {
                             UbtLog.d(TAG, "请求失败");
                             ToastUtils.showShort("请求失败");
+                            rl_content.setVisibility(View.INVISIBLE);
+                            rl_no_net.setVisibility(View.VISIBLE);
                         }
                         break;
                     default:
@@ -628,69 +644,8 @@ public class OnlineCategoryListFragment extends MVPBaseFragment<OnlineAudioPlaye
             UbtLog.d(TAG, "DISCONNECT THE BLUETOOTH");
             //BUG 25855
             mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    showBluetoothDisconnect();
-                }
-            });
-
         }
     }
 
-    void showBluetoothDisconnect() {
-        try {
-            ConfirmDialog dialog = null;
-            dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
-                    .setTitle("提示")
-                    .setMsg("蓝牙连接断开，请重新连接")
-                    .setCancelable(true)
-                    .setPositiveButton("去连接", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            UbtLog.d(TAG, "去连接蓝牙 ");
-                            gotoConnectBluetooth();
-                        }
-                    }).setNegativeButton("取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            UbtLog.d(TAG, "取消 ");
-                            getActivity().finish();
-                        }
-                    });
-            dialog.show();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    //去连接蓝牙
-    void gotoConnectBluetooth() {
-        try {
-            boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
-            Intent bluetoothConnectIntent = new Intent();
-            if (isfirst) {
-                UbtLog.d(TAG, "第一次蓝牙连接");
-                SPUtils.getInstance().put("firstBluetoothConnect", false);
-                bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothguidestartrobotActivity.class);
-            } else {
-                bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothandnetconnectstateActivity.class);
-            }
-            startActivityForResult(bluetoothConnectIntent, 100);
-
-            if (AppManager.getInstance().currentActivity() != null
-                    && (AppManager.getInstance().currentActivity() instanceof PrincipleActivity
-                    || AppManager.getInstance().currentActivity() instanceof SplitActivity
-                    || AppManager.getInstance().currentActivity() instanceof MergeActivity
-                    || AppManager.getInstance().currentActivity() instanceof FeatureActivity)) {
-                UbtLog.d(TAG, "有需要关闭的课程界面 ");
-                AlphaApplication.setmNeedOpenActivity(AppManager.getInstance().currentActivity().getClass().getSimpleName());
-                AppManager.getInstance().currentActivity().finish();
-            }
-            getActivity().overridePendingTransition(R.anim.activity_open_up_down, 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
 

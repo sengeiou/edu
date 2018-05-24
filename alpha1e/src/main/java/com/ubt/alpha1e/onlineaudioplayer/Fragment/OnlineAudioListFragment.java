@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,6 +83,9 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     private ImageView ivMusicStop;
     private ImageView ivMusicNext;
     private ImageView ivRecycleButton;
+    RelativeLayout rl_no_net;
+    RelativeLayout rl_content;
+    RelativeLayout rl_play_content;
     public static int SINGLE_AUDIO_PLAYING = 2;
     public static int RECYCLE_AUDIO_LIST_PLAYING = 1;
     public static int ORDER_AUDIO_LIST_PLAYING = 0;
@@ -240,6 +244,9 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         ivRecycleButton = mView.findViewById(R.id.iv_music_circle);
         ivPlayStatus = mView.findViewById(R.id.iv_play_status);
         tvPlayName = mView.findViewById(R.id.tv_play_name);
+        rl_no_net=mView.findViewById(R.id.rl_no_net);
+        rl_content =mView.findViewById(R.id.rl_content);
+        rl_play_content =mView.findViewById(R.id.rl_play_content);
 
         ivMusicLast.setOnClickListener(mOnClickListener);
         ivMusicPlay.setOnClickListener(mOnClickListener);
@@ -248,6 +255,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         ivRecycleButton.setOnClickListener(mOnClickListener);
         tvPlayName.setOnClickListener(mOnClickListener);
         mBack.setOnClickListener(mOnClickListener);
+        rl_no_net.setOnClickListener(mOnClickListener);
 
         playStatusAnim = (AnimationDrawable) ivPlayStatus.getBackground();
         playStatusAnim.setOneShot(false);
@@ -255,7 +263,6 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
         tvBaseTitleName.setText(mAlbumName);
         rvEventList.setLayoutManager(mLayoutManager);
         mBack.setVisibility(View.VISIBLE);
-
         return mView;
     }
 
@@ -322,6 +329,13 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
                 case R.id.iv_back:
                     EventBus.getDefault().unregister(this);
                     pop();
+                    break;
+                case R.id.rl_no_net:
+                    try {
+                        mPresenter.getAudioList(currentAlbumId);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     break;
@@ -391,6 +405,9 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     public void showAudioList(Boolean status, List<AudioContentInfo> album, String errorMsgs) {
         UbtLog.d(TAG, "request result from back-end " + album);
         if (album != null) {
+            rl_content.setVisibility(View.VISIBLE);
+            rl_no_net.setVisibility(View.INVISIBLE);
+            rl_play_content.setVisibility(View.VISIBLE);
             UbtLog.d(TAG, "request result from back-end notnull " + album);
             mHelper.setPlayContent(album);
             mAdapter.setData(album);
@@ -400,12 +417,17 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             mHelper.getRobotOnlineAudioStatus();
         } else {
             Toast.makeText(getActivity(), "后台出错，没有配置数据", Toast.LENGTH_LONG).show();
+            rl_content.setVisibility(View.INVISIBLE);
+            rl_no_net.setVisibility(View.VISIBLE);
+            rl_play_content.setVisibility(View.INVISIBLE);
         }
     }
 
     @Override
     public void onRequestStatus(int requestType, int errorCode) {
-
+        rl_content.setVisibility(View.INVISIBLE);
+        rl_no_net.setVisibility(View.VISIBLE);
+        rl_play_content.setVisibility(View.INVISIBLE);
     }
 
     private Handler mHandler = new Handler() {
@@ -636,69 +658,12 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
             }
         } else if (event.getEvent() == RobotEvent.Event.DISCONNECT) {
             UbtLog.d(TAG, "DISCONNECT THE BLUETOOTH");
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    showBluetoothDisconnect();
-                }
-            });
-
+            mHandler.sendEmptyMessage(STOP_CURRENT_PLAY);
         }
     }
 
-    void showBluetoothDisconnect() {
-        try {
-            ConfirmDialog dialog = null;
-            dialog = new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
-                    .setTitle("提示")
-                    .setMsg("蓝牙连接断开，请重新连接")
-                    .setCancelable(true)
-                    .setPositiveButton("去连接", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            UbtLog.d(TAG, "去连接蓝牙 ");
-                            gotoConnectBluetooth();
-                        }
-                    }).setNegativeButton("取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            UbtLog.d(TAG, "取消 ");
-                            AppManager.getInstance().finishUseBluetoothActivity();
-                        }
-                    });
-            dialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    //去连接蓝牙
-    void gotoConnectBluetooth() {
-        try {
-            boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
-            Intent bluetoothConnectIntent = new Intent();
-            if (isfirst) {
-                UbtLog.d(TAG, "第一次蓝牙连接");
-                SPUtils.getInstance().put("firstBluetoothConnect", false);
-                bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothguidestartrobotActivity.class);
-            } else {
-                bluetoothConnectIntent.setClass(AppManager.getInstance().currentActivity(), BluetoothandnetconnectstateActivity.class);
-            }
-            startActivityForResult(bluetoothConnectIntent, 100);
 
-            if (AppManager.getInstance().currentActivity() != null
-                    && (AppManager.getInstance().currentActivity() instanceof PrincipleActivity
-                    || AppManager.getInstance().currentActivity() instanceof SplitActivity
-                    || AppManager.getInstance().currentActivity() instanceof MergeActivity
-                    || AppManager.getInstance().currentActivity() instanceof FeatureActivity)) {
-                UbtLog.d(TAG, "有需要关闭的课程界面 ");
-                AlphaApplication.setmNeedOpenActivity(AppManager.getInstance().currentActivity().getClass().getSimpleName());
-                AppManager.getInstance().currentActivity().finish();
-            }
-            getActivity().overridePendingTransition(R.anim.activity_open_up_down, 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 }
 

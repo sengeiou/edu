@@ -248,7 +248,6 @@ public class BluetoothandnetconnectstateActivity extends MVPBaseActivity<Bluetoo
         }else {
             rl_ip_addr.setText("机器人IP:");
         }
-
     }
 
     //只有蓝牙连接

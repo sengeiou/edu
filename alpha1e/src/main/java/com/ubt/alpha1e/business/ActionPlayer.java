@@ -60,7 +60,6 @@ public class ActionPlayer implements BlueToothInteracter {
     //Servo protection time 20 minutes
     private static final int AUTO_STOP_PLAY_CYCLE_TIME =20*60*1000;  //20分钟
     private String Servo_protection_indication="{\"filename\":\"循环播放20分钟停下.wav\",\"playcount\":1}";
-    private static final int REMOVE_DUPLICATE_REPLY_TIMEOUT=4000;
 
     private String cycleActionName = "";  //增加循环播放时动作的名称，用于在全局控件中更新显示动作名称
     private String mCurrentPlayActionName = "";
@@ -292,9 +291,19 @@ public class ActionPlayer implements BlueToothInteracter {
         doPlay(action_name);
         if (thiz.mListeners != null) {
             for (int i = 0; i < mListeners.size(); i++) {
+                //BUG show playing status, play name is default foot when enter the remote UI
+                try {
+                    if (action_name.equals("action/controller/Default foot.hts")) {
+                        UbtLog.d(TAG, "remote control return default foots");
+                        return;
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
                 thiz.mListeners.get(i).notePlayStart(mSourceActionNameList,
                         info, mCurrentPlayType);
             }
+
         }
 
         notifyMainActivityEvent(action_name, ActionEvent.Event.ACTION_PLAY_START);

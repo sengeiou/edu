@@ -46,7 +46,31 @@
             android:layout_marginLeft="18dp"
             android:layout_centerVertical="true"/>
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_no_net"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/iv_advice_re"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/img_network_error"
+            android:layout_centerVertical="true"/>
+        <TextView
+            android:layout_below="@id/iv_advice_re"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textColor="#AFBFC8"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="14sp"
+            android:text="网络出错，轻触屏幕重新加载"/>
 
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rl_content"
         android:layout_below="@id/rl_tile"
@@ -54,7 +78,8 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/bg_onlineres_list">
+        android:background="@drawable/bg_onlineres_list"
+        android:visibility="visible">
         <RelativeLayout
             android:id="@+id/rl_content_player"
             android:layout_width="match_parent"
