@@ -111,36 +111,43 @@
                 <RelativeLayout
                     android:id="@+id/rl_tel"
                     android:layout_width="236dp"
-                    android:layout_height="42dp"
-                    android:background="@drawable/bg_auth_login"
-                    android:padding="10dp">
+                    android:layout_height="42dp">
 
                     <TextView
                         android:id="@+id/tv_tel_prefix"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
                         android:text="+86"
                         android:textSize="15sp"
                         android:textColor="@color/tv_user_edit_color"
+                        android:drawableEnd="@drawable/spinner_arrow_down"
+                        android:background="@drawable/bg_auth_login"
+                        android:drawablePadding="5dp"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="10dp"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true"
                         />
 
 
 
                     <EditText
                         android:id="@+id/edt_tel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_toRightOf="@+id/tv_tel_prefix"
-                        android:background="@null"
                         android:imeOptions="flagNoExtractUi"
                         android:hint="请输入手机号码"
-                        android:paddingLeft="25dp"
+                        android:paddingLeft="15dp"
                         android:textColor="@color/tv_user_edit_color"
                         android:inputType="phone|number"
                         android:digits="1234567890"
                         android:maxLength="11"
                         android:textSize="15sp"
                         android:gravity="center"
+                        android:background="@drawable/bg_auth_login"
+                        android:layout_marginStart="5dp"
                         />
 
                 </RelativeLayout>

@@ -49,6 +49,11 @@
         <item>@drawable/normal_13_c</item>
     </array>
 
-
+    <string-array name="login_phone_area">
+        <item>+86</item>
+        <item>+852</item>
+        <item>+853</item>
+        <item>+886</item>
+    </string-array>
 
 </resources>

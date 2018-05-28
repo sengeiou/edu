@@ -3,15 +3,22 @@ package com.ubt.alpha1e.login.loginauth;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -60,16 +67,19 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
 
     RequestCountDown requestCountDown;
     private static final long REQUEST_TIME = 61 * 1000;
+    @BindView(R.id.tv_tel_prefix)
+    TextView tvTelPrefix;
 
     private String token;
     private String userId;
     private String nickName;
     private String userImage;
-
-
+    private String[] mPhoneItems;
+    private String mPhonePrefix = "86";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPhoneItems = getResources().getStringArray(R.array.login_phone_area);
         initControlListener();
         requestCountDown = new RequestCountDown(REQUEST_TIME, 1000);
         token = SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN);
@@ -145,7 +155,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                 setGetCodeTextEnable(false);
 
                 GetCodeRequest getCodeRequest = new GetCodeRequest();
-                getCodeRequest.setPhone(edtTel.getText().toString());
+                getCodeRequest.setPhone(mPhonePrefix + edtTel.getText().toString());
                 OkHttpClientUtils.getJsonByPostRequest(HttpEntity.REQUEST_SMS_CODE, getCodeRequest, 0).execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
@@ -190,7 +200,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                         LoadingDialog.dismiss(LoginAuthActivity.this);
                         BaseResponseModel baseResponseModel = GsonImpl.get().toObject(response, BaseResponseModel.class);
                         if (baseResponseModel.status) {
-                            UbtLog.d(TAG,"model=="+baseResponseModel.models);
+                            UbtLog.d(TAG, "model==" + baseResponseModel.models);
                             UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
                             userModel.setPhone(edtTel.getText().toString());
                             UbtLog.d(TAG, "userModel:" + userModel);
@@ -199,7 +209,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                             intent.setClass(LoginAuthActivity.this, UserEditActivity.class);
                             startActivity(intent);
                             finish();
-                        }else{
+                        } else {
                             ToastUtils.showShort("验证码错误");
                         }
 
@@ -215,12 +225,18 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
             public void onClick(View view) {
                 UbtLog.d(TAG, "rlLayout");
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if(imm.isActive() ){
+                if (imm.isActive()) {
                     imm.hideSoftInputFromWindow(getCurrentFocus().getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
             }
         });
 
+        tvTelPrefix.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPhonePop();
+            }
+        });
     }
 
 
@@ -244,7 +260,6 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
     }
 
 
-
     private void setGetCodeTextEnable(boolean enable) {
 
         tvGetCode.setEnabled(enable);
@@ -260,7 +275,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(requestCountDown != null){
+        if (requestCountDown != null) {
             requestCountDown.cancel();
         }
     }
@@ -295,5 +310,28 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
         }
     }
 
+    private void showPhonePop(){
+        View contentView = LayoutInflater.from(LoginAuthActivity.this).inflate(R.layout.phone_popwin_dropdown_stytle, null);
+        ListView lsvMore = (ListView) contentView.findViewById(R.id.lsvMore);
+        lsvMore.setAdapter(new ArrayAdapter<String>(LoginAuthActivity.this, R.layout.item_phone_prefix, mPhoneItems));
+
+        final PopupWindow mPopWindow = new PopupWindow(contentView,
+                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, true);
+        mPopWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00ffffff")));
+        mPopWindow.setFocusable(true);
+        mPopWindow.setOutsideTouchable(true);
+        mPopWindow.update();
+        mPopWindow.showAsDropDown(tvTelPrefix, 0, 200);
+        lsvMore.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                UbtLog.e(TAG, "position:" + position);
+                String str = mPhoneItems[position];
+                mPhonePrefix = str.replace("+","");
+                tvTelPrefix.setText(str);
+                mPopWindow.dismiss();
+            }
+        });
+    }
 
 }
