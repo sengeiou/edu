@@ -321,13 +321,13 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
         mPopWindow.setFocusable(true);
         mPopWindow.setOutsideTouchable(true);
         mPopWindow.update();
-        mPopWindow.showAsDropDown(tvTelPrefix, 0, 200);
+        mPopWindow.showAsDropDown(tvTelPrefix, 0, 0);
         lsvMore.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UbtLog.e(TAG, "position:" + position);
                 String str = mPhoneItems[position];
                 mPhonePrefix = str.replace("+","");
+                UbtLog.e(TAG, "position:" + position+ "   mPhonePrefix:"+mPhonePrefix);
                 tvTelPrefix.setText(str);
                 mPopWindow.dismiss();
             }

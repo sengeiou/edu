@@ -1,6 +1,8 @@
 package com.ubt.alpha1e.userinfo.psdmanage.psdverifycode;
 
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -11,6 +13,11 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.AlphaApplication;
@@ -54,6 +61,11 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
     TextView tvConfirm;
 
     protected Dialog mCoonLoadingDia;
+    @BindView(R.id.tv_tel_prefix)
+    TextView tvTelPrefix;
+
+    private String[] mPhoneItems;
+    private String mPhonePrefix = "86";
 
     public static PsdVerifyCodeFragment newInstance() {
         PsdVerifyCodeFragment psdVerifyCodeFragment = new PsdVerifyCodeFragment();
@@ -80,6 +92,7 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
 
     @Override
     protected void initUI() {
+        mPhoneItems = getResources().getStringArray(R.array.login_phone_area);
         setViewEnable(tvGetVerifyCode, false);
         setViewEnable(tvConfirm, false);
         requestCountDown = new RequestCountDown(REQUEST_TIME, 1000);
@@ -144,9 +157,9 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
 
     @Override
     public int getContentViewId() {
-        if(AlphaApplication.isPad()){
+        if (AlphaApplication.isPad()) {
             return R.layout.fragment_pswmanage_verify_code_pad;
-        }else {
+        } else {
             return R.layout.fragment_pswmanage_verify_code;
         }
 
@@ -171,7 +184,7 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
         unbinder.unbind();
     }
 
-    @OnClick({R.id.tv_get_verify_code, R.id.tv_confirm})
+    @OnClick({R.id.tv_get_verify_code, R.id.tv_confirm, R.id.tv_tel_prefix})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_get_verify_code:
@@ -181,14 +194,16 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
 
                 mCoonLoadingDia.cancel();
                 mCoonLoadingDia.show();
-                mPresenter.doGetVerifyCode(edtPhone.getText().toString());
+                mPresenter.doGetVerifyCode(mPhonePrefix+edtPhone.getText().toString());
                 break;
             case R.id.tv_confirm:
                 mCoonLoadingDia.cancel();
                 mCoonLoadingDia.show();
                 mPresenter.doVerifyCode(edtPhone.getText().toString(), edtVerifyCode.getText().toString());
                 break;
-
+            case R.id.tv_tel_prefix:
+                showPhonePop();
+                break;
         }
     }
 
@@ -277,5 +292,30 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
             mCoonLoadingDia.cancel();
         }
         super.onDestroy();
+    }
+
+    private void showPhonePop() {
+        View contentView = LayoutInflater.from(mContext).inflate(R.layout.phone_popwin_dropdown_stytle, null);
+        ListView lsvMore = (ListView) contentView.findViewById(R.id.lsvMore);
+        lsvMore.setAdapter(new ArrayAdapter<String>(mContext, R.layout.item_phone_prefix, mPhoneItems));
+
+        final PopupWindow mPopWindow = new PopupWindow(contentView,
+                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, true);
+        mPopWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00ffffff")));
+        mPopWindow.setFocusable(true);
+        mPopWindow.setOutsideTouchable(true);
+        mPopWindow.update();
+        mPopWindow.showAsDropDown(tvTelPrefix, 0, 0);
+        lsvMore.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String str = mPhoneItems[position];
+                mPhonePrefix = str.replace("+", "");
+                tvTelPrefix.setText(str);
+                UbtLog.e(TAG, "position:" + position+ "   mPhonePrefix:"+mPhonePrefix);
+                mPopWindow.dismiss();
+            }
+        });
     }
 }

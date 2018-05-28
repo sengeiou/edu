@@ -4,7 +4,7 @@
 
     <ScrollView
         android:id="@+id/sv_main"
-        android:layout_width="450dp"
+        android:layout_width="480dp"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
@@ -40,42 +40,68 @@
 
                 <RelativeLayout
                     android:id="@+id/rl_base_search"
-                    android:layout_width="250dp"
+                    android:layout_width="350dp"
                     android:layout_height="50dp"
                     android:layout_toRightOf="@+id/tv_phone"
                     android:layout_centerVertical="true"
                     android:background="@drawable/bg_edt_round_button">
 
-                    <com.ubt.alpha1e.ui.custom.ClearableEditText
-                        android:id="@+id/edt_phone"
-                        android:layout_width="165dp"
-                        android:layout_height="50dp"
-                        android:gravity="center_vertical"
-                        android:background="@color/transparent"
-                        android:paddingLeft="10dp"
-                        android:singleLine="true"
-                        android:imeOptions="flagNoExtractUi"
-                        android:inputType="number"
-                        android:maxLength="11"
-                        android:paddingRight="10dp"
-                        android:textColor="@color/txt_new_edtion"
-                        android:textSize="15sp" />
-
                     <TextView
-                        android:id="@+id/tv_get_verify_code"
-                        android:layout_width="70dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"
-                        android:text="@string/ui_register_get_vertify_code"
-                        android:textSize="12sp"
-                        android:textColor="@color/white"
-                        android:paddingLeft="5dp"
-                        android:paddingRight="5dp"
-                        android:background="@drawable/bg_button_blue"
-                        android:layout_centerVertical="true"
+                        android:id="@+id/tv_tel_prefix"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:text="+86"
+                        android:textSize="15sp"
+                        android:textColor="@color/tv_user_edit_color"
+                        android:drawableEnd="@drawable/spinner_arrow_down"
+                        android:background="@drawable/bg_auth_login"
+                        android:drawablePadding="5dp"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="10dp"
                         android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true"
                         />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/tv_tel_prefix"
+                        android:layout_marginStart="5dp"
+                        android:orientation="horizontal"
+                        android:background="@drawable/bg_edt_round_button"
+                        >
+
+                        <com.ubt.alpha1e.ui.custom.ClearableEditText
+                            android:id="@+id/edt_phone"
+                            android:layout_width="145dp"
+                            android:layout_height="50dp"
+                            android:gravity="center_vertical"
+                            android:background="@drawable/trans_bg"
+                            android:paddingLeft="10dp"
+                            android:singleLine="true"
+                            android:imeOptions="flagNoExtractUi"
+                            android:inputType="number"
+                            android:maxLength="11"
+                            android:paddingRight="10dp"
+                            android:textColor="@color/txt_new_edtion"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/tv_get_verify_code"
+                            android:layout_width="70dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="10dp"
+                            android:text="@string/ui_register_get_vertify_code"
+                            android:textSize="12sp"
+                            android:textColor="@color/white"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:background="@drawable/bg_button_blue"
+                            android:layout_centerVertical="true"
+                            android:gravity="center"
+                            />
+                    </LinearLayout>
 
                 </RelativeLayout>
 
@@ -104,7 +130,7 @@
 
                 <com.ubt.alpha1e.ui.custom.ClearableEditText
                     android:id="@+id/edt_verify_code"
-                    android:layout_width="250dp"
+                    android:layout_width="350dp"
                     android:layout_height="50dp"
                     android:gravity="center_vertical"
                     android:layout_toRightOf="@+id/tv_verify_code"
