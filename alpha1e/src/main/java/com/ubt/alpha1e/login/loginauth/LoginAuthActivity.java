@@ -118,11 +118,16 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (CheckPhoneNumberUtil.isChinaPhoneLegal(phoneNum)) {
+                if(phoneNum.length() > 0){
+                    setGetCodeTextEnable(true);
+                }else{
+                    setGetCodeTextEnable(false);
+                }
+                /*if (CheckPhoneNumberUtil.isChinaPhoneLegal(phoneNum)) {
                     setGetCodeTextEnable(true);
                 } else {
                     setGetCodeTextEnable(false);
-                }
+                }*/
 
             }
         });
@@ -180,7 +185,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                 String params = "{"
                         + "\"token\":" + "\"" + token + "\""
                         + ",\n\"userId\":" + "\"" + userId + "\""
-                        + ",\n\"phone\":" + "\"" + edtTel.getText().toString() + "\""
+                        + ",\n\"phone\":" + "\"" + mPhonePrefix+edtTel.getText().toString() + "\""
                         + ",\n\"nickName\":" + "\"" + nickName + "\""
                         + ",\n\"headPic\":" + "\"" + userImage + "\""
                         + ",\n\"code\":" + "\"" + edtVerifyCode.getText().toString() + "\""
@@ -202,7 +207,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                         if (baseResponseModel.status) {
                             UbtLog.d(TAG, "model==" + baseResponseModel.models);
                             UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
-                            userModel.setPhone(edtTel.getText().toString());
+                            userModel.setPhone(mPhonePrefix+edtTel.getText().toString());
                             UbtLog.d(TAG, "userModel:" + userModel);
                             SPUtils.getInstance().saveObject(Constant.SP_USER_INFO, userModel);
                             Intent intent = new Intent();

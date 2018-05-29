@@ -34,6 +34,7 @@ import com.tencent.tauth.UiError;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.BuildConfig;
 import com.ubt.alpha1e.R;
+import com.ubt.alpha1e.base.FileUtils;
 import com.ubt.alpha1e.base.RequstMode.BaseRequest;
 import com.ubt.alpha1e.base.SPUtils;
 import com.ubt.alpha1e.blockly.bean.QueryResult;
@@ -797,7 +798,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
                 if(fromVideo && !loadError){
                     rlGoVideo.setVisibility(View.VISIBLE);
-                    Bitmap bitmap = BitmapFactory.decodeFile(BlocklyUtil.getPath() + SHOTCUT_NAME+ ".jpg");
+                    Bitmap bitmap = FileUtils.compressImage(BitmapFactory.decodeFile(BlocklyUtil.getPath() + SHOTCUT_NAME+ ".jpg"));
                     if(bitmap != null){
                         ivShotAlbum.setImageBitmap(bitmap);
                     }

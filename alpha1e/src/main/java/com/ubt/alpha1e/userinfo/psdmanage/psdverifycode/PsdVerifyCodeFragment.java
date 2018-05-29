@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.ubt.alpha1e.AlphaApplication;
 import com.ubt.alpha1e.R;
 import com.ubt.alpha1e.base.ToastUtils;
-import com.ubt.alpha1e.login.loginauth.CheckPhoneNumberUtil;
 import com.ubt.alpha1e.mvp.MVPBaseFragment;
 import com.ubt.alpha1e.ui.custom.ClearableEditText;
 import com.ubt.alpha1e.ui.dialog.SLoadingDialog;
@@ -114,7 +113,7 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
             @Override
             public void afterTextChanged(Editable editable) {
                 telephone = edtPhone.getText().toString();
-                if (CheckPhoneNumberUtil.isChinaPhoneLegal(telephone)) {
+                if (telephone.length() > 0) {
                     setViewEnable(tvGetVerifyCode, true);
                 } else {
                     setViewEnable(tvGetVerifyCode, false);
@@ -140,7 +139,7 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
             public void afterTextChanged(Editable editable) {
                 verifyCode = edtVerifyCode.getText().toString();
                 if (!TextUtils.isEmpty(verifyCode) && verifyCode.length() == 4
-                        && CheckPhoneNumberUtil.isChinaPhoneLegal(edtPhone.getText().toString())) {
+                        && edtPhone.getText().toString().length() > 0) {
                     setViewEnable(tvConfirm, true);
                 } else {
                     setViewEnable(tvConfirm, false);
@@ -199,7 +198,7 @@ public class PsdVerifyCodeFragment extends MVPBaseFragment<PsdVerifyCodeContract
             case R.id.tv_confirm:
                 mCoonLoadingDia.cancel();
                 mCoonLoadingDia.show();
-                mPresenter.doVerifyCode(edtPhone.getText().toString(), edtVerifyCode.getText().toString());
+                mPresenter.doVerifyCode(mPhonePrefix + edtPhone.getText().toString(), edtVerifyCode.getText().toString());
                 break;
             case R.id.tv_tel_prefix:
                 showPhonePop();
