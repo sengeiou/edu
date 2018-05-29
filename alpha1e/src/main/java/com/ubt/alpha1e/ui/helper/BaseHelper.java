@@ -322,6 +322,10 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                         isLowBatteryNotExecuteAction=true;
                         isNeedNoteLowPowerFive = false;
                     }
+                    if (power >= 20) {
+                        UbtLog.d(TAG, "POWER VALUE IS LARGER 20, SO NO DIALOG ");
+                        isLowBatteryNotExecuteAction = false;
+                    }
                 } else {
                     isNeedNoteLowPowerTwenty = true;
                     isNeedNoteLowPowerFive = true;
@@ -828,8 +832,10 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                         UbtLog.d(TAG, "一键绑定 ");
                         if (MainUiBtHelper.getInstance(mContext).isLostCoon()) {
                             UbtLog.d(TAG, "没有连接蓝牙 ");
-                            Intent intent = new Intent(mBaseActivity, BluetoothandnetconnectstateActivity.class);
-                            mContext.startActivity(intent);
+                            if(mContext!=null) {
+                                Intent intent = new Intent(mContext, BluetoothandnetconnectstateActivity.class);
+                                mContext.startActivity(intent);
+                            }
                         } else {
                             UbtLog.d(TAG, "连接了蓝牙 ");
                             gotoBind();

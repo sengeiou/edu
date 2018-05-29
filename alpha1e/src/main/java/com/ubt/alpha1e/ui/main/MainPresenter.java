@@ -173,9 +173,13 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         }else if(type==Constant.BUDDLE_RANDOM_TEXT){
             Random random = new Random();
             // UbtLog.i(TAG, "randomBuddleText :   " + buddleTextTimeout + "main thread " );
-            String[] arrayText = AppManager.getInstance().currentActivity().getResources().getStringArray(R.array.mainUi_buddle_text);
-            int select = random.nextInt(arrayText.length);
-            text = arrayText[select];
+            try {
+                String[] arrayText = AppManager.getInstance().currentActivity().getResources().getStringArray(R.array.mainUi_buddle_text);
+                int select = random.nextInt(arrayText.length);
+                text = arrayText[select];
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }else if(type==Constant.BUDDLE_INIT_TEXT){
             if(mView!=null) {
                 text = mView.getContext().getResources().getString(R.string.buddle_text_init_status);
