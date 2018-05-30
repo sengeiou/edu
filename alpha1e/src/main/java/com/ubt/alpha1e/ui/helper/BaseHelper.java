@@ -323,10 +323,12 @@ public abstract class BaseHelper implements BlueToothInteracter, IImageListener 
                         isNeedNoteLowPowerFive = false;
                     }
                     if (power >= 20) {
-                        UbtLog.d(TAG, "POWER VALUE IS LARGER 20, SO NO DIALOG ");
-                        isNeedNoteLowPowerTwenty = true;
-                        isNeedNoteLowPowerFive = true;
-                        isLowBatteryNotExecuteAction = false;
+                        if(isLowBatteryNotExecuteAction) {
+                            UbtLog.d(TAG, "NOISE DATA POWER VALUE IS LARGER 20, SO NO DIALOG ");
+                            isNeedNoteLowPowerTwenty = true;
+                            isNeedNoteLowPowerFive = true;
+                            isLowBatteryNotExecuteAction = false;
+                        }
                     }
                 } else {
                     isNeedNoteLowPowerTwenty = true;
