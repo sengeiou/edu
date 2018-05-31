@@ -225,7 +225,7 @@ public class OnlineAudioListFragment extends MVPBaseFragment<OnlineAudioPlayerCo
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.activity_play_event_list, container, false);
+        mView = inflater.inflate(R.layout.online_play_event_list, container, false);
         UbtLog.d(TAG, "onCreatView  ");
         ButterKnife.bind(getActivity());
         mHelper = OnlineAudioResourcesHelper.getInstance(getContext());
