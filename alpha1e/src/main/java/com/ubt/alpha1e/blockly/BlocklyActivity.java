@@ -802,7 +802,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     if(bitmap != null){
                         ivShotAlbum.setImageBitmap(bitmap);
                     }
-
+                    bitmap.recycle();
                 }else{
                     rlGoVideo.setVisibility(View.GONE);
                 }

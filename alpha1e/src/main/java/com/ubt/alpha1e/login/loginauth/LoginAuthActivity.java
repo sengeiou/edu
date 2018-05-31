@@ -171,6 +171,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                     @Override
                     public void onResponse(String response, int id) {
                         UbtLog.e(TAG, "REQUEST_SMS_CODE response:" + response);
+                        ToastUtils.showShort("验证码已发送");
                     }
                 });
 
@@ -215,7 +216,7 @@ public class LoginAuthActivity extends MVPBaseActivity<LoginAuthContract.View, L
                             startActivity(intent);
                             finish();
                         } else {
-                            ToastUtils.showShort("验证码错误");
+                            ToastUtils.showShort(baseResponseModel.info);
                         }
 
                     }

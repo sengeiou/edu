@@ -20,7 +20,6 @@ import com.pbq.imagepicker.ImagePicker;
 import com.pbq.imagepicker.bean.ImageItem;
 import com.pbq.imagepicker.ui.media.MediaGridActivity;
 import com.sina.weibo.sdk.WbSdk;
-import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.share.WbShareCallback;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.UiError;
@@ -240,7 +239,12 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 UbtLog.d(TAG, "url = " + url);
-                doGotoPage(url);
+                if(Build.VERSION.SDK_INT<Build.VERSION_CODES.O) {
+                    doGotoPage(url);
+                }else{
+                    return false;
+                }
+
                 return true;
             }
 

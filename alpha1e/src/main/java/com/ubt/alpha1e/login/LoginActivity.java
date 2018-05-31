@@ -328,7 +328,9 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
                     saveThirdLoginUserId(user);
                     //getUserPhone(user);
                     getUserInfo();
-                } catch (JSONException ex) {
+                } catch (Exception ex) {
+                    ToastUtils.showShort("登录失败");
+                    LoadingDialog.dismiss(LoginActivity.this);
 
                 }
 

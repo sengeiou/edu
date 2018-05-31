@@ -113,7 +113,12 @@ public class WebContentActivity extends MVPBaseActivity<WebContentContract.View,
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 UbtLog.d(TAG, "url = " + url);
-                doGotoPage(url);
+                if(Build.VERSION.SDK_INT<Build.VERSION_CODES.O) {
+                    doGotoPage(url);
+                }else{
+                    return false;
+                }
+
                 return true;
             }
 

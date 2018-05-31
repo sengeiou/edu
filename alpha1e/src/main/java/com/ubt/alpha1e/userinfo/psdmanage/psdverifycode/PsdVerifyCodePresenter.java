@@ -63,7 +63,7 @@ public class PsdVerifyCodePresenter extends BasePresenterImpl<PsdVerifyCodeContr
                         mView.onGetVerifyCode(false,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_setting_password_modify_fail"));
                         break;
                     case DO_VERIFY_CODE:
-                        mView.onVerifyCode(false,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_setting_password_modify_fail"));
+                        mView.onVerifyCode(false,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_setting_password_verify_fail"));
                         break;
                 }
 
@@ -89,7 +89,7 @@ public class PsdVerifyCodePresenter extends BasePresenterImpl<PsdVerifyCodeContr
                             if (baseResponseModel.status) {
                                 mView.onVerifyCode(true,"");
                             }else {
-                                mView.onVerifyCode(false,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_setting_password_modify_fail"));
+                                mView.onVerifyCode(false,((MVPBaseActivity)(mView.getContext())).getStringResources("ui_setting_password_verify_fail"));
                             }
                         }
                         break;
