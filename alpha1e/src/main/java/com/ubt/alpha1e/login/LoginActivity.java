@@ -65,9 +65,9 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
     RelativeLayout rlWXLogin;
     ImageView ivPrivacy;
     TextView tvPrivacy;
-    boolean select = true;
+    boolean select = false;
+    RelativeLayout rlEduLogin;
 
-//    private int loginType = 0; //默认 0 QQ， 1 WX;
 
     public static final String PID = "95518e46-af79-494e-b2fa-a6db6409ae6b:77022ec0a7614dbcb33c7ab73d4e2ceb";
     public static final String DSN = "123456";
@@ -90,6 +90,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
         rlWXLogin = (RelativeLayout) findViewById(R.id.rl_wx_login);
         ivPrivacy = (ImageView) findViewById(R.id.iv_privacy);
         tvPrivacy = (TextView) findViewById(R.id.tv_privacy);
+        rlEduLogin = (RelativeLayout) findViewById(R.id.rl_edu_login);
         select = true;
         ivPrivacy.setSelected(select);
 
@@ -197,6 +198,15 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
                 intent.setClass(LoginActivity.this, PrivacyActivity.class);
                 startActivity(intent);
 //                WebContentActivity.launchActivity(LoginActivity.this, HttpEntity.USER_PRIVACY,"");
+            }
+        });
+
+        rlEduLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }
