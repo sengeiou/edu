@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ubt.alpha1e.ui.ActionsPublishActivity">
+    tools:context="com.ubt.alpha1e_edu.ui.ActionsPublishActivity">
 
     <include
         android:id="@+id/layout_title"
@@ -15,7 +15,7 @@
         android:background="@color/B6"
         android:layout_height="275dp"/>
 
-    <com.ubt.alpha1e.ui.DesContentEditText
+    <com.ubt.alpha1e_edu.ui.DesContentEditText
         android:id="@+id/edt_content"
         android:layout_width="match_parent"
         android:layout_height="110dp"
@@ -33,7 +33,7 @@
         android:textColorHint="@color/T7"
         android:textColor="@color/T1">
         <requestFocus />
-    </com.ubt.alpha1e.ui.DesContentEditText>
+    </com.ubt.alpha1e_edu.ui.DesContentEditText>
 
     <TextView
         android:id="@+id/txt_max_length"

@@ -24,7 +24,7 @@
         android:paddingBottom="16dp"
         >
 
-        <com.ubt.alpha1e.ui.custom.DesContentEditText
+        <com.ubt.alpha1e_edu.ui.custom.DesContentEditText
             android:id="@+id/edt_play_connect"
             android:layout_width="match_parent"
             android:layout_height="110dp"
@@ -41,7 +41,7 @@
             android:textColorHint="@color/T7"
             android:textColor="@color/T1">
             <requestFocus />
-        </com.ubt.alpha1e.ui.custom.DesContentEditText>
+        </com.ubt.alpha1e_edu.ui.custom.DesContentEditText>
 
         <TextView
             android:id="@+id/tv_max_length"

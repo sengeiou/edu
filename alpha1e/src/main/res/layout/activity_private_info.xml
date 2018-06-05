@@ -20,7 +20,7 @@
             android:textColor="@color/T1"
             android:textSize="22sp" />
 
-        <com.ubt.alpha1e.ui.custom.RoundImageView
+        <com.ubt.alpha1e_edu.ui.custom.RoundImageView
             android:id="@+id/img_head"
             android:layout_width="87dp"
             android:layout_height="87dp"

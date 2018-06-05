@@ -32,9 +32,9 @@
     	</list>
     -->
     <list>
-         <mapping class="com.ubt.alpha1e.maincourse.model.LocalActionRecord"/>
-          <mapping class="com.ubt.alpha1e.blockly.BlocklyProjectMode"/>
-        <mapping class="com.ubt.alpha1e.blocklycourse.model.CourseData"/>
+         <mapping class="com.ubt.alpha1e_edu.maincourse.model.LocalActionRecord"/>
+          <mapping class="com.ubt.alpha1e_edu.blockly.BlocklyProjectMode"/>
+        <mapping class="com.ubt.alpha1e_edu.blocklycourse.model.CourseData"/>
  
      </list>
 

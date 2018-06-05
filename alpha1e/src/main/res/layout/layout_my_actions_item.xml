@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.ubt.alpha1e.ui.custom.SlideView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ubt.alpha1e_edu.ui.custom.SlideView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:id="@+id/swipe"
@@ -27,7 +27,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.ubt.alpha1e.ui.custom.ShapedImageView
+    <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
         android:id="@+id/action_logo"
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -248,5 +248,5 @@
 
 </RelativeLayout>
 
-</com.ubt.alpha1e.ui.custom.SlideView>
+</com.ubt.alpha1e_edu.ui.custom.SlideView>
 

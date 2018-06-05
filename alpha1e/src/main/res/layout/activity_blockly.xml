@@ -20,7 +20,7 @@
         android:visibility="gone"
         >
 
-        <com.ubt.alpha1e.base.loading.MKLoader
+        <com.ubt.alpha1e_edu.base.loading.MKLoader
             android:id="@+id/loading"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -71,7 +71,7 @@
 
     </RelativeLayout>
     
-    <com.ubt.alpha1e.blockly.DragView
+    <com.ubt.alpha1e_edu.blockly.DragView
         android:id="@+id/rl_go_video"
         android:layout_width="200dp"
         android:layout_height="130dp"
@@ -112,7 +112,7 @@
 
         
         
-    </com.ubt.alpha1e.blockly.DragView>
+    </com.ubt.alpha1e_edu.blockly.DragView>
     
     
 </RelativeLayout>

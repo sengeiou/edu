@@ -72,7 +72,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:background="@color/B6">
-        <com.ubt.alpha1e.ui.custom.RoundImageView
+        <com.ubt.alpha1e_edu.ui.custom.RoundImageView
             android:id="@+id/img_head"
             android:layout_width="100dp"
             android:layout_height="100dp"

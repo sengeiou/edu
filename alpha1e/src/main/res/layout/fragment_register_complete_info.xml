@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/B6"
-    tools:context="com.ubt.alpha1e.ui.fragment.RegisterCompleteInfoFragment">
+    tools:context="com.ubt.alpha1e_edu.ui.fragment.RegisterCompleteInfoFragment">
 
-    <com.ubt.alpha1e.ui.custom.ShapedImageView
+    <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
         android:id="@+id/img_register_complete_profile"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/B6"
-    tools:context="com.ubt.alpha1e.ui.MediaRecordActivity">
+    tools:context="com.ubt.alpha1e_edu.ui.MediaRecordActivity">
 
     <include
         android:id="@+id/layout_title"

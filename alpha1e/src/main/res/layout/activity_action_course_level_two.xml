@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ubt.alpha1e.action.actioncreate.ActionTestActivity">
+    tools:context="com.ubt.alpha1e_edu.action.actioncreate.ActionTestActivity">
 
-    <com.ubt.alpha1e.maincourse.courselayout.CourseLevelTwoLayout
+    <com.ubt.alpha1e_edu.maincourse.courselayout.CourseLevelTwoLayout
         android:id="@+id/action_edit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

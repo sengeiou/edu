@@ -98,7 +98,7 @@
                 android:textSize="16dp" />
         </RelativeLayout>
 
-        <com.ubt.alpha1e.ui.custom.ScrollLayout
+        <com.ubt.alpha1e_edu.ui.custom.ScrollLayout
             android:id="@+id/lay_using_alpha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -191,7 +191,7 @@
                         android:visibility="invisible" />
                 </RelativeLayout>
             </LinearLayout>
-        </com.ubt.alpha1e.ui.custom.ScrollLayout>
+        </com.ubt.alpha1e_edu.ui.custom.ScrollLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

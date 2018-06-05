@@ -12,7 +12,7 @@
         android:gravity="center_vertical|left"
         android:orientation="vertical" >
 
-        <com.ubt.alpha1e.ui.custom.EditIndexView
+        <com.ubt.alpha1e_edu.ui.custom.EditIndexView
             android:id="@+id/edt_1"
             android:layout_width="28dp"
             android:layout_height="28dp"
@@ -48,7 +48,7 @@
                 android:gravity="center_vertical|left"
                 android:orientation="vertical" >
 
-                <com.ubt.alpha1e.ui.custom.EditIndexView
+                <com.ubt.alpha1e_edu.ui.custom.EditIndexView
                     android:id="@+id/edt_2"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
@@ -71,7 +71,7 @@
                 android:gravity="center_vertical|left"
                 android:orientation="vertical" >
 
-                <com.ubt.alpha1e.ui.custom.EditIndexView
+                <com.ubt.alpha1e_edu.ui.custom.EditIndexView
                     android:id="@+id/edt_3"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
@@ -94,7 +94,7 @@
                 android:gravity="center_vertical|left"
                 android:orientation="vertical" >
 
-                <com.ubt.alpha1e.ui.custom.EditIndexView
+                <com.ubt.alpha1e_edu.ui.custom.EditIndexView
                     android:id="@+id/edt_4"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
@@ -117,7 +117,7 @@
                 android:gravity="center_vertical|left"
                 android:orientation="vertical" >
 
-                <com.ubt.alpha1e.ui.custom.EditIndexView
+                <com.ubt.alpha1e_edu.ui.custom.EditIndexView
                     android:id="@+id/edt_5"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
@@ -148,7 +148,7 @@
                 android:gravity="center_vertical|left"
                 android:orientation="vertical" >
 
-                <com.ubt.alpha1e.ui.custom.EditIndexView
+                <com.ubt.alpha1e_edu.ui.custom.EditIndexView
                     android:id="@+id/edt_6"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
@@ -171,7 +171,7 @@
                 android:gravity="center_vertical|left"
                 android:orientation="vertical" >
 
-                <com.ubt.alpha1e.ui.custom.EditIndexView
+                <com.ubt.alpha1e_edu.ui.custom.EditIndexView
                     android:id="@+id/edt_7"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
@@ -194,7 +194,7 @@
                 android:gravity="center_vertical|left"
                 android:orientation="vertical" >
 
-                <com.ubt.alpha1e.ui.custom.EditIndexView
+                <com.ubt.alpha1e_edu.ui.custom.EditIndexView
                     android:id="@+id/edt_8"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
@@ -217,7 +217,7 @@
                 android:gravity="center_vertical|left"
                 android:orientation="vertical" >
 
-                <com.ubt.alpha1e.ui.custom.EditIndexView
+                <com.ubt.alpha1e_edu.ui.custom.EditIndexView
                     android:id="@+id/edt_9"
                     android:layout_width="28dp"
                     android:layout_height="28dp"

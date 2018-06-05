@@ -33,7 +33,7 @@
         android:textSize="11sp"
         android:visibility="invisible" />
 
-    <com.ubt.alpha1e.ui.custom.ShapedImageView
+    <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
         android:id="@+id/img_action_publisher"
         android:layout_width="44dp"
         android:layout_height="44dp"

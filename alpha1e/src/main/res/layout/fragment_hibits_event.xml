@@ -55,7 +55,7 @@
                         android:layout_centerInParent="true"
                         />
 
-                    <com.ubt.alpha1e.ui.custom.CircleBar
+                    <com.ubt.alpha1e_edu.ui.custom.CircleBar
                         android:id="@+id/cb_score"
                         android:layout_width="150dp"
                         android:layout_height="150dp"

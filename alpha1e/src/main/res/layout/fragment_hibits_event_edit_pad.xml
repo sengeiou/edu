@@ -221,14 +221,14 @@
                     android:padding="10dp"
                     >
 
-                    <com.ubt.alpha1e.behaviorhabits.drag.DragRecyclerView
+                    <com.ubt.alpha1e_edu.behaviorhabits.drag.DragRecyclerView
                         android:id="@+id/rv_play_content"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:splitMotionEvents="false"
                         >
 
-                    </com.ubt.alpha1e.behaviorhabits.drag.DragRecyclerView>
+                    </com.ubt.alpha1e_edu.behaviorhabits.drag.DragRecyclerView>
                     <!--<android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_play_content"
                         android:layout_width="match_parent"

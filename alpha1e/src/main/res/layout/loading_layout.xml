@@ -5,7 +5,7 @@
                 android:background="#80000000"
                 android:orientation="vertical">
 
-    <com.ubt.alpha1e.base.loading.MKLoader
+    <com.ubt.alpha1e_edu.base.loading.MKLoader
         android:id="@+id/loading"
         android:layout_width="80dp"
         android:layout_height="80dp"
