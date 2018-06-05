@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <com.ubt.alpha1e.ui.custom.ShapedImageView
+        <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
             android:id="@+id/iv_lesson_logo"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -27,7 +27,7 @@
             android:layout_height="80dp"
             android:layout_centerInParent="true">
 
-            <com.ubt.alpha1e.ui.custom.ShapedImageView
+            <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
                 android:id="@+id/img_open_lock_bg"
                 android:layout_width="80dp"
                 android:layout_height="80dp"

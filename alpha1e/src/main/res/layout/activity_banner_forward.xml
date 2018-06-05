@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.ubt.alpha1e.ui.custom.TranslucentScrollView
+    <com.ubt.alpha1e.edu.ui.custom.TranslucentScrollView
         android:id="@+id/pullzoom_scrollview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -38,9 +38,9 @@
 
 
         </LinearLayout>
-    </com.ubt.alpha1e.ui.custom.TranslucentScrollView>
+    </com.ubt.alpha1e.edu.ui.custom.TranslucentScrollView>
 
-    <com.ubt.alpha1e.ui.custom.TranslucentActionBar
+    <com.ubt.alpha1e.edu.ui.custom.TranslucentActionBar
         android:id="@+id/actionbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

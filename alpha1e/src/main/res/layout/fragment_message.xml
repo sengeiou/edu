@@ -5,7 +5,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-    <com.ubt.alpha1e.library.ptr.PtrClassicFrameLayout
+    <com.ubt.alpha1e.edu.library.ptr.PtrClassicFrameLayout
         android:id="@+id/pull_to_refresh"
         android:layout_marginBottom="2dp"
         xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
@@ -25,7 +25,7 @@
             android:layout_height="match_parent">
         </android.support.v7.widget.RecyclerView>
 
-    </com.ubt.alpha1e.library.ptr.PtrClassicFrameLayout>
+    </com.ubt.alpha1e.edu.library.ptr.PtrClassicFrameLayout>
 
     <include
         layout="@layout/layout_my_message_empty" />

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/B6"
-    tools:context="com.ubt.alpha1e.ui.fragment.RegisterSelectCountryFragment">
+    tools:context="com.ubt.alpha1e.edu.ui.fragment.RegisterSelectCountryFragment">
 
 
     <TextView

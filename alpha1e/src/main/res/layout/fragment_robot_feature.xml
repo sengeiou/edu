@@ -77,7 +77,7 @@
             android:src="@drawable/icon_principle_rightleg"
             />
 
-        <com.ubt.alpha1e.animator.BezierView
+        <com.ubt.alpha1e.edu.animator.BezierView
             android:id="@+id/bzv_principle_steering_engine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
 
-        <com.ubt.alpha1e.animator.BezierView
+        <com.ubt.alpha1e.edu.animator.BezierView
             android:id="@+id/bzv_principle_infrared_sensor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
 
-        <com.ubt.alpha1e.animator.BezierView
+        <com.ubt.alpha1e.edu.animator.BezierView
             android:id="@+id/bzv_principle_soundbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
 
-        <com.ubt.alpha1e.animator.BezierView
+        <com.ubt.alpha1e.edu.animator.BezierView
             android:id="@+id/bzv_principle_head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
 
-        <com.ubt.alpha1e.animator.BezierView
+        <com.ubt.alpha1e.edu.animator.BezierView
             android:id="@+id/bzv_principle_eye"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
 
-        <com.ubt.alpha1e.animator.BezierView
+        <com.ubt.alpha1e.edu.animator.BezierView
             android:id="@+id/bzv_principle_voice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
 
-        <com.ubt.alpha1e.animator.BezierView
+        <com.ubt.alpha1e.edu.animator.BezierView
             android:id="@+id/bzv_principle_voice_obstacle_avoidance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

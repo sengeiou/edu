@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.ubt.alpha1e.ui.custom.SlideView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ubt.alpha1e.edu.ui.custom.SlideView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -80,7 +80,7 @@
             android:textSize="13sp"
             android:visibility="gone"/>
 
-        <com.ubt.alpha1e.ui.custom.ExpandableTextView
+        <com.ubt.alpha1e.edu.ui.custom.ExpandableTextView
             android:id="@+id/expand_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
 
             </LinearLayout>
 
-        </com.ubt.alpha1e.ui.custom.ExpandableTextView>
+        </com.ubt.alpha1e.edu.ui.custom.ExpandableTextView>
 
         <ImageView
             android:id="@+id/iv_instruction_edit"
@@ -158,5 +158,5 @@
 
 
 
-</com.ubt.alpha1e.ui.custom.SlideView>
+</com.ubt.alpha1e.edu.ui.custom.SlideView>
 

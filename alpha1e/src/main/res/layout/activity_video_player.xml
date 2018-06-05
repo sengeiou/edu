@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/B5"
-    tools:context="com.ubt.alpha1e.ui.VideoPlayerActivity">
+    tools:context="com.ubt.alpha1e.edu.ui.VideoPlayerActivity">
 
     <include
         android:id="@+id/layout_title"

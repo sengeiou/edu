@@ -21,7 +21,7 @@
         android:ellipsize="end"
         android:visibility="gone"/>
 
-    <com.ubt.alpha1e.ui.custom.ShapedImageView
+    <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
         android:id="@+id/img_message_public_logo"
         android:layout_width="50dp"
         android:layout_height="50dp"

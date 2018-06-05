@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.ubt.alpha1e.ui.custom.ClearableEditText
+    <com.ubt.alpha1e.edu.ui.custom.ClearableEditText
         android:id="@+id/edt_name"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -18,7 +18,7 @@
         android:textColorHint="@color/register_txt_hint"
         android:textSize="17sp" />
 
-    <com.ubt.alpha1e.ui.custom.VisiblePswEditText
+    <com.ubt.alpha1e.edu.ui.custom.VisiblePswEditText
         android:id="@+id/edt_passwd"
         android:layout_width="match_parent"
         android:layout_height="50dp"

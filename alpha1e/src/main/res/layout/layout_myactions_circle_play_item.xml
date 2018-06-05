@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         >
 
-        <com.ubt.alpha1e.ui.custom.ShapedImageView
+        <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
             android:id="@+id/action_logo"
             android:layout_width="100dp"
             android:layout_height="100dp"

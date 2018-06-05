@@ -254,7 +254,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginLeft="26dp">
 
-        <com.ubt.alpha1e.ui.custom.ShapedImageView
+        <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
             android:id="@+id/top_icon"
             android:layout_width="41dp"
             android:layout_height="41dp"

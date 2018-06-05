@@ -92,7 +92,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.ubt.alpha1e.ui.custom.ShapedImageView
+            <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
                 android:id="@+id/img_action_1"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
@@ -117,7 +117,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.ubt.alpha1e.ui.custom.ShapedImageView
+            <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
                 android:id="@+id/img_action_3"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
@@ -142,7 +142,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.ubt.alpha1e.ui.custom.ShapedImageView
+            <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
                 android:id="@+id/img_action_5"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
@@ -167,7 +167,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.ubt.alpha1e.ui.custom.ShapedImageView
+            <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
                 android:id="@+id/img_action_2"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
@@ -192,7 +192,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.ubt.alpha1e.ui.custom.ShapedImageView
+            <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
                 android:id="@+id/img_action_4"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
@@ -217,7 +217,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <com.ubt.alpha1e.ui.custom.ShapedImageView
+            <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
                 android:id="@+id/img_action_6"
                 android:layout_width="65dp"
                 android:layout_height="65dp"

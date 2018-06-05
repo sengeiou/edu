@@ -5,7 +5,7 @@
     android:background="@color/B5"
     tools:context=".ui.fragment.IShowFragment">
 
-    <com.ubt.alpha1e.library.ptr.PtrClassicFrameLayout
+    <com.ubt.alpha1e.edu.library.ptr.PtrClassicFrameLayout
         android:id="@+id/refresh_fragment_square"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </android.support.v7.widget.RecyclerView>
-    </com.ubt.alpha1e.library.ptr.PtrClassicFrameLayout>
+    </com.ubt.alpha1e.edu.library.ptr.PtrClassicFrameLayout>
 
        <include
            layout="@layout/layout_my_dynamic_empty" />

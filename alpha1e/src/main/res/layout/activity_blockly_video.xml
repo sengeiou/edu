@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
-    <com.ubt.alpha1e.blocklycourse.videoPlayer.BlocklyVideoPlayer
+    <com.ubt.alpha1e.edu.blocklycourse.videoPlayer.BlocklyVideoPlayer
         android:id="@+id/video_player"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

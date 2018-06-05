@@ -45,7 +45,7 @@
                     android:src="@drawable/notice_horn"
                     android:visibility="visible" />
 
-                <com.ubt.alpha1e.ui.custom.WrapContentHeightViewPager
+                <com.ubt.alpha1e.edu.ui.custom.WrapContentHeightViewPager
                     android:id="@+id/view_pager"
                     android:layout_toRightOf="@+id/gif_notice"
                     android:layout_marginLeft="10dp"
@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:minHeight="38dp">
 
-                </com.ubt.alpha1e.ui.custom.WrapContentHeightViewPager>
+                </com.ubt.alpha1e.edu.ui.custom.WrapContentHeightViewPager>
 
                 <RelativeLayout
                     android:layout_width="match_parent"

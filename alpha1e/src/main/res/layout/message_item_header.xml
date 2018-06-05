@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:visibility="visible">
 
-    <com.ubt.alpha1e.ui.custom.ShapedImageView
+    <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
         android:id="@+id/img_message_appraiser_head"
         android:layout_width="48dp"
         android:layout_height="48dp"

@@ -16,7 +16,7 @@
 
 
 
-        <com.ubt.alpha1e.ui.custom.ShapedImageView
+        <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
             android:id="@+id/action_icon"
             android:layout_width="80dp"
             android:layout_height="80dp"

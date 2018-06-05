@@ -6,7 +6,7 @@
     android:layout_height="100dp"
     android:background="@color/B6">
 
-    <com.ubt.alpha1e.ui.custom.ShapedImageView
+    <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
         android:id="@+id/img_action_logo"
         android:layout_width="64dp"
         android:layout_height="64dp"

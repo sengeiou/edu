@@ -31,14 +31,14 @@
         android:background="@color/B5"
         android:visibility="gone"/>
 
-    <com.ubt.alpha1e.ui.custom.CustomViewPager
+    <com.ubt.alpha1e.edu.ui.custom.CustomViewPager
         android:id="@+id/viewpager_list"
         android:layout_below="@+id/view_splite"
         android:layout_above="@+id/lay_ctrl"
         android:layout_width="match_parent"
         android:background="@color/B5"
         android:layout_height="match_parent">
-    </com.ubt.alpha1e.ui.custom.CustomViewPager>
+    </com.ubt.alpha1e.edu.ui.custom.CustomViewPager>
 
     <RelativeLayout
         android:id="@+id/rl_fragment_content"

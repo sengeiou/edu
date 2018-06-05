@@ -56,7 +56,7 @@
         android:gravity="center"
         android:orientation="horizontal" >
 
-        <com.ubt.alpha1e.ui.custom.WheelView
+        <com.ubt.alpha1e.edu.ui.custom.WheelView
             android:id="@+id/time_repet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
