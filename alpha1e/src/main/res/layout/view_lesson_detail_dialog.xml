@@ -14,7 +14,7 @@
         android:background="@drawable/alert_backgroud"
         android:layout_gravity="center">
 
-        <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
+        <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
             android:id="@+id/iv_lesson_detail"
             android:layout_width="match_parent"
             android:layout_height="230dp"

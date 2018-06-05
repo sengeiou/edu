@@ -24,7 +24,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp">
 
-            <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
+            <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
                 android:id="@+id/img_head"
                 android:layout_width="77dp"
                 android:layout_height="73dp"

@@ -71,7 +71,7 @@
                         android:background="@drawable/bg_edt_round_button"
                         >
 
-                    <com.ubt.alpha1e_edu.ui.custom.ClearableEditText
+                    <com.ubt.alpha1e.edu.ui.custom.ClearableEditText
                         android:id="@+id/edt_phone"
                         android:layout_width="145dp"
                         android:layout_height="50dp"
@@ -127,7 +127,7 @@
                     android:text="@string/ui_setting_verify_code"
                     />
 
-                <com.ubt.alpha1e_edu.ui.custom.ClearableEditText
+                <com.ubt.alpha1e.edu.ui.custom.ClearableEditText
                     android:id="@+id/edt_verify_code"
                     android:layout_width="325dp"
                     android:layout_height="50dp"

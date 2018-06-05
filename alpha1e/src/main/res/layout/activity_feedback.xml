@@ -42,7 +42,7 @@
                     android:textColor="@color/T21"
                     android:text="@string/ui_about_feedback_tips" />
 
-                <com.ubt.alpha1e_edu.ui.custom.ClearableEditText
+                <com.ubt.alpha1e.edu.ui.custom.ClearableEditText
                     android:id="@+id/edt_feedback"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
@@ -109,7 +109,7 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/icon_contactus_email"/>
 
-                    <com.ubt.alpha1e_edu.ui.custom.ClearableEditText
+                    <com.ubt.alpha1e.edu.ui.custom.ClearableEditText
                         android:id="@+id/edt_email"
                         android:layout_toRightOf="@+id/iv_email"
                         android:layout_width="match_parent"
@@ -144,7 +144,7 @@
                         android:layout_centerVertical="true"
                         android:src="@drawable/icon_contactus_phone"/>
 
-                    <com.ubt.alpha1e_edu.ui.custom.ClearableEditText
+                    <com.ubt.alpha1e.edu.ui.custom.ClearableEditText
                         android:id="@+id/edt_phone"
                         android:layout_toRightOf="@+id/iv_phone"
                         android:layout_width="match_parent"

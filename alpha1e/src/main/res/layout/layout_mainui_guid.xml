@@ -347,7 +347,7 @@
             android:textSize="16sp"
             android:textStyle="bold" />
     </RelativeLayout>
-    <com.ubt.alpha1e_edu.ui.custom.RoundImageView
+    <com.ubt.alpha1e.edu.ui.custom.RoundImageView
         android:id="@+id/top_icon"
         android:layout_width="43dp"
         android:layout_height="43dp"

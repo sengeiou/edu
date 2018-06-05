@@ -37,7 +37,7 @@
                     android:text="@string/ui_setting_old_password"
                     />
 
-                <com.ubt.alpha1e_edu.ui.custom.ClearableEditText
+                <com.ubt.alpha1e.edu.ui.custom.ClearableEditText
                     android:id="@+id/edt_old_password"
                     android:layout_width="200dp"
                     android:layout_height="50dp"
@@ -76,7 +76,7 @@
                     android:text="@string/ui_setting_new_password"
                     />
 
-                <com.ubt.alpha1e_edu.ui.custom.ClearableEditText
+                <com.ubt.alpha1e.edu.ui.custom.ClearableEditText
                     android:id="@+id/edt_new_password"
                     android:layout_width="200dp"
                     android:layout_height="50dp"

@@ -26,7 +26,7 @@
         android:layout_toRightOf="@+id/layout_img_select"
         android:layout_height="100dp">
 
-        <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
+        <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
             android:id="@+id/action_logo"
             android:layout_width="80dp"
             android:layout_height="80dp"

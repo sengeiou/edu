@@ -7,7 +7,7 @@
 
     <include layout="@layout/layout_title_back" />
 
-    <com.ubt.alpha1e_edu.ui.custom.HScrollView
+    <com.ubt.alpha1e.edu.ui.custom.HScrollView
         android:id="@+id/hsv_img_info"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal" />
-    </com.ubt.alpha1e_edu.ui.custom.HScrollView>
+    </com.ubt.alpha1e.edu.ui.custom.HScrollView>
 
     <RelativeLayout
         android:id="@+id/lay_bottom"

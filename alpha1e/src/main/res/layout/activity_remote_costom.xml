@@ -160,7 +160,7 @@
         android:layout_marginRight="70dp"
         android:layout_marginTop="20dp">
 
-        <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
+        <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
             android:id="@+id/img_action_1"
             android:layout_width="65dp"
             android:layout_height="65dp"
@@ -170,7 +170,7 @@
             app:shape_mode="circle"
             android:src="@drawable/gamepad_settings_custom_none" />
 
-        <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
+        <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
             android:id="@+id/img_action_3"
             android:layout_width="65dp"
             android:layout_height="65dp"
@@ -180,7 +180,7 @@
             app:shape_mode="circle"
             android:src="@drawable/gamepad_settings_custom_none" />
 
-        <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
+        <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
             android:id="@+id/img_action_5"
             android:layout_width="65dp"
             android:layout_height="65dp"
@@ -190,7 +190,7 @@
             app:shape_mode="circle"
             android:src="@drawable/gamepad_settings_custom_none" />
 
-        <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
+        <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
             android:id="@+id/img_action_2"
             android:layout_width="65dp"
             android:layout_height="65dp"
@@ -200,7 +200,7 @@
             app:shape_mode="circle"
             android:src="@drawable/gamepad_settings_custom_none" />
 
-        <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
+        <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
             android:id="@+id/img_action_4"
             android:layout_width="65dp"
             android:layout_height="65dp"
@@ -210,7 +210,7 @@
             app:shape_mode="circle"
             android:src="@drawable/gamepad_settings_custom_none" />
 
-        <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
+        <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
             android:id="@+id/img_action_6"
             android:layout_width="65dp"
             android:layout_height="65dp"

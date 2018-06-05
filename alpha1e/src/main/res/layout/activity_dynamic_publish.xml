@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ubt.alpha1e_edu.ui.ActionsPublishActivity"
+    tools:context="com.ubt.alpha1e.edu.ui.ActionsPublishActivity"
     android:background="@color/B5"
 
 >
@@ -24,7 +24,7 @@
         android:paddingBottom="16dp"
         >
 
-        <com.ubt.alpha1e_edu.ui.custom.DesContentEditText
+        <com.ubt.alpha1e.edu.ui.custom.DesContentEditText
             android:id="@+id/edt_content"
             android:layout_width="match_parent"
             android:layout_height="110dp"
@@ -41,7 +41,7 @@
             android:textColorHint="@color/T7"
             android:textColor="@color/T1">
             <requestFocus />
-        </com.ubt.alpha1e_edu.ui.custom.DesContentEditText>
+        </com.ubt.alpha1e.edu.ui.custom.DesContentEditText>
         <TextView
             android:id="@+id/txt_max_length"
             android:layout_width="wrap_content"
@@ -108,7 +108,7 @@
 
 
 
-            <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
+            <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
                 android:id="@+id/action_logo"
                 android:layout_width="80dp"
                 android:layout_height="80dp"

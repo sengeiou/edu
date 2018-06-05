@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.ubt.alpha1e_edu.ui.custom.SlideView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ubt.alpha1e.edu.ui.custom.SlideView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/gamepad_swipe"
@@ -93,5 +93,5 @@
         android:background="#F0F3F3" />
 </RelativeLayout>
 
-</com.ubt.alpha1e_edu.ui.custom.SlideView>
+</com.ubt.alpha1e.edu.ui.custom.SlideView>
 

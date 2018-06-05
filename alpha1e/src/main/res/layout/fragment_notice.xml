@@ -5,7 +5,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-    <com.ubt.alpha1e_edu.library.ptr.PtrClassicFrameLayout
+    <com.ubt.alpha1e.edu.library.ptr.PtrClassicFrameLayout
         android:id="@+id/pull_to_refresh"
         android:layout_marginBottom="2dp"
         xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
@@ -25,7 +25,7 @@
             android:divider="#00000000"
             android:dividerHeight="1dp" />
 
-    </com.ubt.alpha1e_edu.library.ptr.PtrClassicFrameLayout>
+    </com.ubt.alpha1e.edu.library.ptr.PtrClassicFrameLayout>
 
     <ImageView
         android:id="@+id/empty_view"

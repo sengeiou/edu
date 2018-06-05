@@ -70,7 +70,7 @@
             android:textColor="@color/T1"
             android:textSize="17sp" />
 
-        <com.ubt.alpha1e_edu.ui.custom.ClearableEditText
+        <com.ubt.alpha1e.edu.ui.custom.ClearableEditText
             android:id="@+id/edt_phone_num"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

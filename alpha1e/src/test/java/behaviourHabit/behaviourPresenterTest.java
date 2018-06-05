@@ -1,6 +1,6 @@
 package behaviourHabit;
-import com.ubt.alpha1e_edu.behaviorhabits.BehaviorHabitsContract;
-import com.ubt.alpha1e_edu.behaviorhabits.BehaviorHabitsPresenter;
+import com.ubt.alpha1e.edu.behaviorhabits.BehaviorHabitsContract;
+import com.ubt.alpha1e.edu.behaviorhabits.BehaviorHabitsPresenter;
 
 import org.junit.Before;
 import org.junit.Test;

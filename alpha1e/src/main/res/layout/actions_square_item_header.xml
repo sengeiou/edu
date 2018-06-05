@@ -13,7 +13,7 @@
         android:layout_marginTop="15dp"
         >
 
-        <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
+        <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
             android:id="@+id/img_square_profile"
             android:layout_width="48dp"
             android:layout_height="48dp"

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="20dp" />
 
-    <com.ubt.alpha1e_edu.ui.custom.ShapedImageView
+    <com.ubt.alpha1e.edu.ui.custom.ShapedImageView
         android:id="@+id/img_remote_action_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
