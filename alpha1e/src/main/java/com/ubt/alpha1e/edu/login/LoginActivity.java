@@ -207,6 +207,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
                 Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
+                SPUtils.getInstance().put(Constant.SP_EDU_MODULE, true);
             }
         });
     }

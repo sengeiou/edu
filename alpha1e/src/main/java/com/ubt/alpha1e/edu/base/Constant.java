@@ -173,5 +173,10 @@ public class Constant {
     public final static String SP_ROBOT_PRODUCT_ID = "sp_robot_product_id";
     public final static String SP_ROBOT_DSN = "sp_robot_dsn";
 
+    /**
+     * 教育模式登录
+     */
+    public final static String SP_EDU_MODULE = "sp_edu_module";
+
 
 }
