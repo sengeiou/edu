@@ -148,7 +148,12 @@ public class ActionCoursePresenter extends BasePresenterImpl<ActionCourseContrac
         //本地没有记录，说明之前没用过，则根据后台返回保存本地记录
         if (null == record) {
             LocalActionRecord record1 = new LocalActionRecord();
-            record1.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
+            if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE)){
+                record1.setUserId(SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN));
+            }else{
+                record1.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
+            }
+
             record1.setCourseLevel(1);
             record1.setPeriodLevel(0);
             record1.setUpload(true);

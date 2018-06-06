@@ -113,6 +113,7 @@ public class OkHttpClientUtils {
     public static RequestCall getJsonByPostRequest(String url, BaseRequest request, int id) {
         if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE)){
             request.setUserId(SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN));
+            UbtLog.d("RequestCall", "SP_ROBOT_DSN:" + SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN));
             request.setToken(Constant.EDU_TOKEN);
         }else{
             request.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
