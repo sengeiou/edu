@@ -129,6 +129,7 @@
             android:src="@drawable/ic_home_community"/>
 
         <TextView
+            android:id="@+id/tv_community"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/ui_main_right_icon4"
