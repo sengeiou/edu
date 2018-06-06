@@ -260,8 +260,15 @@ public class NewActionsManager implements IFileListener {
 //                return;
 //            }
 //            long actionUserId = ((AlphaApplication) mContext).getCurrentUserInfo().userId;
-            String actionUserId = SPUtils.getInstance().getString(Constant.SP_USER_ID);
+            String actionUserId = "";
+            if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE)){
+                 actionUserId = SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN);
+            }else{
+                 actionUserId = SPUtils.getInstance().getString(Constant.SP_USER_ID);
+            }
             UbtLog.d(TAG, "actionUserId:" + actionUserId);
+
+
 
             File file = new File(FileTools.actions_new_cache + File.separator + mChangeNewActionInfo.actionId + ".zip");
             File imageFile;

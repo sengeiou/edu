@@ -2827,8 +2827,28 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         Toast.makeText(this,getStringResources("ui_action_share_no_wechat"),Toast.LENGTH_SHORT).show();
     }
 
+    //显示蓝牙连接对话框
+    void showBluetoothConnectDialog() {
+        new ConfirmDialog(this).builder()
+                .setTitle("提示")
+                .setMsg("请先连接蓝牙和Wi-Fi")
+                .setCancelable(true)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接蓝牙 ");
+                        connectBluetooth();
+                    }
+                }).show();
+    }
+
 
     public void saveUserProgram(final String pid, final String programName, final String programData){
+
+        if(!isBulueToothConnected()){
+            showBluetoothConnectDialog();
+            return;
+        }
 
         BlocklySaveMode saveMode = new BlocklySaveMode();
         saveMode.setProgramName(programName);
@@ -2847,7 +2867,11 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 UbtLog.d(TAG, "saveUserProgram onError e:" + e.getMessage());
                 BlocklyProjectMode blocklyProjectMode = new BlocklyProjectMode();
                 blocklyProjectMode.setPid(pid);
-                blocklyProjectMode.setUserId(SPUtils.getInstance().getString(com.ubt.alpha1e.edu.base.Constant.SP_USER_ID));
+                if(SPUtils.getInstance().getBoolean(com.ubt.alpha1e.edu.base.Constant.SP_EDU_MODULE)){
+                    blocklyProjectMode.setUserId(SPUtils.getInstance().getString(com.ubt.alpha1e.edu.base.Constant.SP_ROBOT_DSN));
+                }else{
+                    blocklyProjectMode.setUserId(SPUtils.getInstance().getString(com.ubt.alpha1e.edu.base.Constant.SP_USER_ID));
+                }
                 blocklyProjectMode.setProgramName(programName);
                 blocklyProjectMode.setProgramData(programData);
                 blocklyProjectMode.setDelState(false);
@@ -3002,6 +3026,13 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
 
     public void updateUserProgram(final String pid, final String programName, final String programData) {
+
+        if(!isBulueToothConnected()){
+            showBluetoothConnectDialog();
+            return;
+        }
+
+
         BlocklySaveMode saveMode = new BlocklySaveMode();
         saveMode.setProgramId(pid);
         saveMode.setProgramName(programName);
@@ -3021,7 +3052,11 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
                 BlocklyProjectMode blocklyProjectMode = new BlocklyProjectMode();
                 blocklyProjectMode.setPid(pid);
-                blocklyProjectMode.setUserId(SPUtils.getInstance().getString(com.ubt.alpha1e.edu.base.Constant.SP_USER_ID));
+                if(SPUtils.getInstance().getBoolean(com.ubt.alpha1e.edu.base.Constant.SP_EDU_MODULE)){
+                    blocklyProjectMode.setUserId(SPUtils.getInstance().getString(com.ubt.alpha1e.edu.base.Constant.SP_ROBOT_DSN));
+                }else{
+                    blocklyProjectMode.setUserId(SPUtils.getInstance().getString(com.ubt.alpha1e.edu.base.Constant.SP_USER_ID));
+                }
                 blocklyProjectMode.setProgramName(programName);
                 blocklyProjectMode.setProgramData(programData);
                 blocklyProjectMode.setDelState(false);

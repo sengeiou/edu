@@ -177,6 +177,10 @@ public class Constant {
      * 教育模式登录
      */
     public final static String SP_EDU_MODULE = "sp_edu_module";
+    /**
+     * 教育模式token
+     */
+    public final static String EDU_TOKEN = "ubteducationtoken";
 
 
 }

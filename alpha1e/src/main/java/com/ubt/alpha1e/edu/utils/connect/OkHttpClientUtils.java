@@ -111,8 +111,15 @@ public class OkHttpClientUtils {
      * @return
      */
     public static RequestCall getJsonByPostRequest(String url, BaseRequest request, int id) {
-        request.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
-        request.setToken(SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN));
+        if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE)){
+            request.setUserId(SPUtils.getInstance().getString(Constant.SP_ROBOT_DSN));
+            request.setToken(Constant.EDU_TOKEN);
+        }else{
+            request.setUserId(SPUtils.getInstance().getString(Constant.SP_USER_ID));
+            request.setToken(SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN));
+        }
+
+
         String params = GsonImpl.get().toJson(request);
         UbtLog.d("Request", "url===" + url + "___params==" + params);
         return OkHttpUtils.postString()
