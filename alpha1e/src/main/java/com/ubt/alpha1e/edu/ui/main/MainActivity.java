@@ -60,6 +60,7 @@ import com.ubt.alpha1e.edu.data.model.BaseResponseModel;
 import com.ubt.alpha1e.edu.data.model.NetworkInfo;
 import com.ubt.alpha1e.edu.event.ActionEvent;
 import com.ubt.alpha1e.edu.event.RobotEvent;
+import com.ubt.alpha1e.edu.learningmode.LearningModeActivity;
 import com.ubt.alpha1e.edu.login.HttpEntity;
 import com.ubt.alpha1e.edu.login.LoginActivity;
 import com.ubt.alpha1e.edu.login.loginauth.LoginAuthActivity;
@@ -183,6 +184,8 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
     ImageView ivProgram;
     @BindView(R.id.iv_community)
     ImageView ivCommunity;
+    @BindView(R.id.tv_community)
+    TextView tvCommunity;
     @BindView(R.id.rl_top_icon)
     RelativeLayout rlTopIcon;
     @BindView(R.id.gif_main)
@@ -453,6 +456,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
         switch (view.getId()) {
             case R.id.rl_top_icon:
                 if (!removeDuplicateClickEvent()) {
+
+                    if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE, false)){
+                        LearningModeActivity.LaunchActivity(this,0);
+                        return;
+                    }
+
                     Intent intent = new Intent();
                     UserModel userModel = (UserModel) SPUtils.getInstance().readObject(Constant.SP_USER_INFO);
                     if (null == userModel) {
@@ -577,6 +586,10 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.ll_community:
                 //OnlineSearchActivity.LaunchActivity(this);
                 //ToastUtils.showShort("即将开放，敬请期待!");
+                if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE, false)){
+                    return;
+                }
+
                 buttonClickAnimation(llCommunity);
                 CommunityActivity.launchActivity(this,0);
                 this.overridePendingTransition(R.anim.activity_open_up_down, 0);
@@ -623,6 +636,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
             case R.id.rl_hibits_event:
 //                OnlineSearchActivity.LaunchActivity(this);
                 UbtLog.d(TAG, "click rl_hibits_event");
+                if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE, false)){
+                    LearningModeActivity.LaunchActivity(this,0);
+                    return;
+                }
+
                 mPresenter.checkMyRobotState();
                 break;
             default:
@@ -1250,6 +1268,11 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
 
     @Override
     protected void initUI() {
+
+        if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE, false)){
+            ivCommunity.setImageResource(R.drawable.ic_home_community_grey);
+            tvCommunity.setAlpha(0.2f);
+        }
 
         if (SizeUtils.isComprehensiveScreen(getContext())||AlphaApplication.isPad()) {
 
