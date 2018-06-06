@@ -58,10 +58,11 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
     RecyclerView mRecyleviewContent;
     private List<CourseModel> mCourseModels;
     private MainCoursedapter mMainCoursedapter;
-    public static int onlinePlayerEnable = 0; //0 enable 1 disale
+
     public static boolean ADD_CONFICT_SOLUTION = false;
     private static MainCourseActivity mainCourseInstance = null;
 
+    public int startIndex = 0;//开始索引
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +73,10 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
         mPresenter.getCourcesData();
         if (ADD_CONFICT_SOLUTION) {
             ((MainCourseHelper) mHelper).stopActionPlayRes();
+        }
+
+        if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE, false)){
+            startIndex = 1;
         }
     }
 
@@ -132,7 +137,9 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
         mRecyleviewContent.setAdapter(mMainCoursedapter);
         mMainCoursedapter.setOnItemClickListener(this);
 
-        doSyncData();
+        if(!SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE, false)){
+            doSyncData();
+        }
     }
 
     private void doSyncData() {
@@ -185,12 +192,12 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
             return;
         }
 
-        if (!isBulueToothConnected() && position != (3 - onlinePlayerEnable)) {
+        if (!isBulueToothConnected() && position != (3 - startIndex)) {
             showBluetoothConnectDialog();
             return;
         }
 
-        if (BaseHelper.isLowBatteryNotExecuteAction && position != (3 - onlinePlayerEnable)) {
+        if (BaseHelper.isLowBatteryNotExecuteAction && position != (3 - startIndex)) {
             new ConfirmDialog(AppManager.getInstance().currentActivity()).builder()
                     .setTitle("提示")
                     .setMsg("机器人电量低动作不能执行，请充电！")
@@ -205,10 +212,10 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
             return;
         }
 
-        if (position == (0 - onlinePlayerEnable)) {
+        if (position == (0 - startIndex)) {
             mHelper.checkMyRobotState();
             // startActivity(new Intent(this, OnlineAudioPlayerActivity.class));
-        } else if (position == (1 - onlinePlayerEnable)) {
+        } else if (position == (1 - startIndex)) {
             if (isBulueToothConnected()) {
                 ((MainCourseHelper) mHelper).stopOnlineRes();
                 String progressKey = Constant.PRINCIPLE_PROGRESS + SPUtils.getInstance().getString(Constant.SP_USER_ID);
@@ -232,12 +239,12 @@ public class MainCourseActivity extends MVPBaseActivity<MainCourseContract.View,
                 ToastUtils.showShort(getStringResources("ui_action_connect_robot"));
             }
 
-        } else if (position == (2 - onlinePlayerEnable)) {
+        } else if (position == (2 - startIndex)) {
             ((MainCourseHelper) mHelper).stopOnlineRes();
             startActivity(new Intent(this, ActionCourseActivity.class));
-        } else if (position == (3 - onlinePlayerEnable)) {
-            ((MainCourseHelper) mHelper).stopOnlineRes();
-            startActivity(new Intent(this, CourseListActivity.class));
+        } else if (position == (3 - startIndex)) {
+            /*((MainCourseHelper) mHelper).stopOnlineRes();
+            startActivity(new Intent(this, CourseListActivity.class));*/
         }
         this.overridePendingTransition(R.anim.activity_open_up_down, 0);
     }

@@ -1,5 +1,5 @@
 .//local/armeabi-v7a/objs/HtsHelper/HTSFileArchive.o: \
-  G:/Alpha1E/alpha1e-android-app/alpha1e/jni/HTSFileArchive.c \
-  G:/Alpha1E/alpha1e-android-app/alpha1e/jni/HTSFileArchive.h
+  D:/Git/alpha1e-android-app/alpha1e/jni/HTSFileArchive.c \
+  D:/Git/alpha1e-android-app/alpha1e/jni/HTSFileArchive.h
 
-G:/Alpha1E/alpha1e-android-app/alpha1e/jni/HTSFileArchive.h:
+D:/Git/alpha1e-android-app/alpha1e/jni/HTSFileArchive.h:

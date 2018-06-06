@@ -68,6 +68,10 @@ public class PrinciplePresenter extends BasePresenterImpl<PrincipleContract.View
      */
     public void doRequestFromWeb(String url, BaseRequest baseRequest, int requestId) {
 
+        if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE, false)){
+            return;
+        }
+
         OkHttpClientUtils.getJsonByPostRequest(url, baseRequest, requestId).execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
