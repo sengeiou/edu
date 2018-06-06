@@ -13,7 +13,7 @@ extern "C" {
 	 * Method:    writeHts
 	 * Signature: (Lcom/ubt/alpha1s/data/model/NewActionInfo;Ljava/lang/String;Lcom/ubt/alpha1s/business/IHtsHelperListener;)V
 	 */
-	JNIEXPORT void JNICALL Java_com_ubt_alpha1e_business_HtsHelper_writeHts
+	JNIEXPORT void JNICALL Java_com_ubt_alpha1e_edu_business_HtsHelper_writeHts
 		(JNIEnv *, jclass, jobject, jstring, jobject);
 
 	/*
@@ -21,7 +21,7 @@ extern "C" {
 	 * Method:    getNewActionInfoFromHts
 	 * Signature: (Lcom/ubt/alpha1s/data/model/NewActionInfo;Ljava/lang/String;Lcom/ubt/alpha1s/business/IHtsHelperListener;)V
 	 */
-	JNIEXPORT void JNICALL Java_com_ubt_alpha1e_business_HtsHelper_getNewActionInfoFromHts
+	JNIEXPORT void JNICALL Java_com_ubt_alpha1e_edu_business_HtsHelper_getNewActionInfoFromHts
 		(JNIEnv *, jclass, jobject, jstring, jobject);
 
 	char* jstringTostring(JNIEnv* env, jstring jstr);

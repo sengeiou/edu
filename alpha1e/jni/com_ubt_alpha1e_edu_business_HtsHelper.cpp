@@ -1,4 +1,4 @@
-#include "com_ubt_alpha1e_business_HtsHelper.h"
+#include "com_ubt_alpha1e_edu_business_HtsHelper.h"
 #include "HTSFileArchive.c"
 #include "FileOperater.h"
 #include "HtsFileReader.h"
@@ -13,10 +13,10 @@ extern "C"
 {
 #endif
 
-	JNIEXPORT void JNICALL Java_com_ubt_alpha1e_business_HtsHelper_writeHts
+	JNIEXPORT void JNICALL Java_com_ubt_alpha1e_edu_business_HtsHelper_writeHts
 		(JNIEnv * env, jclass j_class, jobject j_object, jstring j_file_path, jobject j_listener){
 
-		jclass NewActionInfo_class = env->FindClass("com/ubt/alpha1e/data/model/NewActionInfo");
+		jclass NewActionInfo_class = env->FindClass("com/ubt/alpha1e/edu/data/model/NewActionInfo");
 		//��class�ļ�����Ŀ¼��ִ��javap -s -p your_class_name �鿴ǩ����Ϣ
 		jmethodID getsize = env->GetMethodID(NewActionInfo_class, "getSize", "()I");
 		jint frame_size = env->CallIntMethod(j_object, getsize);
@@ -24,10 +24,10 @@ extern "C"
 
 		jfieldID NewActionInfo_frameActions_id = env->GetFieldID(NewActionInfo_class, "frameActions", "Ljava/util/List;");
 		jobject NewActionInfo_frameActions = env->GetObjectField(j_object, NewActionInfo_frameActions_id);
-		__android_log_print(ANDROID_LOG_INFO, "yuyong----------", "log from cpp : %s", "Java_com_ubt_alpha1e_business_HtsHelper_getHtsFileData-->NewActionInfo_frameActions ok");
+		__android_log_print(ANDROID_LOG_INFO, "yuyong----------", "log from cpp : %s", "Java_com_ubt_alpha1e_edu_business_HtsHelper_getHtsFileData-->NewActionInfo_frameActions ok");
 
-		jmethodID get_frame_index = env->GetMethodID(NewActionInfo_class, "getFrameIndex", "(I)Lcom/ubt/alpha1e/data/model/FrameActionInfo;");
-		jclass FrameActionInfo_class = env->FindClass("com/ubt/alpha1e/data/model/FrameActionInfo");
+		jmethodID get_frame_index = env->GetMethodID(NewActionInfo_class, "getFrameIndex", "(I)Lcom/ubt/alpha1e/edu/data/model/FrameActionInfo;");
+		jclass FrameActionInfo_class = env->FindClass("com/ubt/alpha1e/edu/data/model/FrameActionInfo");
 		jmethodID get_data_int = env->GetMethodID(FrameActionInfo_class, "getDataInt", "()[I");
 		jfieldID eng_angles = env->GetFieldID(FrameActionInfo_class, "eng_angles", "Ljava/lang/String;");
 		jfieldID eng_time = env->GetFieldID(FrameActionInfo_class, "eng_time", "I");
@@ -79,7 +79,7 @@ extern "C"
 		free(*buf);
         free(file_path);
 
-		jclass IHtsHelperListener_class = env->FindClass("com/ubt/alpha1e/business/IHtsHelperListener");
+		jclass IHtsHelperListener_class = env->FindClass("com/ubt/alpha1e/edu/business/IHtsHelperListener");
 		jmethodID on_hts_write_finish = env->GetMethodID(IHtsHelperListener_class, "onHtsWriteFinish", "(Z)V");
 
 		if (size == *bufsize){
@@ -92,7 +92,7 @@ extern "C"
 		__android_log_print(ANDROID_LOG_INFO, "yuyong----------", "log from cpp : finish");
 	}
 
-	JNIEXPORT void JNICALL Java_com_ubt_alpha1e_business_HtsHelper_getNewActionInfoFromHts
+	JNIEXPORT void JNICALL Java_com_ubt_alpha1e_edu_business_HtsHelper_getNewActionInfoFromHts
 		(JNIEnv * env, jclass j_class, jobject j_object, jstring j_file_path, jobject j_listener)
 	{
 
@@ -109,7 +109,7 @@ extern "C"
 		unsigned short file_strean = File_Read(file_path, file_content, *file_size, finish_size);
 		free(file_path);
         if(file_strean == 100){
-                jclass IHtsHelperListener_class = env->FindClass("com/ubt/alpha1e/business/IHtsHelperListener");
+                jclass IHtsHelperListener_class = env->FindClass("com/ubt/alpha1e/edu/business/IHtsHelperListener");
                 jmethodID on_get_new_action_info_finish = env->GetMethodID(IHtsHelperListener_class, "onGetNewActionInfoFinish", "(Z)V");
                 env->CallVoidMethod(j_listener, on_get_new_action_info_finish, false);
         }else{
@@ -123,7 +123,7 @@ extern "C"
 
         		FrameDatasToNewActionInfo(env, j_object, *rtn, *size);
 
-        		jclass IHtsHelperListener_class = env->FindClass("com/ubt/alpha1e/business/IHtsHelperListener");
+        		jclass IHtsHelperListener_class = env->FindClass("com/ubt/alpha1e/edu/business/IHtsHelperListener");
         		jmethodID on_get_new_action_info_finish = env->GetMethodID(IHtsHelperListener_class, "onGetNewActionInfoFinish", "(Z)V");
         		env->CallVoidMethod(j_listener, on_get_new_action_info_finish, true);
         }
@@ -165,7 +165,7 @@ extern "C"
 	}
 
 	void FrameDatasToNewActionInfo(JNIEnv* env, jobject j_object, FrameData* datas, int data_size){
-		jclass NewActionInfo_class = env->FindClass("com/ubt/alpha1e/data/model/NewActionInfo");
+		jclass NewActionInfo_class = env->FindClass("com/ubt/alpha1e/edu/data/model/NewActionInfo");
 		jmethodID addFrame = env->GetMethodID(NewActionInfo_class, "addFrame", "([I)V");
 		for (int i = 0; i < data_size; i++){
 			int i_datas[18];

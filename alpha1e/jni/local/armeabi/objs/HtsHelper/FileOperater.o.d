@@ -1,5 +1,5 @@
 .//local/armeabi/objs/HtsHelper/FileOperater.o: \
-  G:/Alpha1E/alpha1e-android-app/alpha1e/jni/FileOperater.cpp \
-  G:/Alpha1E/alpha1e-android-app/alpha1e/jni/FileOperater.h
+  D:/Git/alpha1e-android-app/alpha1e/jni/FileOperater.cpp \
+  D:/Git/alpha1e-android-app/alpha1e/jni/FileOperater.h
 
-G:/Alpha1E/alpha1e-android-app/alpha1e/jni/FileOperater.h:
+D:/Git/alpha1e-android-app/alpha1e/jni/FileOperater.h:
