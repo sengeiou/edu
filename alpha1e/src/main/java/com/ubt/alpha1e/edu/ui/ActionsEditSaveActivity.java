@@ -26,18 +26,24 @@ import com.ubt.alpha1e.edu.AlphaApplication;
 import com.ubt.alpha1e.edu.R;
 import com.ubt.alpha1e.edu.base.FileUtils;
 import com.ubt.alpha1e.edu.base.PermissionUtils;
+import com.ubt.alpha1e.edu.base.SPUtils;
+import com.ubt.alpha1e.edu.bluetoothandnet.netconnect.NetconnectActivity;
 import com.ubt.alpha1e.edu.data.Constant;
 import com.ubt.alpha1e.edu.data.FileTools;
 import com.ubt.alpha1e.edu.data.ImageTools;
+import com.ubt.alpha1e.edu.data.model.DownloadProgressInfo;
 import com.ubt.alpha1e.edu.data.model.NewActionInfo;
 import com.ubt.alpha1e.edu.net.http.basic.FileUploadListener;
 import com.ubt.alpha1e.edu.net.http.basic.IImageListener;
 import com.ubt.alpha1e.edu.ui.custom.EditTextCheck;
 import com.ubt.alpha1e.edu.ui.dialog.BaseDiaUI;
+import com.ubt.alpha1e.edu.ui.dialog.ConfirmDialog;
 import com.ubt.alpha1e.edu.ui.dialog.LoadingDialog;
 import com.ubt.alpha1e.edu.ui.helper.ActionsEditHelper;
 import com.ubt.alpha1e.edu.ui.helper.IEditActionUI;
 import com.ubt.alpha1e.edu.ui.helper.PrivateInfoHelper;
+import com.ubt.alpha1e.edu.userinfo.dynamicaction.DownLoadActionManager;
+import com.ubt.alpha1e.edu.userinfo.model.DynamicActionModel;
 import com.ubt.alpha1e.edu.utils.log.UbtLog;
 
 import java.io.File;
@@ -46,11 +52,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 public class ActionsEditSaveActivity extends BaseActivity implements
-        IEditActionUI, FileUploadListener, BaseDiaUI {
+        IEditActionUI, FileUploadListener, BaseDiaUI, DownLoadActionManager.DownLoadActionListener {
 
     private static final String TAG = "ActionsEditSaveActivity";
 
@@ -131,6 +138,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
 
         initUI();
         initControlListener();
+        DownLoadActionManager.getInstance(this).addDownLoadActionListener(this);
     }
 
     @Override
@@ -699,15 +707,31 @@ public class ActionsEditSaveActivity extends BaseActivity implements
 
     }
 
+    private boolean onChangeActionFinish = false;
     @Override
     public void onChangeActionFinish() {
         UbtLog.d(TAG, "wmma onChangeActionFinish");
+        if(SPUtils.getInstance().getBoolean(com.ubt.alpha1e.edu.base.Constant.SP_EDU_MODULE)){
+            if(downloadFailed){
+                dismissProgress();
+                return;
+            }
+        }
+
+        onChangeActionFinish = true;
         boolean state = ((ActionsEditHelper) mHelper).getActionSaveState();
 //
         edt_name.post(new Runnable() {
             @Override
             public void run() {
-                dismissProgress();
+                if(SPUtils.getInstance().getBoolean(com.ubt.alpha1e.edu.base.Constant.SP_EDU_MODULE)){
+                    if(downloadFinish){
+                        dismissProgress();
+                    }
+                }else{
+                    dismissProgress();
+                }
+
             }
         });
         if (state) {
@@ -721,6 +745,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
             FileTools.DeleteFile(new File(mCurrentAction.actionZip_local));
             mCurrentAction.actionId = -1;
             showToast("ui_save_action_save_failed");
+            dismissProgress();
         }
     }
 
@@ -795,4 +820,72 @@ public class ActionsEditSaveActivity extends BaseActivity implements
     public void noteWaitWebProcressShutDown() {
 
     }
+
+    @Override
+    public void getRobotActionLists(List<String> list) {
+
+    }
+
+    private boolean downloadFinish = false;
+    private boolean downloadFailed = false;
+    @Override
+    public void getDownLoadProgress(DynamicActionModel info, DownloadProgressInfo progressInfo) {
+
+        if(progressInfo.status == 2){
+            downloadFinish = true;
+            UbtLog.d(TAG, "下载成功");
+            if(onChangeActionFinish){
+                dismissProgress();
+            }
+        }else if(progressInfo.status == 0){
+            downloadFailed = true;
+            dismissProgress();
+        }
+
+    }
+
+    @Override
+    public void playActionFinish(String actionName) {
+
+    }
+
+    @Override
+    public void onBlutheDisconnected() {
+
+    }
+
+    @Override
+    public void doActionPlay(long actionId, int statu) {
+
+    }
+
+    @Override
+    public void doTapHead() {
+
+    }
+
+    @Override
+    public void isAlpha1EConnectNet(boolean statu) {
+        if (!statu) {
+            showNetWorkConnectDialog();
+        }
+    }
+
+    //显示网络连接对话框
+    private void showNetWorkConnectDialog() {
+        new ConfirmDialog(this).builder()
+                .setTitle("提示")
+                .setMsg("请先连接机器人Wi-Fi")
+                .setCancelable(true)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接Wifi ");
+                        Intent intent = new Intent();
+                        intent.setClass(ActionsEditSaveActivity.this, NetconnectActivity.class);
+                        startActivity(intent);
+                    }
+                }).show();
+    }
+
 }

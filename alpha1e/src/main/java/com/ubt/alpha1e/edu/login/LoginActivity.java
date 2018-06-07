@@ -54,8 +54,8 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
-    private String appidWx = "wxfa7003941d57a391";
-    private String appidQQOpen = "1106515940";
+    private String appidWx = "wx8415d53d544b9238";
+    private String appidQQOpen = "1106953718";
     private LoginProxy proxy;
     private WxInfoManager wxInfoManager;
     private QQOpenInfoManager qqOpenInfoManager;

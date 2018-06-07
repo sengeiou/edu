@@ -18,6 +18,8 @@ import com.ubt.alpha1e.edu.data.model.NewActionInfo;
 import com.ubt.alpha1e.edu.login.HttpEntity;
 import com.ubt.alpha1e.edu.net.http.basic.HttpAddress;
 import com.ubt.alpha1e.edu.ui.DubActivity;
+import com.ubt.alpha1e.edu.userinfo.dynamicaction.DownLoadActionManager;
+import com.ubt.alpha1e.edu.userinfo.model.DynamicActionModel;
 import com.ubt.alpha1e.edu.utils.log.UbtLog;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -323,6 +325,15 @@ public class NewActionsManager implements IFileListener {
                                     mChangeNewActionInfo.actionHeadUrl = newActionInfo.actionHeadUrl;
                                     mChangeNewActionInfo.actionUrl = newActionInfo.actionUrl;
                                     mChangeNewActionInfo.actionId = newActionInfo.actionId;
+
+                                    if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE)){
+                                        DownLoadActionManager.getInstance(mContext).readNetworkStatus();
+                                        DynamicActionModel dynamicActionModel = new DynamicActionModel();
+                                        dynamicActionModel.setActionId((int)newActionInfo.actionId);
+                                        dynamicActionModel.setActionOriginalId(""+newActionInfo.actionOriginalId);
+                                        dynamicActionModel.setActionUrl(newActionInfo.actionUrl);
+                                        DownLoadActionManager.getInstance(mContext).downRobotAction(dynamicActionModel);
+                                    }
 
                                     FileTools.readFileString(FileTools.actions_new_cache,
                                             FileTools.actions_new_log_name,
