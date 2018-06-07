@@ -169,6 +169,7 @@ public class ActionsEditSaveActivity extends BaseActivity implements
         }
         ((AlphaApplication) this
                 .getApplicationContext()).setActionOriginalId(0);
+        DownLoadActionManager.getInstance(this).removeDownLoadActionListener(this);
         super.onDestroy();
     }
 
