@@ -143,7 +143,9 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
         initUI();
         initControlListener();
 
-        ((RemoteHelper) mHelper).doIntoRemote();
+        if(isBulueToothConnected()){
+            ((RemoteHelper) mHelper).doIntoRemote();
+        }
     }
 
     @Override
@@ -151,7 +153,9 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
         setCurrentActivityLable(RemoteSelActivity.class.getSimpleName());
         super.onResume();
 
-        ((RemoteHelper) mHelper).dd();
+        if(isBulueToothConnected()){
+            ((RemoteHelper) mHelper).dd();
+        }
         ((RemoteHelper) mHelper).doReadAllRemoteRole();
 
         mClickPosition = -1;
@@ -326,7 +330,9 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
 
     private void clickRemoteRole(int position,boolean showLoading){
         if(position == 0){// football
-            ((RemoteHelper) mHelper).doStopPrePlay();
+            if(isBulueToothConnected()){
+                ((RemoteHelper) mHelper).doStopPrePlay();
+            }
 
             RemoteHelper.mCurrentType = RemoteRecordOperater.ModelType.FOOTBALL_PLAYER;
             RemoteHelper.mCurrentInfo = RemoteRecordOperater.getInstance(this, FileTools.db_log_cache, FileTools.db_log_name)
@@ -342,7 +348,9 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
                 ((LoadingDialog) mCoonLoadingDia).showMessage(RemoteSelActivity.this.getStringResources("ui_remote_initializing"));
             }*/
         }else if(position == 1){// FIGHTER
-            ((RemoteHelper) mHelper).doStopPrePlay();
+            if(isBulueToothConnected()){
+                ((RemoteHelper) mHelper).doStopPrePlay();
+            }
 
             RemoteHelper.mCurrentType = RemoteRecordOperater.ModelType.FIGHTER;
             RemoteHelper.mCurrentInfo = RemoteRecordOperater.getInstance(this, FileTools.db_log_cache, FileTools.db_log_name)
@@ -362,7 +370,10 @@ public class RemoteSelActivity extends BaseActivity implements IRemoteUI, BaseDi
             //((RemoteHelper) mHelper).sendFiles(RemoteRecordOperater.ModelType.FIGHTER);
             //((LoadingDialog) mCoonLoadingDia).showMessage(RemoteSelActivity.this.getStringResources("ui_remote_initializing"));
         }else {
-            ((RemoteHelper) mHelper).doStopPrePlay();
+            if(isBulueToothConnected()){
+                ((RemoteHelper) mHelper).doStopPrePlay();
+            }
+
             RemoteHelper.mCurrentType = RemoteRecordOperater.ModelType.CUSTOM;
             RemoteHelper.mCurrentInfo = RemoteRecordOperater.getInstance(this, FileTools.db_log_cache, FileTools.db_log_name)
                     .getRemoteInfoByModel(RemoteHelper.mCurrentType, false,mAllRemoteRoleDatas.get(position).roleid+"");

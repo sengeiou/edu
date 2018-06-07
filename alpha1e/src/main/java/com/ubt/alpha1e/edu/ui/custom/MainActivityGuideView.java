@@ -87,6 +87,8 @@ public class MainActivityGuideView{
     RelativeLayout rlCommunityGuides;
     @BindView(R.id.iv_community)
     ImageView ivCommunity;
+    @BindView(R.id.tv_community)
+    TextView tvCommunity;
     @BindView(R.id.rl_course_center)
     RelativeLayout rlCourseCenter;
     @BindView(R.id.rl_course_center_guides)
@@ -186,6 +188,11 @@ public class MainActivityGuideView{
 
     private void initView() {
         {
+            if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE, false)){
+                ivCommunity.setImageResource(R.drawable.ic_home_community_grey);
+                tvCommunity.setAlpha(0.2f);
+            }
+
             if (SizeUtils.isComprehensiveScreen(mContext)||AlphaApplication.isPad()) {
                 rlHibitsEvent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 

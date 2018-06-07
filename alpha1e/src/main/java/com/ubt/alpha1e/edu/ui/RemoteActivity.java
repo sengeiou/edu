@@ -1,5 +1,6 @@
 package com.ubt.alpha1e.edu.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ubt.alpha1e.edu.AlphaApplication;
 import com.ubt.alpha1e.edu.R;
+import com.ubt.alpha1e.edu.base.AppManager;
+import com.ubt.alpha1e.edu.base.SPUtils;
+import com.ubt.alpha1e.edu.bluetoothandnet.bluetoothandnetconnectstate.BluetoothandnetconnectstateActivity;
+import com.ubt.alpha1e.edu.bluetoothandnet.bluetoothguidestartrobot.BluetoothguidestartrobotActivity;
 import com.ubt.alpha1e.edu.business.ActionPlayer;
 import com.ubt.alpha1e.edu.data.DB.RemoteRecordOperater;
 import com.ubt.alpha1e.edu.data.RemoteItem;
@@ -155,12 +160,13 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
 
         mHelper = new RemoteHelper(this, this);
-        startOrStopRun((byte)0x05);
 
-        UbtLog.d(TAG, "stopEventSound = ");
-        byte[] mCmd = {0};
-        mCmd[0] = 0;
-        mHelper.doSendComm(ConstValue.DV_NOTIFYONLINEPLAYER_EXIT, mCmd);
+        initUI();
+        initControlListener();
+
+        if(!isBulueToothConnected()){
+            showBluetoothConnectDialog();
+        }
     }
 
     @Override
@@ -169,12 +175,20 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 //        mHelper = new RemoteHelper(this, this);
         //((RemoteHelper) mHelper).doReadActions();
         super.onResume();
-        mCoonLoadingDia = LoadingDialog.getInstance(this, this);
-        initUI();
-        initControlListener();
+
         /*if(guideView == null && !RemoteGuideView.isShowGuide(RemoteActivity.this)){
              guideView = new RemoteGuideView(RemoteActivity.this);
         }*/
+
+        if(isBulueToothConnected()){
+            startOrStopRun((byte)0x05);
+
+            UbtLog.d(TAG, "stopEventSound = ");
+            byte[] mCmd = {0};
+            mCmd[0] = 0;
+            mHelper.doSendComm(ConstValue.DV_NOTIFYONLINEPLAYER_EXIT, mCmd);
+        }
+
 
         if(mHelper.isStartHibitsProcess()){
             mHelper.showStartHibitsProcess(new IDismissCallbackListener() {
@@ -211,6 +225,8 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
     @Override
     protected void initUI() {
+
+        mCoonLoadingDia = LoadingDialog.getInstance(this, this);
 
         btn_1 = (ImageButton) findViewById(R.id.btn_1);
         btn_2 = (ImageButton) findViewById(R.id.btn_2);
@@ -305,6 +321,9 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         public boolean onTouch(View view, MotionEvent event) {
 
             if(event.getAction() == MotionEvent.ACTION_DOWN){
+                if(!isBulueToothConnected()){
+                    showBluetoothConnectDialog();
+                }
 
 //                if(view.getId() == R.id.btn_up
 //                        || view.getId() == R.id.btn_down
@@ -327,6 +346,9 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 //
 //                }
             }else if(event.getAction() == MotionEvent.ACTION_UP){
+                if(!isBulueToothConnected()){
+                    return false;
+                }
 
                 //松开stop
 //                if(view.getId() == R.id.btn_up
@@ -356,6 +378,10 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
 
         @Override
         public boolean onLongClick(View view) {
+            if(!isBulueToothConnected()){
+                return false;
+            }
+
             longClickItem = view;
             execActions(longClickItem);
             keepExec = true;
@@ -412,6 +438,12 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
                 UbtLog.d(TAG,"1000ms才能点击");
                 return;
             }
+
+            if(!isBulueToothConnected()){
+                showBluetoothConnectDialog();
+                return;
+            }
+
             lastClickTime = System.currentTimeMillis();
             execActions(arg0);
         }
@@ -507,8 +539,10 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startOrStopRun((byte)0x06);
-                handler.sendEmptyMessage(EXEC_STOP_ACTION);
+                if(isBulueToothConnected()){
+                    startOrStopRun((byte)0x06);
+                    handler.sendEmptyMessage(EXEC_STOP_ACTION);
+                }
                 RemoteActivity.this.finish();
             }
         });
@@ -708,9 +742,43 @@ public class RemoteActivity extends BaseActivity implements IRemoteUI , BaseDiaU
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            startOrStopRun((byte)0x06);
-            handler.sendEmptyMessage(EXEC_STOP_ACTION);
+            if(isBulueToothConnected()){
+                startOrStopRun((byte)0x06);
+                handler.sendEmptyMessage(EXEC_STOP_ACTION);
+            }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    //显示蓝牙连接对话框
+    void showBluetoothConnectDialog() {
+        new ConfirmDialog(this).builder()
+                .setTitle("提示")
+                .setMsg("请先连接蓝牙")
+                .setCancelable(true)
+                .setPositiveButton("去连接", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UbtLog.d(TAG, "去连接蓝牙 ");
+                        gotoConnectBluetooth();
+                    }
+                }).show();
+    }
+
+    //去连接蓝牙
+    void gotoConnectBluetooth() {
+        boolean isfirst = SPUtils.getInstance().getBoolean("firstBluetoothConnect", true);
+        Intent bluetoothConnectIntent = new Intent();
+        if (isfirst) {
+            UbtLog.d("MainCourse", "第一次蓝牙连接");
+            SPUtils.getInstance().put("firstBluetoothConnect", false);
+            bluetoothConnectIntent.setClass(RemoteActivity.this, BluetoothguidestartrobotActivity.class);
+        } else {
+            UbtLog.d("MainCourse", "非第一次蓝牙连接 ");
+            bluetoothConnectIntent.setClass(RemoteActivity.this, BluetoothandnetconnectstateActivity.class);
+        }
+
+        startActivityForResult(bluetoothConnectIntent, 100);
+        this.overridePendingTransition(R.anim.activity_open_up_down, 0);
     }
 }

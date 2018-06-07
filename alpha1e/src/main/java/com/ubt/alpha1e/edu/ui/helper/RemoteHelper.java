@@ -151,6 +151,7 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
             info.actionName = item.hts_name.split("\\.")[0];
             MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_gamepad;
             MyActionsHelper.mCurrentPlayType = MyActionsHelper.Action_type.Unkown;
+            UbtLog.d(TAG,"mPlayer = " + mPlayer);
             if(mPlayer != null){
                 mPlayer.doPlayAction(info);
             }
@@ -305,6 +306,18 @@ public class RemoteHelper extends BaseHelper implements FileSendManager.IFileSen
     @Override
     public void RegisterHelper() {
         super.RegisterHelper();
+
+        if(mBaseActivity.checkCoon()){
+            if (mPlayer == null){
+                mPlayer = ActionPlayer.getInstance(
+                        ((AlphaApplication) mBaseActivity.getApplicationContext())
+                                .getBlueToothManager(),
+                        ((AlphaApplication) mBaseActivity.getApplicationContext())
+                                .getCurrentBluetooth().getAddress());
+            }
+            mPlayer.addListener(mUI);
+        }
+
         if (mPlayer != null)
             mPlayer.addListener(mUI);
     }
