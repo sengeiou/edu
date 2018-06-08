@@ -1091,6 +1091,8 @@
 
     <string name="ui_common_tip">提示</string>
     <string name="ui_learning_model_tip">使用学习模式时，机器人语音、行为习惯提醒等功能不可用。</string>
+    <string name="ui_learning_model_center">学习模式中心</string>
+    <string name="ui_learning_model_logout">退出学习模式</string>
     <string name="ui_common_known">我知道了</string>
 
 </resources>

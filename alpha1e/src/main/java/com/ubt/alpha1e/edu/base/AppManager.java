@@ -81,10 +81,10 @@ public class AppManager {
         for (int i = 0; i < activityStack.size(); i++) {
             try {
                 mActivity = activityStack.get(i);
-                if (mActivity instanceof RemoteActivity
-                        || mActivity instanceof RemoteSelActivity
+                if (//mActivity instanceof RemoteActivity
+                        //|| mActivity instanceof RemoteSelActivity
                        // || mActivity instanceof MainCourseActivity
-                        || mActivity instanceof PrincipleActivity
+                        /*||*/ mActivity instanceof PrincipleActivity
                         || mActivity instanceof SplitActivity
                         || mActivity instanceof MergeActivity
                         || mActivity instanceof FeatureActivity

@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.edu.R;
+import com.ubt.alpha1e.edu.login.LoginActivity;
 import com.ubt.alpha1e.edu.mvp.MVPBaseActivity;
 
 import butterknife.BindView;
@@ -50,14 +51,20 @@ public class LearningModeActivity extends MVPBaseActivity<LearningModeContract.V
     protected void initUI() {
         llBaseBack.setVisibility(View.GONE);
 
-        tvBaseTitleName.setText(getStringResources("ui_common_tip"));
+
         ivTitleRight.setVisibility(View.VISIBLE);
         ivTitleRight.setBackgroundResource(R.drawable.action_close);
 
         type = getIntent().getExtras().getInt("type", 0);
 
         if (type == 0) {
+            tvBaseTitleName.setText(getStringResources("ui_common_tip"));
             tvLearningModelTip.setText(getStringResources("ui_learning_model_tip"));
+            tvConfirm.setText(getStringResources("ui_common_known"));
+        }else {
+            tvBaseTitleName.setText(getStringResources("ui_learning_model_center"));
+            tvLearningModelTip.setText(getStringResources("ui_learning_model_tip"));
+            tvConfirm.setText(getStringResources("ui_learning_model_logout"));
         }
 
     }
@@ -89,10 +96,18 @@ public class LearningModeActivity extends MVPBaseActivity<LearningModeContract.V
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_back:
-            case R.id.tv_confirm:
             case R.id.iv_title_right:
                 LearningModeActivity.this.finish();
                 break;
+            case R.id.tv_confirm:
+                if(type == 1){
+                    LoginActivity.LaunchActivity(getContext());
+                }
+                LearningModeActivity.this.finish();
+                break;
+            default:
+                break;
+
         }
     }
 }

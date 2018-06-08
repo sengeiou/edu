@@ -458,7 +458,7 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                 if (!removeDuplicateClickEvent()) {
 
                     if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE, false)){
-                        LearningModeActivity.LaunchActivity(this,0);
+                        LearningModeActivity.LaunchActivity(this,1);
                         return;
                     }
 
@@ -531,7 +531,12 @@ public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresent
                         startActivity(mLaunch);
                     }
                 } else {
-                    showBluetoothConnectDialog();
+
+                    if (!removeDuplicateClickEvent()) {
+                        mLaunch.setClass(this, RemoteSelActivity.class);
+                        startActivity(mLaunch);
+                    }
+                    //showBluetoothConnectDialog();
                 }
                 break;
             case R.id.ll_action:
