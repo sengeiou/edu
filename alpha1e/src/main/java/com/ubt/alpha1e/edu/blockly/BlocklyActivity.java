@@ -36,9 +36,12 @@ import com.ubt.alpha1e.edu.BuildConfig;
 import com.ubt.alpha1e.edu.R;
 import com.ubt.alpha1e.edu.base.FileUtils;
 import com.ubt.alpha1e.edu.base.RequstMode.BaseRequest;
+import com.ubt.alpha1e.edu.base.RequstMode.GetMessageListRequest;
 import com.ubt.alpha1e.edu.base.SPUtils;
+import com.ubt.alpha1e.edu.blockly.bean.ActionNameModule;
 import com.ubt.alpha1e.edu.blockly.bean.QueryResult;
 import com.ubt.alpha1e.edu.blockly.bean.RobotSensor;
+import com.ubt.alpha1e.edu.blockly.bean.TempActionsModel;
 import com.ubt.alpha1e.edu.blockly.sensor.SensorHelper;
 import com.ubt.alpha1e.edu.blockly.sensor.SensorObservable;
 import com.ubt.alpha1e.edu.blockly.sensor.SensorObserver;
@@ -226,6 +229,9 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
     private ImageView ivBack;
 
     private RelativeLayout rlLoading;
+
+    private List<ActionNameModule> actionNameModuleList = new ArrayList<ActionNameModule>();
+    private List<TempActionsModel> dynamicActionModelList = new ArrayList<TempActionsModel>();
 
     private Handler mHandler = new Handler(){
         @Override
@@ -877,6 +883,9 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
      * @return
      */
     public void playRobotAction(String name, boolean isWalk, String time ,boolean isTurn){
+
+        name = getActionNameKey(name);
+
         if(isBulueToothConnected()){
             if(isWalk){
                 if(isTurn){
@@ -916,8 +925,11 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     MyActionsHelper.mCurrentLocalPlayType = MyActionsHelper.Action_type.My_new_local;
                 }
             }
-            UbtLog.d(TAG,"name = " + name + "   isWalk = " + isWalk + "     time = " + time);
+            UbtLog.d(TAG,"name = " + name + "isWalk=" + isWalk + "time =" + MyActionsHelper.mCurrentLocalPlayType + "trueName:" + getActionNameKey(name));
+
             mMyActionsHelper.doPlayForBlockly(name, isWalk);
+
+
         }else{
             runOnUiThread(new Runnable() {
                 @Override
@@ -960,9 +972,30 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         }
     }
 
+    List<String> actionNameList = new ArrayList<String>();
+
     public List<String> getActionList(){
         UbtLog.d(TAG, "getActionList:" + mActionList);
-        return mActionList;
+        actionNameList.clear();
+        actionNameModuleList.clear();
+        if(mActionList.size()!=0){
+            for(int i=0; i <mActionList.size(); i++){
+                ActionNameModule actionNameModule = new ActionNameModule();
+                actionNameModule.setActionKey(mActionList.get(i));
+                actionNameModule.setActionValue(getActionNameValue(mActionList.get(i)));
+                actionNameModuleList.add(actionNameModule);
+            }
+            UbtLog.d(TAG, "actionNameModuleList:" + actionNameModuleList.toString());
+        }
+
+        if(actionNameModuleList.size()!=0){
+            for(int i=0; i<actionNameModuleList.size(); i++){
+                actionNameList.add(actionNameModuleList.get(i).getActionValue());
+            }
+        }
+        UbtLog.d(TAG, "actionNameList:" + actionNameList);
+
+        return actionNameList;
     }
 
 
@@ -1076,6 +1109,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                 public void run() {
                     UbtLog.d(TAG, "Bluetooth disconnect checkBlueConnectState 3！");
                     mActionList.clear();
+                    actionNameList.clear();
+                    actionNameModuleList.clear();
                     mWebView.loadUrl("javascript:checkBlueConnectState()");
                 }
             });
@@ -1411,6 +1446,8 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     @Override
                     public void run() {
                         mActionList.clear();
+                        actionNameList.clear();
+                        actionNameModuleList.clear();
                         mWebView.loadUrl("javascript:checkBlueConnectState()");
                     }
                 });
@@ -1615,7 +1652,9 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             //获取机器人内置动作后，主动调用js方法通知蓝牙状态变化，让js重新请求获取内置动作。
             UbtLog.d(TAG, "names.size():" + names.size());
             if (names.size() > 0) {
+                UbtLog.d(TAG, "68 1");
                 mActionList = names;
+
                 mWebView.post(new Runnable() {
                     @Override
                     public void run() {
@@ -2714,6 +2753,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
         showLoading();
         listUserProgram();
+        getCreateAction();
 
 /*        String updateUrl = HttpAddress.WebBlocklyUpdateAdderss + readBlocklyLocalVersion(BlocklyActivity.this);
         UbtLog.d(TAG,"updateUrl = " + updateUrl);
@@ -3149,6 +3189,65 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             return  result;
         }
 
+    }
+
+
+    private void getCreateAction() {
+
+        GetMessageListRequest messageListRequest = new GetMessageListRequest();
+        messageListRequest.setOffset(1);
+        messageListRequest.setLimit(9999);
+        String actionUrl = HttpEntity.ACTION_DYNAMIC_LIST;
+
+
+        OkHttpClientUtils.getJsonByPostRequest(actionUrl, messageListRequest, 0).execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                UbtLog.d(TAG, " getNoticeData onError:" + e.getMessage());
+
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+                UbtLog.d(TAG, "68 2");
+                UbtLog.d(TAG, "getDynamicData==" + response);
+
+                BaseResponseModel<List<TempActionsModel>> baseResponseModel = GsonImpl.get().toObject(response,
+                        new TypeToken<BaseResponseModel<List<TempActionsModel>>>() {
+                        }.getType());
+                if (baseResponseModel.status) {
+                /*    if (mView != null) {
+                        UbtLog.d(TAG, "getDynamicData.models==" + baseResponseModel.models);
+                        mView.setDynamicData(true, pullType, baseResponseModel.models);
+                    }*/
+                    dynamicActionModelList = baseResponseModel.models;
+                } else {
+
+                }
+            }
+        });
+    }
+
+    private String getActionNameValue(String key){
+        if(dynamicActionModelList.size()!=0){
+            for(int i=0; i <dynamicActionModelList.size(); i++) {
+                if(key.equals(dynamicActionModelList.get(i).getActionOriginalId())){
+                    return dynamicActionModelList.get(i).getActionName();
+                }
+            }
+        }
+        return key;
+    }
+
+    private String getActionNameKey(String value){
+        if(actionNameModuleList.size()!=0){
+            for(int i=0; i <actionNameModuleList.size(); i++) {
+                if(value.equals(actionNameModuleList.get(i).getActionValue())){
+                    return actionNameModuleList.get(i).getActionKey();
+                }
+            }
+        }
+        return value;
     }
 
 

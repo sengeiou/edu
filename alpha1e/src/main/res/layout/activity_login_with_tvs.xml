@@ -92,7 +92,7 @@
             android:layout_height="45.33dp"
             android:layout_gravity="center"
             android:background="@drawable/bt_wechat"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="16dp"
             android:gravity="center"
             >
 

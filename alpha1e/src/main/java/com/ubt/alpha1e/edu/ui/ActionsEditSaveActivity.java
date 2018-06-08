@@ -745,7 +745,12 @@ public class ActionsEditSaveActivity extends BaseActivity implements
             FileTools.DeleteFile(new File(mCurrentAction.actionDir_local));
             FileTools.DeleteFile(new File(mCurrentAction.actionZip_local));
             mCurrentAction.actionId = -1;
-            showToast("ui_save_action_save_failed");
+            if(((ActionsEditHelper) mHelper).getErrCode().equals("11301")){
+                showToast("动作名称重复，请修改动作名称!");
+            }else{
+                showToast("ui_save_action_save_failed");
+            }
+
             dismissProgress();
         }
     }

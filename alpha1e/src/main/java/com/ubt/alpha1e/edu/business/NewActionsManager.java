@@ -49,6 +49,8 @@ public class NewActionsManager implements IFileListener {
     public boolean isSaveSuccess = false;
     private Context mContext;
     private List<NewActionsManagerListener> mListenerLists;
+    public String errCode = "";
+
 
     private int do_read_new_actions_for_play = 10001;
     private int do_read_new_actions_for_update = 10002;
@@ -339,6 +341,13 @@ public class NewActionsManager implements IFileListener {
                                             FileTools.actions_new_log_name,
                                             do_read_new_actions_for_save, thiz);
 
+                                }else{
+                                    if(json.get("info").equals("11301")){
+//                                        ToastUtils.showShort("保存动作重复，请修改名称");
+                                        errCode = json.get("info").toString();
+                                        isSaveSuccess = false;
+                                        notifyListeners();
+                                    }
                                 }
                             } catch (Exception e) {
                                 isSaveSuccess = false;

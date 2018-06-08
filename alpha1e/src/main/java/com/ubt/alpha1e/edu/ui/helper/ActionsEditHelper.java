@@ -88,6 +88,10 @@ public class ActionsEditHelper extends BaseHelper implements
         return mNewActionsManager.isSaveSuccess;
     }
 
+    public String getErrCode() {
+        return mNewActionsManager.errCode;
+    }
+
     public NewActionInfo getNewActionInfo() {
 
         return mNewActionsManager.mChangeNewActionInfo;

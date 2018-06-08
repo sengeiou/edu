@@ -8,9 +8,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ubt.alpha1e.edu.AlphaApplication;
 import com.ubt.alpha1e.edu.R;
+import com.ubt.alpha1e.edu.base.Constant;
+import com.ubt.alpha1e.edu.base.SPUtils;
 import com.ubt.alpha1e.edu.community.CommunityActivity;
 import com.ubt.alpha1e.edu.data.model.NewActionInfo;
 import com.ubt.alpha1e.edu.userinfo.model.DynamicActionModel;
@@ -31,6 +34,8 @@ public class SaveSuccessActivity extends Activity implements View.OnClickListene
 
     ImageView ivClose;
     Button btn_to_other;
+    TextView txt_to_other;
+    TextView txt_base_title_name;
 
     private NewActionInfo actionInfo = null;
 
@@ -42,6 +47,17 @@ public class SaveSuccessActivity extends Activity implements View.OnClickListene
         ivClose.setOnClickListener(this);
         btn_to_other = (Button) findViewById(R.id.btn_to_other) ;
         btn_to_other.setOnClickListener(this);
+        txt_to_other = (TextView) findViewById(R.id.txt_to_other);
+        txt_base_title_name = (TextView) findViewById(R.id.txt_base_title_name);
+        if(SPUtils.getInstance().getBoolean(Constant.SP_EDU_MODULE)){
+            btn_to_other.setVisibility(View.INVISIBLE);
+            txt_to_other.setVisibility(View.INVISIBLE);
+            txt_base_title_name.setText("保存");
+        }else{
+            btn_to_other.setVisibility(View.VISIBLE);
+            txt_to_other.setVisibility(View.VISIBLE);
+            txt_base_title_name.setText("保存并发布");
+        }
 
         if(getIntent() != null){
             actionInfo = getIntent().getParcelableExtra("NewActionInfo");
