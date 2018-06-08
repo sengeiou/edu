@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ubt.alpha1e.edu.R;
+import com.ubt.alpha1e.edu.base.Constant;
+import com.ubt.alpha1e.edu.base.SPUtils;
 import com.ubt.alpha1e.edu.login.LoginActivity;
 import com.ubt.alpha1e.edu.mvp.MVPBaseActivity;
 
@@ -101,6 +103,7 @@ public class LearningModeActivity extends MVPBaseActivity<LearningModeContract.V
                 break;
             case R.id.tv_confirm:
                 if(type == 1){
+                    SPUtils.getInstance().put(Constant.SP_EDU_MODULE,false);
                     LoginActivity.LaunchActivity(getContext());
                 }
                 LearningModeActivity.this.finish();

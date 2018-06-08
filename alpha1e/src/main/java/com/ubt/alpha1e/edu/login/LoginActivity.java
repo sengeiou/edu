@@ -151,6 +151,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
 //                loginType = 0;
 //                proxy.clearToken(ELoginPlatform.QQOpen, LoginActivity.this);
 //                proxy.requestLogin(ELoginPlatform.QQOpen, PID, DSN, LoginActivity.this);
+                SPUtils.getInstance().put(Constant.SP_EDU_MODULE,false);
                 if(select){
                     LoginManger.getInstance().loginQQ(LoginActivity.this);
                 }else{
@@ -166,6 +167,7 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
 //                loginType = 1;
 //                proxy.clearToken(ELoginPlatform.WX, LoginActivity.this);
 //                proxy.requestLogin(ELoginPlatform.WX, PID, DSN, LoginActivity.this);
+                SPUtils.getInstance().put(Constant.SP_EDU_MODULE,false);
                 if(select){
                     LoginManger.getInstance().loginWX(LoginActivity.this);
                 }else{
@@ -204,10 +206,10 @@ public class LoginActivity extends BaseActivity implements LoginManger.OnLoginLi
         rlEduLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SPUtils.getInstance().put(Constant.SP_EDU_MODULE, true);
                 Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
-                SPUtils.getInstance().put(Constant.SP_EDU_MODULE, true);
             }
         });
     }
