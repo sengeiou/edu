@@ -25,6 +25,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.czt.mp3recorder.MP3Recorder;
@@ -324,12 +325,17 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 
     ConfirmDialog confirmDialog;
 
+    private TextView tv_show_temp;
+    private TextView tv_show_inf;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UbtLog.d(TAG, "onCreate");
         setContentView(R.layout.activity_blockly);
+        tv_show_temp = (TextView) findViewById(R.id.tv_show_temp);
+        tv_show_inf = (TextView) findViewById(R.id.tv_show_inf);
         mWebView = (WebView) findViewById(R.id.blockly_webView);
         rlBlank = (RelativeLayout) findViewById(R.id.rl_blank);
         rlGoVideo = (DragView) findViewById(R.id.rl_go_video);
@@ -719,6 +725,10 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
         mWebView.getSettings().setDatabaseEnabled(true);
         mWebView.getSettings().setDomStorageEnabled(true);
         new HeightVisibleChangeListener(mWebView);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mWebView.setWebContentsDebuggingEnabled(true);
+        }
 
         WebViewClient webViewClient = new WebViewClient() {
             @Override
@@ -1545,6 +1555,13 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
                     }
                 });
             }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tv_show_inf.setText("");
+                    tv_show_inf.setText("红外距离：" + mInfraredDistance);
+                }
+            });
             updateInfraredObserver(mInfraredDistance);
             if(infraredParams != ""){
                 callInfraredEvent(infraredParams, mInfraredDistance);
@@ -1619,6 +1636,7 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
             });
         }else if(event.getType() == BlocklyEvent.CALL_TEMPERATURE){
             final String humidity =event.getMessage().toString();
+//            parseData(humidity);
             UbtLog.d(TAG, "sss humidity:" + humidity);
             mWebView.post(new Runnable() {
                 @Override
@@ -1628,6 +1646,28 @@ public class BlocklyActivity extends BaseActivity implements IEditActionUI, IAct
 //                    mWebView.loadUrl("javascript:humidity(" + humidity + ")");
                 }
             });
+        }
+    }
+
+    private void parseData(String data) {
+        UbtLog.d(TAG, "data:" + data);
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            final String temperature = jsonObject.optString("temperature");
+            final String humidity = jsonObject.optString("humidity");
+            final String light = jsonObject.optString("light");
+
+            UbtLog.d(TAG, "温度：" +temperature + "湿度：" + humidity + "光度：" + light);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tv_show_temp.setText("");
+                    tv_show_temp.setText("温度：" +temperature + "湿度：" + humidity + "光度：" + light);
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 

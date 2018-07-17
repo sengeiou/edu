@@ -693,9 +693,9 @@ public class BlocklyJsInterface {
             }
         }
 
-        localLanguage = mBaseActivity.getStandardLocale(localLanguage);
+//        localLanguage = mBaseActivity.getStandardLocale(localLanguage);
         UbtLog.d(TAG, "localLanguage == " + localLanguage);
-        return localLanguage;
+        return "zh"/*localLanguage*/;
     }
 
     /**

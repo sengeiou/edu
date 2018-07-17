@@ -47,9 +47,9 @@ android {
         ubt_test {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "ubt_test"]
             buildConfigField 'String', 'WebServiceXG', '"https://test79.ubtrobot.com/xinge-push-rest/"'
-            buildConfigField 'String', 'WebServiceThirdLogin', '"http://10.10.20.71:8010/user-service-rest/v2/"'
-            buildConfigField 'String', 'WebServiceUbx', '"http://10.10.1.14:8080/alpha1e/"'
-            buildConfigField 'String', 'WebServiceBind', '"http://10.10.1.12:8085/equipment/"'
+            buildConfigField 'String', 'WebServiceThirdLogin', '"http://210.75.21.107:8010/user-service-rest/v2/"'
+            buildConfigField 'String', 'WebServiceUbx', '"http://210.75.21.106:8080/alpha1e/"'
+            buildConfigField 'String', 'WebServiceBind', '"http://210.75.21.106:8080/equipment/"'
             buildConfigField 'String', 'WebServiceCodeMao', '"https://dev-ubt.codemao.cn/"'
             buildConfigField 'String', 'WebServiceCommunity', '"https://test79.ubtrobot.com/community/alphaEbot/"'
         }

@@ -113,6 +113,26 @@
         
         
     </com.ubt.alpha1e.edu.blockly.DragView>
+
+    <TextView
+        android:id="@+id/tv_show_temp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="16dp"
+        android:layout_marginLeft="90dp"
+        android:textColor="@color/A1"
+        />
+
+    <TextView
+        android:id="@+id/tv_show_inf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_show_temp"
+        android:paddingLeft="16dp"
+        android:layout_marginLeft="90dp"
+        android:textColor="@color/A1"
+        />
     
     
 </RelativeLayout>

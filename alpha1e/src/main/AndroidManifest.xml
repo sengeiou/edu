@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.ubt.alpha1e.edu"
           android:versionCode="2"
-          android:versionName="V1.0.3.9">
+          android:versionName="V1.0.0.2">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -131,7 +131,7 @@
         <!-- Alpha1s FacebookContentProvider1533377826954209 改包名后 Alpha1e FacebookContentProvider1533377826954208 -->
         <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider1533377826954208"
+            android:authorities="com.facebook.app.FacebookContentProvider1533377826954207"
             android:exported="true"/>
 
         <activity
