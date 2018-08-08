@@ -342,7 +342,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
         String accessKey = SPUtils.getInstance().getString(Constant.SP_XG_ACCESSKEY);
         String userId = SPUtils.getInstance().getString(Constant.SP_XG_USERID);
         UbtLog.d("XGREquest","getXGInfo  old userId"+userId+ "new USERID "+SPUtils.getInstance().getString(Constant.SP_USER_ID));
-            String Url = HttpEntity.getXGAppId + "?appName=ALPHA1E";
+            String Url = HttpEntity.getXGAppId + "?appName=ALPHAEBOT_EDU";
             UbtLog.d("XGREquest", "url===" + Url);
             OkHttpUtils.get()
                     .addHeader("authorization", SPUtils.getInstance().getString(Constant.SP_LOGIN_TOKEN))

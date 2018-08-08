@@ -182,5 +182,15 @@ public class Constant {
      */
     public final static String EDU_TOKEN = "ubteducationtoken";
 
+    /**
+     * 教育版新增APPId参数，用于所有网路请求
+     */
+    public final static String APP_ID = "100060011";
+
+    /**
+     * 社区链接需要的参数，目前直接写在请求的url后面，暂时没用
+     */
+    public final static String PRODUCT_ID = "10402";
+
 
 }

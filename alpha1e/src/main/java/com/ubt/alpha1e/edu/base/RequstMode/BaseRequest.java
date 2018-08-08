@@ -12,6 +12,7 @@ package com.ubt.alpha1e.edu.base.RequstMode;
 public class BaseRequest {
     private String userId;
     private String token;
+    private String appId;
 
     public String getUserId() {
         return userId;
@@ -27,5 +28,13 @@ public class BaseRequest {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 }

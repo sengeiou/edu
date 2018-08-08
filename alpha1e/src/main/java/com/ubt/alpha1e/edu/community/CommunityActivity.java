@@ -82,9 +82,9 @@ public class CommunityActivity extends MVPBaseActivity<CommunityContract.View, C
     //String postReplyUrl = "http://10.10.32.22:8080/community/postReply.html?source=1&class=active";
     //String postDetailUrl = "http://10.10.32.22:8080/community/postDetails.html?source=2";
 
-    String mainUrl = BuildConfig.WebServiceCommunity + "index.html?source=0";
-    String postReplyUrl = BuildConfig.WebServiceCommunity + "postReply.html?source=1&class=active";
-    String postDetailUrl = BuildConfig.WebServiceCommunity + "postDetails.html?source=2";
+    String mainUrl = BuildConfig.WebServiceCommunity + "index.html?source=0&appId=100060011&product=10402";
+    String postReplyUrl = BuildConfig.WebServiceCommunity + "postReply.html?source=1&class=active&appId=100060011&product=10402";
+    String postDetailUrl = BuildConfig.WebServiceCommunity + "postDetails.html?source=2&appId=100060011&product=10402";
     //String communityUrl = "https://test79.ubtrobot.com/community/alphaEbot/index.html?source=0";
 
     private int mCommunitySource = 0;//0 首页 1 发贴 2 贴子详情
